@@ -1,0 +1,389 @@
+{{#admin}}
+
+<div id="admin_main" class="row center black white-text" style="display:none;padding:1em;margin:0!important">
+
+  <div class="row center">
+    <a style="margin:5px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
+      data-position="bottom" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
+      <i class="fab fa-google"></i>
+      {{ l.a_google_account}}</a>
+
+    <a style="margin:5px;" class="tooltipped waves-effect cyan waves-light btn" target="_blank" rel="noopener"
+      data-position="bottom" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
+      <i class="fab fa-google"></i>
+      {{ l.a_google_password}}</a>
+
+    <a style="margin:5px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+      data-position="bottom" data-tooltip="{{ l.a_google_search_ttip }}" href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
+      <i class="fab fa-google"></i>
+      {{ l.a_google_search }}</a>
+
+    <a style="margin:5px;" class="tooltipped waves-effect purple waves-light btn" target="_blank" rel="noopener"
+      data-position="bottom" data-tooltip="{{ l.a_google_analytics_ttip }}" href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
+      <i class="fab fa-google"></i>
+      {{ l.a_google_analytics }}</a>
+
+    <a style="margin:5px;" class="tooltipped waves-effect magenta waves-light btn" target="_blank" rel="noopener"
+      data-position="bottom" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://onesignal.com">
+      <i class="fas fa-bell"></i>
+      {{ l.a_onesignal }}</a>
+
+    <a style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom" data-tooltip="{{ l.a_google_logout_ttip }}"
+      href="/logout">
+      <i class="fab fa-google"></i>
+      {{ l.a_google_logout }}</a>
+  </div>
+
+  <div class="row center">
+    <div class="col l4 m6 s12">
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
+        <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
+        <p id="a_update_info"></p>
+        <h5>Cache</h5>
+        <ul>
+          <li>default: {{ cache_profiles.default }}</li>
+          <li>CSV: {{ cache_profiles.csv }}</li>
+          <li>limiter: {{ LIMITER_MAXIMUM }} / {{ cache_profiles.limiter }}</li>
+        </ul>
+        <div class="row center">
+          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom"
+            data-tooltip="{{ l.a_update_ttip }}">
+            <i class="fab fa-google-drive"></i>
+            {{ l.a_update }}</a>
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn" data-position="bottom"
+            data-tooltip="{{ l.a_flush_ttip }}">
+            <i class="fas fa-cloud-sun"></i>
+            {{ l.a_flush }}</a>
+
+        </div>
+        <div class="row center white">
+          <div class="col s12">
+            <select id="RemoteFnSelect" style="width:70%!important;border:0">
+              <option value="" disabled="" selected=""></option>
+              <option value="CoreUpdateRemote">Core Update</option>
+              <option value="FlushCacheRemote">Flush Cache</option>
+              <label>Remote Functions</label>
+            </select>
+          </div>
+          <input id="a_security_token" class="black-text" style="font-size:11px;width:90%;border:0" type="text"
+            readonly value="N/A">
+          <div class="row center">
+            <a id="a_get_token" class="tooltipped waves-effect green waves-light btn" data-position="bottom"
+              data-tooltip="{{ l.a_update_remote_ttip }}">{{
+              l.a_get_token }}</a>
+            <a id="a_token_cc" class="tooltipped waves-effect green waves-light btn" data-position="bottom"
+              data-tooltip="{{ l.a_copy_clipboard }}">
+              <i class="large material-icons">content_copy</i></a>&nbsp;<span id="sectok_ping" class="mono">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col l4 m6 s12">
+      <div class="row center" style="border:2px solid orange;margin:5px;border-radius:5px;">
+        <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
+        <p id="a_ps_insights_info"></p>
+        <div class="row center">
+          <a id="a_ps_insights" class="tooltipped waves-effect orange waves-light btn" data-position="bottom"
+            data-tooltip="{{ l.a_ps_insights_ttip }}">
+            <i class="fab fa-google"></i>
+            {{ l.a_ps_insights }}</a>
+        </div>
+      </div>
+      <div class="row left-align" style="margin:1em">
+
+        {{^l.onesignal_appid}}
+        <div class="row center red-text">
+          {{#convert_hyperlinks}}{{ l.a_onesignal_missing }}{{/convert_hyperlinks}}
+        </div>
+        {{/l.onesignal_appid}}
+
+        <h4 class="center">
+          <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="bottom" data-tooltip="GitHub Inc."
+            href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
+          <a rel="noopener" target="_blank" class="tooltipped lime-text text" data-position="bottom" data-tooltip="SysInfo"
+            href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i class="fas fa-server"></i></a>
+          {{#l.a_lasagna_manual_disable}}
+          <a rel="noopener" target="_blank" class="tooltipped grey-text text" data-position="bottom" data-tooltip="{{ l.a_lasagna_manual_ttip }} &mdash; {{ l.a_notavailable_ttip }}"><i
+              class="fas fa-dna"></i></a>
+          {{/l.a_lasagna_manual_disable}}
+          {{^l.a_lasagna_manual_disable}}
+          <a rel="noopener" target="_blank" class="tooltipped purple-text text" data-position="bottom" data-tooltip="{{ l.a_lasagna_manual_ttip }}"
+            href="{{ l.a_lasagna_manual_url }}"><i class="fas fa-dna"></i></a>
+          {{/l.a_lasagna_manual_disable}}
+          <a rel="noopener" target="_blank" class="tooltipped white-text text" data-position="bottom" data-tooltip="{{ l.a_locale_template_ttip }}"
+            href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i></a>
+          {{#google_drive_backup}}
+          <a rel="noopener" target="_blank" class="tooltipped green-text text" data-position="bottom" data-tooltip="{{ l.a_google_backup_ttip }}"
+            href="{{ google_drive_backup }}"><i class="fas fa-warehouse"></i></a>
+          {{/google_drive_backup}}
+        </h4>
+
+        {{#convert_hyperlinks}}{{ l.a_changelog }}{{/convert_hyperlinks}}
+
+      </div>
+    </div>
+
+    <div class="col l4 m6 s12">
+      <div class="card blue-grey darken-4">
+        <div class="card-content white-text">
+          <h5 class="card-title">{{ l.a_groups_permissions }}</h5>
+          <strong>OWNER / ADMIN</strong>
+          <p class="orange-text">
+            {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
+            {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
+          </p>
+          <br>
+          <strong>DEFAULT</strong>
+          <p class="orange-text">
+            {{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
+            {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}
+          </p>
+        </div>
+      </div>
+      <h5>Google</h5>
+      <ul class="mono">
+        <li>Console project: {{ gcp_project_id }}
+          {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
+        <li>Maps query: {{ google.map_query }}
+          {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
+        <li>Analytics: {{ google.ua }}
+          {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
+        <br>
+        <li>Maps API key:<br><span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
+          {{^google.mapsapi_key}}<i class="red-text fas fa-times"></i>{{/google.mapsapi_key}}</li>
+        <li>PageSpeed Insights API key:<br><span title="{{ google.pagespeedinsights_key }}" class="protect">{{
+            google.pagespeedinsights_key }}</span>
+          {{^google.pagespeedinsights_key}}<i class="red-text fas fa-times"></i>{{/google.pagespeedinsights_key}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function (w) {
+      if (w.GSC.init) {
+
+        // show loader
+        if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
+          if (t) {
+            $(t).html(
+              '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
+            );
+          }
+        }
+
+        // ping green/red dot
+        if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
+          if (status) {
+            status = "green";
+          } else {
+            status = "red";
+          }
+          $(dot).html("&#8226;").css({
+            color: status,
+            opacity: 1
+          }).fadeTo("slow", 0);
+        }
+
+        // start GetCsvInfo()
+        if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
+          if (!w.GSC.SemaphoreAdminPanelOn) return false;
+          var t = "#a_update_info";
+          $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
+              GSC.PingDot("#csv_ping");
+              var content = "";
+              var now = ~~(Date.now() / 1000);
+              for (x in data.data) {
+                var link = x;
+                var sheet = data.data[x]["sheet"];
+                var csv = data.data[x]["csv"];
+                var lines = data.data[x]["lines"];
+                if (sheet) {
+                  link =
+                    '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" class="green-text mono bold" href="' +
+                    'https://docs.google.com/spreadsheets/d/' + sheet + '/edit#gid=0">' + x +
+                    '&nbsp;<i class="material-icons green-text tiny">edit</i></a>&nbsp; ' +
+                    '&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}" class="bold blue-text mono" ' +
+                    'href="https://docs.google.com/spreadsheets/d/e/' + csv + '/pub?output=csv">' + lines +
+                    '&nbsp;<i class="material-icons blue-text tiny">assignment</i></a>&nbsp; ';
+                }
+                moment.locale("{{ lang }}");
+                content += (link + " {{ l.a_age }}&nbsp;" +
+                  moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() +
+                  "<br>"
+                );
+              }
+              $(t).html(content);
+            })
+            .fail(function () {
+              GSC.PingDot("#csv_ping", false);
+              $(t).html('<i class="material-icons large">mood_bad</i>');
+            });
+        } // end GetCsvInfo()
+
+        // start GetPSInsights()
+        if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
+          var t = "#a_ps_insights_info";
+          GSC.ShowLoader(t);
+          $(t).css({
+            display: "none"
+          });
+          $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
+              GSC.PingDot("#psi_ping");
+              $(t).html("<h2 class='orange-text a_reset a_h2'>" + data.data.ruleGroups.SPEED.score +
+                "&nbsp;%</h2>");
+              $(t).append("numberResources:&nbsp;<span class=bold>" +
+                data.data.pageStats.numberResources + "</span> ");
+              $(t).append("numberStaticResources:&nbsp;<span class=bold>" +
+                data.data.pageStats.numberStaticResources + "</span> ");
+              $(t).append("numberJsResources:&nbsp;<span class=bold>" +
+                data.data.pageStats.numberJsResources + "</span> ");
+              $(t).append("numberCssResources:&nbsp;<span class=bold>" +
+                data.data.pageStats.numberCssResources + "</span> ");
+              $(t).append("<br>");
+              $(t).append("htmlResponseBytes:&nbsp;<span class=bold>" +
+                GSC.FormatBytes(data.data.pageStats.htmlResponseBytes) + "</span> ");
+              $(t).append("cssResponseBytes:&nbsp;<span class=bold>" +
+                GSC.FormatBytes(data.data.pageStats.cssResponseBytes) + "</span> ");
+              $(t).append("imageResponseBytes:&nbsp;<span class=bold>" +
+                GSC.FormatBytes(data.data.pageStats.imageResponseBytes) + "</span> ");
+              $(t).append("<br>");
+              $(t).append("numTotalRoundTrips:&nbsp;<span class=bold>" +
+                data.data.pageStats.numTotalRoundTrips + "</span> ");
+              $(t).append("numRenderBlockingRoundTrips:&nbsp;<span class=bold>" +
+                data.data.pageStats.numRenderBlockingRoundTrips + "</span> ");
+              $(t).slideDown();
+              $("#a_ps_insights").removeAttr("disabled");
+            })
+            .fail(function () {
+              GSC.PingDot("#psi_ping", false);
+              $(t).html('<i class="material-icons large">mood_bad</i>').slideDown();
+              $("#a_ps_insights").removeAttr("disabled");
+            });
+        } // end GetPSInsights()
+
+        // PageSpeed Insights click action
+        w.GSC.init.push(function () {
+          w.GSC.names.push("PageSpeed Insights click action");
+          $("#a_ps_insights").click(function () {
+            $(this).attr("disabled", "disabled");
+            GSC.PingDot("#psi_ping");
+            GSC.GetPSInsights();
+          });
+        });
+
+        // UI bindings
+        w.GSC.init.push(function () {
+          w.GSC.names.push("UI bindings");
+
+          $("#RemoteFnSelect").change(function () {
+            if (!$("#RemoteFnSelect").val()) return;
+            var s = $("#RemoteFnSelect").val();
+            var t = $("#a_security_token").val();
+            t = t.replace(/[a-zA-Z]*\?/, s + "?");
+            $("#a_security_token").val(t);
+          });
+
+          $("#a_update").click(function () {
+            GSC.PingDot("#csv_ping");
+            GSC.GetCsvInfo = function () {};
+            $("#a_update").attr("disabled", "disabled").html("{{ l.a_waitplease }}");
+            location.href = "/admin/CoreUpdate";
+          });
+
+          $("#a_flush").click(function () {
+            GSC.PingDot("#csv_ping");
+            GSC.GetCsvInfo = function () {};
+            $("#a_flush").attr("disabled", "disabled").html("{{ l.a_waitplease }}");
+            location.href = "/admin/FlushCache";
+          });
+
+          $("#a_token_cc").click(function () {
+            GSC.CopyClipboard($("#a_security_token").val());
+            GSC.PingDot("#sectok_ping");
+          });
+
+          $("#a_get_token").click(function () {
+            if (!$("#RemoteFnSelect").val()) return;
+            $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
+              $("#a_security_token").val(data.data);
+              $("#RemoteFnSelect").change();
+              GSC.PingDot("#sectok_ping");
+            }).fail(function () {
+              $("#a_security_token").val("N/A");
+              GSC.PingDot("#sectok_ping", false);
+            });
+          });
+
+        });
+
+        // CSV info timer
+        w.GSC.init.push(function () {
+          w.GSC.names.push("CSV info timer");
+          GSC.ShowLoader("#a_update_info");
+          setInterval("GSC.GetCsvInfo()", 2500);
+        });
+
+        // PSI preload
+        w.GSC.init.push(function () {
+          w.GSC.names.push("PSI preload");
+          setTimeout("$.get('/admin/GetPSInsights?" + Date.now() + "');", 5000);
+        });
+
+        // admin UI reset
+        w.GSC.init.push(function () {
+          w.GSC.names.push("admin UI reset");
+          w.GSC.AdminUiReset = function () {
+            $("#admin_main div").addClass("a_reset");
+            $("#admin_main h2").addClass("a_reset a_h2");
+            $("#admin_main h3").addClass("a_reset a_h3");
+            $("#admin_main h4").addClass("a_reset a_h4");
+            $("#admin_main h5").addClass("a_reset a_h5");
+            $("#admin_main p").addClass("a_reset");
+          }();
+        });
+      }
+    })(window);
+
+  </script>
+  {{>admin_custom}}
+</div>
+
+<style>
+  .protect {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 12em;
+  }
+
+  .a_reset {
+    font-family: Arial !important;
+    font-size: 14px !important;
+  }
+
+  .a_h2 {
+    font-size: 5em !important;
+    font-weight: bold !important
+  }
+
+  .a_h3 {
+    font-size: 4em !important;
+    font-weight: bold !important
+  }
+
+  .a_h4 {
+    font-size: 3em !important;
+    font-weight: bold !important
+  }
+
+  .a_h5 {
+    font-size: 2em !important;
+    font-weight: bold !important
+  }
+
+</style>
+
+<script src="{{ cdn }}/js/moment.min.js" defer></script>
+{{/admin}}

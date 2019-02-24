@@ -1,0 +1,88 @@
+## TESSERACT LASAGNA
+## CONFIGURATION
+
+#dbg: TRUE
+minify: TRUE
+
+app: micro
+canonical_url: "https://lasagna.gscloud.cz/"
+
+date_default_timezone: "Europe/Prague"
+project: LASAGNA
+secret_cookie_key: secure.key
+version: v1
+
+# GCP
+gcp_project_id: "gscloudcz-163314"
+
+# Google OAuth 2.0
+goauth_origin: "https://lasagna.gscloud.cz"
+goauth_redirect: "https://lasagna.gscloud.cz/login"
+local_goauth_origin: "http://localhost:8007"
+local_goauth_redirect: "http://localhost:8007/login"
+
+# Google
+google: [
+  mapsapi_key: "AIzaSyDbGVxd_acxsOtu7twlSxABJmIjV9-sroI"
+  pagespeedinsights_key: "AIzaSyADAb3wmEwNAWVTGJFv1osZAlXFV-Q4TG4"
+  ua: "UA-89950317-12"
+]
+
+cache_profiles: [
+  default: "+10 minutes"
+  csv: "+100 minutes"
+  limiter: "+2 seconds"
+]
+
+css_sources: [
+  "/css/gulp/1.normalize.min.css",
+  "/css/gulp/3.materialize.min.css",
+  "/css/gulp/4.fontawesome.min.css",
+  "/css/gulp/5.v4-shims.min.css",
+  "/css/gulp/6.cookieconsent.min.css",
+  "/css/gulp/7.brands.min.css",
+  "/css/gulp/8.solid.min.css",
+  "/css/gulp/style.css",
+]
+
+script_sources: [
+  "/js/gulp/0.plugins.js",
+  "/js/gulp/1.jquery-3.3.1.min.js",
+  "/js/gulp/2.modernizr-3.6.0.min.js",
+  "/js/gulp/3.materialize.min.js",
+  "/js/gulp/6.cookieconsent.min.js",
+  "/js/gulp/8.lazysizes.min.js",
+  "/js/gulp/9.mustache.min.js",
+  "/js/gulp/main.js",
+]
+
+locales: [
+  default: "2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay"
+  admin: "2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk"
+  micro: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
+]
+
+lasagna_sheets: [
+  default: "1z2a5X7HVR9To7FvxMfRm_6ZxHeTVljUO8BjjMkI3phI"
+  admin: "1iwJNAuvHQtNOgxQfQK5TYtROzCwFOBFGeo7Vj-7_48Q"
+  micro: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
+]
+
+design: [
+  css_font: [
+    "https://fonts.googleapis.com/icon?family=Material+Icons"
+    "https://fonts.googleapis.com/css?family=Aladin"
+  ]
+  footer_color: "black"
+  nav_color: "orange"
+  theme_color: "blue"
+]
+
+ui: [
+  cookie_button_background: "#fff"
+  cookie_button_border: "#fff"
+  cookie_button_text: "#000"
+  cookie_popup_background: "red"
+  cookie_position: "bottom"
+  cookie_static: "false"
+]

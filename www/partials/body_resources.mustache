@@ -1,0 +1,19 @@
+{{^minify}}
+{{#script_sources}}
+<script src="{{ cdn }}{{ . }}" defer></script>
+{{/script_sources}}
+{{#css_sources}}
+<link rel="stylesheet" href="{{ cdn }}{{ . }}">
+{{/css_sources}}
+{{#design.skin}}
+<link rel="stylesheet" href="{{ cdn }}/css/{{ design.skin }}.min.css">
+{{/design.skin}}
+{{/minify}}
+{{#minify}}
+<script src="{{ cdn }}/build.js" defer></script>
+<link rel="stylesheet" href="{{ cdn }}/build.css">
+{{/minify}}
+{{#design.css_font}}
+<link rel="preload" href="{{ . }}" as="style">
+<link rel="stylesheet" href="{{ . }}">
+{{/design.css_font}}

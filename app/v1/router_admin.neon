@@ -1,0 +1,13 @@
+admin:
+  path: '/admin/[a:p]'
+  presenter: admin
+
+login:
+  path: /login
+  presenter: login
+  assert_httpcode: 303
+
+logout:
+  path: /logout
+  presenter: logout
+  assert_httpcode: 303

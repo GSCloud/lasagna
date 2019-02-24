@@ -1,0 +1,65 @@
+defaults:
+  language: cs
+  method: GET
+  presenter: home
+  sitemap: false
+  session: false
+  template: index
+  view: home
+  assert_httpcode: 200
+  nopwa: false
+
+webmanifest:
+  path: /manifest.json
+  presenter: core
+
+sitemap:
+  path: /sitemap.txt
+  presenter: core
+
+swjs:
+  path: /sw.js
+  presenter: core
+
+cz_redirect:
+  path: /cz/*
+  redirect: /cs
+  assert_httpcode: 303
+
+version_core:
+  method: GET|POST
+  path: /version/core
+  presenter: core
+  assert_json: true
+
+version_core_js:
+  path: /version/core.js
+  presenter: core
+
+cs_version_data:
+  language: cs
+  method: GET|POST
+  path: /cs/version/data
+  presenter: core
+  assert_json: true
+
+cs_version_data_js:
+  language: cs
+  path: /cs/version/data.js
+  presenter: core
+
+en_version_data:
+  language: en
+  method: GET|POST
+  path: /en/version/data
+  presenter: core
+  assert_json: true
+
+en_version_data_js:
+  language: en
+  path: /en/version/data.js
+  presenter: core
+
+error:
+  path: '/err/[a:code]'
+  presenter: error

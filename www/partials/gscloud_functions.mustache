@@ -1,0 +1,127 @@
+<script>
+  (function (w) {
+    if (w.GSC.init) {
+
+      // format bytes for humans
+      if (!w.GSC.FormatBytes) w.GSC.FormatBytes = function (number, precision) {
+        number = parseInt(number);
+        if (!number) return "0";
+        var c = 1024,
+          d = precision || 2,
+          e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+          f = Math.floor(Math.log(number) / Math.log(c));
+        return parseFloat((number / Math.pow(c, f)).toFixed(d)) + "&nbsp;" + e[f];
+      }
+
+      // global set cookie
+      if (!w.setCookie) w.setCookie = function (key, value, days) {
+        var expires = "";
+        var d = days ? parseInt(days) : 30;
+        var date = new Date();
+        date.setTime(date.getTime() + (d * 24 * 3600 * 1000));
+        expires = "; expires=" + date.toGMTString();
+        document.cookie = key + "=" + value + ";path=/" + expires;
+      }
+
+      // global get cookie
+      if (!w.getCookie) w.getCookie = function (key) {
+        var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+        return v ? v[2] : null;
+      }
+
+      if (!w.GSC.GetTime) w.GSC.GetTime = function (dateString) {
+        var dayz = ["", "{{l.day_of_the_week_1}}", "{{l.day_of_the_week_2}}", "{{l.day_of_the_week_3}}",
+          "{{l.day_of_the_week_4}}", "{{l.day_of_the_week_5}}", "{{l.day_of_the_week_6}}",
+          "{{l.day_of_the_week_7}}"
+        ];
+        var monthz = ["", "{{l.month_1}}", "{{l.month_2}}", "{{l.month_3}}", "{{l.month_4}}",
+          "{{l.month_5}}", "{{l.month_6}}", "{{l.month_7}}", "{{l.month_8}}", "{{l.month_9}}",
+          "{{l.month_10}}", "{{l.month_11}}", "{{l.month_12}}"
+        ];
+        var monthz2p = ["", "{{l.month_2p_1}}", "{{l.month_2p_2}}", "{{l.month_2p_3}}", "{{l.month_2p_4}}",
+          "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
+          "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
+        ];
+        var d = new Date();
+        if (dateString) {
+          var d = new Date(dateString);
+        }
+        var x = {};
+        x.day = d.getDay();
+        x.day_str = dayz[d.getDay()];
+        x.h = d.getHours();
+        x.hh = ("0" + d.getHours()).slice(-2);
+        x.yyyy = d.getFullYear();
+        x.m = d.getMonth() + 1;
+        x.mm = ("0" + (d.getMonth() + 1)).slice(-2);
+        x.d = d.getDate();
+        x.dd = ("0" + d.getDate()).slice(-2);
+        x.today = x.dd + "." + x.mm + "." + x.yyyy;
+
+        function ext(x) {
+          x = ("" + x).slice(-1);
+          if (x == 1) return "st";
+          if (x == 2) return "nd";
+          if (x == 3) return "rd";
+          return "th";
+        }
+
+        // Czech string
+        if ("{{ langcs }}") {
+          x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
+        }
+        // English string
+        if ("{{ langen }}") {
+          x.today_str = x.day_str + " " + x.d + ext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
+        }
+        x.d = d;  // export date object
+        return x;
+      }
+
+      // copy string to clipboard
+      if (!w.GSC.CopyClipboard) w.GSC.CopyClipboard = function (str) {
+        var el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute("readonly", "");
+        el.style.position = "absolute";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        var selected =
+          document.getSelection().rangeCount > 0 ?
+          document.getSelection().getRangeAt(0) :
+          false;
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        if (selected) {
+          document.getSelection().removeAllRanges();
+          document.getSelection().addRange(selected);
+        }
+      }
+
+      // custom easing function
+      w.GSC.init.push(function () {
+        w.GSC.names.push("custom easing function");
+        $.extend($.easing, {
+          easeInOutElastic: function (x, t, b, c, d) {
+            var s = 1.70158;
+            var p = 0;
+            var a = c;
+            if (t == 0) return b;
+            if ((t /= d / 2) == 2) return b + c;
+            if (!p) p = d * (.3 * 1.5);
+            if (a < Math.abs(c)) {
+              a = c;
+              var s = p / 4;
+            } else var s = p / (2 * Math.PI) * Math.asin(c / a);
+            if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) /
+              p)) + b;
+            return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+          }
+        });
+      });
+
+    }
+  })(window);
+
+</script>

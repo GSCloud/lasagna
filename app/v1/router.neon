@@ -1,0 +1,17 @@
+home:
+  path: /
+  redirect: /cs
+
+admin_redirect:
+  path: /admin
+  redirect: "https://lasagna.gscloud.cz/login?relogin=true"
+
+cs:
+  path: /cs
+  language: cs
+  sitemap: true
+
+en:
+  path: /en
+  language: en
+  sitemap: true

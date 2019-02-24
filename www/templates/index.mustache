@@ -1,0 +1,93 @@
+<!doctype html>
+<html class="no-js" lang="{{ lang }}">
+<head>
+{{>head_pre}}
+<meta charset="utf-8">
+<title>{{#LOCALHOST}}LOCAL: {{/LOCALHOST}}{{ l.title }}</title>
+<link rel="dns-prefetch" href="//connect.facebook.net">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link rel="dns-prefetch" href="//platform.twitter.com">
+<link rel="dns-prefetch" href="//www.google-analytics.com">
+<link rel="dns-prefetch" href="//www.google.com">
+<link rel="preconnect" href="//connect.facebook.net">
+<link rel="preconnect" href="//fonts.googleapis.com">
+<link rel="preconnect" href="//fonts.gstatic.com">
+<link rel="preconnect" href="//platform.twitter.com">
+<link rel="preconnect" href="//www.google-analytics.com">
+<link rel="preconnect" href="//www.google.com">
+{{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
+{{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}">{{/canonical_url}}
+{{#cdn}}<link rel="manifest" href="/manifest.json?lang={{ lang }}">{{/cdn}}
+{{>head_meta}}
+{{>head_favicons}}
+{{>head_googleanalytics}}
+{{>head_html5shim}}
+{{>head_custom}}
+<style>
+#loader{position:fixed;top:50%;left:50%;margin-top:-64px;margin-left:-64px}
+#loader_motto{font-size:1.5em;font-family:monospace;width:100%;text-align:center;position:fixed;bottom:2em;left:0;padding:1em}
+.bold{font-weight:bold!important}.hidden{display:none!important}.mono{font-family:Consolas,Monaco,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace}.noscript{font-size:0.8em}.pointer{cursor:pointer}.text-center{text-align:center}.text-monospace{font-family:'Courier New',Courier,monospace}.w3-animate-opacity{animation:opac 0.5s}@keyframes opac{from{opacity:0}to{opacity:1}}.w3-spin{animation:w3-spin 1s infinite cubic-bezier(0.25,0.1,0.25,1)}@keyframes w3-spin{0%{transform:rotate(0deg)}100%{transform:rotate(359deg)}}
+</style>
+{{>onesignal}}
+{{>head_post}}
+</head>
+<body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
+{{>body_pre}}
+<div id="loader" class="hidden">
+    <img src="{{ cdn }}/img/loading.png" width=128 height=128 alt="Loading&hellip;" class="w3-spin" style="opacity:0" onload="this.style.opacity=1;">
+    <div id="loader_motto" onclick="self.location.reload(true);"
+    class="pointer">{{ l.motto }}&nbsp;↻</div>
+</div>
+<noscript>
+{{>noscript}}
+</noscript>
+<script>
+(function (w) {
+// loader
+var x = document.getElementById('loader');
+x.className = x.className.replace(/\bhidden\b/g, '');
+// LASAGNA
+var x = w.GSC || {};
+x.init = [];
+x.names = [];
+x.AutoInit = function() {
+    var g = window.GSC.init;
+    var n = window.GSC.names;
+    for (var i = 0, l = g.length; i < l; i++) {
+        try {
+            g[i]();
+            {{#dbg}}console.log("fn #" + i + " " + n[i]);{{/dbg}}
+        } catch(e) {}
+    }
+}
+x.LASAGNA = {};
+x.LASAGNA.core = {};
+x.LASAGNA.core.version = '{{ VERSION }}';
+x.LASAGNA.core.timestamp = ~~(Date.now() / 1000);
+x.LASAGNA.data = {};
+x.LASAGNA.data.version = null;
+x.LASAGNA.data.timestamp = null;
+x.loaderOff = function () {
+    console.log("Loader off...");
+    var x = document.getElementById('loader');
+    if (x) x.parentNode.removeChild(x);
+    x = document.getElementById('divbody');
+    if (x) document.getElementById('divbody').className = document.getElementById('divbody').className.replace(/\bhidden\b/g, 'w3-animate-opacity');
+};
+w.GSC = x;
+setTimeout("GSC.loaderOff()", 2500);
+// remove noscript
+document.getElementsByTagName('noscript')[0].remove();
+})(window);</script>
+<script src="/{{ lang }}/version/data.js" defer></script>
+<div id="divbody" class="hidden">
+    {{>body_cookieconsent}}
+    {{>gscloud_functions}}
+    {{>body_container}}
+</div>
+{{>body_resources}}
+{{>body_custom}}
+{{>body_post}}
+</body>
+</html>

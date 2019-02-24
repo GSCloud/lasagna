@@ -1,0 +1,22 @@
+{
+  "short_name": "{{ l.title_short }}",
+  "name": "{{ l.title }}",
+  "icons": [{
+      "src": "/img/favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "{{#design.background_color}}{{ design.background_color }}{{/design.background_color}}{{^design.background_color}}#fff{{/design.background_color}}",
+  "display": "{{#design.display}}{{ design.display }}{{/design.display}}{{^design.display}}standalone{{/design.display}}",
+  "gcm_sender_id": "482941778795",
+  "gcm_sender_id_comment": "OneSignal",
+  "scope": "/",
+  "start_url": "/?utm_source={{ app }}",
+  "theme_color": "{{#design.theme_color}}{{ design.theme_color }}{{/design.theme_color}}{{^design.theme_color}}#000{{/design.theme_color}}"
+}

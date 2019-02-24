@@ -1,0 +1,26 @@
+### XXX
+### PRIVATE CONFIGURATION
+
+# Google OAuth 2.0
+goauth_client_id: "someid.apps.googleusercontent.com"
+goauth_secret: ""
+
+# Cloudflare
+cf: [
+  email: "joe@foo.bar"
+  apikey: hash
+  zoneid: [
+    hash1
+    hash2
+  ]
+]
+
+# admins
+admin_groups: [
+  default: [
+  ]
+  admin: [
+    joe@foo.bar
+    mike@foo.bar
+  ]
+]
