@@ -13,6 +13,9 @@ class HomePresenter extends \GSC\APresenter
         // check user
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $this->getUserGroup();
+        if ($this->getUserGroup()) {
+            $data["admin_group_" . $this->getUserGroup()] = true;
+        }
 
         // set language and fetch locale
         $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";

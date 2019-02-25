@@ -18,7 +18,9 @@ class AdminPresenter extends \GSC\APresenter
         // check user
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $this->getUserGroup();
-        $data["admingroup_" . $this->getUserGroup()] = true;
+        if ($this->getUserGroup()) {
+            $data["admin_group_" . $this->getUserGroup()] = true;
+        }
 
         function getFileLines($f)
         {
