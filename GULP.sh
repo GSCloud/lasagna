@@ -14,7 +14,11 @@ command -v nodejs >/dev/null 2>&1 || {
   info "Installing Node ..."
   curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
   sudo apt-get install -y nodejs
+
+  info "Installing gulp ..."
   sudo npm rm --global gulp
+  sudo rm -f /usr/bin/gulp >/dev/null 2>&1
+  sudo npm install --global gulp-cli
 }
 
 command -v yarn >/dev/null 2>&1 || {
@@ -29,34 +33,20 @@ echo -e "\n"
 
 v=`node --version`
 info "node version: "$v
-
 v=`npm --version`
 info "npm version: "$v
-
 v=`npx --version`
 info "npx version: "$v
-
 v=`yarn --version`
 info "yarn version: "$v
 
 echo -e "\n"
 
-info "Reinstall gulp?"
-yes_or_no && {
-  sudo npm rm --global gulp
-  sudo rm -f /usr/bin/gulp >/dev/null 2>&1
-  sudo npm install --global gulp-cli
-}
-
 info "Recreate project?"
 yes_or_no && {
+  rm -rf ./node_modules >/dev/null 2>&1
   npm init
   npm install --save-dev gulp
-}
-
-info "Reinstall gulp plugins?"
-yes_or_no && {
-  rm -rf ./node_modules >/dev/null 2>&1
   npm install exec
   npm install gulp-autoprefixer
   npm install gulp-concat
