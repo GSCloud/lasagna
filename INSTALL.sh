@@ -11,4 +11,8 @@ chmod 0777 www/download www/upload
 chmod -R 0775 cache ci data
 sudo chgrp www-data cache ci data www/cdn-assets www/download www/upload
 
+command -v composer >/dev/null 2>&1 || {
+    warn "You need PHP composer installed!"
+}
+
 info "Done."

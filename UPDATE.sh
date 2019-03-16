@@ -11,4 +11,8 @@ echo ${VERSION} > VERSION
 ln -s ../. www/cdn-assets/${VERSION} >/dev/null 2>&1
 info "Version: ${VERSION}"
 
+command -v composer >/dev/null 2>&1 || {
+    fail "You need PHP composer installed!"
+}
+
 composer update --no-plugins --no-scripts

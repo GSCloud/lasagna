@@ -6,7 +6,7 @@
     "monolog/monolog": "^1.24",
     "mustache/mustache": "^2.12",
     "nette/neon": "^2.4",
-    "php": "^7.2",
+    "php": "^7.3",
     "tracy/tracy": "^2.5",
     "tuupola/base58": "^0.2.0",
     "there4/php-analytics-event": "^1.1",
@@ -37,6 +37,11 @@
   "autoload": {
     "psr-4": {
       "GSC\\": "app/"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.3"
     }
   }
 }
