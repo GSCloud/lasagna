@@ -6,7 +6,7 @@
  * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://microsite.gscloud.cz
+ * @link     https://lasagna.gscloud.cz
  */
 
 use Cake\Cache\Cache;
@@ -24,13 +24,15 @@ defined("VERSION") || exit;
 defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
 defined("SERVER") || define("SERVER", strtr($_SERVER["SERVER_NAME"] ?? "", ".", "_"));
-defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? "gscloudcz-163314");
 defined("MONOLOG") || define("MONOLOG", CACHE . "/LOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
 // Google Cloud Platform
-$x = "/keys/GSCloud-6dd97e5ac451.json";
-check_file(APP . $x);
-putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . $x);
+defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? "gscloudcz-163314");
+defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? "/keys/GSCloud-6dd97e5ac451.json");
+
+if (file_exists(APP . GCP_KEYS)) {
+    putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
+}
 
 // Stackdriver logger
 function logger($message, $severity = Logger::INFO)
@@ -195,7 +197,7 @@ if (array_key_exists("output", $data)) {
 }
 echo $output;
 
-// end credits
+// finishing game
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
 header("X-Processing: ${time} msec.");
@@ -205,7 +207,7 @@ if ($events) {
     @$events->trackEvent($cfg["app"], "processing_time", $time);
 }
 
-// end debug
+// last debug
 if (DEBUG) {
     bdump($data, "DATA " . date("Y-m-d"));
 }

@@ -70,11 +70,11 @@ abstract class APresenter implements IPresenter
 
     // CONSTANTS
 
-    /** @var integer */
-    const COOKIE_KEY_FILEMODE = 0600;
+    /** @var string */
+    const ERROR_NULL = " > FATAL ERROR: UNEXPECTED NULL";
 
     /** @var integer */
-    const COOKIE_TTL = 86400 * 14;
+    const LOG_FILEMODE = 0664;
 
     /** @var integer */
     const CSV_FILEMODE = 0664;
@@ -82,34 +82,95 @@ abstract class APresenter implements IPresenter
     /** @var integer */
     const CSV_MIN_SIZE = 42;
 
-    /** @var string */
-    const ERROR_NULL = " > FATAL ERROR: UNEXPECTED NULL";
+    /** @var integer */
+    const COOKIE_KEY_FILEMODE = 0600;
 
-    /** @var string */
-    const GS_CSV_POSTFIX = "/pub?output=csv";
+    /** @var integer */
+    const COOKIE_TTL = 86400 * 14;
 
     /** @var string */
     const GS_CSV_PREFIX = "https://docs.google.com/spreadsheets/d/e/";
 
     /** @var string */
-    const GS_SHEET_POSTFIX = "/edit#gid=0";
+    const GS_CSV_POSTFIX = "/pub?output=csv";
 
     /** @var string */
     const GS_SHEET_PREFIX = "https://docs.google.com/spreadsheets/d/";
 
-    /** @var integer */
-    const LOG_FILEMODE = 0664;
+    /** @var string */
+    const GS_SHEET_POSTFIX = "/edit#gid=0";
 
     /** @var integer */
     const LIMITER_MAXIMUM = 30;
 
+    // GOOGLE DRIVE TEMPLATES
+
+    /** @var string */
+    const GOOGLE_SHEET_EDIT =
+        "https://docs.google.com/spreadsheets/d/FILEID/edit#gid=0";
+
+    /** @var string */
+    const GOOGLE_SHEET_VIEW =
+        "https://docs.google.com/spreadsheets/d/FILEID/view#gid=0";
+
+    /** @var string */
+    const GOOGLE_DOCUMENT_EXPORT_DOC =
+        "https://docs.google.com/document/d/FILEID/export?format=doc";
+
+    /** @var string */
+    const GOOGLE_DOCUMENT_EXPORT_PDF =
+        "https://docs.google.com/document/d/FILEID/export?format=pdf";
+
+    /** @var string */
+    const GOOGLE_SHEET_EXPORT_DOCX =
+        "https://docs.google.com/spreadsheets/d/FILEID/export?format=docx";
+
+    /** @var string */
+    const GOOGLE_SHEET_EXPORT_PDF =
+        "https://docs.google.com/spreadsheets/d/FILEID/export?format=pdf";
+
+    /** @var string */
+    const GOOGLE_SHEET_EXPORT_XLSX =
+        "https://docs.google.com/spreadsheets/d/FILEID/export?format=xlsx";
+
+    /** @var string */
+    const GOOGLE_SHEET_EXPORT_CSV =
+        "https://docs.google.com/spreadsheets/d/e/FILEID/pub?output=csv";
+
+    /** @var string */
+    const GOOGLE_SHEET_EXPORT_HTML =
+        "https://docs.google.com/spreadsheets/d/e/FILEID/pubhtml";
+
+    /** @var string */
+    const GOOGLE_SUITE_IMAGE_VIEW =
+        "https://drive.google.com/a/DOMAIN/thumbnail?id=IMAGEID";
+
+    /** @var string */
+    const GOOGLE_IMAGE_VIEW =
+        "https://drive.google.com/thumbnail?id=IMAGEID";
+
+    /** @var string */
+    const GOOGLE_FILE_EXPORT_DOWNLOAD =
+        "https://drive.google.com/uc?export=download&id=FILEID";
+
+    /** @var string */
+    const GOOGLE_FILE_EXPORT_VIEW =
+        "https://drive.google.com/uc?export=view&id=FILEID";
+
     // PRIVATE VARS
+
     private $data = []; // DATA
+
     private $messages = []; // INFO + MESSAGES
+
     private $errors = []; // ERRORS
+
     private $criticals = []; // CRITICAL ERRORS
+
     private $identity = []; // user identity
+
     private $force_csv_check = false; // should re-check locales?
+
     private $csv_postload = []; // $cfg key indexes to [$name=>$csvkey] pairs
 
     private static $instances = array(); // singleton instances
