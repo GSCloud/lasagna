@@ -1,43 +1,11 @@
 {{#admin_group_admin}}
 
-<div class="right">
-  {{#user.avatar}}
-  <a id="admin_menu" title="{{ user.name }} | {{ admin }} | {{ user.email }}">
-    <img style="cursor:pointer;margin:2px;padding:2px;z-index:99999" width=50 class="responsive-img circle"
-      src="{{ user.avatar }}" alt="{{ user.name }}">
-  </a>
-  {{/user.avatar}}
-  {{^user.avatar}}
-  <a id="admin_menu" title="{{ user.name }} | {{ admin }} | {{ user.email }}">
-    <i style="cursor:pointer;font-size:3em!important;padding:2px;;z-index:99999" class="large material-icons">face</i></a>
-  {{/user.avatar}}
-</div>
-
 <script>
   (function (w) {
     if (w.GSC.init) {
 
-      // toggle ADMIN PANEL
-      w.GSC.init.push(function () {
-        w.GSC.names.push("toggle admin menu");
-        var a = "#admin_main";
-        var m = "#admin_menu";
-        var p = "admin_panel";
-
-        $(m).click(function () {
-          $(a).slideToggle("slow", "easeInOutElastic", function () {
-            setCookie(p, $(a).css("display") == "block");
-            w.GSC.SemaphoreAdminPanelOn = $(a).css("display") == "block";
-            if (w.GSC.AdminPanelHandler) {
-              w.GSC.AdminPanelHandler();
-            }
-          });
-        });
-
-        if (getCookie(p) == "true") {
-          $(m).click();
-        }
-      });
+      delCookie("admin_panel");
+      w.GSC.SemaphoreAdminPanelOn = true;
 
     }
   })(window);

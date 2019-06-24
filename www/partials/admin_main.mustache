@@ -1,6 +1,6 @@
 {{#admin_group_admin}}
 
-<div id="admin_main" class="row center black white-text" style="display:none;padding:1em;margin:0!important">
+<div id="admin_main" class="row center black white-text" style="display:block;padding:1em;margin:0!important">
 
   <div class="row center">
     <a style="margin:5px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
@@ -187,7 +187,6 @@
 
         // start GetCsvInfo()
         if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
-          if (!w.GSC.SemaphoreAdminPanelOn) return false;
           var t = "#a_update_info";
           $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
               GSC.PingDot("#csv_ping");

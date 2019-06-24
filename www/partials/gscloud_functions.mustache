@@ -19,7 +19,7 @@
         var d = days ? parseInt(days) : 30;
         var date = new Date();
         date.setTime(date.getTime() + (d * 24 * 3600 * 1000));
-        expires = "; expires=" + date.toGMTString();
+        expires = ";expires=" + date.toGMTString();
         document.cookie = key + "=" + value + ";path=/" + expires;
       }
 
@@ -27,6 +27,14 @@
       if (!w.getCookie) w.getCookie = function (key) {
         var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
         return v ? v[2] : null;
+      }
+
+      // global del cookie
+      if (!w.delCookie) w.delCookie = function (key) {
+        var date = new Date();
+        date.setTime(0);
+        expires = ";expires=" + date.toGMTString();
+        document.cookie = key + "=;path=/" + expires;
       }
 
       if (!w.GSC.GetTime) w.GSC.GetTime = function (dateString) {
