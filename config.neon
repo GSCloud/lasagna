@@ -1,12 +1,12 @@
 ## TESSERACT LASAGNA
 ## CONFIGURATION
 
-#dbg: TRUE
+dbg: TRUE
 minify: TRUE
 
-app: micro
+# CORE
+app: lasagna1
 canonical_url: "https://lasagna.gscloud.cz/"
-
 date_default_timezone: "Europe/Prague"
 project: LASAGNA
 secret_cookie_key: secure.key
@@ -46,13 +46,13 @@ css_sources: [
 ]
 
 script_sources: [
-  "/js/gulp/0.plugins.js",
-  "/js/gulp/1.jquery-3.3.1.min.js",
-  "/js/gulp/2.modernizr-3.6.0.min.js",
+  "/js/gulp/0.setup.js",
+  "/js/gulp/1.jquery.min.js",
+  "/js/gulp/2.modernizr.min.js",
   "/js/gulp/3.materialize.min.js",
   "/js/gulp/6.cookieconsent.min.js",
   "/js/gulp/8.lazysizes.min.js",
-  "/js/gulp/9.mustache.min.js",
+  "/js/gulp/eu.cookieconsent.setup.js",
   "/js/gulp/main.js",
 ]
 

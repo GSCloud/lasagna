@@ -3,7 +3,7 @@
 <head>
 {{>head_pre}}
 <meta charset="utf-8">
-<title>{{#LOCALHOST}}LOCAL: {{/LOCALHOST}}{{ l.title }}</title>
+<title>{{#LOCALHOST}}LOCALHOST: {{/LOCALHOST}}{{ l.title }}</title>
 <link rel="dns-prefetch" href="//connect.facebook.net">
 <link rel="dns-prefetch" href="//fonts.googleapis.com">
 <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,7 +18,7 @@
 <link rel="preconnect" href="//www.google.com">
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}">{{/canonical_url}}
-{{#cdn}}<link rel="manifest" href="/manifest.json?lang={{ lang }}">{{/cdn}}
+<link rel="manifest" href="/manifest.json?lang={{ lang }}">
 {{>head_meta}}
 {{>head_favicons}}
 {{>head_googleanalytics}}
@@ -44,10 +44,8 @@
 </noscript>
 <script>
 (function (w) {
-// loader
 var x = document.getElementById('loader');
 x.className = x.className.replace(/\bhidden\b/g, '');
-// LASAGNA
 var x = w.GSC || {};
 x.init = [];
 x.names = [];
@@ -56,8 +54,8 @@ x.AutoInit = function() {
     var n = window.GSC.names;
     for (var i = 0, l = g.length; i < l; i++) {
         try {
+            {{#dbg}}console.log("fn #" + i + ": " + n[i]);{{/dbg}}
             g[i]();
-            {{#dbg}}console.log("fn #" + i + " " + n[i]);{{/dbg}}
         } catch(e) {}
     }
 }
@@ -69,25 +67,24 @@ x.LASAGNA.data = {};
 x.LASAGNA.data.version = null;
 x.LASAGNA.data.timestamp = null;
 x.loaderOff = function () {
-    console.log("Loader off...");
-    var x = document.getElementById('loader');
+    console.log("GSC loader off...");
+    var x = document.getElementById("loader");
     if (x) x.parentNode.removeChild(x);
     x = document.getElementById('divbody');
-    if (x) document.getElementById('divbody').className = document.getElementById('divbody').className.replace(/\bhidden\b/g, 'w3-animate-opacity');
+    if (x) document.getElementById("divbody").className = document.getElementById("divbody").className.replace(/\bhidden\b/g, "w3-animate-opacity");
 };
 w.GSC = x;
-setTimeout("GSC.loaderOff()", 2500);
-// remove noscript
-document.getElementsByTagName('noscript')[0].remove();
+setTimeout("GSC.loaderOff()", 2000);
+document.getElementsByTagName("noscript")[0].remove();
 })(window);</script>
-<script src="/{{ lang }}/version/data.js" defer></script>
 <div id="divbody" class="hidden">
-    {{>body_cookieconsent}}
-    {{>gscloud_functions}}
-    {{>body_container}}
+{{>body_cookieconsent}}
+{{>gscloud_functions}}
+{{>body_container}}
 </div>
 {{>body_resources}}
 {{>body_custom}}
 {{>body_post}}
 </body>
+<script src="/{{ lang }}/version/data.js" defer></script>
 </html>
