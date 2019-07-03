@@ -1,4 +1,3 @@
-console.log("Show EU cookie consent...");
 window.cookieconsent.initialise({
   "palette": {
     "popup": {

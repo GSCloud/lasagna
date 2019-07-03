@@ -2,7 +2,7 @@
 ## CONFIGURATION
 
 dbg: TRUE
-minify: TRUE
+#minify: TRUE
 
 # CORE
 app: lasagna1

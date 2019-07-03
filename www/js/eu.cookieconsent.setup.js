@@ -1,4 +1,3 @@
-console.log("Cookie consent");
 window.cookieconsent.initialise({
   "palette": {
     "popup": {

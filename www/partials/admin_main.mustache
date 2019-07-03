@@ -14,12 +14,14 @@
       {{ l.a_google_password}}</a>
 
     <a style="margin:5px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
-      data-position="bottom" data-tooltip="{{ l.a_google_search_ttip }}" href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
+      data-position="bottom" data-tooltip="{{ l.a_google_search_ttip }}"
+      href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
       <i class="fab fa-google"></i>
       {{ l.a_google_search }}</a>
 
     <a style="margin:5px;" class="tooltipped waves-effect purple waves-light btn" target="_blank" rel="noopener"
-      data-position="bottom" data-tooltip="{{ l.a_google_analytics_ttip }}" href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
+      data-position="bottom" data-tooltip="{{ l.a_google_analytics_ttip }}"
+      href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
       <i class="fab fa-google"></i>
       {{ l.a_google_analytics }}</a>
 
@@ -28,8 +30,8 @@
       <i class="fas fa-bell"></i>
       {{ l.a_onesignal }}</a>
 
-    <a style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom" data-tooltip="{{ l.a_google_logout_ttip }}"
-      href="/logout">
+    <a style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom"
+      data-tooltip="{{ l.a_google_logout_ttip }}" href="/logout">
       <i class="fab fa-google"></i>
       {{ l.a_google_logout }}</a>
   </div>
@@ -46,12 +48,12 @@
           <li>limiter: {{ LIMITER_MAXIMUM }} / {{ cache_profiles.limiter }}</li>
         </ul>
         <div class="row center">
-          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom"
-            data-tooltip="{{ l.a_update_ttip }}">
+          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
+            data-position="bottom" data-tooltip="{{ l.a_update_ttip }}">
             <i class="fab fa-google-drive"></i>
             {{ l.a_update }}</a>
-          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn" data-position="bottom"
-            data-tooltip="{{ l.a_flush_ttip }}">
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
+            data-position="bottom" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
 
@@ -65,15 +67,16 @@
               <label>Remote Functions</label>
             </select>
           </div>
-          <input id="a_security_token" class="black-text" style="font-size:11px;width:90%;border:0" type="text"
-            readonly value="N/A">
+          <input id="a_security_token" class="black-text" style="font-size:11px;width:90%;border:0" type="text" readonly
+            value="N/A">
           <div class="row center">
             <a id="a_get_token" class="tooltipped waves-effect green waves-light btn" data-position="bottom"
               data-tooltip="{{ l.a_update_remote_ttip }}">{{
               l.a_get_token }}</a>
             <a id="a_token_cc" class="tooltipped waves-effect green waves-light btn" data-position="bottom"
               data-tooltip="{{ l.a_copy_clipboard }}">
-              <i class="large material-icons">content_copy</i></a>&nbsp;<span id="sectok_ping" class="mono">&nbsp;</span>
+              <i class="large material-icons">content_copy</i></a>&nbsp;<span id="sectok_ping"
+              class="mono">&nbsp;</span>
           </div>
         </div>
       </div>
@@ -99,23 +102,28 @@
         {{/l.onesignal_appid}}
 
         <h4 class="center">
-          <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="bottom" data-tooltip="GitHub Inc."
-            href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
-          <a rel="noopener" target="_blank" class="tooltipped lime-text text" data-position="bottom" data-tooltip="SysInfo"
-            href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i class="fas fa-server"></i></a>
+          <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="bottom"
+            data-tooltip="GitHub Inc." href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
+          <a rel="noopener" target="_blank" class="tooltipped lime-text text" data-position="bottom"
+            data-tooltip="SysInfo" href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i
+              class="fas fa-server"></i></a>
           {{#l.a_lasagna_manual_disable}}
-          <a rel="noopener" target="_blank" class="tooltipped grey-text text" data-position="bottom" data-tooltip="{{ l.a_lasagna_manual_ttip }} &mdash; {{ l.a_notavailable_ttip }}"><i
+          <a rel="noopener" target="_blank" class="tooltipped grey-text text" data-position="bottom"
+            data-tooltip="{{ l.a_lasagna_manual_ttip }} &mdash; {{ l.a_notavailable_ttip }}"><i
               class="fas fa-dna"></i></a>
           {{/l.a_lasagna_manual_disable}}
           {{^l.a_lasagna_manual_disable}}
-          <a rel="noopener" target="_blank" class="tooltipped purple-text text" data-position="bottom" data-tooltip="{{ l.a_lasagna_manual_ttip }}"
-            href="{{ l.a_lasagna_manual_url }}"><i class="fas fa-dna"></i></a>
+          <a rel="noopener" target="_blank" class="tooltipped purple-text text" data-position="bottom"
+            data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}"><i
+              class="fas fa-dna"></i></a>
           {{/l.a_lasagna_manual_disable}}
-          <a rel="noopener" target="_blank" class="tooltipped white-text text" data-position="bottom" data-tooltip="{{ l.a_locale_template_ttip }}"
-            href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i></a>
+          <a rel="noopener" target="_blank" class="tooltipped white-text text" data-position="bottom"
+            data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i
+              class="fas fa-clone"></i></a>
           {{#google_drive_backup}}
-          <a rel="noopener" target="_blank" class="tooltipped green-text text" data-position="bottom" data-tooltip="{{ l.a_google_backup_ttip }}"
-            href="{{ google_drive_backup }}"><i class="fas fa-warehouse"></i></a>
+          <a rel="noopener" target="_blank" class="tooltipped green-text text" data-position="bottom"
+            data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i
+              class="fas fa-warehouse"></i></a>
           {{/google_drive_backup}}
         </h4>
 
@@ -160,7 +168,7 @@
   </div>
 
   <script>
-    (function (w) {
+    (function (w, d, undefined) {
       if (w.GSC.init) {
 
         // show loader
@@ -263,7 +271,7 @@
 
         // PageSpeed Insights click action
         w.GSC.init.push(function () {
-          w.GSC.names.push("PageSpeed Insights click action");
+          w.GSC.names.push("PSI click");
           $("#a_ps_insights").click(function () {
             $(this).attr("disabled", "disabled");
             GSC.PingDot("#psi_ping");
@@ -341,8 +349,15 @@
             $("#admin_main p").addClass("a_reset");
           }();
         });
+
+        // Summernote editor
+        w.GSC.init.push(function () {
+          w.GSC.names.push("init Summernote editor");
+          $('#summernote').summernote();
+        });
+
       }
-    })(window);
+    })(window, document);
 
   </script>
   {{>admin_custom}}
@@ -385,7 +400,13 @@
 </style>
 
 <script src="{{ cdn }}/js/moment.min.js" defer></script>
-<script src="{{ cdn }}/summernote/summernote.js" defer></script>
-<link href="{{ cdn }}/summernote/summernote.css" rel="stylesheet">
+
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 
 {{/admin_group_admin}}
