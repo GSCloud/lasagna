@@ -1,8 +1,8 @@
 ## TESSERACT LASAGNA
 ## CONFIGURATION
 
-dbg: TRUE
-#minify: TRUE
+#dbg: TRUE
+minify: TRUE
 
 # CORE
 app: lasagna1
@@ -47,7 +47,6 @@ css_sources: [
 
 script_sources: [
   "/js/gulp/0.setup.js",
-  "/js/gulp/1.jquery.min.js",
   "/js/gulp/2.modernizr.min.js",
   "/js/gulp/3.materialize.min.js",
   "/js/gulp/6.cookieconsent.min.js",
