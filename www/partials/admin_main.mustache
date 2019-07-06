@@ -364,17 +364,45 @@
         w.GSC.init.push(function () {
           w.GSC.names.push("Summernote editor");
           if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+
+            var SaveButton = function(context) {
+              var ui = $.summernote.ui;
+              var button = ui.button({
+                contents: '<i class="fa fa-save"/>',
+                click: function () {
+                  alert('TBD');
+                }
+              });
+              return button.render();
+            }
+
             $('.summernote').summernote({
-              dialogsInBody: true,
-              disableDragAndDrop: true,
+              codeviewFilter: true,
+              codeviewIframeFilter: true,
+              dialogsInBody: false,
+              disableDragAndDrop: false,
               height: 250,
-              codemirror: {
-                theme: 'monokai'
+              toolbar: [
+                ['do', ['undo', 'redo']],
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear', 'superscript', 'subscript']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph', 'height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview']],
+                ['file', ['save']]
+              ],
+              buttons: {
+                save: SaveButton
               }
             });
+
           }
+          setTimeout("GSC.DeploySummernote();", 1E3);
+
         });
-        setTimeout("GSC.DeploySummernote();", 1E3);
       }
     })(window, document);
   </script>
@@ -383,8 +411,8 @@
 
 </div>
 
-<!-- Summernote editor -->
-<script src="{{ cdn }}/summernote/summernote-lite.js"></script>
+<!-- summernote -->
+<script src="{{ cdn }}/summernote/summernote-lite.js" defer></script>
 <link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
 
 <!-- moment library -->
