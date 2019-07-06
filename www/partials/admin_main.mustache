@@ -1,5 +1,14 @@
 {{#admin_group_admin}}
 
+<style>
+.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:12em}
+.a_reset{font-family:Arial!important;font-size:14px!important}
+.a_h2{font-size:5em!important;font-weight:700!important}
+.a_h3{font-size:4em!important;font-weight:700!important}
+.a_h4{font-size:3em!important;font-weight:700!important}
+.a_h5{font-size:2em!important;font-weight:700!important}
+</style>
+
 <div id="admin_main" class="row center black white-text" style="display:block;padding:1em;margin:0!important">
 
   <div class="row center">
@@ -326,7 +335,7 @@
 
         // CSV info timer
         w.GSC.init.push(function () {
-          w.GSC.names.push("CSV info timer");
+          w.GSC.names.push("CSV timer");
           GSC.ShowLoader("#a_update_info");
           setInterval("GSC.GetCsvInfo()", 2500);
         });
@@ -339,9 +348,10 @@
 
         // admin UI reset
         w.GSC.init.push(function () {
-          w.GSC.names.push("admin UI reset");
+          w.GSC.names.push("reset admin UI");
           w.GSC.AdminUiReset = function () {
             $("#admin_main div").addClass("a_reset");
+            $("#admin_main h1").addClass("a_reset a_h1");
             $("#admin_main h2").addClass("a_reset a_h2");
             $("#admin_main h3").addClass("a_reset a_h3");
             $("#admin_main h4").addClass("a_reset a_h4");
@@ -350,63 +360,34 @@
           }();
         });
 
-        // Summernote editor
+        // Summernote WYSIWYG
         w.GSC.init.push(function () {
-          w.GSC.names.push("init Summernote editor");
-          $('#summernote').summernote();
+          w.GSC.names.push("Summernote editor");
+          if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+            $('.summernote').summernote({
+              dialogsInBody: true,
+              disableDragAndDrop: true,
+              height: 250,
+              codemirror: {
+                theme: 'monokai'
+              }
+            });
+          }
         });
-
+        setTimeout("GSC.DeploySummernote();", 1E3);
       }
     })(window, document);
-
   </script>
+
   {{>admin_custom}}
+
 </div>
 
-<style>
-  .protect {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    width: 12em;
-  }
+<!-- Summernote editor -->
+<script src="{{ cdn }}/summernote/summernote-lite.js"></script>
+<link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
 
-  .a_reset {
-    font-family: Arial !important;
-    font-size: 14px !important;
-  }
-
-  .a_h2 {
-    font-size: 5em !important;
-    font-weight: bold !important
-  }
-
-  .a_h3 {
-    font-size: 4em !important;
-    font-weight: bold !important
-  }
-
-  .a_h4 {
-    font-size: 3em !important;
-    font-weight: bold !important
-  }
-
-  .a_h5 {
-    font-size: 2em !important;
-    font-weight: bold !important
-  }
-
-</style>
-
+<!-- moment library -->
 <script src="{{ cdn }}/js/moment.min.js" defer></script>
-
-<!-- include libraries(jQuery, bootstrap) -->
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-
-<!-- include summernote css/js -->
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 
 {{/admin_group_admin}}

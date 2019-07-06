@@ -15,5 +15,5 @@ window.addEventListener("load", function () {
       M.AutoInit();
       window.setTimeout(window.GSC.AutoInit, 1);
     });
-  })(jQuery);
+  })(jQuery, window);
 });
