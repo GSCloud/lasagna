@@ -402,40 +402,45 @@ abstract class APresenter implements IPresenter
      */
     public function getData($key = null)
     {
-        $data = (array) $this->data;
+        $dot = new \Adbar\Dot((array) $this->data);
 
         // global constants
-        $data["CONST"]["APP"] = APP;
-        $data["CONST"]["CACHE"] = CACHE;
-        $data["CONST"]["DATA"] = DATA;
-        $data["CONST"]["DOMAIN"] = DOMAIN;
-        $data["CONST"]["MONOLOG"] = MONOLOG;
-        $data["CONST"]["PARTIALS"] = PARTIALS;
-        $data["CONST"]["PROJECT"] = PROJECT;
-        $data["CONST"]["ROOT"] = ROOT;
-        $data["CONST"]["SERVER"] = SERVER;
-        $data["CONST"]["TEMP"] = TEMP;
-        $data["CONST"]["TEMPLATES"] = TEMPLATES;
-        $data["CONST"]["VERSION"] = VERSION;
-        $data["CONST"]["WWW"] = WWW;
+        $dot->set([
+            "CONST.APP" => APP,
+            "CONST.CACHE" => CACHE,
+            "CONST.DATA" => DATA,
+            "CONST.DOMAIN" => DOMAIN,
+            "CONST.MONOLOG" => MONOLOG,
+            "CONST.PARTIALS" => PARTIALS,
+            "CONST.PROJECT" => PROJECT,
+            "CONST.ROOT" => ROOT,
+            "CONST.SERVER" => SERVER,
+            "CONST.TEMP" => TEMP,
+            "CONST.TEMPLATES" => TEMPLATES,
+            "CONST.VERSION" => VERSION,
+            "CONST.WWW" => WWW,
+        ]);
 
         // class constants
-        $data["COOKIE_KEY_FILEMODE"] = self::COOKIE_KEY_FILEMODE;
-        $data["COOKIE_TTL"] = self::COOKIE_TTL;
-        $data["CSV_FILEMODE"] = self::CSV_FILEMODE;
-        $data["CSV_MIN_SIZE"] = self::CSV_MIN_SIZE;
-        $data["ERROR_NULL"] = self::ERROR_NULL;
-        $data["GS_CSV_POSTFIX"] = self::GS_CSV_POSTFIX;
-        $data["GS_CSV_PREFIX"] = self::GS_CSV_PREFIX;
-        $data["GS_SHEET_POSTFIX"] = self::GS_SHEET_POSTFIX;
-        $data["GS_SHEET_PREFIX"] = self::GS_SHEET_PREFIX;
-        $data["LIMITER_MAXIMUM"] = self::LIMITER_MAXIMUM;
-        $data["LOG_FILEMODE"] = self::LOG_FILEMODE;
+        $dot->set([
+            "CONST.COOKIE_KEY_FILEMODE" => self::COOKIE_KEY_FILEMODE,
+            "CONST.COOKIE_TTL" => self::COOKIE_TTL,
+            "CONST.CSV_FILEMODE" => self::CSV_FILEMODE,
+            "CONST.CSV_MIN_SIZE" => self::CSV_MIN_SIZE,
+            "CONST.ERROR_NULL" => self::ERROR_NULL,
+            "CONST.GS_CSV_POSTFIX" => self::GS_CSV_POSTFIX,
+            "CONST.GS_CSV_PREFIX" => self::GS_CSV_PREFIX,
+            "CONST.GS_SHEET_POSTFIX" => self::GS_SHEET_POSTFIX,
+            "CONST.GS_SHEET_PREFIX" => self::GS_SHEET_PREFIX,
+            "CONST.LIMITER_MAXIMUM" => self::LIMITER_MAXIMUM,
+            "CONST.LOG_FILEMODE" => self::LOG_FILEMODE,
+        ]);
 
+        $this->data = $dot->all();
         if (is_null($key)) {
-            return $data;
+            return $this->data;
         }
-        return $data[$key] ?? null;
+        return $dot->get($key);
     }
 
     /**
@@ -452,7 +457,9 @@ abstract class APresenter implements IPresenter
             $data = $this->data;
         }
         if (is_string($key) && !empty($key)) {
-            $data[$key] = $value;
+            $dot = new \Adbar\Dot($data);
+            $dot->set($key, $value);
+            $data = $dot->all();
         }
         $this->data = (array) $data;
         return $this;
@@ -656,11 +663,10 @@ abstract class APresenter implements IPresenter
      */
     public function getCfg($key = null)
     {
-        $cfg = (array) $this->getData("cfg") ?? [];
         if (is_null($key)) {
-            return $cfg;
+            return $this->getData("cfg");
         }
-        return $cfg[$key] ?? null;
+        return $this->getData("cfg.$key");
     }
 
     /**

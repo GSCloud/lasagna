@@ -21,7 +21,8 @@
     "symfony/polyfill-mbstring": "^1.11.0",
     "there4/php-analytics-event": "^1.1.0",
     "tracy/tracy": "^2.6.3",
-    "tuupola/base58": "^0.2.3"
+    "tuupola/base58": "^0.2.3",
+    "adbario/php-dot-notation": "^2.2"
   },
   "autoload": {
     "psr-4": {

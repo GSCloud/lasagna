@@ -188,9 +188,10 @@ $security = [
 ];
 #header(implode(" ", $security));
 
-// the App
+// App
 require_once APP . "/APresenter.php";
 require_once $presenter_file;
+
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
@@ -201,7 +202,7 @@ if (array_key_exists("output", $data)) {
 }
 echo $output;
 
-// finishing game
+// end credits
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
 header("X-Processing: ${time} msec.");
