@@ -407,12 +407,17 @@ abstract class APresenter implements IPresenter
         // global constants
         $data["CONST"]["APP"] = APP;
         $data["CONST"]["CACHE"] = CACHE;
+        $data["CONST"]["DATA"] = DATA;
         $data["CONST"]["DOMAIN"] = DOMAIN;
         $data["CONST"]["MONOLOG"] = MONOLOG;
+        $data["CONST"]["PARTIALS"] = PARTIALS;
         $data["CONST"]["PROJECT"] = PROJECT;
         $data["CONST"]["ROOT"] = ROOT;
         $data["CONST"]["SERVER"] = SERVER;
+        $data["CONST"]["TEMP"] = TEMP;
+        $data["CONST"]["TEMPLATES"] = TEMPLATES;
         $data["CONST"]["VERSION"] = VERSION;
+        $data["CONST"]["WWW"] = WWW;
 
         // class constants
         $data["COOKIE_KEY_FILEMODE"] = self::COOKIE_KEY_FILEMODE;
@@ -532,10 +537,9 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
-        $a = $_SESSION["admin"] ?? $this->getCookie("admin") ?? "N/A";
-        $b = session_id();
-        $c = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
-        return "${a}_${b}_${c}";
+        $a = $this->getCookie("admin") ?? "unknown";
+        $b = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
+        return "${a}_${b}";
     }
 
     /**
@@ -847,7 +851,7 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         unset($_COOKIE[$name]);
-        \setcookie($name, null, -1, "/");
+        \setcookie($name, "", time() - 3600, "/");
         return $this;
     }
 
@@ -875,18 +879,10 @@ abstract class APresenter implements IPresenter
      */
     public function logout()
     {
-        if (session_id() == "") {
-            session_start();
-        }
         $this->clearCookie("admin");
         $this->clearCookie("avatar");
         $this->clearCookie("id");
         $this->clearCookie("name");
-        unset($_SESSION["admin"]);
-        unset($_SESSION["avatar"]);
-        unset($_SESSION["id"]);
-        unset($_SESSION["name"]);
-        session_regenerate_id(true);
         $this->setLocation("https://www.google.com/accounts/Logout");
     }
 
@@ -1109,8 +1105,8 @@ abstract class APresenter implements IPresenter
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
                 header("HTTP/1.1 500 FATAL ERROR");
-                $this->addCritical("FATAL ERROR: LOCALES CORRUPTED!");
-                echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED!</h2></body>";
+                $this->addCritical("FATAL ERROR: LOCALES CORRUPTED");
+                echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED</h2></body>";
                 exit;
             } else {
                 $this->setForceCsvCheck()->checkLocales(true);

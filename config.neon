@@ -1,5 +1,4 @@
-## TESSERACT LASAGNA
-## CONFIGURATION
+### TESSERACT LASAGNA
 
 #dbg: TRUE
 minify: TRUE
@@ -29,9 +28,6 @@ google: [
 ]
 
 cache_profiles: [
-  default: "+10 minutes"
-  csv: "+100 minutes"
-  limiter: "+2 seconds"
 ]
 
 css_sources: [

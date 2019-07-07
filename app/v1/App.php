@@ -48,14 +48,13 @@ function logger($message, $severity = Logger::INFO)
 }
 
 // caching profiles
-$cache_profiles = array_replace(
-    $cfg["cache_profiles"] ?? [],
-    [
+$cache_profiles = array_replace([
         "default" => "+3 minutes",
         "csv" => "+60 minutes",
         "limiter" => "+2 seconds",
         "page" => "+10 seconds",
-    ]
+    ],
+    $cfg["cache_profiles"] ?? []
 );
 foreach ($cache_profiles as $k => $v) {
     Cache::setConfig($k, [
@@ -214,8 +213,8 @@ if ($events) {
 
 // last debug
 if (DEBUG) {
-    $data["cf"] = "redacted";
-    $data["goauth_client_id"] = "redacted";
-    $data["goauth_secret"] = "redacted";
+    unset($data["cf"]);
+    unset($data["goauth_client_id"]);
+    unset($data["goauth_secret"]);
     bdump($data, "DATA " . date("Y-m-d"));
 }
