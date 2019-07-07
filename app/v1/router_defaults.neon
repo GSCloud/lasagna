@@ -63,3 +63,13 @@ en_version_data_js:
 error:
   path: '/err/[a:code]'
   presenter: error
+
+en_article:
+  path: '/en/id/[**:trailing]'
+  language: en
+  presenter: article
+
+cs_article:
+  path: '/cs/id/[**:trailing]'
+  language: cs
+  presenter: article

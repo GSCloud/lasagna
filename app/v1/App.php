@@ -24,7 +24,7 @@ defined("VERSION") || exit;
 defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
 defined("SERVER") || define("SERVER", strtr($_SERVER["SERVER_NAME"] ?? "", ".", "_"));
-defined("MONOLOG") || define("MONOLOG", CACHE . "/LOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
+defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
 // Google Cloud Platform
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? "gscloudcz-163314");
@@ -34,13 +34,13 @@ if (file_exists(APP . GCP_KEYS)) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
-// Stackdriver logger
+// Stackdriver logging
 function logger($message, $severity = Logger::INFO)
 {
     ob_flush();
     try {
         $logging = new LoggingClient(["projectId" => GCP_PROJECTID]);
-        $stack = $logging->logger($cfg["app"] ?? "app");
+        $stack = $logging->logger(APP ?? "app");
         $stack->write($stack->entry($message), [
             "severity" => $severity,
         ]);
@@ -48,17 +48,21 @@ function logger($message, $severity = Logger::INFO)
 }
 
 // caching profiles
-$cache = $cfg["cache_profiles"] ?? [
-    "default" => "+10 minutes",
-    "csv" => "+100 minutes",
-    "limiter" => "+2 seconds",
-];
-foreach ($cache as $k => $v) {
+$cache_profiles = array_replace(
+    $cfg["cache_profiles"] ?? [],
+    [
+        "default" => "+3 minutes",
+        "csv" => "+60 minutes",
+        "limiter" => "+2 seconds",
+        "page" => "+10 seconds",
+    ]
+);
+foreach ($cache_profiles as $k => $v) {
     Cache::setConfig($k, [
         "className" => "File",
         "duration" => $v,
         "path" => CACHE,
-        "prefix" => "cache_" . SERVER . "_" . PROJECT . "_" . VERSION . "_",
+        "prefix" => "cakephpcache_" . SERVER . "_" . PROJECT . "_" . VERSION . "_",
     ]);
 }
 
@@ -140,6 +144,7 @@ if ($router[$view]["nopwa"] ?? false) {
     }
 }
 
+$data["cache_profiles"] = $cache_profiles;
 $data["match"] = $match;
 $data["presenter"] = $presenter;
 $data["router"] = $router;
@@ -209,5 +214,8 @@ if ($events) {
 
 // last debug
 if (DEBUG) {
+    $data["cf"] = "redacted";
+    $data["goauth_client_id"] = "redacted";
+    $data["goauth_secret"] = "redacted";
     bdump($data, "DATA " . date("Y-m-d"));
 }

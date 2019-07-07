@@ -5,7 +5,7 @@
 minify: TRUE
 
 # CORE
-app: lasagna1
+app: lasagna
 canonical_url: "https://lasagna.gscloud.cz/"
 date_default_timezone: "Europe/Prague"
 project: LASAGNA

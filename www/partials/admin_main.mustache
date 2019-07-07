@@ -53,8 +53,9 @@
         <h5>Cache</h5>
         <ul>
           <li>default: {{ cache_profiles.default }}</li>
-          <li>CSV: {{ cache_profiles.csv }}</li>
-          <li>limiter: {{ LIMITER_MAXIMUM }} / {{ cache_profiles.limiter }}</li>
+          <li>csv: {{ cache_profiles.csv }}</li>
+          <li>limiter: {{ LIMITER_MAXIMUM }}x / {{ cache_profiles.limiter }}</li>
+          <li>page: {{ cache_profiles.page }}</li>
         </ul>
         <div class="row center">
           <a id="a_update" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
@@ -65,7 +66,6 @@
             data-position="bottom" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
-
         </div>
         <div class="row center white">
           <div class="col s12">
@@ -301,16 +301,13 @@
           });
 
           $("#a_update").click(function () {
-            GSC.PingDot("#csv_ping");
-            GSC.GetCsvInfo = function () {};
-            $("#a_update").attr("disabled", "disabled").html("{{ l.a_waitplease }}");
-            location.href = "/admin/CoreUpdate";
+            $("#a_update").attr("disabled", "disabled");
+            $.post("/admin/CoreUpdate");
           });
 
           $("#a_flush").click(function () {
-            GSC.PingDot("#csv_ping");
             GSC.GetCsvInfo = function () {};
-            $("#a_flush").attr("disabled", "disabled").html("{{ l.a_waitplease }}");
+            $("#a_flush").attr("disabled", "disabled");
             location.href = "/admin/FlushCache";
           });
 

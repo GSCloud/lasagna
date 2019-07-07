@@ -404,6 +404,17 @@ abstract class APresenter implements IPresenter
     {
         $data = (array) $this->data;
 
+        // global constants
+        $data["CONST"]["APP"] = APP;
+        $data["CONST"]["CACHE"] = CACHE;
+        $data["CONST"]["DOMAIN"] = DOMAIN;
+        $data["CONST"]["MONOLOG"] = MONOLOG;
+        $data["CONST"]["PROJECT"] = PROJECT;
+        $data["CONST"]["ROOT"] = ROOT;
+        $data["CONST"]["SERVER"] = SERVER;
+        $data["CONST"]["VERSION"] = VERSION;
+
+        // class constants
         $data["COOKIE_KEY_FILEMODE"] = self::COOKIE_KEY_FILEMODE;
         $data["COOKIE_TTL"] = self::COOKIE_TTL;
         $data["CSV_FILEMODE"] = self::CSV_FILEMODE;
@@ -413,8 +424,8 @@ abstract class APresenter implements IPresenter
         $data["GS_CSV_PREFIX"] = self::GS_CSV_PREFIX;
         $data["GS_SHEET_POSTFIX"] = self::GS_SHEET_POSTFIX;
         $data["GS_SHEET_PREFIX"] = self::GS_SHEET_PREFIX;
-        $data["LOG_FILEMODE"] = self::LOG_FILEMODE;
         $data["LIMITER_MAXIMUM"] = self::LIMITER_MAXIMUM;
+        $data["LOG_FILEMODE"] = self::LOG_FILEMODE;
 
         if (is_null($key)) {
             return $data;
@@ -433,8 +444,7 @@ abstract class APresenter implements IPresenter
     public function setData($data = null, $key = null, $value = null)
     {
         if (is_null($data)) {
-            $this->addError(__NAMESPACE__ . " : " . __METHOD__ . self::ERROR_NULL);
-            return $this;
+            $data = $this->data;
         }
         if (is_string($key) && !empty($key)) {
             $data[$key] = $value;
@@ -820,13 +830,7 @@ abstract class APresenter implements IPresenter
             $secure = false;
             $httponly = true;
         }
-        if (PHP_VERSION_ID >= 70300) {
-            // PHP 7.3
-            $cookie->store($name, $data, time() + self::COOKIE_TTL, "/", DOMAIN, $secure, $httponly, $samesite);
-        } else {
-            // PHP 7.2 trick
-            $cookie->store($name, $data, time() + self::COOKIE_TTL, "/; samesite=${samesite}", DOMAIN, $secure, $httponly);
-        }
+        $cookie->store($name, $data, time() + self::COOKIE_TTL, "/", DOMAIN, $secure, $httponly, $samesite);
         return $this;
     }
 

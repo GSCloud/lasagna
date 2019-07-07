@@ -48,7 +48,7 @@ class CorePresenter extends \GSC\APresenter
             case "version_core":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
-                return $this->writeJsonData($d, ["name" => "LASAGNA Core Version", "fn" => "core"]);
+                return $this->writeJsonData($d, ["name" => "LASAGNA core version", "fn" => "core"]);
                 break;
 
             // core version as JavaScript
@@ -68,7 +68,7 @@ class CorePresenter extends \GSC\APresenter
         $data["lang{$language}"] = true;
         $data["l"] = $this->getLocale($language);
 
-        // remove differences to calculate hash
+        // remove variabilities to calculate correct hash
         unset($data["match"]);
         unset($data["nonce"]);
         unset($data["utm"]);
@@ -81,7 +81,7 @@ class CorePresenter extends \GSC\APresenter
             case "cs_version_data":
                 $d = [];
                 $d["LASAGNA"]["data"]["version"] = hash('sha256', (string) json_encode($data));
-                return $this->writeJsonData($d, ["name" => "LASAGNA Data Version " . strtoupper($language), "fn" => "data"]);
+                return $this->writeJsonData($d, ["name" => "LASAGNA data version " . strtoupper($language), "fn" => "data"]);
                 break;
 
             // data version as JavaScript

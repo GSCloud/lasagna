@@ -2,7 +2,7 @@
 
 use Cake\Cache\Cache;
 
-class HomePresenter extends \GSC\APresenter
+class ArticlePresenter extends \GSC\APresenter
 {
 
     public function process()
