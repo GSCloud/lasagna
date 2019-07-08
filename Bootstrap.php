@@ -67,7 +67,7 @@ function check_file($f)
     }
 }
 
-// check folders + files
+// checks
 check_folder(CACHE, true);
 check_folder(DATA, true);
 check_folder(PARTIALS);
@@ -77,12 +77,11 @@ check_folder(WWW);
 check_file(CONFIG);
 check_file(ROOT . "/VERSION");
 
-// load public + private NEON configuration
+// NEON configuration
 $cfg = @Neon::decode(@file_get_contents(CONFIG));
 if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
 }
-
 date_default_timezone_set($cfg["date_default_timezone"] ?? "Europe/Prague");
 defined("VERSION") || define("VERSION", $cfg["version"] ?? "v1");
 defined("APP") || define("APP", ROOT . "/app/" . VERSION);
@@ -101,14 +100,13 @@ function check_var(&$arr, $key, $default = null)
     }
 }
 
-// check variables / set defaults
+// checks
 check_var($cfg, "app", "app");
 check_var($cfg, "canonical_url");
 check_var($cfg, "dbg", ($_SERVER["SERVER_NAME"] ?? "") == "localhost");
 check_var($cfg, "minify", false);
 
 // Tracy
-//Tracy\OutputDebugger::enable();
 defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
 if (DEBUG) {
     Debugger::enable(Debugger::DEVELOPMENT, CACHE);
@@ -119,7 +117,7 @@ Debugger::$maxLength = $cfg["DEBUG_LENGTH"] ?? 2500;
 Debugger::$strictMode = true;
 Debugger::timer();
 
-// DATA population
+// data population
 $data = $cfg;
 $data["cfg"] = $cfg; // secondary copy :)
 $data["VERSION"] = $version = trim(@file_get_contents(ROOT . "/VERSION") ?? "", "\r\n");
@@ -147,7 +145,7 @@ if (array_key_exists("ua", $data["google"]) && (isset($_SERVER["HTTPS"]))) {
     }
 }
 
-// the switcher
+// locate the APP
 if (file_exists(APP) && is_file(APP)) {
     require_once APP;
 } elseif (file_exists(APP . "/App.php") && is_file(APP . "/App.php")) {
