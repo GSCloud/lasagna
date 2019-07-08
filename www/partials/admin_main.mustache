@@ -372,13 +372,18 @@
       // Summernote WYSIWYG
       w.GSC.init.push(function () {
         w.GSC.names.push("Summernote editor");
+
         if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
           $("#a_summernote").text("{{ l.a_save_all }}");
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
-            // TBD SAVE DATA!
-            $('.summernote').summernote("destroy");
+            $(".summernote").each(function(i, obj) {
+              // TBD SAVE DATA!
+              console.log($(obj).summernote("code"));
+              $(obj).summernote("destroy");
+            });
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
+            $("#a_summernote").unbind("click");
             $("#a_summernote").click(function () {
               GSC.DeploySummernote();
             });
