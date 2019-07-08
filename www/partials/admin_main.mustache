@@ -15,12 +15,12 @@
     <a style="margin:5px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
       data-position="bottom" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
       <i class="fab fa-google"></i>
-      {{ l.a_google_account}}</a>
+      {{ l.a_google_account }}</a>
 
     <a style="margin:5px;" class="tooltipped waves-effect cyan waves-light btn" target="_blank" rel="noopener"
       data-position="bottom" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
       <i class="fab fa-google"></i>
-      {{ l.a_google_password}}</a>
+      {{ l.a_google_password }}</a>
 
     <a style="margin:5px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
       data-position="bottom" data-tooltip="{{ l.a_google_search_ttip }}"
@@ -50,6 +50,11 @@
       <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
+        <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
+            data-position="bottom" data-tooltip="{{ l.a_summernote_ttip }}">
+            <i class="fas fa-edit"></i>
+            {{ l.a_summernote }}</a>
+            <br>(TBD SAVE DATA)
         <h5>Cache</h5>
         <ul>
           <li>default: {{ cache_profiles.default }}</li>
@@ -62,7 +67,7 @@
             data-position="bottom" data-tooltip="{{ l.a_update_ttip }}">
             <i class="fab fa-google-drive"></i>
             {{ l.a_update }}</a>
-          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
             data-position="bottom" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
@@ -175,244 +180,242 @@
       </ul>
     </div>
   </div>
-
-  <script>
-    (function (w, d, undefined) {
-      if (w.GSC.init) {
-
-        // show loader
-        if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
-          if (t) {
-            $(t).html(
-              '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
-            );
-          }
-        }
-
-        // ping green/red dot
-        if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
-          if (status) {
-            status = "green";
-          } else {
-            status = "red";
-          }
-          $(dot).html("&#8226;").css({
-            color: status,
-            opacity: 1
-          }).fadeTo("slow", 0);
-        }
-
-        // start GetCsvInfo()
-        if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
-          var t = "#a_update_info";
-          $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
-              GSC.PingDot("#csv_ping");
-              var content = "";
-              var now = ~~(Date.now() / 1000);
-              for (x in data.data) {
-                var link = x;
-                var sheet = data.data[x]["sheet"];
-                var csv = data.data[x]["csv"];
-                var lines = data.data[x]["lines"];
-                if (sheet) {
-                  link =
-                    '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" class="green-text mono bold" href="' +
-                    'https://docs.google.com/spreadsheets/d/' + sheet + '/edit#gid=0">' + x +
-                    '&nbsp;<i class="material-icons green-text tiny">edit</i></a>&nbsp; ' +
-                    '&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}" class="bold blue-text mono" ' +
-                    'href="https://docs.google.com/spreadsheets/d/e/' + csv + '/pub?output=csv">' + lines +
-                    '&nbsp;<i class="material-icons blue-text tiny">assignment</i></a>&nbsp; ';
-                }
-                moment.locale("{{ lang }}");
-                content += (link + " {{ l.a_age }}&nbsp;" +
-                  moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() +
-                  "<br>"
-                );
-              }
-              $(t).html(content);
-            })
-            .fail(function () {
-              GSC.PingDot("#csv_ping", false);
-              $(t).html('<i class="material-icons large">mood_bad</i>');
-            });
-        } // end GetCsvInfo()
-
-        // start GetPSInsights()
-        if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
-          var t = "#a_ps_insights_info";
-          GSC.ShowLoader(t);
-          $(t).css({
-            display: "none"
-          });
-          $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
-              GSC.PingDot("#psi_ping");
-              $(t).html("<h2 class='orange-text a_reset a_h2'>" + data.data.ruleGroups.SPEED.score +
-                "&nbsp;%</h2>");
-              $(t).append("numberResources:&nbsp;<span class=bold>" +
-                data.data.pageStats.numberResources + "</span> ");
-              $(t).append("numberStaticResources:&nbsp;<span class=bold>" +
-                data.data.pageStats.numberStaticResources + "</span> ");
-              $(t).append("numberJsResources:&nbsp;<span class=bold>" +
-                data.data.pageStats.numberJsResources + "</span> ");
-              $(t).append("numberCssResources:&nbsp;<span class=bold>" +
-                data.data.pageStats.numberCssResources + "</span> ");
-              $(t).append("<br>");
-              $(t).append("htmlResponseBytes:&nbsp;<span class=bold>" +
-                GSC.FormatBytes(data.data.pageStats.htmlResponseBytes) + "</span> ");
-              $(t).append("cssResponseBytes:&nbsp;<span class=bold>" +
-                GSC.FormatBytes(data.data.pageStats.cssResponseBytes) + "</span> ");
-              $(t).append("imageResponseBytes:&nbsp;<span class=bold>" +
-                GSC.FormatBytes(data.data.pageStats.imageResponseBytes) + "</span> ");
-              $(t).append("<br>");
-              $(t).append("numTotalRoundTrips:&nbsp;<span class=bold>" +
-                data.data.pageStats.numTotalRoundTrips + "</span> ");
-              $(t).append("numRenderBlockingRoundTrips:&nbsp;<span class=bold>" +
-                data.data.pageStats.numRenderBlockingRoundTrips + "</span> ");
-              $(t).slideDown();
-              $("#a_ps_insights").removeAttr("disabled");
-            })
-            .fail(function () {
-              GSC.PingDot("#psi_ping", false);
-              $(t).html('<i class="material-icons large">mood_bad</i>').slideDown();
-              $("#a_ps_insights").removeAttr("disabled");
-            });
-        } // end GetPSInsights()
-
-        // PageSpeed Insights click action
-        w.GSC.init.push(function () {
-          w.GSC.names.push("PSI click");
-          $("#a_ps_insights").click(function () {
-            $(this).attr("disabled", "disabled");
-            GSC.PingDot("#psi_ping");
-            GSC.GetPSInsights();
-          });
-        });
-
-        // UI bindings
-        w.GSC.init.push(function () {
-          w.GSC.names.push("UI bindings");
-
-          $("#RemoteFnSelect").change(function () {
-            if (!$("#RemoteFnSelect").val()) return;
-            var s = $("#RemoteFnSelect").val();
-            var t = $("#a_security_token").val();
-            t = t.replace(/[a-zA-Z]*\?/, s + "?");
-            $("#a_security_token").val(t);
-          });
-
-          $("#a_update").click(function () {
-            $("#a_update").attr("disabled", "disabled");
-            $.post("/admin/CoreUpdate");
-          });
-
-          $("#a_flush").click(function () {
-            GSC.GetCsvInfo = function () {};
-            $("#a_flush").attr("disabled", "disabled");
-            location.href = "/admin/FlushCache";
-          });
-
-          $("#a_token_cc").click(function () {
-            GSC.CopyClipboard($("#a_security_token").val());
-            GSC.PingDot("#sectok_ping");
-          });
-
-          $("#a_get_token").click(function () {
-            if (!$("#RemoteFnSelect").val()) return;
-            $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
-              $("#a_security_token").val(data.data);
-              $("#RemoteFnSelect").change();
-              GSC.PingDot("#sectok_ping");
-            }).fail(function () {
-              $("#a_security_token").val("N/A");
-              GSC.PingDot("#sectok_ping", false);
-            });
-          });
-
-        });
-
-        // CSV info timer
-        w.GSC.init.push(function () {
-          w.GSC.names.push("CSV timer");
-          GSC.ShowLoader("#a_update_info");
-          setInterval("GSC.GetCsvInfo()", 2500);
-        });
-
-        // PSI preload
-        w.GSC.init.push(function () {
-          w.GSC.names.push("PSI preload");
-          setTimeout("$.get('/admin/GetPSInsights?" + Date.now() + "');", 5000);
-        });
-
-        // admin UI reset
-        w.GSC.init.push(function () {
-          w.GSC.names.push("reset admin UI");
-          w.GSC.AdminUiReset = function () {
-            $("#admin_main div").addClass("a_reset");
-            $("#admin_main h1").addClass("a_reset a_h1");
-            $("#admin_main h2").addClass("a_reset a_h2");
-            $("#admin_main h3").addClass("a_reset a_h3");
-            $("#admin_main h4").addClass("a_reset a_h4");
-            $("#admin_main h5").addClass("a_reset a_h5");
-            $("#admin_main p").addClass("a_reset");
-          }();
-        });
-
-        // Summernote WYSIWYG
-        w.GSC.init.push(function () {
-          w.GSC.names.push("Summernote editor");
-          if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
-
-            var SaveButton = function(context) {
-              var ui = $.summernote.ui;
-              var button = ui.button({
-                contents: '<i class="fa fa-save"/>',
-                click: function () {
-                  alert('TBD');
-                }
-              });
-              return button.render();
-            }
-
-            $('.summernote').summernote({
-              codeviewFilter: true,
-              codeviewIframeFilter: true,
-              dialogsInBody: false,
-              disableDragAndDrop: false,
-              height: 250,
-              toolbar: [
-                ['do', ['undo', 'redo']],
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear', 'superscript', 'subscript']],
-                ['fontname', ['fontname']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph', 'height']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview']],
-                ['file', ['save']]
-              ],
-              buttons: {
-                save: SaveButton
-              }
-            });
-
-          }
-          setTimeout("GSC.DeploySummernote();", 1E3);
-
-        });
-      }
-    })(window, document);
-  </script>
-
-  {{>admin_custom}}
-
 </div>
+
+<script>
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+
+      // show loader
+      if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
+        if (t) {
+          $(t).html(
+            '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
+          );
+        }
+      }
+
+      // ping green/red dot
+      if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
+        if (status) {
+          status = "green";
+        } else {
+          status = "red";
+        }
+        $(dot).html("&#8226;").css({
+          color: status,
+          opacity: 1
+        }).fadeTo("slow", 0);
+      }
+
+      // start GetCsvInfo()
+      if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
+        var t = "#a_update_info";
+        $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
+            GSC.PingDot("#csv_ping");
+            var content = "";
+            var now = ~~(Date.now() / 1000);
+            for (x in data.data) {
+              var link = x;
+              var sheet = data.data[x]["sheet"];
+              var csv = data.data[x]["csv"];
+              var lines = data.data[x]["lines"];
+              if (sheet) {
+                link =
+                  '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" class="green-text mono bold" href="' +
+                  'https://docs.google.com/spreadsheets/d/' + sheet + '/edit#gid=0">' + x +
+                  '&nbsp;<i class="material-icons green-text tiny">edit</i></a>&nbsp; ' +
+                  '&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}" class="bold blue-text mono" ' +
+                  'href="https://docs.google.com/spreadsheets/d/e/' + csv + '/pub?output=csv">' + lines +
+                  '&nbsp;<i class="material-icons blue-text tiny">assignment</i></a>&nbsp; ';
+              }
+              moment.locale("{{ lang }}");
+              content += (link + " {{ l.a_age }}&nbsp;" +
+                moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() +
+                "<br>"
+              );
+            }
+            $(t).html(content);
+          })
+          .fail(function () {
+            GSC.PingDot("#csv_ping", false);
+            $(t).html('<i class="material-icons large">mood_bad</i>');
+          });
+      } // end GetCsvInfo()
+
+      // start GetPSInsights()
+      if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
+        var t = "#a_ps_insights_info";
+        GSC.ShowLoader(t);
+        $(t).css({
+          display: "none"
+        });
+        $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
+            GSC.PingDot("#psi_ping");
+            $(t).html("<h2 class='orange-text a_reset a_h2'>" + data.data.ruleGroups.SPEED.score +
+              "&nbsp;%</h2>");
+            $(t).append("numberResources:&nbsp;<span class=bold>" +
+              data.data.pageStats.numberResources + "</span> ");
+            $(t).append("numberStaticResources:&nbsp;<span class=bold>" +
+              data.data.pageStats.numberStaticResources + "</span> ");
+            $(t).append("numberJsResources:&nbsp;<span class=bold>" +
+              data.data.pageStats.numberJsResources + "</span> ");
+            $(t).append("numberCssResources:&nbsp;<span class=bold>" +
+              data.data.pageStats.numberCssResources + "</span> ");
+            $(t).append("<br>");
+            $(t).append("htmlResponseBytes:&nbsp;<span class=bold>" +
+              GSC.FormatBytes(data.data.pageStats.htmlResponseBytes) + "</span> ");
+            $(t).append("cssResponseBytes:&nbsp;<span class=bold>" +
+              GSC.FormatBytes(data.data.pageStats.cssResponseBytes) + "</span> ");
+            $(t).append("imageResponseBytes:&nbsp;<span class=bold>" +
+              GSC.FormatBytes(data.data.pageStats.imageResponseBytes) + "</span> ");
+            $(t).append("<br>");
+            $(t).append("numTotalRoundTrips:&nbsp;<span class=bold>" +
+              data.data.pageStats.numTotalRoundTrips + "</span> ");
+            $(t).append("numRenderBlockingRoundTrips:&nbsp;<span class=bold>" +
+              data.data.pageStats.numRenderBlockingRoundTrips + "</span> ");
+            $(t).slideDown();
+            $("#a_ps_insights").removeAttr("disabled");
+          })
+          .fail(function () {
+            GSC.PingDot("#psi_ping", false);
+            $(t).html('<i class="material-icons large">mood_bad</i>').slideDown();
+            $("#a_ps_insights").removeAttr("disabled");
+          });
+      } // end GetPSInsights()
+
+      // PageSpeed Insights action
+      w.GSC.init.push(function () {
+        w.GSC.names.push("PSI click");
+        $("#a_ps_insights").click(function () {
+          $(this).attr("disabled", "disabled");
+          GSC.PingDot("#psi_ping");
+          GSC.GetPSInsights();
+        });
+      });
+
+      // UI bindings
+      w.GSC.init.push(function () {
+        w.GSC.names.push("UI bindings");
+
+        $("#RemoteFnSelect").change(function () {
+          if (!$("#RemoteFnSelect").val()) return;
+          var s = $("#RemoteFnSelect").val();
+          var t = $("#a_security_token").val();
+          t = t.replace(/[a-zA-Z]*\?/, s + "?");
+          $("#a_security_token").val(t);
+        });
+
+        $("#a_update").click(function () {
+          $("#a_update").attr("disabled", "disabled");
+          GSC.ShowLoader("#a_update_info");
+          setTimeout('$("#a_update").removeAttr("disabled");', 20E3);
+          $.post("/admin/CoreUpdate");
+        });
+
+        $("#a_summernote").click(function () {
+          GSC.DeploySummernote();
+        });
+
+        $("#a_flush").click(function () {
+          GSC.GetCsvInfo = function () {};
+          $("#a_flush").attr("disabled", "disabled");
+          location.href = "/admin/FlushCache";
+        });
+
+        $("#a_token_cc").click(function () {
+          GSC.CopyClipboard($("#a_security_token").val());
+          GSC.PingDot("#sectok_ping");
+        });
+
+        $("#a_get_token").click(function () {
+          if (!$("#RemoteFnSelect").val()) return;
+          $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
+            $("#a_security_token").val(data.data);
+            $("#RemoteFnSelect").change();
+            GSC.PingDot("#sectok_ping");
+          }).fail(function () {
+            $("#a_security_token").val("N/A");
+            GSC.PingDot("#sectok_ping", false);
+          });
+        });
+
+      });
+
+      // CSV timer
+      w.GSC.init.push(function () {
+        w.GSC.names.push("CSV timer");
+        GSC.ShowLoader("#a_update_info");
+        setInterval("GSC.GetCsvInfo()", 2500);
+      });
+
+      // PSI preload
+      w.GSC.init.push(function () {
+        w.GSC.names.push("PSI preload");
+        setTimeout("$.get('/admin/GetPSInsights?" + Date.now() + "');", 5000);
+      });
+
+      // admin UI reset
+      w.GSC.init.push(function () {
+        w.GSC.names.push("reset admin UI");
+        w.GSC.AdminUiReset = function () {
+          $("#admin_main div").addClass("a_reset");
+          $("#admin_main h1").addClass("a_reset a_h1");
+          $("#admin_main h2").addClass("a_reset a_h2");
+          $("#admin_main h3").addClass("a_reset a_h3");
+          $("#admin_main h4").addClass("a_reset a_h4");
+          $("#admin_main h5").addClass("a_reset a_h5");
+          $("#admin_main p").addClass("a_reset");
+        }();
+      });
+
+      // Summernote WYSIWYG
+      w.GSC.init.push(function () {
+        w.GSC.names.push("Summernote editor");
+        if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+          $("#a_summernote").text("{{ l.a_save_all }}");
+          $("#a_summernote").unbind("click");
+          $("#a_summernote").click(function () {
+            // TBD SAVE DATA!
+            $('.summernote').summernote("destroy");
+            $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
+            $("#a_summernote").click(function () {
+              GSC.DeploySummernote();
+            });
+          })
+
+          $(".summernote").summernote({
+            codeviewFilter: true,
+            codeviewIframeFilter: true,
+            dialogsInBody: false,
+            disableDragAndDrop: true,
+            height: 100,
+            toolbar: [
+              ['do', ['undo', 'redo']],
+              ['style', ['style']],
+              ['font', ['bold', 'underline', 'clear', 'superscript', 'subscript']],
+              ['fontname', ['fontname']],
+              ['color', ['color']],
+              ['para', ['ul', 'ol', 'paragraph', 'height']],
+              ['table', ['table']],
+              ['insert', ['link', 'picture', 'video']],
+              ['view', ['fullscreen', 'codeview']],
+            ]
+          });
+        }
+
+      });
+    }
+  })(window, document);
+</script>
+
+{{>admin_custom}}
 
 <!-- summernote -->
 <script src="{{ cdn }}/summernote/summernote-lite.js" defer></script>
 <link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
 
-<!-- moment library -->
+<!-- moment  -->
 <script src="{{ cdn }}/js/moment.min.js" defer></script>
 
 {{/admin_group_admin}}

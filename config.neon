@@ -31,7 +31,6 @@ cache_profiles: [
 ]
 
 css_sources: [
-  "/css/gulp/3.materialize.min.css",
   "/css/gulp/4.fontawesome.min.css",
   "/css/gulp/5.v4-shims.min.css",
   "/css/gulp/6.cookieconsent.min.css",

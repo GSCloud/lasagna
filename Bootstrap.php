@@ -22,23 +22,17 @@ error_reporting(E_ALL);
 
 // tweak ini
 ini_set("auto_detect_line_endings", "1");
-ini_set("default_socket_timeout", 15);
+ini_set("default_socket_timeout", 20);
 ini_set("display_errors", "1");
 
-// ROOT
+// constants in specific order!
 defined("ROOT") || define("ROOT", __DIR__);
-
-// folders
 defined("TEMP") || define("TEMP", "/tmp");
 defined("CACHE") || define("CACHE", ROOT . "/cache");
 defined("DATA") || define("DATA", ROOT . "/data");
 defined("WWW") || define("WWW", ROOT . "/www");
-
-// Mustache
-defined("TEMPLATES") || define("TEMPLATES", ROOT . "/www/templates");
+defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
 defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
-
-// files
 defined("CONFIG") || define("CONFIG", ROOT . "/config.neon");
 defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.neon");
 

@@ -71,7 +71,7 @@ abstract class APresenter implements IPresenter
     // CONSTANTS
 
     /** @var string */
-    const ERROR_NULL = " > FATAL ERROR: UNEXPECTED NULL";
+    const ERROR_NULL = " > FATAL ERROR: NULL UNEXPECTED";
 
     /** @var integer */
     const LOG_FILEMODE = 0664;
@@ -86,7 +86,7 @@ abstract class APresenter implements IPresenter
     const COOKIE_KEY_FILEMODE = 0600;
 
     /** @var integer */
-    const COOKIE_TTL = 86400 * 14;
+    const COOKIE_TTL = 86400 * 10;
 
     /** @var string */
     const GS_CSV_PREFIX = "https://docs.google.com/spreadsheets/d/e/";

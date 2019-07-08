@@ -27,7 +27,6 @@ class HomePresenter extends \GSC\APresenter
         // advanced caching
         $arr = [
             $data["host"],
-            $data["lang"],
             $data["request_path"],
         ];
         $cache_key = strtolower(join($arr, "_"));
