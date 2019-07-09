@@ -1,12 +1,39 @@
 {{#admin_group_admin}}
 
 <style>
-.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:12em}
-.a_reset{font-family:Arial!important;font-size:14px!important}
-.a_h2{font-size:5em!important;font-weight:700!important}
-.a_h3{font-size:4em!important;font-weight:700!important}
-.a_h4{font-size:3em!important;font-weight:700!important}
-.a_h5{font-size:2em!important;font-weight:700!important}
+  .protect {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 12em
+  }
+
+  .a_reset {
+    font-family: Arial !important;
+    font-size: 14px !important
+  }
+
+  .a_h2 {
+    font-size: 5em !important;
+    font-weight: 700 !important
+  }
+
+  .a_h3 {
+    font-size: 4em !important;
+    font-weight: 700 !important
+  }
+
+  .a_h4 {
+    font-size: 3em !important;
+    font-weight: 700 !important
+  }
+
+  .a_h5 {
+    font-size: 2em !important;
+    font-weight: 700 !important
+  }
+
 </style>
 
 <div id="admin_main" class="row center black white-text" style="display:block;padding:1em;margin:0!important">
@@ -50,11 +77,20 @@
       <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
+        <div class="col s12 white">
+          <label>{{ l.a_site }}</label>
+          <select id="SiteSelect" style="width:70%!important;border:0">
+            <option value="" disabled selected>...</option>
+            {{#multisite_names}}
+            <option value="{{.}}">{{.}}</option>
+            {{/multisite_names}}
+          </select>
+        </div>
         <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
-            data-position="bottom" data-tooltip="{{ l.a_summernote_ttip }}">
-            <i class="fas fa-edit"></i>
-            {{ l.a_summernote }}</a>
-            <br>(TBD SAVE DATA)
+          data-position="bottom" data-tooltip="{{ l.a_summernote_ttip }}">
+          <i class="fas fa-edit"></i>
+          {{ l.a_summernote }}</a>
+        <br>(TBD SAVE DATA)
         <h5>Cache</h5>
         <ul>
           <li>default: {{ cache_profiles.default }}</li>
@@ -67,18 +103,18 @@
             data-position="bottom" data-tooltip="{{ l.a_update_ttip }}">
             <i class="fab fa-google-drive"></i>
             {{ l.a_update }}</a>
-          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
-            data-position="bottom" data-tooltip="{{ l.a_flush_ttip }}">
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom"
+            data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
         </div>
         <div class="row center white">
           <div class="col s12">
+            <label>Remote Functions</label>
             <select id="RemoteFnSelect" style="width:70%!important;border:0">
-              <option value="" disabled="" selected=""></option>
+              <option value="" disabled selected>...</option>
               <option value="CoreUpdateRemote">Core Update</option>
               <option value="FlushCacheRemote">Flush Cache</option>
-              <label>Remote Functions</label>
             </select>
           </div>
           <input id="a_security_token" class="black-text" style="font-size:11px;width:90%;border:0" type="text" readonly
@@ -188,11 +224,10 @@
 
       // show loader
       if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
-        if (t) {
-          $(t).html(
-            '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
-          );
-        }
+        if (!t) return;
+        $(t).html(
+          '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
+        );
       }
 
       // ping green/red dot
@@ -296,7 +331,9 @@
 
       // UI bindings
       w.GSC.init.push(function () {
-        w.GSC.names.push("admin panel UI bindings");
+        w.GSC.names.push("admin panel UI");
+        $('#SiteSelect option[value=default]').attr('selected', 'selected');
+        $("#SiteSelect").formSelect();
 
         $("#RemoteFnSelect").change(function () {
           if (!$("#RemoteFnSelect").val()) return;
@@ -344,7 +381,7 @@
 
       // CSV timer
       w.GSC.init.push(function () {
-        w.GSC.names.push("CSV timer");
+        w.GSC.names.push("CSV load timer");
         GSC.ShowLoader("#a_update_info");
         setInterval("GSC.GetCsvInfo()", 2500);
       });
@@ -358,15 +395,13 @@
       // admin UI reset
       w.GSC.init.push(function () {
         w.GSC.names.push("reset admin UI");
-        w.GSC.AdminUiReset = function () {
-          $("#admin_main div").addClass("a_reset");
-          $("#admin_main h1").addClass("a_reset a_h1");
-          $("#admin_main h2").addClass("a_reset a_h2");
-          $("#admin_main h3").addClass("a_reset a_h3");
-          $("#admin_main h4").addClass("a_reset a_h4");
-          $("#admin_main h5").addClass("a_reset a_h5");
-          $("#admin_main p").addClass("a_reset");
-        }();
+        $("#admin_main div").addClass("a_reset");
+        $("#admin_main h1").addClass("a_reset a_h1");
+        $("#admin_main h2").addClass("a_reset a_h2");
+        $("#admin_main h3").addClass("a_reset a_h3");
+        $("#admin_main h4").addClass("a_reset a_h4");
+        $("#admin_main h5").addClass("a_reset a_h5");
+        $("#admin_main p").addClass("a_reset");
       });
 
       // Summernote WYSIWYG
@@ -378,7 +413,7 @@
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
             var data = {};
-            $(".summernote").each(function(i, obj) {
+            $(".summernote").each(function (i, obj) {
               data[$(obj).attr("id")] = $(obj).summernote("code");
               $(obj).summernote("destroy");
             });
@@ -413,6 +448,7 @@
       });
     }
   })(window, document);
+
 </script>
 
 {{>admin_custom}}

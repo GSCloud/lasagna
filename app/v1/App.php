@@ -49,11 +49,11 @@ function logger($message, $severity = Logger::INFO)
 
 // caching profiles
 $cache_profiles = array_replace([
-        "default" => "+3 minutes",
-        "csv" => "+60 minutes",
-        "limiter" => "+2 seconds",
-        "page" => "+10 seconds",
-    ],
+    "default" => "+3 minutes",
+    "csv" => "+60 minutes",
+    "limiter" => "+2 seconds",
+    "page" => "+10 seconds",
+],
     $cfg["cache_profiles"] ?? []
 );
 foreach ($cache_profiles as $k => $v) {
@@ -63,6 +63,16 @@ foreach ($cache_profiles as $k => $v) {
         "path" => CACHE,
         "prefix" => "cakephpcache_" . SERVER . "_" . PROJECT . "_" . VERSION . "_",
     ]);
+}
+
+// multi-site profiles
+$multisite_names = [];
+$multisite_profiles = array_replace([
+    "default" => DOMAIN,
+], $cfg["multisite_profiles"] ?? []
+);
+foreach ($multisite_profiles as $k => $v) {
+    $multisite_names[] = $k;
 }
 
 // routing tables
@@ -125,16 +135,16 @@ $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 // sethl
 if ($router[$view]["sethl"] ?? false) {
     $r = $_COOKIE["hl"] ?? $router[$view]["redirect"] ?? false;
-    switch($r) {
+    switch ($r) {
         case "cs":
         case "/cs":
             $r = "cs";
-        break;
+            break;
 
         case "en":
         case "/en":
             $r = "en";
-        break;
+            break;
     }
     if ($r) {
         header("Location: /" . $r, true, 303);
@@ -159,6 +169,9 @@ if ($router[$view]["nopwa"] ?? false) {
 }
 
 $data["cache_profiles"] = $cache_profiles;
+$data["multisite_names"] = $multisite_names;
+$data["multisite_profiles"] = $multisite_profiles;
+
 $data["match"] = $match;
 $data["presenter"] = $presenter;
 $data["router"] = $router;
