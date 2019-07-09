@@ -122,21 +122,36 @@ if (php_sapi_name() === "cli") {
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 
-// HTTP redirect
+// sethl
+if ($router[$view]["sethl"] ?? false) {
+    $r = $_COOKIE["hl"] ?? $router[$view]["redirect"] ?? false;
+    switch($r) {
+        case "cs":
+        case "/cs":
+            $r = "cs";
+        break;
+
+        case "en":
+        case "/en":
+            $r = "en";
+        break;
+    }
+    if ($r) {
+        header("Location: /" . $r, true, 303);
+        exit;
+    }
+}
+
+// redirect
 if ($router[$view]["redirect"] ?? false) {
+    $r = $router[$view]["redirect"];
     ob_end_clean();
-    header("Location: " . $router[$view]["redirect"], true, 303);
+    header("Location: " . $r, true, 303);
     exit;
 }
 
-// session start
-if ($router[$view]["session"] ?? false) {
-    session_start();
-}
-
-// no PWA
+// nopwa
 if ($router[$view]["nopwa"] ?? false) {
-    $data["nopwa"] = true;
     if (!isset($_GET["nonce"])) {
         header("Location: ?nonce=" . substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8), true, 303);
         exit;

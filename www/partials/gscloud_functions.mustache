@@ -39,6 +39,13 @@
       }
 
       if (!w.GSC.GetTime) w.GSC.GetTime = function (dateString) {
+        function ext(x) {
+          x = ("" + x).slice(-1);
+          if (x == 1) return "st";
+          if (x == 2) return "nd";
+          if (x == 3) return "rd";
+          return "th";
+        }
         var dayz = ["", "{{l.day_of_the_week_1}}", "{{l.day_of_the_week_2}}", "{{l.day_of_the_week_3}}",
           "{{l.day_of_the_week_4}}", "{{l.day_of_the_week_5}}", "{{l.day_of_the_week_6}}",
           "{{l.day_of_the_week_7}}"
@@ -56,34 +63,28 @@
           var d = new Date(dateString);
         }
         var x = {};
-        x.day = d.getDay();
+        x.day = ("" + d.getDay());
         x.day_str = dayz[d.getDay()];
-        x.h = d.getHours();
+        x.h = ("" + d.getHours());
         x.hh = ("0" + d.getHours()).slice(-2);
-        x.yyyy = d.getFullYear();
-        x.m = d.getMonth() + 1;
+        x.yy = ("" + d.getFullYear()).slice(-2);
+        x.yyyy = ("" + d.getFullYear());
+        x.m = ("" + (d.getMonth() + 1));
         x.mm = ("0" + (d.getMonth() + 1)).slice(-2);
+        x.month_str = monthz[x.m];
+        x.month_str2p = monthz2p[x.m];
         x.d = d.getDate();
         x.dd = ("0" + d.getDate()).slice(-2);
         x.today = x.dd + "." + x.mm + "." + x.yyyy;
-
-        function ext(x) {
-          x = ("" + x).slice(-1);
-          if (x == 1) return "st";
-          if (x == 2) return "nd";
-          if (x == 3) return "rd";
-          return "th";
-        }
-
-        // Czech string
+        // Czech locale
         if ("{{ langcs }}") {
           x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
         }
-        // English string
+        // English locale
         if ("{{ langen }}") {
           x.today_str = x.day_str + " " + x.d + ext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
         }
-        x.d = d; // export date object
+        x.d = d;
         return x;
       }
 
@@ -97,8 +98,7 @@
         document.body.appendChild(el);
         var selected =
           document.getSelection().rangeCount > 0 ?
-          document.getSelection().getRangeAt(0) :
-          false;
+          document.getSelection().getRangeAt(0) : false;
         el.select();
         document.execCommand("copy");
         document.body.removeChild(el);

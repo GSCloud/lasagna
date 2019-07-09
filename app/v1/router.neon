@@ -1,6 +1,7 @@
 home:
   path: /
   redirect: /cs
+  sethl: true
 
 admin_redirect:
   path: /admin

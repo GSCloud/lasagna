@@ -3,11 +3,11 @@ defaults:
   method: GET
   presenter: home
   sitemap: false
-  session: false
   template: index
   view: home
   assert_httpcode: 200
   nopwa: false
+  sethl: false
 
 webmanifest:
   path: /manifest.json
