@@ -296,7 +296,7 @@
 
       // UI bindings
       w.GSC.init.push(function () {
-        w.GSC.names.push("UI bindings");
+        w.GSC.names.push("admin panel UI bindings");
 
         $("#RemoteFnSelect").change(function () {
           if (!$("#RemoteFnSelect").val()) return;
@@ -377,17 +377,18 @@
           $("#a_summernote").text("{{ l.a_save_all }}");
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
+            var data = {};
             $(".summernote").each(function(i, obj) {
-              // TBD SAVE DATA!
-              console.log($(obj).summernote("code"));
+              data[$(obj).attr("id")] = $(obj).summernote("code");
               $(obj).summernote("destroy");
             });
+            console.log(data);
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
             $("#a_summernote").click(function () {
               GSC.DeploySummernote();
             });
-          })
+          });
 
           $(".summernote").summernote({
             codeviewFilter: true,

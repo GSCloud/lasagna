@@ -3,33 +3,31 @@
     <a id="logo-container" class="brand-logo truncate" href="/{{#langcs}}cs{{/langcs}}{{#langen}}en{{/langen}}">{{ l.title }}</a>
     <ul class="right hide-on-med-and-down">
       <li>
-        <a class="{{#langcs}}{{ design.nav_color}} darken-4{{/langcs}} text-lighten-4"
-        {{^langcs}}href="/cz"{{/langcs}}><b>{{ l.nav_czech }}</b></a>
+        <a class="sethlcs {{#langcs}}{{ design.nav_color}} darken-4{{/langcs}} text-lighten-4"
+        {{^langcs}}href="/cs"{{/langcs}}><b>{{ l.nav_czech }}</b></a>
       </li>
       <li>
-        <a class="{{#langen}}{{ design.nav_color}} darken-4{{/langen}} text-lighten-4"
+        <a class="sethlen {{#langen}}{{ design.nav_color}} darken-4{{/langen}} text-lighten-4"
         {{^langen}}href="/en"{{/langen}}><b>{{ l.nav_english }}</b></a>
       </li>
     </ul>
     <ul id="nav-mobile" class="sidenav {{ design.nav_color }}">
       <li>
-        <a class="{{#langcs}}black{{/langcs}}" href="/cz">
+        <a class="sethlcs {{#langcs}}black{{/langcs}}" href="/cs">
         <i class="fas fa-language right"></i>
         <b style="color:#fff!important">{{ l.nav_czech }}</b></a>
       </li>
       <li>
-        <a class="{{#langen}}black{{/langen}}" href="/en">
+        <a class="sethlen {{#langen}}black{{/langen}}" href="/en">
         <i class="fas fa-language right"></i>
         <b style="color:#fff!important">{{ l.nav_english }}</b></a>
       </li>
-
       {{#l.company_facebook}}
       <li>
         <a style="color:#fff!important" href="https://facebook.com/{{ l.company_facebook }}">
           <i class="fab fa-facebook"></i>&nbsp;&nbsp;Facebook</a>
       </li>
       {{/l.company_facebook}}
-
       {{#l.company_instagram}}
       <li>
         <a style="color:#fff!important" href="https://instagram.com/{{ l.company_instagram }}">

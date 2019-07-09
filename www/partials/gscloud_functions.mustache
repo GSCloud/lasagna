@@ -1,5 +1,30 @@
 <script>
-  (function(w, d, undefined) {
+  (function (w, d, undefined) {
+
+    // global set cookie
+    if (!w.setCookie) w.setCookie = function (key, value, days) {
+      var expires = "";
+      var d = days ? parseInt(days) : 60;
+      var date = new Date();
+      date.setTime(date.getTime() + (d * 86400));
+      expires = ";expires=" + date.toGMTString();
+      document.cookie = key + "=" + value + ";path=/" + expires;
+    }
+
+    // global get cookie
+    if (!w.getCookie) w.getCookie = function (key) {
+      var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+      return v ? v[2] : null;
+    }
+
+    // global del cookie
+    if (!w.delCookie) w.delCookie = function (key) {
+      var date = new Date();
+      date.setTime(0);
+      expires = ";expires=" + date.toGMTString();
+      document.cookie = key + "=;path=/" + expires;
+    }
+
     if (w.GSC.init) {
 
       // humanize
@@ -11,30 +36,6 @@
           e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
           f = Math.floor(Math.log(number) / Math.log(c));
         return parseFloat((number / Math.pow(c, f)).toFixed(d)) + "&nbsp;" + e[f];
-      }
-
-      // global set cookie
-      if (!w.setCookie) w.setCookie = function (key, value, days) {
-        var expires = "";
-        var d = days ? parseInt(days) : 30;
-        var date = new Date();
-        date.setTime(date.getTime() + (d * 24 * 3600 * 1000));
-        expires = ";expires=" + date.toGMTString();
-        document.cookie = key + "=" + value + ";path=/" + expires;
-      }
-
-      // global get cookie
-      if (!w.getCookie) w.getCookie = function (key) {
-        var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-        return v ? v[2] : null;
-      }
-
-      // global del cookie
-      if (!w.delCookie) w.delCookie = function (key) {
-        var date = new Date();
-        date.setTime(0);
-        expires = ";expires=" + date.toGMTString();
-        document.cookie = key + "=;path=/" + expires;
       }
 
       if (!w.GSC.GetTime) w.GSC.GetTime = function (dateString) {
@@ -82,7 +83,7 @@
         if ("{{ langen }}") {
           x.today_str = x.day_str + " " + x.d + ext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
         }
-        x.d = d;  // export date object
+        x.d = d; // export date object
         return x;
       }
 
@@ -106,6 +107,17 @@
           document.getSelection().addRange(selected);
         }
       }
+
+      // UI bindings
+      w.GSC.init.push(function () {
+        w.GSC.names.push("UI bindings");
+        $(".sethlcs").click(function() {
+          setCookie("hl","cs");
+        });
+        $(".sethlen").click(function() {
+          setCookie("hl","en");
+        });
+      });
 
     }
   })(window, document);
