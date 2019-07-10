@@ -1,11 +1,11 @@
 {{>html_header}}
 
 <div class="container">
-  <div id="user1" class="summernote"></div>
+  <div id="user1" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
   <div class="section">
     <div class="row center">
       {{>title}}
-      <div id="user2" class="summernote"></div>
+      <div id="user2" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
       <br>
 
       {{#admin_group_default}}
@@ -39,8 +39,6 @@
 
       <h4>{{ user.name }}</h4>
       <br>
-      <img class="responsive-img" src="{{ user.avatar }}" alt="{{ user.name }}">
-      <br>
       Google ID: {{ user.id }}
       <br>
       e-mail: <strong>{{ user.email }}</strong>
@@ -66,6 +64,6 @@
     </div>
   </div>
 </div>
-<div id="user3" class="summernote"></div>
+<div id="user3" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
 
 {{>html_footer}}

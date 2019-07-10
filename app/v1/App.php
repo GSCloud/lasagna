@@ -15,13 +15,13 @@ use Monolog\Logger;
 use Nette\Neon\Neon;
 
 // sanity checks
-$x = "FATAL ERROR: broken chain of trust";
+$x = "FATAL ERROR: broken chain of trust\n\n";
 defined("APP") || die($x);
 defined("CACHE") || die($x);
 defined("ROOT") || die($x);
-defined("VERSION") || die($x);
 
 // global constants
+defined("VERSION") || define("VERSION", "v1");
 defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
 defined("SERVER") || define("SERVER", strtr($_SERVER["SERVER_NAME"] ?? "", ".", "_"));
@@ -123,9 +123,22 @@ foreach ($presenter as $k => $v) {
     }
 }
 
-// CI tester, CLI ONLY!!!
+// CLI interface
 if (php_sapi_name() === "cli") {
-    require_once "CiTester.php";
+    if (isset($argv[1])) {
+        switch ($argv[1]) {
+            case "localtest":
+            case "production":
+                require_once "CiTester.php";
+                exit;
+                break;
+        }
+    }
+
+    echo "Tesseract LASAGNA CLI interface.\n\n";
+    echo "Usage: Bootstrap.php <command> [<parameters>...]\n\n";
+    echo "\tlocaltest - CI local test\n";
+    echo "\tproduction - CI production test\n";
     exit;
 }
 

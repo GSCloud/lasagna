@@ -9,15 +9,15 @@
  * @link     https://microsite.gscloud.cz
  */
 
-ob_end_clean();
-
 // sanity check
-$x = "FATAL ERROR: broken chain of trust";
-$x = "FATAL ERROR: missing parameter";
+$x = "FATAL ERROR: broken chain of trust\n\n";
+$x = "FATAL ERROR: missing parameter\n\n";
 defined("ROOT") || die($x);
 if (!isset($cfg)) die($x);
 if (!isset($presenter)) die($x);
 if (!isset($argv)) die($y);
+
+ob_end_clean();
 
 switch ($argv[1]) {
     case "localtest":

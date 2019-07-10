@@ -410,6 +410,7 @@ abstract class APresenter implements IPresenter
             "CONST.CACHE" => CACHE,
             "CONST.DATA" => DATA,
             "CONST.DOMAIN" => DOMAIN,
+            "CONST.DOWNLOAD" => DOWNLOAD,
             "CONST.MONOLOG" => MONOLOG,
             "CONST.PARTIALS" => PARTIALS,
             "CONST.PROJECT" => PROJECT,
@@ -417,6 +418,7 @@ abstract class APresenter implements IPresenter
             "CONST.SERVER" => SERVER,
             "CONST.TEMP" => TEMP,
             "CONST.TEMPLATES" => TEMPLATES,
+            "CONST.UPLOAD" => UPLOAD,
             "CONST.VERSION" => VERSION,
             "CONST.WWW" => WWW,
         ]);

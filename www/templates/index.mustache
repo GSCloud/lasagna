@@ -51,8 +51,7 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2
 
 <div id="loader" class="hidden">
     <img src="{{ cdn }}/img/loading.png" width=128 height=128 alt="Loading&hellip;" class="w3-spin" style="opacity:0" onload="this.style.opacity=1;">
-    <div id="loader_motto" onclick="self.location.reload(true);"
-    class="pointer">{{ l.motto }}</div>
+    <div id="loader_motto">{{ l.motto }}</div>
 </div>
 
 <noscript>
@@ -61,10 +60,11 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2
 
 <script>
 (function(c,e){var a=document.getElementById("loader");a.className=a.className.replace(/\bhidden\b/g,"");a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+b+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version=null;a.LASAGNA.data.timestamp=null;a.loaderOff=function(){console.log("GSC loader off...");
-var a=document.getElementById("loader");a&&a.parentNode.removeChild(a);if(a=document.getElementById("divbody"))document.getElementById("divbody").className=document.getElementById("divbody").className.replace(/\bhidden\b/g,"w3-animate-opacity")};c.GSC=a;setTimeout("GSC.loaderOff()",2E3);document.getElementsByTagName("noscript")[0].remove()})(window);
+var a=document.getElementById("loader");a&&a.parentNode.removeChild(a);if(a=document.getElementById("divbody"))document.getElementById("divbody").className=document.getElementById("divbody").className.replace(/\bhidden\b/g,"w3-animate-opacity")};c.GSC=a;setTimeout("GSC.loaderOff()",3E3);})(window);
 </script>
 
-<div id="divbody" class="hidden">
+<div id="divbody">
+<script>document.getElementById("divbody").className="hidden";</script>
 
 {{>body_cookieconsent}}
 {{>gscloud_functions}}

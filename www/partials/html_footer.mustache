@@ -1,19 +1,16 @@
 <footer class="page-footer {{ design.footer_color }}" style="font-family:Arial!important;font-size:14px;">
   <div class="container">
-    <div id="userfooter1" class="summernote"></div>
+    <div id="userfooter1" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
     <div class="row">
       {{#l.company}}
       <div class="col l6 m6 s12">
         <h5 class="white-text"><i class="material-icons">cloud</i>&nbsp;&nbsp;{{ l.company }}</h5>
-
         {{#l.company_regaddr}}<p class="grey-text text-lighten-4">
           <i class="material-icons">map</i>&nbsp;&nbsp;{{ l.company_regaddr }}</p>
         {{/l.company_regaddr}}
-
         {{#l.company_mobile}}<p class="grey-text text-lighten-4">
           <i class="material-icons">phone_iphone</i>&nbsp;&nbsp;{{ l.company_mobile }}</p>
         {{/l.company_mobile}}
-
         {{#l.company_email}}
         <p class="grey-text text-lighten-4">
           <a class="btn-floating red pulse" href="mailto:{{ l.company_email }}">
@@ -21,13 +18,11 @@
             href="mailto:{{ l.company_email }}">{{ l.company_email }}</a>
         </p>
         {{/l.company_email}}
-
         {{#l.company_facebook}}
         <p><i class="fab fa-facebook"></i>&nbsp;&nbsp;<a class="white-a" href="https://facebook.com/{{ l.company_facebook }}">
             {{ l.company_facebook }}</a>
         </p>
         {{/l.company_facebook}}
-
         {{#l.company_instagram}}
         <p><i class="fab fa-instagram"></i>&nbsp;&nbsp;<a class="white-a" href="https://instagram.com/{{ l.company_instagram }}">
             {{ l.company_instagram }}</a>
@@ -35,7 +30,6 @@
         {{/l.company_instagram}}
       </div>
       {{/l.company}}
-
       {{#l.company}}
       <div class="col l6 m6 s12">
         <h5 class="white-text"><i class="material-icons">cloud</i>&nbsp;&nbsp; {{ l.company }}</h5>
@@ -44,12 +38,9 @@
         {{/l.company_id}}
       </div>
       {{/l.company}}
-
     </div>
     <div class="row">
-
       {{>google_map}}
-
     </div>
   </div>
 

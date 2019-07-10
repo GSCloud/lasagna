@@ -23,13 +23,15 @@ ini_set("default_socket_timeout", 15);
 ini_set("display_errors", "1");
 
 // constants in SPECIFIC ORDER!!!
-defined("ROOT") || define("ROOT", __DIR__);
-defined("TEMP") || define("TEMP", "/tmp");
+defined("ROOT")  || define("ROOT", __DIR__);
+defined("TEMP")  || define("TEMP", "/tmp");
 defined("CACHE") || define("CACHE", ROOT . "/cache");
-defined("DATA") || define("DATA", ROOT . "/data");
-defined("WWW") || define("WWW", ROOT . "/www");
+defined("DATA")  || define("DATA", ROOT . "/data");
+defined("WWW")   || define("WWW", ROOT . "/www");
 defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
-defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
+defined("PARTIALS")  || define("PARTIALS", WWW . "/partials");
+defined("DOWNLOAD")  || define("DOWNLOAD", WWW . "/download");
+defined("UPLOAD")    || define("UPLOAD", WWW . "/upload");
 defined("CONFIG") || define("CONFIG", ROOT . "/config.neon");
 defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.neon");
 
@@ -41,7 +43,7 @@ function check_file($f)
     if (!file_exists($f) || !is_readable($f)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>File: $f</h3>";
+        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>File: $f</h3>\n\n";
         exit;
     }
 }
@@ -51,28 +53,30 @@ function check_folder($f, $writable = false)
     if (!file_exists($f) || !is_readable($f)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>Folder: $f</h3>";
+        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>Folder: $f</h3>\n\n";
         exit;
     }
     if ((bool) $writable === true) {
         if (!is_writable($f)) {
             ob_end_clean();
             header("HTTP/1.1 500 Internal Server Error");
-            echo "<h1>Internal Server Error</h1><h2>Access Denied</h2><h3>Folder: $f</h3>";
+            echo "<h1>Internal Server Error</h1><h2>Access Denied</h2><h3>Folder: $f</h3>\n\n";
             exit;
         }
     }
 }
 
 // sanity checks
+check_file(CONFIG);
+check_file(ROOT . "/VERSION");
 check_folder(CACHE, true);
 check_folder(DATA, true);
+check_folder(DOWNLOAD);
 check_folder(PARTIALS);
 check_folder(TEMP, true);
 check_folder(TEMPLATES);
+check_folder(UPLOAD, true);
 check_folder(WWW);
-check_file(CONFIG);
-check_file(ROOT . "/VERSION");
 
 // configuration
 $cfg = @Neon::decode(@file_get_contents(CONFIG));
@@ -92,7 +96,7 @@ function check_var(&$arr, $key, $default = null)
         }
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Configuration</h2><h3>$arr: $key</h3>";
+        echo "<h1>Internal Server Error</h1><h2>Corrupted Configuration</h2><h3>$arr: $key</h3>\n\n";
         exit;
     }
 }
