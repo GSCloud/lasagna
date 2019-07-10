@@ -68,7 +68,7 @@ foreach ($cache_profiles as $k => $v) {
 // multi-site profiles
 $multisite_names = [];
 $multisite_profiles = array_replace([
-    "default" => DOMAIN,
+    "default" => [trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN],
 ], $cfg["multisite_profiles"] ?? []
 );
 foreach ($multisite_profiles as $k => $v) {
@@ -247,5 +247,7 @@ if (DEBUG) {
     // sanitize private data
     unset($data["cf"]);
     unset($data["goauth_secret"]);
+    unset($data["goauth_client_id"]);
+    unset($data["google_drive_backup "]);
     bdump($data, "DATA " . date("Y-m-d"));
 }

@@ -78,7 +78,7 @@
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
         <div class="col s12 white">
-          <label>{{ l.a_site }}</label>
+          <label>{{ l.a_sites }}</label>
           <select id="SiteSelect" style="width:70%!important;border:0">
             <option value="" disabled selected>...</option>
             {{#multisite_names}}
@@ -89,7 +89,8 @@
         <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
           data-position="bottom" data-tooltip="{{ l.a_summernote_ttip }}">
           <i class="fas fa-edit"></i>
-          {{ l.a_summernote }}</a>
+          {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping"
+              class="mono">&nbsp;</span>
         <br>(TBD SAVE DATA)
         <h5>Cache</h5>
         <ul>
@@ -110,7 +111,7 @@
         </div>
         <div class="row center white">
           <div class="col s12">
-            <label>Remote Functions</label>
+            <label>{{ l.a_remotefns }}</label>
             <select id="RemoteFnSelect" style="width:70%!important;border:0">
               <option value="" disabled selected>...</option>
               <option value="CoreUpdateRemote">Core Update</option>
@@ -176,9 +177,7 @@
               class="fas fa-warehouse"></i></a>
           {{/google_drive_backup}}
         </h4>
-
         {{#convert_hyperlinks}}{{ l.a_changelog }}{{/convert_hyperlinks}}
-
       </div>
     </div>
 
@@ -416,6 +415,7 @@
             $(".summernote").each(function (i, obj) {
               data[$(obj).attr("id")] = $(obj).summernote("code");
               $(obj).summernote("destroy");
+              GSC.PingDot("#summer_ping");
             });
             console.log(data);
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');

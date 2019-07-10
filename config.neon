@@ -30,6 +30,27 @@ google: [
 cache_profiles: [
 ]
 
+multisite_profiles: [
+  lasagna2: [
+    lasagna2.gscloud.cz
+  ]
+]
+
+lasagna2: [
+  cfg: [
+    canonical_url: "https://lasagna2.gscloud.cz/"
+    google: [
+      ua: "UA-123456"
+    ]
+    design: [
+      nav_color: "blue"
+      theme_color: "blue"
+    ]
+  ]
+  data: []
+  locale_prefix: "lsgn2_"
+]
+
 css_sources: [
   "/css/gulp/4.fontawesome.min.css",
   "/css/gulp/5.v4-shims.min.css",
@@ -67,7 +88,7 @@ design: [
   ]
   footer_color: "black"
   nav_color: "orange"
-  theme_color: "blue"
+  theme_color: "orange"
 ]
 
 ui: [
