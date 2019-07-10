@@ -13,19 +13,16 @@ use Nette\Neon\Neon;
 use There4\Analytics\AnalyticsEvent;
 use Tracy\Debugger;
 
-// timer start
+// start!
 list($usec, $sec) = explode(" ", microtime());
 define("LASAGNA_START", ((float) $usec + (float) $sec));
-
 ob_start();
 error_reporting(E_ALL);
-
-// tweak ini
 ini_set("auto_detect_line_endings", "1");
-ini_set("default_socket_timeout", 20);
+ini_set("default_socket_timeout", 15);
 ini_set("display_errors", "1");
 
-// constants in specific order!
+// constants in SPECIFIC ORDER!!!
 defined("ROOT") || define("ROOT", __DIR__);
 defined("TEMP") || define("TEMP", "/tmp");
 defined("CACHE") || define("CACHE", ROOT . "/cache");
@@ -38,6 +35,16 @@ defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.ne
 
 // Composer
 require_once ROOT . "/vendor/autoload.php";
+
+function check_file($f)
+{
+    if (!file_exists($f) || !is_readable($f)) {
+        ob_end_clean();
+        header("HTTP/1.1 500 Internal Server Error");
+        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>File: $f</h3>";
+        exit;
+    }
+}
 
 function check_folder($f, $writable = false)
 {
@@ -57,17 +64,7 @@ function check_folder($f, $writable = false)
     }
 }
 
-function check_file($f)
-{
-    if (!file_exists($f) || !is_readable($f)) {
-        ob_end_clean();
-        header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>File: $f</h3>";
-        exit;
-    }
-}
-
-// checks
+// sanity checks
 check_folder(CACHE, true);
 check_folder(DATA, true);
 check_folder(PARTIALS);
@@ -77,7 +74,7 @@ check_folder(WWW);
 check_file(CONFIG);
 check_file(ROOT . "/VERSION");
 
-// NEON configuration
+// configuration
 $cfg = @Neon::decode(@file_get_contents(CONFIG));
 if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
@@ -100,13 +97,13 @@ function check_var(&$arr, $key, $default = null)
     }
 }
 
-// checks
+// sanity checks
 check_var($cfg, "app", "app");
 check_var($cfg, "canonical_url");
 check_var($cfg, "dbg", ($_SERVER["SERVER_NAME"] ?? "") == "localhost");
 check_var($cfg, "minify", false);
 
-// Tracy
+// debugger
 defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
 if (DEBUG) {
     Debugger::enable(Debugger::DEVELOPMENT, CACHE);
@@ -145,7 +142,7 @@ if (array_key_exists("ua", $data["google"]) && (isset($_SERVER["HTTPS"]))) {
     }
 }
 
-// locate the APP
+// App
 if (file_exists(APP) && is_file(APP)) {
     require_once APP;
 } elseif (file_exists(APP . "/App.php") && is_file(APP . "/App.php")) {

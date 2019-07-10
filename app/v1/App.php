@@ -14,11 +14,12 @@ use Google\Cloud\Logging\LoggingClient;
 use Monolog\Logger;
 use Nette\Neon\Neon;
 
-// sanity check
-defined("APP") || exit;
-defined("CACHE") || exit;
-defined("ROOT") || exit;
-defined("VERSION") || exit;
+// sanity checks
+$x = "FATAL ERROR: broken chain of trust";
+defined("APP") || die($x);
+defined("CACHE") || die($x);
+defined("ROOT") || die($x);
+defined("VERSION") || die($x);
 
 // global constants
 defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
@@ -29,12 +30,11 @@ defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PRO
 // Google Cloud Platform
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? "gscloudcz-163314");
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? "/keys/GSCloud-6dd97e5ac451.json");
-
 if (file_exists(APP . GCP_KEYS)) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
-// Stackdriver logging
+// Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
     ob_flush();
@@ -97,7 +97,7 @@ foreach ($defaults as $r) {
     $router = array_replace_recursive($router, @Neon::decode($content));
 }
 
-// set defaults
+// routing defaults
 $presenter = array();
 $defaults = $router["defaults"] ?? [];
 foreach ($router as $k => $v) {
@@ -109,6 +109,7 @@ foreach ($router as $k => $v) {
     }
     $presenter[$k] = $router[$k];
 }
+
 // map routes
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
@@ -122,9 +123,9 @@ foreach ($presenter as $k => $v) {
     }
 }
 
-// CLI tester
+// CI tester, CLI ONLY!!!
 if (php_sapi_name() === "cli") {
-    require_once "CliTester.php";
+    require_once "CiTester.php";
     exit;
 }
 
@@ -168,6 +169,7 @@ if ($router[$view]["nopwa"] ?? false) {
     }
 }
 
+// data population
 $data["cache_profiles"] = $cache_profiles;
 $data["multisite_names"] = $multisite_names;
 $data["multisite_profiles"] = $multisite_profiles;
@@ -177,7 +179,7 @@ $data["presenter"] = $presenter;
 $data["router"] = $router;
 $data["view"] = $view;
 
-// instantiate singleton
+// App singleton
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $presenter_file = APP . "/${p}.php";
 if (!file_exists($presenter_file)) {
@@ -188,38 +190,38 @@ if (!file_exists($presenter_file)) {
 }
 
 // CSP headers
-$security = [
-    "Content-Security-Policy:",
-    "connect-src",
-    "'self'",
-    "https://*;",
-    "default-src",
-    "'unsafe-inline'",
-    "'self'",
-    "https://*;",
-    "font-src",
-    "'self'",
-    "'unsafe-inline'",
-    "https://*.googleapis.com",
-    "https://*.gstatic.com;",
-    "script-src",
-    "'self'",
-    "'unsafe-inline'",
-    "'unsafe-eval';",
-    "img-src",
-    "'self'",
-    "'unsafe-inline'",
-    "https://*.googleusercontent.com/*",
-    "data:;",
-    "form-action",
-    "'self';",
-];
-#header(implode(" ", $security));
+/*
+header(implode(" ", [
+"Content-Security-Policy:",
+"connect-src",
+"'self'",
+"https://*;",
+"default-src",
+"'unsafe-inline'",
+"'self'",
+"https://*;",
+"font-src",
+"'self'",
+"'unsafe-inline'",
+"https://*.googleapis.com",
+"https://*.gstatic.com;",
+"script-src",
+"'self'",
+"'unsafe-inline'",
+"'unsafe-eval';",
+"img-src",
+"'self'",
+"'unsafe-inline'",
+"https://*.googleusercontent.com/*",
+"data:;",
+"form-action",
+"'self';",
+]));
+ */
 
 // App
 require_once APP . "/APresenter.php";
 require_once $presenter_file;
-
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
@@ -242,8 +244,8 @@ if ($events) {
 
 // last debug
 if (DEBUG) {
+    // sanitize private data
     unset($data["cf"]);
-    unset($data["goauth_client_id"]);
     unset($data["goauth_secret"]);
     bdump($data, "DATA " . date("Y-m-d"));
 }

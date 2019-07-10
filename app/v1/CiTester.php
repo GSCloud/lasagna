@@ -12,19 +12,15 @@
 ob_end_clean();
 
 // sanity check
-defined("ROOT") || exit;
-if (!isset($argv)) {
-    exit;
-}
-if (!isset($cfg)) {
-    exit;
-}
-if (!isset($presenter)) {
-    exit;
-}
+$x = "FATAL ERROR: broken chain of trust";
+$x = "FATAL ERROR: missing parameter";
+defined("ROOT") || die($x);
+if (!isset($cfg)) die($x);
+if (!isset($presenter)) die($x);
+if (!isset($argv)) die($y);
 
 switch ($argv[1]) {
-    case "local":
+    case "localtest":
         $case = "local";
         $target = $cfg["local_goauth_origin"];
         break;
