@@ -400,6 +400,9 @@
         $("#admin_main h4").addClass("a_reset a_h4");
         $("#admin_main h5").addClass("a_reset a_h5");
         $("#admin_main p").addClass("a_reset");
+        if (w.GSC.TouchDevice) {
+          $('.tooltipped').tooltip('destroy');
+        }
       });
 
       // Summernote WYSIWYG

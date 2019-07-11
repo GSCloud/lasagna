@@ -27,6 +27,9 @@
 
     if (w.GSC.init) {
 
+      w.GSC.TouchDevice = ("ontouchstart" in window || w.DocumentTouch && d instanceof DocumentTouch)
+        ? true : false;
+
       // humanize
       if (!w.GSC.FormatBytes) w.GSC.FormatBytes = function (number, precision) {
         number = parseInt(number);

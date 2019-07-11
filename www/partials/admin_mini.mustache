@@ -1,12 +1,11 @@
 {{#admin_group_admin}}
 
 <script>
-  (function (w) {
+  (function (w, d, undefined) {
     if (w.GSC.init) {
       delCookie("admin_panel");
-      w.GSC.SemaphoreAdminPanelOn = true;
     }
-  })(window);
+  })(window, document);
 </script>
 
 {{/admin_group_admin}}
