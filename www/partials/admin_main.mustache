@@ -1,42 +1,15 @@
 {{#admin_group_admin}}
 
 <style>
-  .protect {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    width: 12em
-  }
-
-  .a_reset {
-    font-family: Arial !important;
-    font-size: 14px !important
-  }
-
-  .a_h2 {
-    font-size: 5em !important;
-    font-weight: 700 !important
-  }
-
-  .a_h3 {
-    font-size: 4em !important;
-    font-weight: 700 !important
-  }
-
-  .a_h4 {
-    font-size: 3em !important;
-    font-weight: 700 !important
-  }
-
-  .a_h5 {
-    font-size: 2em !important;
-    font-weight: 700 !important
-  }
-
+.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:12em}
+.a_reset{font-family:Arial!important;font-size:14px!important}
+.a_h2{font-size:5em!important;font-weight:700!important}
+.a_h3{font-size:4em!important;font-weight:700!important}
+.a_h4{font-size:3em!important;font-weight:700!important}
+.a_h5{font-size:2em!important;font-weight:700!important}
 </style>
 
-<div id="admin_main" class="row center black white-text" style="display:block;padding:1em;margin:0!important">
+<div id="admin_main" class="row center black white-text" style="display:none;padding:1em;margin:0!important">
 
   <div class="row center">
     <a style="margin:5px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
@@ -67,7 +40,7 @@
       {{ l.a_onesignal }}</a>
 
     <a style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="bottom"
-      data-tooltip="{{ l.a_google_logout_ttip }}" href="/logout">
+      data-tooltip="{{ l.a_google_logout_ttip }}" href="https://www.google.com/accounts/Logout">
       <i class="fab fa-google"></i>
       {{ l.a_google_logout }}</a>
   </div>
@@ -89,8 +62,9 @@
         <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
           data-position="bottom" data-tooltip="{{ l.a_summernote_ttip }}">
           <i class="fas fa-edit"></i>
-          {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping"
-              class="mono">&nbsp;</span>
+          {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
+      </div>
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
         <h5>Cache</h5>
         <ul>
           <li>{{ l.a_default }}: {{ cache_profiles.default }}</li>
@@ -133,24 +107,62 @@
     </div>
 
     <div class="col l4 m6 s12">
-      <div class="row center" style="border:2px solid orange;margin:5px;border-radius:5px;">
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
+        <div class="white-text">
+          <h5>{{ l.a_groups_permissions }}</h5>
+          <div class="row center">
+            <a id="a_logout" class="tooltipped waves-effect green waves-light btn" data-position="bottom"
+              data-tooltip="{{ l.a_logout_ttip }}">
+              <i class="fas fa-sign-out-alt"></i>
+              {{ l.a_logout }}</a>
+          </div>
+          <strong>OWNER / ADMIN</strong>
+          <p class="orange-text">
+            {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
+            {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
+          </p>
+          <br>
+          <strong>DEFAULT</strong>
+          <p class="orange-text">
+            {{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
+            {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}
+          </p>
+        </div>
+      </div>
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
+        <div class="white-text">
+          <h5>Google</h5>
+          <ul class="mono">
+            <li>Console project: {{ gcp_project_id }}
+              {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
+            <li>Maps query: {{ google.map_query }}
+              {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
+            <li>Analytics: {{ google.ua }}
+              {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
+            <br>
+            <li>Maps API key:<br><span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
+              {{^google.mapsapi_key}}<i class="red-text fas fa-times"></i>{{/google.mapsapi_key}}</li>
+            <li>PageSpeed Insights API key:<br><span title="{{ google.pagespeedinsights_key }}" class="protect">{{
+            google.pagespeedinsights_key }}</span>
+              {{^google.pagespeedinsights_key}}<i class="red-text fas fa-times"></i>{{/google.pagespeedinsights_key}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col l4 m6 s12">
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
         <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
         <p id="a_ps_insights_info"></p>
-        <div class="row center">
+        <div id="psi_row" class="row center">
           <a id="a_ps_insights" class="tooltipped waves-effect orange waves-light btn" data-position="bottom"
             data-tooltip="{{ l.a_ps_insights_ttip }}">
             <i class="fab fa-google"></i>
             {{ l.a_ps_insights }}</a>
         </div>
       </div>
-      <div class="row left-align" style="margin:1em">
-
-        {{^l.onesignal_appid}}
-        <div class="row center red-text">
-          {{#convert_hyperlinks}}{{ l.a_onesignal_missing }}{{/convert_hyperlinks}}
-        </div>
-        {{/l.onesignal_appid}}
-
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
         <h4 class="center">
           <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="bottom"
             data-tooltip="GitHub Inc." href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
@@ -176,43 +188,21 @@
               class="fas fa-warehouse"></i></a>
           {{/google_drive_backupxxx}}
         </h4>
+        </div>
+      <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
+        <div class="row grey-text left-align" style="margin-top:1em">
+        <div class="grey-text left-align container">
         {{#convert_hyperlinks}}{{ l.a_changelog }}{{/convert_hyperlinks}}
+        </div>
+        {{^l.onesignal_appid}}
+        <div class="row center red-text" style="margin:1em">
+          {{#convert_hyperlinks}}{{ l.a_onesignal_missing }}{{/convert_hyperlinks}}
+        </div>
+        {{/l.onesignal_appid}}
+        </div>
       </div>
     </div>
 
-    <div class="col l4 m6 s12">
-      <div class="card blue-grey darken-4">
-        <div class="card-content white-text">
-          <h5 class="card-title">{{ l.a_groups_permissions }}</h5>
-          <strong>OWNER / ADMIN</strong>
-          <p class="orange-text">
-            {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
-            {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
-          </p>
-          <br>
-          <strong>DEFAULT</strong>
-          <p class="orange-text">
-            {{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
-            {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}
-          </p>
-        </div>
-      </div>
-      <h5>Google</h5>
-      <ul class="mono">
-        <li>Console project: {{ gcp_project_id }}
-          {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
-        <li>Maps query: {{ google.map_query }}
-          {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
-        <li>Analytics: {{ google.ua }}
-          {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
-        <br>
-        <li>Maps API key:<br><span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
-          {{^google.mapsapi_key}}<i class="red-text fas fa-times"></i>{{/google.mapsapi_key}}</li>
-        <li>PageSpeed Insights API key:<br><span title="{{ google.pagespeedinsights_key }}" class="protect">{{
-            google.pagespeedinsights_key }}</span>
-          {{^google.pagespeedinsights_key}}<i class="red-text fas fa-times"></i>{{/google.pagespeedinsights_key}}</li>
-      </ul>
-    </div>
   </div>
 </div>
 
@@ -228,7 +218,7 @@
         );
       }
 
-      // ping green/red dot
+      // ping dot
       if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
         if (status) {
           status = "green";
@@ -280,9 +270,7 @@
       if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
         var t = "#a_ps_insights_info";
         GSC.ShowLoader(t);
-        $(t).css({
-          display: "none"
-        });
+        $("#psi_row").hide();
         $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
             GSC.PingDot("#psi_ping");
             $(t).html("<h2 class='orange-text a_reset a_h2'>" + data.data.ruleGroups.SPEED.score +
@@ -375,6 +363,10 @@
           });
         });
 
+        $("#a_logout").click(function () {
+          window.location.href="/logout";
+        });
+
       });
 
       // CSV timer
@@ -392,7 +384,7 @@
 
       // admin UI reset
       w.GSC.init.push(function () {
-        w.GSC.names.push("reset admin UI");
+        w.GSC.names.push("admin UI");
         $("#admin_main div").addClass("a_reset");
         $("#admin_main h1").addClass("a_reset a_h1");
         $("#admin_main h2").addClass("a_reset a_h2");
@@ -403,6 +395,7 @@
         if (w.GSC.TouchDevice) {
           $('.tooltipped').tooltip('destroy');
         }
+        $("#admin_main").show();
       });
 
       // Summernote WYSIWYG
@@ -413,9 +406,10 @@
           $("#a_summernote").text("{{ l.a_save_all }}");
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
+            var id;
             var data = {};
             $(".summernote").each(function (i, obj) {
-              data[$(obj).attr("id")] = $(obj).summernote("code");
+              if (id = $(obj).attr("id")) data[id] = $(obj).summernote("code");
               $(obj).summernote("destroy");
               GSC.PingDot("#summer_ping");
             });
@@ -455,11 +449,8 @@
 
 {{>admin_custom}}
 
-<!-- summernote -->
 <script src="{{ cdn }}/summernote/summernote-lite.js" defer></script>
-<link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
-
-<!-- moment  -->
 <script src="{{ cdn }}/js/moment.min.js" defer></script>
+<link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
 
 {{/admin_group_admin}}

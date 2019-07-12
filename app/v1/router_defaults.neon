@@ -1,13 +1,13 @@
 defaults:
+  assert_httpcode: 200
   language: cs
   method: GET
+  nopwa: false
   presenter: home
+  sethl: false
   sitemap: false
   template: index
   view: home
-  assert_httpcode: 200
-  nopwa: false
-  sethl: false
 
 webmanifest:
   path: /manifest.json
@@ -64,12 +64,18 @@ error:
   path: '/err/[a:code]'
   presenter: error
 
-en_article:
-  path: '/en/id/[**:trailing]'
-  language: en
-  presenter: article
-
 cs_article:
-  path: '/cs/id/[**:trailing]'
   language: cs
-  presenter: article
+  path: '/cs/id/[**:trailing]'
+  presenter: home
+
+en_article:
+  language: en
+  path: '/en/id/[**:trailing]'
+  presenter: home
+
+read_articles:
+  assert_json: true
+  method: GET
+  path: '/ReadArticles/[**:trailing]'
+  presenter: core

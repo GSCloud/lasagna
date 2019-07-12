@@ -1,14 +1,26 @@
 admin:
-  path: '/admin/[a:p]'
   method: GET|POST|DELETE
+  path: '/admin/[a:p]'
   presenter: admin
 
 login:
+  assert_httpcode: 303
   path: /login
   presenter: login
-  assert_httpcode: 303
 
 logout:
+  assert_httpcode: 303
   path: /logout
   presenter: logout
-  assert_httpcode: 303
+
+update_articles:
+  assert_json: true
+  method: POST
+  path: '/UpdateArticles/[**:trailing]'
+  presenter: admin
+
+delete_articles:
+  assert_json: true
+  method: DELETE
+  path: '/DeleteArticles/[**:trailing]'
+  presenter: admin

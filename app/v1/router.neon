@@ -8,11 +8,11 @@ admin_redirect:
   redirect: "https://lasagna.gscloud.cz/login?relogin=true"
 
 cs:
-  path: /cs
   language: cs
+  path: /cs
   sitemap: true
 
 en:
-  path: /en
   language: en
+  path: /en
   sitemap: true
