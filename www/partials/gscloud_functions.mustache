@@ -1,6 +1,21 @@
 <script>
   (function (w, d, undefined) {
 
+    function checkNetwork(e) {
+      if (navigator.onLine) {
+        d.getElementsByTagName("html")[0].setAttribute("offline", false);
+        d.getElementById("offline-message").setAttribute("aria-hidden", true);
+      } else {
+        d.getElementsByTagName("html")[0].setAttribute("offline", true);
+        d.getElementById("offline-message").setAttribute("aria-hidden", false);
+      }
+    }
+    w.addEventListener("load", function () {
+      w.addEventListener("online", checkNetwork);
+      w.addEventListener("offline", checkNetwork);
+    });
+    checkNetwork();
+
     // global set cookie
     if (!w.setCookie) w.setCookie = function (key, value, days) {
       var expires = "";
@@ -27,8 +42,8 @@
 
     if (w.GSC.init) {
 
-      w.GSC.TouchDevice = ("ontouchstart" in window || w.DocumentTouch && d instanceof DocumentTouch)
-        ? true : false;
+      w.GSC.TouchDevice = ("ontouchstart" in window || w.DocumentTouch && d instanceof DocumentTouch) ?
+        true : false;
 
       // humanize
       if (!w.GSC.FormatBytes) w.GSC.FormatBytes = function (number, precision) {
@@ -114,11 +129,11 @@
       // UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("UI bindings");
-        $(".sethlcs").click(function() {
-          setCookie("hl","cs");
+        $(".sethlcs").click(function () {
+          setCookie("hl", "cs");
         });
-        $(".sethlen").click(function() {
-          setCookie("hl","en");
+        $(".sethlen").click(function () {
+          setCookie("hl", "en");
         });
       });
 

@@ -1,4 +1,5 @@
 window.GSC.loaderOff();
+
 window.addEventListener("load", function () {
   if ("serviceWorker" in navigator) {
     console.log("Service worker...");
@@ -13,7 +14,7 @@ window.addEventListener("load", function () {
   (function ($) {
     $(function () {
       M.AutoInit();
-      window.setTimeout(window.GSC.AutoInit, 1);
+      window.GSC.AutoInit();
     });
   })(jQuery, window);
 });
