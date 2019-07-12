@@ -210,7 +210,6 @@
 
   (function (w, d, undefined) {
     d.getElementById("admin_main").style.display = "block";
-
     if (w.GSC.init) {
 
       // loader
@@ -234,6 +233,10 @@
       // GetCsvInfo()
       if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
         var t = "#a_update_info";
+        if (w.GSC.offline) {
+          GSC.PingDot("#csv_ping", false);
+          return;
+        }
         $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
             GSC.PingDot("#csv_ping");
             var content = "";
@@ -269,10 +272,14 @@
       // GetPSInsights()
       if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
         var t = "#a_ps_insights_info";
+        if (w.GSC.offline) {
+          GSC.PingDot("#psi_ping", false);
+          return;
+        }
         GSC.ShowLoader(t);
-        $("#psi_row").hide();
         $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
             GSC.PingDot("#psi_ping");
+            $("#psi_row").hide();
             $(t).html("<h2 class='orange-text a_reset a_h2'>" + data.data.ruleGroups.SPEED.score +
               "&nbsp;%</h2>");
             $(t).append("numberResources:&nbsp;<span class=bold>" +
@@ -309,6 +316,10 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("PSI click");
         $("#a_ps_insights").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#psi_ping", false);
+            return;
+          }
           $(this).attr("disabled", "disabled");
           GSC.PingDot("#psi_ping");
           GSC.GetPSInsights();
@@ -330,9 +341,13 @@
         });
 
         $("#a_update").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#csv_ping", false);
+            return;
+          }
           $("#a_update").attr("disabled", "disabled");
           GSC.ShowLoader("#a_update_info");
-          setTimeout('$("#a_update").removeAttr("disabled");', 20E3);
+          setTimeout('$("#a_update").removeAttr("disabled");', 10E3);
           $.post("/admin/CoreUpdate");
         });
 
@@ -341,6 +356,10 @@
         });
 
         $("#a_flush").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#csv_ping", false);
+            return;
+          }
           GSC.GetCsvInfo = function () {};
           $("#a_flush").attr("disabled", "disabled");
           location.href = "/admin/FlushCache";
@@ -352,6 +371,10 @@
         });
 
         $("#a_get_token").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#sectok_ping", false);
+            return;
+          }
           if (!$("#RemoteFnSelect").val()) return;
           $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
             $("#a_security_token").val(data.data);
@@ -364,6 +387,7 @@
         });
 
         $("#a_logout").click(function () {
+          if (w.GSC.offline) return;
           window.location.replace("/logout");
         });
 
@@ -405,6 +429,10 @@
           $("#a_summernote").text("{{ l.a_save_all }}");
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
+            if (w.GSC.offline) {
+              GSC.PingDot("#summer_ping", false);
+              return;
+            }
             var id;
             var data = {};
             $(".summernote").each(function (i, obj) {
