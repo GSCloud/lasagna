@@ -1,7 +1,7 @@
 ### TESSERACT LASAGNA
 
-dbg: TRUE
-#minify: TRUE
+#dbg: TRUE
+minify: TRUE
 
 # CORE
 app: lasagna

@@ -207,10 +207,13 @@
 </div>
 
 <script>
+
   (function (w, d, undefined) {
+    d.getElementById("admin_main").style.display = "block";
+
     if (w.GSC.init) {
 
-      // show loader
+      // loader
       if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
         if (!t) return;
         $(t).html(
@@ -220,18 +223,15 @@
 
       // ping dot
       if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
-        if (status) {
-          status = "green";
-        } else {
-          status = "red";
-        }
+        if (status) status = "green";
+          else status = "red";
         $(dot).html("&#8226;").css({
           color: status,
           opacity: 1
         }).fadeTo("slow", 0);
       }
 
-      // start GetCsvInfo()
+      // GetCsvInfo()
       if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
         var t = "#a_update_info";
         $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
@@ -266,7 +266,7 @@
           });
       } // end GetCsvInfo()
 
-      // start GetPSInsights()
+      // GetPSInsights()
       if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
         var t = "#a_ps_insights_info";
         GSC.ShowLoader(t);
@@ -305,7 +305,7 @@
           });
       } // end GetPSInsights()
 
-      // PageSpeed Insights action
+      // PageSpeed Insights
       w.GSC.init.push(function () {
         w.GSC.names.push("PSI click");
         $("#a_ps_insights").click(function () {
@@ -315,7 +315,7 @@
         });
       });
 
-      // UI bindings
+      // admin UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("admin panel UI");
         $('#SiteSelect option[value=default]').attr('selected', 'selected');
@@ -364,7 +364,7 @@
         });
 
         $("#a_logout").click(function () {
-          window.location.href="/logout";
+          window.location.replace("/logout");
         });
 
       });
@@ -395,7 +395,6 @@
         if (w.GSC.TouchDevice) {
           $('.tooltipped').tooltip('destroy');
         }
-        $("#admin_main").show();
       });
 
       // Summernote WYSIWYG
