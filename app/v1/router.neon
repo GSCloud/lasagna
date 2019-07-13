@@ -1,6 +1,6 @@
 home:
   path: /
-  redirect: /cs
+  sitemap: true
   sethl: true
 
 admin_redirect:

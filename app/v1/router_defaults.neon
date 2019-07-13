@@ -21,11 +21,6 @@ swjs:
   path: /sw.js
   presenter: core
 
-cz_redirect:
-  path: /cz/*
-  redirect: /cs
-  assert_httpcode: 303
-
 version_core:
   method: GET|POST
   path: /version/core
