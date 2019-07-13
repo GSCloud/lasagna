@@ -5,18 +5,20 @@
       if (navigator.onLine) {
         d.getElementsByTagName("html")[0].setAttribute("offline", false);
         d.getElementById("offline-message").setAttribute("aria-hidden", true);
-        if (w.GSC.init) w.GSC.offline = false;
+        if (w.GSC) w.GSC.offline = false;
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
         d.getElementById("offline-message").setAttribute("aria-hidden", false);
-        if (w.GSC.init) w.GSC.offline = true;
+        if (w.GSC) w.GSC.offline = true;
       }
     }
-    w.addEventListener("load", function () {
-      w.addEventListener("online", checkNetwork);
-      w.addEventListener("offline", checkNetwork);
-    });
-    checkNetwork();
+    if ('onLine' in navigator) {
+      w.addEventListener("load", function () {
+        w.addEventListener("online", checkNetwork);
+        w.addEventListener("offline", checkNetwork);
+        checkNetwork();
+      });
+    }
 
     // global set cookie
     if (!w.setCookie) w.setCookie = function (key, value, days) {
@@ -42,7 +44,7 @@
       document.cookie = key + "=;path=/" + expires;
     }
 
-    if (w.GSC.init) {
+    if (w.GSC) {
 
       w.GSC.TouchDevice = ("ontouchstart" in window || w.DocumentTouch && d instanceof DocumentTouch) ?
         true : false;

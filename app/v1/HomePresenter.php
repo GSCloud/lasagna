@@ -13,10 +13,11 @@ class HomePresenter extends \GSC\APresenter
         $view = $this->getView();
 
         // check user
+        $use_cache = true;
         $data["user"] = $this->getCurrentUser();
-        $data["admin"] = $this->getUserGroup();
-        if ($this->getUserGroup()) {
-            $data["admin_group_" . $this->getUserGroup()] = true;
+        if ($data["admin"] = $this->getUserGroup()) {
+            $data["admin_group_" . $data["admin"]] = true;
+            $use_cache = false;
         }
 
         // set language and fetch locale
@@ -30,7 +31,7 @@ class HomePresenter extends \GSC\APresenter
             $data["request_path"],
         ];
         $cache_key = strtolower(join($arr, "_"));
-        if ($output = Cache::read($cache_key, "page")) {
+        if ($use_cache && $output = Cache::read($cache_key, "page")) {
             $output .= "\n<script>console.log('(page cached)');</script>";
             return $this->setData($data, "output", $output);
         }
@@ -50,5 +51,4 @@ class HomePresenter extends \GSC\APresenter
         Cache::write($cache_key, $output, "page");
         return $this->setData($data, "output", $output);
     }
-
 }
