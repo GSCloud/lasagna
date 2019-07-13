@@ -46,8 +46,10 @@
 
     if (w.GSC) {
 
+      // touch
       w.GSC.TouchDevice = ("ontouchstart" in window || w.DocumentTouch && d instanceof DocumentTouch) ?
         true : false;
+      if (w.GSC.TouchDevice) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
       // humanize
       if (!w.GSC.FormatBytes) w.GSC.FormatBytes = function (number, precision) {
