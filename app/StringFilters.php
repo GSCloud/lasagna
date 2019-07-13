@@ -77,6 +77,8 @@ class StringFilters implements IStringFilters
     {
         $replace = array(
             "  " => " ",
+            ">>" => "»",
+            "<<" => "«",
             " % " => "&nbsp;% ",
             " - " => " – ",
             " ... " => "&nbsp;… ",
@@ -102,6 +104,7 @@ class StringFilters implements IStringFilters
             " Ms. " => " Ms.&nbsp;",
             " PM" => "&nbsp;PM",
             " USD " => " USD&nbsp;",
+            " Usd " => " USD&nbsp;",
             " a " => " a&nbsp;",
             " h " => "&nbsp;h ",
             " h" => "&nbsp;h",
@@ -139,6 +142,8 @@ class StringFilters implements IStringFilters
     {
         $replace = array(
             "  " => " ",
+            ">>" => "»",
+            "<<" => "«",
             " % " => "&nbsp;%",
             " - " => " – ",
             " ... " => "&nbsp;… ",
@@ -158,6 +163,7 @@ class StringFilters implements IStringFilters
             " Kč" => "&nbsp;Kč",
             " Ltd." => "&nbsp;Ltd.",
             " USD" => "&nbsp;USD",
+            " Usd" => "&nbsp;USD",
             " a " => " a&nbsp;",
             " cca. " => " cca.&nbsp;",
             " h " => "&nbsp;h ",

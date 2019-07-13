@@ -24,7 +24,7 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 <link rel="preconnect" href="//www.google.com">
 
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
-{{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}">{{/canonical_url}}
+{{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
 <link rel="manifest" href="/manifest.json?lang={{ lang }}">
 
 {{>head_meta}}
@@ -46,6 +46,7 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2
 
 <link rel="stylesheet" href="{{ cdn}}/css/materialize.min.css">
 </head>
+
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
 
 {{>body_pre}}

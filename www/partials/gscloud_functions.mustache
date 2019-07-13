@@ -12,6 +12,7 @@
         if (w.GSC) w.GSC.offline = true;
       }
     }
+
     if ('onLine' in navigator) {
       w.addEventListener("load", function () {
         w.addEventListener("online", checkNetwork);
@@ -20,24 +21,24 @@
       });
     }
 
-    // global set cookie
-    if (!w.setCookie) w.setCookie = function (key, value, days) {
+    // GLOBAL setCookie()
+    if (!w.setCookie) window.setCookie = function (key, value, days) {
       var expires = "";
-      var d = days ? parseInt(days) : 60;
+      var d = days ? parseInt(days) : 30;
       var date = new Date();
       date.setTime(date.getTime() + (d * 86400));
       expires = ";expires=" + date.toGMTString();
       document.cookie = key + "=" + value + ";path=/" + expires;
     }
 
-    // global get cookie
-    if (!w.getCookie) w.getCookie = function (key) {
+    // GLOBAL getCookie()
+    if (!w.getCookie) window.getCookie = function (key) {
       var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
       return v ? v[2] : null;
     }
 
-    // global del cookie
-    if (!w.delCookie) w.delCookie = function (key) {
+    // GLOBAL delCookie()
+    if (!w.delCookie) window.delCookie = function (key) {
       var date = new Date();
       date.setTime(0);
       expires = ";expires=" + date.toGMTString();
@@ -47,11 +48,11 @@
     if (w.GSC) {
 
       // touch
-      w.GSC.TouchDevice = ("ontouchstart" in window || w.DocumentTouch && d instanceof DocumentTouch) ?
+      w.GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
         true : false;
-      if (w.GSC.TouchDevice) d.getElementsByTagName("html")[0].setAttribute("touch", true);
+      if (w.GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
-      // humanize
+      // FormatBytes()
       if (!w.GSC.FormatBytes) w.GSC.FormatBytes = function (number, precision) {
         number = parseInt(number);
         if (!number) return "0";
@@ -62,6 +63,7 @@
         return parseFloat((number / Math.pow(c, f)).toFixed(d)) + "&nbsp;" + e[f];
       }
 
+      // GetTime()
       if (!w.GSC.GetTime) w.GSC.GetTime = function (dateString) {
         function ext(x) {
           x = ("" + x).slice(-1);
@@ -82,57 +84,54 @@
           "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
           "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
         ];
-        var d = new Date();
+        var z = new Date();
         if (dateString) {
-          var d = new Date(dateString);
+          var z = new Date(dateString);
         }
         var x = {};
-        x.day = ("" + d.getDay());
-        x.day_str = dayz[d.getDay()];
-        x.h = ("" + d.getHours());
-        x.hh = ("0" + d.getHours()).slice(-2);
-        x.yy = ("" + d.getFullYear()).slice(-2);
-        x.yyyy = ("" + d.getFullYear());
-        x.m = ("" + (d.getMonth() + 1));
-        x.mm = ("0" + (d.getMonth() + 1)).slice(-2);
+        x.day = ("" + z.getDay());
+        x.day_str = dayz[z.getDay()];
+        x.h = ("" + z.getHours());
+        x.hh = ("0" + z.getHours()).slice(-2);
+        x.yy = ("" + z.getFullYear()).slice(-2);
+        x.yyyy = ("" + z.getFullYear());
+        x.m = ("" + (z.getMonth() + 1));
+        x.mm = ("0" + (z.getMonth() + 1)).slice(-2);
         x.month_str = monthz[x.m];
         x.month_str2p = monthz2p[x.m];
-        x.d = d.getDate();
-        x.dd = ("0" + d.getDate()).slice(-2);
+        x.d = z.getDate();
+        x.dd = ("0" + z.getDate()).slice(-2);
         x.today = x.dd + "." + x.mm + "." + x.yyyy;
-        // Czech locale
-        if ("{{ langcs }}") {
+        if ("{{ langcs }}") { // Czech locale
           x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
         }
-        // English locale
-        if ("{{ langen }}") {
+        if ("{{ langen }}") { // English locale
           x.today_str = x.day_str + " " + x.d + ext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
         }
-        x.d = d;
+        x.d = z;
         return x;
       }
 
-      // copy string to clipboard
-      if (!w.GSC.CopyClipboard) w.GSC.CopyClipboard = function (str) {
-        var el = document.createElement('textarea');
-        el.value = str;
+      // CopyClipboard()
+      if (!w.GSC.CopyClipboard) w.GSC.CopyClipboard = function (dataString) {
+        var el = d.createElement('textarea');
+        el.value = dataString;
         el.setAttribute("readonly", "");
         el.style.position = "absolute";
         el.style.left = "-9999px";
-        document.body.appendChild(el);
+        d.body.appendChild(el);
         var selected =
-          document.getSelection().rangeCount > 0 ?
-          document.getSelection().getRangeAt(0) : false;
+          d.getSelection().rangeCount > 0 ? d.getSelection().getRangeAt(0) : false;
         el.select();
-        document.execCommand("copy");
-        document.body.removeChild(el);
+        d.execCommand("copy");
+        d.body.removeChild(el);
         if (selected) {
-          document.getSelection().removeAllRanges();
-          document.getSelection().addRange(selected);
+          d.getSelection().removeAllRanges();
+          d.getSelection().addRange(selected);
         }
       }
 
-      // UI bindings
+      // DELAYED UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("UI bindings");
         $(".sethlcs").click(function () {

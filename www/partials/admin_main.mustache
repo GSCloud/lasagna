@@ -170,9 +170,9 @@
       <div class="row center" style="border:2px solid green;margin:5px;border-radius:5px;">
         <h4 class="center">
           <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="bottom"
-            data-tooltip="GitHub Inc." href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
+            data-tooltip="GitHub repo" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
           <a rel="noopener" target="_blank" class="tooltipped lime-text text" data-position="bottom"
-            data-tooltip="SysInfo" href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i
+            data-tooltip="server SysInfo" href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i
               class="fas fa-server"></i></a>
           {{#l.a_lasagna_manual_disable}}
           <a rel="noopener" target="_blank" class="tooltipped grey-text text" data-position="bottom"
@@ -420,7 +420,7 @@
         $("#admin_main h4").addClass("a_reset a_h4");
         $("#admin_main h5").addClass("a_reset a_h5");
         $("#admin_main p").addClass("a_reset");
-        if (w.GSC.TouchDevice) {
+        if (w.GSC.touch) {
           $('.tooltipped').tooltip('destroy');
         }
       });
