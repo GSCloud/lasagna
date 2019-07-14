@@ -149,31 +149,32 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("version check");
         if (!w.GSC.VersionCheck) w.GSC.VersionCheck = function () {
-          var set = false;
+          console.log("version check...");
+          if (w.GSC.offline) {
+            setTimeout("window.GSC.VersionCheck()", 5000);
+            return;
+          }
           $.post("/version/core", function (post) {
             if (post.data.LASAGNA.core.version) {
-              if (post.data.LASAGNA.core.version == GSC.LASAGNA.core.version) {
-                set = true;
-              } else {
+              if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
                 $("#update-message").show();
                 w.GSC.VersionCheck = {};
+                console.log("core version check failed!");
                 return;
               }
             }
           });
           $.post("/{{ lang }}/version/data", function (post) {
             if (post.data.LASAGNA.data.version) {
-              if (post.data.LASAGNA.data.version == GSC.LASAGNA.data.version) {
-                set = true
-              } else {
+              if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
                 $("#update-message").show();
                 w.GSC.VersionCheck = {};
+                console.log("{{ lang }} data version check failed!");
                 return;
               }
             }
           });
-          if (set) setTimeout("window.GSC.VersionCheck()", 30000);
-          return;
+          setTimeout("window.GSC.VersionCheck()", 30000);
         }
         setTimeout("window.GSC.VersionCheck()", 5000);
       });
