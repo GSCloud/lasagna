@@ -140,6 +140,24 @@
         $(".sethlen").click(function () {
           setCookie("hl", "en");
         });
+        $("#update-message").click(function () {
+          window.location.reload(true);
+        });
+      });
+
+      // DELAYED version check
+      w.GSC.init.push(function () {
+        w.GSC.names.push("version check");
+        if (!w.GSC.VersionCheck) w.GSC.VersionCheck = function () {
+          $.post("/version/core", function (x) {
+            if (x.data.LASAGNA.core.version) {
+              if (GSC.LASAGNA.core.version == x.data.LASAGNA.core.version) return;
+              $("#update-message").show();
+              w.GSC.VersionCheck = {};
+            }
+          });
+        }
+        setTimeout("window.GSC.VersionCheck()", 5000);
       });
 
     }
