@@ -29,7 +29,7 @@ class AdminPresenter extends \GSC\APresenter
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
             }
-            catch(Exception $e) {   // catch non-existent files
+            catch(Exception $e) { // non-existent files?
                 return -1;
             }
         }
@@ -186,11 +186,11 @@ class AdminPresenter extends \GSC\APresenter
             try {
                 ob_flush();
                 Cache::clear(false);
-                clearstatcache();
                 @array_map("unlink", glob(CACHE . "/*.php"));
-                @array_map("unlink", glob(CACHE . "/cache*"));
-                $this->CloudflarePurgeCache($this->getCfg("cf"));
+                @array_map("unlink", glob(CACHE . "/*.tmp"));
+                @array_map("unlink", glob(CACHE . "/cakephpcache_*"));
                 clearstatcache();
+                $this->CloudflarePurgeCache($this->getCfg("cf"));
                 $this->checkLocales();
             } finally {
                 $lock->release();
