@@ -145,17 +145,35 @@
         });
       });
 
-      // DELAYED version check
+      // DELAYED version and data check
       w.GSC.init.push(function () {
         w.GSC.names.push("version check");
         if (!w.GSC.VersionCheck) w.GSC.VersionCheck = function () {
-          $.post("/version/core", function (x) {
-            if (x.data.LASAGNA.core.version) {
-              if (GSC.LASAGNA.core.version == x.data.LASAGNA.core.version) return;
-              $("#update-message").show();
-              w.GSC.VersionCheck = {};
+          var set = false;
+          $.post("/version/core", function (post) {
+            if (post.data.LASAGNA.core.version) {
+              if (post.data.LASAGNA.core.version == GSC.LASAGNA.core.version) {
+                set = true;
+              } else {
+                $("#update-message").show();
+                w.GSC.VersionCheck = {};
+                return;
+              }
             }
           });
+          $.post("/{{ lang }}/version/data", function (post) {
+            if (post.data.LASAGNA.data.version) {
+              if (post.data.LASAGNA.data.version == GSC.LASAGNA.data.version) {
+                set = true
+              } else {
+                $("#update-message").show();
+                w.GSC.VersionCheck = {};
+                return;
+              }
+            }
+          });
+          if (set) setTimeout("window.GSC.VersionCheck()", 30000);
+          return;
         }
         setTimeout("window.GSC.VersionCheck()", 5000);
       });
