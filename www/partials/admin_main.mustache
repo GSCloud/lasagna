@@ -351,7 +351,7 @@
           }
           $("#a_update").attr("disabled", "disabled");
           GSC.ShowLoader("#a_update_info");
-          setTimeout('$("#a_update").removeAttr("disabled");', 10E3);
+          setTimeout('$("#a_update").removeAttr("disabled");', 20E3);
           $.post("/admin/CoreUpdate");
         });
 
@@ -407,7 +407,7 @@
       // PSI preload
       w.GSC.init.push(function () {
         w.GSC.names.push("PSI preload");
-        setTimeout("$.get('/admin/GetPSInsights?" + Date.now() + "');", 5000);
+        setTimeout("$.get('/admin/GetPSInsights?" + Date.now() + "');", 4000);
       });
 
       // admin UI reset
