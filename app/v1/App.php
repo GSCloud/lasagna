@@ -22,11 +22,12 @@ defined("CACHE") || die($x);
 defined("ROOT") || die($x);
 
 // global constants
+defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 defined("CLI") || define("CLI", (php_sapi_name() === "cli"));
-defined("VERSION") || define("VERSION", "v1");
 defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
 defined("SERVER") || define("SERVER", strtr($_SERVER["SERVER_NAME"] ?? "", ".", "_"));
+defined("VERSION") || define("VERSION", "v1");
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
 // Google Cloud Platform
@@ -64,7 +65,7 @@ foreach ($cache_profiles as $k => $v) {
         "className" => "File",
         "duration" => $v,
         "path" => CACHE,
-        "prefix" => "cakephpcache_" . SERVER . "_" . PROJECT . "_" . VERSION . "_",
+        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . VERSION . "_",
     ]);
 }
 
@@ -165,6 +166,7 @@ if ($router[$view]["sethl"] ?? false) {
     }
     if ($r) {
         ob_end_clean();
+        \setcookie("hl", $r, time() + 86400 * 30, "/");
         header("Location: /" . $r, true, 303);
         exit;
     }
