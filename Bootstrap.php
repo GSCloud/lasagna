@@ -10,10 +10,9 @@
  */
 
 use Nette\Neon\Neon;
-use There4\Analytics\AnalyticsEvent;
 use Tracy\Debugger;
 
-// start!
+// start
 list($usec, $sec) = explode(" ", microtime());
 define("LASAGNA_START", ((float) $usec + (float) $sec));
 ob_start();
@@ -22,7 +21,7 @@ ini_set("auto_detect_line_endings", "1");
 ini_set("default_socket_timeout", 15);
 ini_set("display_errors", "1");
 
-// constants in SPECIFIC ORDER!!!
+// constants in SPECIFIC ORDER !!!
 defined("ROOT")  || define("ROOT", __DIR__);
 defined("TEMP")  || define("TEMP", "/tmp");
 defined("CACHE") || define("CACHE", ROOT . "/cache");
@@ -135,16 +134,6 @@ $data["nonce"] = $nonce = substr(hash("sha256", random_bytes(10) . (string) time
 $data["utm"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
 $data["ALPHA"] = (in_array($host, $cfg["alpha_hosts"] ?? []));
 $data["BETA"] = (in_array($host, $cfg["beta_hosts"] ?? []));
-
-// Google Analytics
-$events = false;
-if (array_key_exists("ua", $data["google"]) && (isset($_SERVER["HTTPS"]))) {
-    if ($_SERVER["HTTPS"] == "on") {
-        if (strlen($data["google"]["ua"])) {
-            $events = new AnalyticsEvent($data["google"]["ua"], $data["canonical_url"]);
-        }
-    }
-}
 
 // App
 if (file_exists(APP) && is_file(APP)) {

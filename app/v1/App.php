@@ -13,6 +13,7 @@ use Cake\Cache\Cache;
 use Google\Cloud\Logging\LoggingClient;
 use Monolog\Logger;
 use Nette\Neon\Neon;
+use There4\Analytics\AnalyticsEvent;
 
 // sanity checks
 $x = "FATAL ERROR: broken chain of trust\n\n";
@@ -21,6 +22,7 @@ defined("CACHE") || die($x);
 defined("ROOT") || die($x);
 
 // global constants
+defined("CLI") || define("CLI", (php_sapi_name() === "cli"));
 defined("VERSION") || define("VERSION", "v1");
 defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
@@ -30,13 +32,14 @@ defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PRO
 // Google Cloud Platform
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? "gscloudcz-163314");
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? "/keys/GSCloud-6dd97e5ac451.json");
-if (file_exists(APP . GCP_KEYS)) {
+if (!CLI && file_exists(APP . GCP_KEYS)) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
+    if (CLI) return;
     ob_flush();
     try {
         $logging = new LoggingClient(["projectId" => GCP_PROJECTID]);
@@ -117,7 +120,7 @@ foreach ($presenter as $k => $v) {
         continue;
     }
     $alto->map($v["method"], $v["path"], $k, "{$k}");
-    // map secondary path as ending with /
+    // secondary path ending with /
     if ($v["path"] != "/") {
         $alto->map($v["method"], $v["path"] . "/", $k, "{$k}_");
     }
@@ -148,7 +151,7 @@ $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 
 // sethl
 if ($router[$view]["sethl"] ?? false) {
-    $r = $_COOKIE["hl"] ?? $router[$view]["redirect"] ?? false;
+    $r = $_COOKIE["hl"] ?? $router[$view]["redirect"] ?? null;
     switch ($r) {
         case "cs":
         case "/cs":
@@ -238,17 +241,25 @@ require_once $presenter_file;
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
-// output
+// vomit output :)
 $output = "";
 if (array_key_exists("output", $data)) {
     $output = $data["output"];
 }
 echo $output;
 
-// end credits
+// credits
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
 header("X-Processing: ${time} msec.");
+$events = false;
+if (array_key_exists("ua", $data["google"]) && (isset($_SERVER["HTTPS"]))) {
+    if ($_SERVER["HTTPS"] == "on") {
+        if (strlen($data["google"]["ua"])) {
+            $events = new AnalyticsEvent($data["google"]["ua"], $data["canonical_url"].$data["request_path"]);
+        }
+    }
+}
 if ($events) {
     ob_flush();
     @$events->trackEvent($cfg["app"], "country_code", $country);

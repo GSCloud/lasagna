@@ -207,7 +207,7 @@ class AdminPresenter extends \GSC\APresenter
     private function unauthorized_access($skip_message = false)
     {
         if (!$skip_message) {
-            echo $_SERVER["SERVER_NAME"] . " - token authentication error\n";
+            echo $_SERVER["HTTP_HOST"] . " - token authentication error\n";
         }
         $this->addError("401: UNAUTHORIZED ACCESS");
         $this->setLocation("/err/401");

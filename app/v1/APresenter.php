@@ -263,6 +263,8 @@ abstract class APresenter implements IPresenter
         }
         $this->checkLocales((bool) $this->force_csv_check);
 
+        if (CLI) return;
+
         $monolog = new Logger("Tesseract log");
         $streamhandler = new StreamHandler(MONOLOG, Logger::INFO, true, self::LOG_FILEMODE);
         $streamhandler->setFormatter(new LineFormatter);
@@ -408,6 +410,7 @@ abstract class APresenter implements IPresenter
         $dot->set([
             "CONST.APP" => APP,
             "CONST.CACHE" => CACHE,
+            "CONST.CLI" => CLI,
             "CONST.DATA" => DATA,
             "CONST.DOMAIN" => DOMAIN,
             "CONST.DOWNLOAD" => DOWNLOAD,
@@ -558,7 +561,7 @@ abstract class APresenter implements IPresenter
      */
     public function getFPstring()
     {
-        $a = $_SESSION["admin"] ?? $this->getCookie("admin") ?? "N/A";
+        $a = $this->getCookie("admin") ?? "N/A";
         $b = ($_SERVER["HTTP_USER_AGENT"] ?? "unknown") . ($_SERVER["HTTP_ACCEPT"] ?? "") . ($_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "en");
         $c = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "N/A";
         return "${a}_${b}_${c}";
@@ -936,12 +939,12 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         // debugging
-        if (strlen($this->getCookie("admin")) == 0) { // mock identity pouze pokud nemáme validní cookie!
+        if (strlen($this->getCookie("admin")) == 0) { // mock identity
             if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
                 return $this;
             }
         }
-        $email = $_SESSION["admin"] ?? $this->getCookie("admin") ?? false;
+        $email = $this->getCookie("admin") ?? false;
         $groups = $this->getCfg("admin_groups") ?? [];
         // private nodes, must validate permissions
         if ($perms === 1 && strlen($email)) {
@@ -989,7 +992,7 @@ abstract class APresenter implements IPresenter
                 return "admin";
             }
         }
-        $email = $_SESSION["admin"] ?? $this->getCookie("admin") ?? false;
+        $email = $this->getCookie("admin") ?? false;
         // not logged!
         if ($email === false) {
             return false;
