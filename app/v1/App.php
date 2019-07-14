@@ -151,7 +151,7 @@ $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 
 // sethl
 if ($router[$view]["sethl"] ?? false) {
-    $r = $_COOKIE["hl"] ?? $router[$view]["redirect"] ?? null;
+    $r = $_GET["hl"] ?? $_COOKIE["hl"] ?? null;
     switch ($r) {
         case "cs":
         case "/cs":
@@ -164,6 +164,7 @@ if ($router[$view]["sethl"] ?? false) {
             break;
     }
     if ($r) {
+        ob_end_clean();
         header("Location: /" . $r, true, 303);
         exit;
     }
