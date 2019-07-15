@@ -17,7 +17,7 @@
   <div id="a_rotate_device" class="row center">
     {{ l.a_rotate_device }}
   </div>
-  <div class="row center hide-on-small-only">
+  <div class="row center black hide-on-small-only" style="padding-top:1em">
     <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
       data-position="bottom" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
       <i class="fab fa-google"></i>
@@ -211,13 +211,15 @@
       </div>
       <div class="spacer">
         <div class="row center alzaborder">
-          <div class="row grey-text left-align" style="margin-top:1em">
+          <div class="row grey-text" style="margin-top:1em">
             <div class="grey-text left-align container">
               {{#convert_hyperlinks}}{{ l.a_changelog }}{{/convert_hyperlinks}}
             </div>
             {{^l.onesignal_appid}}
-            <div class="row center red-text" style="margin:1em">
+            <div class="row center red-text" style="margin-top:1em">
+              <div class="container">
               {{#convert_hyperlinks}}{{ l.a_onesignal_missing }}{{/convert_hyperlinks}}
+              </div>
             </div>
             {{/l.onesignal_appid}}
           </div>
