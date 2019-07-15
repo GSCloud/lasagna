@@ -181,14 +181,14 @@ class AdminPresenter extends \GSC\APresenter
     {
         $store = new FlockStore();
         $factory = new Factory($store);
-        $lock = $factory->createLock("core-update", 3);
+        $lock = $factory->createLock("core-update", 10);
         if ($lock->acquire()) {
             try {
                 ob_flush();
                 Cache::clear(false);
                 @array_map("unlink", glob(CACHE . "/*.php"));
                 @array_map("unlink", glob(CACHE . "/*.tmp"));
-                @array_map("unlink", glob(CACHE . "/cakephpcache_*"));
+                @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX. "*"));
                 clearstatcache();
                 $this->CloudflarePurgeCache($this->getCfg("cf"));
                 $this->checkLocales();

@@ -24,9 +24,9 @@ defined("ROOT") || die($x);
 // global constants
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 defined("CLI") || define("CLI", (php_sapi_name() === "cli"));
-defined("DOMAIN") || define("DOMAIN", $_SERVER["SERVER_NAME"] ?? "");
+defined("DOMAIN") || define("DOMAIN", preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "unknown"));
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
-defined("SERVER") || define("SERVER", strtr($_SERVER["SERVER_NAME"] ?? "", ".", "_"));
+defined("SERVER") || define("SERVER", preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "unknown"));
 defined("VERSION") || define("VERSION", "v1");
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
@@ -155,14 +155,11 @@ if ($router[$view]["sethl"] ?? false) {
     $r = $_GET["hl"] ?? $_COOKIE["hl"] ?? null;
     switch ($r) {
         case "cs":
-        case "/cs":
-            $r = "cs";
+        case "en":
             break;
 
-        case "en":
-        case "/en":
-            $r = "en";
-            break;
+        default:
+            $r = null;
     }
     if ($r) {
         ob_end_clean();
@@ -192,7 +189,6 @@ if ($router[$view]["nopwa"] ?? false) {
 $data["cache_profiles"] = $cache_profiles;
 $data["multisite_names"] = $multisite_names;
 $data["multisite_profiles"] = $multisite_profiles;
-
 $data["match"] = $match;
 $data["presenter"] = $presenter;
 $data["router"] = $router;
@@ -202,7 +198,6 @@ $data["view"] = $view;
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $presenter_file = APP . "/${p}.php";
 if (!file_exists($presenter_file)) {
-    // missing presenter
     logger("MISSING PRESENTER: $p", Logger::EMERGENCY);
     header("Location: /error/410", true, 303);
     exit;
@@ -255,7 +250,7 @@ echo $output;
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
 header("X-Processing: ${time} msec.");
-$events = false;
+$events = null;
 if (array_key_exists("ua", $data["google"]) && (isset($_SERVER["HTTPS"]))) {
     if ($_SERVER["HTTPS"] == "on") {
         if (strlen($data["google"]["ua"])) {
@@ -269,9 +264,9 @@ if ($events) {
     @$events->trackEvent($cfg["app"], "processing_time", $time);
 }
 
-// last debug
+// debug
 if (DEBUG) {
-    // sanitize private data
+    // sanitize data
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);

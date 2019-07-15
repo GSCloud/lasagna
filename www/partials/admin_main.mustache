@@ -254,10 +254,13 @@
               if (sheet) {
                 link =
                   '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" class="green mono white-text bold" href="' +
-                  'https://docs.google.com/spreadsheets/d/' + sheet + '/edit#gid=0"><i class="material-icons white-text tiny">edit</i>' +
-                  x + '</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}" class="bold blue white-text mono" ' +
-                  'href="https://docs.google.com/spreadsheets/d/e/' + csv + '/pub?output=csv"><i class="fas white-text fa-cloud-download-alt"></i>'
-                  + lines + '</a>&nbsp;';
+                  'https://docs.google.com/spreadsheets/d/' +
+                  sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>' +
+                  x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
+                  ' class="bold blue white-text mono" ' +
+                  'href="https://docs.google.com/spreadsheets/d/e/' +
+                  csv + '/pub?output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>' +
+                  lines + '&nbsp;</a>&nbsp;';
               }
               moment.locale("{{ lang }}");
               content += (link + " {{ l.a_age }}&nbsp;" +

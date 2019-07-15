@@ -24,6 +24,7 @@ class HomePresenter extends \GSC\APresenter
         $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $data["lang{$language}"] = true;
         $data["l"] = $this->getLocale($language);
+        $data["DATA_VERSION"] = hash('sha256', (string) json_encode($data["l"]));
 
         // advanced caching
         $arr = [

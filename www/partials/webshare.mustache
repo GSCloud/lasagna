@@ -1,0 +1,19 @@
+<script>
+
+shareButton.addEventListener("click", event => {
+  if (navigator.share) {
+var title = document.title;
+var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]").href : document.location.href;
+    navigator.share({
+      title: title,
+      url: url
+    }).then(() => {
+      console.log("Thanks for sharing!");
+    })
+    .catch(console.error);
+  } else {
+    shareDialog.classList.add("is-open");
+  }
+});
+
+</script>

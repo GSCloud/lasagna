@@ -27,10 +27,6 @@ version_core:
   presenter: core
   assert_json: true
 
-version_core_js:
-  path: /version/core.js
-  presenter: core
-
 cs_version_data:
   language: cs
   method: GET|POST
@@ -38,22 +34,12 @@ cs_version_data:
   presenter: core
   assert_json: true
 
-cs_version_data_js:
-  language: cs
-  path: /cs/version/data.js
-  presenter: core
-
 en_version_data:
   language: en
   method: GET|POST
   path: /en/version/data
   presenter: core
   assert_json: true
-
-en_version_data_js:
-  language: en
-  path: /en/version/data.js
-  presenter: core
 
 error:
   path: '/err/[a:code]'

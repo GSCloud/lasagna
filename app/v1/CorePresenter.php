@@ -9,6 +9,7 @@ class CorePresenter extends \GSC\APresenter
         $view = $this->getView();
 
         switch ($view) {
+
             // webmanifest
             case "webmanifest":
                 $this->setHeaderJson();
@@ -20,6 +21,7 @@ class CorePresenter extends \GSC\APresenter
                 $output = $this->setData($data)->renderHTML("site.webmanifest");
                 return $this->setData($data, "output", $output);
                 break;
+
             // sitemap
             case "sitemap":
                 $this->setHeaderText();
@@ -33,47 +35,33 @@ class CorePresenter extends \GSC\APresenter
                 $output = $this->setData($data)->renderHTML("sitemap.txt");
                 return $this->setData($data, "output", $output);
                 break;
+
             // sw.js
             case "swjs":
                 $this->setHeaderJavaScript();
                 $output = $this->setData($data)->renderHTML("sw.js");
                 return $this->setData($data, "output", $output);
                 break;
-            // core version as JSON
+
+            // core version
             case "version_core":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
                 return $this->writeJsonData($d, ["name" => "LASAGNA core version", "fn" => "core"]);
                 break;
-            // core version as JavaScript
-            case "version_core_js":
-                $this->setHeaderJavaScript();
-                $output = "!(function(w){";
-                $output .= "if(w.GSC.LASAGNA)w.GSC.LASAGNA.core.version=\"" . $data["VERSION"] . "\";";
-                $output .= "if(w.GSC.LASAGNA)w.GSC.LASAGNA.core.timestamp=\"" . time() . "\";})(window);";
-                return $this->setData($data, "output", $output);
-                break;
         }
         // fetch locale
         $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);
+        $hash = hash('sha256', (string) json_encode($locale));
 
         switch ($view) {
-            // data version as JSON
+            // data version
             case "en_version_data":
             case "cs_version_data":
                 $d = [];
-                $d["LASAGNA"]["data"]["version"] = hash('sha256', (string) json_encode($locale));
+                $d["LASAGNA"]["data"]["version"] = $hash;
                 return $this->writeJsonData($d, ["name" => "LASAGNA data version " . strtoupper($language), "fn" => "core"]);
-                break;
-            // data version as JavaScript
-            case "en_version_data_js":
-            case "cs_version_data_js":
-                $this->setHeaderJavaScript();
-                $output = "!(function(w){";
-                $output .= "if(w.GSC.LASAGNA)w.GSC.LASAGNA.data.version=\"" . hash('sha256', (string) json_encode($locale)) . "\";";
-                $output .= "if(w.GSC.LASAGNA)w.GSC.LASAGNA.data.timestamp=\"" . time() . "\";})(window);";
-                return $this->setData($data, "output", $output);
                 break;
         }
         return $this;
