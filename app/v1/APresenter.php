@@ -32,8 +32,6 @@ interface IPresenter
     public function getCurrentUser();
     public function getData($key);
     public function getErrors();
-    public function getFP();
-    public function getFPstring();
     public function getIdentity();
     public function getLocale($locale, $key);
     public function getMatch();
@@ -550,22 +548,16 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
-        $a = $this->getCookie("admin") ?? "unknown";
-        $b = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
-        return "${a}_${b}";
-    }
-
-    /**
-     * Get universal fingerprint
-     *
-     * @return string
-     */
-    public function getFPstring()
-    {
-        $a = $this->getCookie("admin") ?? "N/A";
-        $b = ($_SERVER["HTTP_USER_AGENT"] ?? "unknown") . ($_SERVER["HTTP_ACCEPT"] ?? "") . ($_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "en");
-        $c = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "N/A";
-        return "${a}_${b}_${c}";
+        $arr = [
+            $this->getCookie("admin") ?? "user",
+            $_SERVER["HTTP_ACCEPT"] ?? "NA",
+            $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "NA",
+            $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
+            $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
+            $_SERVER["HTTP_USER_AGENT"] ?? "agent",
+            $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA"
+        ];
+        return strtr(implode("_", $arr), " ", "_");
     }
 
     /**
@@ -576,16 +568,6 @@ abstract class APresenter implements IPresenter
     public function getUID()
     {
         return hash("sha256", $this->getUIDstring());
-    }
-
-    /**
-     * Get universal FP hash
-     *
-     * @return string
-     */
-    public function getFP()
-    {
-        return hash("sha256", $this->getFPstring());
     }
 
     /**
@@ -613,7 +595,6 @@ abstract class APresenter implements IPresenter
         $u = [];
         $u["avatar"] = "https://cdn0.iconfinder.com/data/icons/robot-3-2/512/RobotV2-52-512.png";
         $u["email"] = "admin@gscloud.cz";
-        $u["fp"] = $this->getFP();
         $u["id"] = 666;
         $u["name"] = "Mr. Robot";
         $u["uid"] = $this->getUID();
@@ -623,7 +604,6 @@ abstract class APresenter implements IPresenter
         $u = [];
         $u["avatar"] = $this->getCookie("avatar") ?? "";
         $u["email"] = $this->getCookie("admin") ?? "";
-        $u["fp"] = $this->getFP();
         $u["id"] = $this->getCookie("id") ?? "";
         $u["name"] = $this->getCookie("name") ?? "";
         $u["uid"] = $this->getUID();
@@ -644,20 +624,20 @@ abstract class APresenter implements IPresenter
                 $u = [];
                 $u["avatar"] = "https://cdn0.iconfinder.com/data/icons/robot-3-2/512/RobotV2-52-512.png";
                 $u["email"] = "admin@gscloud.cz";
-                $u["fp"] = $this->getFP();
                 $u["id"] = 666;
                 $u["name"] = "Mr. Robot";
                 $u["uid"] = $this->getUID();
+                $u["uids"] = $this->getUIDstring();
                 return $u;
             }
         }
         $u = [];
         $u["avatar"] = $this->getCookie("avatar") ?? "";
         $u["email"] = $this->getCookie("admin") ?? "";
-        $u["fp"] = $this->getFP();
         $u["id"] = $this->getCookie("id") ?? "";
         $u["name"] = $this->getCookie("name") ?? "";
         $u["uid"] = $this->getUID();
+        $u["uids"] = $this->getUIDstring();
         return ($u["id"] && $u["email"]) ? $u : false;
     }
 
