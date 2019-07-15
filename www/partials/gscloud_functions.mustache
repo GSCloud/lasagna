@@ -148,34 +148,33 @@
       // DELAYED version and data check
       w.GSC.init.push(function () {
         w.GSC.names.push("version check");
+
         if (!w.GSC.VersionCheck) w.GSC.VersionCheck = function () {
-          console.log("version check...");
-          if (w.GSC.offline) {
-            setTimeout("window.GSC.VersionCheck()", 5000);
-            return;
+          if (!w.GSC.offline) {
+            $.post("/version/core", function (post) {
+              if (post.data.LASAGNA.core.version) {
+                if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
+                  $("#update-message").show();
+                  w.GSC.VersionCheck = {};
+                  console.log("UPDATE: core version check failed!");
+                  return;
+                }
+              }
+            });
+            $.post("/{{ lang }}/version/data", function (post) {
+              if (post.data.LASAGNA.data.version) {
+                if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
+                  $("#update-message").show();
+                  w.GSC.VersionCheck = {};
+                  console.log("UPDATE: {{ lang }} data version check failed!");
+                  return;
+                }
+              }
+            });
+            setTimeout("window.GSC.VersionCheck()", 30000);
           }
-          $.post("/version/core", function (post) {
-            if (post.data.LASAGNA.core.version) {
-              if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
-                $("#update-message").show();
-                w.GSC.VersionCheck = {};
-                console.log("core version check failed!");
-                return;
-              }
-            }
-          });
-          $.post("/{{ lang }}/version/data", function (post) {
-            if (post.data.LASAGNA.data.version) {
-              if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
-                $("#update-message").show();
-                w.GSC.VersionCheck = {};
-                console.log("{{ lang }} data version check failed!");
-                return;
-              }
-            }
-          });
-          setTimeout("window.GSC.VersionCheck()", 30000);
         }
+
         setTimeout("window.GSC.VersionCheck()", 5000);
       });
 
