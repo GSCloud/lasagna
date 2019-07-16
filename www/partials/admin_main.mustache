@@ -1,14 +1,15 @@
 {{#admin_group_admin}}
 
 <style>
-.spacer{margin:5px}
-.alzaborder{border:1px solid green;border-radius:5px}
+.spacer{margin:3px}
+.alzaborder{border:2px solid green;border-radius:5px}
 .protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em}
 .a_reset{font-family:Arial!important;font-size:14px!important}
 .a_h2{font-size:5em!important;font-weight:700!important}
 .a_h3{font-size:4em!important;font-weight:700!important}
 .a_h4{font-size:3em!important;font-weight:700!important}
 .a_h5{font-size:2em!important;font-weight:700!important}
+#admin_main{font-family:Arial!important;font-size:14px!important}
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
 </style>
@@ -117,7 +118,7 @@
       </div>
     </div>
 
-    <div class="col l4 m6 hide-on-small-only">
+    <div class="col l4 m6 s12">
       <div class="spacer">
         <div class="row center alzaborder">
           <div class="white-text">
@@ -128,22 +129,27 @@
                 <i class="fas fa-sign-out-alt"></i>
                 {{ l.a_logout }}</a>
             </div>
-            <strong>OWNER / ADMIN</strong>
-            <p class="orange-text">
-              {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
-              {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
-            </p>
-            <br>
-            <strong>DEFAULT</strong>
-            <p class="orange-text">
-              {{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
-              {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}
-            </p>
+            <div class="row center hide-on-small-only">
+              <strong>OWNER / ADMIN</strong>
+              <div class="container">
+                <p class="orange-text">
+                  {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
+                  {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
+                </p>
+              </div>
+              <strong>DEFAULT</strong>
+              <div class="container">
+                <p class="orange-text">
+                  {{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
+                  {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="spacer">
-        <div class="row center alzaborder">
+        <div class="row center alzaborder hide-on-small-only">
           <div class="white-text">
             <h5>Google</h5>
             <ul class="mono">
