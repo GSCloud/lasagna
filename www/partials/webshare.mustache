@@ -1,21 +1,16 @@
-<button><i class="fas fa-share-alt-square"></i></button>
-
+<a style="display:none;font-size:3em" id="webshare"><i class="fas fa-share-alt-square"></i></a>
 <script>
-
-shareButton.addEventListener("click", event => {
-  if (navigator.share) {
-var title = document.title;
-var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]").href : document.location.href;
-    navigator.share({
-      title: title,
-      url: url
-    }).then(() => {
-      console.log("Thanks for sharing!");
-    })
-    .catch(console.error);
-  } else {
-    shareDialog.classList.add("is-open");
-  }
-});
-
+  var el = document.getElementById("webshare");
+  el.addEventListener("click", function (e) {
+    if (navigator.share) {
+      var title = document.title;
+      var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]").href :
+        document.location.href;
+      navigator.share({
+        title: title,
+        url: url
+      }).catch(console.error);
+    el.style.display = "inline-block";
+    }
+  });
 </script>

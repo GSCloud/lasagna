@@ -119,6 +119,7 @@ Debugger::timer();
 
 // data population
 $data = $cfg;
+$base58 = new \Tuupola\Base58;
 $data["cfg"] = $cfg; // alt copy :)
 $data["VERSION"] = $version = trim(@file_get_contents(ROOT . "/VERSION") ?? "", "\r\n");
 $data["VERSION_DATE"] = date(DATE_ATOM, @filemtime(ROOT . "/VERSION") ?? time());
@@ -128,11 +129,10 @@ $data["CDN"] = $data["cdn"];
 $data["host"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["HOST"] = $host;
 $data["request_uri"] = $uri = $_SERVER["REQUEST_URI"] ?? "";
-$data["request_path"] = trim(trim($uri, "/"));
+$data["request_path"] = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
 $data["base"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
 $data["BASE"] = $data["base"];
 $data["LOCALHOST"] = (($_SERVER["SERVER_NAME"] ?? "") == "localhost");
-$base58 = new \Tuupola\Base58;
 $data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 8), 16, 10));
 $data["nonce"] = $nonce = substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8);
 $data["NONCE"] = $data["nonce"];
