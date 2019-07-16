@@ -1,4 +1,4 @@
-<a style="display:none;font-size:3em" id="webshare"><i class="fas fa-share-alt-square"></i></a>
+<a style="display:inline-block;font-size:3em" id="webshare"><i class="fas fa-share-alt-square"></i></a>
 <script>
   if (navigator.share) {
     var el = document.getElementById("webshare");
@@ -11,7 +11,7 @@
           title: title,
           url: url
         }).catch(console.error);
-      }
-    });
+      });
+    };
 
 </script>
