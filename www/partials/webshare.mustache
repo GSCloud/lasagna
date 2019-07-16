@@ -1,11 +1,13 @@
 <a style="display:none;font-size:3em" id="webshare"><i class="fas fa-share-alt-square"></i></a>
 <script>
-  if (navigator.share) {
-    var el = document.getElementById("webshare");
-    el.style.display = "inline-block";
-    el.addEventListener("click", function (e) {
+  if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
+    if (navigator.share) {
+      var el = document.getElementById("webshare");
+      el.style.display = "inline-block";
+      el.addEventListener("click", function (e) {
         var title = document.title;
-        var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]").href :
+        var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]")
+          .href :
           document.location.href;
         navigator.share({
           title: title,
@@ -13,5 +15,6 @@
         }).catch(console.error);
       });
     };
+  }
 
 </script>
