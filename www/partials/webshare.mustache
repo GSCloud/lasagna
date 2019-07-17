@@ -1,9 +1,9 @@
-<a style="display:none;font-size:3em" id="webshare"><i class="fas fa-share-alt-square"></i></a>
+<a style="display:none;font-size:2em;width:100%" id="webshare"><i class="fas fa-share-alt-square"></i> {{ l.webshare_button }}</a>
 <script>
   if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
     if (navigator.share) {
       var el = document.getElementById("webshare");
-      el.style.display = "inline-block";
+      el.style.display = "block";
       el.addEventListener("click", function (e) {
         var title = document.title;
         var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]")
