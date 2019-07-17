@@ -1,18 +1,31 @@
-<a style="display:none;font-size:2em;width:100%" id="webshare"><i class="fas fa-share-alt-square"></i> {{ l.webshare_button }}</a>
+<a style="display:none;font-size:1.2em;width:100%" id="webshare"><i
+    class="fas fa-share-alt-square"></i>&nbsp;{{ l.webshare_button }}</a>
 <script>
   if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
     if (navigator.share) {
-      var el = document.getElementById("webshare");
-      el.style.display = "block";
-      el.addEventListener("click", function (e) {
-        var title = document.title;
-        var url = document.querySelector("link[rel=canonical]") ? document.querySelector("link[rel=canonical]")
-          .href :
-          document.location.href;
+
+      if (!window.WebShare) window.WebShare = function (text) {
+        var title = text ? text : document.title;
+        var url = document.querySelector("link[rel=canonical]") ?
+          document.querySelector("link[rel=canonical]").href : document.location.href;
         navigator.share({
           title: title,
           url: url
         }).catch(console.error);
+      }
+
+      if (!window.WebShareFactory) window.WebShareFactory = function (text) {
+        text = text.replace(new RegExp(/['\"]*/, "g"), "");
+        var el = '<a onclick="window.WebShare(\'' +
+          text + '\')" style="display:inline-block;font-size:1.2em">' +
+          '<i class="fas fa-share-alt-square"></i></a>';
+        return el;
+      }
+
+      var el = document.getElementById("webshare");
+      el.style.display = "block";
+      el.addEventListener("click", function (e) {
+        window.WebShare();
       });
     };
   }

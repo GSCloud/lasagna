@@ -65,9 +65,25 @@
 
       {{/admin_group_default}}
 
+      <br>
+      <br>
+
+      <div id="websharetest">webshare test: </div>
+
     </div>
   </div>
 </div>
 <div id="user3" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
+
+<script>
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+      w.GSC.init.push(function () {
+          w.GSC.names.push("WebShare API test");
+          $('#websharetest').append(WebShareFactory('WebShare API works!'));
+        });
+      };
+  })(window, document);
+</script>
 
 {{>html_footer}}
