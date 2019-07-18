@@ -84,6 +84,9 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("WebShare API test");
         $('#websharetest').append(WebShareFactory('WebShare API works!'));
+      });
+      w.GSC.init.push(function () {
+        w.GSC.names.push("Grapheme test");
         var splitter = new GraphemeSplitter();
         var graphemes = splitter.splitGraphemes($("#emojisdemo").text());
         var arr = graphemes.map(function (x) {
