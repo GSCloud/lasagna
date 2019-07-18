@@ -37,6 +37,9 @@ class ArticlePresenter extends \GSC\APresenter
             return $this->setData($data, "output", $output);
         }
 
+        $data["container_switch_article"] = true;
+
+
         // fix text data
         if (is_array($data["l"])) {
             foreach ($data["l"] as $k => $v) {

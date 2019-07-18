@@ -48,12 +48,12 @@ error:
 cs_article:
   language: cs
   path: '/cs/id/[**:trailing]'
-  presenter: home
+  presenter: article
 
 en_article:
   language: en
   path: '/en/id/[**:trailing]'
-  presenter: home
+  presenter: article
 
 read_articles:
   assert_json: true

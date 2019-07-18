@@ -15,6 +15,8 @@ class AdminPresenter extends \GSC\APresenter
         $presenter = $this->getPresenter();
         $view = $this->getView();
 
+        $admin_key = "/admin.key";
+
         // check user
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $this->getUserGroup();
@@ -103,7 +105,7 @@ class AdminPresenter extends \GSC\APresenter
             // get update code
             case "GetUpdateToken":
                 $this->checkAdmins("admin");
-                $file = DATA . "/admin_key";
+                $file = DATA . $admin_key;
                 $key = trim(@file_get_contents($file));
                 if (!$key) {
                     $key = hash("sha256", random_bytes(256) . time());
@@ -139,7 +141,7 @@ class AdminPresenter extends \GSC\APresenter
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
                 if ($user && $token) {
-                    $file = DATA . "/admin_key";
+                    $file = DATA . $admin_key;
                     $key = trim(@file_get_contents($file));
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
@@ -155,7 +157,7 @@ class AdminPresenter extends \GSC\APresenter
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
                 if ($user && $token) {
-                    $file = DATA . "/admin_key";
+                    $file = DATA . $admin_key;
                     $key = trim(@file_get_contents($file));
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {

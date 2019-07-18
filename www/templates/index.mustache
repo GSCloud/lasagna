@@ -54,7 +54,7 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2
 <link rel="stylesheet" href="{{ cdn}}/css/materialize.min.css">
 </head>
 
-<body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
+<body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini scrollspy">
 
 {{>body_pre}}
 
@@ -81,7 +81,7 @@ var a=document.getElementById("loader");a&&a.parentNode.removeChild(a);if(a=docu
 
 {{>body_cookieconsent}}
 {{>gscloud_functions}}
-{{>body_container}}
+{{>container_switcher}}
 
 </div>
 
