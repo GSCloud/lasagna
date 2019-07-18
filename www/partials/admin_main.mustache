@@ -14,6 +14,7 @@
 #admin_main{font-family:Arial!important;font-size:14px!important}
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
+#emojis{cursor:crosshair}
 </style>
 
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
@@ -68,7 +69,7 @@
               {{/multisite_names}}
             </select>
           </div>
-          <a id="a_emoji" style="margin:5px;" class="waves-effect blue waves btn">♬😜</a>
+          <a id="a_emoji" style="margin:5px;display:none" class="waves-effect blue waves btn">♬😜</a>
           <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
             data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
             <i class="fas fa-edit"></i>
@@ -397,6 +398,20 @@
         });
 
         $("#a_emoji").click(function () {
+          if (!GSC.emojicc) {
+            var splitter = new GraphemeSplitter();
+            var graphemes = splitter.splitGraphemes($("#emojis").text());
+            var arr = graphemes.map(function (x) {
+              return '<span class="ccemoji">' + x + '</span>';
+            });
+            $("#emojis").html(arr.join(''));
+            $(".ccemoji").click(function () {
+              var x = $(this).text();
+              GSC.CopyClipboard(x);
+              M.toast({html: x});
+            });
+            GSC.emojicc = true;
+          }
           $("#emojis").toggle("fast");
         });
 
@@ -466,6 +481,8 @@
           $(".tooltipped").tooltip("destroy");
           $('#emojis').remove();
           $('#a_emoji').remove();
+        } else {
+          $('#a_emoji').show();
         }
       });
 
@@ -526,6 +543,7 @@
 {{>admin_custom}}
 
 <script src="{{ cdn }}/js/moment.min.js" defer></script>
+<script src="{{ cdn }}/js/grapheme.min.js" defer></script>
 <script src="{{ cdn }}/summernote/summernote-lite.js" defer></script>
 <link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
 {{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
