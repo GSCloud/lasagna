@@ -68,21 +68,37 @@
       <h4 id="websharetest">&nbsp;webshare test&nbsp;</h4>
 
       <h4>Emoji & specials</h4>
+      <div id="emojisdemo">
       {{>emoji}}
+      </div>
 
     </div>
   </div>
 </div>
 <div id="user3" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
 
+<script src="{{ cdn }}/js/grapheme.min.js" defer></script>
 <script>
   (function (w, d, undefined) {
     if (w.GSC.init) {
       w.GSC.init.push(function () {
-          w.GSC.names.push("WebShare API test");
-          $('#websharetest').append(WebShareFactory('WebShare API works!'));
+        w.GSC.names.push("WebShare API test");
+        $('#websharetest').append(WebShareFactory('WebShare API works!'));
+        var splitter = new GraphemeSplitter();
+        var graphemes = splitter.splitGraphemes($("#emojisdemo").text());
+        var arr = graphemes.map(function (x) {
+          return '<span class="ccemojisdemo">' + x + '</span>';
         });
-      };
+        $("#emojisdemo").html(arr.join(''));
+        $(".ccemojisdemo").click(function () {
+          var x = $(this).text();
+          GSC.CopyClipboard(x);
+          M.toast({
+            html: x
+          });
+        });
+      });
+    }
   })(window, document);
 </script>
 
