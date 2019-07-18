@@ -1,21 +1,23 @@
 {{#admin_group_admin}}
 
 <style>
-.spacer{margin:3px}
-.alzaborder{border:2px solid green;border-radius:5px}
-.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em}
 .a_reset{font-family:Arial!important;font-size:14px!important}
 .a_h2{font-size:5em!important;font-weight:700!important}
 .a_h3{font-size:4em!important;font-weight:700!important}
 .a_h4{font-size:3em!important;font-weight:700!important}
 .a_h5{font-size:2em!important;font-weight:700!important}
+.alzaborder{border:2px solid green;border-radius:5px}
+.nowrap{white-space:nowrap}
+.row{margin-bottom:6px}
+.spacer{margin:3px}
+.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em}
 #admin_main{font-family:Arial!important;font-size:14px!important}
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
 </style>
 
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
-  <div id="a_rotate_device" class="row center">
+  <div id="a_rotate_device" class="row center" style="padding-top:3px">
     {{ l.a_rotate_device }}
   </div>
   <div class="row center black hide-on-small-only" style="padding-top:1em">
@@ -51,7 +53,6 @@
       <i class="fab fa-google"></i>
       {{ l.a_google_logout }}</a>
   </div>
-
   <div class="row center" style="overflow:hidden">
     <div class="col l4 m6 s12">
       <div class="spacer">
@@ -67,6 +68,7 @@
               {{/multisite_names}}
             </select>
           </div>
+          <a id="a_emoji" style="margin:5px;" class="waves-effect blue waves btn">♬😜</a>
           <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
             data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
             <i class="fas fa-edit"></i>
@@ -75,13 +77,16 @@
       </div>
       <div class="spacer">
         <div class="row center alzaborder">
-          <h5>Cache</h5>
-          <ul>
-            <li>{{ l.a_default }}: {{ cache_profiles.default }}</li>
-            <li>CSV: {{ cache_profiles.csv }}</li>
-            <li>{{ l.a_limiter }}: {{ CONST.LIMITER_MAXIMUM }}x / {{ cache_profiles.limiter }}</li>
-            <li>{{ l.a_webpage }}: {{ cache_profiles.page }}</li>
-          </ul>
+          <h5>{{ l.a_cache }}</h5>
+          <div class="container">
+            <span class="nowrap">default: {{ cache_profiles.default }}</span>
+            &nbsp;&nbsp;
+            <span class="nowrap">CSV: {{ cache_profiles.csv }}</span>
+            &nbsp;&nbsp;
+            <span class="nowrap">{{ l.a_limiter }}: {{ CONST.LIMITER_MAXIMUM }}x / {{ cache_profiles.limiter }}</span>
+            &nbsp;&nbsp;
+            <span class="nowrap">{{ l.a_webpage }}: {{ cache_profiles.page }}</span>
+          </div>
           <div class="row center">
             <a id="a_update" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
               data-position="top" data-tooltip="{{ l.a_update_ttip }}">
@@ -151,7 +156,7 @@
       <div class="spacer">
         <div class="row center alzaborder hide-on-small-only">
           <div class="white-text">
-            <h5>Google</h5>
+            <h5>{{ l.a_google }}</h5>
             <ul class="mono">
               <li>Console project: {{ gcp_project_id }}
                 {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
@@ -217,6 +222,7 @@
       </div>
       <div class="spacer">
         <div class="row center alzaborder">
+          <h5>{{ l.a_changes }}</h5>
           <div class="row grey-text" style="margin-top:1em">
             <div class="grey-text left-align container">
               {{#convert_hyperlinks}}{{ l.a_changelog }}{{/convert_hyperlinks}}
@@ -232,8 +238,9 @@
         </div>
       </div>
     </div>
-
   </div>
+
+  <div id="emojis" class="row center" style="display:none">{{>emoji}}</div>
 
 </div>
 
@@ -359,7 +366,7 @@
         });
       });
 
-      // admin UI bindings
+      // admin UI
       w.GSC.init.push(function () {
         w.GSC.names.push("admin panel UI");
         $('#SiteSelect option[value=default]').attr('selected', 'selected');
@@ -388,6 +395,10 @@
           GSC.DeploySummernote();
         });
 
+        $("#a_emoji").click(function () {
+          $("#emojis").toggle("fast");
+        });
+
         $("#a_flush").click(function () {
           if (w.GSC.offline) {
             GSC.PingDot("#csv_ping", false);
@@ -401,6 +412,7 @@
         $("#a_token_cc").click(function () {
           GSC.CopyClipboard($("#a_security_token").val());
           GSC.PingDot("#sectok_ping");
+          if (GSC.touch) M.toast({html: "💕"});
         });
 
         $("#a_get_token").click(function () {
@@ -430,7 +442,7 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("CSV load timer");
         GSC.ShowLoader("#a_update_info");
-        setInterval("GSC.GetCsvInfo()", 2500);
+        setInterval("GSC.GetCsvInfo()", 3000);
       });
 
       // PSI preload
@@ -450,7 +462,9 @@
         $("#admin_main h5").addClass("a_reset a_h5");
         $("#admin_main p").addClass("a_reset");
         if (w.GSC.touch) {
-          $('.tooltipped').tooltip('destroy');
+          $(".tooltipped").tooltip("destroy");
+          $('#emojis').remove();
+          $('#a_emoji').remove();
         }
       });
 
@@ -513,6 +527,7 @@
 <script src="{{ cdn }}/summernote/summernote-lite.js" defer></script>
 {{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
 <link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
-<script src="{{ cdn }}/js/moment.min.js" defer></script>
+<script src="{{ cdn }}/js/moment.min.js" async></script>
+<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous" async></script>
 
 {{/admin_group_admin}}
