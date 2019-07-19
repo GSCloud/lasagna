@@ -22,7 +22,7 @@
     }
 
     // GLOBAL setCookie()
-    if (!w.setCookie) window.setCookie = function (key, value, days) {
+    if (typeof w.setCookie !== "function") window.setCookie = function (key, value, days) {
       var expires = "";
       var d = days ? parseInt(days) : 30;
       var date = new Date();
@@ -32,13 +32,13 @@
     }
 
     // GLOBAL getCookie()
-    if (!w.getCookie) window.getCookie = function (key) {
+    if (typeof w.getCookie !== "function") window.getCookie = function (key) {
       var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
       return v ? v[2] : null;
     }
 
     // GLOBAL delCookie()
-    if (!w.delCookie) window.delCookie = function (key) {
+    if (typeof w.delCookie !== "function") window.delCookie = function (key) {
       var date = new Date();
       date.setTime(0);
       expires = ";expires=" + date.toGMTString();
@@ -53,7 +53,7 @@
       if (w.GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
       // FormatBytes()
-      if (!w.GSC.FormatBytes) w.GSC.FormatBytes = function (number, precision) {
+      if (typeof w.GSC.FormatBytes !== "function") w.GSC.FormatBytes = function (number, precision) {
         number = parseInt(number);
         if (!number) return "0";
         var c = 1024,
@@ -64,7 +64,7 @@
       }
 
       // GetTime()
-      if (!w.GSC.GetTime) w.GSC.GetTime = function (dateString) {
+      if (typeof w.GSC.GetTime !== "function") w.GSC.GetTime = function (dateString) {
         function ext(x) {
           x = ("" + x).slice(-1);
           if (x == 1) return "st";
@@ -113,7 +113,7 @@
       }
 
       // CopyClipboard()
-      if (!w.GSC.CopyClipboard) w.GSC.CopyClipboard = function (dataString) {
+      if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString) {
         var el = d.createElement('textarea');
         el.value = dataString;
         el.setAttribute("readonly", "");
@@ -149,13 +149,13 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("version check");
 
-        if (!w.GSC.VersionCheck) w.GSC.VersionCheck = function () {
+        if (typeof w.GSC.VersionCheck !== "function") w.GSC.VersionCheck = function () {
           if (!w.GSC.offline) {
             $.post("/version/core", function (post) {
               if (post.data.LASAGNA.core.version) {
                 if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
                   $("#update-message").show();
-                  w.GSC.VersionCheck = {};
+                  w.GSC.VersionCheck = function () {};
                   console.log("UPDATE: core version check failed!");
                   return;
                 }
@@ -165,7 +165,7 @@
               if (post.data.LASAGNA.data.version) {
                 if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
                   $("#update-message").show();
-                  w.GSC.VersionCheck = {};
+                  w.GSC.VersionCheck = function () {};
                   console.log("UPDATE: {{ lang }} data version check failed!");
                   return;
                 }

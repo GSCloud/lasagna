@@ -4,20 +4,25 @@
   if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
     if (navigator.share) {
 
-      if (typeof window.WebShare !== "function") window.WebShare = function (text) {
-        var title = text ? text : document.title;
-        var url = document.querySelector("link[rel=canonical]") ?
-          document.querySelector("link[rel=canonical]").href : document.location.href;
+      if (typeof window.WebShare !== "function") window.WebShare = function (text, url) {
+        if (!text) text = "";
+        if (!url) url = "";
+        var title = text.length ? text : document.title;
+        var url = url.length ? url : (document.querySelector("link[rel=canonical]")
+          ? document.querySelector("link[rel=canonical]").href : document.location.href);
         navigator.share({
           title: title,
           url: url
         }).catch(console.error);
       }
 
-      if (typeof window.WebShareFactory !== "function") window.WebShareFactory = function (text) {
+      if (typeof window.WebShareFactory !== "function") window.WebShareFactory = function (text, url) {
+        if (!text) text = "";
+        if (!url) url = "";
         text = text.replace(new RegExp(/['\"\n\r]*/, "g"), "");
+        url = url.replace(new RegExp(/['\"\n\r\s]*/, "g"), "");
         var el = '<a onclick="window.WebShare(\'' +
-          text + '\')" aria-hidden="true" style="display:inline-block;margin:8px">' +
+          text + '\', \'' + url + '\')" aria-hidden="true" style="display:inline-block;margin:8px">' +
           '<i class="fas fa-share-alt-square"></i></a>';
         return el;
       }
