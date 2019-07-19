@@ -28,8 +28,8 @@
         url = url.replace(new RegExp(/['\"\n\r\s]*/, "g"), "");
         title = title.replace(new RegExp(/['\"\n\r]*/, "g"), "");
         var el =
-          '<a onclick="var that=this;var color=this.style.color;this.style.transition=\'all 0s\';this.style.color=\'#ffa\';' +
-          'setTimeout(function(){that.style.transition=\'all 0.3s\';that.style.color=color;},1);window.WebShare(\'' +
+          '<a onclick="var that = this;this.style.transition = \'filter 0s\';this.style.filter = \'invert(100%)\';' +
+          'setTimeout(function () {that.style.transition = \'all 2s\';that.style.filter = \'\';}, 1);window.WebShare(\'' +
           text + '\', \'' + url + '\', \'' + title + '\')" aria-hidden="true" style="display:inline-block;margin:8px">' +
           '<i class="fas fa-share-alt-square"></i></a>';
         return el;
@@ -40,12 +40,11 @@
         el[i].style.display = "block";
         el[i].addEventListener("click", function () {
           var that = this;
-          var color = this.style.color;
-          this.style.transition = "all 0s";
-          this.style.color = "#ffa";
+          this.style.transition = "filter 0s";
+          this.style.filter = "invert(100%)";
           setTimeout(function () {
-            that.style.transition = "all 0.3s";
-            that.style.color = color;
+            that.style.transition = "all 2s";
+            that.style.filter = "";
           }, 1);
           window.WebShare();
         });
