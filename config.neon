@@ -31,12 +31,14 @@ cache_profiles: [
 ]
 
 multisite_profiles: [
-  lasagna2: [
+  demo: [
+    demo.gscloud.cz
+    template.gscloud.cz
     lasagna2.gscloud.cz
   ]
 ]
 
-lasagna2: [
+demo: [
   cfg: [
     canonical_url: "https://lasagna2.gscloud.cz/"
     google: [

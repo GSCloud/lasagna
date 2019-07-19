@@ -73,11 +73,10 @@ foreach ($cache_profiles as $k => $v) {
 $multisite_names = [];
 $multisite_profiles = array_replace([
     "default" => [trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN],
-], $cfg["multisite_profiles"] ?? []
-);
-foreach ($multisite_profiles as $k => $v) {
-    $multisite_names[] = $k;
-}
+], $cfg["multisite_profiles"] ?? []);
+foreach ($multisite_profiles as $k => $v) $multisite_names[] = $k;
+$profile_index = (string) trim($_GET["profile"] ?? "default");
+if (!in_array($profile_index, $multisite_names)) $profile_index = "default";
 
 // routing tables
 $router = array();
@@ -187,8 +186,10 @@ if ($router[$view]["nopwa"] ?? false) {
 
 // data population
 $data["cache_profiles"] = $cache_profiles;
-$data["multisite_names"] = $multisite_names;
 $data["multisite_profiles"] = $multisite_profiles;
+$data["multisite_names"] = $multisite_names;
+$data["profile_domains"] = $multisite_profiles[$profile_index];
+
 $data["match"] = $match;
 $data["presenter"] = $presenter;
 $data["router"] = $router;
