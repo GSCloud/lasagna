@@ -258,8 +258,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       // data
       GSC.data = {};
-      GSC.data.multisite_names = [{{#multisite_names}}"{{.}}", {{/multisite_names}}];
-      GSC.data.profile_domains = [{{#profile_domains}}"{{.}}", {{/profile_domains}}];
+      GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
       // loader
       if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
@@ -381,17 +380,19 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       w.GSC.init.push(function () {
         w.GSC.names.push("admin panel UI");
 
+        var profiles = [];
         var params = new window.URLSearchParams(window.location.search);
         var profile = params.get("profile");
-        if (!GSC.data.multisite_names.includes(profile)) {
+        for (var i in GSC.data.multisite_profiles) profiles.push(i);
+        if (!profiles.includes(profile)) {
           profile = getCookie("profile");
-          if (!GSC.data.multisite_names.includes(profile)) {
+          if (!profiles.includes(profile)) {
             profile = "default";
           }
         }
         $("#SiteSelect option[value=" + profile + "]").attr("selected", "selected");
         $("#SiteSelect").formSelect();
-        $("#domains").html(GSC.data.profile_domains.join(" "));
+        $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
 
         $("#SiteSelect").change(function () {
           if (!$("#SiteSelect").val()) return;

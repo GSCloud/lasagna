@@ -188,7 +188,7 @@ if ($router[$view]["nopwa"] ?? false) {
 $data["cache_profiles"] = $cache_profiles;
 $data["multisite_profiles"] = $multisite_profiles;
 $data["multisite_names"] = $multisite_names;
-$data["profile_domains"] = $multisite_profiles[$profile_index];
+$data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
 $data["match"] = $match;
 $data["presenter"] = $presenter;
