@@ -8,8 +8,8 @@
         if (!text) text = "";
         if (!url) url = "";
         var title = text.length ? text : document.title;
-        var url = url.length ? url : (document.querySelector("link[rel=canonical]")
-          ? document.querySelector("link[rel=canonical]").href : document.location.href);
+        var url = url.length ? url : (document.querySelector("link[rel=canonical]") ?
+          document.querySelector("link[rel=canonical]").href : document.location.href);
         navigator.share({
           title: title,
           url: url
@@ -21,11 +21,11 @@
         if (!url) url = "";
         text = text.replace(new RegExp(/['\"\n\r]*/, "g"), "");
         url = url.replace(new RegExp(/['\"\n\r\s]*/, "g"), "");
-        var el = '<a onclick="var that=this;var color=this.style.color;this.style.transition=\'all 0s\';this.style.color=\'#ffa\';' +
+        return
+          '<a onclick="var that=this;var color=this.style.color;this.style.transition=\'all 0s\';this.style.color=\'#ffa\';' +
           'setTimeout(function(){that.style.transition=\'all 0.3s\';that.style.color=color;},1);window.WebShare(\'' +
           text + '\', \'' + url + '\')" aria-hidden="true" style="display:inline-block;margin:8px">' +
           '<i class="fas fa-share-alt-square"></i></a>';
-        return el;
       }
 
       var el = document.getElementsByClassName("webshare");
@@ -34,12 +34,16 @@
         el[i].addEventListener("click", function () {
           var that = this;
           var color = this.style.color;
-          this.style.transition ="all 0s";
+          this.style.transition = "all 0s";
           this.style.color = "#ffa";
-          setTimeout(function(){that.style.transition="all 0.3s";that.style.color=color;}, 1);
+          setTimeout(function () {
+            that.style.transition = "all 0.3s";
+            that.style.color = color;
+          }, 1);
           window.WebShare();
         });
       }
     };
   }
+
 </script>
