@@ -15,25 +15,25 @@ use Monolog\Logger;
 use Nette\Neon\Neon;
 use There4\Analytics\AnalyticsEvent;
 
-// sanity checks
+// sanity check
 $x = "FATAL ERROR: broken chain of trust\n\n";
 defined("APP") || die($x);
 defined("CACHE") || die($x);
 defined("ROOT") || die($x);
 
-// global constants
+// constants
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 defined("CLI") || define("CLI", (php_sapi_name() === "cli"));
-defined("DOMAIN") || define("DOMAIN", preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "unknown"));
+defined("DOMAIN") || define("DOMAIN", preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "DOMAIN"));
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
-defined("SERVER") || define("SERVER", preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "unknown"));
+defined("SERVER") || define("SERVER", preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "SERVER"));
 defined("VERSION") || define("VERSION", "v1");
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
 // Google Cloud Platform
-defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? "gscloudcz-163314");
-defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? "/keys/GSCloud-6dd97e5ac451.json");
-if (!CLI && file_exists(APP . GCP_KEYS)) {
+defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
+defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
+if (!CLI && GCP_KEYS && file_exists(APP . GCP_KEYS)) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
@@ -41,6 +41,8 @@ if (!CLI && file_exists(APP . GCP_KEYS)) {
 function logger($message, $severity = Logger::INFO)
 {
     if (CLI) return;
+    if (!GCP_PROJECTID) return;
+    if (!$message) return;
     ob_flush();
     try {
         $logging = new LoggingClient(["projectId" => GCP_PROJECTID]);
@@ -234,7 +236,7 @@ header(implode(" ", [
 ]));
  */
 
-// App
+// APP
 require_once APP . "/APresenter.php";
 require_once $presenter_file;
 $app = $p::getInstance()->setData($data)->process();
@@ -247,7 +249,8 @@ if (array_key_exists("output", $data)) {
 }
 echo $output;
 
-// credits
+// END
+/*
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
 header("X-Processing: ${time} msec.");
@@ -264,10 +267,23 @@ if ($events) {
     @$events->trackEvent($cfg["app"], "country_code", $country);
     @$events->trackEvent($cfg["app"], "processing_time", $time);
 }
+*/
+$data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
+$data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
+$events = null;
+$dot = new \Adbar\Dot((array) $data);
+header("X-Processing: ${time} msec.");
+if ( $dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVER["HTTPS"])) && ($_SERVER["HTTPS"] == "on")  ) {
+    $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url").$dot->get("request_path"));
+}
+if ($events) {
+    ob_flush();
+    @$events->trackEvent($cfg["app"], "country_code", $country);
+    @$events->trackEvent($cfg["app"], "processing_time", $time);
+}
 
-// debug
+// DEBUG
 if (DEBUG) {
-    // sanitize data
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);

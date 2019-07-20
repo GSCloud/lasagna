@@ -12,7 +12,7 @@
 use Nette\Neon\Neon;
 use Tracy\Debugger;
 
-// start
+// START
 list($usec, $sec) = explode(" ", microtime());
 define("LASAGNA_START", ((float) $usec + (float) $sec));
 ob_start();
@@ -65,7 +65,7 @@ function check_folder($f, $writable = false)
     }
 }
 
-// sanity checks
+// sanity check
 check_file(CONFIG);
 check_file(ROOT . "/VERSION");
 check_folder(CACHE, true);
@@ -83,6 +83,8 @@ if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
 }
 date_default_timezone_set($cfg["date_default_timezone"] ?? "Europe/Prague");
+
+// constants based on configuration
 defined("VERSION") || define("VERSION", $cfg["version"] ?? "v1");
 defined("APP") || define("APP", ROOT . "/app/" . VERSION);
 
@@ -141,7 +143,7 @@ $data["UTM"] = $data["utm"];
 $data["ALPHA"] = (in_array($host, $cfg["alpha_hosts"] ?? []));
 $data["BETA"] = (in_array($host, $cfg["beta_hosts"] ?? []));
 
-// App
+// APP.php
 if (file_exists(APP) && is_file(APP)) {
     require_once APP;
 } elseif (file_exists(APP . "/App.php") && is_file(APP . "/App.php")) {

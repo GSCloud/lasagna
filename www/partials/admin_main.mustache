@@ -75,8 +75,8 @@
             </select>
           </div>
           <div id="domains" class="container"></div>
-          <a id="a_emoji" style="margin:5px;display:none" class="waves-effect blue waves btn faces emojianim"></a>
-          <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
+          <a id="a_emoji" style="margin:5px" class="waves-effect blue waves btn faces emojianim"></a>
+          <a id="a_summernote" style="margin:5px" class="tooltipped waves-effect orange waves-light btn"
             data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
             <i class="fas fa-edit"></i>
             {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
@@ -490,10 +490,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         $("#admin_main p").addClass("a_reset");
         if (w.GSC.touch) {
           $(".tooltipped").tooltip("destroy");
-          $('#emojis').remove();
-          $('#a_emoji').remove();
-        } else {
-          $('#a_emoji').show();
         }
       });
 
