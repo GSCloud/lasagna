@@ -1,6 +1,6 @@
-<div id="gscmodal" class="modal a_reset" style="color:#000!important;">
+<div id="gscmodal" class="modal a_reset" style="color:#000!important">
   <div class="modal-content">
-    <p style="color:#000!important;font-family:Arial!important;font-size:1.3em;">{{ l.$generator }}</p>
+    <p style="color:#000!important;font-family:Arial!important;font-size:1.3em">{{ l.$generator }}</p>
     <div class="row center">
       <div class="col l4 m6 s12">
         <p>{{ l.a_footer_app }}:
@@ -15,11 +15,11 @@
       <div class="col l4 m6 s12">
 
         {{^admin}}
-
         {{#LOCALHOST}}
         {{#local_goauth_redirect}}
         <a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}"
-          class="waves-effect waves-light blue btn-large z-depth-3">{{ l.a_login }}<i class="material-icons right">cloud</i></a>
+          class="waves-effect waves-light blue btn-large z-depth-3">{{ l.a_login }}<i
+            class="material-icons right">cloud</i></a>
         <br>
         {{/local_goauth_redirect}}
         {{/LOCALHOST}}
@@ -27,25 +27,26 @@
         {{^LOCALHOST}}
         {{#goauth_redirect}}
         <a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}"
-          class="waves-effect waves-light blue btn-large z-depth-3">{{ l.a_login }}<i class="material-icons right">cloud</i></a>
+          class="waves-effect waves-light blue btn-large z-depth-3">{{ l.a_login }}<i
+            class="material-icons right">cloud</i></a>
         <br>
         {{/goauth_redirect}}
         {{/LOCALHOST}}
-
         {{/admin}}
         <br>
 
         {{#LOCALHOST}}
         {{#local_goauth_redirect}}
         <a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true"
-          class="waves-effect waves-light red btn-large z-depth-3">{{ l.a_relogin }}<i class="material-icons right">cloud</i></a>
+          class="waves-effect waves-light red btn-large z-depth-3">{{ l.a_relogin }}<i
+            class="material-icons right">cloud</i></a>
         {{/local_goauth_redirect}}
         {{/LOCALHOST}}
-
         {{^LOCALHOST}}
         {{#goauth_redirect}}
         <a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true"
-          class="waves-effect waves-light red btn-large z-depth-3">{{ l.a_relogin }}<i class="material-icons right">cloud</i></a>
+          class="waves-effect waves-light red btn-large z-depth-3">{{ l.a_relogin }}<i
+            class="material-icons right">cloud</i></a>
         {{/goauth_redirect}}
         {{/LOCALHOST}}
 
@@ -57,34 +58,21 @@
 <div class="footer-copyright black scrollspy" style="font-size:80%">
   <div class="row center">
     <div id="userfooter2" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
+    <a rel="noopener" target="_blank" class="white-text text" href="https://fred.mxd.cz/{{ utm }}">
+      {{ l.$year }}&nbsp;{{ l.author }}</a>&nbsp;&mdash;&nbsp;<a rel="noopener" target="_blank" class="white-text text"
+      href="https://gscloud.cz/{{ utm }}">{{ l.$gsc }}</a>
     <br>
-    <a rel="noopener" target="_blank" class="white-text text"
-      href="https://fred.mxd.cz/{{ utm }}">
-      {{ l.$year }}&nbsp;{{ l.author }}</a>&nbsp;&mdash;&nbsp;<a
-        rel="noopener"
-        target="_blank"
-        class="white-text text"
-        href="https://gscloud.cz/{{ utm }}">{{ l.$gsc }}</a>&nbsp;&mdash;&nbsp;<a
-        rel="noopener"
-        target="_blank"
-        class="white-text text"
-        href="https://gscloud.cz/privacy-policy.pdf">{{ l.privacy_policy }}</a>&nbsp;&mdash;&nbsp;<a
-        rel="noopener"
-        target="_blank"
-        class="white-text text"
-        href="/GDPR.pdf">GDPR</a>
+    <a rel="noopener" target="_blank"
+      class="white-text text"
+      href="https://gscloud.cz/privacy-policy.pdf">{{ l.privacy_policy }}</a>&nbsp;&mdash;&nbsp;<a rel="noopener"
+      target="_blank" class="white-text text" href="/GDPR.pdf">GDPR</a>
     <br>
     {{ l.poweredby }} &nbsp;<a rel="noopener" target="_blank" class="white-text text" title="GitHub Inc."
       href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
     <br>
     <a class="modal-trigger" href="#gscmodal">
-      <img
-        class="responsive-img"
-        style="margin:1em;background-color:#fff;border-radius:50%"
-        src="{{ cdn }}/img/LASAGNA_logo.png"
-        alt="Tesseract LASAGNA"
-        width=80
-        height=80
-      ></a>
+      <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:50%"
+        src="{{ cdn }}/img/LASAGNA_logo.png" alt="Tesseract LASAGNA" width=80 height=80>
+    </a>
   </div>
 </div>
