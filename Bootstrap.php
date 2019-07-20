@@ -22,17 +22,17 @@ ini_set("default_socket_timeout", 15);
 ini_set("display_errors", "1");
 
 // constants in SPECIFIC ORDER !!!
-defined("ROOT")  || define("ROOT", __DIR__);
-defined("TEMP")  || define("TEMP", "/tmp");
+defined("ROOT") || define("ROOT", __DIR__);
 defined("CACHE") || define("CACHE", ROOT . "/cache");
-defined("DATA")  || define("DATA", ROOT . "/data");
-defined("WWW")   || define("WWW", ROOT . "/www");
-defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
-defined("PARTIALS")  || define("PARTIALS", WWW . "/partials");
-defined("DOWNLOAD")  || define("DOWNLOAD", WWW . "/download");
-defined("UPLOAD")    || define("UPLOAD", WWW . "/upload");
+defined("DATA") || define("DATA", ROOT . "/data");
+defined("WWW") || define("WWW", ROOT . "/www");
 defined("CONFIG") || define("CONFIG", ROOT . "/config.neon");
 defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.neon");
+defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
+defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
+defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
+defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
+defined("TEMP")  || define("TEMP", "/tmp");
 
 // Composer
 require_once ROOT . "/vendor/autoload.php";

@@ -1,9 +1,10 @@
 {{#admin_group_admin}}
 
 <style>
-.hearts::after{content:'🤕';animation-name: hearts;animation-duration:1s}
-.emojianim::after{animation-timing-function: linear;animation-iteration-count: infinite}
-@keyframes hearts{10%{content:'😩'}20%{content:'😫'}30%{content:'😪'}40%{content:'😴'}50%{content:'😵'}60%{content:'😦'}70%{content:'😢'}80%{content:'😭'}90%{content:'🤒'}}
+.bigemoji{font-size:3em}
+.faces::after{content:'🤕';animation-name:faces;animation-duration:1s}
+.emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
+@keyframes faces{10%{content:'😩'}20%{content:'😫'}30%{content:'😪'}40%{content:'😴'}50%{content:'😵'}60%{content:'😦'}70%{content:'😢'}80%{content:'😭'}90%{content:'🤒'}}
 .a_reset{font-family:Arial!important;font-size:14px!important}
 .a_h2{font-size:5em!important;font-weight:700!important}
 .a_h3{font-size:4em!important;font-weight:700!important}
@@ -59,6 +60,7 @@
   </div>
   <div class="row center" style="overflow:hidden">
     <div class="col l4 m6 s12">
+
       <div class="spacer">
         <div class="row center alzaborder">
           <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
@@ -73,13 +75,27 @@
             </select>
           </div>
           <div id="domains" class="container"></div>
-          <a id="a_emoji" style="margin:5px;display:none" class="waves-effect blue waves btn hearts emojianim"></a>
+          <a id="a_emoji" style="margin:5px;display:none" class="waves-effect blue waves btn faces emojianim"></a>
           <a id="a_summernote" style="margin:5px;" class="tooltipped waves-effect orange waves-light btn"
             data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
             <i class="fas fa-edit"></i>
             {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
         </div>
       </div>
+
+      <div class="spacer">
+        <div class="row center white hide-on-small-only">
+          <div class="col s12">
+            <label>{{ l.a_remotefns }}</label>
+            <select id="RemoteFnSelect">
+              <option value="" disabled selected>...</option>
+              <option value="CoreUpdateRemote">Core Update</option>
+              <option value="FlushCacheRemote">Flush Cache</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="spacer">
         <div class="row center alzaborder">
           <h5>{{ l.a_cache }}</h5>
@@ -103,28 +119,7 @@
               {{ l.a_flush }}</a>
           </div>
         </div>
-        <div class="spacer">
-          <div class="row center white hide-on-small-only">
-            <div class="col s12">
-              <label>{{ l.a_remotefns }}</label>
-              <select id="RemoteFnSelect">
-                <option value="" disabled selected>...</option>
-                <option value="CoreUpdateRemote">Core Update</option>
-                <option value="FlushCacheRemote">Flush Cache</option>
-              </select>
-            </div>
-            <input id="a_security_token" class="black-text" style="font-size:11px;width:90%;border:0" type="text"
-              readonly value="N/A">
-            <div class="row center">
-              <a id="a_get_token" class="tooltipped waves-effect green waves-light btn" data-position="top"
-                data-tooltip="{{ l.a_update_remote_ttip }}">{{
-              l.a_get_token }}</a>
-              <a id="a_token_cc" class="tooltipped waves-effect green waves-light btn" data-position="top"
-                data-tooltip="{{ l.a_clipboard_ttip }}">
-                <i class="fas fa-clipboard"></i></a>&nbsp;<span id="sectok_ping" class="mono">&nbsp;</span>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
 
@@ -298,11 +293,11 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
                 link =
                   '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" class="green mono white-text bold" href="' +
                   'https://docs.google.com/spreadsheets/d/' +
-                  sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>' +
+                  sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
                   x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
                   ' class="bold blue white-text mono" ' +
                   'href="https://docs.google.com/spreadsheets/d/e/' +
-                  csv + '/pub?output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>' +
+                  csv + '/pub?output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                   lines + '&nbsp;</a>&nbsp;';
               }
               moment.locale("{{ lang }}");
@@ -402,11 +397,22 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         });
 
         $("#RemoteFnSelect").change(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#sectok_ping", false);
+            return;
+          }
           if (!$("#RemoteFnSelect").val()) return;
-          var s = $("#RemoteFnSelect").val();
-          var t = $("#a_security_token").val();
-          t = t.replace(/[a-zA-Z]*\?/, s + "?");
-          $("#a_security_token").val(t);
+          $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
+            var s = $("#RemoteFnSelect").val();
+            var t = data.data[0];
+            t = t.replace(/[a-zA-Z]*\?/, s + "?");
+            GSC.CopyClipboard(t);
+            GSC.PingDot("#sectok_ping");
+            M.toast({html: s + " OK 💕"});
+          }).fail(function () {
+            $("#a_security_token").val("N/A");
+            GSC.PingDot("#sectok_ping", false);
+          });
         });
 
         $("#a_update").click(function () {
@@ -435,7 +441,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             $(".ccemoji").click(function () {
               var x = $(this).text();
               GSC.CopyClipboard(x);
-              M.toast({html: x});
+              M.toast({html: x, classes: "bigemoji"});
             });
             GSC.emojicc = true;
           }
@@ -450,28 +456,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           GSC.GetCsvInfo = function () {};
           $("#a_flush").attr("disabled", "disabled");
           location.href = "/admin/FlushCache";
-        });
-
-        $("#a_token_cc").click(function () {
-          GSC.CopyClipboard($("#a_security_token").val());
-          GSC.PingDot("#sectok_ping");
-          if (GSC.touch) M.toast({html: "💕"});
-        });
-
-        $("#a_get_token").click(function () {
-          if (w.GSC.offline) {
-            GSC.PingDot("#sectok_ping", false);
-            return;
-          }
-          if (!$("#RemoteFnSelect").val()) return;
-          $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
-            $("#a_security_token").val(data.data);
-            $("#RemoteFnSelect").change();
-            GSC.PingDot("#sectok_ping");
-          }).fail(function () {
-            $("#a_security_token").val("N/A");
-            GSC.PingDot("#sectok_ping", false);
-          });
         });
 
         $("#a_logout").click(function () {
