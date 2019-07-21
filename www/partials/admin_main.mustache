@@ -15,7 +15,8 @@
 .row{margin-bottom:6px}
 .spacer{margin:3px}
 .protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em}
-#admin_main{font-family:Arial!important;font-size:14px!important}
+#admin_main,#admin_main h1,#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5{font-family:Arial!important}
+#admin_main {font-size:14px!important}
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
 #emojis{cursor:crosshair}
@@ -25,7 +26,7 @@
   <div id="a_rotate_device" class="row center" style="padding-top:3px">
     {{ l.a_rotate_device }}
   </div>
-  <div class="row center black hide-on-small-only" style="padding-top:1em">
+  <div class="row center black hide-on-small-only" style="padding-top:3px">
     <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
       data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
       <i class="fab fa-google"></i>
@@ -58,7 +59,7 @@
       <i class="fab fa-google"></i>
       {{ l.a_google_logout }}</a>
   </div>
-  <div class="row center" style="overflow:hidden">
+  <div class="row center" style="overflow:hidden" style="padding-top:3px">
     <div class="col l4 m6 s12">
 
       <div class="spacer">
@@ -437,6 +438,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             var arr = graphemes.map(function (x) {
               return '<span class="ccemoji">' + x + '</span>';
             });
+            console.log("Emojis and symbols: " + arr.length);
             $("#emojis").html(arr.join(''));
             $(".ccemoji").click(function () {
               var x = $(this).text();
