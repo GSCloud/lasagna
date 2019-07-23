@@ -221,59 +221,44 @@ if (!file_exists($presenter_file)) {
 }
 
 // CSP headers
-/*
 header(implode(" ", [
-    "Content-Security-Policy:",
-    "connect-src",
-    "'self'",
-    "https://*;",
+    "Content-Security-Policy: ",
 
     "default-src",
     "'unsafe-inline'",
     "'self'",
     "https://*;",
 
+    "connect-src",
+    "'self'",
+    "https://*;",
+
     "font-src",
     "'self'",
     "'unsafe-inline'",
-    "https://*.google-analytics.com",
-    "https://*.googleapis.com",
-    "https://*.googletagmanager.com",
-    "https://*.gstatic.com",
-    "https://cdn.onesignal.com",
-    "https://platform.twitter.com;",
+    "*.gstatic.com;",
 
     "script-src",
+    "*.facebook.net",
+    "*.google-analytics.com",
+    "*.googleapis.com",
+    "*.googletagmanager.com",
+    "cdn.onesignal.com",
+    "onesignal.com",
+    "platform.twitter.com",
     "'self'",
-    "'unsafe-inline'",
-    "'unsafe-eval';",
-    "script-src-elem",
-    "'self'",
-    "https://*.facebook.net",
-    "https://*.google-analytics.com",
-    "https://*.googleapis.com",
-    "https://*.googletagmanager.com",
-    "https://cdn.onesignal.com",
-    "https://platform.twitter.com",
     "'unsafe-inline'",
     "'unsafe-eval';",
 
     "img-src",
+    "*",
     "'self'",
     "'unsafe-inline'",
-    "https://*.google-analytics.com",
-    "https://*.googleapis.com",
-    "https://*.googletagmanager.com",
-    "https://*.googleusercontent.com",
-    "https://*.gstatic.com,",
-    "https://cdn.onesignal.com",
-    "https://platform.twitter.com",
     "data:;",
 
     "form-action",
     "'self';",
 ]));
-*/
 
 // APP
 require_once APP . "/APresenter.php";
