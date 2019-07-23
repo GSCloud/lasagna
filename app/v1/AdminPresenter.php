@@ -17,7 +17,6 @@ class AdminPresenter extends \GSC\APresenter
 
         $admin_key = "/admin.key";
 
-        // check user
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $this->getUserGroup();
         if ($this->getUserGroup()) {
@@ -31,14 +30,14 @@ class AdminPresenter extends \GSC\APresenter
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
             }
-            catch(Exception $e) { // non-existent files?
+            catch(Exception $e) {
                 return -1;
             }
         }
 
         switch ($match["params"]["p"] ?? null) {
 
-            // get csv timestamps
+            // get CSV info
             case "GetCsvInfo":
                 $this->checkAdmins("admin");
                 $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
@@ -71,7 +70,7 @@ class AdminPresenter extends \GSC\APresenter
                     $file = "Cloudflare_Analytics_$zoneid";
                     $results = Cache::read($file, "default");
                     if ($results === false) {
-                        //$results = @file_get_contents($uri);
+                            $results = @file_get_contents($uri);
                         if ($results !== false) {
                             Cache::write($file, $results, "default");
                         }
@@ -102,33 +101,39 @@ class AdminPresenter extends \GSC\APresenter
                 return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA PageSpeed Insights", "fn" => "GetPSInsights"]);
                 break;
 
-            // get update code
+            // get update token
             case "GetUpdateToken":
                 $this->checkAdmins("admin");
                 $file = DATA . $admin_key;
                 $key = trim(@file_get_contents($file));
-                if (!$key) {
-                    $key = hash("sha256", random_bytes(256) . time());
-                    file_put_contents($file, $key);
-                    @chmod($file, 0660);
-                    $this->addMessage("ADMIN: new keyfile created");
+                try {
+                    if (!$key) {
+                        $key = hash("sha256", random_bytes(256) . time());
+                        file_put_contents($file, $key);
+                        @chmod($file, 0660);
+                        $this->addMessage("ADMIN: new keyfile created");
+                    }
+                } catch(Exception $e) {
+                    $this->unauthorized_access();
                 }
                 $user = $this->getCurrentUser();
                 $arr = "";
                 if ($user["id"]) {
                     $hashid = hash("sha256", $user["id"]);
                     $arr = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
+                } else {
+                    $this->unauthorized_access();
                 }
                 return $this->writeJsonData($arr, ["name" => "LASAGNA Remote Update Token", "fn" => "GetUpdateToken"]);
                 break;
 
-            // FLUSH cache
+            // FLUSH
             case "FlushCache":
                 $this->checkAdmins("admin");
                 $this->flush_cache();
                 break;
 
-            // UPDATE cache
+            // UPDATE
             case "CoreUpdate":
                 $this->checkAdmins("admin");
                 $this->setForceCsvCheck();
@@ -136,13 +141,16 @@ class AdminPresenter extends \GSC\APresenter
                 $this->flush_cache();
                 break;
 
-            // UPDATE remote
+            // FLUSH remote
             case "FlushCacheRemote":
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
                 if ($user && $token) {
                     $file = DATA . $admin_key;
                     $key = trim(@file_get_contents($file));
+                    if (!$key) {
+                        $this->unauthorized_access();
+                    }
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->flush_cache();
@@ -159,6 +167,9 @@ class AdminPresenter extends \GSC\APresenter
                 if ($user && $token) {
                     $file = DATA . $admin_key;
                     $key = trim(@file_get_contents($file));
+                    if (!$key) {
+                        $this->unauthorized_access();
+                    }
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->setForceCsvCheck();
@@ -175,7 +186,6 @@ class AdminPresenter extends \GSC\APresenter
                 break;
 
         } // switch END
-
         return $this;
     }
 
@@ -210,6 +220,7 @@ class AdminPresenter extends \GSC\APresenter
     {
         if (!$skip_message) {
             echo $_SERVER["HTTP_HOST"] . " - token authentication error\n";
+            exit;
         }
         $this->addError("401: UNAUTHORIZED ACCESS");
         $this->setLocation("/err/401");

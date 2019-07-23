@@ -13,6 +13,7 @@
       }
     }
 
+      // online feature support?
     if ("onLine" in navigator) {
       w.addEventListener("load", function () {
         w.addEventListener("online", checkNetwork);
@@ -21,7 +22,7 @@
       });
     }
 
-    // GLOBAL setCookie()
+    // window.setCookie()
     if (typeof w.setCookie !== "function") window.setCookie = function (key, value, days) {
       var expires = "";
       var d = days ? parseInt(days) : 30;
@@ -31,13 +32,13 @@
       document.cookie = key + "=" + value + ";path=/" + expires;
     }
 
-    // GLOBAL getCookie()
+    // window.getCookie()
     if (typeof w.getCookie !== "function") window.getCookie = function (key) {
       var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
       return v ? v[2] : null;
     }
 
-    // GLOBAL delCookie()
+    // window.delCookie()
     if (typeof w.delCookie !== "function") window.delCookie = function (key) {
       var date = new Date();
       date.setTime(0);
@@ -47,12 +48,12 @@
 
     if (w.GSC) {
 
-      // touch
+      // touch feature support?
       w.GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
         true : false;
       if (w.GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
-      // FormatBytes()
+      // GSC.FormatBytes()
       if (typeof w.GSC.FormatBytes !== "function") w.GSC.FormatBytes = function (number, precision) {
         number = parseInt(number);
         if (!number) return "0";
@@ -63,7 +64,7 @@
         return parseFloat((number / Math.pow(c, f)).toFixed(d)) + "&nbsp;" + e[f];
       }
 
-      // GetTime()
+      // GSC.GetTime()
       if (typeof w.GSC.GetTime !== "function") w.GSC.GetTime = function (dateString) {
         function ext(x) {
           x = ("" + x).slice(-1);
@@ -112,7 +113,7 @@
         return x;
       }
 
-      // CopyClipboard()
+      // GSC.CopyClipboard()
       if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString) {
         var el = d.createElement('textarea');
         el.value = dataString;
@@ -145,12 +146,13 @@
         });
       });
 
-      // DELAYED version and data check
+      // DELAYED version / data check
       w.GSC.init.push(function () {
         w.GSC.names.push("version check");
 
         if (typeof w.GSC.VersionCheck !== "function") w.GSC.VersionCheck = function () {
           if (!w.GSC.offline) {
+
             $.post("/version/core", function (post) {
               if (post.data.LASAGNA.core.version) {
                 if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
@@ -161,6 +163,7 @@
                 }
               }
             });
+
             $.post("/{{ lang }}/version/data", function (post) {
               if (post.data.LASAGNA.data.version) {
                 if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
@@ -171,11 +174,12 @@
                 }
               }
             });
-            setTimeout("window.GSC.VersionCheck()", 30000);
+
+            setTimeout("window.GSC.VersionCheck()", 60000);
           }
         }
 
-        setTimeout("window.GSC.VersionCheck()", 5000);
+        setTimeout("window.GSC.VersionCheck()", 2500);
       });
 
     }

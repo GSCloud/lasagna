@@ -1,21 +1,20 @@
 {{#admin_group_admin}}
 
 <style>
-.bigemoji{font-size:3em}
-.faces::after{content:'🤕';animation-name:faces;animation-duration:1s}
+.bigemoji{font-size:5em}
+.faces::after{content:"🤕";animation-name:faces;animation-duration:1s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
-@keyframes faces{10%{content:'😩'}20%{content:'😫'}30%{content:'😪'}40%{content:'😴'}50%{content:'😵'}60%{content:'😦'}70%{content:'😢'}80%{content:'😭'}90%{content:'🤒'}}
+@keyframes faces{10%{content:"😩"}20%{content:"😫"}30%{content:"😪"}40%{content:"😴"}50%{content:"😵"}60%{content:"😦"}70%{content:"😢"}80%{content:"😭"}90%{content:"🤒"}}
 .a_reset{font-family:Arial!important;font-size:14px!important}
 .a_h2{font-size:5em!important;font-weight:700!important}
-.a_h3{font-size:4em!important;font-weight:700!important}
 .a_h4{font-size:3em!important;font-weight:700!important}
 .a_h5{font-size:2em!important;font-weight:700!important}
-.alzaborder{border:2px solid green;border-radius:5px}
+.extrapadding{padding:5px;border-radius:5px}
 .nowrap{white-space:nowrap}
-.row{margin-bottom:6px}
-.spacer{margin:3px}
-.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em}
-#admin_main,#admin_main h1,#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5{font-family:Arial!important}
+#admin_main .row{margin-bottom:6px}
+#admin_main {padding-top:5px}
+.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
+#admin_main,#admin_main h2,#admin_main h4,#admin_main h5{font-family:Arial!important}
 #admin_main {font-size:14px!important}
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
@@ -26,50 +25,17 @@
   <div id="a_rotate_device" class="row center" style="padding-top:3px">
     {{ l.a_rotate_device }}
   </div>
-  <div class="row center black hide-on-small-only" style="padding-top:3px">
-    <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
-      data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
-      <i class="fab fa-google"></i>
-      {{ l.a_google_account }}</a>
 
-    <a style="margin:2px;" class="tooltipped waves-effect cyan waves-light btn" target="_blank" rel="noopener"
-      data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
-      <i class="fab fa-google"></i>
-      {{ l.a_google_password }}</a>
+  <div class="row grid" style="overflow:hidden" style="padding-top:3px">
 
-    <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
-      data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
-      href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
-      <i class="fab fa-google"></i>
-      {{ l.a_google_search }}</a>
-
-    <a style="margin:2px;" class="tooltipped waves-effect purple waves-light btn" target="_blank" rel="noopener"
-      data-position="top" data-tooltip="{{ l.a_google_analytics_ttip }}"
-      href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
-      <i class="fab fa-google"></i>
-      {{ l.a_google_analytics }}</a>
-
-    <a style="margin:2px;" class="tooltipped waves-effect magenta waves-light btn" target="_blank" rel="noopener"
-      data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://onesignal.com">
-      <i class="fas fa-bell"></i>
-      {{ l.a_onesignal }}</a>
-
-    <a style="margin:2px;" class="tooltipped waves-effect red waves-light btn" data-position="top"
-      data-tooltip="{{ l.a_google_logout_ttip }}" href="https://www.google.com/accounts/Logout">
-      <i class="fab fa-google"></i>
-      {{ l.a_google_logout }}</a>
-  </div>
-  <div class="row center" style="overflow:hidden" style="padding-top:3px">
-    <div class="col l4 m6 s12">
-
-      <div class="spacer">
-        <div class="row center alzaborder">
+      <div class="col xl3 l4 m6 s12">
+        <div class="row center extrapadding">
           <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
           <p id="a_update_info"></p>
           <div class="col s12 white">
             <label>{{ l.a_sites }}</label>
             <select id="SiteSelect">
-              <option value="" disabled selected>...</option>
+              <option value="" disabled selected>&hellip;</option>
               {{#multisite_names}}
               <option value="{{.}}">{{.}}</option>
               {{/multisite_names}}
@@ -84,21 +50,8 @@
         </div>
       </div>
 
-      <div class="spacer">
-        <div class="row center white hide-on-small-only">
-          <div class="col s12">
-            <label>{{ l.a_remotefns }}</label>
-            <select id="RemoteFnSelect">
-              <option value="" disabled selected>...</option>
-              <option value="CoreUpdateRemote">Core Update</option>
-              <option value="FlushCacheRemote">Flush Cache</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="spacer">
-        <div class="row center alzaborder">
+      <div class="col xl3 l4 m6 s12">
+        <div class="row center extrapadding">
           <h5>{{ l.a_cache }}</h5>
           <div class="container">
             <span class="nowrap">default: {{ cache_profiles.default }}</span>
@@ -120,13 +73,20 @@
               {{ l.a_flush }}</a>
           </div>
         </div>
-
+        <div class="row center white hide-on-small-only">
+          <div class="col s12 white">
+            <label>{{ l.a_remotefns }}</label>
+            <select id="RemoteFnSelect">
+              <option value="" disabled selected>&hellip;</option>
+              <option value="CoreUpdateRemote">Core Update</option>
+              <option value="FlushCacheRemote">Flush Cache</option>
+            </select>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="col l4 m6 s12">
-      <div class="spacer">
-        <div class="row center alzaborder">
+      <div class="col xl3 l4 m6 s12">
+        <div class="row center extrapadding">
           <div class="white-text">
             <h5>{{ l.a_groups_permissions }}</h5>
             <div class="row center">
@@ -154,8 +114,9 @@
           </div>
         </div>
       </div>
-      <div class="spacer">
-        <div class="row center alzaborder hide-on-small-only">
+
+      <div class="col xl3 l4 m6 s12">
+        <div class="row center extrapadding hide-on-small-only">
           <div class="white-text">
             <h5>{{ l.a_google }}</h5>
             <ul class="mono">
@@ -165,11 +126,10 @@
                 {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
               <li>Google Analytics: {{ google.ua }}
                 {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
-              <br>
-              <li>Google Maps API key:<br><span title="{{ google.mapsapi_key }}"
+              <li>Google Maps API key: <span title="{{ google.mapsapi_key }}"
                   class="protect">{{ google.mapsapi_key }}</span>
                 {{^google.mapsapi_key}}<i class="red-text fas fa-times"></i>{{/google.mapsapi_key}}</li>
-              <li>PageSpeed Insights API key:<br><span title="{{ google.pagespeedinsights_key }}" class="protect">{{
+              <li>PageSpeed Insights API key: <span title="{{ google.pagespeedinsights_key }}" class="protect">{{
             google.pagespeedinsights_key }}</span>
                 {{^google.pagespeedinsights_key}}<i class="red-text fas fa-times"></i>{{/google.pagespeedinsights_key}}
               </li>
@@ -177,23 +137,9 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col l4 m6 hide-on-small-only">
-      <div class="spacer">
-        <div class="row center alzaborder">
-          <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
-          <p id="a_ps_insights_info"></p>
-          <div id="psi_row" class="row center">
-            <a id="a_ps_insights" class="tooltipped waves-effect orange waves-light btn" data-position="top"
-              data-tooltip="{{ l.a_ps_insights_ttip }}">
-              <i class="fab fa-google"></i>
-              {{ l.a_ps_insights }}</a>
-          </div>
-        </div>
-      </div>
-      <div class="spacer">
-        <div class="row center alzaborder">
+      <div class="col xl3 l4 m6 s12 hide-on-small-only">
+        <div class="row center extrapadding">
           <h4 class="center">
             <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
               data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
@@ -220,9 +166,7 @@
             {{/google_drive_backupxxx}}
           </h4>
         </div>
-      </div>
-      <div class="spacer">
-        <div class="row center alzaborder">
+        <div class="row center extrapadding">
           <h5>{{ l.a_changes }}</h5>
           <div class="row grey-text" style="margin-top:1em">
             <div class="grey-text left-align container">
@@ -238,8 +182,58 @@
           </div>
         </div>
       </div>
-    </div>
+
+      <div class="col xl3 l4 m6 s12 hide-on-small-only">
+        <div class="row center black hide-on-small-only" style="padding-top:3px">
+          <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+            data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
+            <i class="fab fa-google"></i>
+            {{ l.a_google_account }}</a>
+          <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+            data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
+            <i class="fab fa-google"></i>
+            {{ l.a_google_password }}</a>
+          <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+            data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
+            href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
+            <i class="fab fa-google"></i>
+            {{ l.a_google_search }}</a>
+          <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+            data-position="top" data-tooltip="{{ l.a_google_analytics_ttip }}"
+            href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
+            <i class="fab fa-google"></i>
+            {{ l.a_google_analytics }}</a>
+          <a style="margin:2px;" class="tooltipped waves-effect pink waves-light btn" target="_blank" rel="noopener"
+            data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://onesignal.com">
+            <i class="fas fa-bell"></i>
+            {{ l.a_onesignal }}</a>
+          <a style="margin:2px;" class="tooltipped waves-effect red waves-light btn" data-position="top"
+            data-tooltip="{{ l.a_google_logout_ttip }}" href="https://www.google.com/accounts/Logout">
+            <i class="fab fa-google"></i>
+            {{ l.a_google_logout }}</a>
+        </div>
+      </div>
+
+      <div class="col xl3 l4 m6 s12 hide-on-small-only">
+        <div class="row center extrapadding">
+          <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
+          <p id="a_ps_insights_info"></p>
+          <div id="psi_row" class="row center">
+            <a id="a_ps_insights" class="tooltipped waves-effect orange waves-light btn" data-position="top"
+              data-tooltip="{{ l.a_ps_insights_ttip }}">
+              <i class="fab fa-google"></i>
+              {{ l.a_ps_insights }}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col xl3 l4 m6 s12 hide-on-small-only">
+        <div class="row center extrapadding">
+        </div>
+      </div>
+
   </div>
+
   <div id="emojis" class="row center" style="display:none">{{>emoji}}</div>
 </div>
 
@@ -256,7 +250,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       GSC.data = {};
       GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
-      // loader
+      // ShowLoader()
       if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
         if (!t) return;
         $(t).html(
@@ -264,7 +258,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         );
       }
 
-      // ping dot
+      // PingDot()
       if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
         if (status) status = "green";
           else status = "red";
@@ -313,7 +307,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             GSC.PingDot("#csv_ping", false);
             $(t).html('<i class="material-icons large">mood_bad</i>');
           });
-      } // end GetCsvInfo()
+      }
 
       // GetPSInsights()
       if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
@@ -326,7 +320,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
             GSC.PingDot("#psi_ping");
             $("#psi_row").hide();
-            $(t).html("<h2 class='orange-text a_reset a_h2'>" + data.data.ruleGroups.SPEED.score +
+            $(t).html('<h2 class="orange-text a_reset a_h2">' + data.data.ruleGroups.SPEED.score +
               "&nbsp;%</h2>");
             $(t).append("numberResources:&nbsp;<span class=bold>" +
               data.data.pageStats.numberResources + "</span> ");
@@ -356,11 +350,12 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             $(t).html('<i class="material-icons large">mood_bad</i>').slideDown();
             $("#a_ps_insights").removeAttr("disabled");
           });
-      } // end GetPSInsights()
+      }
 
-      // PageSpeed Insights
+      // PageSpeed Insights click
       w.GSC.init.push(function () {
         w.GSC.names.push("PSI click");
+
         $("#a_ps_insights").click(function () {
           if (w.GSC.offline) {
             GSC.PingDot("#psi_ping", false);
@@ -409,7 +404,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             t = t.replace(/[a-zA-Z]*\?/, s + "?");
             GSC.CopyClipboard(t);
             GSC.PingDot("#sectok_ping");
-            M.toast({html: s + " OK 💕"});
+            M.toast({html: s + " 💕"});
           }).fail(function () {
             $("#a_security_token").val("N/A");
             GSC.PingDot("#sectok_ping", false);
@@ -423,7 +418,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           }
           $("#a_update").attr("disabled", "disabled");
           GSC.ShowLoader("#a_update_info");
-          setTimeout('$("#a_update").removeAttr("disabled");', 20E3);
+          setTimeout(function(){$("#a_update").removeAttr("disabled")}, 20E3);
           $.post("/admin/CoreUpdate");
         });
 
@@ -439,7 +434,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               return '<span class="ccemoji">' + x + '</span>';
             });
             console.log("Emojis and symbols: " + arr.length);
-            $("#emojis").html(arr.join(''));
+            $("#emojis").html(arr.join(""));
             $(".ccemoji").click(function () {
               var x = $(this).text();
               GSC.CopyClipboard(x);
@@ -467,26 +462,18 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       });
 
-      // CSV timer
+      // set CSV timer
       w.GSC.init.push(function () {
         w.GSC.names.push("CSV load timer");
         GSC.ShowLoader("#a_update_info");
-        setInterval("GSC.GetCsvInfo()", 3000);
-      });
-
-      // PSI preload
-      w.GSC.init.push(function () {
-        w.GSC.names.push("PSI preload");
-        setTimeout("$.get('/admin/GetPSInsights?" + Date.now() + "');", 4000);
+        setInterval(function(){window.GSC.GetCsvInfo()}, 2500);
       });
 
       // admin UI reset
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI");
         $("#admin_main div").addClass("a_reset");
-        $("#admin_main h1").addClass("a_reset a_h1");
         $("#admin_main h2").addClass("a_reset a_h2");
-        $("#admin_main h3").addClass("a_reset a_h3");
         $("#admin_main h4").addClass("a_reset a_h4");
         $("#admin_main h5").addClass("a_reset a_h5");
         $("#admin_main p").addClass("a_reset");
@@ -523,22 +510,22 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           });
 
           $(".summernote").summernote({
-            lang: {{#langcs}}'cs-CZ'{{/langcs}}{{#langen}}'en-US'{{/langen}},
+            lang: {{#langcs}}"cs-CZ"{{/langcs}}{{#langen}}"en-US"{{/langen}},
             codeviewFilter: true,
             codeviewIframeFilter: true,
             dialogsInBody: false,
             disableDragAndDrop: true,
             height: 150,
             toolbar: [
-              ['do', ['undo', 'redo']],
-              ['style', ['style']],
-              ['font', ['bold', 'underline', 'clear', 'superscript', 'subscript']],
-              ['fontname', ['fontname']],
-              ['color', ['color']],
-              ['para', ['ul', 'ol', 'paragraph', 'height']],
-              ['table', ['table']],
-              ['insert', ['link', 'picture', 'video']],
-              ['view', ['fullscreen', 'codeview']],
+              ["do", ["undo", "redo"]],
+              ["style", ["style"]],
+              ["font", ["bold", "underline", "clear", "superscript", "subscript"]],
+              ["fontname", ["fontname"]],
+              ["color", ["color"]],
+              ["para", ["ul", "ol", "paragraph", "height"]],
+              ["table", ["table"]],
+              ["insert", ["link", "picture", "video"]],
+              ["view", ["fullscreen", "codeview"]],
             ]
           });
         }

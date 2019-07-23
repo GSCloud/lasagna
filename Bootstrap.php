@@ -17,11 +17,11 @@ list($usec, $sec) = explode(" ", microtime());
 define("LASAGNA_START", ((float) $usec + (float) $sec));
 ob_start();
 error_reporting(E_ALL);
-ini_set("auto_detect_line_endings", "1");
-ini_set("default_socket_timeout", 15);
-ini_set("display_errors", "1");
+@ini_set("auto_detect_line_endings", true);
+@ini_set("default_socket_timeout", 15);
+@ini_set("display_errors", true);
 
-// constants in SPECIFIC ORDER !!!
+// constants (in SPECIFIC ORDER !!!)
 defined("ROOT") || define("ROOT", __DIR__);
 defined("CACHE") || define("CACHE", ROOT . "/cache");
 defined("DATA") || define("DATA", ROOT . "/data");

@@ -40,9 +40,18 @@ if (!CLI && GCP_KEYS && file_exists(APP . GCP_KEYS)) {
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
-    if (CLI) return;
-    if (!GCP_PROJECTID) return;
-    if (!$message) return;
+    if (CLI) {
+        return;
+    }
+
+    if (!GCP_PROJECTID) {
+        return;
+    }
+
+    if (!$message) {
+        return;
+    }
+
     ob_flush();
     try {
         $logging = new LoggingClient(["projectId" => GCP_PROJECTID]);
@@ -76,9 +85,14 @@ $multisite_names = [];
 $multisite_profiles = array_replace([
     "default" => [trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN],
 ], $cfg["multisite_profiles"] ?? []);
-foreach ($multisite_profiles as $k => $v) $multisite_names[] = $k;
+foreach ($multisite_profiles as $k => $v) {
+    $multisite_names[] = $k;
+}
+
 $profile_index = (string) trim($_GET["profile"] ?? "default");
-if (!in_array($profile_index, $multisite_names)) $profile_index = "default";
+if (!in_array($profile_index, $multisite_names)) {
+    $profile_index = "default";
+}
 
 // routing tables
 $router = array();
@@ -140,10 +154,10 @@ if (php_sapi_name() === "cli") {
         }
     }
 
-    echo "Tesseract LASAGNA CLI interface.\n\n";
-    echo "Usage: Bootstrap.php <command> [<parameters>...]\n\n";
-    echo "\tlocaltest - CI local test\n";
-    echo "\tproduction - CI production test\n";
+    echo "Tesseract LASAGNA command line interface. \n\n";
+    echo "Usage: Bootstrap.php <command> [<parameters>...] \n\n";
+    echo "\t localtest - CI local test \n";
+    echo "\t production - CI production test \n";
     exit;
 }
 
@@ -197,7 +211,7 @@ $data["presenter"] = $presenter;
 $data["router"] = $router;
 $data["view"] = $view;
 
-// App singleton
+// singleton
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $presenter_file = APP . "/${p}.php";
 if (!file_exists($presenter_file)) {
@@ -207,34 +221,37 @@ if (!file_exists($presenter_file)) {
 }
 
 // CSP headers
-/*
 header(implode(" ", [
-"Content-Security-Policy:",
-"connect-src",
-"'self'",
-"https://*;",
-"default-src",
-"'unsafe-inline'",
-"'self'",
-"https://*;",
-"font-src",
-"'self'",
-"'unsafe-inline'",
-"https://*.googleapis.com",
-"https://*.gstatic.com;",
-"script-src",
-"'self'",
-"'unsafe-inline'",
-"'unsafe-eval';",
-"img-src",
-"'self'",
-"'unsafe-inline'",
-"https://*.googleusercontent.com/*",
-"data:;",
-"form-action",
-"'self';",
+    "Content-Security-Policy:",
+    "connect-src",
+    "'self'",
+    "https://*;",
+    "default-src",
+    "'unsafe-inline'",
+    "'self'",
+    "https://*;",
+    "font-src",
+    "'self'",
+    "'unsafe-inline'",
+    "https://*.googleapis.com",
+    "https://*.gstatic.com;",
+    "script-src",
+    "'self'",
+    "'unsafe-inline'",
+    "'unsafe-eval';",
+    "script-src-elem",
+    "'self'",
+    "https://*.facebook.net",
+    "'unsafe-inline'",
+    "'unsafe-eval';",
+    "img-src",
+    "'self'",
+    "'unsafe-inline'",
+    "https://*.googleusercontent.com/*",
+    "data:;",
+    "form-action",
+    "'self';",
 ]));
- */
 
 // APP
 require_once APP . "/APresenter.php";
@@ -242,7 +259,7 @@ require_once $presenter_file;
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
-// vomit output :)
+// OUTPUT
 $output = "";
 if (array_key_exists("output", $data)) {
     $output = $data["output"];
@@ -250,36 +267,18 @@ if (array_key_exists("output", $data)) {
 echo $output;
 
 // END
-/*
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
+$events = null;
 header("X-Processing: ${time} msec.");
-$events = null;
-if (array_key_exists("ua", $data["google"]) && (isset($_SERVER["HTTPS"]))) {
-    if ($_SERVER["HTTPS"] == "on") {
-        if (strlen($data["google"]["ua"])) {
-            $events = new AnalyticsEvent($data["google"]["ua"], $data["canonical_url"].$data["request_path"]);
-        }
-    }
-}
-if ($events) {
-    ob_flush();
-    @$events->trackEvent($cfg["app"], "country_code", $country);
-    @$events->trackEvent($cfg["app"], "processing_time", $time);
-}
-*/
-$data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
-$data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
-$events = null;
 $dot = new \Adbar\Dot((array) $data);
-header("X-Processing: ${time} msec.");
-if ( $dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVER["HTTPS"])) && ($_SERVER["HTTPS"] == "on")  ) {
-    $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url").$dot->get("request_path"));
+if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVER["HTTPS"])) && ($_SERVER["HTTPS"] == "on")) {
+    $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url") . $dot->get("request_path"));
 }
 if ($events) {
     ob_flush();
-    @$events->trackEvent($cfg["app"], "country_code", $country);
-    @$events->trackEvent($cfg["app"], "processing_time", $time);
+    @$events->trackEvent($cfg["app"] ?? "APP", "country_code", $country);
+    @$events->trackEvent($cfg["app"] ?? "APP", "processing_time", $time);
 }
 
 // DEBUG
