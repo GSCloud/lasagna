@@ -244,14 +244,13 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
   (function (w, d, undefined) {
 
-    if (getCookie("logout")) {
-      delCookie("logout");
-    }
-    else {
+    if (!getCookie("logout")) {
       d.getElementById("admin_main").style.display = "block";
     }
-    if (w.GSC.init) {
+    delCookie("logout");
 
+    if (w.GSC.init) {
+  
       // data
       GSC.data = {};
       GSC.data.multisite_profiles = {{ multisite_profiles_json }};

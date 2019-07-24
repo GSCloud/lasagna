@@ -33,28 +33,23 @@ defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PRO
 // Google Cloud Platform
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
-if (!CLI && GCP_KEYS && file_exists(APP . GCP_KEYS)) {
+if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
-    if (CLI) {
-        return;
-    }
-
-    if (!GCP_PROJECTID) {
-        return;
-    }
-
-    if (!$message) {
-        return;
-    }
+//    if (CLI) return;
+    if (!GCP_PROJECTID) return;
+    if (!$message) return;
 
     ob_flush();
     try {
-        $logging = new LoggingClient(["projectId" => GCP_PROJECTID]);
+        $logging = new LoggingClient([
+            "projectId" => GCP_PROJECTID,
+            "keyFilePath" => APP . GCP_KEYS,
+        ]);
         $stack = $logging->logger(APP ?? "app");
         $stack->write($stack->entry($message), [
             "severity" => $severity,

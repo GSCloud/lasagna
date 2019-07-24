@@ -261,7 +261,7 @@ abstract class APresenter implements IPresenter
         }
         $this->checkLocales((bool) $this->force_csv_check);
 
-        if (CLI) return;
+//        if (CLI) return;
 
         $monolog = new Logger("Tesseract log");
         $streamhandler = new StreamHandler(MONOLOG, Logger::INFO, true, self::LOG_FILEMODE);
@@ -284,7 +284,10 @@ abstract class APresenter implements IPresenter
 
         try {
             if (count($criticals) + count($errors) + count($messages)) {
-                $logging = new LoggingClient(["projectId" => GCP_PROJECTID]);
+                $logging = new LoggingClient([
+                    "projectId" => GCP_PROJECTID,
+                    "keyFilePath" => APP . GCP_KEYS,
+                ]);
                 $google_logger = $logging->logger($this->getCfg("app") ?? "app");
             }
             if (count($criticals)) {
