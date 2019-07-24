@@ -50,6 +50,7 @@ class LoginPresenter extends GSC\APresenter
                 $ownerDetails = $provider->getResourceOwner($token, [
                     "useOidcMode" => true,
                 ]);
+                // TODO: NEEDS WORK!!!
                 $this->setCookie("id", $ownerDetails->getId());
                 $this->setCookie("name", $ownerDetails->getName());
                 $this->setCookie("admin", $ownerDetails->getEmail());

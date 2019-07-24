@@ -29,7 +29,13 @@
       var date = new Date();
       date.setTime(date.getTime() + (d * 86400));
       expires = ";expires=" + date.toGMTString();
-      document.cookie = key + "=" + value + ";path=/" + expires;
+      if (days === 0) {
+        // session cookie
+        document.cookie = key + "=" + value + ";path=/";
+      } else {
+        // normal cookie
+        document.cookie = key + "=" + value + ";path=/" + expires;
+      }
     }
 
     // window.getCookie()

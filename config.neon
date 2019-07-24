@@ -22,8 +22,6 @@ local_goauth_redirect: "http://localhost:8007/login"
 
 # Google
 google: [
-  mapsapi_key: "AIzaSyDbGVxd_acxsOtu7twlSxABJmIjV9-sroI"
-  pagespeedinsights_key: "AIzaSyADAb3wmEwNAWVTGJFv1osZAlXFV-Q4TG4"
   ua: "UA-89950317-12"
 ]
 

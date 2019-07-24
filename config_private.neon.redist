@@ -5,13 +5,25 @@
 goauth_client_id: "someid.apps.googleusercontent.com"
 goauth_secret: ""
 
+# Google Cloud Platfrom keys
+gcp_keys: "/keys/some.json"
+
+# Google Drive backup
+google_drive_backup: "https://drive.google.com/drive/folders/xxx"
+
+# Google
+google: [
+  mapsapi_key: "some_key"
+  pagespeedinsights_key: "some_key"
+]
+
 # Cloudflare
 cf: [
   email: "joe@foo.bar"
-  apikey: hash
+  apikey: "some_key"
   zoneid: [
-    hash1
-    hash2
+    "some_key"
+    "some_key"
   ]
 ]
 

@@ -24,9 +24,9 @@ defined("ROOT") || die($x);
 // constants
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 defined("CLI") || define("CLI", (php_sapi_name() === "cli"));
-defined("DOMAIN") || define("DOMAIN", preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "DOMAIN"));
+defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "DOMAIN")));
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
-defined("SERVER") || define("SERVER", preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "SERVER"));
+defined("SERVER") || define("SERVER", strtoupper(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "SERVER")));
 defined("VERSION") || define("VERSION", "v1");
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
@@ -83,15 +83,18 @@ foreach ($cache_profiles as $k => $v) {
 // multi-site profiles
 $multisite_names = [];
 $multisite_profiles = array_replace([
-    "default" => [trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN],
+    "default" => [strtolower(trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN)],
 ], $cfg["multisite_profiles"] ?? []);
 foreach ($multisite_profiles as $k => $v) {
-    $multisite_names[] = $k;
+    $multisite_names[] = strtolower($k);
 }
-
-$profile_index = (string) trim($_GET["profile"] ?? "default");
+$profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
 if (!in_array($profile_index, $multisite_names)) {
     $profile_index = "default";
+}
+$origin_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"]));
+if ($origin_domain != $multisite_profiles["default"][0]) {
+    $multisite_profiles["default"][1] = $origin_domain;
 }
 
 // routing tables
@@ -116,7 +119,7 @@ foreach ($defaults as $r) {
     $router = array_replace_recursive($router, @Neon::decode($content));
 }
 
-// routing defaults
+// router defaults
 $presenter = array();
 $defaults = $router["defaults"] ?? [];
 foreach ($router as $k => $v) {
@@ -167,7 +170,7 @@ $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 
 // sethl
 if ($router[$view]["sethl"] ?? false) {
-    $r = $_GET["hl"] ?? $_COOKIE["hl"] ?? null;
+    $r = trim(strtolower($_GET["hl"] ?? $_COOKIE["hl"] ?? null));
     switch ($r) {
         case "cs":
         case "en":

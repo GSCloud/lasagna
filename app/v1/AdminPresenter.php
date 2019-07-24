@@ -37,7 +37,7 @@ class AdminPresenter extends \GSC\APresenter
 
         switch ($match["params"]["p"] ?? null) {
 
-            // get CSV info
+            // CSV info
             case "GetCsvInfo":
                 $this->checkAdmins("admin");
                 $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
@@ -56,16 +56,17 @@ class AdminPresenter extends \GSC\APresenter
                 return $this->writeJsonData($arr, ["name" => "LASAGNA CSV Information", "fn" => "GetCsvInfo"]);
                 break;
 
-            // get Cloudflare Analytics
-            case "GetCFAnalytics":
+            // Cloudflare Analytics - UNFINISHED -> TODO!!!
+            case "GetCfAnalytics":
                 $this->checkAdmins("admin");
                 $cf = $this->getCfg("cf");
                 if (!is_array($cf)) {
-                    return $this->writeJsonData(null, ["fn" => "GetCFAnalytics"]);
+                    return $this->writeJsonData(null, ["fn" => "GetCfAnalytics"]);
                 }
                 $email = $cf["email"] ?? null;
                 $apikey = $cf["apikey"] ?? null;
                 $zoneid = $cf["zoneid"] ?? null;
+                $uri = "";
                 if ($email && $apikey && $zoneid) {
                     $file = "Cloudflare_Analytics_$zoneid";
                     $results = Cache::read($file, "default");
@@ -75,13 +76,13 @@ class AdminPresenter extends \GSC\APresenter
                             Cache::write($file, $results, "default");
                         }
                     }
-                    return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Cloudflare Analytics", "fn" => "GetCFAnalytics"]);
+                    return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Cloudflare Analytics", "fn" => "GetCfAnalytics"]);
                 } else {
-                    return $this->writeJsonData(null, ["fn" => "GetCFAnalytics"]);
+                    return $this->writeJsonData(null, ["fn" => "GetCfAnalytics"]);
                 }
                 break;
 
-            // get PS insights
+            // PageSpeed Insights
             case "GetPSInsights":
                 $this->checkAdmins("admin");
                 $base = urlencode($cfg["canonical_url"]);
@@ -101,7 +102,7 @@ class AdminPresenter extends \GSC\APresenter
                 return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA PageSpeed Insights", "fn" => "GetPSInsights"]);
                 break;
 
-            // get update token
+            // update token
             case "GetUpdateToken":
                 $this->checkAdmins("admin");
                 $file = DATA . $admin_key;
@@ -131,6 +132,7 @@ class AdminPresenter extends \GSC\APresenter
             case "FlushCache":
                 $this->checkAdmins("admin");
                 $this->flush_cache();
+                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA FlushCache", "fn" => "FlushCache"]);
                 break;
 
             // UPDATE
@@ -139,6 +141,7 @@ class AdminPresenter extends \GSC\APresenter
                 $this->setForceCsvCheck();
                 $this->postloadAppData("app_data");
                 $this->flush_cache();
+                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA CoreUpdate", "fn" => "CoreUpdate"]);
                 break;
 
             // FLUSH remote
@@ -154,6 +157,8 @@ class AdminPresenter extends \GSC\APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->flush_cache();
+                        echo "FlushCacheRemote OK";
+                        exit;
                     } else {
                         $this->unauthorized_access();
                     }
@@ -175,6 +180,8 @@ class AdminPresenter extends \GSC\APresenter
                         $this->setForceCsvCheck();
                         $this->postloadAppData("app_data");
                         $this->flush_cache();
+                        echo "CoreUpdateRemote OK";
+                        exit;
                     } else {
                         $this->unauthorized_access();
                     }
@@ -212,8 +219,7 @@ class AdminPresenter extends \GSC\APresenter
             $this->setLocation("/err/429");
             exit;
         }
-        $this->setLocation();
-        exit;
+        return;
     }
 
     private function unauthorized_access($skip_message = false)
