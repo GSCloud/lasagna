@@ -13,7 +13,7 @@
       }
     }
 
-      // online feature support?
+      // "online" feature detection
     if ("onLine" in navigator) {
       w.addEventListener("load", function () {
         w.addEventListener("online", checkNetwork);
@@ -23,62 +23,61 @@
     }
 
     // window.setCookie()
-    if (typeof w.setCookie !== "function") window.setCookie = function (key, value, days) {
-      var expires = "";
-      var d = days ? parseInt(days) : 30;
-      var date = new Date();
-      date.setTime(date.getTime() + (d * 86400));
-      expires = ";expires=" + date.toGMTString();
+    if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days = 30) {
+      if (key === undefined) return false;
+      if (value === undefined) return false;
       if (days === 0) {
-        // session cookie
         document.cookie = key + "=" + value + ";path=/";
       } else {
-        // normal cookie
-        document.cookie = key + "=" + value + ";path=/" + expires;
+        var date = new Date();
+        date.setTime(date.getTime() + (parseInt(days) * 86400));
+        document.cookie = key + "=" + value + ";path=/" + ";expires=" + date.toGMTString();
       }
     }
 
     // window.getCookie()
-    if (typeof w.getCookie !== "function") window.getCookie = function (key) {
+    if (typeof window.getCookie !== "function") window.getCookie = function (key) {
+      if (key === undefined) return false;
       var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
       return v ? v[2] : null;
     }
 
     // window.delCookie()
-    if (typeof w.delCookie !== "function") window.delCookie = function (key) {
+    if (typeof window.delCookie !== "function") window.delCookie = function (key) {
+      if (key === undefined) return false;
       var date = new Date();
       date.setTime(0);
-      expires = ";expires=" + date.toGMTString();
-      document.cookie = key + "=;path=/" + expires;
+      document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
     }
 
     if (w.GSC) {
 
-      // touch feature support?
+      // "touch" feature detection
       w.GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
         true : false;
       if (w.GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
       // GSC.FormatBytes()
-      if (typeof w.GSC.FormatBytes !== "function") w.GSC.FormatBytes = function (number, precision) {
+      if (typeof w.GSC.FormatBytes !== "function") w.GSC.FormatBytes = function (number, precision = 2) {
         number = parseInt(number);
         if (!number) return "0";
         var c = 1024,
-          d = precision || 2,
           e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
           f = Math.floor(Math.log(number) / Math.log(c));
-        return parseFloat((number / Math.pow(c, f)).toFixed(d)) + "&nbsp;" + e[f];
+        return parseFloat((number / Math.pow(c, f)).toFixed(precision)) + "&nbsp;" + e[f];
       }
 
       // GSC.GetTime()
-      if (typeof w.GSC.GetTime !== "function") w.GSC.GetTime = function (dateString) {
-        function ext(x) {
+      if (typeof w.GSC.GetTime !== "function") w.GSC.GetTime = function (dateString = 0) {
+
+        function englishext(x) {
           x = ("" + x).slice(-1);
           if (x == 1) return "st";
           if (x == 2) return "nd";
           if (x == 3) return "rd";
           return "th";
         }
+
         var dayz = ["", "{{l.day_of_the_week_1}}", "{{l.day_of_the_week_2}}", "{{l.day_of_the_week_3}}",
           "{{l.day_of_the_week_4}}", "{{l.day_of_the_week_5}}", "{{l.day_of_the_week_6}}",
           "{{l.day_of_the_week_7}}"
@@ -91,8 +90,9 @@
           "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
           "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
         ];
-        var z = new Date();
-        if (dateString) {
+        if (dateString === 0) {
+          var z = new Date();
+        } else {
           var z = new Date(dateString);
         }
         var x = {};
@@ -113,14 +113,14 @@
           x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
         }
         if ("{{ langen }}") { // English locale
-          x.today_str = x.day_str + " " + x.d + ext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
+          x.today_str = x.day_str + " " + x.d + englishext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
         }
         x.d = z;
         return x;
       }
 
       // GSC.CopyClipboard()
-      if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString) {
+      if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString = "") {
         var el = d.createElement('textarea');
         el.value = dataString;
         el.setAttribute("readonly", "");
@@ -141,15 +141,25 @@
       // DELAYED UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("UI bindings");
+
         $(".sethlcs").click(function () {
           setCookie("hl", "cs");
         });
+
         $(".sethlen").click(function () {
           setCookie("hl", "en");
         });
+
         $("#update-message").click(function () {
           window.location.reload(true);
         });
+
+        if (GSC.touch) {
+          if (typeof window.WebShareFactory === "function") {
+            $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
+            $(".webshareicon").append("{{ l.webshare_button }}");
+          }
+        }
       });
 
       // DELAYED version / data check
