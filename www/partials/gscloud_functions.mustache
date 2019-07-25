@@ -210,6 +210,7 @@
           if (!w.GSC.offline) {
 
             $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" + Date.now(), function (data) {
+              if (GSC.summernote_on) return;
               if ( (!data) || (!data.data) || (!data.data.html) ) return;
               if (data.data.html) {
                 var obj = jQuery.parseJSON(data.data.html);
