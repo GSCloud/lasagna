@@ -497,6 +497,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         w.GSC.names.push("Summernote editor");
 
         if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+          GSC.summernote_on = true;
           $("#a_summernote").text("{{ l.a_save_all }}");
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
@@ -518,6 +519,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               data: JSON.stringify(data)
               });
             GSC.PingDot("#summer_ping");
+            GSC.summernote_on = false;
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
             $("#a_summernote").click(function () {
