@@ -244,6 +244,7 @@ header(implode(" ", [
     "*.google-analytics.com",
     "*.googleapis.com",
     "*.googletagmanager.com",
+    "*.ytimg.com",
     "cdn.onesignal.com",
     "onesignal.com",
     "platform.twitter.com",

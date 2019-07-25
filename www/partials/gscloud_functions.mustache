@@ -167,11 +167,49 @@
         }
       });
 
+      // DELAYED version / data check
+      w.GSC.init.push(function () {
+        w.GSC.names.push("version check");
+
+        if (typeof w.GSC.VersionCheck !== "function") w.GSC.VersionCheck = function () {
+          if (!w.GSC.offline) {
+
+            $.post("/version/core", function (post) {
+              if (post.data.LASAGNA.core.version) {
+                if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
+                  $("#update-message").show();
+                  w.GSC.VersionCheck = function () {};
+                  console.log("UPDATE: core version check failed!");
+                  return;
+                }
+              }
+            });
+
+            $.post("/{{ lang }}/version/data", function (post) {
+              if (post.data.LASAGNA.data.version) {
+                if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
+                  $("#update-message").show();
+                  w.GSC.VersionCheck = function () {};
+                  console.log("UPDATE: {{ lang }} data version check failed!");
+                  return;
+                }
+              }
+            });
+
+            setTimeout("window.GSC.VersionCheck()", 60000);
+          }
+        }
+        setTimeout("window.GSC.VersionCheck()", 2500);
+      });
+
       // DELAYED ReadArticles
       w.GSC.init.push(function () {
         w.GSC.names.push("read articles");
 
+        console.log("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" + Date.now());
+
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" + Date.now(), function (data) {
+          if ( (!data) || (!data.data) || (!data.data.html) ) return;
           if (data.data.html) {
             var obj = jQuery.parseJSON(data.data.html);
             for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);

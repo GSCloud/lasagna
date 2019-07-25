@@ -61,7 +61,12 @@ class CorePresenter extends \GSC\APresenter
                 if (isset($match["params"]["hash"])) {
                     $hash = trim($match["params"]["hash"]);
                 }
-                $data = @file_get_contents(DATA . "/summernote_" . $profile . "_" . $hash . ".json");
+                $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
+                if (file_exists($file)) {
+                    $data = @file_get_contents($file);
+                } else {
+                    $data = false;
+                }
                 if ($data === false) {
                     return $this->writeJsonData(403, ["name" => "LASAGNA core version", "fn" => "ReadArticles"]);
                 }

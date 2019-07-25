@@ -1311,7 +1311,6 @@ abstract class APresenter implements IPresenter
         if (is_int($d)) {
             $code = $d;
             $msg = "Error";
-            $d = null;
         }
         if (is_string($d)) {
             $d = [$d];
@@ -1319,7 +1318,6 @@ abstract class APresenter implements IPresenter
         if (is_null($d)) {
             $code = 500;
             $msg = "Internal Server Error";
-            $d = null;
         }
         $v["code"] = $code;
         $v["message"] = $msg;
