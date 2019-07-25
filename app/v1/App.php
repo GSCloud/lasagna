@@ -40,8 +40,13 @@ if (GCP_KEYS) {
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
-    if (!GCP_PROJECTID) return;
-    if (!$message) return;
+    if (!GCP_PROJECTID) {
+        return;
+    }
+
+    if (!$message) {
+        return;
+    }
 
     ob_flush();
     try {
@@ -129,24 +134,23 @@ foreach ($router as $k => $v) {
 // map routes
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
-    if (!isset($v["path"])) {
-        continue;
-    }
+    if (!isset($v["path"])) continue;
     $alto->map($v["method"], $v["path"], $k, "{$k}");
-    // secondary path ending with /
-    if ($v["path"] != "/") {
-        $alto->map($v["method"], $v["path"] . "/", $k, "{$k}_");
-    }
+    if (substr($v["path"], -1) != "/") $alto->map($v["method"], $v["path"] . "/", $k, "{$k}_slash");
 }
 
-// CLI interface
+// CLI modules
 if (CLI) {
     if (isset($argv[1])) {
+
         switch ($argv[1]) {
             case "localtest":
-            case "production":
+            case "prodtest":
                 require_once "CiTester.php";
                 exit;
+                break;
+
+            default:
                 break;
         }
     }

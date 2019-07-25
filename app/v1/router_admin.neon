@@ -12,15 +12,3 @@ logout:
   assert_httpcode: 303
   path: /logout
   presenter: logout
-
-update_articles:
-  assert_json: true
-  method: POST
-  path: '/UpdateArticles/[**:trailing]'
-  presenter: admin
-
-delete_articles:
-  assert_json: true
-  method: DELETE
-  path: '/DeleteArticles/[**:trailing]'
-  presenter: admin

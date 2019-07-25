@@ -1308,16 +1308,22 @@ abstract class APresenter implements IPresenter
                 $msg = "Unknown error.";
                 break;
         }
-        $v["code"] = $code;
-        $v["message"] = $msg;
-        $v = array_merge_recursive($v, $headers);
+        if (is_int($d)) {
+            $code = $d;
+            $msg = "Error";
+            $d = null;
+        }
         if (is_string($d)) {
             $d = [$d];
         }
         if (is_null($d)) {
             $code = 500;
             $msg = "Internal Server Error";
+            $d = null;
         }
+        $v["code"] = $code;
+        $v["message"] = $msg;
+        $v = array_merge_recursive($v, $headers);
         $v["data"] = $d ?? null;
         $this->setHeaderJson();
         $data = $this->getData();

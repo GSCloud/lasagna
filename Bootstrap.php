@@ -143,6 +143,7 @@ $data["host"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["HOST"] = $host;
 $data["request_uri"] = $uri = $_SERVER["REQUEST_URI"] ?? "";
 $data["request_path"] = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
+$data["request_path_hash"] = $hash = hash("sha256", $data["request_path"]);
 $data["base"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
 $data["BASE"] = $data["base"];
 $data["LOCALHOST"] = (($_SERVER["SERVER_NAME"] ?? "") == "localhost");

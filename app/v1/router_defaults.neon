@@ -55,8 +55,8 @@ en_article:
   path: '/en/id/[**:trailing]'
   presenter: article
 
-read_articles:
+ReadArticles:
   assert_json: true
   method: GET
-  path: '/ReadArticles/[**:trailing]'
+  path: '/ReadArticles/[a:profile]/[a:hash]'
   presenter: core

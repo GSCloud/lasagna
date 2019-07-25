@@ -7,6 +7,7 @@ class CorePresenter extends \GSC\APresenter
         $data = $this->getData();
         $presenter = $this->getPresenter();
         $view = $this->getView();
+        $match = $this->getMatch();
 
         switch ($view) {
 
@@ -49,7 +50,27 @@ class CorePresenter extends \GSC\APresenter
                 $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
                 return $this->writeJsonData($d, ["name" => "LASAGNA core version", "fn" => "core"]);
                 break;
-        }
+
+                // core version
+            case "ReadArticles":
+                $hash = null;
+                $profile = null;
+                if (isset($match["params"]["profile"])) {
+                    $profile = trim($match["params"]["profile"]);
+                }
+                if (isset($match["params"]["hash"])) {
+                    $hash = trim($match["params"]["hash"]);
+                }
+                $data = @file_get_contents(DATA . "/summernote_" . $profile . "_" . $hash . ".json");
+                if ($data === false) {
+                    return $this->writeJsonData(403, ["name" => "LASAGNA core version", "fn" => "ReadArticles"]);
+                }
+                return $this->writeJsonData([
+                    "html" => $data,
+                ], ["name" => "LASAGNA core version", "fn" => "ReadArticles"]);
+                break;
+            }
+
         // fetch locale
         $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);

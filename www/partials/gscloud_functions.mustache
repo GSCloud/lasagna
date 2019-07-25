@@ -52,6 +52,11 @@
 
     if (w.GSC) {
 
+      // data
+      GSC.profile = "default";
+      GSC.data = {};
+      GSC.data.multisite_profiles = {{ multisite_profiles_json }};
+
       // "touch" feature detection
       w.GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
         true : false;
@@ -162,40 +167,17 @@
         }
       });
 
-      // DELAYED version / data check
+      // DELAYED ReadArticles
       w.GSC.init.push(function () {
-        w.GSC.names.push("version check");
+        w.GSC.names.push("read articles");
 
-        if (typeof w.GSC.VersionCheck !== "function") w.GSC.VersionCheck = function () {
-          if (!w.GSC.offline) {
-
-            $.post("/version/core", function (post) {
-              if (post.data.LASAGNA.core.version) {
-                if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
-                  $("#update-message").show();
-                  w.GSC.VersionCheck = function () {};
-                  console.log("UPDATE: core version check failed!");
-                  return;
-                }
-              }
-            });
-
-            $.post("/{{ lang }}/version/data", function (post) {
-              if (post.data.LASAGNA.data.version) {
-                if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
-                  $("#update-message").show();
-                  w.GSC.VersionCheck = function () {};
-                  console.log("UPDATE: {{ lang }} data version check failed!");
-                  return;
-                }
-              }
-            });
-
-            setTimeout("window.GSC.VersionCheck()", 60000);
+        $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" + Date.now(), function (data) {
+          if (data.data.html) {
+            var obj = jQuery.parseJSON(data.data.html);
+            for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
           }
-        }
+        });
 
-        setTimeout("window.GSC.VersionCheck()", 2500);
       });
 
     }

@@ -53,7 +53,7 @@ class AdminPresenter extends \GSC\APresenter
                     ];
                     if ($arr[$k]["lines"] === -1) unset($arr[$k]);
                 }
-                return $this->writeJsonData($arr, ["name" => "LASAGNA CSV Information", "fn" => "GetCsvInfo"]);
+                return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetCsvInfo"]);
                 break;
 
             // Cloudflare Analytics - UNFINISHED -> TODO!!!
@@ -76,7 +76,7 @@ class AdminPresenter extends \GSC\APresenter
                             Cache::write($file, $results, "default");
                         }
                     }
-                    return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Cloudflare Analytics", "fn" => "GetCfAnalytics"]);
+                    return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetCfAnalytics"]);
                 } else {
                     return $this->writeJsonData(null, ["fn" => "GetCfAnalytics"]);
                 }
@@ -99,7 +99,7 @@ class AdminPresenter extends \GSC\APresenter
                         return $this->writeJsonData(null, ["fn" => "GetPSInsights"]);
                     }
                 }
-                return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA PageSpeed Insights", "fn" => "GetPSInsights"]);
+                return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetPSInsights"]);
                 break;
 
             // update token
@@ -125,14 +125,14 @@ class AdminPresenter extends \GSC\APresenter
                 } else {
                     $this->unauthorized_access();
                 }
-                return $this->writeJsonData($arr, ["name" => "LASAGNA Remote Update Token", "fn" => "GetUpdateToken"]);
+                return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetUpdateToken"]);
                 break;
 
             // FLUSH
             case "FlushCache":
                 $this->checkAdmins("admin");
                 $this->flush_cache();
-                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA FlushCache", "fn" => "FlushCache"]);
+                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "FlushCache"]);
                 break;
 
             // UPDATE
@@ -141,7 +141,45 @@ class AdminPresenter extends \GSC\APresenter
                 $this->setForceCsvCheck();
                 $this->postloadAppData("app_data");
                 $this->flush_cache();
-                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA CoreUpdate", "fn" => "CoreUpdate"]);
+                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CoreUpdate"]);
+                break;
+
+            // UPDATE ARTICLES
+            case "UpdateArticles":
+                $this->checkAdmins("admin");
+                $data = null;
+                $profile = null;
+                $request_path = null;
+                if (isset($_POST["data"])) {
+                    $data = (array) $_POST["data"];
+                }
+                if (isset($_POST["profile"])) {
+                    $profile = trim((string) $_POST["profile"]);
+                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));
+                }
+                if (isset($_POST["request_path"])) {
+                    $request_path = trim((string) $_POST["request_path"]);
+                }
+                $hash = hash("sha256", $request_path);
+                if (@file_put_contents(DATA . "/summernote_" . $profile . "_" . $hash . ".json", $data, LOCK_EX) === false) {
+                    return $this->writeJsonData([
+                        "status" => "FAIL",
+                        "profile" => $profile,
+                        "hash" => $hash,
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                } else {
+                    return $this->writeJsonData([
+                        "status" => "OK",
+                        "profile" => $profile,
+                        "hash" => $hash,
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                }
+                break;
+
+            // DELETE ARTICLES
+            case "DeleteArticles":
+                $this->checkAdmins("admin");
+                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "DeleteArticles"]);
                 break;
 
             // FLUSH remote
