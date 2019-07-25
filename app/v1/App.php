@@ -19,11 +19,11 @@ use There4\Analytics\AnalyticsEvent;
 $x = "FATAL ERROR: broken chain of trust\n\n";
 defined("APP") || die($x);
 defined("CACHE") || die($x);
+defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
 // constants
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
-defined("CLI") || define("CLI", (php_sapi_name() === "cli"));
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "DOMAIN")));
 defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
 defined("SERVER") || define("SERVER", strtoupper(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "SERVER")));
@@ -40,7 +40,6 @@ if (GCP_KEYS) {
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
-//    if (CLI) return;
     if (!GCP_PROJECTID) return;
     if (!$message) return;
 
@@ -141,7 +140,7 @@ foreach ($presenter as $k => $v) {
 }
 
 // CLI interface
-if (php_sapi_name() === "cli") {
+if (CLI) {
     if (isset($argv[1])) {
         switch ($argv[1]) {
             case "localtest":

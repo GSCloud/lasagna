@@ -261,8 +261,6 @@ abstract class APresenter implements IPresenter
         }
         $this->checkLocales((bool) $this->force_csv_check);
 
-//        if (CLI) return;
-
         $monolog = new Logger("Tesseract log");
         $streamhandler = new StreamHandler(MONOLOG, Logger::INFO, true, self::LOG_FILEMODE);
         $streamhandler->setFormatter(new LineFormatter);

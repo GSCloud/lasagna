@@ -157,7 +157,7 @@ class AdminPresenter extends \GSC\APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->flush_cache();
-                        echo "FlushCacheRemote OK";
+                        echo $_SERVER["HTTP_HOST"] . " FlushCacheRemote OK \n";
                         exit;
                     } else {
                         $this->unauthorized_access();
@@ -180,7 +180,7 @@ class AdminPresenter extends \GSC\APresenter
                         $this->setForceCsvCheck();
                         $this->postloadAppData("app_data");
                         $this->flush_cache();
-                        echo "CoreUpdateRemote OK";
+                        echo $_SERVER["HTTP_HOST"] . " CoreUpdateRemote OK \n";
                         exit;
                     } else {
                         $this->unauthorized_access();
@@ -189,7 +189,7 @@ class AdminPresenter extends \GSC\APresenter
                 break;
 
             default:
-                $this->unauthorized_access(true);
+                $this->unauthorized_access();
                 break;
 
         } // switch END
@@ -222,12 +222,8 @@ class AdminPresenter extends \GSC\APresenter
         return;
     }
 
-    private function unauthorized_access($skip_message = false)
+    private function unauthorized_access()
     {
-        if (!$skip_message) {
-            echo $_SERVER["HTTP_HOST"] . " - token authentication error\n";
-            exit;
-        }
         $this->addError("401: UNAUTHORIZED ACCESS");
         $this->setLocation("/err/401");
         exit;

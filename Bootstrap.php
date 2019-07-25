@@ -32,10 +32,12 @@ defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
 defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
 defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
 defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
-defined("TEMP")  || define("TEMP", "/tmp");
+defined("TEMP") || define("TEMP", "/tmp");
+defined("CLI") || define("CLI", !(strpos($_SERVER["REQUEST_SCHEME"], "http") === 0));
 
 // Composer
 require_once ROOT . "/vendor/autoload.php";
+//Tracy\OutputDebugger::enable();
 
 function check_file($f)
 {
@@ -109,15 +111,24 @@ check_var($cfg, "dbg", ($_SERVER["SERVER_NAME"] ?? "") == "localhost");
 check_var($cfg, "minify", false);
 
 // debugger
-defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
-if (DEBUG) {
-    Debugger::enable(Debugger::DEVELOPMENT, CACHE);
+if (CLI === true) {
+    defined("DEBUG") || define("DEBUG", false);
 }
-Debugger::$logSeverity = E_NOTICE | E_WARNING;
-Debugger::$maxDepth = $cfg["DEBUG_DEPTH"] ?? 5;
-Debugger::$maxLength = $cfg["DEBUG_LENGTH"] ?? 2500;
-Debugger::$strictMode = true;
-Debugger::timer();
+if (strpos($_SERVER["HTTP_USER_AGENT"], "curl") === 0) {
+    defined("DEBUG") || define("DEBUG", false);
+}
+defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
+if (DEBUG === true) {
+    Debugger::enable(Debugger::DEVELOPMENT, CACHE);
+    Debugger::$logSeverity = E_NOTICE | E_WARNING;
+    Debugger::$maxDepth = $cfg["DEBUG_DEPTH"] ?? 5;
+    Debugger::$maxLength = $cfg["DEBUG_LENGTH"] ?? 2500;
+    Debugger::$strictMode = true;
+    Debugger::$showBar = true;
+    Debugger::timer();
+} else {
+    Debugger::$showBar = false;
+}
 
 // data population
 $data = $cfg;
