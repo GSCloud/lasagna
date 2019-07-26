@@ -159,10 +159,9 @@ class AdminPresenter extends \GSC\APresenter
                         $x++;
                     }
                 }
-                if (isset($_POST["request_path"])) {
-                    $request_path = trim((string) $_POST["request_path"]);
-                    if (strlen($request_path)) {
-                        $hash = hash("sha256", $request_path);
+                if (isset($_POST["hash"])) {
+                    $hash = trim((string) $_POST["hash"]);
+                    if (strlen($hash)) {
                         $x++;
                     }
                 }

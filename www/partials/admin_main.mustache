@@ -519,7 +519,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             console.log("UpdateArticles write", {data});
             $.post("/admin/UpdateArticles", { // API call
               profile: GSC.profile,
-              request_path: window.location.pathname.substr(1).trim("/"),
+              hash: "{{ request_path_hash }}",
               data: JSON.stringify(data)
             });
             GSC.PingDot("#summer_ping");
