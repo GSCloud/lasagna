@@ -128,8 +128,7 @@ foreach ($router as $k => $v) {
     }
     $presenter[$k] = $router[$k];
 }
-
-// map routes
+// router mappings
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
     if (!isset($v["path"])) continue;

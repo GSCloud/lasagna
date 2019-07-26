@@ -126,7 +126,7 @@
 
       // GSC.CopyClipboard()
       if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString = "") {
-        var el = d.createElement('textarea');
+        var el = d.createElement("textarea");
         el.value = dataString;
         el.setAttribute("readonly", "");
         el.style.position = "absolute";
@@ -161,6 +161,7 @@
 
         if (GSC.touch) {
           if (typeof window.WebShareFactory === "function") {
+            console.log("WebShareFactory: adding mobile link")
             $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
             $(".webshareicon").append("{{ l.webshare_button }}");
           }
