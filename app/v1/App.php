@@ -133,7 +133,7 @@ $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
     if (!isset($v["path"])) continue;
     if ($v["path"] == "/") {
-        if ($data["request_path_hash"] == "") {
+        if ($data["request_path_hash"] == "") { // set path hash for homepage to default language
             $data["request_path_hash"] = hash("sha256", $v["language"]);
         }
     }
