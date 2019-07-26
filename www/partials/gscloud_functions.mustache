@@ -208,14 +208,12 @@
 
         if (typeof w.GSC.ReadArticles !== "function") w.GSC.ReadArticles = function (callback) {
           if (w.GSC.offline) {  // we are offline
-//            console.log("ReadArticles -> offline");
             setTimeout("window.GSC.ReadArticles()", 5000);
             return;
           }
-//          console.log('ReadArticles in progress');
+
           $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
               Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {  // API call
-//            console.log('ReadArticles done');
             if (GSC.summernote_on) return;
             if (data && data.data && data.data.html) {
               if (data.data.crc) GSC.data.articlescrc = data.data.crc;
@@ -223,8 +221,6 @@
               for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
             }
             if (typeof callback === "function") callback();
-          }
-
           });
 
           setTimeout("window.GSC.ReadArticles()", 30000);
