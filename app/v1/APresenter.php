@@ -1275,8 +1275,6 @@ abstract class APresenter implements IPresenter
         $v = [];
         $v["timestamp"] = time();
         $v["version"] = $this->getCfg("version");
-        $code = 200;
-        $msg = "OK";
 
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
@@ -1308,6 +1306,13 @@ abstract class APresenter implements IPresenter
                 $msg = "Unknown error.";
                 break;
         }
+        if (is_null($d)) {
+            $code = 500;
+            $msg = "INTERNAL SERVER ERROR";
+        }
+        if (is_string($d)) {
+            $d = [$d];
+        }
         if (is_int($d)) {
             $code = $d;
             switch ($d) {
@@ -1320,13 +1325,7 @@ abstract class APresenter implements IPresenter
                 default:
                     $msg = "Unknown error.";
             }
-        }
-        if (is_string($d)) {
-            $d = [$d];
-        }
-        if (is_null($d)) {
-            $code = 500;
-            $msg = "INTERNAL SERVER ERROR";
+            $d = null;
         }
         $v["code"] = $code;
         $v["message"] = $msg;

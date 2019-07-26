@@ -167,14 +167,14 @@ class AdminPresenter extends \GSC\APresenter
                     }
                 }
                 if ($x != 3) {
-                    return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 }
                 if (@file_put_contents(DATA . "/summernote_" . $profile . "_" . $hash . ".json", $data, LOCK_EX) === false) {
                     return $this->writeJsonData([
-                        "status" => "FAIL",
+                        "status" => "Data write failed.",
                         "profile" => $profile,
                         "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
                 } else {
                     return $this->writeJsonData([
                         "status" => "OK",
@@ -187,7 +187,7 @@ class AdminPresenter extends \GSC\APresenter
             // DELETE ARTICLES
             case "DeleteArticles":
                 $this->checkAdmins("admin");
-                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "DeleteArticles"]);
+                return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "DeleteArticles"]);
                 break;
 
             // FLUSH remote
