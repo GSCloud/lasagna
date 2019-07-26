@@ -6,8 +6,10 @@
     if (navigator.share) {
 
       if (typeof window.WebShare !== "function") window.WebShare = function (text, url, title) {
-        var url = url.length ? url : (document.querySelector("link[rel=canonical]") ?
+        url = url || (document.querySelector("link[rel=canonical]") ?
           document.querySelector("link[rel=canonical]").href : document.location.href);
+        title = title || document.title;
+        text = text || document.title;
         console.log("WebShare API call: ", {title, text, url});
         navigator.share({
           title: title,
