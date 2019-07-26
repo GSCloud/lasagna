@@ -3,83 +3,25 @@
 {{>tw_body}}
 
 <div class="container">
-  <div id="user1" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
-  <div class="section">
-    <div class="row center">
+  <div class="row center">
 
-      {{>title}}
-      {{>webshare}}
-      {{>youtube_api}}
+    {{>title}}
+    {{>webshare}}
+    {{>youtube_api}}
 
-      <div id="user2" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
-      <br>
+    <div id="user1" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
 
-      {{#admin_group_default}}
+    <h5 id="websharetest">&nbsp;webshare test&nbsp;</h5>
 
-      <h4>{{ user.name }}</h4>
-      <br>
-      <img class="responsive-img" src="{{ user.avatar }}" alt="{{ user.name }}">
-      <br>
-      Google ID: {{ user.id }}
-      <br>
-      e-mail: <strong>{{ user.email }}</strong>
-      <br>
-      <br>
-
-      {{#LOCALHOST}}
-      {{#local_goauth_redirect}}
-      <a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
-        l.a_relogin }}<i class="material-icons right">cloud</i></a>
-      {{/local_goauth_redirect}}
-      {{/LOCALHOST}}
-      {{^LOCALHOST}}
-      {{#goauth_redirect}}
-      <a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
-        l.a_relogin }}<i class="material-icons right">cloud</i></a>
-      {{/goauth_redirect}}
-      {{/LOCALHOST}}
-
-      {{/admin_group_default}}
-
-      {{^admin_group_default}}
-
-      <h4>{{ user.name }}</h4>
-      <br>
-      Google ID: {{ user.id }}
-      <br>
-      e-mail: <strong>{{ user.email }}</strong>
-      <br>
-      <br>
-
-      {{#LOCALHOST}}
-      {{#local_goauth_redirect}}
-      <a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
-        l.a_login }}<i class="material-icons right">cloud</i></a>
-      {{/local_goauth_redirect}}
-      {{/LOCALHOST}}
-
-      {{^LOCALHOST}}
-      {{#goauth_redirect}}
-      <a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
-        l.a_login }}<i class="material-icons right">cloud</i></a>
-      {{/goauth_redirect}}
-      {{/LOCALHOST}}
-
-      {{/admin_group_default}}
-
-      <h4 id="websharetest">&nbsp;webshare test&nbsp;</h4>
-
-      <h4>Emoji & specials</h4>
-      <div id="emojisdemo">
-😃😄😅😆😊😎😇😋😏😌😁😀😂🤣🤠🤡🤑🤩🤪😳😉
-😗😚😘😙😍🤤🤗😛😜😝😶🙃😐😑🤔🙄😮😔😖😕🤨🤯🤭🧐🤫😯🤐
+    <h4>Emoji & specials</h4>
+    <div id="emojisdemo">😃😄😅😆😊😎😇😋😏😌😁😀😂🤣🤠🤡🤑🤩🤪
+😳😉😗😚😘😙😍🤤🤗😛😜😝😶🙃😐😑🤔🙄😮😔😖😕🤨🤯🤭🧐🤫😯🤐
 😷😩😫😪😴😵😦😢😭🤒🤕🤮😒😠😤😣😧🤢😈👿😡🤬😬😓😰😱😲😞😥😟😨🤥🤓
-</div>
-
     </div>
+
+    <div id="user2" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
   </div>
 </div>
-<div id="user3" class="summernote"><noscript>{{ l.nojs_placeholder }}</noscript></div>
 
 <script src="{{ cdn }}/js/grapheme.min.js" defer></script>
 <script>
@@ -88,7 +30,8 @@
 
       w.GSC.init.push(function () {
         w.GSC.names.push("WebShare API test");
-        if (typeof window.WebShareFactory === "function") $('#websharetest').append(WebShareFactory('WebShare API works!', '', 'DEMO'));
+        if (typeof window.WebShareFactory === "function") $('#websharetest').append(WebShareFactory(
+          'WebShare API works!', '', 'DEMO'));
       });
 
       w.GSC.init.push(function () {
@@ -107,9 +50,10 @@
           });
         });
       });
-      
+
     }
   })(window, document);
+
 </script>
 
 {{>html_footer}}

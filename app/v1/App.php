@@ -87,10 +87,12 @@ $multisite_profiles = array_replace([
 foreach ($multisite_profiles as $k => $v) {
     $multisite_names[] = strtolower($k);
 }
+
 $profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
 if (!in_array($profile_index, $multisite_names)) {
     $profile_index = "default";
 }
+
 $origin_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"]));
 if ($origin_domain != $multisite_profiles["default"][0]) {
     $multisite_profiles["default"][1] = $origin_domain;
@@ -98,17 +100,17 @@ if ($origin_domain != $multisite_profiles["default"][0]) {
 
 // routing tables
 $router = array();
-$defaults = [
+$routes = [
     APP . "/router_defaults.neon",
     APP . "/router_admin.neon",
     APP . "/router.neon",
 ];
-foreach ($defaults as $r) {
+foreach ($routes as $r) {
     if (is_callable("check_file")) {
         check_file($r);
     }
-    $content = @file_get_contents($r);
-    if ($content === false) {
+
+    if (($content = @file_get_contents($r)) === false) {
         logger("Error in routing table: $r", Logger::EMERGENCY);
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
@@ -122,7 +124,10 @@ foreach ($defaults as $r) {
 $presenter = array();
 $defaults = $router["defaults"] ?? [];
 foreach ($router as $k => $v) {
-    if ($k == "defaults") continue;
+    if ($k == "defaults") {
+        continue;
+    }
+
     foreach ($defaults as $i => $j) {
         $router[$k][$i] = $v[$i] ?? $defaults[$i];
     }
@@ -131,14 +136,20 @@ foreach ($router as $k => $v) {
 // router mappings
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
-    if (!isset($v["path"])) continue;
+    if (!isset($v["path"])) {   // skip presenters without path
+        continue;
+    }
+
     if ($v["path"] == "/") {
         if ($data["request_path_hash"] == "") { // set path hash for homepage to default language
             $data["request_path_hash"] = hash("sha256", $v["language"]);
         }
     }
     $alto->map($v["method"], $v["path"], $k, "route_${k}");
-    if (substr($v["path"], -1) != "/") $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_slash");
+    if (substr($v["path"], -1) != "/") {    // map duplicates ending with slash
+        $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_slash");
+    }
+
 }
 
 // CLI modules
@@ -157,16 +168,15 @@ if (CLI) {
                 require_once "CliPresenter.php";
                 $app = CliPresenter::getInstance()->process();
                 if ($argc != 3) {
-                    echo 'Use $app singleton as entry point.'."\n\n";
-                    echo 'Example: app \'print_r($app->getData());\''."\n";
-                    echo 'Example: app \'$app->showConst();\''."\n";
+                    echo 'Use $app singleton as entry point.' . "\n\n";
+                    echo 'Example: app \'print_r($app->getData());\'' . "\n";
+                    echo 'Example: app \'$app->showConst();\'' . "\n";
                     exit;
                 }
                 echo eval($argv[2]);
                 echo "\n";
                 exit;
-            break;
-
+                break;
 
             default:
                 break;
