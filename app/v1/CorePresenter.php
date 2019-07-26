@@ -51,30 +51,35 @@ class CorePresenter extends \GSC\APresenter
                 return $this->writeJsonData($d, ["name" => "LASAGNA core version", "fn" => "core"]);
                 break;
 
-                // core version
+            // core version
             case "ReadArticles":
-                $hash = null;
-                $profile = null;
+                $x = 0;
                 if (isset($match["params"]["profile"])) {
                     $profile = trim($match["params"]["profile"]);
+                    $x++;
                 }
                 if (isset($match["params"]["hash"])) {
                     $hash = trim($match["params"]["hash"]);
+                    $x++;
+                }
+                if ($x !== 2) {
+                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                 }
                 $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
                 if (file_exists($file)) {
                     $data = @file_get_contents($file);
+                    $crc = hash("sha256", $data);
+                    if (isset($_GET["crc"])) {
+                        if ($_GET["crc"] == $crc) {
+                            return $this->writeJsonData(304, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
+                        }
+                    }
+                    return $this->writeJsonData(["html" => $data, "crc" => $crc], ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                 } else {
-                    $data = false;
+                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                 }
-                if ($data === false) {
-                    return $this->writeJsonData(403, ["name" => "LASAGNA core version", "fn" => "ReadArticles"]);
-                }
-                return $this->writeJsonData([
-                    "html" => $data,
-                ], ["name" => "LASAGNA core version", "fn" => "ReadArticles"]);
                 break;
-            }
+        }
 
         // fetch locale
         $language = strtolower($presenter[$view]["language"]) ?? "cs";

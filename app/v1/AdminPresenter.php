@@ -147,20 +147,24 @@ class AdminPresenter extends \GSC\APresenter
             // UPDATE ARTICLES
             case "UpdateArticles":
                 $this->checkAdmins("admin");
-                $data = null;
-                $profile = null;
-                $request_path = null;
+                $x = 0;
                 if (isset($_POST["data"])) {
-                    $data = (array) $_POST["data"];
+                    $data = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]);
+                    $x++;
                 }
                 if (isset($_POST["profile"])) {
                     $profile = trim((string) $_POST["profile"]);
                     $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));
+                    $x++;
                 }
                 if (isset($_POST["request_path"])) {
                     $request_path = trim((string) $_POST["request_path"]);
+                    $hash = hash("sha256", $request_path);
+                    $x++;
                 }
-                $hash = hash("sha256", $request_path);
+                if ($x != 3) {
+                    return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                }
                 if (@file_put_contents(DATA . "/summernote_" . $profile . "_" . $hash . ".json", $data, LOCK_EX) === false) {
                     return $this->writeJsonData([
                         "status" => "FAIL",

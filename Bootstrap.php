@@ -33,7 +33,7 @@ defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
 defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
 defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
 defined("TEMP") || define("TEMP", "/tmp");
-defined("CLI") || define("CLI", !(strpos($_SERVER["REQUEST_SCHEME"], "http") === 0));
+defined("CLI") || define("CLI", (PHP_SAPI == "cli"));
 
 // Composer
 require_once ROOT . "/vendor/autoload.php";
@@ -87,7 +87,7 @@ if (file_exists(CONFIG_PRIVATE)) {
 date_default_timezone_set($cfg["date_default_timezone"] ?? "Europe/Prague");
 
 // constants based on configuration
-defined("VERSION") || define("VERSION", $cfg["version"] ?? "v1");
+defined("VERSION") || define("VERSION", (string) $cfg["version"] ?? "v1");
 defined("APP") || define("APP", ROOT . "/app/" . VERSION);
 
 function check_var(&$arr, $key, $default = null)
@@ -114,7 +114,7 @@ check_var($cfg, "minify", false);
 if (CLI === true) {
     defined("DEBUG") || define("DEBUG", false);
 }
-if (strpos($_SERVER["HTTP_USER_AGENT"], "curl") === 0) {
+if ( isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") == 0) {
     defined("DEBUG") || define("DEBUG", false);
 }
 defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
@@ -143,7 +143,7 @@ $data["host"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["HOST"] = $host;
 $data["request_uri"] = $uri = $_SERVER["REQUEST_URI"] ?? "";
 $data["request_path"] = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
-$data["request_path_hash"] = $hash = hash("sha256", $data["request_path"]);
+$data["request_path_hash"] = ($data["request_path"] == "") ? "" : hash("sha256", $data["request_path"]);
 $data["base"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
 $data["BASE"] = $data["base"];
 $data["LOCALHOST"] = (($_SERVER["SERVER_NAME"] ?? "") == "localhost");

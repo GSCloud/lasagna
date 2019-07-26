@@ -122,9 +122,7 @@ foreach ($defaults as $r) {
 $presenter = array();
 $defaults = $router["defaults"] ?? [];
 foreach ($router as $k => $v) {
-    if ($k === "defaults") {
-        continue;
-    }
+    if ($k == "defaults") continue;
     foreach ($defaults as $i => $j) {
         $router[$k][$i] = $v[$i] ?? $defaults[$i];
     }
@@ -135,8 +133,13 @@ foreach ($router as $k => $v) {
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
     if (!isset($v["path"])) continue;
-    $alto->map($v["method"], $v["path"], $k, "{$k}");
-    if (substr($v["path"], -1) != "/") $alto->map($v["method"], $v["path"] . "/", $k, "{$k}_slash");
+    if ($v["path"] == "/") {
+        if ($data["request_path_hash"] == "") {
+            $data["request_path_hash"] = hash("sha256", $v["language"]);
+        }
+    }
+    $alto->map($v["method"], $v["path"], $k, "route_${k}");
+    if (substr($v["path"], -1) != "/") $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_slash");
 }
 
 // CLI modules
@@ -145,7 +148,7 @@ if (CLI) {
 
         switch ($argv[1]) {
             case "localtest":
-            case "prodtest":
+            case "productiontest":
                 require_once "CiTester.php";
                 exit;
                 break;
@@ -158,7 +161,7 @@ if (CLI) {
     echo "Tesseract LASAGNA command line interface. \n\n";
     echo "Usage: Bootstrap.php <command> [<parameters>...] \n\n";
     echo "\t localtest - CI local test \n";
-    echo "\t production - CI production test \n";
+    echo "\t productiontest - CI production test \n";
     exit;
 }
 
@@ -276,10 +279,11 @@ if (array_key_exists("output", $data)) {
 echo $output;
 
 // END
+$events = null;
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
-$events = null;
-header("X-Processing: ${time} msec.");
+header("X-Country: $country");
+header("X-Processing: $time msec.");
 $dot = new \Adbar\Dot((array) $data);
 if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVER["HTTPS"])) && ($_SERVER["HTTPS"] == "on")) {
     $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url") . $dot->get("request_path"));

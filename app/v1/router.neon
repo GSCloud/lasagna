@@ -3,10 +3,6 @@ home:
   sitemap: true
   sethl: true
 
-admin_redirect:
-  path: /admin
-  redirect: "https://lasagna.gscloud.cz/login?relogin=true"
-
 cs:
   language: cs
   path: /cs

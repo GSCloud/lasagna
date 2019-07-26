@@ -465,9 +465,12 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         });
 
         $("#a_logout").click(function () {
-          if (w.GSC.offline) return;
           setCookie("logout", "logout", 0);
-          window.location.replace("/logout");
+          if (GSC.offline) {
+            window.location.replace("/");
+          } else {
+            window.location.replace("/logout");
+          }
         });
 
       });
@@ -512,7 +515,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               if (id) data[id] = $(obj).summernote("code");
               $(obj).summernote("destroy");
             });
-            console.log("Summernote write:", {data});
+            console.log("Summernote write: ", {data});
             $.post("/admin/UpdateArticles", {
               profile: GSC.profile,
               request_path: window.location.pathname.substr(1).trim("/"),

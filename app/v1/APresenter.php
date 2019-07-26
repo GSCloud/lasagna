@@ -556,7 +556,7 @@ abstract class APresenter implements IPresenter
             $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
             $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
             $_SERVER["HTTP_USER_AGENT"] ?? "agent",
-            $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA"
+            $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
         ];
         return strtr(implode("_", $arr), " ", "_");
     }
@@ -1310,14 +1310,23 @@ abstract class APresenter implements IPresenter
         }
         if (is_int($d)) {
             $code = $d;
-            $msg = "Error";
+            switch ($d) {
+                case 304:
+                    $msg = "Not modified.";
+                    break;
+                case 400:
+                    $msg = "Bad request.";
+                    break;
+                default:
+                    $msg = "Unknown error.";
+            }
         }
         if (is_string($d)) {
             $d = [$d];
         }
         if (is_null($d)) {
             $code = 500;
-            $msg = "Internal Server Error";
+            $msg = "INTERNAL SERVER ERROR";
         }
         $v["code"] = $code;
         $v["message"] = $msg;
