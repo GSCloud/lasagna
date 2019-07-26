@@ -155,12 +155,16 @@ class AdminPresenter extends \GSC\APresenter
                 if (isset($_POST["profile"])) {
                     $profile = trim((string) $_POST["profile"]);
                     $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));
-                    $x++;
+                    if (strlen($profile)) {
+                        $x++;
+                    }
                 }
                 if (isset($_POST["request_path"])) {
                     $request_path = trim((string) $_POST["request_path"]);
-                    $hash = hash("sha256", $request_path);
-                    $x++;
+                    if (strlen($request_path)) {
+                        $hash = hash("sha256", $request_path);
+                        $x++;
+                    }
                 }
                 if ($x != 3) {
                     return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
