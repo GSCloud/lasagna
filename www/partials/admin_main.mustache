@@ -431,7 +431,8 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         });
 
         $("#a_summernote").click(function () {
-          GSC.DeploySummernote();
+          GSC.ReadArticles(function(){GSC.DeploySummernote()});
+//          GSC.DeploySummernote();
         });
 
         $("#a_emoji").click(function () {
@@ -504,30 +505,31 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           $("#a_summernote").text("{{ l.a_save_all }}");
           $("#a_summernote").unbind("click");
           $("#a_summernote").click(function () {
-            if (w.GSC.offline) {
+            if (w.GSC.offline) {  // we are offline
               GSC.PingDot("#summer_ping", false);
               return;
             }
             var id;
             var data = {};
-            $(".summernote").each(function (i, obj) {
+            $(".summernote").each(function (i, obj) { // collect HTML data
               id = $(obj).attr("id")
               if (id) data[id] = $(obj).summernote("code");
               $(obj).summernote("destroy");
             });
-            console.log("Summernote write: ", {data});
-            $.post("/admin/UpdateArticles", {
+            console.log("UpdateArticles write", {data});
+            $.post("/admin/UpdateArticles", { // API call
               profile: GSC.profile,
               request_path: window.location.pathname.substr(1).trim("/"),
               data: JSON.stringify(data)
-              });
+            });
             GSC.PingDot("#summer_ping");
             GSC.summernote_on = false;
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
             $("#a_summernote").click(function () {
-              GSC.DeploySummernote();
+              GSC.ReadArticles(function(){GSC.DeploySummernote()});
             });
+
           });
 
           $(".summernote").summernote({

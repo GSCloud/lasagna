@@ -153,6 +153,22 @@ if (CLI) {
                 exit;
                 break;
 
+            case "app":
+                require_once "APresenter.php";
+                require_once "CliPresenter.php";
+                $app = CliPresenter::getInstance()->process();
+                if ($argc != 3) {
+                    echo 'Use $app singleton as entry point.'."\n\n";
+                    echo 'Example: app \'print_r($app->getData());\''."\n";
+                    echo 'Example: app \'$app->showConst();\''."\n";
+                    exit;
+                }
+                echo eval($argv[2]);
+                echo "\n";
+                exit;
+            break;
+
+
             default:
                 break;
         }
@@ -160,6 +176,7 @@ if (CLI) {
 
     echo "Tesseract LASAGNA command line interface. \n\n";
     echo "Usage: Bootstrap.php <command> [<parameters>...] \n\n";
+    echo "\t app '<code>' - run code \n";
     echo "\t localtest - CI local test \n";
     echo "\t productiontest - CI production test \n";
     exit;
