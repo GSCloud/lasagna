@@ -46,7 +46,8 @@
           var x = $(this).text();
           GSC.CopyClipboard(x);
           M.toast({
-            html: x
+            html: x,
+            classes: "bigemoji"
           });
         });
       });
@@ -55,5 +56,6 @@
   })(window, document);
 
 </script>
+<style>.bigemoji{font-size:5em}</style>
 
 {{>html_footer}}
