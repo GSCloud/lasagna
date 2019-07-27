@@ -2,7 +2,10 @@
     class="fas fa-share-alt-square"></i>&nbsp;{{ l.webshare_button }}</a>
 
 <script>
+  // enable feature for touch devices only
   if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
+
+    // feature detection
     if (navigator.share) {
 
       if (typeof window.WebShare !== "function") window.WebShare = function (text, url, title) {
@@ -34,6 +37,8 @@
       var el = document.getElementsByClassName("webshare");
       for (var i = 0; i < el.length; i++) {
         el[i].style.display = "block";
+
+        // element animation
         el[i].addEventListener("click", function () {
           var that = this;
           this.style.transition = "filter 0s";
@@ -45,7 +50,7 @@
           window.WebShare();
         });
       }
-    };
+    }
   }
 
 </script>

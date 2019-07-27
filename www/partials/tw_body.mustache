@@ -14,14 +14,14 @@
     return t;
   }(document, "script", "twitter-wjs"));
 
-  if (typeof window.TwitterShareFactory !== "function") window.TwitterShareFactory = function (obj, text = "", url, hashtags = "") {
-    if (!obj) {
-      console.log("missing object to append Twitter button:\n\nwindow.TwitterShareFactory(obj, text, url, hashtags)");
+  if (typeof window.TwitterShareFactory !== "function") window.TwitterShareFactory = function (el, text = "", url, hashtags = "") {
+    if (!el) {
+      console.log("missing DOM element to append Twitter button:\n\nwindow.TwitterShareFactory(el, text, url, hashtags)");
       return false;
     }
     url = url || "{{ canonical_url }}{{ request_path }}";
     url = url.replace(new RegExp(/['\"\n\r\s]*/, "g"), "").trim();
-    twttr.widgets.createShareButton(url, obj, {
+    twttr.widgets.createShareButton(url, el, {
       dnt: true,
       hashtags: hashtags,
       lang: "{{ lang }}",
