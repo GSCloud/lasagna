@@ -27,14 +27,17 @@ ln -s ../. www/cdn-assets/${VERSION} >/dev/null 2>&1
 info "Version: ${VERSION}"
 
 rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" --exclude "www/download" \
-  _includes.sh \
-  _site_cfg.sh \
-  remote_fixer.sh \
   *.json \
   *.neon \
   *.php \
-  app \
+  LICENSE \
+  LOCAL_TEST.sh \
   VERSION \
+  _includes.sh \
+  _site_cfg.sh \
+  app \
+  cli.sh \
+  remote_fixer.sh \
   vendor \
   www \
   ${USER}@${HOST}:${DEST}'/' | grep -E -v '/$'
