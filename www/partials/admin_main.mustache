@@ -521,20 +521,25 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               if (id) data[id] = $(obj).summernote("code");
               $(obj).summernote("destroy");
             });
-            console.log("UpdateArticles write", {data});
+            console.log("UpdateArticles write data", {data});
             $.post("/admin/UpdateArticles", { // API call
               profile: GSC.profile,
               hash: "{{ request_path_hash }}",
               data: JSON.stringify(data)
+            }, function (data) {
+              console.log("UpdateArticles write result",{data});
+            }).done(function() {
+              GSC.PingDot("#summer_ping");
+              GSC.summernote_on = false;
+              $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
+              $("#a_summernote").unbind("click");
+              $("#a_summernote").click(function () {
+                GSC.ReadArticles(function(){GSC.DeploySummernote()});
+              });
+            }).fail(function() {
+              GSC.PingDot("#summer_ping", false);
+              alert("ERROR!");
             });
-            GSC.PingDot("#summer_ping");
-            GSC.summernote_on = false;
-            $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
-            $("#a_summernote").unbind("click");
-            $("#a_summernote").click(function () {
-              GSC.ReadArticles(function(){GSC.DeploySummernote()});
-            });
-
           });
 
           $(".summernote").summernote({

@@ -168,7 +168,8 @@ class AdminPresenter extends \GSC\APresenter
                 if ($x != 3) {
                     return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 }
-                if (@file_put_contents(DATA . "/summernote_" . $profile . "_" . $hash . ".json", $data, LOCK_EX) === false) {
+                @copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak");
+                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
                     return $this->writeJsonData([
                         "status" => "Data write failed.",
                         "profile" => $profile,
