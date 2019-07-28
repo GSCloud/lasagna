@@ -2191,16 +2191,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.3.2",
+            "version": "v4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "ee4cfbc78b3175ef41f000daa1c06b5600e623bd"
+                "reference": "6e85629526f54bbf2589611d015d35ae744436bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/ee4cfbc78b3175ef41f000daa1c06b5600e623bd",
-                "reference": "ee4cfbc78b3175ef41f000daa1c06b5600e623bd",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/6e85629526f54bbf2589611d015d35ae744436bc",
+                "reference": "6e85629526f54bbf2589611d015d35ae744436bc",
                 "shasum": ""
             },
             "require": {
@@ -2232,12 +2232,12 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                },
-                {
                     "name": "Jérémy Derussé",
                     "email": "jeremy@derusse.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
                 }
             ],
             "description": "Symfony Lock Component",
@@ -2250,7 +2250,7 @@
                 "redlock",
                 "semaphore"
             ],
-            "time": "2019-06-26T09:25:00+00:00"
+            "time": "2019-07-03T17:15:34+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
