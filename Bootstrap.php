@@ -37,7 +37,6 @@ defined("CLI") || define("CLI", (PHP_SAPI == "cli"));
 
 // Composer
 require_once ROOT . "/vendor/autoload.php";
-//Tracy\OutputDebugger::enable();
 
 function check_file($f)
 {
@@ -107,10 +106,12 @@ function check_var(&$arr, $key, $default = null)
 // sanity checks
 check_var($cfg, "app", "app");
 check_var($cfg, "canonical_url");
-check_var($cfg, "dbg", ($_SERVER["SERVER_NAME"] ?? "") == "localhost");
 check_var($cfg, "minify", false);
 
 // debugger
+if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
+    defined("DEBUG") || define("DEBUG", true);
+}
 if (CLI === true) {
     defined("DEBUG") || define("DEBUG", false);
 }
@@ -118,7 +119,7 @@ if ( isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "
     defined("DEBUG") || define("DEBUG", false);
 }
 defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
-if (DEBUG === true) {
+if (DEBUG == true) {
     Debugger::enable(Debugger::DEVELOPMENT, CACHE);
     Debugger::$logSeverity = E_NOTICE | E_WARNING;
     Debugger::$maxDepth = $cfg["DEBUG_DEPTH"] ?? 5;

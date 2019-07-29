@@ -1,19 +1,19 @@
-'use strict';
-var version = '{{ version }}.{{ VERSION_SHORT }}';
+"use strict";
+var version = "{{ version }}.{{ VERSION_SHORT }}";
 
 var offlineFundamentals = [
-  '',
-  '/cs',
-  '/en',
-  '/cs/?utm_source={{ app }}',
-  '{{ cdn }}/build.css',
-  '{{ cdn }}/build.js'
+  "",
+  "/cs",
+  "/en",
+  "/cs/?utm_source={{ app }}",
+  "/en/?utm_source={{ app }}",
+  "{{ cdn }}/build.css",
+  "{{ cdn }}/build.js",
 ];
 
 self.addEventListener("install", function (event) {
-//  console.log('WORKER: install in progress.');
   event.waitUntil(
-    caches.open(version + 'fundamentals')
+    caches.open(version + "fundamentals")
     .then(function (cache) {
       return cache.addAll(offlineFundamentals);
     })
@@ -22,8 +22,8 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
-  if (event.request.method !== 'GET') {
-    console.log('WORKER: fetch ignored.', event.request.method, event.request.url);
+  if (event.request.method !== "GET") {
+    console.log("WORKER: fetch ignored", event.request.method, event.request.url);
     return;
   }
   event.respondWith(
@@ -32,29 +32,25 @@ self.addEventListener("fetch", function (event) {
       var networked = fetch(event.request)
         .then(fetchedFromNetwork, unableToResolve)
         .catch(unableToResolve);
-//      console.log('WORKER: fetch event', cached ? '(cached)' : '(network)', event.request.url);
       return cached || networked;
 
       function fetchedFromNetwork(response) {
         var cacheCopy = response.clone();
-//        console.log('WORKER: fetch response from network.', event.request.url);
-        caches.open(version + 'pages')
+        caches.open(version + "pages")
           .then(function add(cache) {
             return cache.put(event.request, cacheCopy);
           })
           .then(function () {
-//            console.log('WORKER: fetch response stored in cache.', event.request.url);
           });
         return response;
       }
 
       function unableToResolve() {
-//        console.log('WORKER: fetch request failed in both cache and network.');
-        return new Response('<h1>Service Unavailable</h1>', {
+        return new Response("<h1>🙄 OFFLINE 🙄</h1>", {
           status: 503,
-          statusText: 'Service Unavailable',
+          statusText: "Service Unavailable",
           headers: new Headers({
-            'Content-Type': 'text/html'
+            "Content-Type": "text/html"
           })
         });
       }
@@ -63,7 +59,6 @@ self.addEventListener("fetch", function (event) {
 });
 
 self.addEventListener("activate", function (event) {
-//  console.log('WORKER: activate event in progress.');
   event.waitUntil(
     caches
     .keys()
@@ -79,7 +74,7 @@ self.addEventListener("activate", function (event) {
       );
     })
     .then(function () {
-      console.log('WORKER: activate completed.');
+      console.log("WORKER: activate completed");
     })
   );
 });

@@ -84,19 +84,11 @@ $multisite_names = [];
 $multisite_profiles = array_replace([
     "default" => [strtolower(trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN)],
 ], $cfg["multisite_profiles"] ?? []);
-foreach ($multisite_profiles as $k => $v) {
-    $multisite_names[] = strtolower($k);
-}
-
+foreach ($multisite_profiles as $k => $v) $multisite_names[] = strtolower($k);
 $profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
-if (!in_array($profile_index, $multisite_names)) {
-    $profile_index = "default";
-}
-
-$origin_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"]));
-if ($origin_domain != $multisite_profiles["default"][0]) {
-    $multisite_profiles["default"][1] = $origin_domain;
-}
+if (!in_array($profile_index, $multisite_names)) $profile_index = "default";
+$auth_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"]));
+if (!in_array($auth_domain, $multisite_profiles["default"])) $multisite_profiles["default"][] = $auth_domain;
 
 // routing tables
 $router = array();

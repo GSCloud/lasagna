@@ -1,4 +1,6 @@
 {
+  "name": "Tesseract LASAGNA",
+  "description": "Tesseract LASAGNA object oriented MVP framework.",
   "require": {
     "altorouter/altorouter": "^1.2.0",
     "cakephp/cache": "^3.7.9",
@@ -20,7 +22,7 @@
     "symfony/lock": "^4.3.1",
     "symfony/polyfill-mbstring": "^1.11.0",
     "there4/php-analytics-event": "^1.1.0",
-    "tracy/tracy": "^2.6.3",
+    "tracy/tracy": "^2.6.4",
     "tuupola/base58": "^0.2.3",
     "adbario/php-dot-notation": "^2.2"
   },
