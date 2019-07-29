@@ -89,6 +89,11 @@ $profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
 if (!in_array($profile_index, $multisite_names)) $profile_index = "default";
 $auth_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"]));
 if (!in_array($auth_domain, $multisite_profiles["default"])) $multisite_profiles["default"][] = $auth_domain;
+// data population
+$data["cache_profiles"] = $cache_profiles;
+$data["multisite_profiles"] = $multisite_profiles;
+$data["multisite_names"] = $multisite_names;
+$data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
 // routing tables
 $router = array();
@@ -158,14 +163,14 @@ if (CLI) {
             case "app":
                 require_once "APresenter.php";
                 require_once "CliPresenter.php";
-                $app = CliPresenter::getInstance()->process();
+                $app = CliPresenter::getInstance()->setData($data)->process();
                 if ($argc != 3) {
                     echo 'Use $app singleton as entry point.' . "\n\n";
                     echo 'Example: app \'print_r($app->getData());\'' . "\n";
                     echo 'Example: app \'$app->showConst();\'' . "\n";
                     exit;
                 }
-                echo eval($argv[2]);
+                echo eval(trim($argv[2], ";").";");
                 echo "\n";
                 exit;
                 break;
@@ -186,6 +191,12 @@ if (CLI) {
 // routing
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
+
+// data population
+$data["match"] = $match;
+$data["presenter"] = $presenter;
+$data["router"] = $router;
+$data["view"] = $view;
 
 // sethl
 if ($router[$view]["sethl"] ?? false) {
@@ -222,17 +233,6 @@ if ($router[$view]["nopwa"] ?? false) {
     }
 }
 
-// data population
-$data["cache_profiles"] = $cache_profiles;
-$data["multisite_profiles"] = $multisite_profiles;
-$data["multisite_names"] = $multisite_names;
-$data["multisite_profiles_json"] = json_encode($multisite_profiles);
-
-$data["match"] = $match;
-$data["presenter"] = $presenter;
-$data["router"] = $router;
-$data["view"] = $view;
-
 // singleton
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $presenter_file = APP . "/${p}.php";
@@ -245,42 +245,36 @@ if (!file_exists($presenter_file)) {
 // CSP headers
 header(implode(" ", [
     "Content-Security-Policy: ",
-
-    "default-src",
-    "'unsafe-inline'",
-    "'self'",
-    "https://*;",
-
+        "default-src",
+        "'unsafe-inline'",
+        "'self'",
+        "https://*;",
     "connect-src",
-    "'self'",
-    "https://*;",
-
+        "'self'",
+        "https://*;",
     "font-src",
-    "'self'",
-    "'unsafe-inline'",
-    "*.gstatic.com;",
-
+        "'self'",
+        "'unsafe-inline'",
+        "*.gstatic.com;",
     "script-src",
-    "*.facebook.net",
-    "*.google-analytics.com",
-    "*.googleapis.com",
-    "*.googletagmanager.com",
-    "*.ytimg.com",
-    "cdn.onesignal.com",
-    "onesignal.com",
-    "platform.twitter.com",
-    "'self'",
-    "'unsafe-inline'",
-    "'unsafe-eval';",
-
+        "*.facebook.net",
+        "*.google-analytics.com",
+        "*.googleapis.com",
+        "*.googletagmanager.com",
+        "*.ytimg.com",
+        "cdn.onesignal.com",
+        "onesignal.com",
+        "platform.twitter.com",
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval';",
     "img-src",
-    "*",
-    "'self'",
-    "'unsafe-inline'",
-    "data:;",
-
+        "*",
+        "'self'",
+        "'unsafe-inline'",
+        "data:;",
     "form-action",
-    "'self';",
+        "'self';",
 ]));
 
 // APP

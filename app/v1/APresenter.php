@@ -445,7 +445,10 @@ abstract class APresenter implements IPresenter
         if (is_null($key)) {
             return $this->data;
         }
-        return $dot->get($key);
+        if (is_string($key)) {
+            return $dot->get($key);
+        }
+        return false;
     }
 
     /**
@@ -653,7 +656,7 @@ abstract class APresenter implements IPresenter
         if (is_null($key)) {
             return $this->getData("cfg");
         }
-        return $this->getData("cfg.$key");
+        return $this->getData("cfg.${key}");
     }
 
     /**
