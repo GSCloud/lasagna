@@ -362,20 +362,86 @@
           });
       }
 
-      // PageSpeed Insights
-      w.GSC.init.push(function () {
-        w.GSC.names.push("PageSpeed Insights");
+      // GSC.AdminUI()
+      if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+        $("#admin_main div").addClass("a_reset");
+        $("#admin_main h2").addClass("a_reset a_h2");
+        $("#admin_main h4").addClass("a_reset a_h4");
+        $("#admin_main h5").addClass("a_reset a_h5");
+        $("#admin_main p").addClass("a_reset");
+        if (w.GSC.touch) {
+          $(".tooltipped").tooltip("destroy");
+        }
 
-        $("#a_ps_insights").click(function () {
-          if (w.GSC.offline) {
-            GSC.PingDot("#psi_ping", false);
+        $(".summernote").dblclick(function () {
+          $(".summernote").unbind("dblclick");
+          GSC.DeploySummernote();
+        });
+      }
+
+      // GSC.DeploySummernote()
+      if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+        GSC.summernote_on = true;
+        $("#a_summernote").text("{{ l.a_save_all }}");
+        $("#a_summernote").unbind("click");
+
+        // SAVE ALL
+        $("#a_summernote").click(function () {
+          if (w.GSC.offline) {  // we are offline
+            GSC.PingDot("#summer_ping", false);
             return;
           }
-          $(this).attr("disabled", "disabled");
-          GSC.PingDot("#psi_ping");
-          GSC.GetPSInsights();
+          var id;
+          var data = {};
+          $(".summernote").each(function (i, obj) { // collect HTML data
+            id = $(obj).attr("id")
+            if (id) data[id] = $(obj).summernote("code");
+            $(obj).summernote("destroy");
+          });
+          console.log("UpdateArticles write", {data});
+          $.post("/admin/UpdateArticles", { // API call
+            profile: GSC.profile,
+            hash: "{{ request_path_hash }}",
+            data: JSON.stringify(data)
+          }, function (data) {
+            console.log("UpdateArticles result",{data});
+          }).done(function() {
+            GSC.PingDot("#summer_ping");
+            GSC.AdminUI();
+            $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
+            $("#a_summernote").unbind("click");
+
+            $("#a_summernote").click(function () {
+              GSC.ReadArticles(function () {
+                GSC.DeploySummernote();
+              });
+            });
+            GSC.summernote_on = false;
+          }).fail(function() {
+            GSC.PingDot("#summer_ping", false);
+            alert("ERROR!");
+          });
         });
-      });
+
+        $(".summernote").summernote({
+          lang: {{#langcs}}"cs-CZ"{{/langcs}}{{#langen}}"en-US"{{/langen}},
+          codeviewFilter: true,
+          codeviewIframeFilter: true,
+          dialogsInBody: false,
+          disableDragAndDrop: true,
+          height: 200,
+          toolbar: [
+            ["style", ["style"]],
+            ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
+            ["color", ["forecolor", "backcolor", "color"]],
+            ["paragraph", ["ul", "ol", "paragraph", "height"]],
+            ["table", ["table"]],
+            ["insert", ["link", "picture", "video"]],
+            ["history", ["undo", "redo"]],
+            ["view", ["codeview", "fullscreen"]],
+          ]
+        });
+      }
 
       // admin UI bindings
       w.GSC.init.push(function () {
@@ -434,6 +500,16 @@
           $.post("/admin/CoreUpdate");
         });
 
+        $("#a_ps_insights").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#psi_ping", false);
+            return;
+          }
+          $(this).attr("disabled", "disabled");
+          GSC.PingDot("#psi_ping");
+          GSC.GetPSInsights();
+        });
+
         $("#a_summernote").click(function () {
           GSC.ReadArticles(function(){GSC.DeploySummernote()});
         });
@@ -489,80 +565,12 @@
       // admin UI
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI");
-        $("#admin_main div").addClass("a_reset");
-        $("#admin_main h2").addClass("a_reset a_h2");
-        $("#admin_main h4").addClass("a_reset a_h4");
-        $("#admin_main h5").addClass("a_reset a_h5");
-        $("#admin_main p").addClass("a_reset");
-        if (w.GSC.touch) {
-          $(".tooltipped").tooltip("destroy");
-        }
-      });
-
-      // Summernote editor
-      w.GSC.init.push(function () {
-        w.GSC.names.push("Summernote editor");
-
-        if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
-          GSC.summernote_on = true;
-          $("#a_summernote").text("{{ l.a_save_all }}");
-          $("#a_summernote").unbind("click");
-          $("#a_summernote").click(function () {
-            if (w.GSC.offline) {  // we are offline
-              GSC.PingDot("#summer_ping", false);
-              return;
-            }
-            var id;
-            var data = {};
-            $(".summernote").each(function (i, obj) { // collect HTML data
-              id = $(obj).attr("id")
-              if (id) data[id] = $(obj).summernote("code");
-              $(obj).summernote("destroy");
-            });
-            console.log("UpdateArticles write data", {data});
-            $.post("/admin/UpdateArticles", { // API call
-              profile: GSC.profile,
-              hash: "{{ request_path_hash }}",
-              data: JSON.stringify(data)
-            }, function (data) {
-              console.log("UpdateArticles write result",{data});
-            }).done(function() {
-              GSC.PingDot("#summer_ping");
-              GSC.summernote_on = false;
-              $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
-              $("#a_summernote").unbind("click");
-              $("#a_summernote").click(function () {
-                GSC.ReadArticles(function(){GSC.DeploySummernote()});
-              });
-            }).fail(function() {
-              GSC.PingDot("#summer_ping", false);
-              alert("ERROR!");
-            });
-          });
-
-          $(".summernote").summernote({
-            lang: {{#langcs}}"cs-CZ"{{/langcs}}{{#langen}}"en-US"{{/langen}},
-            codeviewFilter: true,
-            codeviewIframeFilter: true,
-            dialogsInBody: false,
-            disableDragAndDrop: true,
-            height: 200,
-            toolbar: [
-              ["style", ["style"]],
-              ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
-              ["color", ["forecolor", "backcolor", "color"]],
-              ["paragraph", ["ul", "ol", "paragraph", "height"]],
-              ["table", ["table"]],
-              ["insert", ["link", "picture", "video"]],
-              ["history", ["undo", "redo"]],
-              ["view", ["codeview", "fullscreen"]],
-            ]
-          });
-        }
-
+        GSC.AdminUI();
       });
 
     }
+
+  $.get("/admin/GetPSInsights?" + Date.now());
 
   })(window, document);
 
