@@ -63,6 +63,7 @@ class CorePresenter extends \GSC\APresenter
                     $x++;
                 }
                 if ($x !== 2) {
+                    // Bad Request
                     return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                 }
                 $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
@@ -71,12 +72,15 @@ class CorePresenter extends \GSC\APresenter
                     $crc = hash("sha256", $data);
                     if (isset($_GET["crc"])) {
                         if ($_GET["crc"] == $crc) {
+                            // Not Modified
                             return $this->writeJsonData(304, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                         }
                     }
+                    // OK
                     return $this->writeJsonData(["html" => $data, "crc" => $crc], ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                 } else {
-                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
+                    // Not Found
+                    return $this->writeJsonData(404, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
                 }
                 break;
         }

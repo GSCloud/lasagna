@@ -1275,6 +1275,7 @@ abstract class APresenter implements IPresenter
         $v = [];
         $v["timestamp"] = time();
         $v["version"] = $this->getCfg("version");
+        $locale = $this->getLocale("en");
 
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
@@ -1303,12 +1304,12 @@ abstract class APresenter implements IPresenter
                 break;
             default:
                 $code = 500;
-                $msg = "Unknown error.";
+                $msg = $locale["server_error_info_500"];
                 break;
         }
         if (is_null($d)) {
             $code = 500;
-            $msg = "INTERNAL SERVER ERROR";
+            $msg = $locale["server_error_info_500"];
         }
         if (is_string($d)) {
             $d = [$d];
@@ -1317,10 +1318,13 @@ abstract class APresenter implements IPresenter
             $code = $d;
             switch ($d) {
                 case 304:
-                    $msg = "Not modified.";
+                    $msg = $locale["server_error_info_304"];
                     break;
                 case 400:
-                    $msg = "Bad request.";
+                    $msg = $locale["server_error_info_400"];
+                    break;
+                case 404:
+                    $msg = $locale["server_error_info_404"];
                     break;
                 default:
                     $msg = "Unknown error.";

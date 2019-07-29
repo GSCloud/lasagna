@@ -244,10 +244,6 @@
 </div>
 
 <script>
-// polyfills
-Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
-String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
-
   (function (w, d, undefined) {
 
     if (!getCookie("logout")) {
@@ -382,7 +378,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       // admin UI
       w.GSC.init.push(function () {
-        w.GSC.names.push("admin panel UI");
+        w.GSC.names.push("admin UI bindings");
 
         var profiles = [];
         var params = new window.URLSearchParams(window.location.search);
@@ -395,15 +391,16 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           }
         }
         GSC.profile = profile;
+        setCookie("profile", profile);
         $("#SiteSelect option[value=" + profile + "]").attr("selected", "selected");
         $("#SiteSelect").formSelect();
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
 
         $("#SiteSelect").change(function () {
           if (!$("#SiteSelect").val()) return;
-          var s = $("#SiteSelect").val().trim();
-          setCookie("profile", s);
-          window.location.href = "?profile=" + s;
+          var profile = $("#SiteSelect").val().trim();
+          setCookie("profile", profile);
+          window.location.href = window.location.pathname + "?profile=" + profile;
         });
 
         $("#RemoteFnSelect").change(function () {
@@ -490,7 +487,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       // admin UI reset
       w.GSC.init.push(function () {
-        w.GSC.names.push("admin UI reset");
+        w.GSC.names.push("admin UI");
         $("#admin_main div").addClass("a_reset");
         $("#admin_main h2").addClass("a_reset a_h2");
         $("#admin_main h4").addClass("a_reset a_h4");

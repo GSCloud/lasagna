@@ -1,235 +1,250 @@
 <script>
-  (function (w, d, undefined) {
+// polyfills
+Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
+String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
-    function checkNetwork(e) {
-      if (navigator.onLine) {
-        d.getElementsByTagName("html")[0].setAttribute("offline", false);
-        d.getElementById("offline-message").setAttribute("aria-hidden", true);
-        if (w.GSC) w.GSC.offline = false;
-      } else {
-        d.getElementsByTagName("html")[0].setAttribute("offline", true);
-        d.getElementById("offline-message").setAttribute("aria-hidden", false);
-        if (w.GSC) w.GSC.offline = true;
-      }
+(function (w, d, undefined) {
+
+  function checkNetwork(e) {
+    if (navigator.onLine) {
+      d.getElementsByTagName("html")[0].setAttribute("offline", false);
+      d.getElementById("offline-message").setAttribute("aria-hidden", true);
+      if (w.GSC) w.GSC.offline = false;
+    } else {
+      d.getElementsByTagName("html")[0].setAttribute("offline", true);
+      d.getElementById("offline-message").setAttribute("aria-hidden", false);
+      if (w.GSC) w.GSC.offline = true;
     }
+  }
 
-      // "online" feature detection
-    if ("onLine" in navigator) {
-      w.addEventListener("load", function () {
-        w.addEventListener("online", checkNetwork);
-        w.addEventListener("offline", checkNetwork);
-        checkNetwork();
-      });
-    }
+    // "online" feature detection
+  if ("onLine" in navigator) {
+    w.addEventListener("load", function () {
+      w.addEventListener("online", checkNetwork);
+      w.addEventListener("offline", checkNetwork);
+      checkNetwork();
+    });
+  }
 
-    // window.setCookie()
-    if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days = 30) {
-      if (key === undefined) return false;
-      if (value === undefined) return false;
-      if (days === 0) {
-        document.cookie = key + "=" + value + ";path=/";
-      } else {
-        var date = new Date();
-        date.setTime(date.getTime() + (parseInt(days) * 86400));
-        document.cookie = key + "=" + value + ";path=/" + ";expires=" + date.toGMTString();
-      }
-    }
-
-    // window.getCookie()
-    if (typeof window.getCookie !== "function") window.getCookie = function (key) {
-      if (key === undefined) return false;
-      var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-      return v ? v[2] : null;
-    }
-
-    // window.delCookie()
-    if (typeof window.delCookie !== "function") window.delCookie = function (key) {
-      if (key === undefined) return false;
+  // window.setCookie()
+  if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days = 30) {
+    if (key === undefined) return false;
+    if (value === undefined) return false;
+    if (days === 0) {
+      document.cookie = key + "=" + value + ";path=/";
+    } else {
       var date = new Date();
-      date.setTime(0);
-      document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
+      date.setTime(date.getTime() + (parseInt(days) * 86400));
+      document.cookie = key + "=" + value + ";path=/" + ";expires=" + date.toGMTString();
+    }
+  }
+
+  // window.getCookie()
+  if (typeof window.getCookie !== "function") window.getCookie = function (key) {
+    if (key === undefined) return false;
+    var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+  }
+
+  // window.delCookie()
+  if (typeof window.delCookie !== "function") window.delCookie = function (key) {
+    if (key === undefined) return false;
+    var date = new Date();
+    date.setTime(0);
+    document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
+  }
+
+  if (w.GSC) {
+
+    // data
+    GSC.profile = "default";
+    GSC.data = {};
+    GSC.data.multisite_profiles = {{ multisite_profiles_json }};
+
+    // "touch" feature detection
+    w.GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
+      true : false;
+    if (w.GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
+
+    // GSC.FormatBytes()
+    if (typeof w.GSC.FormatBytes !== "function") w.GSC.FormatBytes = function (number, precision = 2) {
+      number = parseInt(number);
+      if (!number) return "0";
+      var c = 1024,
+        e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+        f = Math.floor(Math.log(number) / Math.log(c));
+      return parseFloat((number / Math.pow(c, f)).toFixed(precision)) + "&nbsp;" + e[f];
     }
 
-    if (w.GSC) {
+    // GSC.GetTime()
+    if (typeof w.GSC.GetTime !== "function") w.GSC.GetTime = function (dateString = 0) {
 
-      // data
-      GSC.profile = "default";
-      GSC.data = {};
-      GSC.data.multisite_profiles = {{ multisite_profiles_json }};
-
-      // "touch" feature detection
-      w.GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
-        true : false;
-      if (w.GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
-
-      // GSC.FormatBytes()
-      if (typeof w.GSC.FormatBytes !== "function") w.GSC.FormatBytes = function (number, precision = 2) {
-        number = parseInt(number);
-        if (!number) return "0";
-        var c = 1024,
-          e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-          f = Math.floor(Math.log(number) / Math.log(c));
-        return parseFloat((number / Math.pow(c, f)).toFixed(precision)) + "&nbsp;" + e[f];
+      function englishext(x) {
+        x = ("" + x).slice(-1);
+        if (x == 1) return "st";
+        if (x == 2) return "nd";
+        if (x == 3) return "rd";
+        return "th";
       }
 
-      // GSC.GetTime()
-      if (typeof w.GSC.GetTime !== "function") w.GSC.GetTime = function (dateString = 0) {
-
-        function englishext(x) {
-          x = ("" + x).slice(-1);
-          if (x == 1) return "st";
-          if (x == 2) return "nd";
-          if (x == 3) return "rd";
-          return "th";
-        }
-
-        var dayz = ["", "{{l.day_of_the_week_1}}", "{{l.day_of_the_week_2}}", "{{l.day_of_the_week_3}}",
-          "{{l.day_of_the_week_4}}", "{{l.day_of_the_week_5}}", "{{l.day_of_the_week_6}}",
-          "{{l.day_of_the_week_7}}"
-        ];
-        var monthz = ["", "{{l.month_1}}", "{{l.month_2}}", "{{l.month_3}}", "{{l.month_4}}",
-          "{{l.month_5}}", "{{l.month_6}}", "{{l.month_7}}", "{{l.month_8}}", "{{l.month_9}}",
-          "{{l.month_10}}", "{{l.month_11}}", "{{l.month_12}}"
-        ];
-        var monthz2p = ["", "{{l.month_2p_1}}", "{{l.month_2p_2}}", "{{l.month_2p_3}}", "{{l.month_2p_4}}",
-          "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
-          "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
-        ];
-        if (dateString === 0) {
-          var z = new Date();
-        } else {
-          var z = new Date(dateString);
-        }
-        var x = {};
-        x.day = ("" + z.getDay());
-        x.day_str = dayz[z.getDay()];
-        x.h = ("" + z.getHours());
-        x.hh = ("0" + z.getHours()).slice(-2);
-        x.yy = ("" + z.getFullYear()).slice(-2);
-        x.yyyy = ("" + z.getFullYear());
-        x.m = ("" + (z.getMonth() + 1));
-        x.mm = ("0" + (z.getMonth() + 1)).slice(-2);
-        x.month_str = monthz[x.m];
-        x.month_str2p = monthz2p[x.m];
-        x.d = z.getDate();
-        x.dd = ("0" + z.getDate()).slice(-2);
-        x.today = x.dd + "." + x.mm + "." + x.yyyy;
-        if ("{{ langcs }}") { // Czech locale
-          x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
-        }
-        if ("{{ langen }}") { // English locale
-          x.today_str = x.day_str + " " + x.d + englishext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
-        }
-        x.d = z;
-        return x;
+      var dayz = ["", "{{l.day_of_the_week_1}}", "{{l.day_of_the_week_2}}", "{{l.day_of_the_week_3}}",
+        "{{l.day_of_the_week_4}}", "{{l.day_of_the_week_5}}", "{{l.day_of_the_week_6}}",
+        "{{l.day_of_the_week_7}}"
+      ];
+      var monthz = ["", "{{l.month_1}}", "{{l.month_2}}", "{{l.month_3}}", "{{l.month_4}}",
+        "{{l.month_5}}", "{{l.month_6}}", "{{l.month_7}}", "{{l.month_8}}", "{{l.month_9}}",
+        "{{l.month_10}}", "{{l.month_11}}", "{{l.month_12}}"
+      ];
+      var monthz2p = ["", "{{l.month_2p_1}}", "{{l.month_2p_2}}", "{{l.month_2p_3}}", "{{l.month_2p_4}}",
+        "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
+        "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
+      ];
+      if (dateString === 0) {
+        var z = new Date();
+      } else {
+        var z = new Date(dateString);
       }
-
-      // GSC.CopyClipboard()
-      if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString = "") {
-        var el = d.createElement("textarea");
-        el.value = dataString;
-        el.setAttribute("readonly", "");
-        el.style.position = "absolute";
-        el.style.left = "-9999px";
-        d.body.appendChild(el);
-        var selected =
-          d.getSelection().rangeCount > 0 ? d.getSelection().getRangeAt(0) : false;
-        el.select();
-        d.execCommand("copy");
-        d.body.removeChild(el);
-        if (selected) {
-          d.getSelection().removeAllRanges();
-          d.getSelection().addRange(selected);
-        }
+      var x = {};
+      x.day = ("" + z.getDay());
+      x.day_str = dayz[z.getDay()];
+      x.h = ("" + z.getHours());
+      x.hh = ("0" + z.getHours()).slice(-2);
+      x.yy = ("" + z.getFullYear()).slice(-2);
+      x.yyyy = ("" + z.getFullYear());
+      x.m = ("" + (z.getMonth() + 1));
+      x.mm = ("0" + (z.getMonth() + 1)).slice(-2);
+      x.month_str = monthz[x.m];
+      x.month_str2p = monthz2p[x.m];
+      x.d = z.getDate();
+      x.dd = ("0" + z.getDate()).slice(-2);
+      x.today = x.dd + "." + x.mm + "." + x.yyyy;
+      if ("{{ langcs }}") { // Czech locale
+        x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
       }
+      if ("{{ langen }}") { // English locale
+        x.today_str = x.day_str + " " + x.d + englishext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
+      }
+      x.d = z;
+      return x;
+    }
 
-      // DELAYED UI bindings
-      w.GSC.init.push(function () {
-        w.GSC.names.push("UI bindings");
+    // GSC.CopyClipboard()
+    if (typeof w.GSC.CopyClipboard !== "function") w.GSC.CopyClipboard = function (dataString = "") {
+      var el = d.createElement("textarea");
+      el.value = dataString;
+      el.setAttribute("readonly", "");
+      el.style.position = "absolute";
+      el.style.left = "-9999px";
+      d.body.appendChild(el);
+      var selected =
+        d.getSelection().rangeCount > 0 ? d.getSelection().getRangeAt(0) : false;
+      el.select();
+      d.execCommand("copy");
+      d.body.removeChild(el);
+      if (selected) {
+        d.getSelection().removeAllRanges();
+        d.getSelection().addRange(selected);
+      }
+    }
 
-        $(".sethlcs").click(function () {
-          setCookie("hl", "cs");
-        });
+    // DELAYED UI bindings
+    w.GSC.init.push(function () {
+      w.GSC.names.push("UI bindings");
 
-        $(".sethlen").click(function () {
-          setCookie("hl", "en");
-        });
-
-        $("#update-message").click(function () {
-          window.location.reload(true);
-        });
-
-        if (GSC.touch) {
-          if (typeof window.WebShareFactory === "function") {
-            console.log("WebShareFactory: adding mobile link")
-            $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
-            $(".webshareicon").append("{{ l.webshare_button }}");
-          }
-        }
+      $(".sethlcs").click(function () {
+        setCookie("hl", "cs");
       });
 
-      // DELAYED version / data check
-      w.GSC.init.push(function () {
-        w.GSC.names.push("version check");
-
-        if (typeof w.GSC.VersionCheck !== "function") w.GSC.VersionCheck = function () {
-          if (!w.GSC.offline) {
-
-            $.post("/version/core", function (post) {
-              if (post.data.LASAGNA.core.version) {
-                if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
-                  $("#update-message").show();
-                  w.GSC.VersionCheck = function () {};
-                  console.log("UPDATE: core version check failed!");
-                  return;
-                }
-              }
-            });
-
-            $.post("/{{ lang }}/version/data", function (post) {
-              if (post.data.LASAGNA.data.version) {
-                if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
-                  $("#update-message").show();
-                  w.GSC.VersionCheck = function () {};
-                  console.log("UPDATE: {{ lang }} data version check failed!");
-                  return;
-                }
-              }
-            });
-
-            setTimeout("window.GSC.VersionCheck()", 60000);
-          }
-        }
-        setTimeout("window.GSC.VersionCheck()", 2500);
+      $(".sethlen").click(function () {
+        setCookie("hl", "en");
       });
 
-      // DELAYED ReadArticles
-      w.GSC.init.push(function () {
-        w.GSC.names.push("read articles");
+      $("#update-message").click(function () {
+        window.location.reload(true);
+      });
 
-        if (typeof w.GSC.ReadArticles !== "function") w.GSC.ReadArticles = function (callback) {
-          if (w.GSC.offline) {  // we are offline
-            setTimeout("window.GSC.ReadArticles()", 5000);
-            return;
-          }
+      if (GSC.touch) {
+        if (typeof window.WebShareFactory === "function") {
+          console.log("WebShareFactory: adding mobile link")
+          $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
+          $(".webshareicon").append("{{ l.webshare_button }}");
+        }
+      }
+    });
 
-          $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
-              Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {  // API call
-            if (GSC.summernote_on) return;
-            if (data && data.data && data.data.html) {
-              if (data.data.crc) GSC.data.articlescrc = data.data.crc;
-              var obj = jQuery.parseJSON(data.data.html);
-              for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
+    // DELAYED version / data check
+    w.GSC.init.push(function () {
+      w.GSC.names.push("version check");
+
+      if (typeof w.GSC.VersionCheck !== "function") w.GSC.VersionCheck = function () {
+        if (!w.GSC.offline) {
+
+          $.post("/version/core", function (post) {
+            if (post.data.LASAGNA.core.version) {
+              if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
+                $("#update-message").show();
+                w.GSC.VersionCheck = function () {};
+                console.log("UPDATE: core version check failed!");
+                return;
+              }
             }
-            if (typeof callback === "function") callback();
           });
 
-          setTimeout("window.GSC.ReadArticles()", 30000);
+          $.post("/{{ lang }}/version/data", function (post) {
+            if (post.data.LASAGNA.data.version) {
+              if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
+                $("#update-message").show();
+                w.GSC.VersionCheck = function () {};
+                console.log("UPDATE: {{ lang }} data version check failed!");
+                return;
+              }
+            }
+          });
+
+          setTimeout("window.GSC.VersionCheck()", 60000);
+        }
+      }
+      setTimeout("window.GSC.VersionCheck()", 2500);
+    });
+
+    // DELAYED ReadArticles
+    w.GSC.init.push(function () {
+      w.GSC.names.push("read articles");
+
+      if (typeof w.GSC.ReadArticles !== "function") w.GSC.ReadArticles = function (callback) {
+        if (w.GSC.offline) {  // we are offline
+          setTimeout("window.GSC.ReadArticles()", 5000);
+          return;
         }
 
-        GSC.ReadArticles();
-      });
+        var profiles = [];
+        var params = new window.URLSearchParams(window.location.search);
+        var profile = params.get("profile");
+        for (var i in GSC.data.multisite_profiles) profiles.push(i);
+        if (!profiles.includes(profile)) {
+          if (!profiles.includes(profile)) {
+            profile = "default";
+          }
+        }
+        GSC.profile = profile;
+        console.log("Reading articles", {profile});
 
-    }
-  })(window, document);
+        $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
+            Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {  // API call
+          if (GSC.summernote_on) return;
+          if (data && data.data && data.data.html) {
+            if (data.data.crc) GSC.data.articlescrc = data.data.crc;
+            var obj = jQuery.parseJSON(data.data.html);
+            for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
+          }
+          if (typeof callback === "function") callback();
+        });
+        setTimeout("window.GSC.ReadArticles()", 30000);
+      }
+
+      setTimeout("window.GSC.ReadArticles()", 1);
+    });
+
+  }
+})(window, document);
 </script>
