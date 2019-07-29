@@ -19,6 +19,10 @@
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
 #emojis{cursor:crosshair}
+/* Summernote plugins */
+.panel-heading.note-toolbar .note-font .dropdown-menu,.panel-heading.note-toolbar .note-style .dropdown-menu{min-width:245px;padding:5px}
+.panel-heading.note-toolbar .note-font .dropdown-menu>div:first-child,.panel-heading.note-toolbar .note-style .dropdown-menu>div:first-child{margin-right:5px}
+.note-add-text-tags-btn{font-family:"Times New Roman",serif;min-width:30px}
 </style>
 
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
@@ -443,8 +447,19 @@
           dialogsInBody: false,
           disableDragAndDrop: true,
           height: 200,
+          callbacks: {
+            onChange: function(contents, $editable) {
+              $("div.note-btn-group.note-custom > button > i").css("color", "red");
+            }
+          },
+          styleTags: [
+            'p', 'blockquote', 'pre', 'h2', 'h3', 'h4', 'h5', 'h6'
+          ],
+          fontSizes: [
+            '8', '9', '10', '11', '12', '14', '16', '18', '24', '36', '48' , '64', '82', '100', '150'
+          ],
           toolbar: [
-            ["style", ["style"]],
+            ["style", ["style", "add-text-tags", "addclass"]],
             ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
             ["color", ["forecolor", "backcolor", "color"]],
             ["paragraph", ["ul", "ol", "paragraph", "height"]],
@@ -459,6 +474,15 @@
           }
         });
       }
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("Summernote plugins");
+
+        (function(d){"function"===typeof define&&define.amd?define(["jquery"],d):"object"===typeof module&&module.exports?module.exports=d(require("jquery")):d(window.jQuery)})(function(d){d.extend(d.summernote.plugins,{"add-text-tags":function(g){var c=this,f=d.summernote.ui,h=g.options;c.generateBtn=function(a,e){var b=a.slice(0,1).toUpperCase();return f.button({contents:"<"+a+">"+b+"</"+a+">",tooltip:e+" <"+a+">",className:"note-add-text-tags-btn",click:function(b){c.wrapInTag(a)}})};var k=c.generateBtn("del","Deleted text"),l=c.generateBtn("ins","Inserted text"),m=c.generateBtn("small","Fine print"),n=c.generateBtn("mark","Highlighted text"),p=c.generateBtn("var","Variable"),q=c.generateBtn("kbd","User input"),r=c.generateBtn("code","Inline code"),t=c.generateBtn("samp","Sample output");g.memo("button.add-text-tags",function(){return f.buttonGroup([f.button({className:"dropdown-toggle",contents:"<b>+</b> "+f.icon(h.icons.caret,"span"),tooltip:"Additional text styles",data:{toggle:"dropdown"}}),f.dropdown([f.buttonGroup({className:"note-add-text-tags-code",children:[r,t,q,p]}),f.buttonGroup({className:"note-add-text-tags-other",children:[n,m,l,k]})])]).render()});c.areDifferentBlockElements=function(a,c){var b=getComputedStyle(a,null).display,e=getComputedStyle(c,null).display;return"inline"!==b&&"inline"!==e?(console.log("Can't insert across two block elements."),!0):!1};c.isSelectionParsable=function(a,e){if(a.isSameNode(e))return!0;if(c.areDifferentBlockElements(a,e))return!1;var b=a.parentElement,d=e.parentElement;if(a.isSameNode(d)||e.isSameNode(b)||b.isSameNode(d))return!0;console.log("Unable to parse across so many nodes. Sorry!");return!1};c.wrapInTag=function(a){if(window.getSelection){var e=window.getSelection(),b=0<e.rangeCount&&e.getRangeAt(0);if(b.startOffset!==b.endOffset){b=b.cloneRange();var d=b.startContainer.parentElement,f=b.endContainer.parentElement;if(d.isSameNode(f)||c.isSelectionParsable(d,f))a=document.createElement(a),a.appendChild(b.extractContents()),b.insertNode(a),b.selectNodeContents(a),e.removeAllRanges(),e.addRange(b)}}}}})});
+
+        (function(c){"function"===typeof define&&define.amd?define(["jquery"],c):"object"===typeof module&&module.exports?module.exports=c(require("jquery")):c(window.jQuery)})(function(c){c.extend(c.summernote.plugins,{addclass:function(b){"undefined"===typeof b.options.addclass&&(b.options.addclass={});"undefined"===typeof b.options.addclass.classTags&&(b.options.addclass.classTags="btn;hoverable;flow-text".split(";"));var d=c.summernote.ui;(function(a){var b=document.createElement("style");b.innerHTML=a;document.body.appendChild(b)})(".scrollable-menu {height: auto; max-height: 200px; max-width:300px; overflow-x: hidden;}");b.memo("button.addclass",function(){return d.buttonGroup([d.button({className:"dropdown-toggle",contents:'<i class="fa fa-css3"/> '+d.icon(b.options.icons.caret,"span"),tooltip:"toggle CSS class",data:{toggle:"dropdown"}}),d.dropdown({className:"dropdown-style scrollable-menu",items:b.options.addclass.classTags,template:function(a){"string"===typeof a&&(a={tag:"div",title:a,value:a});var b=a.tag;return"<"+b+" "+(a.style?' style="'+a.style+'" ':"")+(a.value?' class="'+a.value+'" ':"")+">"+a.title+"</"+b+">"},click:function(a,d,e){a.preventDefault();e=e||c(a.target).closest("[data-value]").data("value");a=c(b.invoke("restoreTarget"));0==a.length&&(a=c(document.getSelection().focusNode.parentElement,".note-editable"));"undefined"!==typeof b.options.addclass&&"undefined"!==typeof b.options.addclass.debug&&b.options.addclass.debug&&console.debug(b.invoke("restoreTarget"),a,"toggling class: "+e,window.getSelection());a.toggleClass(e)}})]).render()});this.events={"summernote.init":function(a,b){},"summernote.keyup":function(a,b){}};this.initialize=function(){};this.destroy=function(){}}})});
+
+      });
 
       // admin UI bindings
       w.GSC.init.push(function () {
