@@ -255,8 +255,8 @@
 
       // data
       GSC.data = {};
-      GSC.data.multisite_profiles = {{ multisite_profiles_json }};
       GSC.profile = "default";
+      GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
       // ShowLoader()
       if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
@@ -268,6 +268,7 @@
 
       // PingDot()
       if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
+        if (!dot) return;
         if (status) status = "green";
           else status = "red";
         $(dot).html("&#8226;").css({
@@ -363,7 +364,7 @@
 
       // PageSpeed Insights
       w.GSC.init.push(function () {
-        w.GSC.names.push("PSI click");
+        w.GSC.names.push("PageSpeed Insights");
 
         $("#a_ps_insights").click(function () {
           if (w.GSC.offline) {
@@ -376,7 +377,7 @@
         });
       });
 
-      // admin UI
+      // admin UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI bindings");
 
@@ -478,14 +479,14 @@
 
       });
 
-      // set CSV timer
+      // CSV timer
       w.GSC.init.push(function () {
         w.GSC.names.push("CSV timer");
         GSC.ShowLoader("#a_update_info");
         setInterval(function(){window.GSC.GetCsvInfo()}, 2500);
       });
 
-      // admin UI reset
+      // admin UI
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI");
         $("#admin_main div").addClass("a_reset");
@@ -547,13 +548,13 @@
             disableDragAndDrop: true,
             height: 200,
             toolbar: [
-              ["history", ["undo", "redo"]],
               ["style", ["style"]],
-              ["font", ["bold", "italic", "underline", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
+              ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
               ["color", ["forecolor", "backcolor", "color"]],
               ["paragraph", ["ul", "ol", "paragraph", "height"]],
               ["table", ["table"]],
               ["insert", ["link", "picture", "video"]],
+              ["history", ["undo", "redo"]],
               ["view", ["codeview", "fullscreen"]],
             ]
           });

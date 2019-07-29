@@ -5,7 +5,8 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
 (function (w, d, undefined) {
 
-  function checkNetwork(e) {
+  // check network status
+  function checkNetwork(event) {
     if (navigator.onLine) {
       d.getElementsByTagName("html")[0].setAttribute("offline", false);
       d.getElementById("offline-message").setAttribute("aria-hidden", true);
@@ -17,7 +18,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
   }
 
-    // "online" feature detection
+  // "online" feature detection
   if ("onLine" in navigator) {
     w.addEventListener("load", function () {
       w.addEventListener("online", checkNetwork);
@@ -57,8 +58,8 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
   if (w.GSC) {
 
     // data
-    GSC.profile = "default";
     GSC.data = {};
+    GSC.profile = "default";
     GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
     // "touch" feature detection
@@ -147,32 +148,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       }
     }
 
-    // DELAYED UI bindings
-    w.GSC.init.push(function () {
-      w.GSC.names.push("UI bindings");
-
-      $(".sethlcs").click(function () {
-        setCookie("hl", "cs");
-      });
-
-      $(".sethlen").click(function () {
-        setCookie("hl", "en");
-      });
-
-      $("#update-message").click(function () {
-        window.location.reload(true);
-      });
-
-      if (GSC.touch) {
-        if (typeof window.WebShareFactory === "function") {
-          console.log("WebShareFactory: adding mobile link")
-          $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
-          $(".webshareicon").append("{{ l.webshare_button }}");
-        }
-      }
-    });
-
-    // DELAYED version / data check
+    // GSC.VersionCheck()
     w.GSC.init.push(function () {
       w.GSC.names.push("version check");
 
@@ -207,7 +183,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       setTimeout("window.GSC.VersionCheck()", 2500);
     });
 
-    // DELAYED ReadArticles
+    // GSC.ReadArticles()
     w.GSC.init.push(function () {
       w.GSC.names.push("read articles");
 
@@ -236,6 +212,9 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             if (data.data.crc) GSC.data.articlescrc = data.data.crc;
             var obj = jQuery.parseJSON(data.data.html);
             for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
+            $(".summernote>ul").each(function (i, obj) {
+              $(obj).addClass("browser-default");
+            });
           }
           if (typeof callback === "function") callback();
         });
@@ -243,6 +222,34 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       }
 
       setTimeout("window.GSC.ReadArticles()", 1);
+    });
+
+    // DELAYED UI bindings
+    w.GSC.init.push(function () {
+      w.GSC.names.push("UI bindings");
+
+      $(".sethlcs").click(function () {
+        setCookie("hl", "cs");
+      });
+
+      $(".sethlen").click(function () {
+        setCookie("hl", "en");
+      });
+
+      $("#update-message").click(function () {
+        window.location.reload(true);
+      });
+
+      $(".summernote>ul").each(function (i, obj) {
+        $(obj).addClass("browser-default");
+      });
+
+      if (GSC.touch) {
+        if (typeof window.WebShareFactory === "function") {
+          $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
+          $(".webshareicon").append("{{ l.webshare_button }}");
+        }
+      }
     });
 
   }
