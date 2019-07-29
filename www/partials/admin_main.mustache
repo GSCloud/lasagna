@@ -432,6 +432,7 @@
         var SaveAllButton = function (context) {
           var ui = $.summernote.ui;
           var button = ui.button({
+            className: "",
             contents: '<i class="fas fa-save"></i> {{ l.a_save_all }}',
             click: function () {
               $("#a_summernote").click();
