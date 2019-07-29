@@ -1304,12 +1304,12 @@ abstract class APresenter implements IPresenter
                 break;
             default:
                 $code = 500;
-                $msg = $locale["server_error_info_500"];
+                $msg = $locale["server_error_info_500"] ?? "";
                 break;
         }
         if (is_null($d)) {
             $code = 500;
-            $msg = $locale["server_error_info_500"];
+            $msg = $locale["server_error_info_500"] ?? "";
         }
         if (is_string($d)) {
             $d = [$d];
@@ -1318,13 +1318,13 @@ abstract class APresenter implements IPresenter
             $code = $d;
             switch ($d) {
                 case 304:
-                    $msg = $locale["server_error_info_304"];
+                    $msg = $locale["server_error_info_304"] ?? "";
                     break;
                 case 400:
-                    $msg = $locale["server_error_info_400"];
+                    $msg = $locale["server_error_info_400"] ?? "";
                     break;
                 case 404:
-                    $msg = $locale["server_error_info_404"];
+                    $msg = $locale["server_error_info_404"] ?? "";
                     break;
                 default:
                     $msg = "Unknown error.";
