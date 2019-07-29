@@ -137,6 +137,7 @@ $base58 = new \Tuupola\Base58;
 $data["cfg"] = $cfg; // alt copy :)
 $data["VERSION"] = $version = trim(@file_get_contents(ROOT . "/VERSION") ?? "", "\r\n");
 $data["VERSION_DATE"] = date(DATE_ATOM, @filemtime(ROOT . "/VERSION") ?? time());
+$data["REVISIONS"] = trim(@file_get_contents(ROOT . "/REVISIONS") ?? "", "\r\n");
 $data["DATA_VERSION"] = null;
 $data["cdn"] = "/cdn-assets/${version}";
 $data["CDN"] = $data["cdn"];

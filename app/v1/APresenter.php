@@ -1083,6 +1083,7 @@ abstract class APresenter implements IPresenter
                     }
                     $locale = array_replace($locale, array_combine($keys, $values));
                 }
+                $locale['$revisions'] = $this->getData("REVISIONS");    // git revisions
                 // find all $ in combined locales array
                 $dolar = array('$' => '$');
                 foreach ((array) $locale as $a => $b) {

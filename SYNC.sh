@@ -22,9 +22,11 @@ if [ -z "${USER}" ]; then fail "Error in _site_cfg.sh !"; fi
 mkdir -p app cache ci data www/cdn-assets www/download www/upload
 
 VERSION=`git rev-parse HEAD`
-echo ${VERSION} > VERSION
-ln -s ../. www/cdn-assets/${VERSION} >/dev/null 2>&1
-info "Version: ${VERSION}"
+echo $VERSION > VERSION
+REVISIONS=`git rev-list --all --count`
+echo $REVISIONS > REVISIONS
+ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
+info "Version: $VERSION Revisions: $REVISIONS"
 
 rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" --exclude "www/download" \
   *.json \
@@ -32,6 +34,7 @@ rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" --ex
   *.php \
   LICENSE \
   LOCAL_TEST.sh \
+  REVISIONS \
   VERSION \
   _includes.sh \
   _site_cfg.sh \

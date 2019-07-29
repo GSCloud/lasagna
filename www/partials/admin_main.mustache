@@ -428,8 +428,7 @@
         var SaveAllButton = function (context) {
           var ui = $.summernote.ui;
           var button = ui.button({
-            contents: "{{ l.a_save_all }}",
-            tooltip: "{{ l.a_save_all }}",
+            contents: '<i class="fas fa-save"></i> {{ l.a_save_all }}',
             click: function () {
               $("#a_summernote").click();
             }
