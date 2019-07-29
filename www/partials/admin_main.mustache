@@ -370,7 +370,7 @@
         $("#admin_main h5").addClass("a_reset a_h5");
         $("#admin_main p").addClass("a_reset");
         if (w.GSC.touch) {
-          $(".tooltipped").tooltip("destroy");
+          if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
         }
 
         $(".summernote").dblclick(function () {
@@ -395,7 +395,9 @@
           var data = {};
           $(".summernote").each(function (i, obj) { // collect HTML data
             id = $(obj).attr("id")
-            if (id) data[id] = $(obj).summernote("code");
+            if (id) {
+              data[id] = $(obj).summernote("code");
+            }
             $(obj).summernote("destroy");
           });
           console.log("UpdateArticles write", {data});
@@ -423,6 +425,18 @@
           });
         });
 
+        var SaveAllButton = function (context) {
+          var ui = $.summernote.ui;
+          var button = ui.button({
+            contents: "{{ l.a_save_all }}",
+            tooltip: "{{ l.a_save_all }}",
+            click: function () {
+              $("#a_summernote").click();
+            }
+          });
+          return button.render();
+        }
+
         $(".summernote").summernote({
           lang: {{#langcs}}"cs-CZ"{{/langcs}}{{#langen}}"en-US"{{/langen}},
           codeviewFilter: true,
@@ -439,7 +453,11 @@
             ["insert", ["link", "picture", "video"]],
             ["history", ["undo", "redo"]],
             ["view", ["codeview", "fullscreen"]],
-          ]
+            ["custom", ["saveall"]],
+          ],
+          buttons: {
+            saveall: SaveAllButton
+          }
         });
       }
 
@@ -558,7 +576,7 @@
       // CSV timer
       w.GSC.init.push(function () {
         w.GSC.names.push("CSV timer");
-        GSC.ShowLoader("#a_update_info");
+        if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
         setInterval(function(){window.GSC.GetCsvInfo()}, 2500);
       });
 
