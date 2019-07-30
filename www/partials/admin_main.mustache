@@ -386,6 +386,7 @@
       // GSC.DeploySummernote()
       if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
         GSC.summernote_on = true;
+        $("#a_summernote").attr("disabled", "disabled");
         $("#a_summernote").text("{{ l.a_save_all }}");
         $("#a_summernote").unbind("click");
 
@@ -395,6 +396,7 @@
             GSC.PingDot("#summer_ping", false);
             return;
           }
+          $("#a_summernote").attr("disabled", "disabled");
           var id;
           var data = {};
           $(".summernote").each(function (i, obj) { // collect HTML data
@@ -413,6 +415,7 @@
             console.log("UpdateArticles result",{data});
           }).done(function() {
             GSC.PingDot("#summer_ping");
+            $("#a_summernote").removeAttr("disabled");
             GSC.AdminUI();
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
@@ -424,6 +427,7 @@
             });
             GSC.summernote_on = false;
           }).fail(function() {
+            $("#a_summernote").removeAttr("disabled");
             GSC.PingDot("#summer_ping", false);
             alert("ERROR!");
           });
@@ -539,6 +543,7 @@
             saveall: SaveAllButton
           }
         });
+        $("#a_summernote").removeAttr("disabled");
       }
 
       w.GSC.init.push(function () {
@@ -568,7 +573,7 @@
         }
         GSC.profile = profile;
         setCookie("profile", profile);
-        $("#SiteSelect option[value=" + profile + "]").attr("selected", "selected");
+        $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
         $("#SiteSelect").formSelect();
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
 

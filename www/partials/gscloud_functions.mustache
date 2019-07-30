@@ -198,11 +198,14 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         var profile = params.get("profile");
         for (var i in GSC.data.multisite_profiles) profiles.push(i);
         if (!profiles.includes(profile)) {
+            profile = getCookie("profile");
+            console.log("cookie override!");
           if (!profiles.includes(profile)) {
             profile = "default";
           }
         }
         GSC.profile = profile;
+        setCookie("profile", profile);
         console.log("Reading articles", {profile});
 
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
