@@ -175,9 +175,10 @@ if (CLI) {
                 $app = CliPresenter::getInstance()->setData($data)->process();
                 if ($argc != 3) {
                     echo 'Use $app singleton as entry point.' . "\n\n";
-                    echo 'Example: app \'print_r($app->getLocale("en"))\'' . "\n";
-                    echo 'Example: app \'print_r($app->getData())\'' . "\n";
                     echo 'Example: app \'$app->showConst()\'' . "\n";
+                    echo 'Example: app \'echo $app->getLocale()["\$lasagna"]\'' . "\n";
+                    echo 'Example: app \'print_r($app->getData())\'' . "\n";
+                    echo 'Example: app \'print_r($app->getLocale())\'' . "\n";
                     exit;
                 }
                 echo eval(trim($argv[2]) . ";");
@@ -267,6 +268,7 @@ header(implode(" ", [
     "'unsafe-inline'",
     "*.gstatic.com;",
     "script-src",
+    "cdnjs.cloudflare.com",
     "*.facebook.net",
     "*.google-analytics.com",
     "*.googleapis.com",
