@@ -84,11 +84,20 @@ $multisite_names = [];
 $multisite_profiles = array_replace([
     "default" => [strtolower(trim(str_replace("https://", "", $cfg["canonical_url"]), "/") ?? DOMAIN)],
 ], $cfg["multisite_profiles"] ?? []);
-foreach ($multisite_profiles as $k => $v) $multisite_names[] = strtolower($k);
+foreach ($multisite_profiles as $k => $v) {
+    $multisite_names[] = strtolower($k);
+}
+
 $profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
-if (!in_array($profile_index, $multisite_names)) $profile_index = "default";
+if (!in_array($profile_index, $multisite_names)) {
+    $profile_index = "default";
+}
+
 $auth_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"]));
-if (!in_array($auth_domain, $multisite_profiles["default"])) $multisite_profiles["default"][] = $auth_domain;
+if (!in_array($auth_domain, $multisite_profiles["default"])) {
+    $multisite_profiles["default"][] = $auth_domain;
+}
+
 // data population
 $data["cache_profiles"] = $cache_profiles;
 $data["multisite_profiles"] = $multisite_profiles;
@@ -133,7 +142,7 @@ foreach ($router as $k => $v) {
 // router mappings
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
-    if (!isset($v["path"])) {   // skip presenters without path
+    if (!isset($v["path"])) { // skip presenters without path
         continue;
     }
 
@@ -143,7 +152,7 @@ foreach ($presenter as $k => $v) {
         }
     }
     $alto->map($v["method"], $v["path"], $k, "route_${k}");
-    if (substr($v["path"], -1) != "/") {    // map duplicates ending with slash
+    if (substr($v["path"], -1) != "/") { // map duplicates ending with slash
         $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_slash");
     }
 
@@ -166,11 +175,12 @@ if (CLI) {
                 $app = CliPresenter::getInstance()->setData($data)->process();
                 if ($argc != 3) {
                     echo 'Use $app singleton as entry point.' . "\n\n";
-                    echo 'Example: app \'print_r($app->getData());\'' . "\n";
-                    echo 'Example: app \'$app->showConst();\'' . "\n";
+                    echo 'Example: app \'print_r($app->getLocale("en"))\'' . "\n";
+                    echo 'Example: app \'print_r($app->getData())\'' . "\n";
+                    echo 'Example: app \'$app->showConst()\'' . "\n";
                     exit;
                 }
-                echo eval(trim($argv[2], ";").";");
+                echo eval(trim($argv[2]) . ";");
                 echo "\n";
                 exit;
                 break;
@@ -245,36 +255,36 @@ if (!file_exists($presenter_file)) {
 // CSP headers
 header(implode(" ", [
     "Content-Security-Policy: ",
-        "default-src",
-        "'unsafe-inline'",
-        "'self'",
-        "https://*;",
+    "default-src",
+    "'unsafe-inline'",
+    "'self'",
+    "https://*;",
     "connect-src",
-        "'self'",
-        "https://*;",
+    "'self'",
+    "https://*;",
     "font-src",
-        "'self'",
-        "'unsafe-inline'",
-        "*.gstatic.com;",
+    "'self'",
+    "'unsafe-inline'",
+    "*.gstatic.com;",
     "script-src",
-        "*.facebook.net",
-        "*.google-analytics.com",
-        "*.googleapis.com",
-        "*.googletagmanager.com",
-        "*.ytimg.com",
-        "cdn.onesignal.com",
-        "onesignal.com",
-        "platform.twitter.com",
-        "'self'",
-        "'unsafe-inline'",
-        "'unsafe-eval';",
+    "*.facebook.net",
+    "*.google-analytics.com",
+    "*.googleapis.com",
+    "*.googletagmanager.com",
+    "*.ytimg.com",
+    "cdn.onesignal.com",
+    "onesignal.com",
+    "platform.twitter.com",
+    "'self'",
+    "'unsafe-inline'",
+    "'unsafe-eval';",
     "img-src",
-        "*",
-        "'self'",
-        "'unsafe-inline'",
-        "data:;",
+    "*",
+    "'self'",
+    "'unsafe-inline'",
+    "data:;",
     "form-action",
-        "'self';",
+    "'self';",
 ]));
 
 // APP

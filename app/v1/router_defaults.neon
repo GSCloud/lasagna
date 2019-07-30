@@ -60,3 +60,15 @@ ReadArticles:
   method: GET
   path: '/ReadArticles/[a:profile]/[a:hash]'
   presenter: core
+
+FixLangDataCs:
+  language: cs
+  method: POST
+  path: '/cs/FixLangData'
+  presenter: core
+
+FixLangDataEn:
+  language: en
+  method: POST
+  path: '/en/FixLangData'
+  presenter: core

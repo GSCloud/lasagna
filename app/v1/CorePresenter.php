@@ -48,7 +48,20 @@ class CorePresenter extends \GSC\APresenter
             case "version_core":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
-                return $this->writeJsonData($d, ["name" => "LASAGNA core version", "fn" => "core"]);
+                $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
+                return $this->writeJsonData($d, ["name" => "LASAGNA Core", "fn" => "core version"]);
+                break;
+
+            // fix lang CS
+            case "FixLangDataCs":
+                $d = [];
+                return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "FixLangDataCs"]);
+                break;
+
+            // fix lang EN
+            case "FixLangDataEn":
+                $d = [];
+                return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "FixLangDataEn"]);
                 break;
 
             // core version
@@ -92,11 +105,12 @@ class CorePresenter extends \GSC\APresenter
 
         switch ($view) {
             // data version
-            case "en_version_data":
             case "cs_version_data":
+            case "en_version_data":
                 $d = [];
                 $d["LASAGNA"]["data"]["version"] = $hash;
-                return $this->writeJsonData($d, ["name" => "LASAGNA data version " . strtoupper($language), "fn" => "core"]);
+                $d["LASAGNA"]["data"]["language"] = $language;
+                return $this->writeJsonData($d, ["name" => "LASAGNA Core", "fn" => "$language data version"]);
                 break;
         }
         return $this;
