@@ -675,8 +675,11 @@ abstract class APresenter implements IPresenter
                 ]);
             }
         }
+        if ($this->identity === []) {
+            $this->setIdentity([]);
+        }
 //        bdump($this->identity, "IDENTITY");
-        return $this->identity;
+return $this->identity;
     }
 
     /**
@@ -686,10 +689,15 @@ abstract class APresenter implements IPresenter
      */
     public function getCurrentUser()
     {
-        $i = $this->getIdentity();
-        $i["uid"] = $this->getUID();
-        $i["uidstring"] = $this->getUIDstring();
-        return ($i["id"] && $i["email"]) ? $i : null;
+        $u = array_replace_recursive([
+            "avatar" => "",
+            "email" => "",
+            "id" => 0,
+            "name" => "",
+        ], $this->getIdentity());
+        $u["uid"] = $this->getUID();
+        $u["uidstring"] = $this->getUIDstring();
+        return $u;
     }
 
     /**
