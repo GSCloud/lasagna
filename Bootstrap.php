@@ -14,6 +14,7 @@ use Tracy\Debugger;
 
 // START
 list($usec, $sec) = explode(" ", microtime());
+/** @const Global timer start. */
 define("LASAGNA_START", ((float) $usec + (float) $sec));
 ob_start();
 error_reporting(E_ALL);
@@ -22,18 +23,32 @@ error_reporting(E_ALL);
 @ini_set("display_errors", true);
 
 // constants (in SPECIFIC ORDER !!!)
+/** @const Bootstrap root folder. */
 defined("ROOT") || define("ROOT", __DIR__);
+/** @const Cache and logs folder, defaults to "cache". */
 defined("CACHE") || define("CACHE", ROOT . "/cache");
+/** @const Application data folder, defaults to "data". */
 defined("DATA") || define("DATA", ROOT . "/data");
+/** @const Website assets folder, defaults to "www". */
 defined("WWW") || define("WWW", ROOT . "/www");
+/** @const Configuration file, full path. */
 defined("CONFIG") || define("CONFIG", ROOT . "/config.neon");
+/** @const Private configuration file, full path. */
 defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.neon");
+/** @const Website templates folder, defaults to "www/templates". */
 defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
+/** @const Website template partials folder, defaults to "www/partials". */
 defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
+/** @const Website downloads folder, defaults to "www/download". */
 defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
+/** @const Website uploads folder, defaults to "www/upload". */
 defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
+/** @const Temporary files folder, defaults to "/tmp". */
 defined("TEMP") || define("TEMP", "/tmp");
-defined("CLI") || define("CLI", (PHP_SAPI == "cli"));
+/** @const True if running from command line interface. */
+define("CLI", (PHP_SAPI == "cli"));
+/** @const True if running server locally. */
+define("LOCALHOST", (($_SERVER["SERVER_NAME"] ?? "") == "localhost"));
 
 // Composer
 require_once ROOT . "/vendor/autoload.php";
@@ -85,8 +100,9 @@ if (file_exists(CONFIG_PRIVATE)) {
 }
 date_default_timezone_set($cfg["date_default_timezone"] ?? "Europe/Prague");
 
-// constants based on configuration
+/** @const Version string. */
 defined("VERSION") || define("VERSION", (string) $cfg["version"] ?? "v1");
+/** @const Application folder. */
 defined("APP") || define("APP", ROOT . "/app/" . VERSION);
 
 function check_var(&$arr, $key, $default = null)
@@ -110,12 +126,15 @@ check_var($cfg, "minify", false);
 
 // debugger
 if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
+    /** @const True if debugging. */
     defined("DEBUG") || define("DEBUG", true);
 }
 if (CLI === true) {
+    /** @const Falsef for CLI. */
     defined("DEBUG") || define("DEBUG", false);
 }
 if ( isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") == 0) {
+    /** @const False for curl. */
     defined("DEBUG") || define("DEBUG", false);
 }
 defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
@@ -126,40 +145,30 @@ if (DEBUG == true) {
     Debugger::$maxLength = $cfg["DEBUG_LENGTH"] ?? 2500;
     Debugger::$strictMode = true;
     Debugger::$showBar = true;
-    Debugger::timer();
+    Debugger::timer("RUNNING");
 } else {
     Debugger::$showBar = false;
 }
 
 // data population
-$data = $cfg;
 $base58 = new \Tuupola\Base58;
-$data["cfg"] = $cfg; // alt copy :)
+$data = (array) $cfg;
+$data["cfg"] = $cfg;
 $data["VERSION"] = $version = trim(@file_get_contents(ROOT . "/VERSION") ?? "", "\r\n");
-$data["VERSION_DATE"] = date(DATE_ATOM, @filemtime(ROOT . "/VERSION") ?? time());
-$data["REVISIONS"] = trim(@file_get_contents(ROOT . "/REVISIONS") ?? "", "\r\n");
+$data["VERSION_DATE"] = date("j. n. Y", @filemtime(ROOT . "/VERSION") ?? time());
+$data["REVISIONS"] = (int) trim(@file_get_contents(ROOT . "/REVISIONS") ?? "0", "\r\n");
 $data["DATA_VERSION"] = null;
-$data["cdn"] = "/cdn-assets/${version}";
-$data["CDN"] = $data["cdn"];
-$data["host"] = $host = $_SERVER["HTTP_HOST"] ?? "";
-$data["HOST"] = $host;
-$data["request_uri"] = $uri = $_SERVER["REQUEST_URI"] ?? "";
-$data["request_path"] = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
-$data["request_path_hash"] = ($data["request_path"] == "") ? "" : hash("sha256", $data["request_path"]);
-$data["base"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
-$data["BASE"] = $data["base"];
+$data["cdn"] = $data["CDN"] = "/cdn-assets/$version";
+$data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
+$data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";
+$data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
+$data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
+$data["base"] = $data["BASE"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
 $data["LOCALHOST"] = (($_SERVER["SERVER_NAME"] ?? "") == "localhost");
 $data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 8), 16, 10));
-$data["nonce"] = $nonce = substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8);
-$data["NONCE"] = $data["nonce"];
-$data["utm"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
-$data["UTM"] = $data["utm"];
+$data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8);
+$data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
 $data["ALPHA"] = (in_array($host, $cfg["alpha_hosts"] ?? []));
 $data["BETA"] = (in_array($host, $cfg["beta_hosts"] ?? []));
 
-// APP.php
-if (file_exists(APP) && is_file(APP)) {
-    require_once APP;
-} elseif (file_exists(APP . "/App.php") && is_file(APP . "/App.php")) {
-    require_once APP . "/App.php";
-}
+require_once APP . "/App.php";

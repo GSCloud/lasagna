@@ -6,16 +6,14 @@ use Symfony\Component\Lock\Store\FlockStore;
 
 class AdminPresenter extends \GSC\APresenter
 {
+    /** @var string Administration token key filename. */
+    const ADMIN_KEY = "admin.key";
 
     public function process()
     {
         $cfg = $this->getCfg();
         $data = $this->getData();
         $match = $this->getMatch();
-        $presenter = $this->getPresenter();
-        $view = $this->getView();
-
-        $admin_key = "/admin.key";
 
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $this->getUserGroup();
@@ -29,15 +27,14 @@ class AdminPresenter extends \GSC\APresenter
                 $file = new \SplFileObject($f, "r");
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 return -1;
             }
         }
 
         switch ($match["params"]["p"] ?? null) {
 
-            // CSV info
+            // GetCsvInfo
             case "GetCsvInfo":
                 $this->checkAdmins("admin");
                 $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
@@ -51,12 +48,15 @@ class AdminPresenter extends \GSC\APresenter
                         "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
                         "timestamp" => @filemtime(DATA . "/${k}.csv"),
                     ];
-                    if ($arr[$k]["lines"] === -1) unset($arr[$k]);
+                    if ($arr[$k]["lines"] === -1) {
+                        unset($arr[$k]);
+                    }
+
                 }
                 return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetCsvInfo"]);
                 break;
 
-            // Cloudflare Analytics - UNFINISHED -> TODO!!!
+            // GetCfAnalytics - UNFINISHED -> TODO!!!
             case "GetCfAnalytics":
                 $this->checkAdmins("admin");
                 $cf = $this->getCfg("cf");
@@ -71,7 +71,7 @@ class AdminPresenter extends \GSC\APresenter
                     $file = "Cloudflare_Analytics_$zoneid";
                     $results = Cache::read($file, "default");
                     if ($results === false) {
-                            $results = @file_get_contents($uri);
+                        $results = @file_get_contents($uri);
                         if ($results !== false) {
                             Cache::write($file, $results, "default");
                         }
@@ -82,11 +82,11 @@ class AdminPresenter extends \GSC\APresenter
                 }
                 break;
 
-            // PageSpeed Insights
+            // GetPSInsights
             case "GetPSInsights":
                 $this->checkAdmins("admin");
                 $base = urlencode($cfg["canonical_url"]);
-                $key = $this->getCfg("google")["pagespeedinsights_key"] ?? "NA";
+                $key = $this->getCfg("google.pagespeedinsights_key") ?? "NA";
                 $uri = "https://www.googleapis.com/pagespeedonline/v4/runPagespeed?url=${base}&key=${key}";
                 $hash = hash("sha256", $base);
                 $file = "PageSpeed_Insights_$hash";
@@ -102,20 +102,21 @@ class AdminPresenter extends \GSC\APresenter
                 return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetPSInsights"]);
                 break;
 
-            // update token
+            // GetUpdateToken
             case "GetUpdateToken":
                 $this->checkAdmins("admin");
-                $file = DATA . $admin_key;
+                $file = DATA . "/" . self::ADMIN_KEY;
                 $key = trim(@file_get_contents($file));
                 try {
                     if (!$key) {
-                        $key = hash("sha256", random_bytes(256) . time());
-                        file_put_contents($file, $key);
+                        file_put_contents($file, hash("sha256", random_bytes(256) . time()));
                         @chmod($file, 0660);
-                        $this->addMessage("ADMIN: new keyfile created");
+                        $this->addMessage("ADMIN: keyfile created");
                     }
-                } catch(Exception $e) {
-                    $this->unauthorized_access();
+                } catch (Exception $e) {
+                    $this->addError("500: Internal Server Error");
+                    $this->setLocation("/err/500");
+                    exit;
                 }
                 $user = $this->getCurrentUser();
                 $arr = "";
@@ -128,14 +129,14 @@ class AdminPresenter extends \GSC\APresenter
                 return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetUpdateToken"]);
                 break;
 
-            // FLUSH
+            // FlushCache
             case "FlushCache":
                 $this->checkAdmins("admin");
                 $this->flush_cache();
                 return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "FlushCache"]);
                 break;
 
-            // UPDATE
+            // CoreUpdate
             case "CoreUpdate":
                 $this->checkAdmins("admin");
                 $this->setForceCsvCheck();
@@ -144,24 +145,25 @@ class AdminPresenter extends \GSC\APresenter
                 return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CoreUpdate"]);
                 break;
 
-            // UPDATE ARTICLES
+            // UpdateArticles
             case "UpdateArticles":
                 $this->checkAdmins("admin");
                 $x = 0;
                 if (isset($_POST["data"])) {
-                    $data = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]);
+//                    $data = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove whitespace
+                    $data = (string) trim((string) $_POST["data"]);
                     $x++;
                 }
                 if (isset($_POST["profile"])) {
                     $profile = trim((string) $_POST["profile"]);
-                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));
+                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));  // only alphanumeric
                     if (strlen($profile)) {
                         $x++;
                     }
                 }
                 if (isset($_POST["hash"])) {
                     $hash = trim((string) $_POST["hash"]);
-                    if (strlen($hash)) {
+                    if (strlen($hash) == 64) {  // SHA256 hexadecimal
                         $x++;
                     }
                 }
@@ -195,7 +197,7 @@ class AdminPresenter extends \GSC\APresenter
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
                 if ($user && $token) {
-                    $file = DATA . $admin_key;
+                    $file = DATA . "/" . self::ADMIN_KEY;
                     $key = trim(@file_get_contents($file));
                     if (!$key) {
                         $this->unauthorized_access();
@@ -216,7 +218,7 @@ class AdminPresenter extends \GSC\APresenter
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
                 if ($user && $token) {
-                    $file = DATA . $admin_key;
+                    $file = DATA . "/" . self::ADMIN_KEY;
                     $key = trim(@file_get_contents($file));
                     if (!$key) {
                         $this->unauthorized_access();
@@ -238,7 +240,7 @@ class AdminPresenter extends \GSC\APresenter
                 $this->unauthorized_access();
                 break;
 
-        } // switch END
+        }
         return $this;
     }
 
@@ -253,7 +255,7 @@ class AdminPresenter extends \GSC\APresenter
                 Cache::clear(false);
                 @array_map("unlink", glob(CACHE . "/*.php"));
                 @array_map("unlink", glob(CACHE . "/*.tmp"));
-                @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX. "*"));
+                @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
                 clearstatcache();
                 $this->CloudflarePurgeCache($this->getCfg("cf"));
                 $this->checkLocales();

@@ -23,19 +23,34 @@ defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
 // constants
+/** @const Cache prefix. */
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
-defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "DOMAIN")));
-defined("PROJECT") || define("PROJECT", $cfg["project"] ?? "LASAGNA");
-defined("SERVER") || define("SERVER", strtoupper(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "SERVER")));
+/** @const Domain name, extracted from SERVER array. */
+defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
+/** @const Project name, default LASAGNA. */
+defined("PROJECT") || define("PROJECT", (string) $cfg["project"] ?? "LASAGNA");
+/** @const Server name, extracted from SERVER array. */
+defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
+/** @const Version string. */
 defined("VERSION") || define("VERSION", "v1");
+/** @const Monolog filename, full path. */
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
 // Google Cloud Platform
+/** @const Google Cloud Platform project ID. */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
+/** @const Google Cloud Platform JSON auth keys. */
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
 if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
+
+// remove old unused cookies
+array_map(function ($name) {
+    setcookie($name, "", 0, "/", DOMAIN, false, true);
+    setcookie($name, "", 0, "/", DOMAIN, true, true);
+    unset($_COOKIE[$name]);
+}, explode(";", "admin;avatar;id;name;email"));
 
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
@@ -54,8 +69,8 @@ function logger($message, $severity = Logger::INFO)
             "projectId" => GCP_PROJECTID,
             "keyFilePath" => APP . GCP_KEYS,
         ]);
-        $stack = $logging->logger(APP ?? "app");
-        $stack->write($stack->entry($message), [
+        $stack = $logging->logger(PROJECT);
+        $stack->write(DOMAIN . " " . $stack->entry($message), [
             "severity" => $severity,
         ]);
     } finally {}
@@ -292,6 +307,7 @@ header(implode(" ", [
 // APP
 require_once APP . "/APresenter.php";
 require_once $presenter_file;
+\Tracy\Debugger::timer("PROCESSING");
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
@@ -305,9 +321,11 @@ echo $output;
 // END
 $events = null;
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
-$data["processing_time"] = $time = round((float) \Tracy\Debugger::timer() * 1000, 2);
+$data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
+$data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
 header("X-Country: $country");
-header("X-Processing: $time msec.");
+header("X-Runtime: $time1 msec.");
+header("X-Processing: $time2 msec.");
 $dot = new \Adbar\Dot((array) $data);
 if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVER["HTTPS"])) && ($_SERVER["HTTPS"] == "on")) {
     $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url") . $dot->get("request_path"));

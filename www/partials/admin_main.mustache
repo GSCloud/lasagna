@@ -25,8 +25,10 @@
 .note-add-text-tags-btn{font-family:"Times New Roman",serif;min-width:30px}
 </style>
 
-<div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
+<span style="position:fixed;left:0;top:0;z-index:999999" class="motyle btn white hide-on-med-and-down">🦋</span>
+<span style="position:fixed;right:0;top:0;z-index:999999" class="motyle btn white hide-on-large-only">🦋</span>
 
+<div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
   <!-- device rotation note -->
   <div id="a_rotate_device" class="row center" style="padding-top:3px">
     {{ l.a_rotate_device }}
@@ -249,9 +251,9 @@
 
 <script>
   (function (w, d, undefined) {
-
-    if (!getCookie("logout")) {
-      d.getElementById("admin_main").style.display = "block";
+    if (getCookie("logout")) {
+      d.getElementById("admin_main").style.display = "none";
+      setCookie("motyle", "true");
     }
     delCookie("logout");
 
@@ -299,11 +301,12 @@
               var lines = data.data[x]["lines"];
               if (sheet) {
                 link =
-                  '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" class="green mono white-text bold" href="' +
+                  '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:5px" ' +
+                  'class="green mono white-text bold" href="' +
                   'https://docs.google.com/spreadsheets/d/' +
                   sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
                   x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
-                  ' class="bold blue white-text mono" ' +
+                  ' style="border-radius:5px" class="bold blue white-text mono" ' +
                   'href="https://docs.google.com/spreadsheets/d/e/' +
                   csv + '/pub?output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                   lines + '&nbsp;</a>&nbsp;';
@@ -546,6 +549,7 @@
         $("#a_summernote").removeAttr("disabled");
       }
 
+      // Summernote plugins
       w.GSC.init.push(function () {
         w.GSC.names.push("Summernote plugins");
 
@@ -560,6 +564,14 @@
       // admin UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI bindings");
+
+        // motyle :)
+        if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(200);
+        $(".motyle").click(function() {
+          $("#admin_main").toggle(200, function () {
+            setCookie("motyle", $("#admin_main").is(":hidden"));
+          })
+        });
 
         var profiles = [];
         var params = new window.URLSearchParams(window.location.search);

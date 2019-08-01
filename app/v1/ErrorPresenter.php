@@ -2,7 +2,6 @@
 
 class ErrorPresenter extends GSC\APresenter
 {
-
     const CODESET = [
         400 => "Bad Request",
         401 => "Unauthorized",

@@ -3,6 +3,7 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
+use Exception;
 use Google\Cloud\Logging\LoggingClient;
 use League\Csv\Reader;
 use League\Csv\Statement;
@@ -66,40 +67,41 @@ interface IPresenter
 abstract class APresenter implements IPresenter
 {
 
-    // CONSTANTS
-
-    /** @var string */
+    /** @var string Fatal error message when checking for null. */
     const ERROR_NULL = " > FATAL ERROR: NULL UNEXPECTED";
 
-    /** @var integer */
+    /** @var integer Octal file mode for logs. */
     const LOG_FILEMODE = 0664;
 
-    /** @var integer */
+    /** @var integer Octal file mode for CSV. */
     const CSV_FILEMODE = 0664;
 
-    /** @var integer */
+    /** @var integer CSV minimal size. */
     const CSV_MIN_SIZE = 42;
 
-    /** @var integer */
+    /** @var integer Octal file mode for cookie secret. */
     const COOKIE_KEY_FILEMODE = 0600;
 
-    /** @var integer */
+    /** @var integer Cookie time to live. */
     const COOKIE_TTL = 86400 * 10;
 
-    /** @var string */
+    /** @var string Google CSV URL prefix. */
     const GS_CSV_PREFIX = "https://docs.google.com/spreadsheets/d/e/";
 
-    /** @var string */
+    /** @var string Google CSV URL postfix. */
     const GS_CSV_POSTFIX = "/pub?output=csv";
 
-    /** @var string */
+    /** @var string Google Sheet URL prefix. */
     const GS_SHEET_PREFIX = "https://docs.google.com/spreadsheets/d/";
 
-    /** @var string */
+    /** @var string Google Sheet URL postfix. */
     const GS_SHEET_POSTFIX = "/edit#gid=0";
 
-    /** @var integer */
+    /** @var integer Access limiter maximum hits. */
     const LIMITER_MAXIMUM = 30;
+
+    /** @var string Identity nonce filename. */
+    const IDENTITY_NONCE = "identity_nonce.key";
 
     // GOOGLE DRIVE TEMPLATES
 
@@ -157,21 +159,29 @@ abstract class APresenter implements IPresenter
 
     // PRIVATE VARS
 
-    private $data = []; // DATA
+    /** @var array $data Model data array. */
+    private $data = [];
 
-    private $messages = []; // INFO + MESSAGES
+    /** @var array $messages Array of internal messages. */
+    private $messages = [];
 
-    private $errors = []; // ERRORS
+    /** @var array $errors Array of internal errors. */
+    private $errors = [];
 
-    private $criticals = []; // CRITICAL ERRORS
+    /** @var array $criticals Array of internal critical errors. */
+    private $criticals = [];
 
-    private $identity = []; // user identity
+    /** @var array $identity Identity associative array. */
+    private $identity = [];
 
-    private $force_csv_check = false; // should re-check locales?
+    /** @var boolean $force_csv_check Should re-check locales? */
+    private $force_csv_check = false;
 
-    private $csv_postload = []; // $cfg key indexes to [$name=>$csvkey] pairs
+    /** @var array $csv_postload Array of keys to [$name => $csvkey] pairs */
+    private $csv_postload = [];
 
-    private static $instances = array(); // singleton instances
+    /** @var array $instances Array of singleton instances. */
+    private static $instances = array();
 
     /**
      * Presenter processor
@@ -188,8 +198,7 @@ abstract class APresenter implements IPresenter
     {
         $class = get_called_class();
         if (array_key_exists($class, self::$instances)) {
-            throw new \Exception("INSTANCE of " . $class . " ALREADY EXISTS");
-            exit;
+            throw new \Exception("INSTANCE OF `" . $class . "` ALREADY EXISTS!");
         }
     }
 
@@ -286,23 +295,23 @@ abstract class APresenter implements IPresenter
                     "projectId" => GCP_PROJECTID,
                     "keyFilePath" => APP . GCP_KEYS,
                 ]);
-                $google_logger = $logging->logger($this->getCfg("app") ?? "app");
+                $google_logger = $logging->logger(PROJECT);
             }
             if (count($criticals)) {
-                $monolog->critical(SERVER . " ERR: " . json_encode($criticals) . $add);
-                $google_logger->write($google_logger->entry(SERVER . " ERR: " . json_encode($criticals) . $add, [
+                $monolog->critical(DOMAIN . " CRIT: " . json_encode($criticals) . $add);
+                $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($criticals) . $add, [
                     "severity" => Logger::CRITICAL,
                 ]));
             }
             if (count($errors)) {
-                $monolog->error(SERVER . " ERR: " . json_encode($errors) . $add);
-                $google_logger->write($google_logger->entry(SERVER . " ERR: " . json_encode($errors) . $add, [
+                $monolog->error(DOMAIN . " ERR: " . json_encode($errors) . $add);
+                $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($errors) . $add, [
                     "severity" => Logger::ERROR,
                 ]));
             }
             if (count($messages)) {
-                $monolog->info(SERVER . " MSG: " . json_encode($messages) . $add);
-                $google_logger->write($google_logger->entry(SERVER . " MSG: " . json_encode($messages) . $add, [
+                $monolog->info(DOMAIN . " MSG: " . json_encode($messages) . $add);
+                $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . json_encode($messages) . $add, [
                     "severity" => Logger::INFO,
                 ]));
             }
@@ -314,7 +323,7 @@ abstract class APresenter implements IPresenter
      *
      * @static
      * @final
-     * @return object
+     * @return object Singleton instance.
      */
     final public static function getInstance()
     {
@@ -328,8 +337,8 @@ abstract class APresenter implements IPresenter
     /**
      * Render HTML content from given template
      *
-     * @param string $template
-     * @return string
+     * @param string $template Template name.
+     * @return string HTML output.
      */
     public function renderHTML($template = "index")
     {
@@ -398,8 +407,8 @@ abstract class APresenter implements IPresenter
     /**
      * Data getter
      *
-     * @param string $key
-     * @return mixed
+     * @param string $key Array index, may use dot notation.
+     * @return mixed Data.
      */
     public function getData($key = null)
     {
@@ -457,7 +466,7 @@ abstract class APresenter implements IPresenter
      * @param array $data
      * @param string $key
      * @param mixed $value
-     * @return object
+     * @return object Singleton instance.
      */
     public function setData($data = null, $key = null, $value = null)
     {
@@ -476,7 +485,7 @@ abstract class APresenter implements IPresenter
     /**
      * Messages getter
      *
-     * @return array
+     * @return array Array of messages.
      */
     public function getMessages()
     {
@@ -486,7 +495,7 @@ abstract class APresenter implements IPresenter
     /**
      * Errors getter
      *
-     * @return array
+     * @return array Array of errors.
      */
     public function getErrors()
     {
@@ -496,7 +505,7 @@ abstract class APresenter implements IPresenter
     /**
      * Criticals getter
      *
-     * @return array
+     * @return array Array of critical messages.
      */
     public function getCriticals()
     {
@@ -504,10 +513,10 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Add a message
+     * Add message
      *
-     * @param string $e
-     * @return void
+     * @param string $e Error string.
+     * @return object Singleton instance.
      */
     public function addMessage($e = null)
     {
@@ -518,10 +527,10 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Add an error
+     * Add error message
      *
-     * @param string $e
-     * @return void
+     * @param string $e Error string.
+     * @return object Singleton instance.
      */
     public function addError($e = null)
     {
@@ -532,10 +541,10 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Add an emergency
+     * Add critical message
      *
-     * @param string $e
-     * @return void
+     * @param string $e Error string.
+     * @return object Singleton instance.
      */
     public function addCritical($e = null)
     {
@@ -548,121 +557,162 @@ abstract class APresenter implements IPresenter
     /**
      * Get universal ID string
      *
-     * @return string
+     * @return string Universal ID string.
      */
     public function getUIDstring()
     {
-        $arr = [
-            $this->getCookie("admin") ?? "user",
+        $string = strtr(implode("_", [
             $_SERVER["HTTP_ACCEPT"] ?? "NA",
             $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "NA",
             $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
             $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
-            $_SERVER["HTTP_USER_AGENT"] ?? "agent",
+            $_SERVER["HTTP_USER_AGENT"] ?? "UA",
             $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
-        ];
-        return strtr(implode("_", $arr), " ", "_");
+        ]), " ", "_");
+        return $string;
     }
 
     /**
      * Get universal ID hash
      *
-     * @return string
+     * @return string Universal ID SHA256 hash.
      */
     public function getUID()
     {
-        return hash("sha256", $this->getUIDstring());
+        $hash = hash("sha256", $this->getUIDstring());
+        return $hash;
     }
 
     /**
      * Set user identity
      *
-     * @param array $identity
-     * @return mixed
+     * @param array $identity Identity array ["avatar, "email", "id", "name"].
+     * @return object Singleton instance.
      */
     public function setIdentity($identity)
     {
+        if (!is_array($identity)) {
+            throw new \Exception("Parameter must be an array!");
+        }
+        $i = [
+            "avatar" => "",
+            "email" => "",
+            "id" => 0,
+            "name" => "",
+        ];
+        $file = DATA . "/" . self::IDENTITY_NONCE;
+        $nonce = @file_get_contents($file);
+        if (!$nonce) {
+            try {
+                $nonce = hash("sha256", random_bytes(256) . time());
+                file_put_contents($file, $nonce);
+                @chmod($file, 0660);
+                $this->addMessage("ADMIN: noncefile created");
+            } catch (Exception $e) {
+                $this->addError("500: Internal Server Error");
+                $this->setLocation("/err/500");
+                exit;
+            }
+        }
+        $i["nonce"] = substr(trim($nonce), 0, 8);
+        if (array_key_exists("avatar", $identity)) {
+            $i["avatar"] = (string) $identity["avatar"];
+        }
+        if (array_key_exists("email", $identity)) {
+            $i["email"] = (string) $identity["email"];
+        }
+        if (array_key_exists("id", $identity)) {
+            $i["id"] = (int) $identity["id"];
+        }
+        if (array_key_exists("name", $identity)) {
+            $i["name"] = (string) $identity["name"];
+        }
+        $i["timestamp"] = time();
+        $out = [];
+        $keys = array_keys($i);
+        shuffle($keys);
+        foreach ($keys as $k) {
+            $out[$k] = $i[$k];
+        }
+        $this->identity = $out;
+        $s = json_encode($out);
+        $this->setCookie("identity", $s);
+//        if (CLI) echo $s."\n";
         return $this;
     }
 
     /**
      * Get user identity
      *
-     * @return mixed
+     * @return array Identity array ["avatar, "email", "id", "name", "nonce", "timestamp"].
      */
     public function getIdentity()
     {
-        // debugging
-        /*
-        if (!strlen($this->getCookie("admin"))) {
-        if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
-        $u = [];
-        $u["avatar"] = "https://cdn0.iconfinder.com/data/icons/robot-3-2/512/RobotV2-52-512.png";
-        $u["email"] = "admin@gscloud.cz";
-        $u["id"] = 666;
-        $u["name"] = "Mr. Robot";
-        $u["uid"] = $this->getUID();
-        return $u;
+        $file = DATA . "/" . self::IDENTITY_NONCE;
+        $nonce = @file_get_contents($file);
+        if (!$nonce) {
+            $this->setIdentity([]);
+            $nonce = @file_get_contents($file) ?? "";
         }
+        $nonce = substr(trim($nonce), 0, 8);
+        if (CLI || ($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
+            $this->setIdentity([
+                "avatar" => "",
+                "email" => "f@mxd.cz",
+                "id" => 666,
+                "name" => "Mr. Robot",
+            ]);
         }
-        $u = [];
-        $u["avatar"] = $this->getCookie("avatar") ?? "";
-        $u["email"] = $this->getCookie("admin") ?? "";
-        $u["id"] = $this->getCookie("id") ?? "";
-        $u["name"] = $this->getCookie("name") ?? "";
-        $u["uid"] = $this->getUID();
-         */
+        if (isset($_COOKIE["identity"])) {
+            $cookie = $this->getCookie("identity");
+            $j = json_decode($cookie, true);
+            if (($j["nonce"] ?? "") == $nonce) {
+                $this->setIdentity([
+                    "avatar" => $j["avatar"] ?? "",
+                    "email" => $j["email"] ?? "",
+                    "id" => $j["id"] ?? 0,
+                    "name" => $j["name"] ?? "",
+                ]);
+            }
+        }
+//        bdump($this->identity, "IDENTITY");
         return $this->identity;
     }
 
     /**
      * Get current user data
      *
-     * @return mixed
+     * @return mixed Get current user data array or NULL.
      */
     public function getCurrentUser()
     {
-        // debugging
-        if (!strlen($this->getCookie("admin"))) {
-            if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
-                $u = [];
-                $u["avatar"] = "https://cdn0.iconfinder.com/data/icons/robot-3-2/512/RobotV2-52-512.png";
-                $u["email"] = "admin@gscloud.cz";
-                $u["id"] = 666;
-                $u["name"] = "Mr. Robot";
-                $u["uid"] = $this->getUID();
-                $u["uids"] = $this->getUIDstring();
-                return $u;
-            }
-        }
-        $u = [];
-        $u["avatar"] = $this->getCookie("avatar") ?? "";
-        $u["email"] = $this->getCookie("admin") ?? "";
-        $u["id"] = $this->getCookie("id") ?? "";
-        $u["name"] = $this->getCookie("name") ?? "";
-        $u["uid"] = $this->getUID();
-        $u["uids"] = $this->getUIDstring();
-        return ($u["id"] && $u["email"]) ? $u : false;
+        $i = $this->getIdentity();
+        $i["uid"] = $this->getUID();
+        $i["uidstring"] = $this->getUIDstring();
+        return ($i["id"] && $i["email"]) ? $i : null;
     }
 
     /**
      * Cfg getter
      *
-     * @param string $key
-     * @return mixed
+     * @param string $key Index to configuration data or void.
+     * @return mixed Configuration data ARRAY by index or whole ARRAY.
      */
     public function getCfg($key = null)
     {
         if (is_null($key)) {
             return $this->getData("cfg");
         }
-        return $this->getData("cfg.${key}");
+        if (is_string($key)) {
+            return $this->getData("cfg.$key");
+        }
+        throw new \Exception("FATAL ERROR: Invalid parameter!");
     }
 
     /**
      * Match getter
      *
-     * @return mixed
+     * @return mixed Possible match data array or false.
      */
     public function getMatch()
     {
@@ -672,7 +722,7 @@ abstract class APresenter implements IPresenter
     /**
      * Presenter getter
      *
-     * @return mixed
+     * @return mixed Possible presenter data array or false.
      */
     public function getPresenter()
     {
@@ -682,7 +732,7 @@ abstract class APresenter implements IPresenter
     /**
      * Router getter
      *
-     * @return mixed
+     * @return mixed Possible router data array or false.
      */
     public function getRouter()
     {
@@ -692,7 +742,7 @@ abstract class APresenter implements IPresenter
     /**
      * View getter
      *
-     * @return mixed
+     * @return mixed Possible router view or false.
      */
     public function getView()
     {
@@ -702,7 +752,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for CSV file
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderCsv()
     {
@@ -713,7 +763,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for binary file
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderFile()
     {
@@ -724,7 +774,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for HTML content
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderHtml()
     {
@@ -735,7 +785,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for JSON content
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderJson()
     {
@@ -746,7 +796,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for JSON content
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderJavaScript()
     {
@@ -757,7 +807,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for PDF file
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderPdf()
     {
@@ -768,7 +818,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for TEXT content
      *
-     * @return object
+     * @return object Singleton instance.
      */
     public function setHeaderText()
     {
@@ -779,8 +829,8 @@ abstract class APresenter implements IPresenter
     /**
      * Get encrypted cookie
      *
-     * @param string $name
-     * @return mixed
+     * @param string $name Cookie name.
+     * @return mixed Cookie value.
      */
     public function getCookie($name = null)
     {
@@ -788,41 +838,42 @@ abstract class APresenter implements IPresenter
             $this->addError(__NAMESPACE__ . " : " . __METHOD__ . self::ERROR_NULL);
             return $this;
         }
-        $secret_key = $this->getCfg("secret_cookie_key") ?? "secure.key";
-        $keyfile = DATA . "/${secret_key}";
+        $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
+        $keyfile = DATA . "/$key";
         if (file_exists($keyfile)) {
-            $enc_key = KeyFactory::loadEncryptionKey($keyfile);
+            $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $this->setCookie($name);
             return null;
         }
-        $cookie = new Cookie($enc_key);
+        $cookie = new Cookie($enc);
         return $cookie->fetch($name);
     }
 
     /**
      * Set encrypted cookie
      *
-     * @param string $name
-     * @param string $data
-     * @return object
+     * @param string $name Cookie name.
+     * @param string $data Cookie data.
+     * @return object Singleton instance.
      */
-    public function setCookie($name = null, $data = null)
+    public function setCookie($name = null, $data = "")
     {
         if (is_null($name)) {
+            $this->addError(__NAMESPACE__ . " : " . __METHOD__ . self::ERROR_NULL);
             return $this;
         }
-        $secret_key = $this->getCfg("secret_cookie_key") ?? "secure.key";
-        $keyfile = DATA . "/${secret_key}";
+        $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
+        $keyfile = DATA . "/$key";
         if (file_exists($keyfile)) {
-            $enc_key = KeyFactory::loadEncryptionKey($keyfile);
+            $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
-            $enc_key = KeyFactory::generateEncryptionKey();
-            KeyFactory::save($enc_key, $keyfile);
+            $enc = KeyFactory::generateEncryptionKey();
+            KeyFactory::save($enc, $keyfile);
             @chmod($keyfile, self::COOKIE_KEY_FILEMODE);
             $this->addMessage("HALITE: new keyfile created");
         }
-        $cookie = new Cookie($enc_key);
+        $cookie = new Cookie($enc);
         $httponly = true;
         $samesite = "strict";
         $secure = true;
@@ -830,15 +881,15 @@ abstract class APresenter implements IPresenter
             $secure = false;
             $httponly = true;
         }
-        $cookie->store($name, $data, time() + self::COOKIE_TTL, "/", DOMAIN, $secure, $httponly, $samesite);
+        $cookie->store($name, (string) $data, time() + self::COOKIE_TTL, "/", DOMAIN, $secure, $httponly, $samesite);
         return $this;
     }
 
     /**
      * Clear encrypted cookie
      *
-     * @param string $name
-     * @return object
+     * @param string $name Cookie name.
+     * @return object  Singleton instance.
      */
     public function clearCookie($name = null)
     {
@@ -854,9 +905,9 @@ abstract class APresenter implements IPresenter
     /**
      * Set URL location and exit
      *
-     * @param string $location
-     * @param integer $code
-     * @return void
+     * @param string $location Full or relative URL address.
+     * @param integer $code HTTP code.
+     * @return void Exit runtime.
      */
     public function setLocation($location = null, $code = 303)
     {
@@ -871,28 +922,22 @@ abstract class APresenter implements IPresenter
     /**
      * Google OAuth 2.0 logout
      *
-     * @return void
+     * @return void Exit runtime.
      */
     public function logout()
     {
-        $this->setCookie("id", "");
-        $this->setCookie("name", "");
-        $this->setCookie("admin", "");
-        $this->setCookie("avatar", "");
-        unset($_COOKIE["id"]);
-        unset($_COOKIE["name"]);
-        unset($_COOKIE["admin"]);
-        unset($_COOKIE["avatar"]);
-        $this->setLocation($this->getCfg("canonical_url"));
+        $this->setCookie("identity", "");
+        unset($_COOKIE["identity"]);
+        $this->identity = [];
+        $this->setLocation($this->getCfg("canonical_url") ?? "/");
         exit;
     }
 
     /**
      * Check current user rate limits
      *
-     * @param string $uid
      * @param integer $maximum
-     * @return object
+     * @return object Singleton instance.
      */
     public function checkRateLimit($maximum = 0)
     {
@@ -904,7 +949,7 @@ abstract class APresenter implements IPresenter
         }
         $rate++;
         if ($rate > $maximum) {
-            $this->addMessage("RATE LIMITED: ${maximum} reached");
+            $this->addMessage("RATE LIMITED: $maximum reached");
             $this->setLocation("/err/420");
         }
         Cache::write($file, $rate, "limiter");
@@ -915,7 +960,7 @@ abstract class APresenter implements IPresenter
      * Check if current user has access rights
      *
      * @param mixed $perms
-     * @return object
+     * @return object Singleton instance.
      */
     public function checkAdmins($perms = false)
     {
@@ -923,13 +968,7 @@ abstract class APresenter implements IPresenter
         if (!$perms) {
             return $this;
         }
-        // debugging
-        if (strlen($this->getCookie("admin")) == 0) { // mock identity
-            if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
-                return $this;
-            }
-        }
-        $email = $this->getCookie("admin") ?? false;
+        $email = $this->getIdentity()["email"];
         $groups = $this->getCfg("admin_groups") ?? [];
         // private nodes, must validate permissions
         if ($perms === 1 && strlen($email)) {
@@ -971,15 +1010,9 @@ abstract class APresenter implements IPresenter
      */
     public function getUserGroup($email = null)
     {
-        // debugging
-        if (strlen($this->getCookie("admin")) == 0) { // mock identity pouze pokud nemáme validní cookie!
-            if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
-                return "admin";
-            }
-        }
-        $email = $this->getCookie("admin") ?? false;
-        // not logged!
-        if ($email === false) {
+        $id = $this->getIdentity()["id"];
+        $email = $this->getIdentity()["email"];
+        if (!$id) {
             return false;
         }
         $mygroup = false;
@@ -999,10 +1032,10 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Force csv checking
+     * Force CSV checking
      *
      * @param boolean $set
-     * @return object
+     * @return object Singleton instance.
      */
     public function setForceCsvCheck($set = true)
     {
@@ -1014,7 +1047,7 @@ abstract class APresenter implements IPresenter
      * Add post-load csv data
      *
      * @param mixed $key
-     * @return object
+     * @return object Singleton instance.
      */
     public function postloadAppData($key = null)
     {
@@ -1052,7 +1085,7 @@ abstract class APresenter implements IPresenter
                 foreach ((array) $cfg["locales"] as $k => $v) {
                     // read from csv file
                     $csv = false;
-                    $subfile = strtolower("${k}");
+                    $subfile = strtolower($k);
                     if ($csv === false) {
                         $csv = @file_get_contents(DATA . "/${subfile}.csv");
                         if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
@@ -1082,16 +1115,16 @@ abstract class APresenter implements IPresenter
                         }
                     } catch (Exception $e) {
                         bdump($e);
-                        $this->addCritical("ERR: ${language} locale ${k} CORRUPTED");
+                        $this->addCritical("ERR: $language locale $k CORRUPTED");
                     }
                     $locale = array_replace($locale, array_combine($keys, $values));
                 }
-                $locale['$revisions'] = $this->getData("REVISIONS");    // git revisions
+                $locale['$revisions'] = $this->getData("REVISIONS"); // git revisions
                 // find all $ in combined locales array
                 $dolar = array('$' => '$');
                 foreach ((array) $locale as $a => $b) {
                     if (substr($a, 0, 1) === '$') {
-                        $a = trim($a, '${}' . " \t\n\r\0\x0B");
+                        $a = trim($a, '${}' . "\x20\t\n\r\0\x0B");
                         if (!strlen($a)) {
                             continue;
                         }
@@ -1107,7 +1140,7 @@ abstract class APresenter implements IPresenter
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
                 header("HTTP/1.1 500 FATAL ERROR");
-                $this->addCritical("FATAL ERROR: LOCALES CORRUPTED");
+                $this->addCritical("ERR: LOCALES CORRUPTED");
                 echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED</h2></body>";
                 exit;
             } else {
@@ -1123,7 +1156,7 @@ abstract class APresenter implements IPresenter
      * Check and preload locales
      *
      * @param boolean $force
-     * @return object
+     * @return object Singleton instance.
      */
     public function checkLocales($force = false)
     {
@@ -1139,8 +1172,8 @@ abstract class APresenter implements IPresenter
     /**
      * Purge CloudFlare cache
      *
-     * @var array $cf
-     * @return object
+     * @var array $cf Array of Cloudflare auth data.
+     * @return object Singleton instance.
      */
     public function CloudflarePurgeCache($cf = null)
     {
@@ -1182,14 +1215,14 @@ abstract class APresenter implements IPresenter
      * @param string $csvkey
      * @param string $postfix
      * @param boolean $force
-     * @return object
+     * @return object Singleton instance.
      */
     private function csv_preloader($name, $csvkey, $force = false)
     {
         $name = trim((string) $name);
         $csvkey = trim((string) $csvkey);
         $force = (bool) $force;
-        $file = strtolower("${name}");
+        $file = strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, "csv") === false || $force === true) {
                 $data = false;
@@ -1226,7 +1259,7 @@ abstract class APresenter implements IPresenter
      *
      * @param string $key
      * @param boolean $force
-     * @return object
+     * @return object Singleton instance.
      */
     public function preloadAppData($key = "app_data", $force = false)
     {
@@ -1270,9 +1303,9 @@ abstract class APresenter implements IPresenter
     /**
      * Write JSON data to output
      *
-     * @param array $d
-     * @param array $headers
-     * @return object
+     * @param array $d Data can be integer error code or array of data.
+     * @param array $headers Optional JSON array of data.
+     * @return object Singleton instance.
      */
     public function writeJsonData($d = null, $headers = [])
     {

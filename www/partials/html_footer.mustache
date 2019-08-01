@@ -1,39 +1,5 @@
 <footer class="page-footer {{ design.footer_color }}" style="font-family:Arial!important;font-size:14px">
 
-  <div class="row">
-    {{#l.company}}
-    <div class="col l6 m6 s12">
-      <h5 class="white-text"><i class="material-icons">cloud</i>&nbsp;&nbsp;{{ l.company }}</h5>
-      {{#l.company_regaddr}}<p class="grey-text text-lighten-4">
-        <i class="material-icons">map</i>&nbsp;&nbsp;{{ l.company_regaddr }}</p>
-      {{/l.company_regaddr}}
-      {{#l.company_mobile}}<p class="grey-text text-lighten-4">
-        <i class="material-icons">phone_iphone</i>&nbsp;&nbsp;{{ l.company_mobile }}</p>
-      {{/l.company_mobile}}
-      {{#l.company_email}}
-      <p class="grey-text text-lighten-4">
-        <a class="btn-floating red pulse" href="mailto:{{ l.company_email }}">
-          <i class="material-icons">email</i></a>&nbsp;&nbsp;<a
-          style="color:#fff!important;border-bottom:2px solid #fff"
-          href="mailto:{{ l.company_email }}">{{ l.company_email }}</a>
-      </p>
-      {{/l.company_email}}
-    </div>
-    {{/l.company}}
-    {{#l.company}}
-    <div class="col l6 m6 s12">
-      <h5 class="white-text"><i class="material-icons">cloud</i>&nbsp;&nbsp; {{ l.company }}</h5>
-      {{#l.company_id}}
-      <p class="grey-text text-lighten-4">{{ l.company_id }}<br>{{ l.company_reg }}</p>
-      {{/l.company_id}}
-    </div>
-    {{/l.company}}
-  </div>
-
-  <div class="row">
-    {{>google_map}}
-  </div>
-
   {{>gscloud_footer}}
 
 </footer>
