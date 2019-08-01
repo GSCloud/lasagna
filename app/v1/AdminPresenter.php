@@ -36,7 +36,7 @@ class AdminPresenter extends \GSC\APresenter
 
             // GetCsvInfo
             case "GetCsvInfo":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
                 foreach ($arr as $k => $v) {
                     if (!$k || !$v) {
@@ -58,7 +58,7 @@ class AdminPresenter extends \GSC\APresenter
 
             // GetCfAnalytics - UNFINISHED -> TODO!!!
             case "GetCfAnalytics":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $cf = $this->getCfg("cf");
                 if (!is_array($cf)) {
                     return $this->writeJsonData(null, ["fn" => "GetCfAnalytics"]);
@@ -84,7 +84,7 @@ class AdminPresenter extends \GSC\APresenter
 
             // GetPSInsights
             case "GetPSInsights":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $base = urlencode($cfg["canonical_url"]);
                 $key = $this->getCfg("google.pagespeedinsights_key") ?? "NA";
                 $uri = "https://www.googleapis.com/pagespeedonline/v4/runPagespeed?url=${base}&key=${key}";
@@ -104,7 +104,7 @@ class AdminPresenter extends \GSC\APresenter
 
             // GetUpdateToken
             case "GetUpdateToken":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $file = DATA . "/" . self::ADMIN_KEY;
                 $key = trim(@file_get_contents($file));
                 try {
@@ -131,14 +131,14 @@ class AdminPresenter extends \GSC\APresenter
 
             // FlushCache
             case "FlushCache":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $this->flush_cache();
                 return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "FlushCache"]);
                 break;
 
             // CoreUpdate
             case "CoreUpdate":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $this->setForceCsvCheck();
                 $this->postloadAppData("app_data");
                 $this->flush_cache();
@@ -147,7 +147,7 @@ class AdminPresenter extends \GSC\APresenter
 
             // UpdateArticles
             case "UpdateArticles":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 $x = 0;
                 if (isset($_POST["data"])) {
 //                    $data = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove whitespace
@@ -188,7 +188,7 @@ class AdminPresenter extends \GSC\APresenter
 
             // DELETE ARTICLES
             case "DeleteArticles":
-                $this->checkAdmins("admin");
+                $this->checkPermission("admin");
                 return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "DeleteArticles"]);
                 break;
 

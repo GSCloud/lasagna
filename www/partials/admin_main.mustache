@@ -291,7 +291,6 @@
         }
         $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
             GSC.PingDot("#csv_ping");
-            var t = "#a_update_info";
             var content = "";
             var now = ~~(Date.now() / 1000);
             for (x in data.data) {
@@ -317,11 +316,11 @@
                 "<br>"
               );
             }
-            $(t).html(content);
+            $("#a_update_info").html(content);
           })
           .fail(function () {
             GSC.PingDot("#csv_ping", false);
-            $(t).html('<i class="material-icons large">mood_bad</i>');
+            $("#a_update_info").html('<i class="material-icons large">mood_bad</i>');
           });
       }
 

@@ -22,7 +22,7 @@ interface IPresenter
     public function addCritical($e);
     public function addError($e);
     public function addMessage($m);
-    public function checkAdmins($perms);
+    public function checkPermission($role);
     public function checkLocales($force);
     public function checkRateLimit($maximum);
     public function clearCookie($name);
@@ -586,7 +586,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set user identity
      *
-     * @param array $identity Identity array ["avatar, "email", "id", "name"].
+     * @param array $identity Identity ["avatar, "email", "id", "name"].
      * @return object Singleton instance.
      */
     public function setIdentity($identity)
@@ -644,7 +644,7 @@ abstract class APresenter implements IPresenter
     /**
      * Get user identity
      *
-     * @return array Identity array ["avatar, "email", "id", "name", "nonce", "timestamp"].
+     * @return array Identity ["avatar, "email", "id", "name", "nonce", "timestamp"].
      */
     public function getIdentity()
     {
@@ -962,44 +962,36 @@ abstract class APresenter implements IPresenter
      * @param mixed $perms
      * @return object Singleton instance.
      */
-    public function checkAdmins($perms = false)
+    public function checkPermission($role = "admin")
     {
-        // public nodes
-        if (!$perms) {
+        if (!$role) {
             return $this;
         }
+        $role = trim((string) $role);
         $email = $this->getIdentity()["email"];
         $groups = $this->getCfg("admin_groups") ?? [];
-        // private nodes, must validate permissions
-        if ($perms === 1 && strlen($email)) {
-            // public access, any Google users allowed
-            if (in_array("*", $groups["default"] ?? [], true)) {
-                return $this;
-            }
-            // check default group
-            if (in_array($email, $groups["default"] ?? [], true)) {
-                return $this;
-            }
-            if (in_array($email, $groups["admin"] ?? [], true)) {
-                return $this;
-            }
-            // logged but not authorized
-            $this->setLocation("/err/401");
-        }
 
-        if (is_string($perms) && strlen($email)) {
-            // check specified group
-            if (in_array($email, $groups[trim($perms)] ?? [], true)) {
+        if (strlen($role) && strlen($email)) {
+            // group access by email
+            if (in_array($email, $groups[$role] ?? [], true)) {
                 return $this;
             }
-            // logged but not authorized
-            $this->setLocation("/err/401");
+            // any Google users allowed in group
+            if (in_array("*", $groups[$role] ?? [], true)) {
+                return $this;
+            }
         }
-        // force re-login
-        if ($this->getCfg("goauth_redirect")) {
-            $this->setLocation($this->getCfg("goauth_redirect") .
-                "?return_uri=" . $this->getCfg("goauth_origin") . ($_SERVER["REQUEST_URI"] ?? ""));
-        }
+        // not authorized
+        $this->setLocation("/err/401");
+
+/*
+// force re-login
+if ($this->getCfg("goauth_redirect")) {
+$this->setLocation($this->getCfg("goauth_redirect") .
+"?return_uri=" . $this->getCfg("goauth_origin") . ($_SERVER["REQUEST_URI"] ?? ""));
+}
+*/
+
     }
 
     /**

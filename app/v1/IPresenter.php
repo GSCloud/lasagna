@@ -4,11 +4,11 @@ namespace GSC;
 
 interface IPresenter
 {
+    public function CFPurgeCache();
     public function addError($error);
     public function addMessage($message);
-    public function CFPurgeCache();
-    public function checkAdmins($perms);
     public function checkLocales($force);
+    public function checkPermission($role);
     public function checkRateLimit($user, $maximum);
     public function clearCookie($name);
     public function getAdminGroup($email);
