@@ -285,13 +285,13 @@
 
       // GetCsvInfo()
       if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
-        var t = "#a_update_info";
         if (w.GSC.offline) {
           GSC.PingDot("#csv_ping", false);
           return;
         }
         $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
             GSC.PingDot("#csv_ping");
+            var t = "#a_update_info";
             var content = "";
             var now = ~~(Date.now() / 1000);
             for (x in data.data) {
