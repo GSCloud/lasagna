@@ -568,6 +568,7 @@
         if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(200);
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {
+            window.scrollTo(0, 0);
             setCookie("motyle", $("#admin_main").is(":hidden"));
           })
         });

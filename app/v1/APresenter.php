@@ -468,7 +468,7 @@ abstract class APresenter implements IPresenter
      * @param mixed $value
      * @return object Singleton instance.
      */
-    public function setData($data = null, $key = null, $value = null)
+    public function setData($data = null, $key = null, $value = null)   // TODO: needs rework!
     {
         if (is_null($data)) {
             $data = $this->data;
@@ -638,6 +638,7 @@ abstract class APresenter implements IPresenter
         $s = json_encode($out);
         $this->setCookie("identity", $s);
 //        if (CLI) echo $s."\n";
+//        bdump($_COOKIE["identity"]);
         return $this;
     }
 
@@ -655,6 +656,7 @@ abstract class APresenter implements IPresenter
             $nonce = @file_get_contents($file) ?? "";
         }
         $nonce = substr(trim($nonce), 0, 8);
+        $timestamp = time();
         if (CLI || ($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
             $this->setIdentity([
                 "avatar" => "",
@@ -664,9 +666,33 @@ abstract class APresenter implements IPresenter
             ]);
         }
         if (isset($_COOKIE["identity"])) {
-            $cookie = $this->getCookie("identity");
-            $j = json_decode($cookie, true);
-            if (($j["nonce"] ?? "") == $nonce) {
+            $identity = $this->getCookie("identity");
+            $j = json_decode($identity, true);
+            if (!array_key_exists("nonce", $j)) {
+                $j["nonce"] = "";
+            }
+            if (!array_key_exists("timestamp", $j)) {
+                $j["timestamp"] = 0;
+            }
+            if ($j["nonce"] == $nonce) {
+                $this->setIdentity([
+                    "avatar" => $j["avatar"] ?? "",
+                    "email" => $j["email"] ?? "",
+                    "id" => $j["id"] ?? 0,
+                    "name" => $j["name"] ?? "",
+                ]);
+            }
+        }
+        if (isset($_GET["identity"])) {
+            $identity = $_GET["identity"];
+            $j = json_decode($identity, true);
+            if (!array_key_exists("nonce", $j)) {
+                $j["nonce"] = "";
+            }
+            if (!array_key_exists("timestamp", $j)) {
+                $j["timestamp"] = 0;
+            }
+            if ($j["nonce"] == $nonce && ($timestamp - (int) $j["timestamp"] < 30)) {
                 $this->setIdentity([
                     "avatar" => $j["avatar"] ?? "",
                     "email" => $j["email"] ?? "",
@@ -679,7 +705,7 @@ abstract class APresenter implements IPresenter
             $this->setIdentity([]);
         }
 //        bdump($this->identity, "IDENTITY");
-return $this->identity;
+        return $this->identity;
     }
 
     /**
@@ -998,7 +1024,7 @@ if ($this->getCfg("goauth_redirect")) {
 $this->setLocation($this->getCfg("goauth_redirect") .
 "?return_uri=" . $this->getCfg("goauth_origin") . ($_SERVER["REQUEST_URI"] ?? ""));
 }
-*/
+ */
 
     }
 
