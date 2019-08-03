@@ -668,6 +668,7 @@ abstract class APresenter implements IPresenter
         if (isset($_COOKIE["identity"])) {
             $identity = $this->getCookie("identity");
             $j = json_decode($identity, true);
+            if (!is_array($j)) $j = [];
             if (!array_key_exists("nonce", $j)) {
                 $j["nonce"] = "";
             }
@@ -686,6 +687,7 @@ abstract class APresenter implements IPresenter
         if (isset($_GET["identity"])) {
             $identity = $_GET["identity"];
             $j = json_decode($identity, true);
+            if (!is_array($j)) $j = [];
             if (!array_key_exists("nonce", $j)) {
                 $j["nonce"] = "";
             }
@@ -963,6 +965,7 @@ abstract class APresenter implements IPresenter
         $this->setCookie("identity", "");
         unset($_COOKIE["identity"]);
         $this->identity = [];
+        header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
         $this->setLocation($this->getCfg("canonical_url") ?? "/");
         exit;
     }
