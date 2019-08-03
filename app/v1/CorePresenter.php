@@ -29,7 +29,8 @@ class CorePresenter extends \GSC\APresenter
                 $a = [];
                 foreach ($presenter as $p) {
                     if (isset($p["sitemap"]) && $p["sitemap"]) {
-                        $a[] = trim($p["path"], "/ ");
+                        $x = trim($p["path"], "/ \t\n\r\0\x0B");
+                        $a[] = $x;
                     }
                 }
                 $data["sitemap"] = $a;
@@ -40,6 +41,14 @@ class CorePresenter extends \GSC\APresenter
             // sw.js
             case "swjs":
                 $this->setHeaderJavaScript();
+                $a = [];
+                foreach ($presenter as $p) {
+                    if (isset($p["sitemap"]) && $p["sitemap"]) {
+                        $x = trim($p["path"], "/ \t\n\r\0\x0B");
+                        $a[] = $x;
+                    }
+                }
+                $data["sitemap"] = $a;
                 $output = $this->setData($data)->renderHTML("sw.js");
                 return $this->setData($data, "output", $output);
                 break;

@@ -1,14 +1,12 @@
 "use strict";
-var version = "{{ version }}.{{ VERSION_SHORT }}";
+var version = "{{ version }}_{{ VERSION_SHORT }}";
 
 var offlineFundamentals = [
-  "",
-  "/cs",
-  "/en",
-  "/cs/?utm_source={{ app }}",
-  "/en/?utm_source={{ app }}",
-  "{{ cdn }}/build.css",
-  "{{ cdn }}/build.js",
+  {{#sitemap}}"/{{ . }}",{{/sitemap}}
+  {{#sitemap}}"/{{ . }}?utm_source={{ app }}",{{/sitemap}}
+  "{{ cdn }}/build.css","{{ cdn }}/build.js",
+  "{{ cdn }}/img/favicon-180.png","{{ cdn }}/img/favicon-16.png","{{ cdn }}/img/favicon-128.png",
+  "{{ cdn }}/img/loading.png","{{ cdn }}/img/logo.png","{{ cdn }}/img/LASAGNA_logo.png",
 ];
 
 self.addEventListener("install", function (event) {
@@ -46,12 +44,12 @@ self.addEventListener("fetch", function (event) {
       }
 
       function unableToResolve() {
-        return new Response("<h1>🙄 OFFLINE 🙄</h1>", {
+        return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><h1 style="text-align:center">🙄 OFFLINE 🙄</h1>', {
           status: 503,
           statusText: "Service Unavailable",
           headers: new Headers({
             "Content-Type": "text/html"
-          })
+          });
         });
       }
     })
