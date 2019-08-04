@@ -23,6 +23,7 @@ error_reporting(E_ALL);
 @ini_set("display_errors", true);
 
 // constants (in SPECIFIC ORDER !!!)
+
 /** @const Bootstrap root folder. */
 defined("ROOT") || define("ROOT", __DIR__);
 /** @const Cache and logs folder, defaults to "cache". */
@@ -50,7 +51,6 @@ define("CLI", (PHP_SAPI == "cli"));
 /** @const True if running server locally. */
 define("LOCALHOST", (($_SERVER["SERVER_NAME"] ?? "") == "localhost"));
 
-// Composer
 require_once ROOT . "/vendor/autoload.php";
 
 function check_file($f)
@@ -58,7 +58,7 @@ function check_file($f)
     if (!file_exists($f) || !is_readable($f)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>File: $f</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>File: $f</h3>\n\n";
         exit;
     }
 }
@@ -68,7 +68,7 @@ function check_folder($f, $writable = false)
     if (!file_exists($f) || !is_readable($f)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Core</h2><h3>Folder: $f</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>Folder: $f</h3>\n\n";
         exit;
     }
     if ((bool) $writable === true) {
@@ -130,15 +130,15 @@ if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
     defined("DEBUG") || define("DEBUG", true);
 }
 if (CLI === true) {
-    /** @const Falsef for CLI. */
+    /** @const Disable for CLI. */
     defined("DEBUG") || define("DEBUG", false);
 }
-if ( isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") == 0) {
-    /** @const False for curl. */
+if ( isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") !== false) {
+    /** @const Disable for curl. */
     defined("DEBUG") || define("DEBUG", false);
 }
-defined("DEBUG") || define("DEBUG", (bool) $cfg["dbg"]);
-if (DEBUG == true) {
+defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false));
+if (DEBUG === true) {
     Debugger::enable(Debugger::DEVELOPMENT, CACHE);
     Debugger::$logSeverity = E_NOTICE | E_WARNING;
     Debugger::$maxDepth = $cfg["DEBUG_DEPTH"] ?? 5;
