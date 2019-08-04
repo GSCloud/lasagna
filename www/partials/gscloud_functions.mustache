@@ -179,10 +179,10 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             }
           });
 
-          setTimeout("window.GSC.VersionCheck()", 60000);
+          setTimeout("GSC.VersionCheck()", 60000);
         }
       }
-      setTimeout("window.GSC.VersionCheck()", 2500);
+      setTimeout("GSC.VersionCheck()", 10000);
     });
 
     // GSC.ReadArticles()
@@ -191,7 +191,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
         if (GSC.offline) {
-          setTimeout("window.GSC.ReadArticles()", 5000);
+          setTimeout("GSC.ReadArticles();", 5000);
           return;
         }
 
@@ -212,23 +212,31 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {  // API call
           if (GSC.summernote_on) return;
           if (data && data.data && data.data.html) {
-            localStorage.setItem("articles", data.data.html);
+            var a = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"];
+            localStorage[a] = data.data.html;
             if (data.data.crc) {
               GSC.data.articlescrc = data.data.crc;
-              localStorage.setItem("crc", data.data.crc);
+              var obj = jQuery.parseJSON(data.data.html);
+              for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
+              $(".summernote>ul").each(function (i, obj) {
+                $(obj).addClass("browser-default");
+              });
             }
-            var obj = jQuery.parseJSON(data.data.html);
-            for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
-            $(".summernote>ul").each(function (i, obj) {
-              $(obj).addClass("browser-default");
-            });
           }
           if (typeof callback === "function") callback();
         });
-        setTimeout("window.GSC.ReadArticles()", 30000);
+        setTimeout("GSC.ReadArticles()", 30000);
       }
 
-      setTimeout("window.GSC.ReadArticles()", 1);
+      setTimeout("GSC.ReadArticles();", 1);
+      var a = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"];
+      if (a && a.length) {
+          var obj = jQuery.parseJSON(a);
+          for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
+          $(".summernote>ul").each(function (i, obj) {
+            $(obj).addClass("browser-default");
+          });
+      }
     });
 
     // DELAYED UI bindings
