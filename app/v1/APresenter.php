@@ -965,7 +965,7 @@ abstract class APresenter implements IPresenter
         $this->setCookie("identity", "");
         unset($_COOKIE["identity"]);
         $this->identity = [];
-        header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+        header('Clear-Site-Data: "cache", "cookies", "storage"');
         $this->setLocation($this->getCfg("canonical_url") ?? "/");
         exit;
     }

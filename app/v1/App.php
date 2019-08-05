@@ -22,7 +22,6 @@ defined("CACHE") || die($x);
 defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
-// constants
 /** @const Cache prefix. */
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 /** @const Domain name, extracted from SERVER array. */
@@ -36,7 +35,6 @@ defined("VERSION") || define("VERSION", "v1");
 /** @const Monolog filename, full path. */
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
 
-// Google Cloud Platform
 /** @const Google Cloud Platform project ID. */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
 /** @const Google Cloud Platform JSON auth keys. */
@@ -44,6 +42,12 @@ defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
 if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
+
+// simple counter + data clearing
+if (isset($_COOKIE["counter"]) && (int) $_COOKIE["counter"] > 500 ) {
+    header('Clear-Site-Data: "cache", "storage"');
+}
+setcookie("counter", 1 + (isset($_COOKIE["counter"]) ? (int) $_COOKIE["counter"] : 0), time() + 86400*31, "/", DOMAIN, false, true); 
 
 // remove old unused cookies
 array_map(function ($name) {
@@ -189,10 +193,9 @@ if (CLI) {
                 require_once "CliPresenter.php";
                 $app = CliPresenter::getInstance()->setData($data)->process();
                 if ($argc != 3) {
-                    echo 'Use $app singleton as entry point.' . "\n\n";
                     echo 'Example: app \'$app->showConst()\'' . "\n";
                     echo 'Example: app \'echo $app->getLocale()["\$lasagna"]\'' . "\n";
-                    echo 'Example: app \'print_r($app->getData())\'' . "\n";
+                    echo 'Example: app \'print_r($app->getIdentity())\'' . "\n";
                     echo 'Example: app \'print_r($app->getLocale())\'' . "\n";
                     exit;
                 }
@@ -206,11 +209,11 @@ if (CLI) {
         }
     }
 
-    echo "Tesseract LASAGNA command line interface. \n\n";
+    echo "Tesseract LASAGNA CLI \n\n";
     echo "Usage: Bootstrap.php <command> [<parameters>...] \n\n";
     echo "\t app '<code>' - run code \n";
     echo "\t localtest - CI local test \n";
-    echo "\t productiontest - CI production test \n";
+    echo "\t productiontest - CI production test \n\n";
     exit;
 }
 
