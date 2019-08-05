@@ -12,11 +12,11 @@ class HomePresenter extends \GSC\APresenter
         $presenter = $this->getPresenter();
         $view = $this->getView();
 
-        // check user
+        // check user & set caching
         $use_cache = true;
         $data["user"] = $this->getCurrentUser();
-        if ($data["admin"] = $this->getUserGroup()) {
-            $data["admin_group_" . $data["admin"]] = true;
+        if ($data["admin"] = $a = $this->getUserGroup()) {
+            $data["admin_group_$a"] = true;
             $use_cache = false;
         }
 
@@ -25,6 +25,11 @@ class HomePresenter extends \GSC\APresenter
         $data["lang{$language}"] = true;
         $data["l"] = $this->getLocale($language);
         $data["DATA_VERSION"] = hash('sha256', (string) json_encode($data["l"]));
+        if (($pos = strpos($data["request_path"], $language)) !== false) {
+            $data["request_path_slug"] = substr_replace($data["request_path"], "", $pos, strlen($language));
+        } else {
+            $data["request_path_slug"] = $data["request_path"];
+        }
 
         // advanced caching
         $arr = [

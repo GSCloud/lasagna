@@ -345,5 +345,5 @@ if (DEBUG) {
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);
     unset($data["google_drive_backup "]);
-    bdump($data, "DATA " . date("Y-m-d"));
+    bdump($data, "DATA");
 }

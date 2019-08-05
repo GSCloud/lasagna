@@ -20,6 +20,7 @@ class LoginPresenter extends GSC\APresenter
             $errors[] = "INFO: " . htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
         } elseif (empty($_GET["code"])) {
             $email = $_COOKIE["login_hint"] ?? null;
+            $email = $_GET["login_hint"] ?? null;
             $hint = $email ? strtolower("&login_hint=$email") : "";
             if (isset($_GET["relogin"]) && $_GET["relogin"] == true) {
                 $authUrl = $provider->getAuthorizationUrl([

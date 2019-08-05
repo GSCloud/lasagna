@@ -586,7 +586,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set user identity
      *
-     * @param array $identity Identity ["avatar, "email", "id", "name"].
+     * @param array $identity Identity.
      * @return object Singleton instance.
      */
     public function setIdentity($identity)
@@ -596,8 +596,10 @@ abstract class APresenter implements IPresenter
         }
         $i = [
             "avatar" => "",
+            "country" => "",
             "email" => "",
             "id" => 0,
+            "ip" => "",
             "name" => "",
         ];
         $file = DATA . "/" . self::IDENTITY_NONCE;
@@ -628,6 +630,8 @@ abstract class APresenter implements IPresenter
             $i["name"] = (string) $identity["name"];
         }
         $i["timestamp"] = time();
+        $i["country"] = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
+        $i["ip"] = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["REMOTE_ADDR"] ?? "";
         $out = [];
         $keys = array_keys($i);
         shuffle($keys);
@@ -645,7 +649,7 @@ abstract class APresenter implements IPresenter
     /**
      * Get user identity
      *
-     * @return array Identity ["avatar, "email", "id", "name", "nonce", "timestamp"].
+     * @return array Identity.
      */
     public function getIdentity()
     {
@@ -667,39 +671,39 @@ abstract class APresenter implements IPresenter
         }
         if (isset($_COOKIE["identity"])) {
             $identity = $this->getCookie("identity");
-            $j = json_decode($identity, true);
-            if (!is_array($j)) $j = [];
-            if (!array_key_exists("nonce", $j)) {
-                $j["nonce"] = "";
+            $i = json_decode($identity, true);
+            if (!is_array($i)) $i = [];
+            if (!array_key_exists("nonce", $i)) {
+                $i["nonce"] = "";
             }
-            if (!array_key_exists("timestamp", $j)) {
-                $j["timestamp"] = 0;
+            if (!array_key_exists("timestamp", $i)) {
+                $i["timestamp"] = 0;
             }
-            if ($j["nonce"] == $nonce) {
+            if ($i["nonce"] == $nonce) {
                 $this->setIdentity([
-                    "avatar" => $j["avatar"] ?? "",
-                    "email" => $j["email"] ?? "",
-                    "id" => $j["id"] ?? 0,
-                    "name" => $j["name"] ?? "",
+                    "avatar" => $i["avatar"] ?? "",
+                    "email" => $i["email"] ?? "",
+                    "id" => $i["id"] ?? 0,
+                    "name" => $i["name"] ?? "",
                 ]);
             }
         }
         if (isset($_GET["identity"])) {
             $identity = $_GET["identity"];
-            $j = json_decode($identity, true);
-            if (!is_array($j)) $j = [];
-            if (!array_key_exists("nonce", $j)) {
-                $j["nonce"] = "";
+            $i = json_decode($identity, true);
+            if (!is_array($i)) $i = [];
+            if (!array_key_exists("nonce", $i)) {
+                $i["nonce"] = "";
             }
-            if (!array_key_exists("timestamp", $j)) {
-                $j["timestamp"] = 0;
+            if (!array_key_exists("timestamp", $i)) {
+                $i["timestamp"] = 0;
             }
-            if ($j["nonce"] == $nonce && ($timestamp - (int) $j["timestamp"] < 30)) {
+            if ($i["nonce"] == $nonce && ($timestamp - (int) $i["timestamp"] < 30)) {
                 $this->setIdentity([
-                    "avatar" => $j["avatar"] ?? "",
-                    "email" => $j["email"] ?? "",
-                    "id" => $j["id"] ?? 0,
-                    "name" => $j["name"] ?? "",
+                    "avatar" => $i["avatar"] ?? "",
+                    "email" => $i["email"] ?? "",
+                    "id" => $i["id"] ?? 0,
+                    "name" => $i["name"] ?? "",
                 ]);
             }
         }
