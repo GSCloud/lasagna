@@ -4,18 +4,18 @@ Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{valu
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
 (function (w, d, undefined) {
-
   // check network status
   function checkNetwork(e) {
     if ("onLine" in navigator) {
       if (navigator.onLine) {
         d.getElementsByTagName("html")[0].setAttribute("offline", false);
         d.getElementById("offline-message").setAttribute("aria-hidden", true);
-        if (w.GSC) w.GSC.offline = false;
+        if (GSC) GSC.offline = false;
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
         d.getElementById("offline-message").setAttribute("aria-hidden", false);
-        if (w.GSC) w.GSC.offline = true;
+        if (GSC) GSC.offline = true;
+        if (GSC) GSC.loaderOff();
       }
     }
   }
