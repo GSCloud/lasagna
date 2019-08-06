@@ -43,12 +43,6 @@ if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
-// simple counter + data clearing
-if (isset($_COOKIE["counter"]) && (int) $_COOKIE["counter"] > 500 ) {
-    header('Clear-Site-Data: "cache", "storage"');
-}
-setcookie("counter", 1 + (isset($_COOKIE["counter"]) ? (int) $_COOKIE["counter"] : 0), time() + 86400*31, "/", DOMAIN, false, true); 
-
 // remove old unused cookies
 array_map(function ($name) {
     setcookie($name, "", 0, "/", DOMAIN, false, true);
@@ -313,6 +307,19 @@ require_once $presenter_file;
 \Tracy\Debugger::timer("PROCESSING");
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
+
+if (isset($data["admin"])) {
+    // do not count for admins!
+} else {
+    // simple counter + data clearing
+    $c = isset($_COOKIE["counter"]) ? (int) $_COOKIE["counter"] : 0;
+    if ($c > 500) {
+        $c = 0;
+        header('Clear-Site-Data: "cache", "storage"');
+    }
+    $c++;
+    setcookie("counter", $c, time() + 86400 * 31, "/", DOMAIN, false, true);
+}
 
 // OUTPUT
 $output = "";
