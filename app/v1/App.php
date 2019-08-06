@@ -308,14 +308,12 @@ require_once $presenter_file;
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
-if (isset($data["admin"])) {
-    // do not count for admins!
-} else {
-    // simple counter + data clearing
+// simple counter + data clearing
+if ($app->getUserGroup() != "admin") {
     $c = isset($_COOKIE["counter"]) ? (int) $_COOKIE["counter"] : 0;
     if ($c > 500) {
         $c = 0;
-        header('Clear-Site-Data: "cache", "storage"');
+//        header('Clear-Site-Data: "cache", "storage"');
     }
     $c++;
     setcookie("counter", $c, time() + 86400 * 31, "/", DOMAIN, false, true);

@@ -61,10 +61,10 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
   if (GSC) {
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
-    GSC.profile = "default";
+    GSC.profile = null;
     GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
-    // "touch" feature detection
+    // feature detection: "touch"
     GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
       true : false;
     if (GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
@@ -132,9 +132,9 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
 
     // GSC.CopyClipboard()
-    if (typeof GSC.CopyClipboard !== "function") GSC.CopyClipboard = function (dataString = "") {
+    if (typeof GSC.CopyClipboard !== "function") GSC.CopyClipboard = function (data) {
       var el = d.createElement("textarea");
-      el.value = dataString;
+      el.value = data;
       el.setAttribute("readonly", "");
       el.style.position = "absolute";
       el.style.left = "-9999px";
@@ -152,11 +152,10 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
     // GSC.VersionCheck()
     GSC.init.push(function () {
-      GSC.names.push("version check");
+      GSC.names.push("GSC.VersionCheck()");
 
       if (typeof GSC.VersionCheck !== "function") GSC.VersionCheck = function () {
         if (!GSC.offline) {
-
           $.post("/version/core", function (post) {
             if (post.data.LASAGNA.core.version) {
               if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
@@ -167,7 +166,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               }
             }
           });
-
           $.post("/{{ lang }}/version/data", function (post) {
             if (post.data.LASAGNA.data.version) {
               if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
@@ -178,23 +176,18 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               }
             }
           });
-
-          setTimeout("GSC.VersionCheck()", 60000);
+          setTimeout("GSC.VersionCheck();", 60000);
         }
       }
-      setTimeout("GSC.VersionCheck()", 10000);
+
+      setTimeout("GSC.VersionCheck();", 10000);
     });
 
-    // GSC.ReadArticles()
-    GSC.init.push(function () {
-      GSC.names.push("read articles");
+    // GSC.SetProfile()
+    GSC.init.push(function() {
+      GSC.names.push("GSC.SetProfile()");
 
-      if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
-        if (GSC.offline) {
-          setTimeout("GSC.ReadArticles();", 5000);
-          return;
-        }
-
+      if (typeof GSC.SetProfile !== "function") GSC.SetProfile = function () {
         var profiles = [];
         var params = new window.URLSearchParams(window.location.search);
         var profile = params.get("profile");
@@ -206,14 +199,24 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           profile = "default";
         }
         GSC.profile = profile;
-        console.log("Reading articles", {profile});
+      }
+    });
+
+    // GSC.ReadArticles()
+    GSC.init.push(function () {
+      GSC.names.push("GSC.ReadArticles()");
+
+      if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
+        if (GSC.summernote_on || GSC.offline) {
+          setTimeout("GSC.ReadArticles();", 5000);
+          return;
+        }
+        console.log("Reading articles:", GSC.profile);
 
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
-            Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {  // API call
-          if (GSC.summernote_on) return;
+            Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {
           if (data && data.data && data.data.html) {
-            var a = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"];
-            localStorage[a] = data.data.html;
+            localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
             if (data.data.crc) {
               GSC.data.articlescrc = data.data.crc;
               var obj = jQuery.parseJSON(data.data.html);
@@ -225,18 +228,20 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           }
           if (typeof callback === "function") callback();
         });
+
         setTimeout("GSC.ReadArticles()", 30000);
       }
 
-      setTimeout("GSC.ReadArticles();", 1);
-      var a = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"];
-      if (a && a.length) {
-          var obj = jQuery.parseJSON(a);
+      GSC.SetProfile();
+      var a = "articles_" + GSC.profile + "_{{ request_path_hash }}";
+      if (localStorage && localStorage[a] && localStorage[a].length) {
+          var obj = jQuery.parseJSON(localStorage[a]);
           for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
           $(".summernote>ul").each(function (i, obj) {
             $(obj).addClass("browser-default");
           });
       }
+      setTimeout("GSC.ReadArticles();", 1);
     });
 
     // DELAYED UI bindings
