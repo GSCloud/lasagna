@@ -233,10 +233,9 @@ if ($router[$view]["sethl"] ?? false) {
             $r = null;
     }
     if ($r) {
-        ob_end_clean();
-        \setcookie("hl", $r, time() + 86400 * 30, "/");
-        header("Location: /" . $r, true, 303);
-        exit;
+        \setcookie("hl", $r, time() + 86400 * 31, "/");
+        $presenter[$view]["language"] = $r;
+        $data["presenter"] = $presenter;
     }
 }
 
@@ -312,21 +311,14 @@ $data = $app->getData();
 if ($app->getUserGroup() != "admin") {
     $c = isset($_COOKIE["counter"]) ? (int) $_COOKIE["counter"] : 0;
     if ($c > 500) {
+        header('Clear-Site-Data: "cache", "storage"');
         $c = 0;
-//        header('Clear-Site-Data: "cache", "storage"');
     }
     $c++;
     setcookie("counter", $c, time() + 86400 * 31, "/", DOMAIN, false, true);
 }
 
-// OUTPUT
-$output = "";
-if (array_key_exists("output", $data)) {
-    $output = $data["output"];
-}
-echo $output;
-
-// END
+// ANALYTICS
 $events = null;
 $data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
@@ -344,11 +336,14 @@ if ($events) {
     @$events->trackEvent($cfg["app"] ?? "APP", "processing_time", $time);
 }
 
+// OUTPUT
+echo $data["output"] ?? "";
+
 // DEBUG
 if (DEBUG) {
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);
     unset($data["google_drive_backup "]);
-    bdump($data, "DATA");
+    bdump($data, '$data');
 }
