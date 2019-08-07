@@ -186,15 +186,7 @@ if (CLI) {
                 require_once "APresenter.php";
                 require_once "CliPresenter.php";
                 $app = CliPresenter::getInstance()->setData($data)->process();
-                if ($argc != 3) {
-                    echo 'Example: app \'$app->showConst()\'' . "\n";
-                    echo 'Example: app \'echo $app->getLocale()["\$lasagna"]\'' . "\n";
-                    echo 'Example: app \'print_r($app->getIdentity())\'' . "\n";
-                    echo 'Example: app \'print_r($app->getLocale())\'' . "\n";
-                    exit;
-                }
-                echo eval(trim($argv[2]) . ";");
-                echo "\n";
+                $app->evaler($app, $argc, $argv);
                 exit;
                 break;
 
@@ -303,7 +295,9 @@ header(implode(" ", [
 // APP
 require_once APP . "/APresenter.php";
 require_once $presenter_file;
+
 \Tracy\Debugger::timer("PROCESSING");
+
 $app = $p::getInstance()->setData($data)->process();
 $data = $app->getData();
 
