@@ -5,9 +5,12 @@ OUTPUT_DIR="$2"
 
 if [ -z "$INPUT_IMAGE" ]; then INPUT_IMAGE="logo.png"; fi
 if [ -z "$OUTPUT_DIR" ]; then OUTPUT_DIR="."; fi
-if [ ! -d "$OUTPUT_DIR" ]; then echo "Error: Output directory does not exist."; exit 1; fi
+if [ ! -d "$OUTPUT_DIR" ]; then
+  echo "ERROR: Output directory does not exist." >&2
+  exit 1
+fi
 if ! [ -x "$(command -v convert)" ]; then
-  echo "Error: convert not found. Check if ImageMagick is installed. Get it from https://www.imagemagick.org." >&2
+  echo "ERROR: convert not found. Check if ImageMagick is installed. Get it from: https://www.imagemagick.org" >&2
   exit 1
 fi
 
@@ -16,13 +19,13 @@ if [ -f $INPUT_IMAGE ]; then
   for size in ${SIZES[@]}; do
     convert -flatten -background none -resize ${size}x${size} $INPUT_IMAGE $OUTPUT_DIR/favicon-${size}.png
     if [ -f favicon-${size}.png ]; then
-      echo $size px
+      echo -ne "\e[0mconverting square: \e[92m$size px\e[0m\033[0K\r"
     else
-      echo "Error: Could not process input file. $INPUT_IMAGE may not be an image file."
+      echo "ERROR: Could not process input file $INPUT_IMAGE" >&2
       exit 1
     fi
   done
 else
-  echo "Error: Input file does not exist."
+  echo "ERROR: Input file $INPUT_IMAGE does not exist." >&2
   exit 1
 fi
