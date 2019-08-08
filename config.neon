@@ -25,7 +25,15 @@ google: [
   ua: "UA-89950317-12"
 ]
 
+alpha_hosts: [
+  alasagna.gscloud.cz
+]
+beta_hosts: [
+  blasagna.gscloud.cz
+]
+
 cache_profiles: [
+  lasagna
 ]
 
 multisite_profiles: [
@@ -46,7 +54,7 @@ v2: [
     ]
   ]
   data: []
-  locale_prefix: "lsgn2_"
+  locale_prefix: "las2_"
 ]
 
 css_sources: [
@@ -62,7 +70,6 @@ script_sources: [
   "/js/gulp/2.modernizr.min.js",
   "/js/gulp/3.materialize.min.js",
   "/js/gulp/6.cookieconsent.min.js",
-  "/js/gulp/8.lazysizes.min.js",
   "/js/gulp/eu.cookieconsent.setup.js",
   "/js/gulp/main.js",
 ]

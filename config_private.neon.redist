@@ -8,9 +8,6 @@ goauth_secret: ""
 # Google Cloud Platfrom keys
 gcp_keys: "/keys/some.json"
 
-# Google Drive backup
-google_drive_backup: "https://drive.google.com/drive/folders/xxx"
-
 # Google
 google: [
   mapsapi_key: "some_key"
@@ -30,6 +27,8 @@ cf: [
 # admins
 admin_groups: [
   default: [
+  ]
+  editor: [
   ]
   admin: [
     joe@foo.bar
