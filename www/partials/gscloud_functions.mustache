@@ -4,6 +4,7 @@ Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{valu
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
 (function (w, d, undefined) {
+
   // check network status
   function checkNetwork(e) {
     if ("onLine" in navigator) {
@@ -30,9 +31,10 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
   }
 
   // window.setCookie()
-  if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days = 31) {
+  if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days) {
     if (key === undefined) return false;
     if (value === undefined) return false;
+    if (days === undefined) days = 31;
     if (days === 0) {
       // session cookie
       document.cookie = key + "=" + value + ";path=/";
@@ -70,8 +72,9 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     if (GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
     // GSC.FormatBytes()
-    if (typeof GSC.FormatBytes !== "function") GSC.FormatBytes = function (number, precision = 2) {
+    if (typeof GSC.FormatBytes !== "function") GSC.FormatBytes = function (number, precision) {
       number = parseInt(number);
+      if (precision === undefined) precision = 2;
       if (!number) return "0";
       var c = 1024,
         e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
@@ -80,7 +83,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
 
     // GSC.GetTime()
-    if (typeof GSC.GetTime !== "function") GSC.GetTime = function (dateString = 0) {
+    if (typeof GSC.GetTime !== "function") GSC.GetTime = function (dateString) {
 
       function englishext(x) {
         x = ("" + x).slice(-1);
@@ -102,7 +105,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
         "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
       ];
-      if (dateString === 0) {
+      if (dateString === undefined) {
         var z = new Date();
       } else {
         var z = new Date(dateString);

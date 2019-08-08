@@ -13,7 +13,6 @@
           document.querySelector("link[rel=canonical]").href : document.location.href);
         title = title || document.title;
         text = text || document.title;
-        console.log("WebShare API call: ", {title, text, url});
         navigator.share({
           title: title,
           text: text,
