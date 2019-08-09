@@ -9,11 +9,6 @@
  * @link     https://lasagna.gscloud.cz
  */
 
- class LogoutPresenter extends \GSC\APresenter {
-
-  public function process() {
-    ob_end_flush();
-    $this->logout();
-  }
-
-}
+ob_end_clean();
+$climate = new League\CLImate\CLImate;
+$climate->out("<green>Welcome to <bold>Tesseract LASAGNA Doctor\n");

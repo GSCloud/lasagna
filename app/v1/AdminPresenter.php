@@ -1,4 +1,13 @@
 <?php
+/**
+ * GSC Tesseract LASAGNA
+ *
+ * @category Framework
+ * @package  LASAGNA
+ * @author   Fred Brooker <oscadal@gscloud.cz>
+ * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
+ */
 
 use Cake\Cache\Cache;
 use Symfony\Component\Lock\Factory;

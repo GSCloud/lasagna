@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * GSC Tesseract LASAGNA
@@ -6,7 +7,7 @@
  * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://microsite.gscloud.cz
+ * @link     https://lasagna.gscloud.cz
  */
 
 use Nette\Neon\Neon;

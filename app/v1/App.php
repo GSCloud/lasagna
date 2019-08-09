@@ -10,8 +10,7 @@
  */
 
 use Cake\Cache\Cache;
-use Google\Cloud\Logging\LoggingClient;
-use Monolog\Logger;
+use Google\Cloud\Logging\LoggingClient;use Monolog\Logger;
 use Nette\Neon\Neon;
 use There4\Analytics\AnalyticsEvent;
 
@@ -182,6 +181,16 @@ if (CLI) {
                 exit;
                 break;
 
+            case "doctor":
+                require_once "Doctor.php";
+                exit;
+                break;
+
+            case "test":
+                require_once "UnitTester.php";
+                exit;
+                break;
+
             case "app":
                 require_once "APresenter.php";
                 require_once "CliPresenter.php";
@@ -198,6 +207,7 @@ if (CLI) {
     echo "Tesseract LASAGNA CLI \n\n";
     echo "Usage: Bootstrap.php <command> [<parameters>...] \n\n";
     echo "\t app '<code>' - run code \n";
+    echo "\t doctor - check system requirements \n";
     echo "\t localtest - CI local test \n";
     echo "\t productiontest - CI production test \n\n";
     exit;

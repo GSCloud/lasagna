@@ -6,19 +6,28 @@
  * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://microsite.gscloud.cz
+ * @link     https://lasagna.gscloud.cz
  */
-
-// sanity check
-$x = "FATAL ERROR: broken chain of trust\n\n";
-$x = "FATAL ERROR: missing parameter\n\n";
-defined("ROOT") || die($x);
-if (!isset($cfg)) die($x);
-if (!isset($presenter)) die($x);
-if (!isset($argv)) die($y);
 
 ob_end_clean();
 $climate = new League\CLImate\CLImate;
+
+// sanity check
+$c = 0;
+defined("ROOT") || $c++;
+isset($presenter) || $c++;
+isset($cfg) || $c++;
+if ($c) {
+    $climate->out("<red><bold>FATAL ERROR</bold>: broken chain of trust!\n");
+    exit;
+}
+$c = 0;
+isset($argc) || $c++;
+isset($argv) || $c++;
+if ($c) {
+    $climate->out("<red><bold>FATAL ERROR</bold>: missing parameter!\n");
+    exit;
+}
 
 switch ($argv[1]) {
     case "localtest":
@@ -34,7 +43,7 @@ switch ($argv[1]) {
 
 if (!strlen($target)) {
     $climate->out("<bold><green>${cfg['app']} ${case}");
-    $climate->out("<red>FATAL ERROR: Missing target URI!\n");
+    $climate->out("<red>FATAL ERROR: missing target URI!\n");
     exit;
 }
 
