@@ -15,66 +15,71 @@ class StringFilters implements IStringFilters
 {
     public static function convert_eol_to_br($content)
     {
+        $content = (string) $content;
         $content = str_replace(array(
             "\n",
             "\r\n",
         ), "<br>", $content);
-
         return (string) $content;
     }
 
     public static function convert_eolhyphen_to_brdot($content)
     {
+        $content = (string) $content;
         $content = str_replace(array(
-            "<br>- ",
-            "\n- ",
             "<br>* ",
+            "<br>- ",
             "\n* ",
+            "\n- ",
         ), "<br>•&nbsp;", $content);
-
-        return (string) $content;
+        if ( (substr($content, 0, 2) === "- ") || (substr($content, 0, 2) === "* ") ) {
+            $content = "•&nbsp;" . substr($content, 2);
+        }
+        return $content;
     }
 
     public static function trim_eol($content)
     {
+        $content = (string) $content;
         $content = str_replace(array(
             "\r\n",
             "\n",
             "\r",
         ), "", $content);
-
-        return (string) $content;
+        return $content;
     }
 
     public static function trim_html_comment($content)
     {
+        $content = (string) $content;
         $body = "<body";
         $c = explode($body, $content, 2);
         $regex = '/<!--(.|\s)*?-->/';
         $c[1] = preg_replace($regex, "<!-- comment -->", $c[1]);
         $content = $c[0] . $body . $c[1];
-
-        return (string) $content;
+        return $content;
     }
 
     public static function correct_text_spacing($content, $language = "cs")
     {
+        $content = (string) $content;
         $language = strtolower((string) $language);
         switch ($language) {
             case "en":
                 $content = self::correct_text_spacing_en($content);
-                return (string) $content;
+                return $content;
                 break;
 
             default:
                 $content = self::correct_text_spacing_cs($content);
-                return (string) $content;
+                return $content;
                 break;
         }
     }
 
     private static function correct_text_spacing_en($content)
     {
+        $content = (string) $content;
         $replace = array(
             "  " => " ",
             ">>" => "»",
@@ -83,10 +88,12 @@ class StringFilters implements IStringFilters
             " - " => " – ",
             " ... " => "&nbsp;… ",
             " ..." => "&nbsp;…",
-            " :-(" => "&nbsp;😟",
             " :-)" => "&nbsp;🙂",
-            " :-O" => "&nbsp;😮",
+            " :-P" => "&nbsp;😋",
             " :-|" => "&nbsp;😐",
+            " :-(" => "&nbsp;😟",
+            " :-[" => "&nbsp;😕",
+            " :-O" => "&nbsp;😮",
             " A " => " A&nbsp;",
             " AM" => "&nbsp;AM",
             " CZK " => " CZK&nbsp;",
@@ -134,12 +141,12 @@ class StringFilters implements IStringFilters
             " ‰ " => "&nbsp;‰",
         );
         $content = str_replace(array_keys($replace), $replace, $content);
-
-        return (string) $content;
+        return $content;
     }
 
     private static function correct_text_spacing_cs($content)
     {
+        $content = (string) $content;
         $replace = array(
             "  " => " ",
             ">>" => "»",
@@ -148,10 +155,12 @@ class StringFilters implements IStringFilters
             " - " => " – ",
             " ... " => "&nbsp;… ",
             " ..." => "&nbsp;…",
-            " :-(" => "&nbsp;😟",
             " :-)" => "&nbsp;🙂",
-            " :-O" => "&nbsp;😮",
+            " :-P" => "&nbsp;😋",
             " :-|" => "&nbsp;😐",
+            " :-(" => "&nbsp;😟",
+            " :-[" => "&nbsp;😕",
+            " :-O" => "&nbsp;😮",
             " CZK" => "&nbsp;CZK",
             " Czk" => "&nbsp;CZK",
             " DIČ: " => " DIČ:&nbsp;",
@@ -228,8 +237,7 @@ class StringFilters implements IStringFilters
             " ‰ " => "&nbsp;‰",
         );
         $content = str_replace(array_keys($replace), $replace, $content);
-
-        return (string) $content;
+        return $content;
     }
 
 }
