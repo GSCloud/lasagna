@@ -35,7 +35,6 @@ beta_hosts: [
 ]
 
 cache_profiles: [
-  lasagna
 ]
 
 multisite_profiles: [

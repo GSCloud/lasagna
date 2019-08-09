@@ -18,20 +18,26 @@ if (!isset($presenter)) die($x);
 if (!isset($argv)) die($y);
 
 ob_end_clean();
+$climate = new League\CLImate\CLImate;
 
 switch ($argv[1]) {
     case "localtest":
         $case = "local";
-        $target = $cfg["local_goauth_origin"];
+        $target = $cfg["local_goauth_origin"] ?? "";
         break;
 
     case "production":
     default:
         $case = "production";
-        $target = $cfg["goauth_origin"];
+        $target = $cfg["goauth_origin"] ?? "";
 }
 
-$climate = new League\CLImate\CLImate;
+if (!strlen($target)) {
+    $climate->out("<bold><green>${cfg['app']} ${case}");
+    $climate->out("<red>FATAL ERROR: Missing target URI!\n");
+    exit;
+}
+
 $climate->out("<bold><green>${cfg['app']} ${case}");
 
 $pages = [];
