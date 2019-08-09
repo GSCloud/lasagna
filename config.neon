@@ -1,4 +1,4 @@
-### TESSERACT LASAGNA
+### LASAGNA
 
 #dbg: TRUE
 minify: TRUE
@@ -23,6 +23,8 @@ local_goauth_redirect: "http://localhost:8007/login"
 # Google
 google: [
   ua: "UA-89950317-12"
+#  map_query: ""
+#  analytics: "https://analytics.google.com/analytics/web/#/report-home/xxx"
 ]
 
 alpha_hosts: [
