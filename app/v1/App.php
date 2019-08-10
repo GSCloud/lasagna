@@ -15,7 +15,7 @@ use Nette\Neon\Neon;
 use There4\Analytics\AnalyticsEvent;
 
 // sanity check
-$x = "FATAL ERROR: broken chain of trust\n\n";
+$x = "FATAL ERROR: broken chain of trust";
 defined("APP") || die($x);
 defined("CACHE") || die($x);
 defined("CLI") || die($x);

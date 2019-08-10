@@ -5,14 +5,11 @@
 .faces::after{content:"🤕";animation-name:faces;animation-duration:1s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
 @keyframes faces{10%{content:"😩"}20%{content:"😫"}30%{content:"😪"}40%{content:"😴"}50%{content:"😵"}60%{content:"😦"}70%{content:"😢"}80%{content:"😭"}90%{content:"🤒"}}
-.a_reset{font-family:Arial!important;font-size:14px!important}
-.a_h2{font-size:5em!important;font-weight:700!important}
-.a_h4{font-size:3em!important;font-weight:700!important}
-.a_h5{font-size:2em!important;font-weight:700!important}
+.a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
 .extrapadding{padding:5px;border-radius:5px}
 .nowrap{white-space:nowrap}
 .protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
-#admin_main .row{margin-bottom:6px}
+#admin_main .row{margin-bottom:5px}
 #admin_main {padding-top:5px}
 #admin_main,#admin_main h2,#admin_main h4,#admin_main h5{font-family:Arial!important}
 #admin_main {font-size:14px!important}
@@ -55,7 +52,7 @@
         href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
         <i class="fab fa-google"></i>
         {{ l.a_google_analytics }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect pink waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect lime waves-light btn" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://onesignal.com">
         <i class="fas fa-bell"></i>
         {{ l.a_onesignal }}</a>
@@ -85,7 +82,7 @@
         </div>
         <div id="domains" style="font-size:10px!important;color:#888!important" class="container"></div>
         <a id="a_emoji" style="margin:5px" class="waves-effect blue waves btn faces emojianim"></a>
-        <a id="a_summernote" style="margin:5px" class="tooltipped waves-effect orange waves-light btn"
+        <a id="a_summernote" style="margin:5px" class="tooltipped waves-effect green waves-light btn"
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
           <i class="fas fa-edit"></i>
           {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
@@ -106,11 +103,11 @@
           <span class="nowrap">{{ l.a_webpage }}: {{ cache_profiles.page }}</span>
         </div>
         <div class="row center">
-          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="top"
+          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn" data-position="top"
             data-tooltip="{{ l.a_update_ttip }}">
             <i class="fab fa-google-drive"></i>
             {{ l.a_update }}</a>
-          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect red waves-light btn" data-position="top"
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn" data-position="top"
             data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
@@ -133,12 +130,6 @@
       <div class="row center extrapadding">
         <div class="white-text">
           <h5>{{ l.a_groups_permissions }}</h5>
-          <div class="row center">
-            <a id="a_logout" class="tooltipped waves-effect green waves-light btn" data-position="top"
-              data-tooltip="{{ l.a_logout_ttip }}">
-              <i class="fas fa-sign-out-alt"></i>
-              {{ l.a_logout }}</a>
-          </div>
           <div class="row center hide-on-small-only">
             <strong>OWNER / ADMIN</strong>
             <div class="container">
@@ -155,6 +146,12 @@
               </p>
             </div>
           </div>
+          <div class="row center">
+            <a id="a_logout" class="tooltipped waves-effect green waves-light btn" data-position="top"
+              data-tooltip="{{ l.a_logout_ttip }}">
+              <i class="fas fa-sign-out-alt"></i>
+              {{ l.a_logout }}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -165,9 +162,9 @@
         <div class="white-text">
           <h5>{{ l.a_google }}</h5>
           <ul class="mono">
-            <li>Project: {{ gcp_project_id }}
+            <li>GCP Project ID: {{ gcp_project_id }}
               {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
-            <li>Google Maps query: {{ google.map_query }}
+            <li>Google Maps Query: {{ google.map_query }}
               {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
             <li>Google Analytics: {{ google.ua }}
               {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
@@ -179,18 +176,6 @@
               {{^google.pagespeedinsights_key}}<i class="red-text fas fa-times"></i>{{/google.pagespeedinsights_key}}
             </li>
           </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- CHANGELOG -->
-    <div class="col l4 m6 hide-on-small-only">
-      <div class="row center extrapadding">
-        <h5>{{ l.a_changes }}</h5>
-        <div class="row grey-text" style="margin-top:1em">
-          <div class="grey-text left-align container">
-            {{#convert_hyperlinks}}{{ l.a_changelog }}{{/convert_hyperlinks}}
-          </div>
           {{^l.onesignal_appid}}
           <div class="row center red-text" style="margin-top:1em">
             <div class="container">
@@ -202,13 +187,25 @@
       </div>
     </div>
 
+    <!-- CHANGELOG -->
+    <div class="col l4 m6 hide-on-small-only">
+      <div class="row center extrapadding">
+        <h5>{{ l.a_changes }}</h5>
+        <div class="row grey-text" style="margin-top:1em">
+          <div class="grey-text left-align container">
+            {{ l.a_changelog }}
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- PageSpeed Insights -->
     <div class="col l4 m6 hide-on-small-only">
       <div class="row center extrapadding">
         <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
         <p id="a_ps_insights_info"></p>
         <div id="psi_row" class="row center">
-          <a id="a_ps_insights" class="tooltipped waves-effect orange waves-light btn" data-position="top"
+          <a id="a_ps_insights" class="tooltipped waves-effect green waves-light btn" data-position="top"
             data-tooltip="{{ l.a_ps_insights_ttip }}">
             <i class="fab fa-google"></i>
             {{ l.a_ps_insights }}</a>
@@ -219,7 +216,7 @@
       <h4 class="center">
         <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
-        <a rel="noopener" target="_blank" class="tooltipped lime-text text" data-position="top"
+        <a rel="noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
           data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i
             class="fas fa-server"></i></a>
         {{#l.a_lasagna_manual_disable}}
@@ -228,18 +225,18 @@
             class="fas fa-dna"></i></a>
         {{/l.a_lasagna_manual_disable}}
         {{^l.a_lasagna_manual_disable}}
-        <a rel="noopener" target="_blank" class="tooltipped purple-text text" data-position="top"
+        <a rel="noopener" target="_blank" class="tooltipped red-text text" data-position="top"
           data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}"><i
             class="fas fa-dna"></i></a>
         {{/l.a_lasagna_manual_disable}}
         <a rel="noopener" target="_blank" class="tooltipped white-text text" data-position="top"
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i
             class="fas fa-clone"></i></a>
-        {{#google_drive_backupxxx}}
-        <a rel="noopener" target="_blank" class="tooltipped green-text text" data-position="top"
+        {{#google_drive_backup}}
+        <a rel="noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i
             class="fas fa-warehouse"></i></a>
-        {{/google_drive_backupxxx}}
+        {{/google_drive_backup}}
       </h4>
     </div>
 
@@ -300,12 +297,12 @@
               var lines = data.data[x]["lines"];
               if (sheet) {
                 link =
-                  '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:5px" ' +
+                  '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:2px" ' +
                   'class="green mono white-text bold" href="' +
                   'https://docs.google.com/spreadsheets/d/' +
                   sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
                   x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
-                  ' style="border-radius:5px" class="bold blue white-text mono" ' +
+                  ' style="border-radius:2px" class="bold blue white-text mono" ' +
                   'href="https://docs.google.com/spreadsheets/d/e/' +
                   csv + '/pub?output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                   lines + '&nbsp;</a>&nbsp;';
