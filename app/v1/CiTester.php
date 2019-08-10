@@ -30,12 +30,12 @@ if ($c) {
 }
 
 switch ($argv[1]) {
-    case "localtest":
+    case "testlocal":
         $case = "local";
         $target = $cfg["local_goauth_origin"] ?? "";
         break;
 
-    case "production":
+    case "testprod":
     default:
         $case = "production";
         $target = $cfg["goauth_origin"] ?? "";
@@ -102,3 +102,5 @@ foreach (array_merge($redirects, $pages) as $x) {
             "${u}${t}length: ${length} target: ${x['url']} code: ${code} / assert: ${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
     }
 }
+
+exit;

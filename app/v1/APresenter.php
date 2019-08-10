@@ -193,7 +193,7 @@ abstract class APresenter implements IPresenter
     private static $instances = array();
 
     /**
-     * Presenter processor
+     * Abstract processor
      *
      * @abstract
      * @return void
@@ -207,7 +207,7 @@ abstract class APresenter implements IPresenter
     {
         $class = get_called_class();
         if (array_key_exists($class, self::$instances)) {
-            throw new \Exception("INSTANCE OF `" . $class . "` ALREADY EXISTS!");
+            throw new \Exception("INSTANCE OF [" . $class . "] ALREADY EXISTS!");
         }
     }
 
@@ -262,7 +262,7 @@ abstract class APresenter implements IPresenter
      */
     final public function __toString()
     {
-        return (string) json_encode($this->getData());
+        return (string) json_encode($this->getData(), JSON_PRETTY_PRINT);
     }
 
     /**
@@ -271,7 +271,6 @@ abstract class APresenter implements IPresenter
     public function __destruct()
     {
         ob_flush();
-        flush();
         ob_start();
 
         foreach ($this->csv_postload as $key) {

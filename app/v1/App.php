@@ -52,11 +52,15 @@ array_map(function ($name) {
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
 {
-    if (!GCP_PROJECTID) {
+    if (empty($message)) {
         return;
     }
 
-    if (!$message) {
+    if (is_null(GCP_PROJECTID)) {
+        return;
+    }
+
+    if (is_null(GCP_KEYS)) {
         return;
     }
 
@@ -123,11 +127,11 @@ $routes = [
     APP . "/router_admin.neon",
     APP . "/router.neon",
 ];
+
 foreach ($routes as $r) {
     if (is_callable("check_file")) {
         check_file($r);
     }
-
     if (($content = @file_get_contents($r)) === false) {
         logger("Error in routing table: $r", Logger::EMERGENCY);
         ob_end_clean();
@@ -145,7 +149,6 @@ foreach ($router as $k => $v) {
     if ($k == "defaults") {
         continue;
     }
-
     foreach ($defaults as $i => $j) {
         $router[$k][$i] = $v[$i] ?? $defaults[$i];
     }
@@ -175,20 +178,17 @@ if (CLI) {
     if (isset($argv[1])) {
 
         switch ($argv[1]) {
-            case "localtest":
-            case "productiontest":
+            case "testlocal":
+            case "testprod":
                 require_once "CiTester.php";
-                exit;
                 break;
 
             case "doctor":
                 require_once "Doctor.php";
-                exit;
                 break;
 
             case "test":
                 require_once "UnitTester.php";
-                exit;
                 break;
 
             case "app":
@@ -204,12 +204,13 @@ if (CLI) {
         }
     }
 
-    echo "Tesseract LASAGNA CLI \n\n";
-    echo "Usage: Bootstrap.php <command> [<parameters>...] \n\n";
-    echo "\t app '<code>' - run code \n";
-    echo "\t doctor - check system requirements \n";
-    echo "\t localtest - CI local test \n";
-    echo "\t productiontest - CI production test \n\n";
+    $climate = new League\CLImate\CLImate;
+    $climate->out("\n<bold><green>Tesseract LASAGNA CLI</green></bold> \n");
+    $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
+    $climate->out("\t <bold>app</bold> '<code>' \t - run code");
+    $climate->out("\t <bold>doctor</bold> \t - check system requirements");
+    $climate->out("\t <bold>testlocal</bold> \t - CI local test");
+    $climate->out("\t <bold>testprod</bold> \t - CI production test \n");
     exit;
 }
 

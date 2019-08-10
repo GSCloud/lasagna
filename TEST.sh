@@ -4,4 +4,4 @@
 dir="$(dirname "$0")"
 . $dir"/_includes.sh"
 
-php -f Bootstrap.php productiontest
+php -f Bootstrap.php testprod

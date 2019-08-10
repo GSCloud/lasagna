@@ -17,6 +17,8 @@ $climate->out("<green>Welcome to <bold>Tesseract LASAGNA Unit Tester\n");
 
 Tester\Environment::setup();
 
+exit;
+
 $o = new Greeting;
 Assert::same('Hello John', $o->say('John')); # we expect the same
 Assert::same('Hi John', $o->say('John'));

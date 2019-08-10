@@ -11,4 +11,8 @@
 
 ob_end_clean();
 $climate = new League\CLImate\CLImate;
-$climate->out("<green>Welcome to <bold>Tesseract LASAGNA Doctor\n");
+$climate->out("<green><bold>Tesseract LASAGNA Doctor\n");
+#[√]
+#[!]
+
+exit;

@@ -133,7 +133,7 @@ if (CLI === true) {
     /** @const Disable for CLI. */
     defined("DEBUG") || define("DEBUG", false);
 }
-if ( isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") !== false) {
+if (isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") !== false) {
     /** @const Disable for curl. */
     defined("DEBUG") || define("DEBUG", false);
 }
