@@ -159,8 +159,8 @@ class AdminPresenter extends \GSC\APresenter
                 $this->checkPermission("admin");
                 $x = 0;
                 if (isset($_POST["data"])) {
-//                    $data = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove whitespace
                     $data = (string) trim((string) $_POST["data"]);
+                    $data_nows = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove all whitespace
                     $x++;
                 }
                 if (isset($_POST["profile"])) {
@@ -179,10 +179,23 @@ class AdminPresenter extends \GSC\APresenter
                 if ($x != 3) {
                     return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 }
-                @copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak");
-                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
+                if(@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
                     return $this->writeJsonData([
-                        "status" => "Data write failed.",
+                        "status" => "Data copy to backup failed.",
+                        "profile" => $profile,
+                        "hash" => $hash,
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
+                };
+                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
+                    return $this->writeJsonData([
+                        "status" => "Data write to history file failed.",
+                        "profile" => $profile,
+                        "hash" => $hash,
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
+                };
+                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data) === false) {
+                    return $this->writeJsonData([
+                        "status" => "Data write to file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
                     ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);

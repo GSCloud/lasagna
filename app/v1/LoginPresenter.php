@@ -46,8 +46,9 @@ class LoginPresenter extends GSC\APresenter
             header("Location: " . $authUrl . $hint, true, 303);
 //            echo $authUrl . $hint;
             exit;
+
         } elseif (empty($_GET["state"]) || ($_GET["state"] && !isset($_COOKIE["oauth2state"]))) {
-            $errors[] = "INFO: Invalid OAuth state";
+            $errors[] = "Invalid OAuth state";
         } else {
             try {
                 $token = $provider->getAccessToken("authorization_code", [
@@ -62,16 +63,24 @@ class LoginPresenter extends GSC\APresenter
                     "id" => $ownerDetails->getId(),
                     "name" => $ownerDetails->getName(),
                 ]);
+                $a = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
+                if ($this->getUserGroup() == "admin") {
+                    if ($this->getCfg("DEBUG_COOKIE")) {
+                        \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
+                    }
+                }
                 \setcookie("oauth2state", "", 0);
                 unset($_COOKIE["oauth2state"]);
                 if (strlen($ownerDetails->getEmail())) {
                     \setcookie("login_hint", $ownerDetails->getEmail() ?? "", time() + 86400 * 10, "/", DOMAIN);
                 }
 /*
-dump($ownerDetails);
-dump($_COOKIE);
-dump(get_defined_constants(true)['user']);
- */
+                echo "IP ADDRESS: $a <br>";
+                echo "USER GROUP: " . $this->getUserGroup() ."<br>";
+                dump($ownerDetails);
+                dump(get_defined_constants(true)['user']);
+                exit;
+*/
                 if (isset($_COOKIE["return_uri"])) {
                     $c = $_COOKIE["return_uri"];
                     \setcookie("return_uri", "", 0);
@@ -88,10 +97,10 @@ dump(get_defined_constants(true)['user']);
         ob_end_flush();
         $this->addError("HTTP/1.1 400 Bad Request");
         header("HTTP/1.1 400 Bad Request");
-        echo "<html><body><h1>HTTP Error 400</h1><center><h2>BAD REQUEST</h2>";
+        echo "<html><body><center><h1>😐 AUTHENTICATION ERROR 😐</h1>";
         echo join("<br>", $errors);
         echo "<h3><a href=\"/login?nonce=" . substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8)
-            . "\">LOGIN RETRY ↻</a></h3></center></html></body>";
+            . "\">RETRY ↻</a></h3></center></html></body>";
         exit;
     }
 }

@@ -139,15 +139,23 @@ if (isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "c
 }
 defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false));
 if (DEBUG === true) {
-    Debugger::enable(Debugger::DEVELOPMENT, CACHE);
-    Debugger::$logSeverity = E_NOTICE | E_WARNING;
-    Debugger::$maxDepth = $cfg["DEBUG_DEPTH"] ?? 5;
-    Debugger::$maxLength = $cfg["DEBUG_LENGTH"] ?? 2500;
-    Debugger::$strictMode = true;
-    Debugger::$showBar = true;
+    // https://api.nette.org/3.0/Tracy/Debugger.html
+    Debugger::$logSeverity = 15; // https://www.php.net/manual/en/errorfunc.constants.php
+    Debugger::$maxDepth = $cfg["DEBUG_MAX_DEPTH"] ?? 5;
+    Debugger::$maxLength = $cfg["DEBUG_MAX_LENGTH"] ?? 500;
+    Debugger::$scream = $cfg["DEBUG_SCREAM"] ?? true;
+    Debugger::$showBar = $cfg["DEBUG_SHOW_BAR"] ?? true;
+    Debugger::$showFireLogger = $cfg["DEBUG_SHOW_FIRELOGGER"] ?? false;
+    Debugger::$showLocation = $cfg["DEBUG_SHOW_LOCATION"] ?? false;
+    Debugger::$strictMode = $cfg["DEBUG_STRICT_MODE"] ?? true;
+    $a = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
+    // // cookie: tracy-debug
+    Debugger::enable(
+        ($cfg["DEBUG_COOKIE"] ?? null) ? $cfg["DEBUG_COOKIE"] . "@" . $a : Debugger::DETECT,
+        CACHE,
+        $cfg["DEBUG_EMAIL"] ?? null
+    );
     Debugger::timer("RUNNING");
-} else {
-    Debugger::$showBar = false;
 }
 
 // data population

@@ -1,6 +1,9 @@
 ### XXX
 ### PRIVATE CONFIGURATION
 
+# cookie: tracy-debug
+DEBUG_COOKIE: "cookievalue"
+
 # Google OAuth 2.0
 goauth_client_id: "someid.apps.googleusercontent.com"
 goauth_secret: ""

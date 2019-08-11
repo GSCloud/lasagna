@@ -476,7 +476,8 @@ abstract class APresenter implements IPresenter
      * @param mixed $value
      * @return object Singleton instance.
      */
-    public function setData($data = null, $key = null, $value = null)   // TODO: needs rework!
+    public function setData($data = null, $key = null, $value = null) // TODO: needs rework!
+
     {
         if (is_null($data)) {
             $data = $this->data;
@@ -575,7 +576,7 @@ abstract class APresenter implements IPresenter
             $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
             $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
             $_SERVER["HTTP_USER_AGENT"] ?? "UA",
-            $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
+            $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
         ]), " ", "_");
         return $string;
     }
@@ -639,7 +640,7 @@ abstract class APresenter implements IPresenter
         }
         $i["timestamp"] = time();
         $i["country"] = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
-        $i["ip"] = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["REMOTE_ADDR"] ?? "";
+        $i["ip"] = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
         $out = [];
         $keys = array_keys($i);
         shuffle($keys);
@@ -650,7 +651,7 @@ abstract class APresenter implements IPresenter
         $s = json_encode($out);
         $this->setCookie("identity", $s);
 //        if (CLI) echo $s."\n";
-//        bdump($_COOKIE["identity"]);
+        //        bdump($_COOKIE["identity"]);
         return $this;
     }
 
@@ -669,18 +670,23 @@ abstract class APresenter implements IPresenter
         }
         $nonce = substr(trim($nonce), 0, 8);
         $timestamp = time();
-        if (CLI || ($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
+
+        // mock identity
+        if (CLI || (DOMAIN == "localhost")) {
             $this->setIdentity([
-                "avatar" => "",
                 "email" => "f@mxd.cz",
                 "id" => 666,
                 "name" => "Mr. Robot",
             ]);
         }
+
         if (isset($_COOKIE["identity"])) {
             $identity = $this->getCookie("identity");
             $i = json_decode($identity, true);
-            if (!is_array($i)) $i = [];
+            if (!is_array($i)) {
+                $i = [];
+            }
+
             if (!array_key_exists("nonce", $i)) {
                 $i["nonce"] = "";
             }
@@ -699,7 +705,10 @@ abstract class APresenter implements IPresenter
         if (isset($_GET["identity"])) {
             $identity = $_GET["identity"];
             $i = json_decode($identity, true);
-            if (!is_array($i)) $i = [];
+            if (!is_array($i)) {
+                $i = [];
+            }
+
             if (!array_key_exists("nonce", $i)) {
                 $i["nonce"] = "";
             }

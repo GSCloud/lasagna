@@ -338,7 +338,6 @@ if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVE
 if ($events) {
     ob_flush();
     @$events->trackEvent($cfg["app"] ?? "APP", "country_code", $country);
-    @$events->trackEvent($cfg["app"] ?? "APP", "processing_time", $time);
 }
 
 // OUTPUT
@@ -351,4 +350,5 @@ if (DEBUG) {
     unset($data["goauth_client_id"]);
     unset($data["google_drive_backup "]);
     bdump($data, '$data');
+    bdump($app->getIdentity(), "identity");
 }
