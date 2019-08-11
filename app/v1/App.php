@@ -26,7 +26,7 @@ defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 /** @const Domain name, extracted from SERVER array. */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 /** @const Project name, default LASAGNA. */
-defined("PROJECT") || define("PROJECT", (string) $cfg["project"] ?? "LASAGNA");
+defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
 /** @const Server name, extracted from SERVER array. */
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 /** @const Version string. */
@@ -84,7 +84,7 @@ $cache_profiles = array_replace([
     "limiter" => "+2 seconds",
     "page" => "+10 seconds",
 ],
-    $cfg["cache_profiles"] ?? []
+    (array) ($cfg["cache_profiles"] ?? [])
 );
 foreach ($cache_profiles as $k => $v) {
     Cache::setConfig($k, [
@@ -98,8 +98,8 @@ foreach ($cache_profiles as $k => $v) {
 // multi-site profiles
 $multisite_names = [];
 $multisite_profiles = array_replace([
-    "default" => [strtolower(trim(str_replace("https://", "", ($cfg["canonical_url"] ?? "")), "/") ?? DOMAIN)],
-], $cfg["multisite_profiles"] ?? []);
+    "default" => [strtolower(trim(str_replace("https://", "", (string) ($cfg["canonical_url"] ?? "")), "/") ?? DOMAIN)],
+], (array) ($cfg["multisite_profiles"] ?? []));
 foreach ($multisite_profiles as $k => $v) {
     $multisite_names[] = strtolower($k);
 }
@@ -109,7 +109,7 @@ if (!in_array($profile_index, $multisite_names)) {
     $profile_index = "default";
 }
 
-$auth_domain = strtolower(str_replace("https://", "", $cfg["goauth_origin"] ?? ""));
+$auth_domain = strtolower(str_replace("https://", "", (string) ($cfg["goauth_origin"] ?? "")));
 if (!in_array($auth_domain, $multisite_profiles["default"])) {
     $multisite_profiles["default"][] = $auth_domain;
 }
@@ -337,7 +337,7 @@ if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVE
 }
 if ($events) {
     ob_flush();
-    @$events->trackEvent($cfg["app"] ?? "APP", "country_code", $country);
+    @$events->trackEvent((string) ($cfg["app"] ?? "APP"), "country_code", $country);
 }
 
 // OUTPUT

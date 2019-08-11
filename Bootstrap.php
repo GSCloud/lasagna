@@ -47,9 +47,9 @@ defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
 /** @const Temporary files folder, defaults to "/tmp". */
 defined("TEMP") || define("TEMP", "/tmp");
 /** @const True if running from command line interface. */
-define("CLI", (PHP_SAPI == "cli"));
+define("CLI", (bool) (PHP_SAPI === "cli"));
 /** @const True if running server locally. */
-define("LOCALHOST", (($_SERVER["SERVER_NAME"] ?? "") == "localhost"));
+define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
 
 require_once ROOT . "/vendor/autoload.php";
 
@@ -96,10 +96,10 @@ $cfg = @Neon::decode(@file_get_contents(CONFIG));
 if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
 }
-date_default_timezone_set($cfg["date_default_timezone"] ?? "Europe/Prague");
+date_default_timezone_set((string) ($cfg["date_default_timezone"] ?? "Europe/Prague"));
 
 /** @const Version string. */
-defined("VERSION") || define("VERSION", (string) $cfg["version"] ?? "v1");
+defined("VERSION") || define("VERSION", (string) ($cfg["version"] ?? "v1"));
 /** @const Application folder. */
 defined("APP") || define("APP", ROOT . "/app/" . VERSION);
 
@@ -139,19 +139,19 @@ defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false));
 if (DEBUG === true) {
     // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::$logSeverity = 15; // https://www.php.net/manual/en/errorfunc.constants.php
-    Debugger::$maxDepth = $cfg["DEBUG_MAX_DEPTH"] ?? 5;
-    Debugger::$maxLength = $cfg["DEBUG_MAX_LENGTH"] ?? 500;
-    Debugger::$scream = $cfg["DEBUG_SCREAM"] ?? true;
-    Debugger::$showBar = $cfg["DEBUG_SHOW_BAR"] ?? true;
-    Debugger::$showFireLogger = $cfg["DEBUG_SHOW_FIRELOGGER"] ?? false;
-    Debugger::$showLocation = $cfg["DEBUG_SHOW_LOCATION"] ?? false;
-    Debugger::$strictMode = $cfg["DEBUG_STRICT_MODE"] ?? true;
+    Debugger::$maxDepth = (int) ($cfg["DEBUG_MAX_DEPTH"] ?? 5);
+    Debugger::$maxLength = (int) ($cfg["DEBUG_MAX_LENGTH"] ?? 500);
+    Debugger::$scream = (bool) ($cfg["DEBUG_SCREAM"] ?? true);
+    Debugger::$showBar = (bool) ($cfg["DEBUG_SHOW_BAR"] ?? true);
+    Debugger::$showFireLogger = (bool) ($cfg["DEBUG_SHOW_FIRELOGGER"] ?? false);
+    Debugger::$showLocation = (bool) ($cfg["DEBUG_SHOW_LOCATION"] ?? false);
+    Debugger::$strictMode = (bool) ($cfg["DEBUG_STRICT_MODE"] ?? true);
     $a = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
-    // // cookie: tracy-debug
+    // cookie: tracy-debug
     Debugger::enable(
-        ($cfg["DEBUG_COOKIE"] ?? null) ? $cfg["DEBUG_COOKIE"] . "@" . $a : Debugger::DETECT,
+        ($cfg["DEBUG_COOKIE"] ?? null) ? (string) $cfg["DEBUG_COOKIE"] . "@" . $a : Debugger::DETECT,
         CACHE,
-        $cfg["DEBUG_EMAIL"] ?? null
+        (string) ($cfg["DEBUG_EMAIL"] ?? null)
     );
     Debugger::timer("RUNNING");
 }
@@ -170,11 +170,11 @@ $data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";
 $data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
 $data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
 $data["base"] = $data["BASE"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
-$data["LOCALHOST"] = (($_SERVER["SERVER_NAME"] ?? "") == "localhost");
+$data["LOCALHOST"] = (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI;
 $data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 8), 16, 10));
 $data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8);
 $data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
-$data["ALPHA"] = (in_array($host, $cfg["alpha_hosts"] ?? []));
-$data["BETA"] = (in_array($host, $cfg["beta_hosts"] ?? []));
+$data["ALPHA"] = (in_array($host, (array) ($cfg["alpha_hosts"] ?? [])));
+$data["BETA"] = (in_array($host, (array) ($cfg["beta_hosts"] ?? [])));
 
 require_once APP . "/App.php";
