@@ -44,8 +44,11 @@ class LoginPresenter extends GSC\APresenter
             ob_end_flush();
             \setcookie("oauth2state", $provider->getState());
             header("Location: " . $authUrl . $hint, true, 303);
-//            echo $authUrl . $hint;
             exit;
+/*
+            echo $authUrl . $hint;
+            exit;
+*/
 
         } elseif (empty($_GET["state"]) || ($_GET["state"] && !isset($_COOKIE["oauth2state"]))) {
             $errors[] = "Invalid OAuth state";

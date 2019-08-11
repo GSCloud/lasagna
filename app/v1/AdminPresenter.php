@@ -165,7 +165,7 @@ class AdminPresenter extends \GSC\APresenter
                 }
                 if (isset($_POST["profile"])) {
                     $profile = trim((string) $_POST["profile"]);
-                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));  // only alphanumeric
+                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));  // allow only alphanumeric
                     if (strlen($profile)) {
                         $x++;
                     }
@@ -181,7 +181,7 @@ class AdminPresenter extends \GSC\APresenter
                 }
                 if(@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
                     return $this->writeJsonData([
-                        "status" => "Data copy to backup failed.",
+                        "status" => "Data copy to backup file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
                     ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
@@ -193,7 +193,7 @@ class AdminPresenter extends \GSC\APresenter
                         "hash" => $hash,
                     ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
                 };
-                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data) === false) {
+                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
                     return $this->writeJsonData([
                         "status" => "Data write to file failed.",
                         "profile" => $profile,
