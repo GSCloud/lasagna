@@ -14,7 +14,8 @@ class CorePresenter extends \GSC\APresenter
             // webmanifest
             case "webmanifest":
                 $this->setHeaderJson();
-                $lang = $_GET["lang"] ?? "cs";
+                $lang = $_GET["lang"] ?? null;
+                if (is_null($lang)) break;
                 if (!in_array($lang, ["cs", "en"])) {
                     $lang = "cs";
                 }

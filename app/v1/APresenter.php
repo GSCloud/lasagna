@@ -1362,7 +1362,11 @@ $this->setLocation($this->getCfg("goauth_redirect") .
         $v = [];
         $v["timestamp"] = time();
         $v["version"] = $this->getCfg("version");
-        $locale = $this->getLocale("en");
+        if (is_array($this->getCfg("locales"))) {
+          $locale = $this->getLocale("en");
+        } else {
+          $locale = [];
+        }
 
         switch (json_last_error()) {
             case JSON_ERROR_NONE:

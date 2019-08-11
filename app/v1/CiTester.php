@@ -18,14 +18,14 @@ defined("ROOT") || $c++;
 isset($presenter) || $c++;
 isset($cfg) || $c++;
 if ($c) {
-    $climate->out("<red><bold>FATAL ERROR</bold>: broken chain of trust!\n");
+    $climate->out("<red><bold>FATAL ERROR</bold>: broken chain of trust!\n\007");
     exit;
 }
 $c = 0;
 isset($argc) || $c++;
 isset($argv) || $c++;
 if ($c) {
-    $climate->out("<red><bold>FATAL ERROR</bold>: missing parameter!\n");
+    $climate->out("<red><bold>FATAL ERROR</bold>: missing parameter!\n\007");
     exit;
 }
 
@@ -43,7 +43,7 @@ switch ($argv[1]) {
 
 if (!strlen($target)) {
     $climate->out("<bold><green>${cfg['app']} ${case}");
-    $climate->out("<red>FATAL ERROR: missing target URI!\n");
+    $climate->out("<red>FATAL ERROR: missing target URI!\n\007");
     exit;
 }
 
@@ -97,7 +97,7 @@ foreach (array_merge($redirects, $pages) as $x) {
     if ($code == $x["assert_httpcode"]) {
         $climate->out("${u}${t}length: <green>${length}</green> code: <green>${code}</green> / assert: <green>${x['assert_httpcode']}</green>");
     } else {
-        $climate->out("<red>ERROR: ${u}${t}</red>");
+        $climate->out("<red>ERROR: ${u}${t}</red>\007");
         @file_put_contents(ROOT . "/ci/errors_" .date("Y-m"). strtr("_${target}", '\/:.', '____') . ".assert.txt",
             "${u}${t}length: ${length} target: ${x['url']} code: ${code} / assert: ${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
     }

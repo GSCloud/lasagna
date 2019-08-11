@@ -86,11 +86,9 @@ check_file(CONFIG);
 check_file(ROOT . "/VERSION");
 check_folder(CACHE, true);
 check_folder(DATA, true);
-check_folder(DOWNLOAD);
 check_folder(PARTIALS);
 check_folder(TEMP, true);
 check_folder(TEMPLATES);
-check_folder(UPLOAD, true);
 check_folder(WWW);
 
 // configuration

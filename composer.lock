@@ -1523,16 +1523,16 @@
         },
         {
             "name": "nette/tester",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tester.git",
-                "reference": "899c70c53b40dfe4a214e568babb617a9c454071"
+                "reference": "60c71a62c2bd18903729251c0a8483c6c3397891"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/899c70c53b40dfe4a214e568babb617a9c454071",
-                "reference": "899c70c53b40dfe4a214e568babb617a9c454071",
+                "url": "https://api.github.com/repos/nette/tester/zipball/60c71a62c2bd18903729251c0a8483c6c3397891",
+                "reference": "60c71a62c2bd18903729251c0a8483c6c3397891",
                 "shasum": ""
             },
             "require": {
@@ -1544,7 +1544,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -1568,7 +1568,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette Tester: enjoyable unit testing in PHP with code coverage reporter. ????",
+            "description": "Nette Tester: enjoyable unit testing in PHP with code coverage reporter. 🍏🍏🍎🍏",
             "homepage": "https://tester.nette.org",
             "keywords": [
                 "Xdebug",
@@ -1582,7 +1582,7 @@
                 "testing",
                 "unit"
             ],
-            "time": "2019-03-11T08:54:30+00:00"
+            "time": "2019-08-11T17:02:47+00:00"
         },
         {
             "name": "nette/utils",
