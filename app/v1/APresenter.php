@@ -293,8 +293,8 @@ abstract class APresenter implements IPresenter
         $messages = $this->getMessages();
 
         list($usec, $sec) = explode(" ", microtime());
-        define("LASAGNA_STOP", ((float) $usec + (float) $sec));
-        $add = "| processing: " . round(((float) LASAGNA_STOP - (float) LASAGNA_START) * 1000, 2) . " msec."
+        define("TESSERACT_STOP", ((float) $usec + (float) $sec));
+        $add = "| processing: " . round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " msec."
             . "| request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
 
         try {
@@ -1123,10 +1123,11 @@ $this->setLocation($this->getCfg("goauth_redirect") .
      */
     public function getLocale($language = "cs", $key = "key")
     {
+        if (!is_array($this->getCfg("locales"))) return null;
         $locale = [];
         $language = trim(strtoupper((string) $language));
         $key = trim(strtoupper((string) $key));
-        $cfg = $this->getCfg();
+        $cfg = $this->getCfg();        
         $file = strtolower("${language}_locale");
         $locale = Cache::read($file, "default");
         if ($locale === false || empty($locale)) {

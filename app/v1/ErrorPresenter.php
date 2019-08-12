@@ -42,8 +42,12 @@ class ErrorPresenter extends GSC\APresenter
         header("HTTP/1.1 ${code} ${error}");
 
         $data["lang"] = "en";
-        $data["l"] = $this->getLocale("en");
-        $template = "<body><h1>HTTP Error $code</h1><h2>{{ l.server_error_${code} }}</h2><p>{{ l.server_error_info_${code} }}</p></body>";
+        $data["l"] = $l = $this->getLocale("en");
+        if (is_null($l)) {
+            $template = "<body><h1>HTTP Error $code</h1><h2>".self::CODESET[$code]."</h2></body>";
+        } else {
+            $template = "<body><h1>HTTP Error $code</h1><h2>{{ l.server_error_${code} }}</h2><p>{{ l.server_error_info_${code} }}</p></body>";
+        }
         $output = $this->setData($data)->renderHTML($template);
         return $this->setData($data, "output", $output);
     }

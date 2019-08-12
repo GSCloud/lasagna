@@ -15,7 +15,7 @@ use Tracy\Debugger;
 // START
 list($usec, $sec) = explode(" ", microtime());
 /** @const Global timer start. */
-define("LASAGNA_START", ((float) $usec + (float) $sec));
+define("TESSERACT_START", ((float) $usec + (float) $sec));
 ob_start();
 error_reporting(E_ALL);
 @ini_set("auto_detect_line_endings", true);

@@ -10,7 +10,8 @@
  */
 
 use Cake\Cache\Cache;
-use Google\Cloud\Logging\LoggingClient;use Monolog\Logger;
+use Google\Cloud\Logging\LoggingClient;
+use Monolog\Logger;
 use Nette\Neon\Neon;
 use There4\Analytics\AnalyticsEvent;
 
@@ -26,7 +27,7 @@ defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
 /** @const Domain name, extracted from SERVER array. */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 /** @const Project name, default LASAGNA. */
-defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
+defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "Tesseract"));
 /** @const Server name, extracted from SERVER array. */
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 /** @const Version string. */
@@ -205,7 +206,7 @@ if (CLI) {
     }
 
     $climate = new League\CLImate\CLImate;
-    $climate->out("\n<bold><green>Tesseract LASAGNA CLI</green></bold> \n");
+    $climate->out("\n<bold><green>Tesseract CLI</green></bold> \n");
     $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
     $climate->out("\t <bold>app</bold> '<code>' \t - run code");
     $climate->out("\t <bold>doctor</bold> \t - check system requirements");

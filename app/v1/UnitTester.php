@@ -13,7 +13,7 @@ use Tester\Assert;
 
 ob_end_clean();
 $climate = new League\CLImate\CLImate;
-$climate->out("<green>Welcome to <bold>Tesseract LASAGNA Unit Tester\n");
+$climate->out("<green><bold>Tesseract Unit Tester\n");
 
 Tester\Environment::setup();
 
