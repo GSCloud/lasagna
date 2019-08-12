@@ -11,9 +11,8 @@
 
 use Tester\Assert;
 
-ob_end_clean();
 $climate = new League\CLImate\CLImate;
-$climate->out("<green><bold>Tesseract Unit Tester\n");
+$climate->out("<blue><bold>Tesseract Unit Tester\n");
 
 Tester\Environment::setup();
 

@@ -9,7 +9,6 @@
  * @link     https://lasagna.gscloud.cz
  */
 
-ob_end_clean();
 $climate = new League\CLImate\CLImate;
 
 // sanity check
@@ -102,5 +101,3 @@ foreach (array_merge($redirects, $pages) as $x) {
             "${u}${t}length: ${length} target: ${x['url']} code: ${code} / assert: ${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
     }
 }
-
-exit;

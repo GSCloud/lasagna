@@ -13,7 +13,6 @@ use Cake\Cache\Cache;
 use Google\Cloud\Logging\LoggingClient;
 use Monolog\Logger;
 use Nette\Neon\Neon;
-use There4\Analytics\AnalyticsEvent;
 
 // sanity check
 $x = "FATAL ERROR: broken chain of trust";
@@ -174,45 +173,17 @@ foreach ($presenter as $k => $v) {
 
 }
 
-// CLI modules
+// CLI
 if (CLI) {
-    if (isset($argv[1])) {
-
-        switch ($argv[1]) {
-            case "testlocal":
-            case "testprod":
-                require_once "CiTester.php";
-                break;
-
-            case "doctor":
-                require_once "Doctor.php";
-                break;
-
-            case "test":
-                require_once "UnitTester.php";
-                break;
-
-            case "app":
-                require_once "APresenter.php";
-                require_once "CliPresenter.php";
-                $app = CliPresenter::getInstance()->setData($data)->process();
-                $app->evaler($app, $argc, $argv);
-                exit;
-                break;
-
-            default:
-                break;
-        }
+    require_once "APresenter.php";
+    require_once "CliPresenter.php";
+    if (ob_get_level()) {
+        ob_end_clean();
     }
-
-    $climate = new League\CLImate\CLImate;
-    $climate->out("\n<bold><green>Tesseract CLI</green></bold> \n");
-    $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
-    $climate->out("\t <bold>app</bold> '<code>' \t - run code");
-    $climate->out("\t <bold>doctor</bold> \t - check system requirements");
-    $climate->out("\t <bold>testlocal</bold> \t - CI local test");
-    $climate->out("\t <bold>testprod</bold> \t - CI production test \n");
-    exit;
+    if (isset($argv[1])) {
+        CliPresenter::getInstance()->setData($data)->process()->selectModule($argv[1], $argc, $argv);
+    }
+    CliPresenter::getInstance()->setData($data)->process()->help();
 }
 
 // routing
@@ -326,19 +297,17 @@ if ($app->getUserGroup() != "admin") {
 
 // ANALYTICS
 $events = null;
-$data["country"] = $country = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
+$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "");
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
+$app->setData($data);
+// HTTP headers
 header("X-Country: $country");
 header("X-Runtime: $time1 msec.");
 header("X-Processing: $time2 msec.");
-$dot = new \Adbar\Dot((array) $data);
-if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (isset($_SERVER["HTTPS"])) && ($_SERVER["HTTPS"] == "on")) {
-    $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url") . $dot->get("request_path"));
-}
-if ($events) {
-    ob_flush();
-    @$events->trackEvent((string) ($cfg["app"] ?? "APP"), "country_code", $country);
+if (method_exists($app, "SendAnalytics")) {
+    // send Google Analytics
+    $app->SendAnalytics();
 }
 
 // OUTPUT
@@ -346,6 +315,7 @@ echo $data["output"] ?? "";
 
 // DEBUG
 if (DEBUG) {
+    // delete private information first
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);

@@ -10,10 +10,15 @@
  */
 
 use Cake\Cache\Cache;
+use There4\Analytics\AnalyticsEvent;
 
 class HomePresenter extends \GSC\APresenter
 {
-
+    /**
+     * Main controller
+     *
+     * @return object Singleton instance.
+     */
     public function process()
     {
         $this->checkRateLimit();
@@ -65,5 +70,22 @@ class HomePresenter extends \GSC\APresenter
         $output = GSC\StringFilters::trim_html_comment($output);
         Cache::write($cache_key, $output, "page");
         return $this->setData($data, "output", $output);
+    }
+
+    /**
+     * Send Google Analytics events
+     *
+     * @return object Singleton instance.
+     */
+    public function SendAnalytics()
+    {
+        $dot = new \Adbar\Dot((array) $this->getData());
+        if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (array_key_exists("HTTPS", $_SERVER)) && ($_SERVER["HTTPS"] == "on")) {
+            ob_flush();
+            $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url") . $dot->get("request_path"));
+            $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "N/A");
+            @$events->trackEvent((string) ($this->getCfg("app") ?? "APP"), "country_code", $country);
+        }
+        return $this;
     }
 }

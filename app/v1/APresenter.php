@@ -270,7 +270,7 @@ abstract class APresenter implements IPresenter
      */
     public function __destruct()
     {
-        ob_flush();
+        if (ob_get_level()) ob_flush();
         ob_start();
 
         foreach ($this->csv_postload as $key) {
@@ -293,7 +293,7 @@ abstract class APresenter implements IPresenter
         $messages = $this->getMessages();
 
         list($usec, $sec) = explode(" ", microtime());
-        define("TESSERACT_STOP", ((float) $usec + (float) $sec));
+        defined("TESSERACT_STOP") || define("TESSERACT_STOP", ((float) $usec + (float) $sec));
         $add = "| processing: " . round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " msec."
             . "| request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
 
@@ -415,8 +415,8 @@ abstract class APresenter implements IPresenter
     /**
      * Data getter
      *
-     * @param string $key Array index, may use dot notation.
-     * @return mixed Data.
+     * @param string $key Optional array key, may use dot notation.
+     * @return mixed Data if key exists or whole data array.
      */
     public function getData($key = null)
     {
