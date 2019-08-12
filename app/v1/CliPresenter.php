@@ -38,7 +38,7 @@ class CliPresenter extends \GSC\APresenter
     }
 
     /**
-     * Display some help.
+     * Display CLI syntax help.
      *
      * @return void
      */
@@ -59,8 +59,8 @@ class CliPresenter extends \GSC\APresenter
      * Evaluate input string.
      *
      * @param object $app Singleton.
-     * @param int $argc $argc count.
-     * @param array $argv $argv array.
+     * @param int $argc ARGC count.
+     * @param array $argv ARGV array.
      * @return void
      */
     public function evaler($app, $argc, $argv)
@@ -84,8 +84,8 @@ class CliPresenter extends \GSC\APresenter
      * Select CLI module.
      *
      * @param string $module CLI parameter.
-     * @param int $argc $argc count.
-     * @param array $argv $argv array.
+     * @param int $argc ARGC count.
+     * @param array $argv ARGV array.
      * @return void
      */
     public function selectModule($module, $argc, $argv)
@@ -94,15 +94,18 @@ class CliPresenter extends \GSC\APresenter
             case "testlocal":
             case "testprod":
                 require_once "CiTester.php";
+                $type = $module;
+                CiTester::getInstance()->setData($this->getData())->test($type);
                 break;
 
             case "testunit":
                 require_once "UnitTester.php";
+                UnitTester::getInstance()->test();
                 break;
 
             case "doctor":
                 require_once "Doctor.php";
-                Doctor::getInstance()->setData($this->getData())->process();
+                Doctor::getInstance()->setData($this->getData())->check();
                 break;
 
             case "app":

@@ -170,8 +170,9 @@ foreach ($presenter as $k => $v) {
     if (substr($v["path"], -1) != "/") { // map duplicates ending with slash
         $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_slash");
     }
-
 }
+$data["presenter"] = $presenter;
+$data["router"] = $router;
 
 // CLI
 if (CLI) {
@@ -189,11 +190,7 @@ if (CLI) {
 // routing
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
-
-// data population
 $data["match"] = $match;
-$data["presenter"] = $presenter;
-$data["router"] = $router;
 $data["view"] = $view;
 
 // sethl
