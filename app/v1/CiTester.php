@@ -23,7 +23,7 @@ class CiTester extends \GSC\APresenter
         $climate = new League\CLImate\CLImate;
         $cfg = $this->getCfg();
         $presenter = $this->getPresenter();
-        $type = (string) $type;        
+        $type = (string) $type;
 
         switch ($type) {
             case "testlocal":

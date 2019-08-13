@@ -27,7 +27,7 @@ class Doctor extends \GSC\APresenter
     public function check()
     {
         $climate = new League\CLImate\CLImate;
-        $climate->out("<green><blue>Tesseract Doctor");
+        $climate->out("<green><bold>Tesseract Doctor");
 
         function check_exist($f)
         {
@@ -50,27 +50,35 @@ class Doctor extends \GSC\APresenter
             $climate = new League\CLImate\CLImate;
             $result = (bool) $result;
             if ($result) {
-                $climate->out("<green><bold>[√]</bold> $message");
+                $climate->out("<green><bold>[√]</bold></green> $message");
             } else {
-                $climate->out("<red><bold>[!]</bold> $message");
+                $climate->out("<red><bold>[!]</bold></red> $message");
             }
         }
 
-        echo "\nFilesystem\n";
-        validate("file:\t" . CONFIG, check_exist(CONFIG));
-        validate("folder:\t" . ROOT . "/VERSION", check_exist(ROOT . "/VERSION"));
-        validate("folder:\t" . CACHE, check_exist(CACHE));
-        validate("writable:\t" . CACHE, check_write(CACHE));
-        validate("folder:\t" . DATA, check_exist(DATA));
-        validate("writable:\t" . DATA, check_write(DATA));
-        validate("folder:\t" . WWW, check_exist(WWW));
-        validate("folder:\t" . PARTIALS, check_exist(PARTIALS));
-        validate("folder:\t" . TEMP, check_exist(TEMP));
-        validate("writable:\t" . TEMP, check_write(TEMP));
-        validate("folder:\t" . TEMPLATES, check_exist(TEMPLATES));
+        echo "\nFile System\n";
+        validate("file\tCONFIG\tas " . CONFIG, check_exist(CONFIG));
+        validate("directory\tAPP\tas " . APP, check_exist(APP));
+        validate("file\trouter_defaults.neon\tin APP", check_exist(APP . "/router_defaults.neon"));
+        validate("file\trouter_admin.neon\tin APP", check_exist(APP . "/router_admin.neon"));
+        validate("file\trouter.neon\tin APP", check_exist(APP . "/router.neon"));
+        validate("file\tVERSION\tas " . ROOT . "/VERSION", check_exist(ROOT . "/VERSION"));
+        validate("directory\tCACHE\tas " . CACHE, check_exist(CACHE));
+        validate("writable\tCACHE", check_write(CACHE));
+        validate("directory\tDATA\tas " . DATA, check_exist(DATA));
+        validate("writable\tDATA", check_write(DATA));
+        validate("directory\tWWW\tas " . WWW, check_exist(WWW));
+        validate("directory\tTEMPLATES\tas " . TEMPLATES, check_exist(TEMPLATES));
+        validate("directory\tPARTIALS\tas " . PARTIALS, check_exist(PARTIALS));
+        validate("directory\tTEMP\tas " . TEMP, check_exist(TEMP));
+        validate("writable\tTEMP", check_write(TEMP));
 
         echo "\nPHP\n";
-        validate("PHP version 7.3+", (PHP_VERSION_ID >= 70300));
+        validate("PHP 7.3+", (PHP_VERSION_ID >= 70300));
+        validate("lib curl", (in_array("curl", get_loaded_extensions())));
+        validate("lib json", (in_array("json", get_loaded_extensions())));
+        validate("lib mbstring", (in_array("mbstring", get_loaded_extensions())));
+        validate("lib sodium", (in_array("sodium", get_loaded_extensions())));
 
         echo "\n";
         exit;

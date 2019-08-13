@@ -299,27 +299,31 @@ abstract class APresenter implements IPresenter
 
         try {
             if (count($criticals) + count($errors) + count($messages)) {
-                $logging = new LoggingClient([
-                    "projectId" => GCP_PROJECTID,
-                    "keyFilePath" => APP . GCP_KEYS,
-                ]);
-                $google_logger = $logging->logger(PROJECT);
+                if (class_exists("LoggingClient") && GCP_PROJECTID && GCP_KEYS) {
+                    $logging = new LoggingClient([
+                        "projectId" => GCP_PROJECTID,
+                        "keyFilePath" => APP . GCP_KEYS,
+                    ]);
+                    $google_logger = $logging->logger(PROJECT);
+                } else {
+                    $google_logger = null;
+                }
             }
             if (count($criticals)) {
-                $monolog->critical(DOMAIN . " CRIT: " . json_encode($criticals) . $add);
-                $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($criticals) . $add, [
+                $monolog->critical(DOMAIN . " FATAL: " . json_encode($criticals) . $add);
+                if ($google_logger) $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($criticals) . $add, [
                     "severity" => Logger::CRITICAL,
                 ]));
             }
             if (count($errors)) {
-                $monolog->error(DOMAIN . " ERR: " . json_encode($errors) . $add);
-                $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($errors) . $add, [
+                $monolog->error(DOMAIN . " ERROR: " . json_encode($errors) . $add);
+                if ($google_logger) $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($errors) . $add, [
                     "severity" => Logger::ERROR,
                 ]));
             }
             if (count($messages)) {
-                $monolog->info(DOMAIN . " MSG: " . json_encode($messages) . $add);
-                $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . json_encode($messages) . $add, [
+                $monolog->info(DOMAIN . " INFO: " . json_encode($messages) . $add);
+                if ($google_logger) $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . json_encode($messages) . $add, [
                     "severity" => Logger::INFO,
                 ]));
             }
@@ -612,19 +616,19 @@ abstract class APresenter implements IPresenter
             "name" => "",
         ];
         $file = DATA . "/" . self::IDENTITY_NONCE;
-        $nonce = @file_get_contents($file);
-        if (!$nonce) {
+        if (!file_exists($file)) {
             try {
                 $nonce = hash("sha256", random_bytes(256) . time());
                 file_put_contents($file, $nonce);
                 @chmod($file, 0660);
-                $this->addMessage("ADMIN: noncefile created");
+                $this->addMessage("ADMIN: nonce file created");
             } catch (Exception $e) {
-                $this->addError("500: Internal Server Error");
+                $this->addError("500: Internal Server Error -> cannot create nonce file");
                 $this->setLocation("/err/500");
                 exit;
             }
         }
+        $nonce = @file_get_contents($file);
         $i["nonce"] = substr(trim($nonce), 0, 8);
         if (array_key_exists("avatar", $identity)) {
             $i["avatar"] = (string) $identity["avatar"];
@@ -663,11 +667,10 @@ abstract class APresenter implements IPresenter
     public function getIdentity()
     {
         $file = DATA . "/" . self::IDENTITY_NONCE;
-        $nonce = @file_get_contents($file);
-        if (!$nonce) {
+        if (!file_exists($file)) {
             $this->setIdentity([]);
-            $nonce = @file_get_contents($file) ?? "";
         }
+        $nonce = @file_get_contents($file);
         $nonce = substr(trim($nonce), 0, 8);
         $timestamp = time();
 
