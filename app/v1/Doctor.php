@@ -56,29 +56,29 @@ class Doctor extends \GSC\APresenter
             }
         }
 
-        echo "\nFile System\n";
-        validate("file\tCONFIG\tas " . CONFIG, check_exist(CONFIG));
-        validate("directory\tAPP\tas " . APP, check_exist(APP));
-        validate("file\trouter_defaults.neon\tin APP", check_exist(APP . "/router_defaults.neon"));
-        validate("file\trouter_admin.neon\tin APP", check_exist(APP . "/router_admin.neon"));
-        validate("file\trouter.neon\tin APP", check_exist(APP . "/router.neon"));
-        validate("file\tVERSION\tas " . ROOT . "/VERSION", check_exist(ROOT . "/VERSION"));
-        validate("directory\tCACHE\tas " . CACHE, check_exist(CACHE));
-        validate("writable\tCACHE", check_write(CACHE));
-        validate("directory\tDATA\tas " . DATA, check_exist(DATA));
-        validate("writable\tDATA", check_write(DATA));
-        validate("directory\tWWW\tas " . WWW, check_exist(WWW));
-        validate("directory\tTEMPLATES\tas " . TEMPLATES, check_exist(TEMPLATES));
-        validate("directory\tPARTIALS\tas " . PARTIALS, check_exist(PARTIALS));
-        validate("directory\tTEMP\tas " . TEMP, check_exist(TEMP));
-        validate("writable\tTEMP", check_write(TEMP));
+        $climate->out("\n<bold>File System");
+        validate("file\t<bold>CONFIG</bold>\tas " . CONFIG, check_exist(CONFIG));
+        validate("directory\t<bold>APP</bold>\tas " . APP, check_exist(APP));
+        validate("file\t<bold>router_defaults.neon</bold>\tin APP", check_exist(APP . "/router_defaults.neon"));
+        validate("file\t<bold>router_admin.neon</bold>\tin APP", check_exist(APP . "/router_admin.neon"));
+        validate("file\t<bold>router.neon</bold>\tin APP", check_exist(APP . "/router.neon"));
+        validate("file\t<bold>VERSION</bold>\tas " . ROOT . "/VERSION", check_exist(ROOT . "/VERSION"));
+        validate("directory\t<bold>CACHE</bold>\tas " . CACHE, check_exist(CACHE));
+        validate("writable\t<bold>CACHE</bold>", check_write(CACHE));
+        validate("directory\t<bold>DATA</bold>\tas " . DATA, check_exist(DATA));
+        validate("writable\t<bold>DATA</bold>", check_write(DATA));
+        validate("directory\t<bold>WWW</bold>\tas " . WWW, check_exist(WWW));
+        validate("directory\t<bold>TEMPLATES</bold>\tas " . TEMPLATES, check_exist(TEMPLATES));
+        validate("directory\t<bold>PARTIALS</bold>\tas " . PARTIALS, check_exist(PARTIALS));
+        validate("directory\t<bold>TEMP</bold>\tas " . TEMP, check_exist(TEMP));
+        validate("writable\t<bold>TEMP</bold>", check_write(TEMP));
 
-        echo "\nPHP\n";
-        validate("PHP 7.3+", (PHP_VERSION_ID >= 70300));
-        validate("lib curl", (in_array("curl", get_loaded_extensions())));
-        validate("lib json", (in_array("json", get_loaded_extensions())));
-        validate("lib mbstring", (in_array("mbstring", get_loaded_extensions())));
-        validate("lib sodium", (in_array("sodium", get_loaded_extensions())));
+        $climate->out("\n<bold>PHP");
+        validate("version <bold>7.3+", (PHP_VERSION_ID >= 70300));
+        validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
+        validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
+        validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
+        validate("lib <bold>sodium", (in_array("sodium", get_loaded_extensions())));
 
         echo "\n";
         exit;

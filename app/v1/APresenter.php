@@ -28,11 +28,11 @@ use ParagonIE\Halite\KeyFactory;
 
 interface IPresenter
 {
-    public function addCritical($e);
-    public function addError($e);
-    public function addMessage($m);
-    public function checkPermission($role);
+    public function addCritical($message);
+    public function addError($message);
+    public function addMessage($message);
     public function checkLocales($force);
+    public function checkPermission($role);
     public function checkRateLimit($maximum);
     public function clearCookie($name);
     public function cloudflarePurgeCache($cf);
@@ -50,7 +50,7 @@ interface IPresenter
     public function getRouter();
     public function getUID();
     public function getUIDstring();
-    public function getUserGroup($email);
+    public function getUserGroup();
     public function getView();
     public function logout();
     public function postloadAppData($key);
@@ -71,6 +71,8 @@ interface IPresenter
     public function setIdentity($identity);
     public function setLocation($locationm, $code);
     public function writeJsonData($d, $headers);
+    public static function getInstance();
+    public static function getTestInstance();
 }
 
 abstract class APresenter implements IPresenter
@@ -256,9 +258,9 @@ abstract class APresenter implements IPresenter
     {}
 
     /**
-     * Serialize the object to JSON encoded string
+     * Object to string
      *
-     * @return string
+     * @return string Serialized model data array to JSON encoded string.
      */
     final public function __toString()
     {
@@ -347,10 +349,23 @@ abstract class APresenter implements IPresenter
     }
 
     /**
+     * Get instance for unit testing
+     *
+     * @static
+     * @final
+     * @return object Class instance.
+     */
+    final public static function getTestInstance()
+    {
+        $class = get_called_class();
+        return new $class();
+    }
+
+    /**
      * Render HTML content from given template
      *
-     * @param string $template Template name.
-     * @return string HTML output.
+     * @param string $template Template name
+     * @return string HTML output
      */
     public function renderHTML($template = "index")
     {
@@ -526,15 +541,15 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Add message
+     * Add info message
      *
-     * @param string $e Error string.
+     * @param string $message Message string.
      * @return object Singleton instance.
      */
-    public function addMessage($e = null)
+    public function addMessage($message = null)
     {
-        if (!is_null($e) || !empty($e)) {
-            $this->messages[] = (string) $e;
+        if (!is_null($message) || !empty($message)) {
+            $this->messages[] = (string) $message;
         }
         return $this;
     }
@@ -542,13 +557,13 @@ abstract class APresenter implements IPresenter
     /**
      * Add error message
      *
-     * @param string $e Error string.
+     * @param string $message Error string.
      * @return object Singleton instance.
      */
-    public function addError($e = null)
+    public function addError($message = null)
     {
-        if (!is_null($e) || !empty($e)) {
-            $this->errors[] = (string) $e;
+        if (!is_null($message) || !empty($message)) {
+            $this->errors[] = (string) $message;
         }
         return $this;
     }
@@ -556,13 +571,13 @@ abstract class APresenter implements IPresenter
     /**
      * Add critical message
      *
-     * @param string $e Error string.
+     * @param string $message Critical error string.
      * @return object Singleton instance.
      */
-    public function addCritical($e = null)
+    public function addCritical($message = null)
     {
-        if (!is_null($e) || !empty($e)) {
-            $this->criticals[] = (string) $e;
+        if (!is_null($message) || !empty($message)) {
+            $this->criticals[] = (string) $message;
         }
         return $this;
     }
@@ -772,45 +787,45 @@ abstract class APresenter implements IPresenter
     /**
      * Match getter
      *
-     * @return mixed Possible match data array or false.
+     * @return mixed Match data array or null.
      */
     public function getMatch()
     {
-        return $this->getData("match") ?? false;
+        return $this->getData("match") ?? null;
     }
 
     /**
      * Presenter getter
      *
-     * @return mixed Possible presenter data array or false.
+     * @return mixed Rresenter data array or null.
      */
     public function getPresenter()
     {
-        return $this->getData("presenter") ?? false;
+        return $this->getData("presenter") ?? null;
     }
 
     /**
      * Router getter
      *
-     * @return mixed Possible router data array or false.
+     * @return mixed Router data array or null.
      */
     public function getRouter()
     {
-        return $this->getData("router") ?? false;
+        return $this->getData("router") ?? null;
     }
 
     /**
      * View getter
      *
-     * @return mixed Possible router view or false.
+     * @return mixed Router view or null.
      */
     public function getView()
     {
-        return $this->getData("view") ?? false;
+        return $this->getData("view") ?? null;
     }
 
     /**
-     * Set HTTP header for CSV file
+     * Set HTTP header for CSV content
      *
      * @return object Singleton instance.
      */
@@ -821,7 +836,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Set HTTP header for binary file
+     * Set HTTP header for binary content
      *
      * @return object Singleton instance.
      */
@@ -865,7 +880,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Set HTTP header for PDF file
+     * Set HTTP header for PDF content
      *
      * @return object Singleton instance.
      */
@@ -917,10 +932,9 @@ abstract class APresenter implements IPresenter
      * @param string $data Cookie data.
      * @return object Singleton instance.
      */
-    public function setCookie($name = null, $data = "")
+    public function setCookie($name, $data = "")
     {
-        if (is_null($name)) {
-            $this->addError(__NAMESPACE__ . " : " . __METHOD__ . self::ERROR_NULL);
+        if (empty($name)) {
             return $this;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
@@ -951,10 +965,9 @@ abstract class APresenter implements IPresenter
      * @param string $name Cookie name.
      * @return object  Singleton instance.
      */
-    public function clearCookie($name = null)
+    public function clearCookie($name)
     {
-        if (is_null($name)) {
-            $this->addError(__NAMESPACE__ . " : " . __METHOD__ . self::ERROR_NULL);
+        if (empty($name)) {
             return $this;
         }
         unset($_COOKIE[$name]);
@@ -965,14 +978,13 @@ abstract class APresenter implements IPresenter
     /**
      * Set URL location and exit
      *
-     * @param string $location Full or relative URL address.
+     * @param string $location URL address.
      * @param integer $code HTTP code.
-     * @return void Exit runtime.
      */
-    public function setLocation($location = null, $code = 303)
+    public function setLocation($location, $code = 303)
     {
         $code = (int) $code;
-        if (is_null($location)) {
+        if (empty($location)) {
             $location = "/?nonce=" . substr(hash("sha1", random_bytes(10) . (string) time()), 0, 8);
         }
         header("Location: $location", true, ($code > 300) ? $code : 303);
@@ -981,8 +993,6 @@ abstract class APresenter implements IPresenter
 
     /**
      * Google OAuth 2.0 logout
-     *
-     * @return void Exit runtime.
      */
     public function logout()
     {
@@ -997,7 +1007,7 @@ abstract class APresenter implements IPresenter
     /**
      * Check current user rate limits
      *
-     * @param integer $maximum
+     * @param integer $maximum Max hits.
      * @return object Singleton instance.
      */
     public function checkRateLimit($maximum = 0)
@@ -1025,7 +1035,7 @@ abstract class APresenter implements IPresenter
      */
     public function checkPermission($role = "admin")
     {
-        if (!$role) {
+        if (empty($role)) {
             return $this;
         }
         $role = trim((string) $role);
@@ -1056,12 +1066,11 @@ $this->setLocation($this->getCfg("goauth_redirect") .
     }
 
     /**
-     * Get current user group
+     * Get user group
      *
-     * @param string $email
-     * @return string
+     * @return string User group name.
      */
-    public function getUserGroup($email = null)
+    public function getUserGroup()
     {
         $id = $this->getIdentity()["id"];
         $email = $this->getIdentity()["email"];
@@ -1087,7 +1096,7 @@ $this->setLocation($this->getCfg("goauth_redirect") .
     /**
      * Force CSV checking
      *
-     * @param boolean $set
+     * @param boolean $set True to force CSV check.
      * @return object Singleton instance.
      */
     public function setForceCsvCheck($set = true)
