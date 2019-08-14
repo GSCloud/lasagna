@@ -764,7 +764,7 @@ abstract class APresenter implements IPresenter
     /**
      * Get current user data
      *
-     * @return mixed Get current user data array or NULL.
+     * @return mixed Get current user data array.
      */
     public function getCurrentUser()
     {
