@@ -9,6 +9,8 @@
  * @link     https://lasagna.gscloud.cz
  */
 
+use League\CLImate\CLImate;
+
 class CliPresenter extends \GSC\APresenter
 {
     /**
@@ -18,7 +20,7 @@ class CliPresenter extends \GSC\APresenter
      */
     public function process()
     {
-        $climate = new League\CLImate\CLImate;
+        $climate = new CLImate;
         $climate->out("\n<bold><green>Tesseract CLI</green></bold>\tapp: "
             . $this->getData("VERSION_SHORT")
             . " (" . str_replace(" ", "", $this->getData("VERSION_DATE"))
@@ -44,13 +46,13 @@ class CliPresenter extends \GSC\APresenter
      */
     public function help()
     {
-        $climate = new League\CLImate\CLImate;
+        $climate = new CLImate;
         $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
-        $climate->out("\t <bold>testunit</bold> \t - Unit tests");
-        $climate->out("\t <bold>testlocal</bold> \t - CI local tests");
-        $climate->out("\t <bold>testprod</bold> \t - CI production tests");
+        $climate->out("\t <bold>unit</bold> \t\t - Unit tester");
+        $climate->out("\t <bold>testlocal</bold> \t - CI Tester: local ");
+        $climate->out("\t <bold>testprod</bold> \t - CI Tester: production");
         echo "\n";
         exit;
     }
@@ -65,7 +67,7 @@ class CliPresenter extends \GSC\APresenter
      */
     public function evaler($app, $argc, $argv)
     {
-        $climate = new League\CLImate\CLImate;
+        $climate = new CLImate;
         if ($argc != 3) {
             $climate->out("Examples:\n");
             $climate->out('<bold>app</bold> \'$app->showConst()\'');
@@ -94,18 +96,17 @@ class CliPresenter extends \GSC\APresenter
             case "testlocal":
             case "testprod":
                 require_once "CiTester.php";
-                $type = $module;
-                CiTester::getInstance()->setData($this->getData())->test($type);
+                new CiTester($this->getCfg(), $this->getPresenter(), $module);
                 break;
 
-            case "testunit":
+            case "unit":
                 require_once "UnitTester.php";
-                UnitTester::getInstance()->test();
+                new UnitTester;
                 break;
 
             case "doctor":
                 require_once "Doctor.php";
-                Doctor::getInstance()->setData($this->getData())->check();
+                new Doctor;
                 break;
 
             case "app":

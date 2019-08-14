@@ -3,26 +3,30 @@
  * GSC Tesseract LASAGNA
  *
  * @category Framework
- * @package  LASAGNA
+ * @package  CI Tester
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
 
-class CiTester extends \GSC\APresenter
-{
-    public function process() {}
+use League\CLImate\CLImate;
 
+class CiTester
+{
     /**
-     * Continuous Integration tester.
+     * CI tester
+     *
+     * @param array $cfg Configuration.
+     * @param array $presenter Presenter.
+     * @param string $type Test type: testlocal, testprod.
      *
      * @return void
      */
-    public function test($type)
+    public function __construct($cfg, $presenter, $type)
     {
-        $climate = new League\CLImate\CLImate;
-        $cfg = $this->getCfg();
-        $presenter = $this->getPresenter();
+        $climate = new CLImate;
+        $cfg = (array) $cfg;
+        $presenter = (array) $presenter;
         $type = (string) $type;
 
         switch ($type) {

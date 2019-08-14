@@ -3,30 +3,23 @@
  * GSC Tesseract LASAGNA
  *
  * @category Framework
- * @package  LASAGNA
+ * @package  CLI Doctor
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
 
-class Doctor extends \GSC\APresenter
+use League\CLImate\CLImate;
+class Doctor
 {
-    /**
-     * Void.
-     *
-     * @return void
-     */
-    public function process()
-    {}
-
     /**
      * Tesseract Doctor
      *
      * @return void
      */
-    public function check()
+    public function __construct()
     {
-        $climate = new League\CLImate\CLImate;
+        $climate = new CLImate;
         $climate->out("<green><bold>Tesseract Doctor");
 
         function check_exist($f)
@@ -47,7 +40,7 @@ class Doctor extends \GSC\APresenter
 
         function validate($message, $result)
         {
-            $climate = new League\CLImate\CLImate;
+            $climate = new CLImate;
             $result = (bool) $result;
             if ($result) {
                 $climate->out("<green><bold>[√]</bold></green> $message");

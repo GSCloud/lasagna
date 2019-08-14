@@ -121,7 +121,7 @@ $data["multisite_names"] = $multisite_names;
 $data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
 // routing tables
-$router = array();
+$router = [];
 $routes = [
     APP . "/router_defaults.neon",
     APP . "/router_admin.neon",
@@ -143,7 +143,7 @@ foreach ($routes as $r) {
 }
 
 // router defaults
-$presenter = array();
+$presenter = [];
 $defaults = $router["defaults"] ?? [];
 foreach ($router as $k => $v) {
     if ($k == "defaults") {

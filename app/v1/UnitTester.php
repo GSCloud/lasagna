@@ -3,28 +3,21 @@
  * GSC Tesseract LASAGNA
  *
  * @category Framework
- * @package  LASAGNA
+ * @package  Unit tester
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
 
 use Tester\Assert;
+use League\CLImate\CLImate;
 
-class UnitTester extends \GSC\APresenter
+class UnitTester
 {
-    /**
-     * Void.
-     *
-     * @return void
-     */
-    public function process()
-    {}
-
-    public function test()
+    public function __construct()
     {
-        $climate = new League\CLImate\CLImate;
-        $climate->out("<blue><bold>Tesseract Unit Tester");
+        $climate = new CLImate;
+        $climate->out("<green><bold>Tesseract Unit Tester");
         Tester\Environment::setup();
 
         Assert::same('Hello John', "Hello John");

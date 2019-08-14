@@ -192,7 +192,7 @@ abstract class APresenter implements IPresenter
     private $csv_postload = [];
 
     /** @var array $instances Array of singleton instances. */
-    private static $instances = array();
+    private static $instances = [];
 
     /**
      * Abstract processor
@@ -272,7 +272,10 @@ abstract class APresenter implements IPresenter
      */
     public function __destruct()
     {
-        if (ob_get_level()) ob_flush();
+        if (ob_get_level()) {
+            ob_flush();
+        }
+
         ob_start();
 
         foreach ($this->csv_postload as $key) {
@@ -313,21 +316,30 @@ abstract class APresenter implements IPresenter
             }
             if (count($criticals)) {
                 $monolog->critical(DOMAIN . " FATAL: " . json_encode($criticals) . $add);
-                if ($google_logger) $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($criticals) . $add, [
-                    "severity" => Logger::CRITICAL,
-                ]));
+                if ($google_logger) {
+                    $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($criticals) . $add, [
+                        "severity" => Logger::CRITICAL,
+                    ]));
+                }
+
             }
             if (count($errors)) {
                 $monolog->error(DOMAIN . " ERROR: " . json_encode($errors) . $add);
-                if ($google_logger) $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($errors) . $add, [
-                    "severity" => Logger::ERROR,
-                ]));
+                if ($google_logger) {
+                    $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($errors) . $add, [
+                        "severity" => Logger::ERROR,
+                    ]));
+                }
+
             }
             if (count($messages)) {
                 $monolog->info(DOMAIN . " INFO: " . json_encode($messages) . $add);
-                if ($google_logger) $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . json_encode($messages) . $add, [
-                    "severity" => Logger::INFO,
-                ]));
+                if ($google_logger) {
+                    $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . json_encode($messages) . $add, [
+                        "severity" => Logger::INFO,
+                    ]));
+                }
+
             }
         } finally {}
     }
@@ -620,7 +632,7 @@ abstract class APresenter implements IPresenter
     public function setIdentity($identity)
     {
         if (!is_array($identity)) {
-            throw new \Exception("Parameter must be an array!");
+            throw new \Exception("Parameter must be array!");
         }
         $i = [
             "avatar" => "",
@@ -683,7 +695,7 @@ abstract class APresenter implements IPresenter
     {
         $file = DATA . "/" . self::IDENTITY_NONCE;
         if (!file_exists($file)) {
-            $this->setIdentity([]);
+            $this->setIdentity([]); // initialize
         }
         $nonce = @file_get_contents($file);
         $nonce = substr(trim($nonce), 0, 8);
@@ -1135,11 +1147,14 @@ $this->setLocation($this->getCfg("goauth_redirect") .
      */
     public function getLocale($language = "cs", $key = "key")
     {
-        if (!is_array($this->getCfg("locales"))) return null;
+        if (!is_array($this->getCfg("locales"))) {
+            return null;
+        }
+
         $locale = [];
         $language = trim(strtoupper((string) $language));
         $key = trim(strtoupper((string) $key));
-        $cfg = $this->getCfg();        
+        $cfg = $this->getCfg();
         $file = strtolower("${language}_locale");
         $locale = Cache::read($file, "default");
         if ($locale === false || empty($locale)) {
@@ -1184,7 +1199,7 @@ $this->setLocation($this->getCfg("goauth_redirect") .
                 }
                 $locale['$revisions'] = $this->getData("REVISIONS"); // git revisions
                 // find all $ in combined locales array
-                $dolar = array('$' => '$');
+                $dolar = ['$' => '$'];
                 foreach ((array) $locale as $a => $b) {
                     if (substr($a, 0, 1) === '$') {
                         $a = trim($a, '${}' . "\x20\t\n\r\0\x0B");
@@ -1241,7 +1256,7 @@ $this->setLocation($this->getCfg("goauth_redirect") .
     public function CloudflarePurgeCache($cf = null)
     {
         if (!is_array($cf)) {
-            return false;
+            return $this;
         }
 
         $email = $cf["email"] ?? null;
@@ -1376,9 +1391,9 @@ $this->setLocation($this->getCfg("goauth_redirect") .
         $v["timestamp"] = time();
         $v["version"] = $this->getCfg("version");
         if (is_array($this->getCfg("locales"))) {
-          $locale = $this->getLocale("en");
+            $locale = $this->getLocale("en");
         } else {
-          $locale = [];
+            $locale = [];
         }
 
         switch (json_last_error()) {
