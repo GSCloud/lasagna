@@ -28,7 +28,7 @@ echo $REVISIONS > REVISIONS
 ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 info "Version: $VERSION Revisions: $REVISIONS"
 
-rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" --exclude "www/download" \
+rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
   *.json \
   *.neon \
   *.php \

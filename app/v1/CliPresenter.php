@@ -1,12 +1,12 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract MINI
  *
  * @category Framework
- * @package  LASAGNA
+ * @package  CLI Presenter
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @link     https://mini.gscloud.cz
  */
 
 use League\CLImate\CLImate;
@@ -14,24 +14,23 @@ use League\CLImate\CLImate;
 class CliPresenter extends \GSC\APresenter
 {
     /**
-     * Display Tesseract heading.
+     * Display Tesseract heading
      *
-     * @return object Singleton instance.
+     * @return object Singleton instance
      */
     public function process()
     {
         $climate = new CLImate;
         $climate->out("\n<bold><green>Tesseract CLI</green></bold>\tapp: "
             . $this->getData("VERSION_SHORT")
-            . " (" . str_replace(" ", "", $this->getData("VERSION_DATE"))
-            . ") \n");
+            . " (" . str_replace(" ", "", $this->getData("VERSION_DATE")) . ")");
         return $this;
     }
 
     /**
-     * Display user defined constants.
+     * Display user defined constants
      *
-     * @return object Singleton instance.
+     * @return object Singleton instance
      */
     public function showConst()
     {
@@ -40,9 +39,9 @@ class CliPresenter extends \GSC\APresenter
     }
 
     /**
-     * Display CLI syntax help.
+     * Display CLI syntax help
      *
-     * @return void
+     * @return object Singleton instance
      */
     public function help()
     {
@@ -50,20 +49,19 @@ class CliPresenter extends \GSC\APresenter
         $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
-        $climate->out("\t <bold>unit</bold> \t\t - Unit tester");
-        $climate->out("\t <bold>testlocal</bold> \t - CI Tester: local ");
-        $climate->out("\t <bold>testprod</bold> \t - CI Tester: production");
-        echo "\n";
-        exit;
+        $climate->out("\t <bold>unit</bold> \t\t - Unit test");
+        $climate->out("\t <bold>testlocal</bold> \t - local CI test");
+        $climate->out("\t <bold>testprod</bold> \t - production CI test\n");
+        return $this;
     }
 
     /**
-     * Evaluate input string.
+     * Evaluate input string
      *
-     * @param object $app Singleton.
-     * @param int $argc ARGC count.
-     * @param array $argv ARGV array.
-     * @return void
+     * @param object $app Singleton
+     * @param int $argc ARGC count
+     * @param array $argv ARGV array
+     * @return object Singleton instance
      */
     public function evaler($app, $argc, $argv)
     {
@@ -72,22 +70,21 @@ class CliPresenter extends \GSC\APresenter
             $climate->out("Examples:\n");
             $climate->out('<bold>app</bold> \'$app->showConst()\'');
             $climate->out('<bold>app</bold> \'print_r($app->getIdentity())\'');
-            $climate->out('<bold>app</bold> \'print_r($app->getLocale())\'');
         } else {
             try {
                 eval(trim($argv[2]) . ";");
             } catch (Exception $e) {}
         }
         echo "\n";
-        exit;
+        return $this;
     }
 
     /**
-     * Select CLI module.
+     * Select CLI module
      *
-     * @param string $module CLI parameter.
-     * @param int $argc ARGC count.
-     * @param array $argv ARGV array.
+     * @param string $module CLI parameter
+     * @param int $argc ARGC count
+     * @param array $argv ARGV array
      * @return void
      */
     public function selectModule($module, $argc, $argv)
@@ -117,5 +114,6 @@ class CliPresenter extends \GSC\APresenter
                 $this->help();
                 break;
         }
+        exit;
     }
 }

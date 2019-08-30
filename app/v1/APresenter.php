@@ -764,7 +764,7 @@ abstract class APresenter implements IPresenter
     /**
      * Get current user data
      *
-     * @return mixed Get current user data array.
+     * @return mixed Get current user data array or NULL.
      */
     public function getCurrentUser()
     {
@@ -1387,9 +1387,10 @@ $this->setLocation($this->getCfg("goauth_redirect") .
      */
     public function writeJsonData($d = null, $headers = [])
     {
-        $v = [];
-        $v["timestamp"] = time();
-        $v["version"] = $this->getCfg("version");
+        $code = 200;
+        $out = [];
+        $out["timestamp"] = time();
+        $out["version"] = (string) ($this->getCfg("version") ?? "v1");
         if (is_array($this->getCfg("locales"))) {
             $locale = $this->getLocale("en");
         } else {
@@ -1423,12 +1424,12 @@ $this->setLocation($this->getCfg("goauth_redirect") .
                 break;
             default:
                 $code = 500;
-                $msg = $locale["server_error_info_500"] ?? "";
+                $msg = $locale["server_error_info_500"] ?? "Internal server error.";
                 break;
         }
         if (is_null($d)) {
             $code = 500;
-            $msg = $locale["server_error_info_500"] ?? "";
+            $msg = $locale["server_error_info_500"] ?? "Internal server error.";
         }
         if (is_string($d)) {
             $d = [$d];
@@ -1437,26 +1438,26 @@ $this->setLocation($this->getCfg("goauth_redirect") .
             $code = $d;
             switch ($d) {
                 case 304:
-                    $msg = $locale["server_error_info_304"] ?? "";
+                    $msg = $locale["server_error_info_304"] ?? "Not modified.";
                     break;
                 case 400:
-                    $msg = $locale["server_error_info_400"] ?? "";
+                    $msg = $locale["server_error_info_400"] ?? "Bad request.";
                     break;
                 case 404:
-                    $msg = $locale["server_error_info_404"] ?? "";
+                    $msg = $locale["server_error_info_404"] ?? "Not found.";
                     break;
                 default:
                     $msg = "Unknown error.";
             }
             $d = null;
         }
-        $v["code"] = $code;
-        $v["message"] = $msg;
-        $v = array_merge_recursive($v, $headers);
-        $v["data"] = $d ?? null;
+        $out["code"] = (int) $code;
+        $out["message"] = $msg;
+        $out = array_merge_recursive($out, $headers);
+        $out["data"] = $d ?? null;
         $this->setHeaderJson();
         $data = $this->getData();
-        $output = json_encode($v, JSON_PRETTY_PRINT);
+        $output = json_encode($out, JSON_PRETTY_PRINT);
         return $this->setData($data, "output", $output);
     }
 }

@@ -179,26 +179,31 @@ class AdminPresenter extends \GSC\APresenter
                 if ($x != 3) {
                     return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 }
-                if(@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
-                    return $this->writeJsonData([
-                        "status" => "Data copy to backup file failed.",
-                        "profile" => $profile,
-                        "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
-                };
+                if (file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
+                    if(@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
+                        return $this->writeJsonData([
+                            "code" => 500,
+                            "status" => "Data copy to backup file failed.",
+                            "profile" => $profile,
+                            "hash" => $hash,
+                        ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    };
+                }
                 if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
                     return $this->writeJsonData([
+                        "code" => 500,
                         "status" => "Data write to history file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 };
                 if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
                     return $this->writeJsonData([
+                        "code" => 500,
                         "status" => "Data write to file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles", "code" => 500]);
+                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 } else {
                     return $this->writeJsonData([
                         "status" => "OK",

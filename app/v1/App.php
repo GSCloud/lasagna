@@ -183,8 +183,10 @@ if (CLI) {
     }
     if (isset($argv[1])) {
         CliPresenter::getInstance()->setData($data)->process()->selectModule($argv[1], $argc, $argv);
+        exit;
     }
     CliPresenter::getInstance()->setData($data)->process()->help();
+    exit;
 }
 
 // routing

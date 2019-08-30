@@ -349,16 +349,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.5.1",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "0f75e20e7392e863f5550ed2c2d3d50af21710fb"
+                "reference": "2ee962e5df3e9427fda859f1b0515d6d62c4afa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/0f75e20e7392e863f5550ed2c2d3d50af21710fb",
-                "reference": "0f75e20e7392e863f5550ed2c2d3d50af21710fb",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/2ee962e5df3e9427fda859f1b0515d6d62c4afa5",
+                "reference": "2ee962e5df3e9427fda859f1b0515d6d62c4afa5",
                 "shasum": ""
             },
             "require": {
@@ -396,7 +396,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2019-04-16T18:48:28+00:00"
+            "time": "2019-07-22T21:01:31+00:00"
         },
         {
             "name": "google/cloud",
@@ -2466,16 +2466,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.3.3",
+            "version": "v4.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "6e85629526f54bbf2589611d015d35ae744436bc"
+                "reference": "1294be813ca1b0981be780c6b14b5f45add34b30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/6e85629526f54bbf2589611d015d35ae744436bc",
-                "reference": "6e85629526f54bbf2589611d015d35ae744436bc",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/1294be813ca1b0981be780c6b14b5f45add34b30",
+                "reference": "1294be813ca1b0981be780c6b14b5f45add34b30",
                 "shasum": ""
             },
             "require": {
@@ -2525,7 +2525,7 @@
                 "redlock",
                 "semaphore"
             ],
-            "time": "2019-07-03T17:15:34+00:00"
+            "time": "2019-08-14T12:26:46+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

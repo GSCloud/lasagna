@@ -1,29 +1,32 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract MINI
  *
  * @category Framework
- * @package  CLI Doctor
+ * @package  Doctor
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @link     https://mini.gscloud.cz
  */
 
 use League\CLImate\CLImate;
+
 class Doctor
 {
     /**
      * Tesseract Doctor
      *
-     * @return void
+     * @return object Singleton instance
      */
     public function __construct()
     {
         $climate = new CLImate;
-        $climate->out("<green><bold>Tesseract Doctor");
 
         function check_exist($f)
         {
+            if (empty($f)) {
+                throw new \Exception("Empty parameter!");
+            }
             if (!file_exists($f) || !is_readable($f)) {
                 return false;
             }
@@ -32,25 +35,42 @@ class Doctor
 
         function check_write($f)
         {
+            if (empty($f)) {
+                throw new \Exception("Empty parameter!");
+            }
             if (!is_writable($f)) {
                 return false;
             }
             return true;
         }
 
+        /**
+         * Display decorated message based on result truthfulness
+         *
+         * @param string $message
+         * @param boolean $result
+         * @return void
+         */
         function validate($message, $result)
         {
+            if (is_null($message)) {
+                throw new \Exception("Empty \$message parameter!");
+            }
+            if (is_null($result)) {
+                throw new \Exception("Empty \$result parameter!");
+            }
             $climate = new CLImate;
             $result = (bool) $result;
             if ($result) {
-                $climate->out("<green><bold>[√]</bold></green> $message");
+                $climate->out("<green><bold>[√]</bold></green> ${message}");
             } else {
-                $climate->out("<red><bold>[!]</bold></red> $message");
+                $climate->out("<red><bold>[!]</bold></red> ${message}");
             }
         }
 
-        $climate->out("\n<bold>File System");
+        $climate->out("\n<blue><bold>File System");
         validate("file\t<bold>CONFIG</bold>\tas " . CONFIG, check_exist(CONFIG));
+        validate("file\t<bold>CONFIG_PRIVATE</bold>\tas " . CONFIG_PRIVATE, check_exist(CONFIG_PRIVATE));
         validate("directory\t<bold>APP</bold>\tas " . APP, check_exist(APP));
         validate("file\t<bold>router_defaults.neon</bold>\tin APP", check_exist(APP . "/router_defaults.neon"));
         validate("file\t<bold>router_admin.neon</bold>\tin APP", check_exist(APP . "/router_admin.neon"));
@@ -66,7 +86,7 @@ class Doctor
         validate("directory\t<bold>TEMP</bold>\tas " . TEMP, check_exist(TEMP));
         validate("writable\t<bold>TEMP</bold>", check_write(TEMP));
 
-        $climate->out("\n<bold>PHP");
+        $climate->out("\n<blue><bold>PHP");
         validate("version <bold>7.3+", (PHP_VERSION_ID >= 70300));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
@@ -74,6 +94,6 @@ class Doctor
         validate("lib <bold>sodium", (in_array("sodium", get_loaded_extensions())));
 
         echo "\n";
-        exit;
+        return $this;
     }
 }
