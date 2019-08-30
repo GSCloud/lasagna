@@ -35,6 +35,7 @@ interface IPresenter
     public function checkRateLimit($maximum);
     public function clearCookie($name);
     public function cloudflarePurgeCache($cf);
+    public function dataExpander(&$data);
     public function getCfg($key);
     public function getCookie($name);
     public function getCriticals();
@@ -1458,4 +1459,42 @@ $this->setLocation($this->getCfg("goauth_redirect") .
         $output = json_encode($out, JSON_PRETTY_PRINT);
         return $this->setData($data, "output", $output);
     }
+
+    /**
+     * Data Expander
+     *
+     * @param array $data
+     * @return void
+     */
+    public function dataExpander(&$data) {
+        if (empty($data)) return;
+        $presenter = $this->getPresenter();
+        $view = $this->getView();
+
+        // check logged user
+        $use_cache = true;
+        $data["user"] = $this->getCurrentUser();
+        $data["admin"] = $a = $this->getUserGroup();
+        if ($a) {
+            $data["admin_group_${a}"] = true;
+            $use_cache = false;
+        }
+        $data["use_cache"] = $use_cache;
+
+        // set language and fetch locale
+        $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";
+        $data["lang{$language}"] = true;
+        $data["l"] = $this->getLocale($language);
+
+        // compute data hash
+        $data["DATA_VERSION"] = hash('sha256', (string) json_encode($data["l"]));
+
+        // extract request path slug
+        if (($pos = strpos($data["request_path"], $language)) !== false) {
+            $data["request_path_slug"] = substr_replace($data["request_path"], "", $pos, strlen($language));
+        } else {
+            $data["request_path_slug"] = $data["request_path"];
+        }
+    }
+
 }

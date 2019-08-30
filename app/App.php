@@ -41,22 +41,23 @@ if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
-// Stackdriver
+/**
+ * Stackdriver logger
+ *
+ * @param string $message
+ * @param mixed $severity
+ * @return void
+ */
 function logger($message, $severity = Logger::INFO)
 {
-    if (empty($message)) {
+    if (empty($message) || is_null(GCP_PROJECTID) || is_null(GCP_KEYS)) {
         return;
     }
 
-    if (is_null(GCP_PROJECTID)) {
-        return;
+    if (ob_get_level()) {
+        ob_end_clean();
     }
 
-    if (is_null(GCP_KEYS)) {
-        return;
-    }
-
-    ob_flush();
     try {
         $logging = new LoggingClient([
             "projectId" => GCP_PROJECTID,
@@ -179,12 +180,11 @@ if (CLI) {
     exit;
 }
 
-// routing
+// ROUTING
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 $data["match"] = $match;
 $data["view"] = $view;
-
 // sethl
 if ($router[$view]["sethl"] ?? false) {
     $r = trim(strtolower($_GET["hl"] ?? $_COOKIE["hl"] ?? null));
@@ -202,7 +202,6 @@ if ($router[$view]["sethl"] ?? false) {
         $data["presenter"] = $presenter;
     }
 }
-
 // redirect
 if ($router[$view]["redirect"] ?? false) {
     $r = $router[$view]["redirect"];
@@ -210,16 +209,15 @@ if ($router[$view]["redirect"] ?? false) {
     header("Location: " . $r, true, 303);
     exit;
 }
-
 // nopwa
 if ($router[$view]["nopwa"] ?? false) {
     if (!isset($_GET["nonce"])) {
-        header("Location: ?nonce=" . substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8), true, 303);
+        header("Location: ?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4), true, 303);
         exit;
     }
 }
 
-// CSP headers
+// CSP HEADERS
 header(implode(" ", [
     "Content-Security-Policy: ",
     "default-src",
@@ -256,7 +254,6 @@ header(implode(" ", [
 ]));
 
 // APP
-// singleton
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
 \Tracy\Debugger::timer("PROCESSING");
@@ -281,7 +278,7 @@ $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING")
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
 $app->setData($data);
 
-// HTTP headers
+// FINAL HEADERS
 header("X-Country: $country");
 header("X-Runtime: $time1 msec.");
 header("X-Processing: $time2 msec.");

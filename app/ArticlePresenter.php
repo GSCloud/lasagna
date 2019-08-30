@@ -12,9 +12,17 @@ namespace GSC;
 
 use Cake\Cache\Cache;
 
+/**
+ * Article Presenter
+ */
 class ArticlePresenter extends APresenter
 {
 
+    /**
+     * Main controller
+     *
+     * @return object Singleton instance
+     */
     public function process()
     {
         $this->checkRateLimit();

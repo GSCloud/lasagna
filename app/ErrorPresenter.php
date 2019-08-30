@@ -10,8 +10,12 @@
 
 namespace GSC;
 
+/**
+ * Error Presenter
+ */
 class ErrorPresenter extends APresenter
 {
+    /** @const array Error codes */
     const CODESET = [
         400 => "Bad Request",
         401 => "Unauthorized",
@@ -24,6 +28,11 @@ class ErrorPresenter extends APresenter
         500 => "Internal Server Error",
     ];
 
+    /**
+     * Main controller
+     *
+     * @return object Singleton instance
+     */
     public function process()
     {
         $data = $this->getData();
@@ -39,7 +48,6 @@ class ErrorPresenter extends APresenter
             $code = 400;
         }
         $error = self::CODESET[$code];
-
         header("HTTP/1.1 ${code} ${error}");
 
         $data["lang"] = "en";

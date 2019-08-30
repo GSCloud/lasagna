@@ -15,6 +15,7 @@ use Tracy\Debugger;
 list($usec, $sec) = explode(" ", microtime());
 /** @const Global timer start. */
 define("TESSERACT_START", ((float) $usec + (float) $sec));
+
 ob_start();
 error_reporting(E_ALL);
 @ini_set("auto_detect_line_endings", true);
@@ -25,6 +26,8 @@ error_reporting(E_ALL);
 
 /** @const Bootstrap root folder. */
 defined("ROOT") || define("ROOT", __DIR__);
+/** @const Application folder. */
+defined("APP") || define("APP", ROOT . "/app");
 /** @const Cache and logs folder, defaults to "cache". */
 defined("CACHE") || define("CACHE", ROOT . "/cache");
 /** @const Application data folder, defaults to "data". */
@@ -46,43 +49,55 @@ defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
 /** @const Temporary files folder, defaults to "/tmp". */
 defined("TEMP") || define("TEMP", "/tmp");
 /** @const True if running from command line interface. */
-define("CLI", (bool) (PHP_SAPI === "cli"));
+define("CLI", (bool) (PHP_SAPI == "cli"));
 /** @const True if running server locally. */
 define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
-/** @const Application folder. */
-defined("APP") || define("APP", ROOT . "/app");
 
+// Composer
 require_once ROOT . "/vendor/autoload.php";
 
-function check_file($f)
+/**
+ * Check if file exists
+ *
+ * @param string $file
+ * @return void
+ */
+function check_file($file)
 {
-    if (!file_exists($f) || !is_readable($f)) {
+    if (!file_exists($file) || !is_readable($file)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>File: $f</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>File: $file</h3>\n\n";
         exit;
     }
 }
 
-function check_folder($f, $writable = false)
+/**
+ * Check if folder exists, optional check for writes
+ *
+ * @param string $folder
+ * @param boolean $writable
+ * @return void
+ */
+function check_folder($folder, $writable = false)
 {
-    if (!file_exists($f) || !is_readable($f)) {
+    if (!file_exists($folder) || !is_readable($folder)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>Folder: $f</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>Folder: $folder</h3>\n\n";
         exit;
     }
     if ((bool) $writable === true) {
-        if (!is_writable($f)) {
+        if (!is_writable($folder)) {
             ob_end_clean();
             header("HTTP/1.1 500 Internal Server Error");
-            echo "<h1>Internal Server Error</h1><h2>Access Denied</h2><h3>Folder: $f</h3>\n\n";
+            echo "<h1>Internal Server Error</h1><h2>Write Access Denied</h2><h3>Folder: $folder</h3>\n\n";
             exit;
         }
     }
 }
 
-// sanity check
+// sanity checks
 check_file(CONFIG);
 check_file(ROOT . "/VERSION");
 check_folder(CACHE, true);
@@ -99,6 +114,14 @@ if (file_exists(CONFIG_PRIVATE)) {
 }
 date_default_timezone_set((string) ($cfg["date_default_timezone"] ?? "Europe/Prague"));
 
+/**
+ * check variables
+ *
+ * @param array $arr array by reference
+ * @param string $key array key
+ * @param mixed $default default value
+ * @return void
+ */
 function check_var(&$arr, $key, $default = null)
 {
     if (!array_key_exists($key, $arr)) {
@@ -145,7 +168,7 @@ if (DEBUG === true) {
     $a = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
     // cookie: tracy-debug
     Debugger::enable(
-        ($cfg["DEBUG_COOKIE"] ?? null) ? (string) $cfg["DEBUG_COOKIE"] . "@" . $a : Debugger::DETECT,
+        ($cfg["DEBUG_COOKIE"] ?? false) ? (string) $cfg["DEBUG_COOKIE"] . "@${a}" : Debugger::DETECT,
         CACHE,
         (string) ($cfg["DEBUG_EMAIL"] ?? null)
     );

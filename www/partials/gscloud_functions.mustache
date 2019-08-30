@@ -153,6 +153,25 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       }
     }
 
+    // GSC.CopyThisText()
+    if (typeof GSC.CopyThisText !== "function") GSC.CopyThisText = function (that) {
+      if (that) {
+        var t = $(that).text().trim();
+        GSC.CopyClipboard(t);
+        M.toast({html: t});
+      }
+    }
+
+    // GSC.CopyThisHtml()
+    if (typeof GSC.CopyThisHtml !== "function") GSC.CopyThisHtml = function (that) {
+      if (that) {
+        var t = $(that).text().trim();
+        var h = $(that).html().trim();
+        GSC.CopyClipboard(h);
+        M.toast({html: t});
+      }
+    }
+
     // GSC.VersionCheck()
     GSC.init.push(function () {
       GSC.names.push("GSC.VersionCheck()");
@@ -183,7 +202,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         }
       }
 
-      setTimeout("GSC.VersionCheck();", 10000);
+      setTimeout("GSC.VersionCheck()", 10000);
     });
 
     // GSC.SetProfile()
@@ -203,19 +222,17 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         }
         GSC.profile = profile;
       }
+
     });
 
     // GSC.ReadArticles()
     GSC.init.push(function () {
       GSC.names.push("GSC.ReadArticles()");
-
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
         if (GSC.summernote_on || GSC.offline) {
           setTimeout("GSC.ReadArticles();", 5000);
           return;
         }
-        console.log("Reading articles:", GSC.profile);
-
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {
           if (data && data.data && data.data.html) {
@@ -224,14 +241,17 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               GSC.data.articlescrc = data.data.crc;
               var obj = jQuery.parseJSON(data.data.html);
               for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
-              $(".summernote>ul").each(function (i, obj) {
+/*
+              $(".summernote ul").each(function (i, obj) {
                 $(obj).addClass("browser-default");
               });
+*/
+              $(".summernote ul").addClass("browser-default");
+              $(".summernote img").addClass("responsive-img");
             }
           }
           if (typeof callback === "function") callback();
         });
-
         setTimeout("GSC.ReadArticles()", 30000);
       }
 
@@ -240,9 +260,8 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       if (localStorage && localStorage[a] && localStorage[a].length) {
           var obj = jQuery.parseJSON(localStorage[a]);
           for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
-          $(".summernote>ul").each(function (i, obj) {
-            $(obj).addClass("browser-default");
-          });
+          $(".summernote ul").addClass("browser-default");
+          $(".summernote img").addClass("responsive-img");
       }
       setTimeout("GSC.ReadArticles();", 1);
     });
@@ -250,23 +269,18 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // DELAYED UI bindings
     GSC.init.push(function () {
       GSC.names.push("UI bindings");
-
       $(".sethlcs").click(function () {
         setCookie("hl", "cs");
       });
-
       $(".sethlen").click(function () {
         setCookie("hl", "en");
       });
-
       $("#update-message").click(function () {
         window.location.reload(true);
       });
-
       $(".summernote>ul").each(function (i, obj) {
         $(obj).addClass("browser-default");
       });
-
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
