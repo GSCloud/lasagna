@@ -1,17 +1,18 @@
 <?php
 /**
- * GSC Tesseract MINI
+ * GSC Tesseract
  *
  * @category Framework
- * @package  CLI Presenter
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://mini.gscloud.cz
+ * @link     https://lasagna.gscloud.cz
  */
+
+namespace GSC;
 
 use League\CLImate\CLImate;
 
-class CliPresenter extends \GSC\APresenter
+class CliPresenter extends APresenter
 {
     /**
      * Display Tesseract heading

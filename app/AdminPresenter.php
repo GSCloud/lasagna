@@ -1,19 +1,20 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
 
+namespace GSC;
+
 use Cake\Cache\Cache;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 
-class AdminPresenter extends \GSC\APresenter
+class AdminPresenter extends APresenter
 {
     /** @var string Administration token key filename. */
     const ADMIN_KEY = "admin.key";

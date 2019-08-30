@@ -1,9 +1,8 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
@@ -387,7 +386,7 @@ abstract class APresenter implements IPresenter
         }
         $type = (file_exists(TEMPLATES . "/${template}.mustache")) ? 1 : 0;
         $renderer = new \Mustache_Engine(array(
-            "template_class_prefix" => "__" . SERVER . "_" . PROJECT . "_" . VERSION . "_",
+            "template_class_prefix" => "__" . SERVER . "_" . PROJECT . "_",
             "cache" => CACHE,
             "cache_file_mode" => 0666,
             "cache_lambda_templates" => true,
@@ -470,7 +469,6 @@ abstract class APresenter implements IPresenter
             "CONST.TEMP" => TEMP,
             "CONST.TEMPLATES" => TEMPLATES,
             "CONST.UPLOAD" => UPLOAD,
-            "CONST.VERSION" => VERSION,
             "CONST.WWW" => WWW,
         ]);
 

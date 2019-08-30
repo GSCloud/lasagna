@@ -1,15 +1,16 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
 
-class ErrorPresenter extends GSC\APresenter
+namespace GSC;
+
+class ErrorPresenter extends APresenter
 {
     const CODESET = [
         400 => "Bad Request",

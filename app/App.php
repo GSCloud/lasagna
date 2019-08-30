@@ -1,13 +1,14 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
+
+namespace GSC;
 
 use Cake\Cache\Cache;
 use Google\Cloud\Logging\LoggingClient;
@@ -29,10 +30,8 @@ defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/"
 defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "Tesseract"));
 /** @const Server name, extracted from SERVER array. */
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
-/** @const Version string. */
-defined("VERSION") || define("VERSION", "v1");
 /** @const Monolog filename, full path. */
-defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . "_" . VERSION . ".log");
+defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . ".log");
 
 /** @const Google Cloud Platform project ID. */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
@@ -41,13 +40,6 @@ defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
 if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
-
-// remove old unused cookies
-array_map(function ($name) {
-    setcookie($name, "", 0, "/", DOMAIN, false, true);
-    setcookie($name, "", 0, "/", DOMAIN, true, true);
-    unset($_COOKIE[$name]);
-}, explode(";", "admin;avatar;id;name;email"));
 
 // Stackdriver
 function logger($message, $severity = Logger::INFO)
@@ -91,7 +83,7 @@ foreach ($cache_profiles as $k => $v) {
         "className" => "File",
         "duration" => $v,
         "path" => CACHE,
-        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . VERSION . "_",
+        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
     ]);
 }
 
@@ -176,8 +168,6 @@ $data["router"] = $router;
 
 // CLI
 if (CLI) {
-    require_once "APresenter.php";
-    require_once "CliPresenter.php";
     if (ob_get_level()) {
         ob_end_clean();
     }
@@ -229,15 +219,6 @@ if ($router[$view]["nopwa"] ?? false) {
     }
 }
 
-// singleton
-$data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
-$presenter_file = APP . "/${p}.php";
-if (!file_exists($presenter_file)) {
-    logger("MISSING PRESENTER: $p", Logger::EMERGENCY);
-    header("Location: /error/410", true, 303);
-    exit;
-}
-
 // CSP headers
 header(implode(" ", [
     "Content-Security-Policy: ",
@@ -275,12 +256,11 @@ header(implode(" ", [
 ]));
 
 // APP
-require_once APP . "/APresenter.php";
-require_once $presenter_file;
-
+// singleton
+$data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
+$controller = "\\GSC\\${p}";
 \Tracy\Debugger::timer("PROCESSING");
-
-$app = $p::getInstance()->setData($data)->process();
+$app = $controller::getInstance()->setData($data)->process();
 $data = $app->getData();
 
 // simple counter + data clearing
@@ -300,6 +280,7 @@ $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "");
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
 $app->setData($data);
+
 // HTTP headers
 header("X-Country: $country");
 header("X-Runtime: $time1 msec.");

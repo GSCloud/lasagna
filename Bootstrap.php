@@ -1,9 +1,8 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
@@ -50,6 +49,8 @@ defined("TEMP") || define("TEMP", "/tmp");
 define("CLI", (bool) (PHP_SAPI === "cli"));
 /** @const True if running server locally. */
 define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
+/** @const Application folder. */
+defined("APP") || define("APP", ROOT . "/app");
 
 require_once ROOT . "/vendor/autoload.php";
 
@@ -97,11 +98,6 @@ if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
 }
 date_default_timezone_set((string) ($cfg["date_default_timezone"] ?? "Europe/Prague"));
-
-/** @const Version string. */
-defined("VERSION") || define("VERSION", (string) ($cfg["version"] ?? "v1"));
-/** @const Application folder. */
-defined("APP") || define("APP", ROOT . "/app/" . VERSION);
 
 function check_var(&$arr, $key, $default = null)
 {
@@ -171,8 +167,8 @@ $data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "
 $data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
 $data["base"] = $data["BASE"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
 $data["LOCALHOST"] = (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI;
-$data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 8), 16, 10));
-$data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8);
+$data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 4), 16, 10));
+$data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4);
 $data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
 $data["ALPHA"] = (in_array($host, (array) ($cfg["alpha_hosts"] ?? [])));
 $data["BETA"] = (in_array($host, (array) ($cfg["beta_hosts"] ?? [])));

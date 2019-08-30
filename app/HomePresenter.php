@@ -1,19 +1,25 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  LASAGNA
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
 
+namespace GSC;
+
 use Cake\Cache\Cache;
+use There4\Analytics\AnalyticsEvent;
 
-class ArticlePresenter extends \GSC\APresenter
+class HomePresenter extends APresenter
 {
-
+    /**
+     * Main controller
+     *
+     * @return object Singleton instance.
+     */
     public function process()
     {
         $this->checkRateLimit();
@@ -51,22 +57,36 @@ class ArticlePresenter extends \GSC\APresenter
             return $this->setData($data, "output", $output);
         }
 
-        $data["container_switch_article"] = true;
-
-
         // fix text data
         if (is_array($data["l"])) {
             foreach ($data["l"] as $k => $v) {
-                $v = GSC\StringFilters::convert_eolhyphen_to_brdot($v);
-                $v = GSC\StringFilters::correct_text_spacing($v, $language);
-                $v = GSC\StringFilters::convert_eol_to_br($v);
+                $v = StringFilters::convert_eolhyphen_to_brdot($v);
+                $v = StringFilters::correct_text_spacing($v, $language);
+                $v = StringFilters::convert_eol_to_br($v);
                 $data["l"][$k] = $v;
             }
         }
 
         $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
-        $output = GSC\StringFilters::trim_html_comment($output);
+        $output = StringFilters::trim_html_comment($output);
         Cache::write($cache_key, $output, "page");
         return $this->setData($data, "output", $output);
+    }
+
+    /**
+     * Send Google Analytics events
+     *
+     * @return object Singleton instance.
+     */
+    public function SendAnalytics()
+    {
+        $dot = new \Adbar\Dot((array) $this->getData());
+        if ($dot->has("google.ua") && (strlen($dot->get("google.ua"))) && (array_key_exists("HTTPS", $_SERVER)) && ($_SERVER["HTTPS"] == "on")) {
+            ob_flush();
+            $events = new AnalyticsEvent($dot->get("google.ua"), $dot->get("canonical_url") . $dot->get("request_path"));
+            $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "N/A");
+            @$events->trackEvent((string) ($this->getCfg("app") ?? "APP"), "country_code", $country);
+        }
+        return $this;
     }
 }

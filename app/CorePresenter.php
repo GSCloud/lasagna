@@ -1,6 +1,16 @@
 <?php
+/**
+ * GSC Tesseract
+ *
+ * @category Framework
+ * @author   Fred Brooker <oscadal@gscloud.cz>
+ * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://mini.gscloud.cz
+ */
 
-class CorePresenter extends \GSC\APresenter
+namespace GSC;
+
+class CorePresenter extends APresenter
 {
     public function process()
     {

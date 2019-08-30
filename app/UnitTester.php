@@ -1,13 +1,14 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
  * @category Framework
- * @package  Unit tester
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
+
+namespace GSC;
 
 use Tester\Assert;
 use League\CLImate\CLImate;

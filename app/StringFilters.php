@@ -1,4 +1,12 @@
 <?php
+/**
+ * GSC Tesseract
+ *
+ * @category Framework
+ * @author   Fred Brooker <oscadal@gscloud.cz>
+ * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://mini.gscloud.cz
+ */
 
 namespace GSC;
 
