@@ -35,7 +35,7 @@ class CliPresenter extends APresenter
      */
     public function showConst()
     {
-        print_r(get_defined_constants(true)["user"]);
+        dump(get_defined_constants(true)["user"]);
         return $this;
     }
 
@@ -70,7 +70,7 @@ class CliPresenter extends APresenter
         if ($argc != 3) {
             $climate->out("Examples:\n");
             $climate->out('<bold>app</bold> \'$app->showConst()\'');
-            $climate->out('<bold>app</bold> \'print_r($app->getIdentity())\'');
+            $climate->out('<bold>app</bold> \'dump($app->getIdentity())\'');
         } else {
             try {
                 eval(trim($argv[2]) . ";");
