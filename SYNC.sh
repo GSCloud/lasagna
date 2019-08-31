@@ -33,7 +33,6 @@ rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
   *.neon \
   *.php \
   LICENSE \
-  LOCAL_TEST.sh \
   REVISIONS \
   VERSION \
   _includes.sh \

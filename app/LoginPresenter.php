@@ -16,7 +16,7 @@ class LoginPresenter extends APresenter
     {
         $this->checkRateLimit()->setHeaderHtml();
         $cfg = $this->getCfg();
-        $time = "?nonce=" . substr(hash("sha256", random_bytes(10) . time()), 0, 8);
+        $time = "?nonce=" . substr(hash("sha256", random_bytes(8) . time()), 0, 4);
         if (isset($_GET["return_uri"])) {
             \setcookie("return_uri", $_GET["return_uri"]);
         }
@@ -103,7 +103,7 @@ class LoginPresenter extends APresenter
         header("HTTP/1.1 400 Bad Request");
         echo "<html><body><center><h1>😐 AUTHENTICATION ERROR 😐</h1>";
         echo join("<br>", $errors);
-        echo "<h3><a href=\"/login?nonce=" . substr(hash("sha256", random_bytes(10) . (string) time()), 0, 8)
+        echo "<h3><a href=\"/login?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4)
             . "\">RETRY ↻</a></h3></center></html></body>";
         exit;
     }

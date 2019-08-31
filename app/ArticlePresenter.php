@@ -30,24 +30,9 @@ class ArticlePresenter extends APresenter
         $presenter = $this->getPresenter();
         $view = $this->getView();
 
-        // check user & set caching
-        $use_cache = true;
-        $data["user"] = $this->getCurrentUser();
-        if ($data["admin"] = $a = $this->getUserGroup()) {
-            $data["admin_group_$a"] = true;
-            $use_cache = false;
-        }
-
-        // set language and fetch locale
-        $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";
-        $data["lang{$language}"] = true;
-        $data["l"] = $this->getLocale($language);
-        $data["DATA_VERSION"] = hash('sha256', (string) json_encode($data["l"]));
-        if (($pos = strpos($data["request_path"], $language)) !== false) {
-            $data["request_path_slug"] = substr_replace($data["request_path"], "", $pos, strlen($language));
-        } else {
-            $data["request_path_slug"] = $data["request_path"];
-        }
+        // expand data model
+        $this->dataExpander($data);
+        $data["container_switch_article"] = true;
 
         // advanced caching
         $arr = [
@@ -55,23 +40,23 @@ class ArticlePresenter extends APresenter
             $data["request_path"],
         ];
         $cache_key = strtolower(join($arr, "_"));
+        $use_cache = $data["use_cache"] ?? false;
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
             $output .= "\n<script>console.log('(page cached)');</script>";
             return $this->setData($data, "output", $output);
         }
 
-        $data["container_switch_article"] = true;
-
         // fix text data
         if (is_array($data["l"])) {
             foreach ($data["l"] as $k => $v) {
                 $v = StringFilters::convert_eolhyphen_to_brdot($v);
-                $v = StringFilters::correct_text_spacing($v, $language);
+                $v = StringFilters::correct_text_spacing($v, $data["lang"]);
                 $v = StringFilters::convert_eol_to_br($v);
                 $data["l"][$k] = $v;
             }
         }
 
+        // render output & save to model and cache
         $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
         $output = StringFilters::trim_html_comment($output);
         Cache::write($cache_key, $output, "page");

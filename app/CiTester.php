@@ -15,7 +15,7 @@ use League\CLImate\CLImate;
 class CiTester
 {
     /**
-     * CI tester
+     * Main controller
      *
      * @param array $cfg Configuration.
      * @param array $presenter Presenter.
@@ -31,11 +31,13 @@ class CiTester
         $type = (string) $type;
 
         switch ($type) {
+            case "local":
             case "testlocal":
                 $case = "local";
                 $target = $cfg["local_goauth_origin"] ?? "";
                 break;
 
+            case "prod":
             case "testprod":
             default:
                 $case = "production";
@@ -85,23 +87,19 @@ class CiTester
             curl_setopt($ch, CURLOPT_HEADER, true);
             curl_setopt($ch, CURLOPT_NOBODY, false);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
             $output = curl_exec($ch);
             @file_put_contents(ROOT . "/ci/" . date("Y-m-d") . strtr("_${target}_${x['path']}", '\/:.', '____') . ".curl.txt", $output);
             $length = strlen($output);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            $u = "url: <bold>${x['site']}${x['path']}</bold> ";
-            $t = "target: ${x['url']} ";
-            if ("${x['site']}${x['path']}" == "${x['url']}") {
-                $t = "";
-            }
+            $u = "<bold>${x['site']}${x['path']}</bold>";
             if ($code == $x["assert_httpcode"]) {
-                $climate->out("${u}${t}length: <green>${length}</green> code: <green>${code}</green> / assert: <green>${x['assert_httpcode']}</green>");
+                $climate->out("${u};length:<green>${length}</green>;code:<green>${code}</green>");
             } else {
-                $climate->out("<red>ERROR: ${u}${t}</red>\007");
+                $climate->out("<red>${u};length:<bold>${length}</bold>;code:<bold>${code}</bold>;assert:<bold>${x['assert_httpcode']}</bold></red>\007");
                 @file_put_contents(ROOT . "/ci/errors_" . date("Y-m") . strtr("_${target}", '\/:.', '____') . ".assert.txt",
-                    "${u}${t}length: ${length} target: ${x['url']} code: ${code} / assert: ${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
+                    "${u};length:${length};code:${code};assert:${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
             }
         }
         exit;

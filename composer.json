@@ -1,7 +1,8 @@
 {
-  "name": "Tesseract LASAGNA",
-  "description": "Tesseract LASAGNA object oriented MVP framework",
+  "name": "gscloud/tesseractlasagna",
+  "description": "Tesseract LASAGNA OOP MVP framework",
   "require": {
+    "adbario/php-dot-notation": "^2.2",
     "altorouter/altorouter": "^1.2.0",
     "cakephp/cache": "^3.7.9",
     "cloudflare/sdk": "^1.1.4",
@@ -13,7 +14,11 @@
     "league/oauth2-google": "^3.0.1",
     "monolog/monolog": "^1.24.0",
     "mustache/mustache": "^2.12.0",
+    "nette/finder": "^2.5",
+    "nette/mail": "^3.1",
     "nette/neon": "^2.4.3",
+    "nette/tester": "^2.2",
+    "nette/utils": "^3.0",
     "paragonie/halite": "^4.5.4",
     "paragonie/random_compat": ">=2 <9.99",
     "php": "^7.3",
@@ -23,12 +28,7 @@
     "symfony/polyfill-mbstring": "^1.11.0",
     "there4/php-analytics-event": "^1.1.0",
     "tracy/tracy": "^2.6.4",
-    "tuupola/base58": "^0.2.3",
-    "adbario/php-dot-notation": "^2.2",
-    "nette/utils": "^3.0",
-    "nette/mail": "^3.1",
-    "nette/tester": "^2.2",
-    "nette/finder": "^2.5"
+    "tuupola/base58": "^0.2.3"
   },
   "autoload": {
     "psr-4": {

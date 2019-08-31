@@ -1,8 +1,8 @@
 defaults:
   assert_httpcode: 200
+  assert_json: false
   language: cs
   method: GET
-  nopwa: false
   presenter: home
   sethl: false
   sitemap: false
@@ -59,16 +59,4 @@ ReadArticles:
   assert_json: true
   method: GET
   path: '/ReadArticles/[a:profile]/[a:hash]'
-  presenter: core
-
-FixLangDataCs:
-  language: cs
-  method: POST
-  path: '/cs/FixLangData'
-  presenter: core
-
-FixLangDataEn:
-  language: en
-  method: POST
-  path: '/en/FixLangData'
   presenter: core

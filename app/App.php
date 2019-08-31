@@ -209,6 +209,8 @@ if ($router[$view]["redirect"] ?? false) {
     header("Location: " . $r, true, 303);
     exit;
 }
+
+/*
 // nopwa
 if ($router[$view]["nopwa"] ?? false) {
     if (!isset($_GET["nonce"])) {
@@ -216,6 +218,7 @@ if ($router[$view]["nopwa"] ?? false) {
         exit;
     }
 }
+*/
 
 // CSP HEADERS
 header(implode(" ", [

@@ -644,7 +644,7 @@ abstract class APresenter implements IPresenter
         $file = DATA . "/" . self::IDENTITY_NONCE;
         if (!file_exists($file)) {
             try {
-                $nonce = hash("sha256", random_bytes(256) . time());
+                $nonce = hash("sha256", random_bytes(8) . (string) time());
                 file_put_contents($file, $nonce);
                 @chmod($file, 0660);
                 $this->addMessage("ADMIN: nonce file created");
@@ -996,7 +996,7 @@ abstract class APresenter implements IPresenter
     {
         $code = (int) $code;
         if (empty($location)) {
-            $location = "/?nonce=" . substr(hash("sha1", random_bytes(10) . (string) time()), 0, 8);
+            $location = "/?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 8);
         }
         header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
