@@ -739,7 +739,6 @@ abstract class APresenter implements IPresenter
             if (isset($_COOKIE["identity"])) {
                 $x = 0;
                 $q = json_decode($this->getCookie("identity"), true);
-                //bdump($q, "getIdentity");
                 if (!is_array($q)) {
                     $x++;
                 }
@@ -761,7 +760,7 @@ abstract class APresenter implements IPresenter
                     }
                 }
                 if ($x) {
-                    $this->clearCookie("identity");
+                    $this->logout();
                     break;
                 }
                 if ($q["nonce"] == $nonce) {
