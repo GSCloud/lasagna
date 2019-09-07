@@ -5,7 +5,6 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -19,7 +18,6 @@ class LogoutPresenter extends APresenter
     /**
      * Main controller
      *
-     * @return void
      */
     public function process()
     {

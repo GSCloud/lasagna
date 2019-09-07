@@ -5,13 +5,15 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
 
 use League\CLImate\CLImate;
 
+/**
+ * CLI Presenter
+ */
 class CliPresenter extends APresenter
 {
     /**
@@ -40,28 +42,30 @@ class CliPresenter extends APresenter
     }
 
     /**
-     * Display CLI syntax help
+     * Display CLI help
      *
      * @return object Singleton instance
      */
     public function help()
     {
         $climate = new CLImate;
+
         $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
         $climate->out("\t <bold>unit</bold> \t\t - Unit test");
         $climate->out("\t <bold>local</bold> \t\t - local CI test");
         $climate->out("\t <bold>prod</bold> \t\t - production CI test\n");
+
         return $this;
     }
 
     /**
      * Evaluate input string
      *
-     * @param object $app Singleton
-     * @param int $argc ARGC count
-     * @param array $argv ARGV array
+     * @param object $app this :)
+     * @param int $argc ARGC
+     * @param array $argv ARGV
      * @return object Singleton instance
      */
     public function evaler($app, $argc, $argv)
@@ -84,8 +88,8 @@ class CliPresenter extends APresenter
      * Select CLI module
      *
      * @param string $module CLI parameter
-     * @param int $argc ARGC count
-     * @param array $argv ARGV array
+     * @param int $argc ARGC
+     * @param array $argv ARGV
      * @return void
      */
     public function selectModule($module, $argc, $argv)

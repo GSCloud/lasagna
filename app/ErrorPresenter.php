@@ -5,7 +5,6 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -15,7 +14,6 @@ namespace GSC;
  */
 class ErrorPresenter extends APresenter
 {
-    /** @const array Error codes */
     const CODESET = [
         400 => "Bad Request",
         401 => "Unauthorized",
@@ -35,10 +33,9 @@ class ErrorPresenter extends APresenter
      */
     public function process()
     {
-        $data = $this->getData();
+        $this->setHeaderHtml();
         $match = $this->getMatch();
-
-        $params = $match["params"] ?? [];
+        $params = (array) ($match["params"] ?? []);
         if (array_key_exists("code", $params)) {
             $code = (int) $params["code"];
         } else {
@@ -49,15 +46,7 @@ class ErrorPresenter extends APresenter
         }
         $error = self::CODESET[$code];
         header("HTTP/1.1 ${code} ${error}");
-
-        $data["lang"] = "en";
-        $data["l"] = $l = $this->getLocale("en");
-        if (is_null($l)) {
-            $template = "<body><h1>HTTP Error $code</h1><h2>".self::CODESET[$code]."</h2></body>";
-        } else {
-            $template = "<body><h1>HTTP Error $code</h1><h2>{{ l.server_error_${code} }}</h2><p>{{ l.server_error_info_${code} }}</p></body>";
-        }
-        $output = $this->setData($data)->renderHTML($template);
-        return $this->setData($data, "output", $output);
+        $template = "<body><center><h1>🤔 HTTP Error $code 💣</h1><h2>" . self::CODESET[$code] . "</h2><h3><a href='/'>RELOAD ↻</a></h3></body>";
+        return $this->setData("output", $this->renderHTML($template));
     }
 }

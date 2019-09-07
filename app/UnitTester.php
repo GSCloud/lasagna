@@ -5,14 +5,16 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
 
-use Tester\Assert;
 use League\CLImate\CLImate;
+use Tester\Assert;
 
+/**
+ * Unit Tester
+ */
 class UnitTester
 {
     public function __construct()

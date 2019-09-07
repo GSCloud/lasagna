@@ -1,6 +1,7 @@
 defaults:
   assert_httpcode: 200
   assert_json: false
+  assert_minlength: false
   language: cs
   method: GET
   presenter: home

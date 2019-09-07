@@ -5,7 +5,6 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -25,7 +24,8 @@ class ArticlePresenter extends APresenter
      */
     public function process()
     {
-        $this->checkRateLimit();
+        $this->checkRateLimit()->setHeaderHtml();
+
         $data = $this->getData();
         $presenter = $this->getPresenter();
         $view = $this->getView();
@@ -42,8 +42,8 @@ class ArticlePresenter extends APresenter
         $cache_key = strtolower(join($arr, "_"));
         $use_cache = $data["use_cache"] ?? false;
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
-            $output .= "\n<script>console.log('(page cached)');</script>";
-            return $this->setData($data, "output", $output);
+            $output .= "\n<script>console.log('*** page content cached');</script>";
+            return $this->setData("output", $output);
         }
 
         // fix text data
@@ -56,10 +56,10 @@ class ArticlePresenter extends APresenter
             }
         }
 
-        // render output & save to model and cache
+        // render output & save to model & cache
         $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
         $output = StringFilters::trim_html_comment($output);
         Cache::write($cache_key, $output, "page");
-        return $this->setData($data, "output", $output);
+        return $this->setData("output", $output);
     }
 }

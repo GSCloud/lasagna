@@ -5,34 +5,56 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
 
+/**
+ * Login Presenter
+ */
 class LoginPresenter extends APresenter
 {
+    /**
+     * Main controller
+     *
+     * @return void
+     */
     public function process()
     {
-        $this->checkRateLimit()->setHeaderHtml();
-        $cfg = $this->getCfg();
-        $time = "?nonce=" . substr(hash("sha256", random_bytes(8) . time()), 0, 4);
-        if (isset($_GET["return_uri"])) {
-            \setcookie("return_uri", $_GET["return_uri"]);
+        if (ob_get_level()) {
+            ob_end_clean();
         }
-        $provider = new \League\OAuth2\Client\Provider\Google([
-            "clientId" => $cfg["goauth_client_id"],
-            "clientSecret" => $cfg["goauth_secret"],
-            "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"],
-        ]);
+        $this->checkRateLimit()->setHeaderHtml();
+
+        $cfg = $this->getCfg();
+        $nonce = "?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 8);
+        // set return URI
+        $refhost = parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
+        $uri = "/${nonce}";
+        if ($refhost ?? null) {
+            if (in_array($refhost, $this->getData("multisite_profiles.default"))) {
+                $uri = $_SERVER["HTTP_REFERER"];
+            }
+        }
+        \setcookie("return_uri", $uri, 0, "/", DOMAIN);
+        try {
+            $provider = new \League\OAuth2\Client\Provider\Google([
+                // set OAuth 2.0 credentials
+                "clientId" => $cfg["goauth_client_id"],
+                "clientSecret" => $cfg["goauth_secret"],
+                "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"],
+            ]);
+        } finally {}
+        // check for errors
         $errors = [];
         if (!empty($_GET["error"])) {
-            $errors[] = "INFO: " . htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
+            $errors[] = htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
         } elseif (empty($_GET["code"])) {
-            $email = $_COOKIE["login_hint"] ?? null;
-            $email = $_GET["login_hint"] ?? null;
-            $hint = $email ? strtolower("&login_hint=$email") : "";
-            if (isset($_GET["relogin"]) && $_GET["relogin"] == true) {
+            $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
+            $hint = $email ? strtolower("&login_hint=${email}") : "";
+            // check URL for relogin parameter
+            if (isset($_GET["relogin"])) {
+                $hint = "";
                 $authUrl = $provider->getAuthorizationUrl([
                     "prompt" => "select_account consent",
                     "response_type" => "code",
@@ -42,18 +64,14 @@ class LoginPresenter extends APresenter
                     "response_type" => "code",
                 ]);
             }
-            ob_end_flush();
             \setcookie("oauth2state", $provider->getState());
             header("Location: " . $authUrl . $hint, true, 303);
             exit;
-/*
-            echo $authUrl . $hint;
-            exit;
-*/
-
         } elseif (empty($_GET["state"]) || ($_GET["state"] && !isset($_COOKIE["oauth2state"]))) {
+            // something baaaaaaaaaaaaaad happened!
             $errors[] = "Invalid OAuth state";
         } else {
+            // get access token
             try {
                 $token = $provider->getAccessToken("authorization_code", [
                     "code" => $_GET["code"],
@@ -67,44 +85,41 @@ class LoginPresenter extends APresenter
                     "id" => $ownerDetails->getId(),
                     "name" => $ownerDetails->getName(),
                 ]);
-                $a = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
+                // debugging
+/*
+                dump("NEW IDENTITY:");
+                dump($this->getIdentity());
+                dump("OAuth IDENTITY:");
+                dump($ownerDetails);
+                exit;
+*/
                 if ($this->getUserGroup() == "admin") {
+                    // set Tracy debug cookie
                     if ($this->getCfg("DEBUG_COOKIE")) {
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
                 }
-                \setcookie("oauth2state", "", 0);
-                unset($_COOKIE["oauth2state"]);
+                $this->clearCookie("oauth2state");
+                // store email for next run
                 if (strlen($ownerDetails->getEmail())) {
-                    \setcookie("login_hint", $ownerDetails->getEmail() ?? "", time() + 86400 * 10, "/", DOMAIN);
+                    \setcookie("login_hint", $ownerDetails->getEmail() ?? "", time() + 86400 * 31, "/", DOMAIN);
                 }
-/*
-                echo "IP ADDRESS: $a <br>";
-                echo "USER GROUP: " . $this->getUserGroup() ."<br>";
-                dump($ownerDetails);
-                dump(get_defined_constants(true)['user']);
-                exit;
-*/
-                if (isset($_COOKIE["return_uri"])) {
-                    $c = $_COOKIE["return_uri"];
-                    \setcookie("return_uri", "", 0);
-                    unset($_COOKIE["return_uri"]);
-                    $this->setLocation($c);
-                } else {
-                    $this->setLocation("/$time");
-                }
+                $this->clearCookie("oauth2state");
+                $this->setLocation("/${nonce}");
                 exit;
             } catch (Exception $e) {
-                $errors[] = "INFO: " . $e->getMessage();
+                $errors[] = $e->getMessage();
             }
         }
-        ob_end_flush();
-        $this->addError("HTTP/1.1 400 Bad Request");
+        // process errors
         header("HTTP/1.1 400 Bad Request");
+        $this->addError("HTTP/1.1 400 Bad Request");
+        $this->clearCookie("login_hint");
+        $this->clearCookie("oauth2state");
+        $this->clearcookie("return_uri");
         echo "<html><body><center><h1>😐 AUTHENTICATION ERROR 😐</h1>";
+        echo '<h2><a href="/login?relogin">RELOAD ↻</a></h2><hr>';
         echo join("<br>", $errors);
-        echo "<h3><a href=\"/login?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4)
-            . "\">RETRY ↻</a></h3></center></html></body>";
         exit;
     }
 }

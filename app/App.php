@@ -263,17 +263,6 @@ $controller = "\\GSC\\${p}";
 $app = $controller::getInstance()->setData($data)->process();
 $data = $app->getData();
 
-// simple counter + data clearing
-if ($app->getUserGroup() != "admin") {
-    $c = isset($_COOKIE["counter"]) ? (int) $_COOKIE["counter"] : 0;
-    if ($c > 500) {
-        header('Clear-Site-Data: "cache", "storage"');
-        $c = 0;
-    }
-    $c++;
-    setcookie("counter", $c, time() + 86400 * 31, "/", DOMAIN, false, true);
-}
-
 // ANALYTICS
 $events = null;
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "");
@@ -301,5 +290,5 @@ if (DEBUG) {
     unset($data["goauth_client_id"]);
     unset($data["google_drive_backup "]);
     bdump($data, '$data');
-    bdump($app->getIdentity(), "identity");
+    //bdump($app->getIdentity(), "identity");
 }

@@ -29,39 +29,34 @@ class CorePresenter extends APresenter
                 if (!in_array($lang, ["cs", "en"])) {
                     $lang = "cs";
                 }
-                $data["l"] = $this->getLocale($lang);
-                $output = $this->setData($data)->renderHTML("site.webmanifest");
-                return $this->setData($data, "output", $output);
+                $output = $this->setData("l", $this->getLocale($lang))->renderHTML("site.webmanifest");
+                return $this->setData("output", $output);
                 break;
 
             // sitemap
             case "sitemap":
                 $this->setHeaderText();
-                $a = [];
+                $map = [];
                 foreach ($presenter as $p) {
                     if (isset($p["sitemap"]) && $p["sitemap"]) {
-                        $x = trim($p["path"], "/ \t\n\r\0\x0B");
-                        $a[] = $x;
+                        $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
                     }
                 }
-                $data["sitemap"] = $a;
-                $output = $this->setData($data)->renderHTML("sitemap.txt");
-                return $this->setData($data, "output", $output);
+                $output = $this->setData("sitemap", $map)->renderHTML("sitemap.txt");
+                return $this->setData("output", $output);
                 break;
 
             // sw.js
             case "swjs":
                 $this->setHeaderJavaScript();
-                $a = [];
+                $map = [];
                 foreach ($presenter as $p) {
                     if (isset($p["sitemap"]) && $p["sitemap"]) {
-                        $x = trim($p["path"], "/ \t\n\r\0\x0B");
-                        $a[] = $x;
+                        $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
                     }
                 }
-                $data["sitemap"] = $a;
-                $output = $this->setData($data)->renderHTML("sw.js");
-                return $this->setData($data, "output", $output);
+                $output = $this->setData("sitemap", $map)->renderHTML("sw.js");
+                return $this->setData("output", $output);
                 break;
 
             // core version

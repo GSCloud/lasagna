@@ -141,22 +141,18 @@ check_var($cfg, "app", "app");
 check_var($cfg, "canonical_url");
 check_var($cfg, "minify", false);
 
-// debugger
+// DEBUGGER
 if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
-    /** @const True if debugging. */
-    defined("DEBUG") || define("DEBUG", true);
+    defined("DEBUG") || define("DEBUG", true);  // ENABLE for localhost
 }
 if (CLI === true) {
-    /** @const Disable for CLI. */
-    defined("DEBUG") || define("DEBUG", false);
+    defined("DEBUG") || define("DEBUG", false); // DISABLE for CLI
 }
 if (isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") !== false) {
-    /** @const Disable for curl. */
-    defined("DEBUG") || define("DEBUG", false);
+    defined("DEBUG") || define("DEBUG", false); // DISABLE for curl
 }
 defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false));
-if (DEBUG === true) {
-    // https://api.nette.org/3.0/Tracy/Debugger.html
+if (DEBUG === true) {   // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::$logSeverity = 15; // https://www.php.net/manual/en/errorfunc.constants.php
     Debugger::$maxDepth = (int) ($cfg["DEBUG_MAX_DEPTH"] ?? 5);
     Debugger::$maxLength = (int) ($cfg["DEBUG_MAX_LENGTH"] ?? 500);
@@ -165,14 +161,17 @@ if (DEBUG === true) {
     Debugger::$showFireLogger = (bool) ($cfg["DEBUG_SHOW_FIRELOGGER"] ?? false);
     Debugger::$showLocation = (bool) ($cfg["DEBUG_SHOW_LOCATION"] ?? false);
     Debugger::$strictMode = (bool) ($cfg["DEBUG_STRICT_MODE"] ?? true);
-    $a = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
     // cookie: tracy-debug
-    Debugger::enable(
-        ($cfg["DEBUG_COOKIE"] ?? false) ? (string) $cfg["DEBUG_COOKIE"] . "@${a}" : Debugger::DETECT,
-        CACHE,
-        (string) ($cfg["DEBUG_EMAIL"] ?? null)
-    );
-    Debugger::timer("RUNNING");
+    if ($cfg["DEBUG_COOKIE"] ?? null) {
+        $address = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
+        $debug_cookie = (string) $cfg["DEBUG_COOKIE"];
+        Debugger::enable(
+              "${debug_cookie}@${address}", CACHE, (string) ($cfg["DEBUG_EMAIL"] ?? "")
+        );
+    } else {
+        Debugger::enable(Debugger::DETECT, CACHE);
+    }
+    Debugger::timer("RUNNING"); // measuring performance
 }
 
 // data population
