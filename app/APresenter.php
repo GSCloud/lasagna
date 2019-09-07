@@ -743,20 +743,22 @@ abstract class APresenter implements IPresenter
                 if (!is_array($q)) {
                     $x++;
                 }
-                if (!array_key_exists("avatar", $q)) {
-                    $x++;
-                }
-                if (!array_key_exists("email", $q)) {
-                    $x++;
-                }
-                if (!array_key_exists("id", $q)) {
-                    $x++;
-                }
-                if (!array_key_exists("name", $q)) {
-                    $x++;
-                }
-                if (!array_key_exists("nonce", $q)) {
-                    $x++;
+                if (is_array($q)) {
+                    if (!array_key_exists("avatar", $q)) {
+                        $x++;
+                    }
+                    if (!array_key_exists("email", $q)) {
+                        $x++;
+                    }
+                    if (!array_key_exists("id", $q)) {
+                        $x++;
+                    }
+                    if (!array_key_exists("name", $q)) {
+                        $x++;
+                    }
+                    if (!array_key_exists("nonce", $q)) {
+                        $x++;
+                    }
                 }
                 if ($x) {
                     $this->clearCookie("identity");
