@@ -15,17 +15,16 @@
 .phpintel/
 .vscode/
 
+REVISIONS
 Thumbs.db
 VERSION
-REVISIONS
 _site_cfg.sh
+config_private.neon
+package-lock.json
+
 cache/*
 ci/*
-config_private.neon
 data/*
 node_modules/
-package-lock.json
 vendor/
 www/cdn-assets
-
-!app/v1/data/krestni_jmena_cs.csv
