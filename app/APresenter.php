@@ -79,12 +79,12 @@ interface IPresenter
     public function renderHTML($template);
     public function writeJsonData($data, $headers);
 
-    /** abstracts */
+    /** abstract */
     public function process();
 
     /** singleton */
     public static function getInstance();
-    public static function getTestInstance();
+    public static function getTestInstance(); // Unit Tests
 }
 
 abstract class APresenter implements IPresenter
@@ -103,7 +103,7 @@ abstract class APresenter implements IPresenter
     const COOKIE_KEY_FILEMODE = 0600;
 
     /** @var integer Cookie time to live */
-    const COOKIE_TTL = 86400 * 10;
+    const COOKIE_TTL = 86400 * 15;
 
     /** @var string Google CSV URL prefix */
     const GS_CSV_PREFIX = "https://docs.google.com/spreadsheets/d/e/";
@@ -118,7 +118,7 @@ abstract class APresenter implements IPresenter
     const GS_SHEET_POSTFIX = "/edit#gid=0";
 
     /** @var integer Access limiter maximum hits */
-    const LIMITER_MAXIMUM = 30;
+    const LIMITER_MAXIMUM = 25;
 
     /** @var string Identity nonce filename */
     const IDENTITY_NONCE = "identity_nonce.key";
@@ -179,25 +179,25 @@ abstract class APresenter implements IPresenter
 
     // PRIVATE VARS
 
-    /** @var array $data Model data array */
+    /** @var array $data Model array */
     private $data = [];
 
-    /** @var array $messages Array of internal messages */
+    /** @var array $messages Array of messages */
     private $messages = [];
 
-    /** @var array $errors Array of internal errors */
+    /** @var array $errors Array of errors */
     private $errors = [];
 
-    /** @var array $criticals Array of internal critical errors */
+    /** @var array $criticals Array of critical errors */
     private $criticals = [];
 
     /** @var array $identity Identity associative array */
     private $identity = [];
 
-    /** @var boolean $force_csv_check Should re-check locales? */
+    /** @var boolean $force_csv_check Recheck locales? */
     private $force_csv_check = false;
 
-    /** @var array $csv_postload Array of keys to [$name => $csvkey] pairs */
+    /** @var array $csv_postload Array of CSV keys */
     private $csv_postload = [];
 
     /** @var array $cookies Array of saved cookies */
@@ -272,7 +272,7 @@ abstract class APresenter implements IPresenter
     /**
      * Object to string
      *
-     * @return string Serialized model data array to JSON encoded string
+     * @return string Serialized JSON model
      */
     final public function __toString()
     {
@@ -287,7 +287,6 @@ abstract class APresenter implements IPresenter
         if (ob_get_level()) {
             ob_flush();
         }
-
         ob_start();
 
         foreach ($this->csv_postload as $key) {
@@ -316,7 +315,7 @@ abstract class APresenter implements IPresenter
 
         try {
             if (count($criticals) + count($errors) + count($messages)) {
-                if (class_exists("LoggingClient") && GCP_PROJECTID && GCP_KEYS) {
+                if (GCP_PROJECTID && GCP_KEYS) {
                     $logging = new LoggingClient([
                         "projectId" => GCP_PROJECTID,
                         "keyFilePath" => APP . GCP_KEYS,
@@ -457,8 +456,8 @@ abstract class APresenter implements IPresenter
     /**
      * Data getter
      *
-     * @param string $key Optional array key, may use dot notation
-     * @return mixed Data if key exists or whole data array
+     * @param string $key array key, dot notation (optional)
+     * @return mixed value / whole array
      */
     public function getData($key = null)
     {
@@ -498,27 +497,27 @@ abstract class APresenter implements IPresenter
             "CONST.LOG_FILEMODE" => self::LOG_FILEMODE,
         ]);
 
-        $this->data = $dot->all();
         if (is_string($key)) {
             return $dot->get($key);
         }
+        $this->data = (array) $dot->all();
         return $this->data;
     }
 
     /**
      * Data setter
      *
-     * @param mixed $data array or key
+     * @param mixed $data array / key
      * @param mixed $value
      * @return object Singleton instance
      */
     public function setData($data = null, $value = null)
     {
         if (is_array($data)) {
-            // $data is the new model = replace it!
+            // $data is the new model = replace it
             $this->data = (array) $data;
         } else {
-            // $data is the index to current model = check the index!
+            // $data is the index to current model
             $key = $data;
             if (is_string($key) && !empty($key)) {
                 $dot = new \Adbar\Dot($this->data);
@@ -608,15 +607,16 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
-        $string = strtr(implode("_", [
-            $_SERVER["HTTP_ACCEPT"] ?? "NA",
-            $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "NA",
-            $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
-            $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
-            $_SERVER["HTTP_USER_AGENT"] ?? "UA",
-            $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
-        ]), " ", "_");
-        return $string;
+        return strtr(implode("_",
+            [
+                $_SERVER["HTTP_ACCEPT"] ?? "NA",
+                $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "NA",
+                $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
+                $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
+                $_SERVER["HTTP_USER_AGENT"] ?? "UA",
+                $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
+            ]),
+        " ", "_");
     }
 
     /**
@@ -693,12 +693,12 @@ abstract class APresenter implements IPresenter
             $out[$k] = $i[$k];
         }
 
-        // our new identity
+        // new identity
         $this->identity = $out;
         if ($i["id"]) {
             $this->setCookie("identity", json_encode($out));
         } else {
-            // no user id - no cookie
+            // no user id = no cookie
             $this->clearCookie("identity");
         }
         return $this;
@@ -737,7 +737,7 @@ abstract class APresenter implements IPresenter
             "name" => "",
         ];
 
-        // mock local identity
+        // mock identity
         if (CLI) {
             $i = [
                 "avatar" => "",
@@ -748,13 +748,18 @@ abstract class APresenter implements IPresenter
         }
 
         do {
-            // URL parameter identity
+            // URL identity
             if (isset($_GET["identity"])) {
                 // set cookie and reload
+                $tls = "";
+                if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+                    $tls = "s";
+                }
                 $this->setCookie("identity", $_GET["identity"]);
-                $this->setLocation("https://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+                $this->setLocation("http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
                 exit;
             }
+
             // COOKIE identity
             if (isset($_COOKIE["identity"])) {
                 $x = 0;
