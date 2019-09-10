@@ -1,6 +1,6 @@
 <?php
 /**
- * GSC Tesseract
+ * GSC Tesseract LASAGNA
  *
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
@@ -26,17 +26,22 @@ use ParagonIE\Halite\KeyFactory;
 
 interface IPresenter
 {
-    // getters
+    /** messages */
+    public function addCritical($message);
+    public function addError($message);
+    public function addMessage($message);
+    public function getCriticals();
+    public function getErrors();
+    public function getMessages();
+
+    /** getters */
     public function getCfg($key);
     public function getCookie($name);
-    public function getCriticals();
     public function getCurrentUser();
     public function getData($key);
-    public function getErrors();
     public function getIdentity();
     public function getLocale($locale);
     public function getMatch();
-    public function getMessages();
     public function getPresenter();
     public function getRouter();
     public function getUID();
@@ -44,10 +49,12 @@ interface IPresenter
     public function getUserGroup();
     public function getView();
 
-    // setters
-    public function addCritical($message);
-    public function addError($message);
-    public function addMessage($message);
+    /** checks */
+    public function checkPermission($role);
+    public function checkRateLimit($maximum);
+    public function checkLocales($force);
+
+    /** setters */
     public function setCookie($name, $data);
     public function setData($data, $value);
     public function setForceCsvCheck();
@@ -61,10 +68,7 @@ interface IPresenter
     public function setIdentity($identity);
     public function setLocation($locationm, $code);
 
-    // tools
-    public function checkLocales($force);
-    public function checkPermission($role);
-    public function checkRateLimit($maximum);
+    /** tools */
     public function clearCookie($name);
     public function cloudflarePurgeCache($cf);
     public function dataExpander(&$data);
@@ -73,12 +77,12 @@ interface IPresenter
     public function preloadAppData($key, $force);
     public function readAppData($name);
     public function renderHTML($template);
-    public function writeJsonData($d, $headers);
+    public function writeJsonData($data, $headers);
 
-    // abstract methods
+    /** abstracts */
     public function process();
 
-    // singleton
+    /** singleton */
     public static function getInstance();
     public static function getTestInstance();
 }
@@ -1412,11 +1416,11 @@ abstract class APresenter implements IPresenter
     /**
      * Write JSON data to output
      *
-     * @param array $d integer error code / array of data
+     * @param array $data integer error code / array of data
      * @param array $headers array of extra data (optional)
      * @return object Singleton instance
      */
-    public function writeJsonData($d = null, $headers = [])
+    public function writeJsonData($data, $headers = [])
     {
         $out = [];
         $code = 200;
@@ -1461,16 +1465,16 @@ abstract class APresenter implements IPresenter
                 $msg = $locale["server_error_info_500"] ?? "Internal server error.";
                 break;
         }
-        if (is_null($d)) {
+        if (is_null($data)) {
             $code = 500;
             $msg = $locale["server_error_info_500"] ?? "Internal server error.";
         }
-        if (is_string($d)) {
-            $d = [$d];
+        if (is_string($data)) {
+            $data = [$data];
         }
-        if (is_int($d)) {
-            $code = $d;
-            switch ($d) {
+        if (is_int($data)) {
+            $code = $data;
+            switch ($data) {
                 case 304:
                     $msg = $locale["server_error_info_304"] ?? "Not modified.";
                     break;
@@ -1483,7 +1487,7 @@ abstract class APresenter implements IPresenter
                 default:
                     $msg = "Unknown error.";
             }
-            $d = null;
+            $data = null;
         }
 
         // output array
@@ -1491,7 +1495,7 @@ abstract class APresenter implements IPresenter
         $out["code"] = (int) $code;
         $out["message"] = $msg;
         $out = array_merge_recursive($out, $headers);
-        $out["data"] = $d ?? null;
+        $out["data"] = $data ?? null;
         return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT));
     }
 

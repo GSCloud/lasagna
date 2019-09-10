@@ -1,6 +1,7 @@
 {{#admin_group_admin}}
 
 <style>
+.btnmargin{margin:2px;margin-bottom:5px}
 .bigemoji{font-size:5em}
 .faces::after{content:"🤕";animation-name:faces;animation-duration:1s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
@@ -131,7 +132,7 @@
         <div class="white-text">
           <h5>{{ l.a_groups_permissions }}</h5>
           <div class="row center hide-on-small-only">
-            <strong>OWNER / ADMIN</strong>
+            <strong>ADMIN</strong>
             <div class="container">
               <p class="orange-text">
                 {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
@@ -147,7 +148,13 @@
             </div>
           </div>
           <div class="row center">
-            <strong>{{ user.name }}</strong><br><br>
+            <strong>{{user.name}}</strong><br>
+            <i style="font-size:smaller">{{user.id}}</i><br>
+            <a id="a_getcode" class="btnmargin xtooltipped waves-effect blue waves-light btn" data-position="top"
+              data-tooltip="">📲</a>
+            <a id="a_delcode" class="btnmargin xtooltipped waves-effect red waves-light btn" data-position="top"
+              data-tooltip="">📴</a>
+            <br>
             <a id="a_logout" class="tooltipped waves-effect green waves-light btn" data-position="top"
               data-tooltip="{{ l.a_logout_ttip }}">
               <i class="fas fa-sign-out-alt"></i>
@@ -299,7 +306,7 @@
               if (sheet) {
                 link =
                   '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:2px" ' +
-                  'class="green mono white-text bold" href="' +
+                  'class="orange mono white-text bold" href="' +
                   'https://docs.google.com/spreadsheets/d/' +
                   sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
                   x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
