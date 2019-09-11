@@ -5,7 +5,6 @@
  * @category Framework
  * @author   Fred Brooker <oscadal@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -14,23 +13,35 @@ use Cake\Cache\Cache;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 
+/**
+ * Admin Presenter
+ */
 class AdminPresenter extends APresenter
 {
-    /** @var string Administration token key filename. */
+    /** @var string Administration token key filename */
     const ADMIN_KEY = "admin.key";
 
+    /**
+     * Main controller
+     */
     public function process()
     {
         $cfg = $this->getCfg();
         $data = $this->getData();
         $match = $this->getMatch();
 
-        $data["user"] = $this->getCurrentUser();
-        $data["admin"] = $this->getUserGroup();
-        if ($this->getUserGroup()) {
-            $data["admin_group_" . $this->getUserGroup()] = true;
+        $data["user"] = $this->getCurrentUser() ?? [];
+        $data["admin"] = $g = $this->getUserGroup() ?? "";
+        if ($g) {
+            $data["admin_group_${g}"] = true;
         }
 
+        /**
+         * Get number of lines in a file
+         *
+         * @param string $f filename
+         * @return int number of lines / -1 if non-existent
+         */
         function getFileLines($f)
         {
             try {
@@ -44,7 +55,6 @@ class AdminPresenter extends APresenter
 
         switch ($match["params"]["p"] ?? null) {
 
-            // GetCsvInfo
             case "GetCsvInfo":
                 $this->checkPermission("admin");
                 $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
@@ -61,17 +71,16 @@ class AdminPresenter extends APresenter
                     if ($arr[$k]["lines"] === -1) {
                         unset($arr[$k]);
                     }
-
                 }
                 return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetCsvInfo"]);
                 break;
 
-            // GetCfAnalytics - UNFINISHED -> TODO!!!
+            // UNFINISHED -> @TODO fix this!!!
             case "GetCfAnalytics":
                 $this->checkPermission("admin");
                 $cf = $this->getCfg("cf");
                 if (!is_array($cf)) {
-                    return $this->writeJsonData(null, ["fn" => "GetCfAnalytics"]);
+                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "GetCsvInfo"]);
                 }
                 $email = $cf["email"] ?? null;
                 $apikey = $cf["apikey"] ?? null;
@@ -88,15 +97,14 @@ class AdminPresenter extends APresenter
                     }
                     return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetCfAnalytics"]);
                 } else {
-                    return $this->writeJsonData(null, ["fn" => "GetCfAnalytics"]);
+                    return $this->writeJsonData(401, ["fn" => "GetCfAnalytics"]);
                 }
                 break;
 
-            // GetPSInsights
             case "GetPSInsights":
                 $this->checkPermission("admin");
-                $base = urlencode($cfg["canonical_url"]);
-                $key = $this->getCfg("google.pagespeedinsights_key") ?? "NA";
+                $base = urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);
+                $key = $this->getCfg("google.pagespeedinsights_key") ?? "";
                 $uri = "https://www.googleapis.com/pagespeedonline/v4/runPagespeed?url=${base}&key=${key}";
                 $hash = hash("sha256", $base);
                 $file = "PageSpeed_Insights_$hash";
@@ -106,13 +114,12 @@ class AdminPresenter extends APresenter
                     if ($results !== false) {
                         Cache::write($file, $results, "default");
                     } else {
-                        return $this->writeJsonData(null, ["fn" => "GetPSInsights"]);
+                        return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "GetPSInsights"]);
                     }
                 }
                 return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetPSInsights"]);
                 break;
 
-            // GetUpdateToken
             case "GetUpdateToken":
                 $this->checkPermission("admin");
                 $file = DATA . "/" . self::ADMIN_KEY;
@@ -128,9 +135,9 @@ class AdminPresenter extends APresenter
                     $this->setLocation("/err/500");
                     exit;
                 }
-                $user = $this->getCurrentUser();
                 $arr = "";
-                if ($user["id"]) {
+                $user = $this->getCurrentUser();
+                if ($user["id"] ?? null) {
                     $hashid = hash("sha256", $user["id"]);
                     $arr = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
                 } else {
@@ -139,14 +146,12 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetUpdateToken"]);
                 break;
 
-            // FlushCache
             case "FlushCache":
                 $this->checkPermission("admin");
                 $this->flush_cache();
                 return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "FlushCache"]);
                 break;
 
-            // CoreUpdate
             case "CoreUpdate":
                 $this->checkPermission("admin");
                 $this->setForceCsvCheck();
@@ -155,7 +160,6 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CoreUpdate"]);
                 break;
 
-            // UpdateArticles
             case "UpdateArticles":
                 $this->checkPermission("admin");
                 $x = 0;
@@ -166,14 +170,14 @@ class AdminPresenter extends APresenter
                 }
                 if (isset($_POST["profile"])) {
                     $profile = trim((string) $_POST["profile"]);
-                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile));  // allow only alphanumeric
+                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile)); // allow only alphanumeric
                     if (strlen($profile)) {
                         $x++;
                     }
                 }
                 if (isset($_POST["hash"])) {
                     $hash = trim((string) $_POST["hash"]);
-                    if (strlen($hash) == 64) {  // SHA256 hexadecimal
+                    if (strlen($hash) == 64) { // SHA256 hexadecimal
                         $x++;
                     }
                 }
@@ -181,7 +185,7 @@ class AdminPresenter extends APresenter
                     return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
                 }
                 if (file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
-                    if(@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
+                    if (@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
                         return $this->writeJsonData([
                             "code" => 500,
                             "status" => "Data copy to backup file failed.",
@@ -214,13 +218,6 @@ class AdminPresenter extends APresenter
                 }
                 break;
 
-            // DELETE ARTICLES
-            case "DeleteArticles":
-                $this->checkPermission("admin");
-                return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "DeleteArticles"]);
-                break;
-
-            // FLUSH remote
             case "FlushCacheRemote":
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
@@ -241,7 +238,6 @@ class AdminPresenter extends APresenter
                 }
                 break;
 
-            // UPDATE remote
             case "CoreUpdateRemote":
                 $user = $_GET["user"] ?? null;
                 $token = $_GET["token"] ?? null;
@@ -264,6 +260,26 @@ class AdminPresenter extends APresenter
                 }
                 break;
 
+            case "RebuildNonceRemote":
+                $user = $_GET["user"] ?? null;
+                $token = $_GET["token"] ?? null;
+                if ($user && $token) {
+                    $file = DATA . "/" . self::ADMIN_KEY;
+                    $key = trim(@file_get_contents($file));
+                    if (!$key) {
+                        $this->unauthorized_access();
+                    }
+                    $code = hash("sha256", $key . $user);
+                    if ($code == $token) {
+                        $this->rebuild_nonce();
+                        echo $_SERVER["HTTP_HOST"] . " RebuildNonceRemote OK \n";
+                        exit;
+                    } else {
+                        $this->unauthorized_access();
+                    }
+                }
+                break;
+
             default:
                 $this->unauthorized_access();
                 break;
@@ -272,6 +288,24 @@ class AdminPresenter extends APresenter
         return $this;
     }
 
+    /**
+     * Rebuild identity nonce
+     *
+     * @return void
+     */
+    private function rebuild_nonce()
+    {
+        $file = DATA . "/" . self::IDENTITY_NONCE;
+        @unlink($file);
+        $this->setIdentity();
+        return;
+    }
+
+    /**
+     * Flush local file cache
+     *
+     * @return void
+     */
     private function flush_cache()
     {
         $store = new FlockStore();
@@ -298,6 +332,10 @@ class AdminPresenter extends APresenter
         return;
     }
 
+    /**
+     * Unauthorized access
+     *
+     */
     private function unauthorized_access()
     {
         $this->addError("401: UNAUTHORIZED ACCESS");
