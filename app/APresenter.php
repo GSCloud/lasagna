@@ -1214,6 +1214,7 @@ abstract class APresenter implements IPresenter
             if (array_key_exists("locales", $cfg)) {
                 $locale = [];
                 foreach ((array) $cfg["locales"] as $k => $v) {
+
                     // 1. read from CSV file
                     $csv = false;
                     $subfile = strtolower($k);
@@ -1223,6 +1224,7 @@ abstract class APresenter implements IPresenter
                             $csv = false;
                         }
                     }
+
                     // 2. read from CSV file backup
                     if ($csv === false) {
                         $csv = @file_get_contents(DATA . "/${subfile}.bak");
@@ -1348,7 +1350,7 @@ abstract class APresenter implements IPresenter
     /**
      * Load CSV data into cache
      *
-     * @param string $name CSV name
+     * @param string $name CSV filename w/o ext.
      * @param string $csvkey Google CSV token
      * @param boolean $force do force load? (optional)
      * @return object Singleton instance
@@ -1395,7 +1397,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Load application CSV data
+     * Pre-load application CSV data
      *
      * @param string $key Configuration array name (optional)
      * @param boolean $force do force load? (optional)
@@ -1416,14 +1418,14 @@ abstract class APresenter implements IPresenter
     /**
      * Read application CSV data
      *
-     * @param string $name naked CSV filename without extension
+     * @param string $name naked CSV filename w/o ext
      * @return string CSV data
      */
     public function readAppData($name)
     {
         $file = strtolower(trim((string) $name));
         if (empty($file)) {
-            $this->addCritical("EMPTY readAppData() parameter!");
+            $this->addCritical("EMPTY readAppData() filename parameter!");
             return null;
         }
 

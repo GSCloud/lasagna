@@ -24,8 +24,7 @@ class CorePresenter extends APresenter
             // webmanifest
             case "webmanifest":
                 $this->setHeaderJson();
-                $lang = $_GET["lang"] ?? null;
-                if (is_null($lang)) break;
+                $lang = $_GET["lang"] ?? "cs";
                 if (!in_array($lang, ["cs", "en"])) {
                     $lang = "cs";
                 }
