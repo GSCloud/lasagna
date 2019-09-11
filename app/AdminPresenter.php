@@ -160,6 +160,31 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CoreUpdate"]);
                 break;
 
+            case "CreateAuthCode":
+                $this->checkPermission("admin");
+                $user = $this->getCurrentUser();
+                if ($user["id"] ?? null) {
+                    $file = DATA . "/identity_" . $user["id"] . ".json";
+                    $user["entropy"] = hash("sha256", random_bytes(8) . (string) time());
+                    $json = json_encode($user);
+                    $hash = substr(hash("sha256", $json), 0, 8);
+                    file_put_contents($file, $json, LOCK_EX);
+                }
+                return $this->writeJsonData(["hash" => $hash, "status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CreateAuthCode"]);
+                break;
+
+            case "DeleteAuthCode":
+                $this->checkPermission("admin");
+                $user = $this->getCurrentUser();
+                if ($user["id"] ?? null) {
+                    $file = DATA . "/identity_" . $user["id"] . ".json";
+                    if (file_exists($file)) {
+                        @unlink($file);
+                    }
+                }
+                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "DeleteAuthCode"]);
+                break;
+
             case "UpdateArticles":
                 $this->checkPermission("admin");
                 $x = 0;

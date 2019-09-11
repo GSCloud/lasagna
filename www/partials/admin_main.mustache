@@ -119,9 +119,9 @@
           <label>{{ l.a_remotefns }}</label>
           <select id="RemoteFnSelect">
             <option value="" disabled selected>&hellip;</option>
-            <option value="CoreUpdateRemote">Core Update</option>
-            <option value="FlushCacheRemote">Flush Cache</option>
-            <option value="RebuildNonceRemote">Rebuild Nonce</option>
+            <option value="CoreUpdateRemote">Core Data Update</option>
+            <option value="FlushCacheRemote">Flush Local Cache</option>
+            <option value="RebuildNonceRemote">Refresh Auth Nonce</option>
           </select>
         </div>
       </div>
@@ -674,6 +674,27 @@
           $("#a_flush").attr("disabled", "disabled");
           $.post("/admin/FlushCache");
           window.location.reload(true);
+        });
+
+        $("#a_getcode").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#csv_ping", false);
+            return;
+          }
+          $.post("/admin/CreateAuthCode", function(data) {
+            GSC.CopyClipboard(data.data.hash);
+            M.toast({html: data.data.hash + " ❤"});
+          });
+        });
+
+        $("#a_delcode").click(function () {
+          if (w.GSC.offline) {
+            GSC.PingDot("#csv_ping", false);
+            return;
+          }
+          $.post("/admin/DeleteAuthCode", function(data) {
+            M.toast({html: "💣"});
+          });
         });
 
         $("#a_logout").click(function () {
