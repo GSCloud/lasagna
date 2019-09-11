@@ -45,6 +45,9 @@ class AdminPresenter extends APresenter
         function getFileLines($f)
         {
             try {
+                if (!file_exists($f)) {
+                    return -1;
+                }
                 $file = new \SplFileObject($f, "r");
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
@@ -66,7 +69,7 @@ class AdminPresenter extends APresenter
                         "csv" => $v,
                         "lines" => getFileLines(DATA . "/${k}.csv"),
                         "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
-                        "timestamp" => @filemtime(DATA . "/${k}.csv"),
+                        "timestamp" => file_exists(DATA . "/${k}.csv") ? @filemtime(DATA . "/${k}.csv") : null,
                     ];
                     if ($arr[$k]["lines"] === -1) {
                         unset($arr[$k]);
