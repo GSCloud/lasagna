@@ -861,7 +861,7 @@ abstract class APresenter implements IPresenter
     /**
      * Router getter
      *
-     * @return mixed Router data array 
+     * @return mixed Router data array
      */
     public function getRouter()
     {
@@ -1087,15 +1087,15 @@ abstract class APresenter implements IPresenter
      */
     public function checkRateLimit($maximum = 0)
     {
-        $maximum = ((int) $maximum > 0) ? (int) $maximum : self::LIMITER_MAXIMUM;
+        $maximum = (int) $maximum;
+        $maximum = $maximum > 0 ? $maximum : self::LIMITER_MAXIMUM;
         $uid = $this->getUID();
         $file = "${uid}_rate_limit";
         if (!$rate = Cache::read($file, "limiter")) {
-            $rate = 1;
+            $rate = 0;
         }
         $rate++;
         if ($rate > $maximum) {
-            $this->addMessage("RATE LIMITED: $maximum reached");
             $this->setLocation("/err/420");
         }
         Cache::write($file, $rate, "limiter");
@@ -1105,7 +1105,7 @@ abstract class APresenter implements IPresenter
     /**
      * Check if current user has access rights
      *
-     * @param mixed $perms
+     * @param mixed $perms role (optional)
      * @return object Singleton instance
      */
     public function checkPermission($role = "admin")
@@ -1113,16 +1113,15 @@ abstract class APresenter implements IPresenter
         if (empty($role)) {
             return $this;
         }
-        $role = trim((string) $role);
-        $email = $this->getIdentity()["email"];
+        $role = strtolower(trim((string) $role));
+        $email = $this->getIdentity()["email"] ?? "";
         $groups = $this->getCfg("admin_groups") ?? [];
-
         if (strlen($role) && strlen($email)) {
-            // group access by email
+            // email allowed
             if (in_array($email, $groups[$role] ?? [], true)) {
                 return $this;
             }
-            // any Google users allowed in group
+            // any Google users allowed
             if (in_array("*", $groups[$role] ?? [], true)) {
                 return $this;
             }
@@ -1133,7 +1132,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Get user group
+     * Get current user group
      *
      * @return string User group name
      */
@@ -1142,9 +1141,9 @@ abstract class APresenter implements IPresenter
         $id = $this->getIdentity()["id"] ?? null;
         $email = $this->getIdentity()["email"] ?? null;
         if (!$id) {
-            return false;
+            return null;
         }
-        $mygroup = false;
+        $mygroup = null;
         $email = trim((string) $email);
         // search all groups for email or asterisk
         foreach ($this->getCfg("admin_groups") ?? [] as $group => $users) {
@@ -1163,7 +1162,7 @@ abstract class APresenter implements IPresenter
     /**
      * Force CSV checking
      *
-     * @param boolean $set True to force CSV check
+     * @param boolean $set True to force CSV check (optional)
      * @return object Singleton instance
      */
     public function setForceCsvCheck($set = true)
@@ -1173,14 +1172,14 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Add post-load csv data
+     * Post-load CSV data
      *
-     * @param mixed $key
+     * @param mixed $key string / array to be merged
      * @return object Singleton instance
      */
-    public function postloadAppData($key = null)
+    public function postloadAppData($key)
     {
-        if (!is_null($key)) {
+        if (!empty($key)) {
             if (is_string($key)) {
                 $this->csv_postload[] = (string) $key;
                 return $this;
@@ -1194,18 +1193,17 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Get locales from GS sheets
+     * Get locales from GS Sheets
      *
-     * @param string $language
-     * @param string $key
-     * @return array
+     * @param string $language language code
+     * @param string $key index column code (optional)
+     * @return array locales
      */
-    public function getLocale($language, $key = "key")
+    public function getLocale($language, $key = "KEY")
     {
         if (!is_array($this->getCfg("locales"))) {
             return null;
         }
-
         $locale = [];
         $language = trim(strtoupper((string) $language));
         $key = trim(strtoupper((string) $key));
@@ -1216,7 +1214,7 @@ abstract class APresenter implements IPresenter
             if (array_key_exists("locales", $cfg)) {
                 $locale = [];
                 foreach ((array) $cfg["locales"] as $k => $v) {
-                    // read from csv file
+                    // 1. read from CSV file
                     $csv = false;
                     $subfile = strtolower($k);
                     if ($csv === false) {
@@ -1225,15 +1223,16 @@ abstract class APresenter implements IPresenter
                             $csv = false;
                         }
                     }
-                    // read from csv backup
+                    // 2. read from CSV file backup
                     if ($csv === false) {
                         $csv = @file_get_contents(DATA . "/${subfile}.bak");
                         if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
-                            continue;
+                            continue; // skip this CSV
                         }
                     }
-                    // parse csv
+
+                    // parse CSV
                     $keys = [];
                     $values = [];
                     try {
@@ -1251,7 +1250,9 @@ abstract class APresenter implements IPresenter
                     }
                     $locale = array_replace($locale, array_combine($keys, $values));
                 }
-                $locale['$revisions'] = $this->getData("REVISIONS"); // git revisions
+
+                // git revisions
+                $locale['$revisions'] = $this->getData("REVISIONS");
 
                 // find all $ in combined locales array
                 $dolar = ['$' => '$'];
@@ -1277,6 +1278,7 @@ abstract class APresenter implements IPresenter
                 echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED</h2></body>";
                 exit;
             } else {
+                // second try!
                 $this->setForceCsvCheck()->checkLocales(true);
                 return $this->getLocale($language, $key);
             }
@@ -1288,7 +1290,7 @@ abstract class APresenter implements IPresenter
     /**
      * Check and preload locales
      *
-     * @param boolean $force force loading locales
+     * @param boolean $force force loading locales (optional)
      * @return object Singleton instance
      */
     public function checkLocales($force = false)
@@ -1337,17 +1339,18 @@ abstract class APresenter implements IPresenter
                     }
                 }
             }
-        } catch (Execption $e) {}
+        } catch (Execption $e) {
+            $this->addError("CLOUDFLARE: " . (string) $e->getMessage());
+        }
         return $this;
     }
 
     /**
      * Load CSV data into cache
      *
-     * @param string $name
-     * @param string $csvkey
-     * @param string $postfix
-     * @param boolean $force
+     * @param string $name CSV name
+     * @param string $csvkey Google CSV token
+     * @param boolean $force do force load? (optional)
      * @return object Singleton instance
      */
     private function csv_preloader($name, $csvkey, $force = false)
@@ -1367,18 +1370,22 @@ abstract class APresenter implements IPresenter
                 }
                 if (strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, "csv");
+                    // @todo add OPERATION LOCK!!!
+                    // delete old backup
                     if (file_exists(DATA . "/${file}.bak")) {
                         if (@unlink(DATA . "/${file}.bak") === false) {
-                            $this->addError("ERR: Deleting ${file}.bak failed!");
+                            $this->addError("FILE: Deleting ${file}.bak failed!");
                         }
                     }
+                    // move CSV to backup
                     if (file_exists(DATA . "/${file}.csv")) {
                         if (@rename(DATA . "/${file}.csv", DATA . "/${file}.bak") === false) {
-                            $this->addError("ERR: Backuping ${file}.csv failed!");
+                            $this->addError("FILE: Backuping ${file}.csv failed!");
                         }
                     }
+                    // write new CSV
                     if (@file_put_contents(DATA . "/${file}.csv", $data, LOCK_EX) === false) {
-                        $this->addError("ERR: Saving data to ${file}.csv failed!");
+                        $this->addError("FILE: Saving data to ${file}.csv failed!");
                         return false;
                     }
                 }
@@ -1388,15 +1395,15 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Load application csv data
+     * Load application CSV data
      *
-     * @param string $key
-     * @param boolean $force
+     * @param string $key Configuration array name (optional)
+     * @param boolean $force do force load? (optional)
      * @return object Singleton instance
      */
     public function preloadAppData($key = "app_data", $force = false)
     {
-        $key = (string) $key;
+        $key = strtolower(trim((string) $key));
         $cfg = $this->getCfg();
         if (array_key_exists($key, $cfg)) {
             foreach ((array) $cfg[$key] as $name => $csvkey) {
@@ -1409,25 +1416,33 @@ abstract class APresenter implements IPresenter
     /**
      * Read application CSV data
      *
-     * @param string $name Naked filename without .csv extension
+     * @param string $name naked CSV filename without extension
      * @return string CSV data
      */
     public function readAppData($name)
     {
-        $name = (string) $name;
-        $file = strtolower($name);
+        $file = strtolower(trim((string) $name));
+        if (empty($file)) {
+            $this->addCritical("EMPTY readAppData() parameter!");
+            return null;
+        }
+
+        // read cache
         $csv = Cache::read($file, "csv");
         if ($csv === false) {
+            // read CSV
             $csv = @file_get_contents(DATA . "/${file}.csv");
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
+            // read CSV backup
             $csv = @file_get_contents(DATA . "/${file}.bak");
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
+            // we have failed >:{
             $csv = null;
         }
         return $csv;
