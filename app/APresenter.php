@@ -616,7 +616,7 @@ abstract class APresenter implements IPresenter
                 $_SERVER["HTTP_USER_AGENT"] ?? "UA",
                 $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
             ]),
-        " ", "_");
+            " ", "_");
     }
 
     /**
@@ -807,12 +807,15 @@ abstract class APresenter implements IPresenter
      */
     public function getCurrentUser()
     {
-        $u = array_replace([
-            "avatar" => "",
-            "email" => "",
-            "id" => 0,
-            "name" => "",
-        ], $this->getIdentity());
+        $u = array_replace(
+            [
+                "avatar" => "",
+                "email" => "",
+                "id" => 0,
+                "name" => "",
+            ],
+            $this->getIdentity()
+        );
         $u["uid"] = $this->getUID();
         $u["uidstring"] = $this->getUIDstring();
         return $u;
@@ -821,8 +824,8 @@ abstract class APresenter implements IPresenter
     /**
      * Cfg getter
      *
-     * @param string $key Index to configuration data or void
-     * @return mixed Configuration data ARRAY by index or whole ARRAY
+     * @param string $key Index to configuration data / void
+     * @return mixed Configuration data by index / whole array
      */
     public function getCfg($key = null)
     {
@@ -830,7 +833,7 @@ abstract class APresenter implements IPresenter
             return $this->getData("cfg");
         }
         if (is_string($key)) {
-            return $this->getData("cfg.$key");
+            return $this->getData("cfg.${key}");
         }
         throw new \Exception("FATAL ERROR: Invalid parameter!");
     }
@@ -838,7 +841,7 @@ abstract class APresenter implements IPresenter
     /**
      * Match getter
      *
-     * @return mixed Match data array or null
+     * @return mixed Match data array
      */
     public function getMatch()
     {
@@ -848,7 +851,7 @@ abstract class APresenter implements IPresenter
     /**
      * Presenter getter
      *
-     * @return mixed Rresenter data array or null
+     * @return mixed Rresenter data array
      */
     public function getPresenter()
     {
@@ -858,7 +861,7 @@ abstract class APresenter implements IPresenter
     /**
      * Router getter
      *
-     * @return mixed Router data array or null
+     * @return mixed Router data array 
      */
     public function getRouter()
     {
@@ -868,7 +871,7 @@ abstract class APresenter implements IPresenter
     /**
      * View getter
      *
-     * @return mixed Router view or null
+     * @return mixed Router view
      */
     public function getView()
     {
@@ -969,11 +972,14 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this->cookies[$name] ?? null;
         }
+
+        // secure key
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
-        $keyfile = DATA . "/$key";
+        $keyfile = DATA . "/${key}";
         if (file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
+            $this->addError("HALITE: Missing encryption key!");
             return null;
         }
         $cookie = new Cookie($enc);
@@ -992,6 +998,11 @@ abstract class APresenter implements IPresenter
         if (empty($name)) {
             return $this;
         }
+        if (is_null($name)) {
+            return $this;
+        }
+
+        // secure key
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
         $keyfile = DATA . "/$key";
         if (file_exists($keyfile)) {
@@ -1000,7 +1011,7 @@ abstract class APresenter implements IPresenter
             $enc = KeyFactory::generateEncryptionKey();
             KeyFactory::save($enc, $keyfile);
             @chmod($keyfile, self::COOKIE_KEY_FILEMODE);
-            $this->addMessage("HALITE: new keyfile created");
+            $this->addMessage("HALITE: New keyfile created");
         }
         $cookie = new Cookie($enc);
         if (DOMAIN == "localhost") {
@@ -1030,16 +1041,20 @@ abstract class APresenter implements IPresenter
         if (empty($name)) {
             return $this;
         }
-        unset($_COOKIE[$name]);
+        if (!is_string($name)) {
+            return $this;
+        }
         \setcookie($name, "", time() - 3600, "/");
+        unset($_COOKIE[$name]);
+        unset($this->cookies[$name]);
         return $this;
     }
 
     /**
      * Set URL location and exit
      *
-     * @param string $location URL address
-     * @param integer $code HTTP code
+     * @param string $location URL address (optional)
+     * @param integer $code HTTP code (optional)
      */
     public function setLocation($location = null, $code = 303)
     {
@@ -1067,7 +1082,7 @@ abstract class APresenter implements IPresenter
     /**
      * Check current user rate limits
      *
-     * @param integer $maximum Max hits
+     * @param integer $maximum Maximum hits per time (optional)
      * @return object Singleton instance
      */
     public function checkRateLimit($maximum = 0)
