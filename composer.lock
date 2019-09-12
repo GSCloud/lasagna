@@ -1724,22 +1724,22 @@
         },
         {
             "name": "paragonie/halite",
-            "version": "v4.5.4",
+            "version": "v4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/halite.git",
-                "reference": "e571a26b9da1e123d2221ecac4b9b98b15e20b8f"
+                "reference": "7b96cdcf355fc7d09c58ee602ba22724bc8545d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/halite/zipball/e571a26b9da1e123d2221ecac4b9b98b15e20b8f",
-                "reference": "e571a26b9da1e123d2221ecac4b9b98b15e20b8f",
+                "url": "https://api.github.com/repos/paragonie/halite/zipball/7b96cdcf355fc7d09c58ee602ba22724bc8545d3",
+                "reference": "7b96cdcf355fc7d09c58ee602ba22724bc8545d3",
                 "shasum": ""
             },
             "require": {
                 "paragonie/constant_time_encoding": "^2",
                 "paragonie/hidden-string": "^1",
-                "paragonie/sodium_compat": "^1.6",
+                "paragonie/sodium_compat": "^1.11",
                 "php": "^7.2"
             },
             "require-dev": {
@@ -1785,7 +1785,7 @@
                 "signatures",
                 "sodium"
             ],
-            "time": "2019-06-05T15:52:53+00:00"
+            "time": "2019-09-12T11:49:55+00:00"
         },
         {
             "name": "paragonie/hidden-string",
@@ -1887,16 +1887,16 @@
         },
         {
             "name": "paragonie/sodium_compat",
-            "version": "v1.10.1",
+            "version": "v1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/sodium_compat.git",
-                "reference": "5115fa44886d1c2785d2f135ef4626db868eac4b"
+                "reference": "a9f968bc99485f85f9303a8524c3485a7e87bc15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/5115fa44886d1c2785d2f135ef4626db868eac4b",
-                "reference": "5115fa44886d1c2785d2f135ef4626db868eac4b",
+                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/a9f968bc99485f85f9303a8524c3485a7e87bc15",
+                "reference": "a9f968bc99485f85f9303a8524c3485a7e87bc15",
                 "shasum": ""
             },
             "require": {
@@ -1965,7 +1965,7 @@
                 "secret-key cryptography",
                 "side-channel resistant"
             ],
-            "time": "2019-07-12T16:36:59+00:00"
+            "time": "2019-09-12T12:05:58+00:00"
         },
         {
             "name": "phpseclib/phpseclib",

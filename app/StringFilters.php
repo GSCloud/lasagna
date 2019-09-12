@@ -61,9 +61,11 @@ class StringFilters implements IStringFilters
         $content = (string) $content;
         $body = "<body";
         $c = explode($body, $content, 2);
-        $regex = '/<!--(.|\s)*?-->/';
-        $c[1] = preg_replace($regex, "<!-- comment -->", $c[1]);
-        $content = $c[0] . $body . $c[1];
+        if (count($c) == 2) {
+            $regex = '/<!--(.|\s)*?-->/';
+            $c[1] = preg_replace($regex, "<!-- comment removed -->", $c[1]);
+            $content = $c[0] . $body . $c[1];
+        }
         return $content;
     }
 

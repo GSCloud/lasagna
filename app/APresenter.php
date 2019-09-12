@@ -680,9 +680,8 @@ abstract class APresenter implements IPresenter
             $i["name"] = (string) $identity["name"];
         }
 
-        // set remaining keys
         $i["timestamp"] = time();
-        $i["country"] = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX";
+        $i["country"] = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "NA";
         $i["ip"] = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
 
         // shuffle data

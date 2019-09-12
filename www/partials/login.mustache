@@ -1,14 +1,6 @@
-{{#admin_group_default}}
-
-<h4>{{ user.name }}</h4>
-<br>
-<img class="responsive-img" src="{{ user.avatar }}" alt="{{ user.name }}">
-<br>
-Google ID: {{ user.id }}
-<br>
-e-mail: <strong>{{ user.email }}</strong>
-<br>
-<br>
+{{#user.name}}<h4>{{ user.name }}</h4>{{/user.name}}
+{{#user.avatar}}<img class="responsive-img" src="{{ user.avatar }}" alt="{{ user.name }}" width="64"><br>{{/user.avatar}}
+{{#user.email}}<strong>{{ user.email }}</strong><br>{{/user.email}}
 
 {{#LOCALHOST}}
 {{#local_goauth_redirect}}
@@ -22,31 +14,3 @@ e-mail: <strong>{{ user.email }}</strong>
   l.a_relogin }}<i class="material-icons right">cloud</i></a>
 {{/goauth_redirect}}
 {{/LOCALHOST}}
-
-{{/admin_group_default}}
-
-{{^admin_group_default}}
-
-<h4>{{ user.name }}</h4>
-<br>
-Google ID: {{ user.id }}
-<br>
-e-mail: <strong>{{ user.email }}</strong>
-<br>
-<br>
-
-{{#LOCALHOST}}
-{{#local_goauth_redirect}}
-<a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
-  l.a_login }}<i class="material-icons right">cloud</i></a>
-{{/local_goauth_redirect}}
-{{/LOCALHOST}}
-
-{{^LOCALHOST}}
-{{#goauth_redirect}}
-<a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
-  l.a_login }}<i class="material-icons right">cloud</i></a>
-{{/goauth_redirect}}
-{{/LOCALHOST}}
-
-{{/admin_group_default}}
