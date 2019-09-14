@@ -117,6 +117,7 @@ class CiTester
         foreach ($p as $x) {
             $output = curl_multi_getcontent($ch[$i]);
             $code = curl_getinfo($ch[$i], CURLINFO_HTTP_CODE);
+            $time = curl_getinfo($ch[$i], CURLINFO_TOTAL_TIME);
             $length = strlen($output);
             @file_put_contents(ROOT . "/ci/" . date("Y-m-d") . strtr("_${target}_${x['path']}", '\/:.', '____') . ".curl.txt", $output);
 
@@ -126,17 +127,17 @@ class CiTester
             $f = date("Y-m-d") . strtr("_${target}", '\/:.', '____');
             if ($code == $x["assert_httpcode"]) {
                 $climate->out(
-                    "${u1};length:<green>${length}</green>;code:<green>${code}</green>"
+                    "${u1};length:<green>${length}</green>;code:<green>${code}</green>;time:${time}"
                 );
                 @file_put_contents(ROOT . "/ci/tests_${f}.assert.txt",
-                    "${u2};length:${length};code:${code};assert:${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
+                    "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time}" . "\n", FILE_APPEND | LOCK_EX);
             } else {
                 $errors++;
                 $climate->out(
-                    "<red>${u1};length:<bold>${length}</bold>;code:<bold>${code}</bold>;assert:<bold>${x['assert_httpcode']}</bold></red>\007"
+                    "<red>${u1};length:<bold>${length}</bold>;code:<bold>${code}</bold>;assert:<bold>${x['assert_httpcode']}</bold>;time:${time}</red>\007"
                 );
                 @file_put_contents(ROOT . "/ci/errors_${f}.assert.txt",
-                    "${u2};length:${length};code:${code};assert:${x['assert_httpcode']}" . "\n", FILE_APPEND | LOCK_EX);
+                    "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time}" . "\n", FILE_APPEND | LOCK_EX);
             }
             curl_multi_remove_handle($multi, $ch[$i]);
             $i++;

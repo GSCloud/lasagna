@@ -56,7 +56,9 @@ class AdminPresenter extends APresenter
             }
         }
 
-        switch ($match["params"]["p"] ?? null) {
+        $view = $match["params"]["p"] ?? null;
+        $extras = ["name" => "LASAGNA Core", "fn" => $view];
+        switch ($view) {
 
             case "GetCsvInfo":
                 $this->checkPermission("admin");
@@ -75,7 +77,8 @@ class AdminPresenter extends APresenter
                         unset($arr[$k]);
                     }
                 }
-                return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetCsvInfo"]);
+                // OK
+                return $this->writeJsonData($arr, $extras);
                 break;
 
             // UNFINISHED -> @TODO fix this!!!
@@ -83,7 +86,8 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $cf = $this->getCfg("cf");
                 if (!is_array($cf)) {
-                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "GetCsvInfo"]);
+                    // error
+                    return $this->writeJsonData(400, $extras);
                 }
                 $email = $cf["email"] ?? null;
                 $apikey = $cf["apikey"] ?? null;
@@ -98,9 +102,11 @@ class AdminPresenter extends APresenter
                             Cache::write($file, $results, "default");
                         }
                     }
-                    return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetCfAnalytics"]);
+                    // OK
+                    return $this->writeJsonData(json_decode($results), $extras);
                 } else {
-                    return $this->writeJsonData(401, ["fn" => "GetCfAnalytics"]);
+                    // error
+                    return $this->writeJsonData(401, $extras);
                 }
                 break;
 
@@ -117,10 +123,12 @@ class AdminPresenter extends APresenter
                     if ($results !== false) {
                         Cache::write($file, $results, "default");
                     } else {
-                        return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "GetPSInsights"]);
+                        // error
+                        return $this->writeJsonData(500, $extras);
                     }
                 }
-                return $this->writeJsonData(json_decode($results), ["name" => "LASAGNA Core", "fn" => "GetPSInsights"]);
+                // OK
+                return $this->writeJsonData(json_decode($results), $extras);
                 break;
 
             case "GetUpdateToken":
@@ -144,15 +152,18 @@ class AdminPresenter extends APresenter
                     $hashid = hash("sha256", $user["id"]);
                     $arr = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
                 } else {
+                    // error
                     $this->unauthorized_access();
                 }
-                return $this->writeJsonData($arr, ["name" => "LASAGNA Core", "fn" => "GetUpdateToken"]);
+                // OK
+                return $this->writeJsonData($arr, $extras);
                 break;
 
             case "FlushCache":
                 $this->checkPermission("admin");
                 $this->flush_cache();
-                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "FlushCache"]);
+                // OK
+                return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
             case "CoreUpdate":
@@ -160,20 +171,29 @@ class AdminPresenter extends APresenter
                 $this->setForceCsvCheck();
                 $this->postloadAppData("app_data");
                 $this->flush_cache();
-                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CoreUpdate"]);
+                // OK
+                return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
             case "CreateAuthCode":
                 $this->checkPermission("admin");
                 $user = $this->getCurrentUser();
+                $hash = null;
                 if ($user["id"] ?? null) {
                     $file = DATA . "/identity_" . $user["id"] . ".json";
+                    // add random entropy
                     $user["entropy"] = hash("sha256", random_bytes(8) . (string) time());
                     $json = json_encode($user);
+                    // return 8 chars of SHA256
                     $hash = substr(hash("sha256", $json), 0, 8);
                     file_put_contents($file, $json, LOCK_EX);
                 }
-                return $this->writeJsonData(["hash" => $hash, "status" => "OK"], ["name" => "LASAGNA Core", "fn" => "CreateAuthCode"]);
+                // OK
+                return $this->writeJsonData(
+                    [
+                        "hash" => $hash,
+                        "status" => "OK",
+                    ], $extras);
                 break;
 
             case "DeleteAuthCode":
@@ -185,7 +205,8 @@ class AdminPresenter extends APresenter
                         @unlink($file);
                     }
                 }
-                return $this->writeJsonData(["status" => "OK"], ["name" => "LASAGNA Core", "fn" => "DeleteAuthCode"]);
+                // OK
+                return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
             case "UpdateArticles":
@@ -210,39 +231,44 @@ class AdminPresenter extends APresenter
                     }
                 }
                 if ($x != 3) {
-                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    // error
+                    return $this->writeJsonData(400, $extras);
                 }
                 if (file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
+                        // error
                         return $this->writeJsonData([
                             "code" => 500,
                             "status" => "Data copy to backup file failed.",
                             "profile" => $profile,
                             "hash" => $hash,
-                        ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                        ], $extras);
                     };
                 }
                 if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
+                    // error
                     return $this->writeJsonData([
                         "code" => 500,
                         "status" => "Data write to history file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    ], $extras);
                 };
                 if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
+                    // error
                     return $this->writeJsonData([
                         "code" => 500,
                         "status" => "Data write to file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    ], $extras);
                 } else {
+                    // OK
                     return $this->writeJsonData([
                         "status" => "OK",
                         "profile" => $profile,
                         "hash" => $hash,
-                    ], ["name" => "LASAGNA Core", "fn" => "UpdateArticles"]);
+                    ], $extras);
                 }
                 break;
 

@@ -292,3 +292,7 @@ if (DEBUG) {
     bdump($data, '$data');
     //bdump($app->getIdentity(), "identity");
 }
+
+@ob_end_flush();
+@ob_implicit_flush();
+@flush();

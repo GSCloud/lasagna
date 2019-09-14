@@ -29,24 +29,28 @@ class ErrorPresenter extends APresenter
     /**
      * Main controller
      *
-     * @return object Singleton instance
+     * @param int $error error code (optional)
      */
-    public function process()
+    public function process($error = null)
     {
         $this->setHeaderHtml();
-        $match = $this->getMatch();
-        $params = (array) ($match["params"] ?? []);
-        if (array_key_exists("code", $params)) {
-            $code = (int) $params["code"];
+        if (is_int($error)) {
+            $code = $error;
         } else {
-            $code = 404;
+            $match = $this->getMatch();
+            $params = (array) ($match["params"] ?? []);
+            if (array_key_exists("code", $params)) {
+                $code = (int) $params["code"];
+            } else {
+                $code = 404;
+            }
         }
         if (!isset(self::CODESET[$code])) {
             $code = 400;
         }
         $error = self::CODESET[$code];
         header("HTTP/1.1 ${code} ${error}");
-        $template = "<body><center><h1>🤔 HTTP Error $code 💣</h1><h2>" . self::CODESET[$code] . "</h2><h3><a href='/'>RELOAD ↻</a></h3></body>";
+        $template = "<body><center><h1>🤔 HTTP Error $code 💣</h1><h2>" . self::CODESET[$code] . "</h2><h3><a href='/'>↻</a></h3></body>";
         return $this->setData("output", $this->renderHTML($template));
     }
 }

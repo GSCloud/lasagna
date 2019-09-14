@@ -19,9 +19,9 @@ class CorePresenter extends APresenter
         $view = $this->getView();
         $match = $this->getMatch();
 
+        $extras = ["name" => "LASAGNA Core", "fn" => $view];
         switch ($view) {
 
-            // webmanifest
             case "webmanifest":
                 $this->setHeaderJson();
                 $lang = $_GET["lang"] ?? "cs";
@@ -32,7 +32,6 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $output);
                 break;
 
-            // sitemap
             case "sitemap":
                 $this->setHeaderText();
                 $map = [];
@@ -45,7 +44,6 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $output);
                 break;
 
-            // sw.js
             case "swjs":
                 $this->setHeaderJavaScript();
                 $map = [];
@@ -58,27 +56,23 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $output);
                 break;
 
-            // core version
             case "version_core":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
-                return $this->writeJsonData($d, ["name" => "LASAGNA Core", "fn" => "core version"]);
+                return $this->writeJsonData($d, $extras);
                 break;
 
-            // fix lang CS
             case "FixLangDataCs":
                 $d = [];
-                return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "FixLangDataCs"]);
+                return $this->writeJsonData(500, $extras);
                 break;
 
-            // fix lang EN
             case "FixLangDataEn":
                 $d = [];
-                return $this->writeJsonData(500, ["name" => "LASAGNA Core", "fn" => "FixLangDataEn"]);
+                return $this->writeJsonData(500, $extras);
                 break;
 
-            // core version
             case "ReadArticles":
                 $x = 0;
                 if (isset($match["params"]["profile"])) {
@@ -91,7 +85,7 @@ class CorePresenter extends APresenter
                 }
                 if ($x !== 2) {
                     // Bad Request
-                    return $this->writeJsonData(400, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
+                    return $this->writeJsonData(400, $extras);
                 }
                 $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
                 if (file_exists($file)) {
@@ -100,14 +94,14 @@ class CorePresenter extends APresenter
                     if (isset($_GET["crc"])) {
                         if ($_GET["crc"] == $crc) {
                             // Not Modified
-                            return $this->writeJsonData(304, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
+                            return $this->writeJsonData(304, $extras);
                         }
                     }
                     // OK
-                    return $this->writeJsonData(["html" => $data, "crc" => $crc], ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
+                    return $this->writeJsonData(["html" => $data, "crc" => $crc], $extras);
                 } else {
                     // Not Found
-                    return $this->writeJsonData(404, ["name" => "LASAGNA Core", "fn" => "ReadArticles"]);
+                    return $this->writeJsonData(404, $extras);
                 }
                 break;
         }
@@ -118,14 +112,17 @@ class CorePresenter extends APresenter
         $hash = hash('sha256', (string) json_encode($locale));
 
         switch ($view) {
-            // data version
+
             case "cs_version_data":
             case "en_version_data":
                 $d = [];
                 $d["LASAGNA"]["data"]["version"] = $hash;
                 $d["LASAGNA"]["data"]["language"] = $language;
-                return $this->writeJsonData($d, ["name" => "LASAGNA Core", "fn" => "$language data version"]);
+                return $this->writeJsonData($d, $extras);
                 break;
+
+            default:
+                ErrorPresenter::getInstance()->process(404);
         }
         return $this;
     }
