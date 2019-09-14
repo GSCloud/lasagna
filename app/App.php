@@ -150,18 +150,18 @@ foreach ($router as $k => $v) {
 // router mappings
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
-    if (!isset($v["path"])) { // skip presenters without path
+    if (!isset($v["path"])) {
         continue;
     }
 
     if ($v["path"] == "/") {
-        if ($data["request_path_hash"] == "") { // set path hash for homepage to default language
+        if ($data["request_path_hash"] == "") { // set homepage hash to default language
             $data["request_path_hash"] = hash("sha256", $v["language"]);
         }
     }
     $alto->map($v["method"], $v["path"], $k, "route_${k}");
-    if (substr($v["path"], -1) != "/") { // map duplicates ending with slash
-        $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_slash");
+    if (substr($v["path"], -1) != "/") { // map slash endings
+        $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_x");
     }
 }
 $data["presenter"] = $presenter;
@@ -213,12 +213,12 @@ if ($router[$view]["redirect"] ?? false) {
 /*
 // nopwa
 if ($router[$view]["nopwa"] ?? false) {
-    if (!isset($_GET["nonce"])) {
-        header("Location: ?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4), true, 303);
-        exit;
-    }
+if (!isset($_GET["nonce"])) {
+header("Location: ?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4), true, 303);
+exit;
 }
-*/
+}
+ */
 
 // CSP HEADERS
 header(implode(" ", [

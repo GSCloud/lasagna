@@ -57,6 +57,10 @@ class CiTester
 
         foreach ($presenter as $p) {
             if (strpos($p["path"], "[") !== false) {
+                $u = "<bold><blue>${target}${p['path']}</blue></bold>";
+                $climate->out(
+                    "${u};parameters-skipped"
+                );
                 continue;
             }
             if (strpos($p["path"], "*") !== false) {
@@ -116,9 +120,11 @@ class CiTester
         // process results
         foreach ($p as $x) {
             $output = curl_multi_getcontent($ch[$i]);
+
             $code = curl_getinfo($ch[$i], CURLINFO_HTTP_CODE);
             $time = curl_getinfo($ch[$i], CURLINFO_TOTAL_TIME);
             $length = strlen($output);
+
             @file_put_contents(ROOT . "/ci/" . date("Y-m-d") . strtr("_${target}_${x['path']}", '\/:.', '____') . ".curl.txt", $output);
 
             $u1 = "<bold>${x['site']}${x['path']}</bold>";

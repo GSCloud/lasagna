@@ -379,7 +379,6 @@ class AdminPresenter extends APresenter
                 $lock->release();
             }
         } else {
-            $this->addError("429: RATE LIMITED");
             $this->setLocation("/err/429");
             exit;
         }
