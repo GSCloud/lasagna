@@ -206,7 +206,7 @@ class CiTester
         curl_multi_close($multi);
 
         if ($errors) {
-            $climate->out("Errors: <bold>" . $errors . "\007\n\n");
+            $climate->out("\nErrors: <bold>" . $errors . "\007\n");
         } else {
             echo "\n";
         }

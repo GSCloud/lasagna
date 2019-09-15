@@ -31,11 +31,11 @@ class ErrorPresenter extends APresenter
      *
      * @param int $error error code (optional)
      */
-    public function process($error = null)
+    public function process($err = null)
     {
         $this->setHeaderHtml();
-        if (is_int($error)) {
-            $code = $error;
+        if (is_int($err)) {
+            $code = $err;
         } else {
             $match = $this->getMatch();
             $params = (array) ($match["params"] ?? []);

@@ -10,11 +10,11 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     if ("onLine" in navigator) {
       if (navigator.onLine) {
         d.getElementsByTagName("html")[0].setAttribute("offline", false);
-        d.getElementById("offline-message").setAttribute("aria-hidden", true);
+        if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", true);
         if (GSC) GSC.offline = false;
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
-        d.getElementById("offline-message").setAttribute("aria-hidden", false);
+        if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", false);
         if (GSC) GSC.offline = true;
         if (GSC) GSC.loaderOff();
       }
@@ -228,6 +228,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // GSC.ReadArticles()
     GSC.init.push(function () {
       GSC.names.push("GSC.ReadArticles()");
+
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
         if (GSC.summernote_on || GSC.offline) {
           setTimeout("GSC.ReadArticles();", 5000);
@@ -241,11 +242,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               GSC.data.articlescrc = data.data.crc;
               var obj = jQuery.parseJSON(data.data.html);
               for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
-/*
-              $(".summernote ul").each(function (i, obj) {
-                $(obj).addClass("browser-default");
-              });
-*/
               $(".summernote ul").addClass("browser-default");
               $(".summernote img").addClass("responsive-img");
             }

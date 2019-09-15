@@ -1555,7 +1555,8 @@ abstract class APresenter implements IPresenter
         if (array_key_exists("nonce", $_GET)) {
             $use_cache = false;
         }
-        // check logged user
+
+        // logged user
         $data["user"] = $user = $this->getCurrentUser();
         $data["admin"] = $group = $this->getUserGroup();
         if ($group) {
@@ -1564,10 +1565,8 @@ abstract class APresenter implements IPresenter
         if ($user["id"]) {
             $use_cache = false; // no cache for logged users
         }
-        bdump($user);
-        bdump($group);
 
-        // set language
+        // language
         $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $data["lang{$language}"] = true;
         $data["l"] = $l = $this->getLocale($language);
