@@ -364,10 +364,10 @@ class AdminPresenter extends APresenter
     {
         $store = new FlockStore();
         $factory = new Factory($store);
-        $lock = $factory->createLock("core-update", 10);
+        $lock = $factory->createLock("core-update");
         if ($lock->acquire()) {
             try {
-                ob_flush();
+                @ob_flush();
                 Cache::clear(false);
                 @array_map("unlink", glob(CACHE . "/*.php"));
                 @array_map("unlink", glob(CACHE . "/*.tmp"));

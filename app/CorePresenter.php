@@ -14,6 +14,14 @@ class CorePresenter extends APresenter
 {
     public function process()
     {
+        if (isset($_GET["api"])) {
+            $api = (string) $_GET["api"];
+            $key = $this->getCfg("ci_tester.api_key") ?? null;
+            if ($key !== $api) $this->checkRateLimit();
+        } else {
+            $this->checkRateLimit();
+        }
+
         $data = $this->getData();
         $presenter = $this->getPresenter();
         $view = $this->getView();
@@ -106,7 +114,7 @@ class CorePresenter extends APresenter
                 break;
         }
 
-        // fetch locale
+        // locale
         $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);
         $hash = hash('sha256', (string) json_encode($locale));
