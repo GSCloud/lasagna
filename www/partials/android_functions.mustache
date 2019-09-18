@@ -1,34 +1,5 @@
 <script>
-// polyfills
-Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
-String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
-
 (function (w, d, undefined) {
-
-  // check network status
-  function checkNetwork(e) {
-    if ("onLine" in navigator) {
-      if (navigator.onLine) {
-        d.getElementsByTagName("html")[0].setAttribute("offline", false);
-        if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", true);
-        if (GSC) GSC.offline = false;
-      } else {
-        d.getElementsByTagName("html")[0].setAttribute("offline", true);
-        if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", false);
-        if (GSC) GSC.offline = true;
-        if (GSC) GSC.loaderOff();
-      }
-    }
-  }
-
-  // "online" feature detection
-  if ("onLine" in navigator) {
-    w.addEventListener("load", function () {
-      w.addEventListener("online", checkNetwork);
-      w.addEventListener("offline", checkNetwork);
-      checkNetwork();
-    });
-  }
 
   // window.setCookie()
   if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days) {
@@ -36,7 +7,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     if (value === undefined) return false;
     if (days === undefined) days = 31;
     if (days === 0) {
-      // session cookie
       document.cookie = key + "=" + value + ";path=/";
     } else {
       var date = new Date();
@@ -62,16 +32,78 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
   if (GSC) {
     GSC.data = {};
-    GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
-    GSC.profile = null;
-    GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
-    // feature detection: "touch"
-    GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
-      true : false;
-    if (GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
+    // GSC.FormatBytes()
+    if (typeof GSC.FormatBytes !== "function") GSC.FormatBytes = function (number, precision) {
+      number = parseInt(number);
+      if (precision === undefined) precision = 2;
+      if (!number) return "0";
+      var c = 1024,
+        e = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+        f = Math.floor(Math.log(number) / Math.log(c));
+      return parseFloat((number / Math.pow(c, f)).toFixed(precision)) + "&nbsp;" + e[f];
+    }
 
-    // GSC.CopyClipboard()
+    // GSC.RemoveIframes()
+    if (typeof GSC.RemoveIframes !== "function") GSC.RemoveIframes = function () {
+      var iframes = document.querySelectorAll('iframe');
+      for (var i = 0; i < iframes.length; i++) {
+        iframes[i].parentNode.removeChild(iframes[i]);
+      }
+    }
+
+    // GSC.GetTime()
+    if (typeof GSC.GetTime !== "function") GSC.GetTime = function (dateString) {
+
+      function englishext(x) {
+        x = ("" + x).slice(-1);
+        if (x == 1) return "st";
+        if (x == 2) return "nd";
+        if (x == 3) return "rd";
+        return "th";
+      }
+
+      var dayz = ["", "{{l.day_of_the_week_1}}", "{{l.day_of_the_week_2}}", "{{l.day_of_the_week_3}}",
+        "{{l.day_of_the_week_4}}", "{{l.day_of_the_week_5}}", "{{l.day_of_the_week_6}}",
+        "{{l.day_of_the_week_7}}"
+      ];
+      var monthz = ["", "{{l.month_1}}", "{{l.month_2}}", "{{l.month_3}}", "{{l.month_4}}",
+        "{{l.month_5}}", "{{l.month_6}}", "{{l.month_7}}", "{{l.month_8}}", "{{l.month_9}}",
+        "{{l.month_10}}", "{{l.month_11}}", "{{l.month_12}}"
+      ];
+      var monthz2p = ["", "{{l.month_2p_1}}", "{{l.month_2p_2}}", "{{l.month_2p_3}}", "{{l.month_2p_4}}",
+        "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
+        "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
+      ];
+      if (dateString === undefined) {
+        var z = new Date();
+      } else {
+        var z = new Date(dateString);
+      }
+      var x = {};
+      x.day = ("" + z.getDay());
+      x.day_str = dayz[z.getDay()];
+      x.h = ("" + z.getHours());
+      x.hh = ("0" + z.getHours()).slice(-2);
+      x.yy = ("" + z.getFullYear()).slice(-2);
+      x.yyyy = ("" + z.getFullYear());
+      x.m = ("" + (z.getMonth() + 1));
+      x.mm = ("0" + (z.getMonth() + 1)).slice(-2);
+      x.month_str = monthz[x.m];
+      x.month_str2p = monthz2p[x.m];
+      x.d = z.getDate();
+      x.dd = ("0" + z.getDate()).slice(-2);
+      x.today = x.dd + "." + x.mm + "." + x.yyyy;
+      if ("{{ langcs }}") { // Czech locale
+        x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
+      }
+      if ("{{ langen }}") { // English locale
+        x.today_str = x.day_str + " " + x.d + englishext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
+      }
+      x.d = z;
+      return x;
+    }
+
     if (typeof GSC.CopyClipboard !== "function") GSC.CopyClipboard = function (data) {
       var el = d.createElement("textarea");
       el.value = data;
@@ -108,12 +140,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         M.toast({html: t});
       }
     }
-
-    // DELAYED UI bindings
-    GSC.init.push(function () {
-      GSC.names.push("UI bindings");
-    });
-
   }
 })(window, document);
+
 </script>

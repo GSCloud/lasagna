@@ -89,7 +89,6 @@ lasagna_sheets: [
 
 design: [
   css_font: [
-    "https://fonts.googleapis.com/icon?family=Material+Icons"
     "https://fonts.googleapis.com/css?family=Aladin&display=swap"
   ]
   footer_color: "black"

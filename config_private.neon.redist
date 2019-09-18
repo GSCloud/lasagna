@@ -27,11 +27,13 @@ cf: [
   ]
 ]
 
-# admins
+# admin groups
 admin_groups: [
   default: [
+    *
   ]
   editor: [
+    editor@foo.bar
   ]
   admin: [
     joe@foo.bar
