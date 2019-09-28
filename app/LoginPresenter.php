@@ -85,14 +85,20 @@ class LoginPresenter extends APresenter
                     "id" => $ownerDetails->getId(),
                     "name" => $ownerDetails->getName(),
                 ]);
+                $this->addMessage("Google login: " . $ownerDetails->getName() . " @: " . $ownerDetails->getEmail() . " id: " . $ownerDetails->getId());
+                @file_put_contents(DATA . "/AuditLog.txt",
+                    date("c") . "; GOOGLE OAUTH LOGIN; IP:" . $this->getIP() . "; "
+                    . $ownerDetails->getName() . "; " . $ownerDetails->getEmail() . "; " . $ownerDetails->getId() . "\n",
+                    FILE_APPEND | LOCK_EX);
+
                 // debugging
-/*
+                /*
                 dump("NEW IDENTITY:");
                 dump($this->getIdentity());
                 dump("OAuth IDENTITY:");
                 dump($ownerDetails);
                 exit;
-*/
+                 */
                 if ($this->getUserGroup() == "admin") {
                     // set Tracy debug cookie
                     if ($this->getCfg("DEBUG_COOKIE")) {
@@ -100,7 +106,7 @@ class LoginPresenter extends APresenter
                     }
                 }
                 $this->clearCookie("oauth2state");
-                // store email for next run
+                // store email for the next run
                 if (strlen($ownerDetails->getEmail())) {
                     \setcookie("login_hint", $ownerDetails->getEmail() ?? "", time() + 86400 * 31, "/", DOMAIN);
                 }
@@ -108,18 +114,16 @@ class LoginPresenter extends APresenter
                 $this->setLocation("/${nonce}");
                 exit;
             } catch (Exception $e) {
-                $errors[] = $e->getMessage();
+                $this->addError("Google OAuth: " . $e->getMessage());
             }
         }
         // process errors
         header("HTTP/1.1 400 Bad Request");
-        $this->addError("HTTP/1.1 400 Bad Request");
         $this->clearCookie("login_hint");
         $this->clearCookie("oauth2state");
         $this->clearcookie("return_uri");
         echo "<html><body><center><h1>😐 AUTHENTICATION ERROR 😐</h1>";
         echo '<h2><a href="/login?relogin">RELOAD ↻</a></h2><hr>';
-        echo join("<br>", $errors);
         exit;
     }
 }

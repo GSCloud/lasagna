@@ -34,30 +34,22 @@ class HomePresenter extends APresenter
         $this->dataExpander($data);
 
         // advanced caching
-        $arr = [
-            $data["host"],
-            $data["request_path"],
-        ];
-        $cache_key = strtolower(join($arr, "_"));
         $use_cache = $data["use_cache"] ?? false;
+        $cache_key = strtolower(join([$data["host"], $data["request_path"]], "_"));
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
             $output .= "\n<script>console.log('*** page content cached');</script>";
             return $this->setData("output", $output);
         }
 
-        // fix text data
-        if (is_array($data["l"])) {
-            foreach ($data["l"] as $k => $v) {
-                $v = StringFilters::convert_eolhyphen_to_brdot($v);
-                $v = StringFilters::correct_text_spacing($v, $data["lang"]);
-                $v = StringFilters::convert_eol_to_br($v);
-                $data["l"][$k] = $v;
-            }
+        // fix locales
+        $data["l"] = $data["l"] ?? [];
+        foreach ($data["l"] as $k => $v) {
+            StringFilters::correct_text_spacing($data["l"][$k], $data["lang"]);
         }
 
         // render output & save to model & cache
         $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
-        $output = StringFilters::trim_html_comment($output);
+        StringFilters::trim_html_comment($output);
         Cache::write($cache_key, $output, "page");
         return $this->setData("output", $output);
     }

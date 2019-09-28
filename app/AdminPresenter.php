@@ -60,6 +60,13 @@ class AdminPresenter extends APresenter
         $extras = ["name" => "LASAGNA Core", "fn" => $view];
         switch ($view) {
 
+            case "AuditLog":
+                $this->checkPermission("admin");
+                $this->setHeaderText();
+                echo @file_get_contents(DATA . "/AuditLog.txt");
+                exit;
+                break;
+
             case "GetCsvInfo":
                 $this->checkPermission("admin");
                 $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);

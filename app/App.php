@@ -22,20 +22,19 @@ defined("CACHE") || die($x);
 defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
-/** @const Cache prefix. */
+/** @const Cache prefix */
 defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
-/** @const Domain name, extracted from SERVER array. */
+/** @const Domain name, extracted from SERVER array */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
-/** @const Project name, default LASAGNA. */
+/** @const Project name, default LASAGNA */
 defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "Tesseract"));
-/** @const Server name, extracted from SERVER array. */
+/** @const Server name, extracted from SERVER array */
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
-/** @const Monolog filename, full path. */
+/** @const Monolog filename, full path */
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . ".log");
-
-/** @const Google Cloud Platform project ID. */
+/** @const Google Cloud Platform project ID */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
-/** @const Google Cloud Platform JSON auth keys. */
+/** @const Google Cloud Platform JSON auth keys */
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
 if (GCP_KEYS) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);

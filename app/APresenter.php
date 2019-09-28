@@ -39,6 +39,7 @@ interface IPresenter
     public function getCookie($name);
     public function getCurrentUser();
     public function getData($key);
+    public function getIP();
     public function getIdentity();
     public function getLocale($locale);
     public function getMatch();
@@ -598,6 +599,16 @@ abstract class APresenter implements IPresenter
             $this->criticals[] = (string) $message;
         }
         return $this;
+    }
+
+    /**
+     * Get IP address
+     *
+     * @return string IP address
+     */
+    public function getIP()
+    {
+        return $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "N/A";
     }
 
     /**
