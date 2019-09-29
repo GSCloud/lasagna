@@ -163,6 +163,7 @@ class AdminPresenter extends APresenter
                     $this->unauthorized_access();
                 }
                 // OK
+                $this->addAuditMessage("GET UPDATE TOKEN");
                 return $this->writeJsonData($arr, $extras);
                 break;
 
@@ -179,6 +180,7 @@ class AdminPresenter extends APresenter
                 $this->postloadAppData("app_data");
                 $this->flush_cache();
                 // OK
+                $this->addAuditMessage("CORE UPDATE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
@@ -196,6 +198,7 @@ class AdminPresenter extends APresenter
                     file_put_contents($file, $json, LOCK_EX);
                 }
                 // OK
+                $this->addAuditMessage("CREATE AUTH CODE");
                 return $this->writeJsonData(
                     [
                         "hash" => $hash,
@@ -213,6 +216,7 @@ class AdminPresenter extends APresenter
                     }
                 }
                 // OK
+                $this->addAuditMessage("DELETE AUTH CODE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
@@ -313,6 +317,7 @@ class AdminPresenter extends APresenter
                         $this->setForceCsvCheck();
                         $this->postloadAppData("app_data");
                         $this->flush_cache();
+                        $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
                         echo $_SERVER["HTTP_HOST"] . " CoreUpdateRemote OK \n";
                         exit;
                     } else {
@@ -333,6 +338,7 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->rebuild_nonce();
+                        $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
                         echo $_SERVER["HTTP_HOST"] . " RebuildNonceRemote OK \n";
                         exit;
                     } else {
@@ -352,14 +358,15 @@ class AdminPresenter extends APresenter
     /**
      * Rebuild identity nonce
      *
-     * @return void
+     * @return object Singleton instance
      */
     private function rebuild_nonce()
     {
         $file = DATA . "/" . self::IDENTITY_NONCE;
         @unlink($file);
+        clearstatcache();
         $this->setIdentity();
-        return;
+        return $this;
     }
 
     /**

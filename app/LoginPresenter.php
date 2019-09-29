@@ -71,11 +71,13 @@ class LoginPresenter extends APresenter
             // something baaaaaaaaaaaaaad happened!
             $errors[] = "Invalid OAuth state";
         } else {
-            // get access token
+
             try {
+                // get access token
                 $token = $provider->getAccessToken("authorization_code", [
                     "code" => $_GET["code"],
                 ]);
+                // get owner details
                 $ownerDetails = $provider->getResourceOwner($token, [
                     "useOidcMode" => true,
                 ]);
@@ -85,20 +87,19 @@ class LoginPresenter extends APresenter
                     "id" => $ownerDetails->getId(),
                     "name" => $ownerDetails->getName(),
                 ]);
-                $this->addMessage("Google login: " . $ownerDetails->getName() . " @: " . $ownerDetails->getEmail() . " id: " . $ownerDetails->getId());
-                @file_put_contents(DATA . "/AuditLog.txt",
-                    date("c") . "; GOOGLE OAUTH LOGIN; IP:" . $this->getIP() . "; "
-                    . $ownerDetails->getName() . "; " . $ownerDetails->getEmail() . "; " . $ownerDetails->getId() . "\n",
-                    FILE_APPEND | LOCK_EX);
+                $i = $this->getIdentity();
+                $this->addMessage("Google login: " . $i["name"] . " " . $i["email"] . " " . $i["id"]);
+                $this->addAuditMessage("GOOGLE OAUTH LOGIN");
 
-                // debugging
-                /*
+/*
+// debugging
                 dump("NEW IDENTITY:");
                 dump($this->getIdentity());
                 dump("OAuth IDENTITY:");
                 dump($ownerDetails);
                 exit;
-                 */
+*/
+
                 if ($this->getUserGroup() == "admin") {
                     // set Tracy debug cookie
                     if ($this->getCfg("DEBUG_COOKIE")) {

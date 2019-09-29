@@ -30,6 +30,7 @@ interface IPresenter
     public function addCritical($message);
     public function addError($message);
     public function addMessage($message);
+    public function addAuditMessage($message);
     public function getCriticals();
     public function getErrors();
     public function getMessages();
@@ -316,7 +317,8 @@ abstract class APresenter implements IPresenter
 
         try {
             if (count($criticals) + count($errors) + count($messages)) {
-                if (GCP_PROJECTID && GCP_KEYS) {
+                // log errors to GCP for valid project, keys and NOT localhost
+                if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
                     $logging = new LoggingClient([
                         "projectId" => GCP_PROJECTID,
                         "keyFilePath" => APP . GCP_KEYS,
@@ -560,6 +562,28 @@ abstract class APresenter implements IPresenter
     }
 
     /**
+     * Add audit message
+     *
+     * @param string $message Message string
+     * @return object Singleton instance
+     */
+    public function addAuditMessage($message = null)
+    {
+        if (!is_null($message) || !empty($message)) {
+            $file = DATA . "/AuditLog.txt";
+            $date = date("c");
+            $message = trim($message);
+            $i = $this->getIdentity();
+            @file_put_contents(
+                $file,
+                "$date;$message;IP:{$i['ip']};NAME:{$i['name']};EMAIL:{$i['email']};ID:{$i['id']}\n",
+                FILE_APPEND | LOCK_EX
+            );
+        }
+        return $this;
+    }
+
+    /**
      * Add info message
      *
      * @param string $message Message string
@@ -620,12 +644,12 @@ abstract class APresenter implements IPresenter
     {
         return strtr(implode("_",
             [
-                $_SERVER["HTTP_ACCEPT"] ?? "NA",
-                $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "NA",
-                $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "NA",
-                $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "NA",
-                $_SERVER["HTTP_USER_AGENT"] ?? "UA",
-                $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "NA",
+                $_SERVER["HTTP_ACCEPT"] ?? "N/A",
+                $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "N/A",
+                $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
+                $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
+                $_SERVER["HTTP_USER_AGENT"] ?? "N/A",
+                $this->getIP(),
             ]),
             " ", "_");
     }
@@ -633,7 +657,7 @@ abstract class APresenter implements IPresenter
     /**
      * Get universal ID hash
      *
-     * @return string Universal ID SHA256 hash
+     * @return string Universal ID SHA-256 hash
      */
     public function getUID()
     {
@@ -658,23 +682,30 @@ abstract class APresenter implements IPresenter
             "id" => 0,
             "ip" => "",
             "name" => "",
+            "timestamp" => 0,
         ];
-        $file = DATA . "/" . self::IDENTITY_NONCE;
 
         // get nonce
+        $file = DATA . "/" . self::IDENTITY_NONCE;
         if (!file_exists($file)) {
             try {
                 $nonce = hash("sha256", random_bytes(256) . time());
-                file_put_contents($file, $nonce);
+                if (@file_put_contents($file, $nonce, LOCK_EX) === false) {
+                    throw new \Exception("File write failed!");
+                }
                 @chmod($file, 0660);
                 $this->addMessage("ADMIN: nonce file created");
             } catch (Exception $e) {
-                $this->addError("500: Internal Server Error -> cannot create nonce file");
+                $this->addError("500: Internal Server Error -> cannot create nonce file: " . $e->getMessage());
                 $this->setLocation("/err/500");
                 exit;
             }
         }
-        $nonce = @file_get_contents($file);
+        if ($nonce = @file_get_contents($file) === false) {
+            $this->addError("500: Internal Server Error -> cannot read nonce file");
+            $this->setLocation("/err/500");
+            exit;
+        }
         $i["nonce"] = substr(trim($nonce), 0, 8);
 
         // check all keys
@@ -691,11 +722,12 @@ abstract class APresenter implements IPresenter
             $i["name"] = (string) $identity["name"];
         }
 
+        // set other values
         $i["timestamp"] = time();
-        $i["country"] = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "NA";
-        $i["ip"] = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
+        $i["country"] = $_SERVER["HTTP_CF_IPCOUNTRY"] ?? "";
+        $i["ip"] = $this->getIP();
 
-        // shuffle data
+        // shuffle keys
         $out = [];
         $keys = array_keys($i);
         shuffle($keys);
@@ -703,12 +735,13 @@ abstract class APresenter implements IPresenter
             $out[$k] = $i[$k];
         }
 
-        // new identity
+        // set new identity
         $this->identity = $out;
-        if ($i["id"]) {
+        if ($out["id"]) {
+            // encrypted cookie
             $this->setCookie("identity", json_encode($out));
         } else {
-            // no user id = no cookie
+            // no cookie
             $this->clearCookie("identity");
         }
         return $this;
@@ -732,25 +765,31 @@ abstract class APresenter implements IPresenter
         // get nonce
         $file = DATA . "/" . self::IDENTITY_NONCE;
         if (!file_exists($file)) {
-            // initialize nonce
+            // initialize new nonce
             $this->setIdentity();
             return $this->identity;
         }
-        $nonce = @file_get_contents($file);
+        if ($nonce = @file_get_contents($file) === false) {
+            $this->addError("500: Internal Server Error -> cannot read nonce file");
+            $this->setLocation("/err/500");
+            exit;
+        }
         $nonce = substr(trim($nonce), 0, 8);
 
         // empty identity
         $i = [
             "avatar" => "",
+            "country" => "",
             "email" => "",
             "id" => 0,
+            "ip" => "",
             "name" => "",
+            "timestamp" => 0,
         ];
 
         // mock identity
         if (CLI) {
             $i = [
-                "avatar" => "",
                 "email" => "f@mxd.cz",
                 "id" => 666,
                 "name" => "Mr. Robot",
@@ -769,7 +808,6 @@ abstract class APresenter implements IPresenter
                 $this->setLocation("http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
                 exit;
             }
-
             // COOKIE identity
             if (isset($_COOKIE["identity"])) {
                 $x = 0;
@@ -798,7 +836,9 @@ abstract class APresenter implements IPresenter
                     $this->logout();
                     break;
                 }
+                // compare nonces
                 if ($q["nonce"] == $nonce) {
+                    // we have an identity!
                     $this->setIdentity($q);
                     break;
                 }
@@ -813,13 +853,14 @@ abstract class APresenter implements IPresenter
     /**
      * Get current user
      *
-     * @return array Get current user data
+     * @return array current user data
      */
     public function getCurrentUser()
     {
         $u = array_replace(
             [
                 "avatar" => "",
+                "country" => "",
                 "email" => "",
                 "id" => 0,
                 "name" => "",

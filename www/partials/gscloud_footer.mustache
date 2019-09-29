@@ -15,28 +15,36 @@
       <div class="col l4 m6 s12">
 
         {{#LOCALHOST}}
-        <a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}"
-          class="waves-effect waves-light blue btn-large z-depth-3">{{ l.a_login }}<i
-            class="material-icons right">cloud</i></a>
+        <a target="_blank" rel="nofollow"
+          href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
+          class="waves-effect waves-light blue btn-large z-depth-3">
+          {{ l.a_login }}<i class="material-icons right">cloud</i>
+        </a>
         {{/LOCALHOST}}
         {{^LOCALHOST}}
-        <a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}"
-          class="waves-effect waves-light blue btn-large z-depth-3">{{ l.a_login }}<i
-            class="material-icons right">cloud</i></a>
+        <a target="_blank" rel="nofollow"
+          href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
+          class="waves-effect waves-light blue btn-large z-depth-3">
+          {{ l.a_login }}<i class="material-icons right">cloud</i>
+        </a>
         {{/LOCALHOST}}
 
         <br>
         <br>
 
         {{#LOCALHOST}}
-        <a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true"
-          class="waves-effect waves-light red btn-large z-depth-3">{{ l.a_relogin }}<i
-            class="material-icons right">cloud</i></a>
+        <a target="_blank" rel="nofollow"
+          href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
+          class="waves-effect waves-light red btn-large z-depth-3">
+          {{ l.a_relogin }}<i class="material-icons right">cloud</i>
+        </a>
         {{/LOCALHOST}}
         {{^LOCALHOST}}
-        <a href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true"
-          class="waves-effect waves-light red btn-large z-depth-3">{{ l.a_relogin }}<i
-            class="material-icons right">cloud</i></a>
+        <a target="_blank" rel="nofollow"
+          href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
+          class="waves-effect waves-light red btn-large z-depth-3">
+          {{ l.a_relogin }}<i class="material-icons right">cloud</i>
+        </a>
         {{/LOCALHOST}}
 
       </div>
