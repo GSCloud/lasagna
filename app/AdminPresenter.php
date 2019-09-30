@@ -62,9 +62,12 @@ class AdminPresenter extends APresenter
 
             case "AuditLog":
                 $this->checkPermission("admin");
-                $this->setHeaderText();
-                echo @file_get_contents(DATA . "/AuditLog.txt");
-                exit;
+                $this->setHeaderHTML();
+                $logs = file(DATA . "/AuditLog.txt");
+                array_walk($logs, array($this, "decorateLogs"));
+                $data["content"] = array_reverse($logs);
+                $output = $this->setData($data)->renderHTML("auditlog");
+                return $this->setData("output", $output);
                 break;
 
             case "GetCsvInfo":
@@ -171,6 +174,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $this->flush_cache();
                 // OK
+                $this->addAuditMessage("FLUSH CACHE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
@@ -275,6 +279,7 @@ class AdminPresenter extends APresenter
                     ], $extras);
                 } else {
                     // OK
+                    $this->addAuditMessage("UPDATE ARTICLE $profile - $hash");
                     return $this->writeJsonData([
                         "status" => "OK",
                         "profile" => $profile,
@@ -295,6 +300,7 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->flush_cache();
+                        $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
                         echo $_SERVER["HTTP_HOST"] . " FlushCacheRemote OK \n";
                         exit;
                     } else {
@@ -409,4 +415,24 @@ class AdminPresenter extends APresenter
         $this->setLocation("/err/401");
         exit;
     }
+
+    /**
+     * Decorate log entries
+     *
+     * @param string $val log line
+     * @param int $key array index
+     * @return void
+     */
+    public function decorateLogs(&$val, $key)
+    {
+        $x = explode(";", $val);
+        array_walk($x, function(&$value, &$key) {
+            $value = str_replace("EMAIL:", "", $value);
+            $value = str_replace("NAME:", "", $value);
+            $value = str_replace("ID:", "", $value);
+        });
+        $y = implode("</td><td>", $x);
+        $val = "<td>$y</td>";
+    }
+
 }
