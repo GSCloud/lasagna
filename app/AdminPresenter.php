@@ -63,6 +63,7 @@ class AdminPresenter extends APresenter
             case "AuditLog":
                 $this->checkPermission("admin");
                 $this->setHeaderHTML();
+
                 $logs = file(DATA . "/AuditLog.txt");
                 array_walk($logs, array($this, "decorateLogs"));
                 $data["content"] = array_reverse($logs);
