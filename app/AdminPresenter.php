@@ -430,8 +430,9 @@ class AdminPresenter extends APresenter
         array_walk($x, function(&$value, &$key) {
             $value = str_replace("EMAIL:", "", $value);
             $value = str_replace("NAME:", "", $value);
-            $value = str_replace("ID:", "", $value);
+//            $value = str_replace("ID:", "", $value);
         });
+        unset($x[5]);
         $y = implode("</td><td>", $x);
         $val = "<td>$y</td>";
     }
