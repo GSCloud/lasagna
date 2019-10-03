@@ -87,8 +87,7 @@ class LoginPresenter extends APresenter
                     "id" => $ownerDetails->getId(),
                     "name" => $ownerDetails->getName(),
                 ]);
-                $i = $this->getIdentity();
-                $this->addMessage("Google login: " . $i["name"] . " " . $i["email"] . " " . $i["id"]);
+                $this->addMessage("Google login: " . $ownerDetails->getName() . " " . $ownerDetails->getEmail());
                 $this->addAuditMessage("GOOGLE OAUTH LOGIN");
 
 /*

@@ -32,6 +32,8 @@
     {{ l.a_rotate_device }}
   </div>
 
+  {{>admin_custom}}
+
   <!-- external services buttons -->
   <div class="row center black hide-on-small-only">
     <div class="extrapadding hide-on-small-only" style="padding-top:3px">
@@ -150,7 +152,7 @@
           </div>
           <div class="row center">
             <strong>{{user.name}}</strong><br>
-            <i style="font-size:smaller">{{user.id}}</i><br>
+            <i style="font-size:smaller">{{user.email}}</i><br>
             <a id="a_getcode" class="btnmargin xtooltipped waves-effect blue waves-light btn" data-position="top"
               data-tooltip="">📲</a>
             <a id="a_delcode" class="btnmargin xtooltipped waves-effect red waves-light btn" data-position="top"
@@ -167,7 +169,7 @@
       </div>
     </div>
 
-    <!-- GOOGLE -->
+    <!-- Google -->
     <div class="col l4 m6 s12">
       <div class="row center extrapadding hide-on-small-only">
         <div class="white-text">
@@ -730,8 +732,6 @@
   })(window, document);
 
 </script>
-
-{{>admin_custom}}
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.2/codemirror.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.2/theme/material.min.css" rel="stylesheet">
