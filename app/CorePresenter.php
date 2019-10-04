@@ -10,14 +10,25 @@
 
 namespace GSC;
 
+/**
+ * Core Presenter
+ */
 class CorePresenter extends APresenter
 {
+    /**
+     * Main controller
+     *
+     * @return void
+     */
     public function process()
     {
         if (isset($_GET["api"])) {
             $api = (string) $_GET["api"];
             $key = $this->getCfg("ci_tester.api_key") ?? null;
-            if ($key !== $api) $this->checkRateLimit();
+            if ($key !== $api) {
+                $this->checkRateLimit();
+            }
+
         } else {
             $this->checkRateLimit();
         }
@@ -64,7 +75,25 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $output);
                 break;
 
-            case "version_core":
+            case "ShowAPIs":
+                $this->setHeaderHTML();
+                $map = [];
+                foreach ($presenter as $p) {
+                    if (isset($p["api"]) && $p["api"]) {
+                        $map[] = [
+                            "path" => trim($p["path"], "/ \t\n\r\0\x0B"),
+                            "desc" => $p["api_description"] ?? "",
+                        ];
+                    }
+                }
+                usort($map, function ($a, $b) {
+                    return strcmp($a["desc"], $b["desc"]);
+                });
+                $output = $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis");
+                return $this->setData("output", $output);
+                break;
+
+            case "GetCoreVersion":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
@@ -121,8 +150,8 @@ class CorePresenter extends APresenter
 
         switch ($view) {
 
-            case "cs_version_data":
-            case "en_version_data":
+            case "GetCsDataVersion":
+            case "GetEnDataVersion":
                 $d = [];
                 $d["LASAGNA"]["data"]["version"] = $hash;
                 $d["LASAGNA"]["data"]["language"] = $language;

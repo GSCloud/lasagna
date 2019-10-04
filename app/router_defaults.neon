@@ -1,5 +1,6 @@
 defaults:
   api: false
+  api_description: ""
   assert_httpcode: 200
   assert_json: false
   assert_values: []
@@ -23,42 +24,58 @@ swjs:
   path: /sw.js
   presenter: core
 
-version_core:
-  method: GET|POST
-  path: /version/core
-  presenter: core
-  assert_json: true
-
-cs_version_data:
-  language: cs
-  method: GET|POST
-  path: /cs/version/data
-  presenter: core
-  assert_json: true
-
-en_version_data:
-  language: en
-  method: GET|POST
-  path: /en/version/data
-  presenter: core
-  assert_json: true
-
-error:
-  path: '/err/[a:code]'
-  presenter: error
-
 cs_article:
-  language: cs
   path: '/cs/id/[**:trailing]'
+  language: cs
   presenter: article
 
 en_article:
-  language: en
   path: '/en/id/[**:trailing]'
+  language: en
   presenter: article
 
+ShowAPIs:
+  path: /api
+  api: true
+  api_description: "Show public REST API list"
+  presenter: core
+
+GetCoreVersion:
+  path: /version/core
+  api: true
+  api_description: "Get Tesseract core version hash and number of revisions"
+  assert_json: true
+  method: GET|POST
+  presenter: core
+
+GetCsDataVersion:
+  path: /cs/version/data
+  api: true
+  api_description: "Get Tesseract Czech locales version hash"
+  assert_json: true
+  language: cs
+  method: GET|POST
+  presenter: core
+
+GetEnDataVersion:
+  path: /en/version/data
+  api: true
+  api_description: "Get Tesseract English locales version hash"
+  assert_json: true
+  language: en
+  method: GET|POST
+  presenter: core
+
 ReadArticles:
+  path: '/ReadArticles/[a:profile]/[a:hash]'
+  api: true
+  api_description: "Get all articles data for a profile and specific URL hash"
   assert_json: true
   method: GET
-  path: '/ReadArticles/[a:profile]/[a:hash]'
   presenter: core
+
+GetError:
+  path: '/err/[a:code]'
+  api: true
+  api_description: "General error page for specified HTTP code"
+  presenter: error
