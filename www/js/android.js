@@ -1,6 +1,11 @@
 (function (w, undefined) {
+
+  console.log('android.js');
+
   var a = w.GSC || {};
+
   a.init = [];
+  a.lang = "";
   a.names = [];
 
   a.AutoInit = function (debug) {
@@ -11,4 +16,5 @@
   }
 
   w.GSC = a;
+
 })(window);
