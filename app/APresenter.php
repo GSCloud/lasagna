@@ -79,7 +79,7 @@ interface IPresenter
     public function preloadAppData($key, $force);
     public function readAppData($name);
     public function renderHTML($template);
-    public function writeJsonData($data, $headers);
+    public function writeJsonData($data, $headers = [], $switches = null);
 
     /** abstract */
     public function process();
@@ -1509,7 +1509,7 @@ abstract class APresenter implements IPresenter
      * @param array $headers array of extra data (optional)
      * @return object Singleton instance
      */
-    public function writeJsonData($data, $headers = [])
+    public function writeJsonData($data, $headers = [], $switches = null)
     {
         $out = [];
         $code = 200;
@@ -1585,7 +1585,10 @@ abstract class APresenter implements IPresenter
         $out["message"] = $msg;
         $out = array_merge_recursive($out, $headers);
         $out["data"] = $data ?? null;
-        return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT));
+        if (is_null($switches)) {
+            return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT));
+        }
+        return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT | $switches));
     }
 
     /**

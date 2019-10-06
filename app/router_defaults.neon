@@ -76,6 +76,4 @@ ReadArticles:
 
 GetError:
   path: '/err/[a:code]'
-  api: true
-  api_description: "General error page for specified HTTP code"
   presenter: error
