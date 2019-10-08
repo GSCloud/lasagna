@@ -80,9 +80,12 @@ class CorePresenter extends APresenter
                 $map = [];
                 foreach ($presenter as $p) {
                     if (isset($p["api"]) && $p["api"]) {
+                        $info = $p["api_info"] ?? "";
+                        StringFilters::convert_eol_to_br($info);
                         $map[] = [
                             "path" => trim($p["path"], "/ \t\n\r\0\x0B"),
                             "desc" => $p["api_description"] ?? "",
+                            "info" => $info ? "<br><blockquote>${info}</blockquote>" : "",
                         ];
                     }
                 }

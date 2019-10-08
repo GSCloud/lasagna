@@ -1,6 +1,7 @@
 defaults:
   api: false
   api_description: ""
+  api_info: ""
   assert_httpcode: 200
   assert_json: false
   assert_values: []
@@ -38,12 +39,14 @@ ShowAPIs:
   path: /api
   api: true
   api_description: "Show public REST API list"
+  api_info: "This HTML page."
   presenter: core
 
 GetCoreVersion:
   path: /version/core
   api: true
-  api_description: "Get Tesseract core version hash and number of revisions"
+  api_description: "Get core version"
+  api_info: "Returns: version hash string and number of revisions."
   assert_json: true
   method: GET|POST
   presenter: core
@@ -51,7 +54,8 @@ GetCoreVersion:
 GetCsDataVersion:
   path: /cs/version/data
   api: true
-  api_description: "Get Tesseract Czech locales version hash"
+  api_description: "Get Czech locales version"
+  api_info: "Returns: version hash string."
   assert_json: true
   language: cs
   method: GET|POST
@@ -60,7 +64,8 @@ GetCsDataVersion:
 GetEnDataVersion:
   path: /en/version/data
   api: true
-  api_description: "Get Tesseract English locales version hash"
+  api_description: "Get English locales version"
+  api_info: "Returns: version hash string."
   assert_json: true
   language: en
   method: GET|POST
@@ -69,7 +74,8 @@ GetEnDataVersion:
 ReadArticles:
   path: '/ReadArticles/[a:profile]/[a:hash]'
   api: true
-  api_description: "Get all articles data for a profile and specific URL hash"
+  api_description: "Get articles data"
+  api_info: "Parameters:\n<b>[a:profile]</b> - alphanumeric profile name,\n<b>[a:hash]</b> - alphanumeric URL stub hash.\n\nReturns: JSON data."
   assert_json: true
   method: GET
   presenter: core
