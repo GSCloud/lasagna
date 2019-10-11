@@ -46,7 +46,7 @@ GetCoreVersion:
   path: /version/core
   api: true
   api_description: "Get core version"
-  api_info: "Returns: version hash string and number of revisions."
+  api_info: "Returns: version hash (string) + number of revisions (integer)."
   assert_json: true
   method: GET|POST
   presenter: core
@@ -55,7 +55,7 @@ GetCsDataVersion:
   path: /cs/version/data
   api: true
   api_description: "Get Czech locales version"
-  api_info: "Returns: version hash string."
+  api_info: "Returns: version hash (string)."
   assert_json: true
   language: cs
   method: GET|POST
@@ -65,7 +65,7 @@ GetEnDataVersion:
   path: /en/version/data
   api: true
   api_description: "Get English locales version"
-  api_info: "Returns: version hash string."
+  api_info: "Returns: version hash (string)."
   assert_json: true
   language: en
   method: GET|POST

@@ -1,2 +1,3 @@
-Filip Oščádal <oscadal@gscloud.cz> project owner, developer
+Filip Oščádal <oscadal@gscloud.cz> project owner
 Kryštof Šara <krystof.sara@gmail.com> developer, tester
+Tomáš Vahalík <tomas@vahalik.cz> developer, tester
