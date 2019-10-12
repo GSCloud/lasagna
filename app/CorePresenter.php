@@ -41,14 +41,13 @@ class CorePresenter extends APresenter
         $extras = ["name" => "LASAGNA Core", "fn" => $view];
         switch ($view) {
 
-            case "webmanifest":
+            case "manifest":
                 $this->setHeaderJson();
                 $lang = $_GET["lang"] ?? "cs";
                 if (!in_array($lang, ["cs", "en"])) {
                     $lang = "cs";
                 }
-                $output = $this->setData("l", $this->getLocale($lang))->renderHTML("site.webmanifest");
-                return $this->setData("output", $output);
+                return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
                 break;
 
             case "sitemap":
@@ -59,8 +58,7 @@ class CorePresenter extends APresenter
                         $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
                     }
                 }
-                $output = $this->setData("sitemap", $map)->renderHTML("sitemap.txt");
-                return $this->setData("output", $output);
+                return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
                 break;
 
             case "swjs":
@@ -71,8 +69,7 @@ class CorePresenter extends APresenter
                         $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
                     }
                 }
-                $output = $this->setData("sitemap", $map)->renderHTML("sw.js");
-                return $this->setData("output", $output);
+                return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sw.js"));
                 break;
 
             case "ShowAPIs":
@@ -85,30 +82,31 @@ class CorePresenter extends APresenter
                         $map[] = [
                             "path" => trim($p["path"], "/ \t\n\r\0\x0B"),
                             "desc" => $p["api_description"] ?? "",
+                            "exam" => $p["api_example"] ?? [],
                             "info" => $info ? "<br><blockquote>${info}</blockquote>" : "",
+                            "count" => count($p["api_example"]),
                         ];
                     }
                 }
                 usort($map, function ($a, $b) {
                     return strcmp($a["desc"], $b["desc"]);
                 });
-                $output = $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis");
-                return $this->setData("output", $output);
+                return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
                 break;
 
             case "GetCoreVersion":
                 $d = [];
-                $d["LASAGNA"]["core"]["version"] = $data["VERSION"];
+                $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
                 return $this->writeJsonData($d, $extras);
                 break;
 
-            case "FixLangDataCs":
+            case "FixLangDataCs": // TODO!!!
                 $d = [];
                 return $this->writeJsonData(500, $extras);
                 break;
 
-            case "FixLangDataEn":
+            case "FixLangDataEn": // TODO!!!
                 $d = [];
                 return $this->writeJsonData(500, $extras);
                 break;
@@ -124,7 +122,7 @@ class CorePresenter extends APresenter
                     $x++;
                 }
                 if ($x !== 2) {
-                    // Bad Request
+                    // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
                 $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
@@ -146,13 +144,11 @@ class CorePresenter extends APresenter
                 break;
         }
 
-        // locale
         $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);
         $hash = hash('sha256', (string) json_encode($locale));
 
         switch ($view) {
-
             case "GetCsDataVersion":
             case "GetEnDataVersion":
                 $d = [];

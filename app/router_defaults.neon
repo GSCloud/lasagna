@@ -2,6 +2,7 @@ defaults:
   api: false
   api_description: ""
   api_info: ""
+  api_example: []
   assert_httpcode: 200
   assert_json: false
   assert_values: []
@@ -13,7 +14,7 @@ defaults:
   template: index
   view: home
 
-webmanifest:
+manifest:
   path: /manifest.json
   presenter: core
 
@@ -75,7 +76,10 @@ ReadArticles:
   path: '/ReadArticles/[a:profile]/[a:hash]'
   api: true
   api_description: "Get articles data"
-  api_info: "Parameters:\n<b>[a:profile]</b> - alphanumeric profile name,\n<b>[a:hash]</b> - alphanumeric URL stub hash.\n\nReturns: JSON data."
+  api_info: "Parameters:\n<b>[a:profile]</b> - alphanumeric profile name,\n<b>[a:hash]</b> - alphanumeric URL stub hash.\n\nReturns: HTML data (JSON) + checksum hash (string)."
+  api_example: [
+    "ReadArticles/default/3b8b91c75627bee566dcb88f4805901b20a3eab2520bcff8d26c87157a035026"
+  ]
   assert_json: true
   method: GET
   presenter: core

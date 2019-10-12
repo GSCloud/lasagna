@@ -14,7 +14,7 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 
 </script>
 
-{{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
+<base href="{{ base }}">
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
 
 {{>head_meta}}
@@ -72,6 +72,15 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2
       <b>{{ desc }}</b>
       <br>
       <a target="_blank" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</a>
+      {{#count}}
+      <br>
+      <br>
+      <i>Example(s):</i>
+      {{/count}}
+      {{#exam}}
+      <br>
+      <a target="_blank" rel="nolink" href="{{ base }}{{ . }}">{{ base }}{{ . }}</a>
+      {{/exam}}
       <i>{{ info }}</i>
     </p>
   </li>
