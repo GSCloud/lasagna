@@ -74,7 +74,7 @@ $cache_profiles = array_replace([
     "default" => "+3 minutes",
     "csv" => "+60 minutes",
     "limiter" => "+2 seconds",
-    "page" => "+10 seconds",
+    "page" => "+30 seconds",
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );
@@ -152,7 +152,6 @@ foreach ($presenter as $k => $v) {
     if (!isset($v["path"])) {
         continue;
     }
-
     if ($v["path"] == "/") {
         if ($data["request_path_hash"] == "") { // set homepage hash to default language
             $data["request_path_hash"] = hash("sha256", $v["language"]);
@@ -208,16 +207,6 @@ if ($router[$view]["redirect"] ?? false) {
     header("Location: " . $r, true, 303);
     exit;
 }
-
-/*
-// nopwa
-if ($router[$view]["nopwa"] ?? false) {
-if (!isset($_GET["nonce"])) {
-header("Location: ?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4), true, 303);
-exit;
-}
-}
- */
 
 // CSP HEADERS
 header(implode(" ", [
@@ -275,8 +264,7 @@ header("X-Country: $country");
 header("X-Runtime: $time1 msec.");
 header("X-Processing: $time2 msec.");
 if (method_exists($app, "SendAnalytics")) {
-    // send Google Analytics
-    $app->SendAnalytics();
+    $app->SendAnalytics(); // send Google Analytics
 }
 
 // OUTPUT
@@ -284,15 +272,14 @@ echo $data["output"] ?? "";
 
 // DEBUG
 if (DEBUG) {
-    // delete private information first
+    // delete private information
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);
     unset($data["google_drive_backup "]);
     bdump($data, '$data');
-    //bdump($app->getIdentity(), "identity");
 }
-
 @ob_end_flush();
 @ob_implicit_flush();
 @flush();
+exit;
