@@ -1583,6 +1583,9 @@ abstract class APresenter implements IPresenter
         $this->setHeaderJson();
         $out["code"] = (int) $code;
         $out["message"] = $msg;
+        list($usec, $sec) = explode(" ", microtime());
+        $stop = (float) $usec + (float) $sec;
+        $out["processing_time"] = round(((float) $stop - (float) TESSERACT_START) * 1000, 2) . " msec.";
         $out = array_merge_recursive($out, $headers);
         $out["data"] = $data ?? null;
         if (is_null($switches)) {
