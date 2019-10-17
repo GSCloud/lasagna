@@ -10,6 +10,7 @@ echo $VERSION > VERSION
 REVISIONS=`git rev-list --all --count`
 echo $REVISIONS > REVISIONS
 
+mkdir -p www/cdn-assets
 ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 info "Version: $VERSION Revisions: $REVISIONS"
 

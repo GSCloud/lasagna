@@ -28,7 +28,6 @@ class CorePresenter extends APresenter
             if ($key !== $api) {
                 $this->checkRateLimit();
             }
-
         } else {
             $this->checkRateLimit();
         }
@@ -101,16 +100,6 @@ class CorePresenter extends APresenter
                 return $this->writeJsonData($d, $extras);
                 break;
 
-            case "FixLangDataCs": // TODO!!!
-                $d = [];
-                return $this->writeJsonData(500, $extras);
-                break;
-
-            case "FixLangDataEn": // TODO!!!
-                $d = [];
-                return $this->writeJsonData(500, $extras);
-                break;
-
             case "ReadArticles":
                 $x = 0;
                 if (isset($match["params"]["profile"])) {
@@ -138,7 +127,7 @@ class CorePresenter extends APresenter
                     // OK
                     return $this->writeJsonData(["html" => $data, "crc" => $crc], $extras);
                 } else {
-                    // Not Found
+                    // fail - Not Found
                     return $this->writeJsonData(404, $extras);
                 }
                 break;

@@ -120,7 +120,7 @@ abstract class APresenter implements IPresenter
     const GS_SHEET_POSTFIX = "/edit#gid=0";
 
     /** @var integer Access limiter maximum hits */
-    const LIMITER_MAXIMUM = 25;
+    const LIMITER_MAXIMUM = 50;
 
     /** @var string Identity nonce filename */
     const IDENTITY_NONCE = "identity_nonce.key";
@@ -645,8 +645,6 @@ abstract class APresenter implements IPresenter
     {
         return strtr(implode("_",
             [
-                $_SERVER["HTTP_ACCEPT"] ?? "N/A",
-                $_SERVER["HTTP_ACCEPT_CHARSET"] ?? "N/A",
                 $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
                 $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
                 $_SERVER["HTTP_USER_AGENT"] ?? "N/A",
@@ -1134,23 +1132,21 @@ abstract class APresenter implements IPresenter
     /**
      * Check current user rate limits
      *
-     * @param integer $maximum Maximum hits per time (optional)
+     * @param integer $maximum Maximum hits per second (optional)
      * @return object Singleton instance
      */
     public function checkRateLimit($maximum = 0)
     {
         $maximum = (int) $maximum;
         $maximum = $maximum > 0 ? $maximum : self::LIMITER_MAXIMUM;
-        $uid = $this->getUID();
-        $file = "${uid}_rate_limit";
+        $file = "user_rate_limit_{$this->getUID()}";
         if (!$rate = Cache::read($file, "limiter")) {
-            $rate = 0;
+            $rate =  0;
         }
-        $rate++;
+        Cache::write($file, ++$rate, "limiter");
         if ($rate > $maximum) {
             $this->setLocation("/err/420");
         }
-        Cache::write($file, $rate, "limiter");
         return $this;
     }
 

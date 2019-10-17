@@ -71,9 +71,9 @@ function logger($message, $severity = Logger::INFO)
 
 // caching profiles
 $cache_profiles = array_replace([
-    "default" => "+3 minutes",
+    "default" => "+5 minutes",
     "csv" => "+60 minutes",
-    "limiter" => "+2 seconds",
+    "limiter" => "+1 seconds",
     "page" => "+30 seconds",
 ],
     (array) ($cfg["cache_profiles"] ?? [])
