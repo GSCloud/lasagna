@@ -78,12 +78,21 @@ $cache_profiles = array_replace([
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );
+Cache::setConfig("filesystem", [
+    "className" => "File",
+    "duration" => "+120 seconds",
+    "path" => CACHE,
+    "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
+]);
 foreach ($cache_profiles as $k => $v) {
     Cache::setConfig($k, [
-        "className" => "File",
+        "className" => "Redis", // use "File" if Redis is not an option
+        "database" => 0,
         "duration" => $v,
-        "path" => CACHE,
+        "host" => "127.0.0.1",
+        "port" => 6379,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
+        'fallback' => 'filesystem', // fallback profile
     ]);
 }
 
