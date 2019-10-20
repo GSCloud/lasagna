@@ -23,7 +23,7 @@ defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
 /** @const Cache prefix */
-defined("CACHEPREFIX") || define("CACHEPREFIX", "cakephpcache_");
+defined("CACHEPREFIX") || define("CACHEPREFIX", "cache_");
 /** @const Domain name, extracted from SERVER array */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 /** @const Project name, default LASAGNA */
@@ -72,27 +72,29 @@ function logger($message, $severity = Logger::INFO)
 // caching profiles
 $cache_profiles = array_replace([
     "default" => "+5 minutes",
+    "minute" => "+60 seconds",
+    "hour" => "+60 minutes",
+    "day" => "+24 hours",
     "csv" => "+60 minutes",
     "limiter" => "+1 seconds",
     "page" => "+30 seconds",
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );
-Cache::setConfig("filesystem", [
-    "className" => "File",
-    "duration" => "+120 seconds",
-    "path" => CACHE,
-    "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
-]);
 foreach ($cache_profiles as $k => $v) {
+    Cache::setConfig("file_{$k}", [
+        "className" => "File",
+        "duration" => $v,
+        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
+    ]);
     Cache::setConfig($k, [
-        "className" => "Redis", // use "File" if Redis is not an option
+        "className" => "Redis",
         "database" => 0,
         "duration" => $v,
         "host" => "127.0.0.1",
         "port" => 6379,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
-        'fallback' => 'filesystem', // fallback profile
+        'fallback' => "file_{$k}", // fallback profile
     ]);
 }
 

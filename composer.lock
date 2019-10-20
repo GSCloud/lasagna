@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e9aeb41039dfe065b62c22ffd51c3bf",
+    "content-hash": "d33ed5f678c2ab90fbd7eaf75732d06c",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -256,6 +256,47 @@
                 "utility"
             ],
             "time": "2019-09-09T13:08:53+00:00"
+        },
+        {
+            "name": "cheprasov/php-redis-client",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cheprasov/php-redis-client.git",
+                "reference": "9bd8634372ea14146ede1d04a9e1417d83f0b45d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cheprasov/php-redis-client/zipball/9bd8634372ea14146ede1d04a9e1417d83f0b45d",
+                "reference": "9bd8634372ea14146ede1d04a9e1417d83f0b45d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "cheprasov/php-extra-mocks": "^1.0.0",
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "RedisClient\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Cheprasov",
+                    "email": "acheprasov84@gmail.com"
+                }
+            ],
+            "description": "Php client for Redis. It is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from 2.6 to 4.0",
+            "homepage": "http://github.com/cheprasov/php-redis-client",
+            "time": "2019-07-17T20:07:12+00:00"
         },
         {
             "name": "cloudflare/sdk",
