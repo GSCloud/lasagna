@@ -1887,16 +1887,16 @@
         },
         {
             "name": "paragonie/sodium_compat",
-            "version": "v1.11.3",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/sodium_compat.git",
-                "reference": "275cca125a5c12280f8f31f4c87710547d747645"
+                "reference": "8228b286d6b8fe24825f42ce02403f72656ac826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/275cca125a5c12280f8f31f4c87710547d747645",
-                "reference": "275cca125a5c12280f8f31f4c87710547d747645",
+                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/8228b286d6b8fe24825f42ce02403f72656ac826",
+                "reference": "8228b286d6b8fe24825f42ce02403f72656ac826",
                 "shasum": ""
             },
             "require": {
@@ -1904,7 +1904,7 @@
                 "php": "^5.2.4|^5.3|^5.4|^5.5|^5.6|^7|^8"
             },
             "require-dev": {
-                "phpunit/phpunit": "^3|^4|^5"
+                "phpunit/phpunit": "^3|^4|^5|^6|^7"
             },
             "suggest": {
                 "ext-libsodium": "PHP < 7.0: Better performance, password hashing (Argon2i), secure memory management (memzero), and better security.",
@@ -1965,7 +1965,7 @@
                 "secret-key cryptography",
                 "side-channel resistant"
             ],
-            "time": "2019-10-17T19:06:36+00:00"
+            "time": "2019-10-19T15:30:42+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
