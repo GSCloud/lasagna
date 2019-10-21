@@ -23,7 +23,8 @@ defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
 /** @const Cache prefix */
-defined("CACHEPREFIX") || define("CACHEPREFIX", "cache_");
+defined("CACHEPREFIX") || define("CACHEPREFIX",
+    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "NA") . "_");
 /** @const Domain name, extracted from SERVER array */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 /** @const Project name, default LASAGNA */
@@ -85,6 +86,8 @@ foreach ($cache_profiles as $k => $v) {
     Cache::setConfig("file_{$k}", [
         "className" => "File",
         "duration" => $v,
+        "fallback" => false,
+        "path" => CACHE,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
     ]);
     Cache::setConfig($k, [
@@ -92,8 +95,10 @@ foreach ($cache_profiles as $k => $v) {
         "database" => 0,
         "duration" => $v,
         "host" => "127.0.0.1",
+        "persistent" => true,
         "port" => 6379,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
+        "timeout" => 0.25,
         'fallback' => "file_{$k}", // fallback profile
     ]);
 }
@@ -106,12 +111,10 @@ $multisite_profiles = array_replace([
 foreach ($multisite_profiles as $k => $v) {
     $multisite_names[] = strtolower($k);
 }
-
 $profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
 if (!in_array($profile_index, $multisite_names)) {
     $profile_index = "default";
 }
-
 $auth_domain = strtolower(str_replace("https://", "", (string) ($cfg["goauth_origin"] ?? "")));
 if (!in_array($auth_domain, $multisite_profiles["default"])) {
     $multisite_profiles["default"][] = $auth_domain;

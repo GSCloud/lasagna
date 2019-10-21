@@ -142,6 +142,9 @@ check_var($cfg, "minify", false);
 
 // DEBUGGER
 if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
+    if (($cfg["dbg"] ?? null) === false) {
+        defined("DEBUG") || define("DEBUG", false); // FORCE DISABLE
+    }
     defined("DEBUG") || define("DEBUG", true); // ENABLE for localhost
 }
 if (CLI === true) {
