@@ -97,13 +97,10 @@
       <div class="row center extrapadding">
         <h5>{{ l.a_cache }}</h5>
         <div class="container">
-          <span class="nowrap">default: {{ cache_profiles.default }}</span>
-          &nbsp;&nbsp;
-          <span class="nowrap">CSV: {{ cache_profiles.csv }}</span>
-          &nbsp;&nbsp;
-          <span class="nowrap">{{ l.a_limiter }}: {{ CONST.LIMITER_MAXIMUM }}&nbsp;x / {{ cache_profiles.limiter }}</span>
-          &nbsp;&nbsp;
-          <span class="nowrap">{{ l.a_webpage }}: {{ cache_profiles.page }}</span>
+          <span class="nowrap">default: <b>{{ cache_profiles.default }}</b></span>&nbsp;
+          <span class="nowrap">CSV: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
+          <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}&nbsp;x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
+          <span class="nowrap">{{ l.a_webpage }}: <b>{{ cache_profiles.page }}</b></span>
         </div>
         <div class="row center">
           <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn" data-position="top"
@@ -344,30 +341,12 @@
         GSC.ShowLoader(t);
 
         $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
+            console.log("Lighthouse data:", data.data.lighthouseResult);
             GSC.PingDot("#psi_ping");
             $("#psi_row").hide();
-            $(t).html('<h2 class="orange-text a_reset a_h2">' + data.data.ruleGroups.SPEED.score +
-              "&nbsp;%</h2>");
-            $(t).append("numberResources:&nbsp;<span class=bold>" +
-              data.data.pageStats.numberResources + "</span> ");
-            $(t).append("numberStaticResources:&nbsp;<span class=bold>" +
-              data.data.pageStats.numberStaticResources + "</span> ");
-            $(t).append("numberJsResources:&nbsp;<span class=bold>" +
-              data.data.pageStats.numberJsResources + "</span> ");
-            $(t).append("numberCssResources:&nbsp;<span class=bold>" +
-              data.data.pageStats.numberCssResources + "</span> ");
-            $(t).append("<br>");
-            $(t).append("htmlResponseBytes:&nbsp;<span class=bold>" +
-              GSC.FormatBytes(data.data.pageStats.htmlResponseBytes) + "</span> ");
-            $(t).append("cssResponseBytes:&nbsp;<span class=bold>" +
-              GSC.FormatBytes(data.data.pageStats.cssResponseBytes) + "</span> ");
-            $(t).append("imageResponseBytes:&nbsp;<span class=bold>" +
-              GSC.FormatBytes(data.data.pageStats.imageResponseBytes) + "</span> ");
-            $(t).append("<br>");
-            $(t).append("numTotalRoundTrips:&nbsp;<span class=bold>" +
-              data.data.pageStats.numTotalRoundTrips + "</span> ");
-            $(t).append("numRenderBlockingRoundTrips:&nbsp;<span class=bold>" +
-              data.data.pageStats.numRenderBlockingRoundTrips + "</span> ");
+            $(t).html('<h2 class="orange-text a_reset a_h2">' + data.data.lighthouseResult.categories.performance.score * 100 + "&nbsp;%</h2>");
+            $(t).append("Lighthouse version:&nbsp;<span class=bold>" + data.data.lighthouseResult.lighthouseVersion + "</span> ");
+            $(t).append("Total timing:&nbsp;<span class=bold>" + data.data.lighthouseResult.timing.total + "&nbsp;ms</span> ");
             $(t).slideDown();
             $("#a_ps_insights").removeAttr("disabled");
           })
@@ -733,10 +712,10 @@
 
 </script>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.2/codemirror.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.2/theme/material.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.2/codemirror.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.2/mode/xml/xml.min.js" defer></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/theme/material.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/mode/xml/xml.min.js" defer></script>
 
 <script src="{{ cdn }}/js/moment.min.js" defer></script>
 <script src="{{ cdn }}/js/grapheme.min.js" defer></script>

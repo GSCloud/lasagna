@@ -125,7 +125,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $base = urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);
                 $key = $this->getCfg("google.pagespeedinsights_key") ?? "";
-                $uri = "https://www.googleapis.com/pagespeedonline/v4/runPagespeed?url=${base}&key=${key}";
+                $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
                 $hash = hash("sha256", $base);
                 $file = "PageSpeed_Insights_$hash";
                 $results = Cache::read($file, "default");
