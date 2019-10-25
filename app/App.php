@@ -76,9 +76,9 @@ $cache_profiles = array_replace([
     "minute" => "+60 seconds",
     "hour" => "+60 minutes",
     "day" => "+24 hours",
-    "csv" => "+60 minutes",
+    "csv" => "+180 minutes",
     "limiter" => "+1 seconds",
-    "page" => "+30 seconds",
+    "page" => "+3 minutes",
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );

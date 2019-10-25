@@ -162,7 +162,7 @@ if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::$showBar = (bool) ($cfg["DEBUG_SHOW_BAR"] ?? true);
     Debugger::$showFireLogger = (bool) ($cfg["DEBUG_SHOW_FIRELOGGER"] ?? false);
     Debugger::$showLocation = (bool) ($cfg["DEBUG_SHOW_LOCATION"] ?? false);
-    Debugger::$strictMode = (bool) ($cfg["DEBUG_STRICT_MODE"] ?? true);
+    Debugger::$strictMode = (bool) ($cfg["DEBUG_STRICT_MODE"] ?? false);
     // debug cookie name: tracy-debug
     if ($cfg["DEBUG_COOKIE"] ?? null) {
         $address = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
