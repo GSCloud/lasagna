@@ -106,11 +106,12 @@ class Doctor
 
         $climate->out("\n<blue><bold>PHP");
 
-        validate("version <bold>7.3+", (PHP_VERSION_ID >= 70300));
+        validate("Zend version <bold>7.3+", (PHP_VERSION_ID >= 70300));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
         validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
         validate("lib <bold>sodium", (in_array("sodium", get_loaded_extensions())));
+        validate("lib <bold>redis", (in_array("redis", get_loaded_extensions())));
         echo "\n";
 
         if (self::$err) $climate->out("Errors: <bold>" . self::$err . "\007\n");

@@ -15,12 +15,14 @@ use Google\Cloud\Logging\LoggingClient;
 use Monolog\Logger;
 use Nette\Neon\Neon;
 
-// sanity check
+// SANITY CHECK
 $x = "FATAL ERROR: broken chain of trust";
 defined("APP") || die($x);
 defined("CACHE") || die($x);
 defined("CLI") || die($x);
 defined("ROOT") || die($x);
+
+// CONSTANTS (in SPECIFIC ORDER !!!)
 
 /** @const Cache prefix */
 defined("CACHEPREFIX") || define("CACHEPREFIX",
@@ -45,7 +47,7 @@ if (GCP_KEYS) {
  * Stackdriver logger
  *
  * @param string $message
- * @param mixed $severity
+ * @param mixed $severity (optional)
  * @return void
  */
 function logger($message, $severity = Logger::INFO)
@@ -53,11 +55,9 @@ function logger($message, $severity = Logger::INFO)
     if (empty($message) || is_null(GCP_PROJECTID) || is_null(GCP_KEYS)) {
         return;
     }
-
     if (ob_get_level()) {
         ob_end_clean();
     }
-
     try {
         $logging = new LoggingClient([
             "projectId" => GCP_PROJECTID,
@@ -70,7 +70,7 @@ function logger($message, $severity = Logger::INFO)
     } finally {}
 }
 
-// caching profiles
+// CACHING PROFILES
 $cache_profiles = array_replace([
     "default" => "+5 minutes",
     "minute" => "+60 seconds",
@@ -82,14 +82,17 @@ $cache_profiles = array_replace([
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );
+
 foreach ($cache_profiles as $k => $v) {
+    // set "file" fallbacks
     Cache::setConfig("file_{$k}", [
         "className" => "File",
         "duration" => $v,
-        "fallback" => false,
+        "lock" => true,
         "path" => CACHE,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
     ]);
+    // set "redis" cache configurations
     Cache::setConfig($k, [
         "className" => "Redis",
         "database" => 0,
@@ -98,12 +101,12 @@ foreach ($cache_profiles as $k => $v) {
         "persistent" => true,
         "port" => 6379,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
-        "timeout" => 0.25,
+        "timeout" => 0.1,
         'fallback' => "file_{$k}", // fallback profile
     ]);
 }
 
-// multi-site profiles
+// MULTI-SITE PROFILES
 $multisite_names = [];
 $multisite_profiles = array_replace([
     "default" => [strtolower(trim(str_replace("https://", "", (string) ($cfg["canonical_url"] ?? "")), "/") ?? DOMAIN)],
@@ -120,20 +123,19 @@ if (!in_array($auth_domain, $multisite_profiles["default"])) {
     $multisite_profiles["default"][] = $auth_domain;
 }
 
-// data population
+// DATA POPULATION
 $data["cache_profiles"] = $cache_profiles;
 $data["multisite_profiles"] = $multisite_profiles;
 $data["multisite_names"] = $multisite_names;
 $data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
-// routing tables
+// ROUTING TABLES
 $router = [];
 $routes = [
     APP . "/router_defaults.neon",
     APP . "/router_admin.neon",
     APP . "/router.neon",
 ];
-
 foreach ($routes as $r) {
     if (is_callable("check_file")) {
         check_file($r);
@@ -148,7 +150,7 @@ foreach ($routes as $r) {
     $router = array_replace_recursive($router, @Neon::decode($content));
 }
 
-// router defaults
+// ROUTER DEFAULTS
 $presenter = [];
 $defaults = $router["defaults"] ?? [];
 foreach ($router as $k => $v) {
@@ -160,7 +162,8 @@ foreach ($router as $k => $v) {
     }
     $presenter[$k] = $router[$k];
 }
-// router mappings
+
+// ROUTER MAPPINGS
 $alto = new \AltoRouter();
 foreach ($presenter as $k => $v) {
     if (!isset($v["path"])) {
@@ -176,6 +179,8 @@ foreach ($presenter as $k => $v) {
         $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_x");
     }
 }
+
+// DATA POPULATION
 $data["presenter"] = $presenter;
 $data["router"] = $router;
 
@@ -195,8 +200,11 @@ if (CLI) {
 // ROUTING
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
+
+// DATA POPULATION
 $data["match"] = $match;
 $data["view"] = $view;
+
 // sethl
 if ($router[$view]["sethl"] ?? false) {
     $r = trim(strtolower($_GET["hl"] ?? $_COOKIE["hl"] ?? null));
@@ -214,6 +222,7 @@ if ($router[$view]["sethl"] ?? false) {
         $data["presenter"] = $presenter;
     }
 }
+
 // redirect
 if ($router[$view]["redirect"] ?? false) {
     $r = $router[$view]["redirect"];
@@ -259,7 +268,7 @@ header(implode(" ", [
     "'self';",
 ]));
 
-// APP
+// PRESENTER
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
 \Tracy\Debugger::timer("PROCESSING");
@@ -267,7 +276,6 @@ $app = $controller::getInstance()->setData($data)->process();
 $data = $app->getData();
 
 // ANALYTICS
-$events = null;
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "");
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
@@ -284,7 +292,7 @@ if (method_exists($app, "SendAnalytics")) {
 // OUTPUT
 echo $data["output"] ?? "";
 
-// DEBUG
+// DEBUG OUTPUT
 if (DEBUG) {
     // delete private information
     unset($data["cf"]);
@@ -293,7 +301,4 @@ if (DEBUG) {
     unset($data["google_drive_backup "]);
     bdump($data, '$data');
 }
-@ob_end_flush();
-@ob_implicit_flush();
-@flush();
 exit;

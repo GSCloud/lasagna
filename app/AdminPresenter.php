@@ -377,7 +377,7 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Flush local file cache
+     * Flush cache
      *
      * @return void
      */
@@ -394,7 +394,10 @@ class AdminPresenter extends APresenter
                 @array_map("unlink", glob(CACHE . "/*.tmp"));
                 @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
                 clearstatcache();
-                $this->CloudflarePurgeCache($this->getCfg("cf"));
+                if (!LOCALHOST) {
+                    // purge cache if run on server only
+                    $this->CloudflarePurgeCache($this->getCfg("cf"));
+                }
                 $this->checkLocales();
             } finally {
                 $lock->release();

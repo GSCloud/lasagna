@@ -19,7 +19,7 @@ error_reporting(E_ALL);
 @ini_set("default_socket_timeout", 15);
 @ini_set("display_errors", true);
 
-// constants (in SPECIFIC ORDER !!!)
+// CONSTANTS (in SPECIFIC ORDER !!!)
 
 /** @const Global timer start */
 define("TESSERACT_START", ((float) $usec + (float) $sec));
@@ -52,7 +52,7 @@ define("CLI", (bool) (PHP_SAPI == "cli"));
 /** @const True if running server locally */
 define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
 
-// Composer
+// COMPOSER
 require_once ROOT . "/vendor/autoload.php";
 
 /**
@@ -96,7 +96,7 @@ function check_folder($folder, $writable = false)
     }
 }
 
-// sanity checks
+// SANITY CHECKS
 check_file(CONFIG);
 check_file(ROOT . "/VERSION");
 check_folder(CACHE, true);
@@ -106,7 +106,7 @@ check_folder(TEMP, true);
 check_folder(TEMPLATES);
 check_folder(WWW);
 
-// configuration
+// CONFIGURATION
 $cfg = @Neon::decode(@file_get_contents(CONFIG));
 if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
@@ -114,11 +114,11 @@ if (file_exists(CONFIG_PRIVATE)) {
 date_default_timezone_set((string) ($cfg["date_default_timezone"] ?? "Europe/Prague"));
 
 /**
- * check variables
+ * Check variables
  *
  * @param array $arr array by reference
- * @param string $key array key
- * @param mixed $default default value
+ * @param string $key key
+ * @param mixed $default default value (optional)
  * @return void
  */
 function check_var(&$arr, $key, $default = null)
@@ -135,25 +135,26 @@ function check_var(&$arr, $key, $default = null)
     }
 }
 
-// sanity checks
+// SANITY CHECKS
 check_var($cfg, "app", "app");
 check_var($cfg, "canonical_url");
 check_var($cfg, "minify", false);
 
-// DEBUGGER
+// DEBUGGER CONFIGURATION
 if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
     if (($cfg["dbg"] ?? null) === false) {
-        defined("DEBUG") || define("DEBUG", false); // FORCE DISABLE
+        defined("DEBUG") || define("DEBUG", false); // DISABLED via configuration
     }
-    defined("DEBUG") || define("DEBUG", true); // ENABLE for localhost
+    defined("DEBUG") || define("DEBUG", true); // ENABLED for localhost
 }
 if (CLI === true) {
-    defined("DEBUG") || define("DEBUG", false); // DISABLE for CLI
+    defined("DEBUG") || define("DEBUG", false); // DISABLED for CLI
 }
 if (isset($_SERVER["HTTP_USER_AGENT"]) && strpos($_SERVER["HTTP_USER_AGENT"], "curl") !== false) {
     defined("DEBUG") || define("DEBUG", false); // DISABLE for curl
 }
-defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false)); // configuration
+defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false)); // set via configuration or DISABLED
+
 if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::$logSeverity = 15; // https://www.php.net/manual/en/errorfunc.constants.php
     Debugger::$maxDepth = (int) ($cfg["DEBUG_MAX_DEPTH"] ?? 5);
@@ -176,7 +177,7 @@ if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::timer("RUNNING"); // start measuring performance
 }
 
-// data population
+// DATA POPULATION
 $base58 = new \Tuupola\Base58;
 $data = (array) $cfg;
 $data["cfg"] = $cfg;
@@ -186,7 +187,7 @@ $data["REVISIONS"] = (int) trim(@file_get_contents(ROOT . "/REVISIONS") ?? "0", 
 $data["DATA_VERSION"] = null;
 $data["cdn"] = $data["CDN"] = "/cdn-assets/$version";
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
-$data["base"] = $data["BASE"] = ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/";
+$data["base"] = $data["BASE"] = $host ? (($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/") : "";
 $data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";
 $data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
 $data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
