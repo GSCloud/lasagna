@@ -381,9 +381,10 @@
         $("#a_summernote").text("{{ l.a_save_all }}");
         $("#a_summernote").unbind("click");
 
-        // SAVE ALL
+        // save all
         $("#a_summernote").click(function () {
-          if (w.GSC.offline) {  // we are offline
+          if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#summer_ping", false);
             return;
           }
@@ -424,6 +425,7 @@
           });
         });
 
+        // SaveAll button function
         var SaveAllButton = function (context) {
           var ui = $.summernote.ui;
           var button = ui.button({
@@ -435,69 +437,7 @@
           return button.render();
         }
 
-        // contents: '<i class="fas fa-hammer"></i> {{ l.a_fix_lang }}',
-/*
-        // Summernote plugin
-        (function (factory) {
-          if (typeof define === 'function' && define.amd) {
-            define(['jquery'], factory);
-          } else if (typeof module === 'object' && module.exports) {
-            module.exports = factory(require('jquery'));
-          } else {
-            factory(window.jQuery);
-          }
-        }(function ($) {
-          $.extend($.summernote.plugins, {
-            'hello': function (context) {
-              var self = this;
-              var ui = $.summernote.ui;
-
-              // add hello button
-              context.memo('button.hello', function () {
-                // create button
-                var button = ui.button({
-                  contents: '<i class="fa fa-child"/> Hello',
-                  tooltip: 'hello',
-                  click: function () {
-                    self.$panel.show();
-                    self.$panel.hide(500);
-                    // invoke insertText method with 'hello' on editor module.
-                    context.invoke('editor.insertText', 'hello');
-                  },
-                });
-
-                // create jQuery object from button instance.
-                var $hello = button.render();
-                return $hello;
-              });
-
-              this.events = {
-                'summernote.init': function (we, e) {
-                  console.log('summernote initialized', we, e);
-                },
-              };
-
-              this.initialize = function () {
-                this.$panel = $('<div class="hello-panel"/>').css({
-                  position: 'absolute',
-                  width: 100,
-                  height: 100,
-                  left: '50%',
-                  top: '50%',
-                  background: 'red',
-                }).show();
-                this.$panel.appendTo('body');
-              };
-
-              this.destroy = function () {
-                this.$panel.remove();
-                this.$panel = null;
-              };
-            },
-          });
-        }));
-*/
-
+        // Summernote configuration
         $(".summernote").summernote({
           codeviewFilter: true,
           codeviewIframeFilter: true,
@@ -517,7 +457,7 @@
             'p', 'blockquote', 'pre', 'h2', 'h3', 'h4', 'h5', 'h6'
           ],
           fontSizes: [
-            '8', '9', '10', '11', '12', '14', '16', '18', '24', '36', '48' , '64', '82', '100', '150'
+            '8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '36', '48' , '64', '82', '100', '130', '150', '200'
           ],
           toolbar: [
             ['style', ['style', 'add-text-tags', 'addclass']],
@@ -553,7 +493,7 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI bindings");
 
-        // motyle :)
+        // motýle :)
         if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(200);
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {
@@ -562,6 +502,7 @@
           })
         });
 
+        // setup profiles
         var profiles = [];
         var params = new window.URLSearchParams(window.location.search);
         var profile = params.get("profile");
@@ -578,6 +519,7 @@
         $("#SiteSelect").formSelect();
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
 
+        // web profile select
         $("#SiteSelect").change(function () {
           if (!$("#SiteSelect").val()) return;
           var profile = $("#SiteSelect").val().trim();
@@ -585,8 +527,10 @@
           window.location.href = window.location.pathname + "?profile=" + profile;
         });
 
+        // remote fn select
         $("#RemoteFnSelect").change(function () {
           if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#sectok_ping", false);
             return;
           }
@@ -604,19 +548,23 @@
           });
         });
 
+        // update Google data
         $("#a_update").click(function () {
           if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#csv_ping", false);
             return;
           }
           $("#a_update").attr("disabled", "disabled");
           GSC.ShowLoader("#a_update_info");
-          setTimeout(function(){$("#a_update").removeAttr("disabled")}, 20E3);
+          setTimeout(function(){$("#a_update").removeAttr("disabled")}, 30E3);
           $.post("/admin/CoreUpdate");
         });
 
+        // show PS Insights
         $("#a_ps_insights").click(function () {
           if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#psi_ping", false);
             return;
           }
@@ -625,10 +573,12 @@
           GSC.GetPSInsights();
         });
 
+        // invoke Summernote editor
         $("#a_summernote").click(function () {
           GSC.ReadArticles(function(){GSC.DeploySummernote()});
         });
 
+        // toggle emoji panel
         $("#a_emoji").click(function () {
           if (!GSC.emojicc) {
             var splitter = new GraphemeSplitter();
@@ -636,7 +586,6 @@
             var arr = graphemes.map(function (x) {
               return '<span class="ccemoji">' + x + '</span>';
             });
-            console.log("Emojis and symbols: " + arr.length);
             $("#emojis").html(arr.join(""));
             $(".ccemoji").click(function () {
               var x = $(this).text();
@@ -648,8 +597,10 @@
           $("#emojis").toggle("fast");
         });
 
+        // flush cache
         $("#a_flush").click(function () {
           if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#csv_ping", false);
             return;
           }
@@ -659,24 +610,28 @@
           window.location.reload(true);
         });
 
+        // get auth code
         $("#a_getcode").click(function () {
           if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#csv_ping", false);
             return;
           }
           $.post("/admin/CreateAuthCode", function(data) {
             GSC.CopyClipboard(data.data.hash);
-            M.toast({html: data.data.hash + " ❤"});
+            M.toast({html: "code in clipboard: [" + data.data.hash + "] ❤"});
           });
         });
 
+        // delete auth code
         $("#a_delcode").click(function () {
           if (w.GSC.offline) {
+            // offline
             GSC.PingDot("#csv_ping", false);
             return;
           }
           $.post("/admin/DeleteAuthCode", function(data) {
-            M.toast({html: "💣"});
+            M.toast({html: "code deleted ⛔"});
           });
         });
 
@@ -695,19 +650,22 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("CSV timer");
         if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
-        setInterval(function(){window.GSC.GetCsvInfo()}, 2500);
+        setInterval(function(){window.GSC.GetCsvInfo()}, 2000);
       });
 
-      // admin UI
+      // Admin UI
       w.GSC.init.push(function () {
-        w.GSC.names.push("admin UI");
+        w.GSC.names.push("Admin UI");
         GSC.AdminUI();
       });
 
+      // PS Insights
+      w.GSC.init.push(function () {
+        w.GSC.names.push("Update PS Insights cache");
+        $.get("/admin/GetPSInsights?" + Date.now());
+      });
+
     }
-
-  $.get("/admin/GetPSInsights?" + Date.now());
-
   })(window, document);
 
 </script>
