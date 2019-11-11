@@ -26,6 +26,20 @@ swjs:
   path: /sw.js
   presenter: core
 
+androidjs:
+  api: true
+  api_description: "Get Android JS"
+  api_info: "Returns: version SHA256 hash (string) + Android JS (string)."
+  path: /android/js
+  presenter: core
+
+androidcss:
+  api: true
+  api_description: "Get Android CSS"
+  api_info: "Returns: version SHA256 hash (string) + Android CSS (string)."
+  path: /android/css
+  presenter: core
+
 cs_article:
   path: '/cs/id/[**:trailing]'
   language: cs

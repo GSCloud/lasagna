@@ -93,6 +93,40 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
                 break;
 
+            case "androidjs":
+                $file = WWW . "/js/android-app.js";
+                if (\file_exists($file)) {
+                    $content = \file_get_contents($file);
+                    $content = trim(preg_replace('/\s+/', ' ', $content));
+                    $version = hash("sha256", $content);
+                } else {
+                    $content = null;
+                    $version = null;
+                }
+                $d = [
+                    "version" => $version,
+                    "js" => $content,
+                ];
+                return $this->writeJsonData($d, $extras);
+                break;
+
+            case "androidcss":
+                $file = WWW . "/css/android.css";
+                if (\file_exists($file)) {
+                    $content = \file_get_contents($file);
+                    $content = trim(preg_replace('/\s+/', ' ', $content));
+                    $version = hash("sha256", $content);
+                } else {
+                    $content = null;
+                    $version = null;
+                }
+                $d = [
+                    "version" => $version,
+                    "css" => $content,
+                ];
+                return $this->writeJsonData($d, $extras);
+                break;
+
             case "GetCoreVersion":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
