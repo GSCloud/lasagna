@@ -94,8 +94,7 @@ foreach ($cache_profiles as $k => $v) {
     ]);
     // set "redis" cache configurations
     Cache::setConfig($k, [
-        //"className" => "Redis",
-        "className" => "File",
+        "className" => "Redis",
         "database" => 0,
         "duration" => $v,
         "host" => "127.0.0.1",

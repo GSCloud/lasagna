@@ -16,7 +16,7 @@ list($usec, $sec) = explode(" ", microtime());
 ob_start();
 error_reporting(E_ALL);
 @ini_set("auto_detect_line_endings", true);
-@ini_set("default_socket_timeout", 15);
+@ini_set("default_socket_timeout", 10);
 @ini_set("display_errors", true);
 
 // CONSTANTS (in SPECIFIC ORDER !!!)
@@ -172,6 +172,7 @@ if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
             "${debug_cookie}@${address}", CACHE, (string) ($cfg["DEBUG_EMAIL"] ?? "")
         );
     } else {
+        //Debugger::enable(Debugger::DEVELOPMENT, CACHE);
         Debugger::enable(Debugger::DETECT, CACHE);
     }
     Debugger::timer("RUNNING"); // start measuring performance
