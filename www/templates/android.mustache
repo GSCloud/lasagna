@@ -74,9 +74,67 @@ html{min-width:320px!important}
 })(window);
 
 </script>
-<script src="js/android-app.js"></script>
 </head>
 <body>
+<script>
+
+// append js
+if (localStorage && localStorage["app_js"]) {
+  var el = document.createElement("script");
+  el.type = "text/javascript";
+  el.innerHTML = localStorage["app_js"];
+  document.getElementsByTagName('body')[0].append(el);
+}
+
+// append css
+if (localStorage && localStorage["app_css"]) {
+  var el = document.createElement("style");
+  el.type = "text/css";
+  el.innerHTML = localStorage["app_css"];
+  document.getElementsByTagName('body')[0].append(el);
+}
+
+$.get("https://andini.gscloud.cz/android/js?" + Date.now(), function(data) {
+  if (data.data.version) {
+    var app_version = data.data.version;
+    if (data.data.js) {
+      var app_js = data.data.js;
+    }
+  }
+  if (app_version && localStorage && localStorage["app_js_version"]) {
+    if (localStorage["app_js_version"] != app_version) {
+      localStorage["app_js_version"] = app_version;
+      localStorage["app_js"] = app_js;
+      window.location.reload(1);
+    }
+  } else {
+      localStorage["app_js_version"] = app_version;
+      localStorage["app_js"] = app_js;
+      window.location.reload(1);
+  }
+});
+
+$.get("https://andini.gscloud.cz/android/css?" + Date.now(), function(data) {
+  if (data.data.version) {
+    var app_version = data.data.version;
+    if (data.data.css) {
+      var app_css = data.data.css;
+    }
+  }
+  if (app_version && localStorage && localStorage["app_css_version"]) {
+    if (localStorage["app_css_version"] != app_version) {
+      localStorage["app_css_version"] = app_version;
+      localStorage["app_css"] = app_css;
+      window.location.reload(1);
+    }
+  } else {
+      localStorage["app_css_version"] = app_version;
+      localStorage["app_css"] = app_css;
+      window.location.reload(1);
+  }
+});
+
+</script>
 
 {{>android_functions}}
 {{>android}}
@@ -88,8 +146,10 @@ window.addEventListener("load", function () {
     $(function () {
       console.log('M init ...');
       M.AutoInit();
+
       console.log('GSC init ...');
       GSC.AutoInit(true); // send true to debug
+
     });
   })($, window);
 });

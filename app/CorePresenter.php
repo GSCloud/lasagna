@@ -97,7 +97,7 @@ class CorePresenter extends APresenter
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
                     $content = \file_get_contents($file);
-                    $content = trim(preg_replace('/\s+/', ' ', $content));
+                    //$content = trim(preg_replace('/\s+/', ' ', $content));
                     $version = hash("sha256", $content);
                 } else {
                     $content = null;
@@ -114,7 +114,7 @@ class CorePresenter extends APresenter
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
                     $content = \file_get_contents($file);
-                    $content = trim(preg_replace('/\s+/', ' ', $content));
+                    //$content = trim(preg_replace('/\s+/', ' ', $content));
                     $version = hash("sha256", $content);
                 } else {
                     $content = null;
