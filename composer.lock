@@ -1195,16 +1195,16 @@
         },
         {
             "name": "league/oauth2-google",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-google.git",
-                "reference": "3290273029f7cc2a468aae68bad184479a23b9d2"
+                "reference": "cfe9b0ae69eb5dbac64a282f04410b731f6b9c04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/3290273029f7cc2a468aae68bad184479a23b9d2",
-                "reference": "3290273029f7cc2a468aae68bad184479a23b9d2",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/cfe9b0ae69eb5dbac64a282f04410b731f6b9c04",
+                "reference": "cfe9b0ae69eb5dbac64a282f04410b731f6b9c04",
                 "shasum": ""
             },
             "require": {
@@ -1242,7 +1242,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2018-12-28T16:18:33+00:00"
+            "time": "2019-11-16T14:11:06+00:00"
         },
         {
             "name": "monolog/monolog",
