@@ -84,6 +84,7 @@ $cache_profiles = array_replace([
 );
 
 foreach ($cache_profiles as $k => $v) {
+
     // set "file" fallbacks
     Cache::setConfig("file_{$k}", [
         "className" => "File",
@@ -92,14 +93,15 @@ foreach ($cache_profiles as $k => $v) {
         "path" => CACHE,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
     ]);
-    // set "redis" cache configurations
+
+    // "redis" cache configurations
     Cache::setConfig($k, [
         "className" => "Redis",
         "database" => 0,
         "duration" => $v,
         "host" => "127.0.0.1",
         "persistent" => true,
-        "port" => 6379,
+        "port" => 6377, // note special port 6377!!!
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
         "timeout" => 0.1,
         'fallback' => "file_{$k}", // fallback profile
