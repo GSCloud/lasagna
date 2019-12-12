@@ -75,7 +75,7 @@ html{min-width:320px!important}
 
 </script>
 </head>
-<body>
+<body style="display:none">
 <script>
 
 // append js
@@ -94,8 +94,30 @@ if (localStorage && localStorage["app_css"]) {
   document.getElementsByTagName('body')[0].append(el);
 }
 
-$.get("https://andini.gscloud.cz/android/js?" + Date.now(), function(data) {
-  if (data.data.version) {
+// build vars
+var dbg = parseInt("{{ dbg }}");
+var app_version = parseInt("{{ VERSION }}");
+var temp_lang = "{{ lang }}";
+if (parseInt("{{ loadlocal }}")) {
+  var update_url = "{{ android_updateurl_local }}";
+} else {
+  var update_url = "{{ android_updateurl_remote }}";
+}
+if (dbg) console.log("update URL: " + update_url);
+// consistency check
+if (localStorage && localStorage["app_version"]) {
+  if (localStorage["app_version"] != app_version) {
+    localStorage.clear();
+  }
+} else {
+  localStorage.clear();
+}
+localStorage["app_version"] = app_version;
+
+// JS update
+$.get(update_url + "android/js?" + Date.now(), function(data) {
+  if (dbg) console.log("update JS", data);
+  if (data.data && data.data.version) {
     var app_version = data.data.version;
     if (data.data.js) {
       var app_js = data.data.js;
@@ -114,8 +136,10 @@ $.get("https://andini.gscloud.cz/android/js?" + Date.now(), function(data) {
   }
 });
 
-$.get("https://andini.gscloud.cz/android/css?" + Date.now(), function(data) {
-  if (data.data.version) {
+// CSS update
+$.get(update_url + "android/css?" + Date.now(), function(data) {
+  if (dbg) console.log("update CSS", data);
+  if (data.data && data.data.version) {
     var app_version = data.data.version;
     if (data.data.css) {
       var app_css = data.data.css;
@@ -140,20 +164,18 @@ $.get("https://andini.gscloud.cz/android/css?" + Date.now(), function(data) {
 {{>android}}
 
 <script>
-
 window.addEventListener("load", function () {
   (function ($, undefined) {
     $(function () {
       console.log('M init ...');
       M.AutoInit();
-
       console.log('GSC init ...');
-      GSC.AutoInit(true); // send true to debug
-
+      // "true" to debug
+      GSC.AutoInit(true);
     });
   })($, window);
 });
-
 </script>
+
 </body>
 </html>
