@@ -55,6 +55,7 @@ function logger($message, $severity = Logger::INFO)
     if (empty($message) || is_null(GCP_PROJECTID) || is_null(GCP_KEYS)) {
         return;
     }
+
     if (ob_get_level()) {
         ob_end_clean();
     }
@@ -202,7 +203,7 @@ if (CLI) {
     exit;
 }
 
-// ROUTING
+// PROCESS ROUTING
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 
@@ -231,7 +232,9 @@ if ($router[$view]["sethl"] ?? false) {
 // redirect
 if ($router[$view]["redirect"] ?? false) {
     $r = $router[$view]["redirect"];
-    ob_end_clean();
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
     header("Location: " . $r, true, 303);
     exit;
 }
@@ -273,7 +276,7 @@ header(implode(" ", [
     "'self';",
 ]));
 
-// PRESENTER
+// SINGLETON CLASS
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
 \Tracy\Debugger::timer("PROCESSING");
@@ -290,8 +293,10 @@ $app->setData($data);
 header("X-Country: $country");
 header("X-Runtime: $time1 msec.");
 header("X-Processing: $time2 msec.");
+
+// ANALYTICS
 if (method_exists($app, "SendAnalytics")) {
-    $app->SendAnalytics(); // send Google Analytics
+    $app->SendAnalytics();
 }
 
 // OUTPUT
@@ -299,11 +304,11 @@ echo $data["output"] ?? "";
 
 // DEBUG OUTPUT
 if (DEBUG) {
-    // delete private information
+    // remove private information
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);
     unset($data["google_drive_backup "]);
     bdump($data, '$data');
+    //bdump($app->getIdentity(), "identity");
 }
-exit;
