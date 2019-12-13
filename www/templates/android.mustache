@@ -96,7 +96,7 @@ if (localStorage && localStorage["app_css"]) {
 
 // build vars
 var dbg = parseInt("{{ dbg }}");
-var app_version = parseInt("{{ VERSION }}");
+var app_version = "{{ VERSION }}";
 var temp_lang = "{{ lang }}";
 if (parseInt("{{ loadlocal }}")) {
   var update_url = "{{ android_updateurl_local }}";
@@ -104,6 +104,7 @@ if (parseInt("{{ loadlocal }}")) {
   var update_url = "{{ android_updateurl_remote }}";
 }
 if (dbg) console.log("update URL: " + update_url);
+
 // consistency check
 if (localStorage && localStorage["app_version"]) {
   if (localStorage["app_version"] != app_version) {
@@ -119,20 +120,25 @@ $.get(update_url + "android/js?" + Date.now(), function(data) {
   if (dbg) console.log("update JS", data);
   if (data.data && data.data.version) {
     var app_version = data.data.version;
+    var app_js = "";
     if (data.data.js) {
-      var app_js = data.data.js;
+      app_js = data.data.js;
     }
   }
   if (app_version && localStorage && localStorage["app_js_version"]) {
     if (localStorage["app_js_version"] != app_version) {
-      localStorage["app_js_version"] = app_version;
-      localStorage["app_js"] = app_js;
-      window.location.reload(1);
+      if (app_version) {
+        localStorage["app_js_version"] = app_version;
+        localStorage["app_js"] = app_js;
+        window.location.reload(1);
+      }
     }
   } else {
-      localStorage["app_js_version"] = app_version;
-      localStorage["app_js"] = app_js;
-      window.location.reload(1);
+      if (app_version) {
+        localStorage["app_js_version"] = app_version;
+        localStorage["app_js"] = app_js;
+        window.location.reload(1);
+      }
   }
 });
 
@@ -141,20 +147,25 @@ $.get(update_url + "android/css?" + Date.now(), function(data) {
   if (dbg) console.log("update CSS", data);
   if (data.data && data.data.version) {
     var app_version = data.data.version;
+    var app_css = "";
     if (data.data.css) {
-      var app_css = data.data.css;
+      app_css = data.data.css;
     }
   }
   if (app_version && localStorage && localStorage["app_css_version"]) {
     if (localStorage["app_css_version"] != app_version) {
-      localStorage["app_css_version"] = app_version;
-      localStorage["app_css"] = app_css;
-      window.location.reload(1);
+      if (app_version) {
+        localStorage["app_css_version"] = app_version;
+        localStorage["app_css"] = app_css;
+        window.location.reload(1);
+      }
     }
   } else {
-      localStorage["app_css_version"] = app_version;
-      localStorage["app_css"] = app_css;
-      window.location.reload(1);
+      if (app_version) {
+        localStorage["app_css_version"] = app_version;
+        localStorage["app_css"] = app_css;
+        window.location.reload(1);
+      }
   }
 });
 
