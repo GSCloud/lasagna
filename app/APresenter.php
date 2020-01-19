@@ -1511,19 +1511,16 @@ abstract class APresenter implements IPresenter
         $code = 200;
         $out["timestamp"] = time();
         $out["version"] = (string) ($this->getCfg("version") ?? "v1");
-
-        // locale for error messages
+        // locales
+        $locale = [];
         if (is_array($this->getCfg("locales"))) {
             $locale = $this->getLocale("en");
-        } else {
-            $locale = [];
         }
-
-        // parse last JSON decoding error
+        // JSON decoding error (last parse)
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
                 $code = 200;
-                $msg = "OK";
+                $msg = "DATA OK";
                 break;
             case JSON_ERROR_DEPTH:
                 $code = 400;
@@ -1552,7 +1549,7 @@ abstract class APresenter implements IPresenter
         }
         if (is_null($data)) {
             $code = 500;
-            $msg = $locale["server_error_info_500"] ?? "Internal server error.";
+            $msg = $locale["server_error_info_500"] ?? "Internal server error. Data is null.";
         }
         if (is_string($data)) {
             $data = [$data];
@@ -1561,20 +1558,25 @@ abstract class APresenter implements IPresenter
             $code = $data;
             switch ($data) {
                 case 304:
-                    $msg = $locale["server_error_info_304"] ?? "Not modified.";
+                    $msg = "Not modified.";
                     break;
                 case 400:
-                    $msg = $locale["server_error_info_400"] ?? "Bad request.";
+                    $msg = "Bad request.";
+                    break;
+                case 401:
+                    $msg = "Unauthorized.";
+                    break;
+                case 403:
+                    $msg = "Forbidden.";
                     break;
                 case 404:
-                    $msg = $locale["server_error_info_404"] ?? "Not found.";
+                    $msg = "Not found.";
                     break;
                 default:
-                    $msg = "Unknown error.";
+                    $msg = "Unknown error >:{";
             }
             $data = null;
         }
-
         // output array
         $this->setHeaderJson();
         $out["code"] = (int) $code;
