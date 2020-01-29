@@ -17,8 +17,8 @@ gcp_project_id: "gscloudcz-163314"
 # Google OAuth 2.0
 goauth_origin: "https://lasagna.gscloud.cz"
 goauth_redirect: "https://lasagna.gscloud.cz/login"
-local_goauth_origin: "http://localhost:8007"
-local_goauth_redirect: "http://localhost:8007/login"
+local_goauth_origin: "http://localhost:8009"
+local_goauth_redirect: "http://localhost:8009/login"
 
 # Google
 google: [
