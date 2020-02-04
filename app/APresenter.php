@@ -1117,15 +1117,12 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Google OAuth 2.0 logout
-     *
+     * Logout
      */
     public function logout()
     {
-        header('Clear-Site-Data: "cache", "cookies", "storage"');
-        $nonce = "?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 8);
-        $this->clearCookie("identity");
-        $this->setLocation("/${nonce}");
+        header('Clear-Site-Data: "cookies"');
+        $this->setIdentity([])->clearCookie("identity")->setLocation();
         exit;
     }
 
@@ -1503,6 +1500,7 @@ abstract class APresenter implements IPresenter
      *
      * @param array $data integer error code / array of data
      * @param array $headers array of extra data (optional)
+     * @param mixed $switches JSON encoder switches
      * @return object Singleton instance
      */
     public function writeJsonData($data, $headers = [], $switches = null)
@@ -1511,12 +1509,14 @@ abstract class APresenter implements IPresenter
         $code = 200;
         $out["timestamp"] = time();
         $out["version"] = (string) ($this->getCfg("version") ?? "v1");
+
         // locales
         $locale = [];
         if (is_array($this->getCfg("locales"))) {
             $locale = $this->getLocale("en");
         }
-        // JSON decoding error (last parse)
+
+        // last decoding error
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
                 $code = 200;
@@ -1544,12 +1544,12 @@ abstract class APresenter implements IPresenter
                 break;
             default:
                 $code = 500;
-                $msg = $locale["server_error_info_500"] ?? "Internal server error.";
+                $msg = "Internal server error.";
                 break;
         }
         if (is_null($data)) {
             $code = 500;
-            $msg = $locale["server_error_info_500"] ?? "Internal server error. Data is null.";
+            $msg = "Internal server error. Data is null.";
         }
         if (is_string($data)) {
             $data = [$data];
@@ -1577,15 +1577,17 @@ abstract class APresenter implements IPresenter
             }
             $data = null;
         }
+
         // output array
         $this->setHeaderJson();
-        $out["code"] = (int) $code;
-        $out["message"] = $msg;
         list($usec, $sec) = explode(" ", microtime());
         $stop = (float) $usec + (float) $sec;
+        $out["code"] = (int) $code;
+        $out["message"] = $msg;
         $out["processing_time"] = round(((float) $stop - (float) TESSERACT_START) * 1000, 2) . " msec.";
         $out = array_merge_recursive($out, $headers);
         $out["data"] = $data ?? null;
+
         if (is_null($switches)) {
             return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT));
         }

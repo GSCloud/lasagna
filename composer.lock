@@ -300,16 +300,16 @@
         },
         {
             "name": "cloudflare/sdk",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cloudflare/cloudflare-php.git",
-                "reference": "9b9738910d927031fe34924261f4d76a63fcd322"
+                "reference": "694342f718bc6bfb83cc1745812a52727e33e227"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cloudflare/cloudflare-php/zipball/9b9738910d927031fe34924261f4d76a63fcd322",
-                "reference": "9b9738910d927031fe34924261f4d76a63fcd322",
+                "url": "https://api.github.com/repos/cloudflare/cloudflare-php/zipball/694342f718bc6bfb83cc1745812a52727e33e227",
+                "reference": "694342f718bc6bfb83cc1745812a52727e33e227",
                 "shasum": ""
             },
             "require": {
@@ -340,7 +340,7 @@
                 }
             ],
             "description": "PHP binding for v4 of the Cloudflare Client API.",
-            "time": "2019-06-07T15:34:38+00:00"
+            "time": "2020-02-03T17:23:45+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -728,16 +728,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.11.2",
+            "version": "v3.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "0864882396746542ead01fc002e1644b9490dbe8"
+                "reference": "9ed032dd1d8f344220dc8e49ddac900ed512b109"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/0864882396746542ead01fc002e1644b9490dbe8",
-                "reference": "0864882396746542ead01fc002e1644b9490dbe8",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/9ed032dd1d8f344220dc8e49ddac900ed512b109",
+                "reference": "9ed032dd1d8f344220dc8e49ddac900ed512b109",
                 "shasum": ""
             },
             "require": {
@@ -765,7 +765,7 @@
             "keywords": [
                 "proto"
             ],
-            "time": "2019-12-14T00:45:36+00:00"
+            "time": "2020-02-03T21:52:12+00:00"
         },
         {
             "name": "grpc/grpc",
