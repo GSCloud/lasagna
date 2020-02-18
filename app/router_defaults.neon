@@ -1,17 +1,21 @@
 defaults:
   api: false
   api_description: ""
-  api_info: ""
   api_example: []
+  api_info: ""
   assert_httpcode: 200
   assert_json: false
   assert_values: []
+  deprecated: false
+  finished: false
   language: cs
   method: GET
   presenter: home
+  private: false
   sethl: false
   sitemap: false
   template: index
+  use_key: false
   view: home
 
 manifest:
@@ -50,11 +54,11 @@ en_article:
   language: en
   presenter: article
 
-ShowAPIs:
+api:
   path: /api
   api: true
-  api_description: "Show public REST API list"
-  api_info: "Exactly this page :)"
+  api_description: "Show REST API dashboard"
+  api_info: "This page, exactly! :)"
   presenter: core
 
 GetCoreVersion:
@@ -90,7 +94,7 @@ ReadArticles:
   path: '/ReadArticles/[a:profile]/[a:hash]'
   api: true
   api_description: "Get articles data"
-  api_info: "Parameters:\n<b>[a:profile]</b> - alphanumeric profile name,\n<b>[a:hash]</b> - alphanumeric URL stub hash.\n\nReturns: HTML data (JSON) + checksum hash (string)."
+  api_info: "Parameters:\n<b><a:profile></b> - alphanumeric profile name,\n<b><a:hash></b> - alphanumeric URL stub hash.\n\nReturns: HTML data (JSON) + checksum hash (string)."
   api_example: [
     "ReadArticles/default/3b8b91c75627bee566dcb88f4805901b20a3eab2520bcff8d26c87157a035026"
   ]
@@ -101,7 +105,7 @@ ReadArticles:
 GetError:
   api: true
   api_description: "Get error page"
-  api_info: "Parameters:\n<b>[a:code]</b> - numeric error code\n\nReturns: HTML page."
+  api_info: "Parameters:\n<b><a:code></b> - numeric error code\n\nReturns: HTML page."
   path: '/err/[a:code]'
   presenter: error
   api_example: [

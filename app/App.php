@@ -22,21 +22,28 @@ defined("CACHE") || die($x);
 defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
-// CONSTANTS (in SPECIFIC ORDER !!!)
-
 /** @const Cache prefix */
 defined("CACHEPREFIX") || define("CACHEPREFIX",
-    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "NA") . "_");
-/** @const Domain name, extracted from SERVER array */
+    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "") . "_");
+
+/** @const Domain name, extracted from $_SERVER array */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
-/** @const Project name, default LASAGNA */
-defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "Tesseract"));
-/** @const Server name, extracted from SERVER array */
+
+/** @const Server name, extracted from $_SERVER array */
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
+
+/** @const Project name, default "LASAGNA" */
+defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
+
+/** @const Application name, default "app" */
+defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
+
 /** @const Monolog filename, full path */
 defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . ".log");
+
 /** @const Google Cloud Platform project ID */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
+
 /** @const Google Cloud Platform JSON auth keys */
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
 if (GCP_KEYS) {
@@ -83,6 +90,7 @@ $cache_profiles = array_replace([
     "page" => "+3 minutes",
     "second" => "+1 seconds",
     "tenseconds" => "+10 seconds",
+    "tenminutes" => "+10 minutes",
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );
@@ -95,7 +103,7 @@ foreach ($cache_profiles as $k => $v) {
         "duration" => $v,
         "lock" => true,
         "path" => CACHE,
-        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
+        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
     ]);
 
     // "redis" cache configurations
@@ -105,8 +113,8 @@ foreach ($cache_profiles as $k => $v) {
         "duration" => $v,
         "host" => "127.0.0.1",
         "persistent" => true,
-        "port" => 6377, // note special port 6377!!!
-        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_",
+        "port" => 6377, // SPECIAL PORT 6377 !!!
+        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
         "timeout" => 0.1,
         'fallback' => "file_{$k}", // fallback profile
     ]);
@@ -135,13 +143,13 @@ $data["multisite_profiles"] = $multisite_profiles;
 $data["multisite_names"] = $multisite_names;
 $data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
-// ROUTING TABLES
-$router = [];
+// ROUTING CONFIGURATION
 $routes = [
     APP . "/router_defaults.neon",
     APP . "/router_admin.neon",
     APP . "/router.neon",
 ];
+$router = [];
 foreach ($routes as $r) {
     if (is_callable("check_file")) {
         check_file($r);
@@ -190,7 +198,7 @@ foreach ($presenter as $k => $v) {
 $data["presenter"] = $presenter;
 $data["router"] = $router;
 
-// CLI
+// CLI HANDLER
 if (CLI) {
     if (ob_get_level()) {
         ob_end_clean();
@@ -229,7 +237,7 @@ if ($router[$view]["sethl"] ?? false) {
     }
 }
 
-// redirect
+// PROCESS REDIRECTS
 if ($router[$view]["redirect"] ?? false) {
     $r = $router[$view]["redirect"];
     if (ob_get_level()) {
@@ -283,11 +291,12 @@ $controller = "\\GSC\\${p}";
 $app = $controller::getInstance()->setData($data)->process();
 $data = $app->getData();
 
-// ANALYTICS
+// ANALYTICS DATA
+$events = null;
+$data = $app->getData();
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "");
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
-$app->setData($data);
 
 // FINAL HEADERS
 header("X-Country: $country");
@@ -296,7 +305,7 @@ header("X-Processing: $time2 msec.");
 
 // ANALYTICS
 if (method_exists($app, "SendAnalytics")) {
-    $app->SendAnalytics();
+    $app->setData($data)->SendAnalytics();
 }
 
 // OUTPUT
@@ -308,7 +317,7 @@ if (DEBUG) {
     unset($data["cf"]);
     unset($data["goauth_secret"]);
     unset($data["goauth_client_id"]);
-    unset($data["google_drive_backup "]);
+    unset($data["google_drive_backup"]);
     bdump($data, '$data');
-    //bdump($app->getIdentity(), "identity");
+    bdump($app->getIdentity(), "identity");
 }

@@ -224,30 +224,28 @@
 
       <!-- icon buttons -->
       <h4 class="center">
-        <a rel="noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
-        <a rel="noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
           data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i
             class="fas fa-server"></i></a>
-        {{#l.a_lasagna_manual_disable}}
-        <a rel="noopener" target="_blank" class="tooltipped grey-text text" data-position="top"
-          data-tooltip="{{ l.a_lasagna_manual_ttip }} &mdash; {{ l.a_notavailable_ttip }}"><i
-            class="fas fa-dna"></i></a>
-        {{/l.a_lasagna_manual_disable}}
-        {{^l.a_lasagna_manual_disable}}
-        <a rel="noopener" target="_blank" class="tooltipped red-text text" data-position="top"
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped red-text text" data-position="top"
           data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}"><i
             class="fas fa-dna"></i></a>
-        {{/l.a_lasagna_manual_disable}}
-        <a rel="noopener" target="_blank" class="tooltipped white-text text" data-position="top"
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped white-text text" data-position="top"
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i
             class="fas fa-clone"></i></a>
         {{#google_drive_backup}}
-        <a rel="noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i
             class="fas fa-warehouse"></i></a>
         {{/google_drive_backup}}
       </h4>
+      <!-- external links -->
+      {{#external_links}}
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped blue white-text" data-position="top"
+          data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
+      {{/external_links}}
     </div>
 
   </div>

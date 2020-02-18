@@ -647,7 +647,7 @@ abstract class APresenter implements IPresenter
             [
                 $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
                 $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
-                $_SERVER["HTTP_USER_AGENT"] ?? "N/A",
+                $_SERVER["HTTP_USER_AGENT"] ?? "UA",
                 $this->getIP(),
             ]),
             " ", "_");
