@@ -2016,16 +2016,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.23",
+            "version": "2.0.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "c78eb5058d5bb1a183133c36d4ba5b6675dfa099"
+                "reference": "40998159a0907cc523e1f2d1904d45765613a617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c78eb5058d5bb1a183133c36d4ba5b6675dfa099",
-                "reference": "c78eb5058d5bb1a183133c36d4ba5b6675dfa099",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/40998159a0907cc523e1f2d1904d45765613a617",
+                "reference": "40998159a0907cc523e1f2d1904d45765613a617",
                 "shasum": ""
             },
             "require": {
@@ -2104,7 +2104,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2019-09-17T03:41:22+00:00"
+            "time": "2020-02-04T12:15:04+00:00"
         },
         {
             "name": "psr/cache",
@@ -2743,16 +2743,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.7.2",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "d28ebdf7ab8d88f231310aef1e8cce965ea0b2ca"
+                "reference": "344c77293038173f49678d9a95c27da6cbdbccd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/d28ebdf7ab8d88f231310aef1e8cce965ea0b2ca",
-                "reference": "d28ebdf7ab8d88f231310aef1e8cce965ea0b2ca",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/344c77293038173f49678d9a95c27da6cbdbccd0",
+                "reference": "344c77293038173f49678d9a95c27da6cbdbccd0",
                 "shasum": ""
             },
             "require": {
@@ -2764,7 +2764,9 @@
                 "nette/di": "<3.0"
             },
             "require-dev": {
+                "latte/latte": "^2.5",
                 "nette/di": "^3.0",
+                "nette/mail": "^3.0",
                 "nette/tester": "^2.2",
                 "nette/utils": "^3.0",
                 "phpstan/phpstan": "^0.12",
@@ -2810,7 +2812,7 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2019-12-15T22:48:05+00:00"
+            "time": "2020-02-23T18:40:15+00:00"
         },
         {
             "name": "tuupola/base58",
