@@ -15,14 +15,14 @@
       <div class="col l4 m6 s12">
 
         {{#LOCALHOST}}
-        <a target="_blank" rel="nofollow"
+        <a rel="nofollow"
           href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
           class="waves-effect waves-light blue btn-large z-depth-3">
           {{ l.a_login }}<i class="material-icons right">cloud</i>
         </a>
         {{/LOCALHOST}}
         {{^LOCALHOST}}
-        <a target="_blank" rel="nofollow"
+        <a rel="nofollow"
           href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
           class="waves-effect waves-light blue btn-large z-depth-3">
           {{ l.a_login }}<i class="material-icons right">cloud</i>
@@ -33,14 +33,14 @@
         <br>
 
         {{#LOCALHOST}}
-        <a target="_blank" rel="nofollow"
+        <a rel="nofollow"
           href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
           class="waves-effect waves-light red btn-large z-depth-3">
           {{ l.a_relogin }}<i class="material-icons right">cloud</i>
         </a>
         {{/LOCALHOST}}
         {{^LOCALHOST}}
-        <a target="_blank" rel="nofollow"
+        <a rel="nofollow"
           href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
           class="waves-effect waves-light red btn-large z-depth-3">
           {{ l.a_relogin }}<i class="material-icons right">cloud</i>
