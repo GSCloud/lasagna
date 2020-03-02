@@ -1,11 +1,14 @@
 {{#admin_group_admin}}
 
 <style>
+.php1{position:relative;left:+0.1em}
+.php2{position:relative;left:+0.0em}
+.php3{position:relative;left:-0.1em}
 .btnmargin{margin:2px;margin-bottom:5px}
 .bigemoji{font-size:5em}
-.faces::after{content:"🤕";animation-name:faces;animation-duration:1s}
+.faces::after{content:"🌸";animation-name:faces;animation-duration:3s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
-@keyframes faces{10%{content:"😩"}20%{content:"😫"}30%{content:"😪"}40%{content:"😴"}50%{content:"😵"}60%{content:"😦"}70%{content:"😢"}80%{content:"😭"}90%{content:"🤒"}}
+@keyframes faces{10%{content:"🌼"}20%{content:"🌳"}30%{content:"🌺"}40%{content:"🌵"}50%{content:"🌶"}60%{content:"🍇"}70%{content:"🍄"}80%{content:"🍓"}90%{content:"🌽"}}
 .a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
 .extrapadding{padding:5px;border-radius:5px}
 .nowrap{white-space:nowrap}
@@ -236,7 +239,7 @@
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i
             class="fas fa-clone"></i></a>
         <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
-          data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz">php</a>
+          data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz" style="font-size:0.8em"><span class="php1">p</span><span class="php2">h</span><span class="php3">p</span></a>
         {{#google_drive_backup}}
         <a rel="noreferrer noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i
