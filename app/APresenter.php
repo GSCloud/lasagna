@@ -738,10 +738,12 @@ abstract class APresenter implements IPresenter
         $this->identity = $out;
         if ($out["id"]) {
             // encrypted cookie
-            $this->setCookie("identity", json_encode($out));
+            //$this->setCookie("identity", json_encode($out));
+            $this->setCookie($this->getCfg("app"), json_encode($out));
         } else {
             // no cookie
-            $this->clearCookie("identity");
+            //$this->clearCookie("identity");
+            $this->clearCookie($this->getCfg("app"));
         }
         return $this;
     }
@@ -803,14 +805,17 @@ abstract class APresenter implements IPresenter
                 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
                     $tls = "s";
                 }
-                $this->setCookie("identity", $_GET["identity"]);
+                //$this->setCookie("identity", $_GET["identity"]);
+                $this->setCookie($this->getCfg("app"), $_GET["identity"]);
                 $this->setLocation("http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
                 exit;
             }
             // COOKIE identity
-            if (isset($_COOKIE["identity"])) {
+            //if (isset($_COOKIE["identity"])) {
+            if (isset($_COOKIE[$this->getCfg("app")])) {
                 $x = 0;
-                $q = json_decode($this->getCookie("identity"), true);
+                //$q = json_decode($this->getCookie("identity"), true);
+                $q = json_decode($this->getCookie($this->getCfg("app")), true);
                 if (!is_array($q)) {
                     $x++;
                 } else {
@@ -1121,8 +1126,11 @@ abstract class APresenter implements IPresenter
      */
     public function logout()
     {
-        header('Clear-Site-Data: "cookies"');
-        $this->setIdentity([])->clearCookie("identity")->setLocation();
+        //header('Clear-Site-Data: "cookies"');
+        $this->setIdentity([]);
+        $this->clearCookie("identity");
+        $this->clearCookie($this->getCfg("app"));
+        $this->setLocation();
         exit;
     }
 
