@@ -103,11 +103,32 @@ ReadArticles:
   presenter: core
 
 GetError:
+  path: '/err/[i:code]'
   api: true
   api_description: "Get error page"
-  api_info: "Parameters:\n<b><a:code></b> - numeric error code\n\nReturns: HTML page."
-  path: '/err/[a:code]'
+  api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
+  method: GET|POST
   presenter: error
   api_example: [
     "err/403"
+    "err/404"
+    "err/420"
+    "err/500"
   ]
+
+GetQR:
+  path: "/qr/[a:type]/[**:text]"
+  api: true
+  api_description: "Get QR code"
+  api_info: "Parameters:\n<b><type></b> - image type\n<b><text></b> - text to render\n\nReturns: image data"
+  method: GET|POST
+  presenter: core
+
+ReadBook:
+  path: "/epub/[**:path]"
+  api: true
+  api_description: "Read ebook in epub format"
+  api_info: "Parameters:\n<b><path></b> - relative path to epub file"
+  method: GET
+  presenter: core
+  template: epub

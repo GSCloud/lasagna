@@ -19,12 +19,11 @@ use Nette\Neon\Neon;
 $x = "FATAL ERROR: broken chain of trust";
 defined("APP") || die($x);
 defined("CACHE") || die($x);
-defined("CLI") || die($x);
 defined("ROOT") || die($x);
 
 /** @const Cache prefix */
 defined("CACHEPREFIX") || define("CACHEPREFIX",
-    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "") . "_");
+    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "someapp") . "_");
 
 /** @const Domain name, extracted from $_SERVER array */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
@@ -33,7 +32,7 @@ defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/"
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 
 /** @const Project name, default "LASAGNA" */
-defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
+defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "TESSLASAGNA"));
 
 /** @const Application name, default "app" */
 defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
@@ -46,7 +45,7 @@ defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? nu
 
 /** @const Google Cloud Platform JSON auth keys */
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
-if (GCP_KEYS) {
+if (GCP_KEYS && \file_exists(APP . GCP_KEYS)) {
     putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
 }
 
@@ -62,7 +61,6 @@ function logger($message, $severity = Logger::INFO)
     if (empty($message) || is_null(GCP_PROJECTID) || is_null(GCP_KEYS)) {
         return;
     }
-
     if (ob_get_level()) {
         ob_end_clean();
     }
@@ -80,42 +78,37 @@ function logger($message, $severity = Logger::INFO)
 
 // CACHING PROFILES
 $cache_profiles = array_replace([
-    "apiconsume" => "+60 minutes",
-    "csv" => "+180 minutes",
+    "apiconsume" => "+60 minutes", // for API access
+    "csv" => "+100 minutes", // storing CSV
     "day" => "+24 hours",
     "default" => "+5 minutes",
     "hour" => "+60 minutes",
-    "limiter" => "+1 seconds",
+    "limiter" => "+1 seconds", // access limiter
     "minute" => "+60 seconds",
-    "page" => "+3 minutes",
+    "page" => "+3 minutes", // public web page, user not logged
     "second" => "+1 seconds",
-    "tenseconds" => "+10 seconds",
     "tenminutes" => "+10 minutes",
+    "tenseconds" => "+10 seconds",
 ],
     (array) ($cfg["cache_profiles"] ?? [])
 );
-
 foreach ($cache_profiles as $k => $v) {
-
-    // set "file" fallbacks
-    Cache::setConfig("file_{$k}", [
+    Cache::setConfig("file_{$k}", [ // "file" fallbacks
         "className" => "File",
         "duration" => $v,
         "lock" => true,
         "path" => CACHE,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
     ]);
-
-    // "redis" cache configurations
-    Cache::setConfig($k, [
+    Cache::setConfig($k, [ // "redis" cache
         "className" => "Redis",
-        "database" => 0,
+        "database" => $cfg["redis_database"] ?? 0,
         "duration" => $v,
-        "host" => "127.0.0.1",
-        "persistent" => true,
-        "port" => 6377, // SPECIAL PORT 6377 !!!
+        "host" => $cfg["redis_host"] ?? "127.0.0.1",
+        "persistent" => $cfg["redis_persistent"] ?? false,
+        "port" => $cfg["redis_port"] ?? 6377, // SPECIAL PORT 6377 !!!
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
-        "timeout" => 0.1,
+        "timeout" => $cfg["redis_timeout"] ?? 0.1,
         'fallback' => "file_{$k}", // fallback profile
     ]);
 }
@@ -144,21 +137,21 @@ $data["multisite_names"] = $multisite_names;
 $data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
 // ROUTING CONFIGURATION
-$routes = [
-    APP . "/router_defaults.neon",
-    APP . "/router_admin.neon",
-    APP . "/router.neon",
-];
 $router = [];
+$routes = $cfg["routes"] ?? [ // configuration can override defaults
+    "/router_defaults.neon",
+    "/router_admin.neon",
+    "/router.neon",
+];
 foreach ($routes as $r) {
-    if (is_callable("check_file")) {
-        check_file($r);
-    }
+    $r = APP . "/${r}";
     if (($content = @file_get_contents($r)) === false) {
         logger("Error in routing table: $r", Logger::EMERGENCY);
-        ob_end_clean();
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Error in routing table</h2><h3>Router: $r</h3>";
+        echo "<h1>Internal Server Error</h1><h2>Error in routing table</h2>Router: <b>$r</b>";
         exit;
     }
     $router = array_replace_recursive($router, @Neon::decode($content));
@@ -211,7 +204,7 @@ if (CLI) {
     exit;
 }
 
-// PROCESS ROUTING
+// ROUTING
 $match = $alto->match();
 $view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
 
@@ -237,7 +230,7 @@ if ($router[$view]["sethl"] ?? false) {
     }
 }
 
-// PROCESS REDIRECTS
+// REDIRECTS
 if ($router[$view]["redirect"] ?? false) {
     $r = $router[$view]["redirect"];
     if (ob_get_level()) {
@@ -294,21 +287,21 @@ $data = $app->getData();
 // ANALYTICS DATA
 $events = null;
 $data = $app->getData();
-$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "");
+$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
 
 // FINAL HEADERS
 header("X-Country: $country");
-header("X-Runtime: $time1 msec.");
-header("X-Processing: $time2 msec.");
+header("X-Runtime: $time1 ms");
+header("X-Processing: $time2 ms");
 
 // ANALYTICS
 if (method_exists($app, "SendAnalytics")) {
     $app->setData($data)->SendAnalytics();
 }
 
-// OUTPUT
+// DATA OUTPUT
 echo $data["output"] ?? "";
 
 // DEBUG OUTPUT

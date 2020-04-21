@@ -29,7 +29,8 @@
     "there4/php-analytics-event": "^1.1.0",
     "tracy/tracy": "^2.6.4",
     "tuupola/base58": "^0.2.3",
-    "cheprasov/php-redis-client": "^1.9"
+    "cheprasov/php-redis-client": "^1.9",
+    "chillerlan/php-qrcode": "^3.2"
   },
   "autoload": {
     "psr-4": {
