@@ -1,21 +1,24 @@
 <script>
+'use strict';
+
 // polyfills
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
 (function (w, d, undefined) {
 
-  // add scroll progress elements
+  // add scroll progress element
+  var pbar = "_" + Date.now();
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
-    "beforeend", '<div class="progress-container"><div class="progress-bar" id="scroll-progress-bar"></div></div>'
+    "beforeend", '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
   );
 
   // check scroll progress
-  w.onscroll = function() {
+  w.onscroll = function () {
     var winScroll = d.body.scrollTop || d.documentElement.scrollTop;
     var height = d.documentElement.scrollHeight - d.documentElement.clientHeight;
     var scrolled = (winScroll / height) * 100;
-    if (d.getElementById("scroll-progress-bar")) d.getElementById("scroll-progress-bar").style.width = scrolled + "%";
+    if (d.getElementById(pbar)) d.getElementById(pbar).style.width = scrolled + "%";
   };
 
   // check network status
@@ -26,17 +29,19 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         d.getElementsByTagName("html")[0].setAttribute("online", true);
         if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", true);
         if (GSC) GSC.offline = false;
+        if (GSC) GSC.online = true;
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
         d.getElementsByTagName("html")[0].setAttribute("online", false);
         if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", false);
         if (GSC) GSC.offline = true;
+        if (GSC) GSC.online = false;
         if (GSC) GSC.loaderOff();
       }
     }
   }
 
-  // "online" feature detection
+  // "online" feature detection and event bind
   if ("onLine" in navigator) {
     w.addEventListener("load", function () {
       w.addEventListener("online", checkNetwork);
@@ -45,7 +50,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     });
   }
 
-  // window.setCookie()
+  // setCookie()
   if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days) {
     if (key === undefined) return false;
     if (value === undefined) return false;
@@ -60,14 +65,14 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
   }
 
-  // window.getCookie()
+  // getCookie()
   if (typeof window.getCookie !== "function") window.getCookie = function (key) {
     if (key === undefined) return false;
     var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
     return v ? v[2] : null;
   }
 
-  // window.delCookie()
+  // delCookie()
   if (typeof window.delCookie !== "function") window.delCookie = function (key) {
     if (key === undefined) return false;
     var date = new Date();
@@ -100,7 +105,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // GSC.GetTime()
     if (typeof GSC.GetTime !== "function") GSC.GetTime = function (dateString) {
 
-      function englishext(x) {
+      function englishExt(x) {
         x = ("" + x).slice(-1);
         if (x == 1) return "st";
         if (x == 2) return "nd";
@@ -143,7 +148,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         x.today_str = x.day_str + " " + x.d + ". " + monthz2p[x.m] + " " + x.yyyy;
       }
       if ("{{ langen }}") { // English locale
-        x.today_str = x.day_str + " " + x.d + englishext(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
+        x.today_str = x.day_str + " " + x.d + englishExt(x.d) + " " + monthz[x.m] + ", " + x.yyyy;
       }
       x.d = z;
       return x;
@@ -221,7 +226,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     });
 
     // GSC.SetProfile()
-    GSC.init.push(function() {
+    GSC.init.push(function () {
       GSC.names.push("GSC.SetProfile()");
 
       if (typeof GSC.SetProfile !== "function") GSC.SetProfile = function () {
@@ -302,4 +307,5 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
   }
 })(window, document);
+
 </script>
