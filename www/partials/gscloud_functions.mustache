@@ -5,15 +5,17 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
 (function (w, d, undefined) {
 
-  // scroll progress
+  // add scroll progress elements
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
     "beforeend", '<div class="progress-container"><div class="progress-bar" id="scroll-progress-bar"></div></div>'
   );
-  window.onscroll = function() {
-    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+  // check scroll progress
+  w.onscroll = function() {
+    var winScroll = d.body.scrollTop || d.documentElement.scrollTop;
+    var height = d.documentElement.scrollHeight - d.documentElement.clientHeight;
     var scrolled = (winScroll / height) * 100;
-    d.getElementById("scroll-progress-bar").style.width = scrolled + "%";
+    if (d.getElementById("scroll-progress-bar")) d.getElementById("scroll-progress-bar").style.width = scrolled + "%";
   };
 
   // check network status
@@ -21,10 +23,12 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     if ("onLine" in navigator) {
       if (navigator.onLine) {
         d.getElementsByTagName("html")[0].setAttribute("offline", false);
+        d.getElementsByTagName("html")[0].setAttribute("online", true);
         if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", true);
         if (GSC) GSC.offline = false;
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
+        d.getElementsByTagName("html")[0].setAttribute("online", false);
         if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", false);
         if (GSC) GSC.offline = true;
         if (GSC) GSC.loaderOff();
