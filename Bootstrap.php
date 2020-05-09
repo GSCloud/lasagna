@@ -18,36 +18,52 @@ define("TESSERACT_START", microtime(true));
 ob_start();
 error_reporting(E_ALL);
 @ini_set("auto_detect_line_endings", true);
-@ini_set("default_socket_timeout", 15);
+@ini_set("default_socket_timeout", 30);
 @ini_set("display_errors", true);
 
 // CONSTANTS (in SPECIFIC ORDER !!!)
 /** @const Bootstrap root folder */
 defined("ROOT") || define("ROOT", __DIR__);
+
 /** @const Application folder */
 defined("APP") || define("APP", ROOT . "/app");
+
 /** @const Cache and logs folder, defaults to "cache" */
-defined("CACHE") || define("CACHE", ROOT . "/cache");
+defined("CACHE") || define("CACHE", "/tmp");
+
 /** @const Application data folder, defaults to "data" */
 defined("DATA") || define("DATA", ROOT . "/data");
+
 /** @const Website assets folder, defaults to "www" */
 defined("WWW") || define("WWW", ROOT . "/www");
+
 /** @const Configuration file, full path */
 defined("CONFIG") || define("CONFIG", ROOT . "/config.neon");
+
 /** @const Private configuration file, full path */
 defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.neon");
-/** @const Website templates folder, defaults to "www/templates" */
+
+/** @const Website templates folder */
 defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
-/** @const Website template partials folder, defaults to "www/partials" */
+
+/** @const Website template partials folder */
 defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
-/** @const Website downloads folder, defaults to "www/download" */
+
+/** @const Website downloads folder */
 defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
-/** @const Website uploads folder, defaults to "www/upload" */
+
+/** @const Website uploads folder */
 defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
-/** @const Temporary files folder, defaults to "/tmp" */
-defined("TEMP") || define("TEMP", "/tmp");
+
+/** @const Temporary files folder */
+defined("TEMP") || define("TEMP", ROOT . "/temp");
+
+/** @const Log files folder */
+defined("LOGS") || define("LOGS", ROOT . "/logs");
+
 /** @const True if running from command line interface */
 define("CLI", (bool) (PHP_SAPI == "cli"));
+
 /** @const True if running server locally */
 define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
 
@@ -174,8 +190,8 @@ if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
         //Debugger::enable(Debugger::DEVELOPMENT, CACHE);
         Debugger::enable(Debugger::DETECT, CACHE);
     }
-    Debugger::timer("RUNNING"); // start measuring performance
 }
+Debugger::timer("RUN"); // start measuring performance
 
 // DATA POPULATION
 $base58 = new \Tuupola\Base58;

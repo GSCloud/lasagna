@@ -5,6 +5,17 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
 (function (w, d, undefined) {
 
+  // scroll progress
+  d.getElementsByTagName("body")[0].insertAdjacentHTML(
+    "beforeend", '<div class="progress-container"><div class="progress-bar" id="scroll-progress-bar"></div></div>'
+  );
+  window.onscroll = function() {
+    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var scrolled = (winScroll / height) * 100;
+    d.getElementById("scroll-progress-bar").style.width = scrolled + "%";
+  };
+
   // check network status
   function checkNetwork(e) {
     if ("onLine" in navigator) {

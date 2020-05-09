@@ -16,10 +16,11 @@ use Monolog\Logger;
 use Nette\Neon\Neon;
 
 // SANITY CHECK
-$x = "FATAL ERROR: broken chain of trust";
-defined("APP") || die($x);
-defined("CACHE") || die($x);
-defined("ROOT") || die($x);
+foreach (["APP", "CACHE", "DATA", "LOGS", "ROOT", "TEMP"] as $x) {
+    if (!\defined($x)) {
+        die("FATAL ERROR: sanity check failed!");
+    }
+}
 
 /** @const Cache prefix */
 defined("CACHEPREFIX") || define("CACHEPREFIX",
@@ -38,7 +39,7 @@ defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "TESSLASAGN
 defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
 
 /** @const Monolog filename, full path */
-defined("MONOLOG") || define("MONOLOG", CACHE . "/MONOLOG_" . SERVER . "_" . PROJECT . ".log");
+defined("MONOLOG") || define("MONOLOG", LOGS . "/MONOLOG_" . SERVER . "_" . PROJECT . ".log");
 
 /** @const Google Cloud Platform project ID */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
@@ -93,23 +94,12 @@ $cache_profiles = array_replace([
     (array) ($cfg["cache_profiles"] ?? [])
 );
 foreach ($cache_profiles as $k => $v) {
-    Cache::setConfig("file_{$k}", [ // "file" fallbacks
+    Cache::setConfig($k, [
         "className" => "File",
         "duration" => $v,
         "lock" => true,
-        "path" => CACHE,
+        "path" => TEMP,
         "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
-    ]);
-    Cache::setConfig($k, [ // "redis" cache
-        "className" => "Redis",
-        "database" => $cfg["redis_database"] ?? 0,
-        "duration" => $v,
-        "host" => $cfg["redis_host"] ?? "127.0.0.1",
-        "persistent" => $cfg["redis_persistent"] ?? false,
-        "port" => $cfg["redis_port"] ?? 6377, // SPECIAL PORT 6377 !!!
-        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
-        "timeout" => $cfg["redis_timeout"] ?? 0.1,
-        'fallback' => "file_{$k}", // fallback profile
     ]);
 }
 
@@ -280,7 +270,7 @@ header(implode(" ", [
 // SINGLETON CLASS
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
-\Tracy\Debugger::timer("PROCESSING");
+\Tracy\Debugger::timer("PROCESS");
 $app = $controller::getInstance()->setData($data)->process();
 $data = $app->getData();
 
@@ -288,13 +278,14 @@ $data = $app->getData();
 $events = null;
 $data = $app->getData();
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
-$data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUNNING") * 1000, 2);
-$data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESSING") * 1000, 2);
+$data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUN") * 1000, 2);
+$data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESS") * 1000, 2);
 
 // FINAL HEADERS
 header("X-Country: $country");
-header("X-Runtime: $time1 ms");
+header("X-RunTime: $time1 ms");
 header("X-Processing: $time2 ms");
+header("X-RateLimiting: {$app->getRateLimit()}");
 
 // ANALYTICS
 if (method_exists($app, "SendAnalytics")) {

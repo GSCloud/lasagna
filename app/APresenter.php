@@ -45,6 +45,7 @@ interface IPresenter
     public function getLocale($locale);
     public function getMatch();
     public function getPresenter();
+    public function getRateLimit();
     public function getRouter();
     public function getUID();
     public function getUIDstring();
@@ -92,10 +93,10 @@ interface IPresenter
 abstract class APresenter implements IPresenter
 {
     /** @var integer Octal file mode for logs */
-    const LOG_FILEMODE = 0664;
+    const LOG_FILEMODE = 0666;
 
     /** @var integer Octal file mode for CSV */
-    const CSV_FILEMODE = 0664;
+    const CSV_FILEMODE = 0666;
 
     /** @var integer CSV min. file size */
     const CSV_MIN_SIZE = 42;
@@ -400,7 +401,7 @@ abstract class APresenter implements IPresenter
         $type = (file_exists(TEMPLATES . "/${template}.mustache")) ? 1 : 0;
         $renderer = new \Mustache_Engine(array(
             "template_class_prefix" => "__" . SERVER . "_" . PROJECT . "_",
-            "cache" => CACHE,
+            "cache" => TEMP,
             "cache_file_mode" => 0666,
             "cache_lambda_templates" => true,
             "loader" => $type ? new \Mustache_Loader_FilesystemLoader(TEMPLATES) : new \Mustache_Loader_StringLoader,
@@ -673,6 +674,7 @@ abstract class APresenter implements IPresenter
             exit;
         }
         $i["nonce"] = substr(trim($nonce), 0, 8); // final nonce
+
         // check all keys
         if (array_key_exists("avatar", $identity)) {
             $i["avatar"] = (string) $identity["avatar"];
@@ -1061,23 +1063,34 @@ abstract class APresenter implements IPresenter
      * @param integer $max Hits per second (optional)
      * @return object Singleton instance
      */
-    public function checkRateLimit($max = 0)
+    public function checkRateLimit($max = null)
     {
+        if (CLI) return;
         $f = "user_rate_limit_{$this->getUID()}";
-        if (!$rate = Cache::read($f, "limiter")) {
-            $rate = 0;
-        }
+        $rate = (int) (Cache::read($f, "limiter") ?? 0);
         Cache::write($f, ++$rate, "limiter");
-        if ($rate > ((int) $max > 0) ? (int) $max : self::LIMITER_MAXIMUM) {
+        $max ??= self::LIMITER_MAXIMUM;
+        if (!LOCALHOST && $rate > (int) $max) { // over limits && NOT localhost
             $this->setLocation("/err/420");
         }
         return $this;
     }
 
     /**
+     * Get current user rate limits
+     *
+     * @return integer current rate limit
+     */
+    public function getRateLimit()
+    {      
+        if (CLI) return false;
+        return Cache::read("user_rate_limit_{$this->getUID()}", "limiter");
+    }
+
+    /**
      * Check if current user has access rights
      *
-     * @param mixed $perms role (optional)
+     * @param mixed $role role (optional)
      * @return object Singleton instance
      */
     public function checkPermission($role = "admin")

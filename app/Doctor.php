@@ -87,6 +87,7 @@ class Doctor
         validate("directory\t<bold>TEMP</bold> as " . TEMP, check_exist(TEMP));
         validate("directory\t<bold>TEMPLATES</bold> as " . TEMPLATES, check_exist(TEMPLATES));
         validate("directory\t<bold>WWW</bold> as " . WWW, check_exist(WWW));
+
         echo "\n";
 
         validate("file\t<bold>CONFIG</bold> as " . CONFIG, check_exist(CONFIG));
@@ -97,6 +98,7 @@ class Doctor
         validate("file\t<bold>VERSION</bold> in ROOT", check_exist(ROOT . "/VERSION"));
         validate("file\t<bold>REVISIONS</bold> in ROOT", check_exist(ROOT . "/REVISIONS"));
         validate("file\t<bold>_site_cfg.sh</bold> in ROOT", check_exist(ROOT . "/_site_cfg.sh"));
+
         echo "\n";
 
         validate("writable\t<bold>CACHE</bold>", check_write(CACHE));
@@ -106,12 +108,13 @@ class Doctor
 
         $climate->out("\n<blue><bold>PHP");
 
-        validate("Zend version <bold>7.3+", (PHP_VERSION_ID >= 70300));
+        validate("Zend version <bold>7.4+", (PHP_VERSION_ID >= 70400));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
         validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
         validate("lib <bold>sodium", (in_array("sodium", get_loaded_extensions())));
         validate("lib <bold>redis", (in_array("redis", get_loaded_extensions())));
+
         echo "\n";
 
         if (self::$err) $climate->out("Errors: <bold>" . self::$err . "\007\n");

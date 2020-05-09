@@ -19,7 +19,7 @@ if [ -z "${DEST}" ]; then fail "Error in _site_cfg.sh !"; fi
 if [ -z "${HOST}" ]; then fail "Error in _site_cfg.sh !"; fi
 if [ -z "${USER}" ]; then fail "Error in _site_cfg.sh !"; fi
 
-mkdir -p app cache ci data www/cdn-assets www/download www/upload
+mkdir -p app ci data www/cdn-assets www/download www/upload
 
 VERSION=`git rev-parse HEAD`
 echo $VERSION > VERSION
