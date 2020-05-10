@@ -156,25 +156,26 @@ class CorePresenter extends APresenter
                     $hash = trim($match["params"]["hash"]);
                     $x++;
                 }
-                if ($x !== 2) {
-                    // ERROR
+                if ($x !== 2) { // ERROR                    
                     return $this->writeJsonData(400, $extras);
                 }
                 $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
+                $data = "";
                 if (file_exists($file)) {
                     $data = @file_get_contents($file);
-                    $crc = hash("sha256", $data);
-                    if (isset($_GET["crc"])) {
-                        if ($_GET["crc"] == $crc) {
-                            // Not Modified
-                            return $this->writeJsonData(304, $extras);
-                        }
-                    }
-                    // OK
-                    return $this->writeJsonData(["html" => $data, "crc" => $crc], $extras);
-                } else {
-                    return $this->writeJsonData(404, $extras);
                 }
+                $crc = hash("sha256", $data);
+                if (isset($_GET["crc"])) {
+                    if ($_GET["crc"] == $crc) { // Not Modified
+                        return $this->writeJsonData(304, $extras);
+                    }
+                }
+                return $this->writeJsonData([
+                    "crc" => $crc,
+                    "hash" => $hash,
+                    "html" => $data,
+                    "profile" => $profile,
+                ], $extras);
                 break;
         }
 

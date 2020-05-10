@@ -94,7 +94,7 @@ ReadArticles:
   path: '/ReadArticles/[a:profile]/[a:hash]'
   api: true
   api_description: "Get articles data"
-  api_info: "Parameters:\n<b><a:profile></b> - alphanumeric profile name,\n<b><a:hash></b> - alphanumeric URL stub hash.\n\nReturns: HTML data (JSON) + checksum hash (string)."
+  api_info: "Parameters:\n<b><a:profile></b> - hexadecimal profile name,\n<b><a:hash></b> - hexadecimal URL stub hash.\n\nReturns: HTML data (JSON) + checksum hash (string)."
   api_example: [
     "ReadArticles/default/3b8b91c75627bee566dcb88f4805901b20a3eab2520bcff8d26c87157a035026"
   ]
