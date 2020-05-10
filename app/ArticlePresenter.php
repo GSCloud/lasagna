@@ -24,34 +24,27 @@ class ArticlePresenter extends APresenter
      */
     public function process()
     {
-        $this->checkRateLimit()->setHeaderHtml();
-
+        // basic setup
         $data = $this->getData();
         $presenter = $this->getPresenter();
         $view = $this->getView();
-
-        // expand data model
-        $this->dataExpander($data);
-        $data["container_switch_article"] = true;
+        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data); // data = Model
 
         // advanced caching
-        $use_cache = $data["use_cache"] ?? false;
-        $cache_key = strtolower(join("_", [$data["host"], $data["request_path"]]));
+        $use_cache = (DEBUG === true) ? false : $data["use_cache"] ?? false;
+        $cache_key = strtolower(join("_", [$data["host"], $data["request_path"]])) . "_htmlpage";
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
-            $output .= "\n<script>console.log('*** page content cached');</script>";
-            return $this->setData("output", $output);
+            return $this->setData("output", $output .= "\n<script>console.log('*** page content cached');</script>");
         }
 
-        // fix locales
-        $data["l"] = $data["l"] ?? [];
-        foreach ($data["l"] as $k => $v) {
+        foreach ($data["l"] ??= [] as $k => $v) { // fix locale text// fix locales
             StringFilters::correct_text_spacing($data["l"][$k], $data["lang"]);
         }
 
-        // render output & save to model & cache
-        $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
-        StringFilters::trim_html_comment($output);
-        Cache::write($cache_key, $output, "page");
-        return $this->setData("output", $output);
+        // output
+        $output = $this->setData($data)->renderHTML($presenter[$view]["template"]); // render
+        StringFilters::trim_html_comment($output); // fix content
+        Cache::write($cache_key, $output, "page"); // save cache
+        return $this->setData("output", $output); // save model
     }
 }

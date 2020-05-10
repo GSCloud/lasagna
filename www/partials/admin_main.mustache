@@ -63,6 +63,11 @@
         <i class="fas fa-bell"></i>
         {{ l.a_onesignal }}</a>
     </div>
+    <!-- external links -->
+    {{#external_links}}
+      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" data-position="top"
+        data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
+    {{/external_links}}
   </div>
 
   <!-- admin grid -->
@@ -242,11 +247,6 @@
             class="fas fa-warehouse"></i></a>
         {{/google_drive_backup}}
       </h4>
-      <!-- external links -->
-      {{#external_links}}
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped blue white-text" data-position="top"
-          data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
-      {{/external_links}}
     </div>
 
   </div>

@@ -24,6 +24,7 @@ class CiTester
      */
     public function __construct($cfg, $presenter, $type)
     {
+        \Tracy\Debugger::timer("CITEST");
         $climate = new CLImate;
         $cfg = (array) $cfg;
         $key = $cfg["ci_tester"]["api_key"] ?? "";
@@ -160,8 +161,8 @@ class CiTester
 
             // assert JSON
             $json = true;
-            $jsformat = "";
-            $jscode = "";
+            $jsformat = "HTML";
+            $jscode = "-";
             if ($x["assert_json"]) {
                 $arr = json_decode($content, true);
                 if (is_null($arr)) {
@@ -169,7 +170,7 @@ class CiTester
                     $json = false;
                     $jsformat = "JSON_ERROR";
                 } else {
-                    $jsformat = "JSON_OK";
+                    $jsformat = "JSON";
                     if ($arr["code"] == 200) {
                         $jscode = "200";
                     } else {
@@ -188,7 +189,7 @@ class CiTester
             // OK
             if ($bad == 0) {
                 $climate->out(
-                    "${u1};length:<green>${length}</green>;code:<green>${code}</green>;time:${time};<green>$jsformat</green>;$jscode"
+                    "${u1} length: <green>${length}</green> code: <green>${code}</green> time: <green>${time}</green> format: <blue>$jsformat</blue> JScode: <green>$jscode</green>"
                 );
                 @file_put_contents(ROOT . "/ci/tests_${f1}.assert.txt",
                     "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time};$jsformat;$jscode\n", FILE_APPEND | LOCK_EX);
@@ -196,19 +197,19 @@ class CiTester
                 // error
                 $errors++;
                 $climate->out(
-                    "<red>${u1};length:<bold>${length}</bold>;code:<bold>${code}</bold>;assert:<bold>${x['assert_httpcode']}</bold>;time:${time};$jsformat;$jscode</red>\007"
+                    "<red>${u1} length: <bold>${length}</bold> code: <bold>${code}</bold> assert: <bold>${x['assert_httpcode']}</bold> time: ${time} format: $jsformat JScode: $jscode</red>\007"
                 );
                 @file_put_contents(ROOT . "/ci/errors_${f1}.assert.txt",
-                    "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time};$jsformat;$jscode\n", FILE_APPEND | LOCK_EX);
+                    "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time};format:$jsformat;jscode:$jscode\n", FILE_APPEND | LOCK_EX);
             }
             $i++;
         }
         curl_multi_close($multi);
 
+        $time = round((float) \Tracy\Debugger::timer("CITEST") * 1000, 2);
+        $climate->out("\nTotal time: <bold><green>$time ms</green></bold>");
         if ($errors) {
             $climate->out("\nErrors: <bold>" . $errors . "\007\n");
-        } else {
-            echo "\n";
         }
         exit($errors);
     }

@@ -36,8 +36,8 @@ class CorePresenter extends APresenter
         $presenter = $this->getPresenter();
         $view = $this->getView();
         $match = $this->getMatch();
-
         $extras = ["name" => "LASAGNA Core", "fn" => $view];
+
         switch ($view) {
 
             case "manifest":
@@ -109,7 +109,6 @@ class CorePresenter extends APresenter
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
                     $content = \file_get_contents($file);
-                    //$content = trim(preg_replace('/\s+/', ' ', $content));
                     $version = hash("sha256", $content);
                 } else {
                     $content = null;
@@ -126,7 +125,6 @@ class CorePresenter extends APresenter
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
                     $content = \file_get_contents($file);
-                    //$content = trim(preg_replace('/\s+/', ' ', $content));
                     $version = hash("sha256", $content);
                 } else {
                     $content = null;
@@ -166,7 +164,7 @@ class CorePresenter extends APresenter
                 }
                 $crc = hash("sha256", $data);
                 if (isset($_GET["crc"])) {
-                    if ($_GET["crc"] == $crc) { // Not Modified
+                    if ($_GET["crc"] == $crc) { // not modified
                         return $this->writeJsonData(304, $extras);
                     }
                 }
