@@ -263,11 +263,16 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               GSC.data.articlescrc = data.data.crc;
               if (data.data.html != "") {
                 var obj = jQuery.parseJSON(data.data.html);
-                for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
+                for (var p in obj) if (obj.hasOwnProperty(p)) {
+                  if (obj[p] == "<p><br></p>") {
+                    obj[p] = "";
+                  }
+                  $("#" + p).html(obj[p]);
+                }
                 $(".summernote ul").addClass("browser-default");
                 $(".summernote img").addClass("responsive-img");
               } else {
-                $(".summernote").addClass("hidden");
+                $(".summernote").html("");
               }
             }
           }
