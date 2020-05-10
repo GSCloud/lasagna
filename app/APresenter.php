@@ -1484,33 +1484,67 @@ abstract class APresenter implements IPresenter
         }
         if (is_null($data)) {
             $code = 500;
-            $msg = "Internal server error. Data is null.";
+            $msg = "Data is null! Internal server error. 🦄";
+            header("HTTP/1.1 500 Internal Server Error");
         }
         if (is_string($data)) {
             $data = [$data];
         }
         if (is_int($data)) {
             $code = $data;
-            switch ($data) {
+            $data = null;
+            $h = $_SERVER["SERVER_PROTOCOL"] ?? "HTTP/1.1";
+            $m = null;
+            switch ($code) {
                 case 304:
-                    $msg = "Not modified.";
+                    $m = "Not modified";
                     break;
                 case 400:
-                    $msg = "Bad request.";
+                    $m = "Bad request";
                     break;
                 case 401:
-                    $msg = "Unauthorized.";
+                    $m = "Unauthorized";
+                    break;
+                case 402:
+                    $m = "Payment Required";
                     break;
                 case 403:
-                    $msg = "Forbidden.";
+                    $m = "Forbidden";
                     break;
                 case 404:
-                    $msg = "Not found.";
+                    $m = "Not found";
+                    break;
+                case 405:
+                    $m = "Method Not Allowed";
+                    break;
+                case 406:
+                    $m = "Not Acceptable";
+                    break;
+                case 409:
+                    $m = "Conflict";
+                    break;
+                case 410:
+                    $m = "Gone";
+                    break;
+                case 412:
+                    $m = "Precondition Failed";
+                    break;
+                case 415:
+                    $m = "Unsupported Media Type";
+                    break;
+                case 416:
+                    $m = "Requested Range Not Satisfiable";
+                    break;
+                case 417:
+                    $m = "Expectation Failed";
                     break;
                 default:
-                    $msg = "Unknown error >:{";
+                    $msg = "Unknown error 🦄";
             }
-            $data = null;
+            if ($m) {
+                $msg = "$m.";
+                header("$h $code $m");
+            }
         }
         // output
         $this->setHeaderJson();
@@ -1536,22 +1570,21 @@ abstract class APresenter implements IPresenter
         if (empty($data)) {
             return;
         }
-        $presenter = $this->getPresenter();
-        $view = $this->getView();
         $use_cache = true;
         if (array_key_exists("nonce", $_GET)) { // do not cache pages with ?nonce
             $use_cache = false;
         }
-        // logged user
-        $data["user"] = $user = $this->getCurrentUser();
-        $data["admin"] = $group = $this->getUserGroup();
+        $data["user"] = $user = $this->getCurrentUser(); // logged user
+        $data["admin"] = $group = $this->getUserGroup(); // logged user group
         if ($group) {
             $data["admin_group_${group}"] = true;
         }
-        if ($user["id"]) {
-            $use_cache = false; // no cache for logged users
+        if ($user["id"]) { // no cache for logged users
+            $use_cache = false;
         }
         // language
+        $presenter = $this->getPresenter();
+        $view = $this->getView();
         $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";
         $data["lang{$language}"] = true;
         $data["l"] = $l = $this->getLocale($language);
