@@ -1,6 +1,5 @@
 <script>
 'use strict';
-
 // polyfills
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
@@ -28,15 +27,15 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         d.getElementsByTagName("html")[0].setAttribute("offline", false);
         d.getElementsByTagName("html")[0].setAttribute("online", true);
         if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", true);
-        if (GSC) GSC.offline = false;
-        if (GSC) GSC.online = true;
+        if (w.GSC) w.GSC.offline = false;
+        if (w.GSC) w.GSC.online = true;
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
         d.getElementsByTagName("html")[0].setAttribute("online", false);
         if (d.getElementById("offline-message")) d.getElementById("offline-message").setAttribute("aria-hidden", false);
-        if (GSC) GSC.offline = true;
-        if (GSC) GSC.online = false;
-        if (GSC) GSC.loaderOff();
+        if (w.GSC) w.GSC.offline = true;
+        if (w.GSC) w.GSC.online = false;
+        if (w.GSC) w.GSC.loaderOff();
       }
     }
   }
@@ -80,7 +79,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
   }
 
-  if (GSC) {
+  if (w.GSC) {
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.profile = null;
@@ -256,7 +255,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         }
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function (data) {
-          //console.log(data);
           if (data && data.data) {
             localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
             if (data.data.crc) {
