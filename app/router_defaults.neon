@@ -6,6 +6,7 @@ defaults:
   assert_httpcode: 200
   assert_json: false
   assert_values: []
+  cached: false
   deprecated: false
   finished: false
   language: cs
@@ -21,14 +22,17 @@ defaults:
 manifest:
   path: /manifest.json
   presenter: core
+  cached: true
 
 sitemap:
   path: /sitemap.txt
   presenter: core
+  cached: true
 
 swjs:
   path: /sw.js
   presenter: core
+  cached: true
 
 androidjs:
   api: true
@@ -107,6 +111,7 @@ GetError:
   api: true
   api_description: "Get error page"
   api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
+  cached: true
   method: GET|POST
   presenter: error
   api_example: [

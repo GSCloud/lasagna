@@ -28,23 +28,24 @@ class ArticlePresenter extends APresenter
         $data = $this->getData();
         $presenter = $this->getPresenter();
         $view = $this->getView();
-        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data); // data = Model
+        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data); // Model
 
         // advanced caching
         $use_cache = (DEBUG === true) ? false : $data["use_cache"] ?? false;
-        $cache_key = strtolower(join("_", [$data["host"], $data["request_path"]])) . "_htmlpage";
+        $cache_key = hash("sha256", join("_", [$data["host"], $data["request_path"], "htmlpage"]));
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
             return $this->setData("output", $output .= "\n<script>console.log('*** page content cached');</script>");
         }
 
-        foreach ($data["l"] ??= [] as $k => $v) { // fix locale text// fix locales
+        // fix locale text
+        foreach ($data["l"] ??= [] as $k => $v) {
             StringFilters::correct_text_spacing($data["l"][$k], $data["lang"]);
         }
 
-        // output
-        $output = $this->setData($data)->renderHTML($presenter[$view]["template"]); // render
-        StringFilters::trim_html_comment($output); // fix content
-        Cache::write($cache_key, $output, "page"); // save cache
+        // output rendering
+        $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
+        StringFilters::trim_html_comment($output); // strip comments
+        Cache::write($cache_key, $output, "page"); // cache
         return $this->setData("output", $output); // save model
     }
 }

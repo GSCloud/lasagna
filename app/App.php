@@ -24,7 +24,7 @@ foreach (["APP", "CACHE", "DATA", "LOGS", "ROOT", "TEMP"] as $x) {
 
 /** @const Cache prefix */
 defined("CACHEPREFIX") || define("CACHEPREFIX",
-    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "someapp") . "_");
+    "cache_" . (string) ($cfg["app"] ?? sha1($cfg["canonical_url"]) ?? sha1($cfg["goauth_origin"]) ?? "app") . "_");
 
 /** @const Domain name, extracted from $_SERVER array */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
@@ -33,7 +33,7 @@ defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/"
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 
 /** @const Project name, default "LASAGNA" */
-defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "TESSLASAGNA"));
+defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
 
 /** @const Application name, default "app" */
 defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
@@ -90,16 +90,28 @@ $cache_profiles = array_replace([
     "second" => "+1 seconds",
     "tenminutes" => "+10 minutes",
     "tenseconds" => "+10 seconds",
-],
-    (array) ($cfg["cache_profiles"] ?? [])
-);
+], (array) ($cfg["cache_profiles"] ?? []));
 foreach ($cache_profiles as $k => $v) {
-    Cache::setConfig($k, [
-        "className" => "File",
+    Cache::setConfig("${k}_file", [
+        "className" => "Cake\Cache\Engine\FileEngine", // fallback file engine
         "duration" => $v,
         "lock" => true,
-        "path" => TEMP,
-        "prefix" => CACHEPREFIX . SERVER . "_" . PROJECT . "_" . APPNAME . "_",
+        "path" => CACHE,
+        "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+    ]);
+    Cache::setConfig($k, [
+        "className" => "Cake\Cache\Engine\RedisEngine",
+        "database" => $cfg["redis"]["database"] ?? 0,
+        "duration" => $v,
+        "fallback" => "${k}_file", // fallback to file engine
+        "host" => $cfg["redis"]["host"] ?? "127.0.0.1",
+        "password" => $cfg["redis"]["password"] ?? "",
+        "path" => CACHE,
+        "persistent" => false,
+        "port" => $cfg["redis"]["port"] ?? 6379,
+        "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+        "timeout" => $cfg["redis"]["timeout"] ?? 1,
+        "unix_socket" => $cfg["redis"]["unix_socket"] ?? "",      
     ]);
 }
 

@@ -4,7 +4,9 @@
   "require": {
     "adbario/php-dot-notation": "^2.2",
     "altorouter/altorouter": "^1.2",
-    "cakephp/cache": "^3.8",
+    "cakephp/cache": "^4.0",
+    "cheprasov/php-redis-client": "^1.9",
+    "chillerlan/php-qrcode": "^3.2",
     "cloudflare/sdk": "^1.1",
     "google/cloud": "^0.86",
     "guzzlehttp/guzzle": "^6.3",
@@ -28,9 +30,7 @@
     "symfony/polyfill-mbstring": "^1.15",
     "there4/php-analytics-event": "^1.1",
     "tracy/tracy": "^2.6",
-    "tuupola/base58": "^0.2.3",
-    "cheprasov/php-redis-client": "^1.9",
-    "chillerlan/php-qrcode": "^3.2"
+    "tuupola/base58": "^0.2.3"
   },
   "autoload": {
     "psr-4": {

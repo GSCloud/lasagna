@@ -37,6 +37,16 @@ beta_hosts: [
 cache_profiles: [
 ]
 
+redis: [
+  #database: 0
+  #host: "127.0.0.1"
+  #password: ""
+  #persistent: true
+  #unix_socket: ""
+  port: 6377
+  timeout: 1
+]
+
 multisite_profiles: [
   v2: [
     lasagna2.gscloud.cz
@@ -59,20 +69,20 @@ v2: [
 ]
 
 css_sources: [
-  "/css/gulp/4.fontawesome.min.css",
-  "/css/gulp/5.v4-shims.min.css",
-  "/css/gulp/6.cookieconsent.min.css",
-  "/css/gulp/7.brands.min.css",
-  "/css/gulp/8.solid.min.css",
-  "/css/gulp/style.css",
+  "/css/gulp/1.fontawesome.min.css",
+  "/css/gulp/2.v4-shims.min.css",
+  "/css/gulp/3.brands.min.css",
+  "/css/gulp/4.solid.min.css",
+  "/css/gulp/5.cookieconsent.min.css",
+  "/css/gulp/6.style.css",
 ]
 
 script_sources: [
-  "/js/gulp/2.modernizr.min.js",
-  "/js/gulp/3.materialize.min.js",
-  "/js/gulp/6.cookieconsent.min.js",
-  "/js/gulp/eu.cookieconsent.setup.js",
-  "/js/gulp/main.js",
+  "/js/gulp/1.materialize.min.js",
+  "/js/gulp/2.cookieconsent.min.js",
+  "/js/gulp/3.lazysizes.min.js",
+  "/js/gulp/4.eu.cookieconsent.setup.js",
+  "/js/gulp/5.main.js",
 ]
 
 locales: [

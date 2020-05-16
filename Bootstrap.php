@@ -29,7 +29,7 @@ defined("ROOT") || define("ROOT", __DIR__);
 defined("APP") || define("APP", ROOT . "/app");
 
 /** @const Cache and logs folder, defaults to "cache" */
-defined("CACHE") || define("CACHE", "/tmp");
+defined("CACHE") || define("CACHE", ROOT . "/temp");
 
 /** @const Application data folder, defaults to "data" */
 defined("DATA") || define("DATA", ROOT . "/data");
@@ -81,7 +81,7 @@ function check_file($file)
     if (!file_exists($file) || !is_readable($file)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>File: $file</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><b>File: $file</b>\n\n";
         exit;
     }
 }
@@ -98,14 +98,14 @@ function check_folder($folder, $writable = false)
     if (!file_exists($folder) || !is_readable($folder)) {
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><h3>Folder: $folder</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><b>Folder: $folder</b>\n\n";
         exit;
     }
     if ((bool) $writable === true) {
         if (!is_writable($folder)) {
             ob_end_clean();
             header("HTTP/1.1 500 Internal Server Error");
-            echo "<h1>Internal Server Error</h1><h2>Write Access Denied</h2><h3>Folder: $folder</h3>\n\n";
+            echo "<h1>Internal Server Error</h1><h2>Write Access Denied</h2><b>Folder: $folder</b>\n\n";
             exit;
         }
     }
@@ -145,7 +145,7 @@ function check_var(&$arr, $key, $default = null)
         }
         ob_end_clean();
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Configuration</h2><h3>$arr: $key</h3>\n\n";
+        echo "<h1>Internal Server Error</h1><h2>Corrupted Configuration</h2><b>$arr: $key</b>\n\n";
         exit;
     }
 }
@@ -172,8 +172,8 @@ defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false)); // set via c
 
 if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::$logSeverity = 15; // https://www.php.net/manual/en/errorfunc.constants.php
-    Debugger::$maxDepth = (int) ($cfg["DEBUG_MAX_DEPTH"] ?? 5);
-    Debugger::$maxLength = (int) ($cfg["DEBUG_MAX_LENGTH"] ?? 500);
+    Debugger::$maxDepth = (int) ($cfg["DEBUG_MAX_DEPTH"] ?? 10);
+    Debugger::$maxLength = (int) ($cfg["DEBUG_MAX_LENGTH"] ?? 1000);
     Debugger::$scream = (bool) ($cfg["DEBUG_SCREAM"] ?? true);
     Debugger::$showBar = (bool) ($cfg["DEBUG_SHOW_BAR"] ?? true);
     Debugger::$showFireLogger = (bool) ($cfg["DEBUG_SHOW_FIRELOGGER"] ?? false);
