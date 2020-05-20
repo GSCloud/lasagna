@@ -52,11 +52,13 @@ class CliPresenter extends APresenter
         $climate = new CLImate;
         $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
-        $climate->out("\t <bold>cache</bold> \t\t - clear cache");
+        $climate->out("\t <bold>clearcache</bold> \t - clear cache");
+        $climate->out("\t <bold>clearci</bold> \t - clear CI logs");
+        $climate->out("\t <bold>clearlogs</bold> \t - clear logs");
+        $climate->out("\t <bold>cleartemp</bold> \t - clear temp");
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
         $climate->out("\t <bold>local</bold> \t\t - local CI test");
         $climate->out("\t <bold>prod</bold> \t\t - production CI test");
-        $climate->out("\t <bold>temp</bold> \t\t - clear temp");
         $climate->out("\t <bold>unit</bold> \t\t - run Unit test");
         return $this;
     }
@@ -105,21 +107,35 @@ class CliPresenter extends APresenter
                 new CiTester($this->getCfg(), $this->getPresenter(), $module);
                 break;
 
-            case "cache":
+            case "clearcache":
                 foreach ($this->getData("cache_profiles") as $k => $v) { // clear all cache profiles
                     Cache::clear($k);
                     Cache::clear("${k}_file");
                 }
+                $c = count(glob(CACHE . "/*"));
                 @array_map("unlink", glob(CACHE . "/*.php"));
                 @array_map("unlink", glob(CACHE . "/*.tmp"));
                 @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
                 clearstatcache();
-                $climate->out("Cleaner: <bold>cache cleaned</bold>\n");
+                $climate->out("Cleaner: <bold>$c files - cache + Redis cleaned</bold>\n");
                 break;
 
-            case "temp":
+            case "clearci":
+                $c = count(glob(ROOT . "/ci/*"));
+                @array_map("unlink", glob(ROOT . "/ci/*"));
+                $climate->out("Cleaner: <bold>$c files - CI logs cleaned</bold>\n");
+                break;
+
+            case "clearlogs":
+                $c = count(glob(LOGS . "/*"));
+                @array_map("unlink", glob(LOGS . "/*"));
+                $climate->out("Cleaner: <bold>$c files - logs cleaned</bold>\n");
+                break;
+
+            case "cleartemp":
+                $c = count(glob(TEMP . "/*"));
                 @array_map("unlink", glob(TEMP . "/*"));
-                $climate->out("Cleaner: <bold>temp cleaned</bold>\n");
+                $climate->out("Cleaner: <bold>$c files - temp cleaned</bold>\n");
                 break;
 
             case "unit":

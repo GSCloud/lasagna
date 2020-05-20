@@ -290,7 +290,6 @@ abstract class APresenter implements IPresenter
             ob_end_flush();
         }
         ob_start();
-
         foreach ($this->csv_postload as $key) {
             $this->preloadAppData((string) $key, true);
         }
@@ -1410,24 +1409,18 @@ abstract class APresenter implements IPresenter
             $this->addCritical("EMPTY readAppData() filename parameter!");
             return null;
         }
-
-        // read cache
-        $csv = Cache::read($file, "csv");
-        if ($csv === false) {
-            // read CSV
+        if (!$csv = Cache::read($file, "csv")) { // read CSV            
             $csv = @file_get_contents(DATA . "/${file}.csv");
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
-            // read CSV backup
-            $csv = @file_get_contents(DATA . "/${file}.bak");
+            $csv = @file_get_contents(DATA . "/${file}.bak"); // read CSV backup
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
-            // we have failed >:{
-            $csv = null;
+            $csv = null; // failure
         }
         return $csv;
     }

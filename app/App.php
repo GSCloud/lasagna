@@ -46,8 +46,10 @@ defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? nu
 
 /** @const Google Cloud Platform JSON auth keys */
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
-if (GCP_KEYS && \file_exists(APP . GCP_KEYS)) {
-    putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . GCP_KEYS);
+
+// include GCP keys
+if (GCP_KEYS && \file_exists(APP . "/" . GCP_KEYS)) {
+    putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . "/" . GCP_KEYS);
 }
 
 /**
@@ -79,7 +81,6 @@ function logger($message, $severity = Logger::INFO)
 
 // CACHING PROFILES
 $cache_profiles = array_replace([
-    "apiconsume" => "+60 minutes", // for API access
     "csv" => "+100 minutes", // storing CSV
     "day" => "+24 hours",
     "default" => "+5 minutes",
@@ -111,7 +112,7 @@ foreach ($cache_profiles as $k => $v) {
         "port" => $cfg["redis"]["port"] ?? 6379,
         "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
         "timeout" => $cfg["redis"]["timeout"] ?? 1,
-        "unix_socket" => $cfg["redis"]["unix_socket"] ?? "",      
+        "unix_socket" => $cfg["redis"]["unix_socket"] ?? "",
     ]);
 }
 

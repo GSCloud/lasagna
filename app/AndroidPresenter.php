@@ -22,7 +22,6 @@ class AndroidPresenter extends APresenter
     public function process()
     {
         $this->checkRateLimit()->setHeaderHtml();
-
         $data = $this->getData();
         $presenter = $this->getPresenter();
         $view = $this->getView();
@@ -44,9 +43,10 @@ class AndroidPresenter extends APresenter
             }
             $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
             StringFilters::trim_html_comment($output);
-            @file_put_contents(WWW . "/android_${language}.html", $output); // @ intentionally for public web
+            if (\is_writable(WWW . "/android_${language}.html")) {
+                file_put_contents(WWW . "/android_${language}.html", $output);
+            }
         }
-
         return $this->setData("output", $output);
     }
 }
