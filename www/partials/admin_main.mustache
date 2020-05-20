@@ -26,11 +26,12 @@
 .note-add-text-tags-btn{font-family:"Times New Roman",serif;min-width:30px}
 </style>
 
+<!-- butterfly -->
 <span style="position:fixed;left:0;top:0;z-index:999999" class="motyle btn white hide-on-med-and-down">🦋</span>
 <span style="position:fixed;right:0;top:0;z-index:999999" class="motyle btn white hide-on-large-only">🦋</span>
 
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
-  <!-- device rotation note -->
+  <!-- device rotation -->
   <div id="a_rotate_device" class="row center" style="padding-top:3px">
     {{ l.a_rotate_device }}
   </div>
@@ -63,10 +64,11 @@
         <i class="fas fa-bell"></i>
         {{ l.a_onesignal }}</a>
     </div>
+
     <!-- external links -->
     {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" data-position="top"
-        data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
+      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text"
+        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
     {{/external_links}}
   </div>
 
@@ -103,16 +105,16 @@
         <div class="container">
           <span class="nowrap">default: <b>{{ cache_profiles.default }}</b></span>&nbsp;
           <span class="nowrap">CSV: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
-          <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}&nbsp;x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
+          <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
           <span class="nowrap">{{ l.a_webpage }}: <b>{{ cache_profiles.page }}</b></span>
         </div>
         <div class="row center">
-          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn" data-position="top"
-            data-tooltip="{{ l.a_update_ttip }}">
+          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
+            data-position="top" data-tooltip="{{ l.a_update_ttip }}">
             <i class="fab fa-google-drive"></i>
             {{ l.a_update }}</a>
-          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn" data-position="top"
-            data-tooltip="{{ l.a_flush_ttip }}">
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
+            data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
         </div>
@@ -154,13 +156,13 @@
           <div class="row center">
             <strong>{{user.name}}</strong><br>
             <i style="font-size:smaller">{{user.email}}</i><br>
-            <a id="a_getcode" class="btnmargin xtooltipped waves-effect blue waves-light btn" data-position="top"
-              data-tooltip="">📲</a>
-            <a id="a_delcode" class="btnmargin xtooltipped waves-effect red waves-light btn" data-position="top"
-              data-tooltip="">📴</a>
+            <a id="a_getcode" class="btnmargin xtooltipped waves-effect blue waves-light btn"
+              data-position="top" data-tooltip="">📲</a>
+            <a id="a_delcode" class="btnmargin xtooltipped waves-effect red waves-light btn"
+              data-position="top" data-tooltip="">📴</a>
             <br>
-            <a id="a_logout" class="tooltipped waves-effect green waves-light btn" data-position="top"
-              data-tooltip="{{ l.a_logout_ttip }}">
+            <a id="a_logout" class="tooltipped waves-effect green waves-light btn"
+              data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
               <i class="fas fa-sign-out-alt"></i>
               {{ l.a_logout }}</a>
             <a target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
@@ -231,20 +233,21 @@
         <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
         <a rel="noreferrer noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
-          data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz/index.php?disp=bootstrap"><i
-            class="fas fa-server"></i></a>
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped red-text text" data-position="top"
-          data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}"><i
-            class="fas fa-dna"></i></a>
+          data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz/index.php?disp=bootstrap">
+          <i class="fas fa-server"></i></a>
+        <a rel="noreferrer noopener" target="_blank" class="tooltipped red-text text"
+          data-position="top" data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}">
+          <i class="fas fa-dna"></i></a>
         <a rel="noreferrer noopener" target="_blank" class="tooltipped white-text text" data-position="top"
-          data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i
-            class="fas fa-clone"></i></a>
+          data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}">
+          <i class="fas fa-clone"></i></a>
         <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
-          data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz" style="font-size:0.8em"><span class="php1">p</span><span class="php2">h</span><span class="php3">p</span></a>
+          data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz" style="font-size:0.8em">
+          <span class="php1">p</span><span class="php2">h</span><span class="php3">p</span></a>
         {{#google_drive_backup}}
         <a rel="noreferrer noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
-          data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i
-            class="fas fa-warehouse"></i></a>
+          data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}">
+          <i class="fas fa-warehouse"></i></a>
         {{/google_drive_backup}}
       </h4>
     </div>
@@ -264,11 +267,9 @@
     delCookie("logout");
 
     if (w.GSC.init) {
-
-      // data
-      GSC.data = {};
-      GSC.profile = "default";
-      GSC.data.multisite_profiles = {{ multisite_profiles_json }};
+      w.GSC.data = {};
+      w.GSC.profile = "default";
+      w.GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
       // ShowLoader()
       if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
@@ -479,13 +480,10 @@
       // Summernote plugins
       w.GSC.init.push(function () {
         w.GSC.names.push("Summernote plugins");
-
         // custom styles
         (function(d){"function"===typeof define&&define.amd?define(["jquery"],d):"object"===typeof module&&module.exports?module.exports=d(require("jquery")):d(window.jQuery)})(function(d){d.extend(d.summernote.plugins,{"add-text-tags":function(g){var c=this,f=d.summernote.ui,h=g.options;c.generateBtn=function(a,e){var b=a.slice(0,1).toUpperCase();return f.button({contents:"<"+a+">"+b+"</"+a+">",tooltip:e+" <"+a+">",className:"note-add-text-tags-btn",click:function(b){c.wrapInTag(a)}})};var k=c.generateBtn("del","Deleted text"),l=c.generateBtn("ins","Inserted text"),m=c.generateBtn("small","Fine print"),n=c.generateBtn("mark","Highlighted text"),p=c.generateBtn("var","Variable"),q=c.generateBtn("kbd","User input"),r=c.generateBtn("code","Inline code"),t=c.generateBtn("samp","Sample output");g.memo("button.add-text-tags",function(){return f.buttonGroup([f.button({className:"dropdown-toggle",contents:"<b>+</b> "+f.icon(h.icons.caret,"span"),tooltip:"Additional text styles",data:{toggle:"dropdown"}}),f.dropdown([f.buttonGroup({className:"note-add-text-tags-code",children:[r,t,q,p]}),f.buttonGroup({className:"note-add-text-tags-other",children:[n,m,l,k]})])]).render()});c.areDifferentBlockElements=function(a,c){var b=getComputedStyle(a,null).display,e=getComputedStyle(c,null).display;return"inline"!==b&&"inline"!==e?(console.log("Can't insert across two block elements."),!0):!1};c.isSelectionParsable=function(a,e){if(a.isSameNode(e))return!0;if(c.areDifferentBlockElements(a,e))return!1;var b=a.parentElement,d=e.parentElement;if(a.isSameNode(d)||e.isSameNode(b)||b.isSameNode(d))return!0;console.log("Unable to parse across so many nodes. Sorry!");return!1};c.wrapInTag=function(a){if(window.getSelection){var e=window.getSelection(),b=0<e.rangeCount&&e.getRangeAt(0);if(b.startOffset!==b.endOffset){b=b.cloneRange();var d=b.startContainer.parentElement,f=b.endContainer.parentElement;if(d.isSameNode(f)||c.isSelectionParsable(d,f))a=document.createElement(a),a.appendChild(b.extractContents()),b.insertNode(a),b.selectNodeContents(a),e.removeAllRanges(),e.addRange(b)}}}}})});
-
         // custom classes
         (function(c){"function"===typeof define&&define.amd?define(["jquery"],c):"object"===typeof module&&module.exports?module.exports=c(require("jquery")):c(window.jQuery)})(function(c){c.extend(c.summernote.plugins,{addclass:function(b){"undefined"===typeof b.options.addclass&&(b.options.addclass={});"undefined"===typeof b.options.addclass.classTags&&(b.options.addclass.classTags="btn;hoverable;flow-text".split(";"));var d=c.summernote.ui;(function(a){var b=document.createElement("style");b.innerHTML=a;document.body.appendChild(b)})(".scrollable-menu {height: auto; max-height: 200px; max-width:300px; overflow-x: hidden;}");b.memo("button.addclass",function(){return d.buttonGroup([d.button({className:"dropdown-toggle",contents:'<i class="fa fa-css3"/> '+d.icon(b.options.icons.caret,"span"),tooltip:"toggle CSS class",data:{toggle:"dropdown"}}),d.dropdown({className:"dropdown-style scrollable-menu",items:b.options.addclass.classTags,template:function(a){"string"===typeof a&&(a={tag:"div",title:a,value:a});var b=a.tag;return"<"+b+" "+(a.style?' style="'+a.style+'" ':"")+(a.value?' class="'+a.value+'" ':"")+">"+a.title+"</"+b+">"},click:function(a,d,e){a.preventDefault();e=e||c(a.target).closest("[data-value]").data("value");a=c(b.invoke("restoreTarget"));0==a.length&&(a=c(document.getSelection().focusNode.parentElement,".note-editable"));"undefined"!==typeof b.options.addclass&&"undefined"!==typeof b.options.addclass.debug&&b.options.addclass.debug&&console.debug(b.invoke("restoreTarget"),a,"toggling class: "+e,window.getSelection());a.toggleClass(e)}})]).render()});this.events={"summernote.init":function(a,b){},"summernote.keyup":function(a,b){}};this.initialize=function(){};this.destroy=function(){}}})});
-
       });
 
       // admin UI bindings
@@ -493,7 +491,7 @@
         w.GSC.names.push("admin UI bindings");
 
         // motýle :)
-        if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(200);
+        if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(100);
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {
             window.scrollTo(0, 0);
@@ -528,10 +526,8 @@
 
         // remote fn select
         $("#RemoteFnSelect").change(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#sectok_ping", false);
-            return;
+          if (w.GSC.offline) { // offline
+            return GSC.PingDot("#sectok_ping", false);
           }
           if (!$("#RemoteFnSelect").val()) return;
           $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
@@ -540,19 +536,18 @@
             t = t.replace(/[a-zA-Z]*\?/, s + "?");
             GSC.CopyClipboard(t);
             GSC.PingDot("#sectok_ping");
-            M.toast({html: s + " 💕"});
+            M.toast({html: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }}"});
           }).fail(function () {
             $("#a_security_token").val("N/A");
             GSC.PingDot("#sectok_ping", false);
+            GSC.CopyClipboard("");
           });
         });
 
         // update Google data
         $("#a_update").click(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#csv_ping", false);
-            return;
+          if (w.GSC.offline) { // offline            
+            return GSC.PingDot("#csv_ping", false);
           }
           $("#a_update").attr("disabled", "disabled");
           GSC.ShowLoader("#a_update_info");
@@ -562,10 +557,8 @@
 
         // show PS Insights
         $("#a_ps_insights").click(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#psi_ping", false);
-            return;
+          if (w.GSC.offline) { // offline            
+            return GSC.PingDot("#psi_ping", false);
           }
           $(this).attr("disabled", "disabled");
           GSC.PingDot("#psi_ping");
@@ -598,10 +591,8 @@
 
         // flush cache
         $("#a_flush").click(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#csv_ping", false);
-            return;
+          if (w.GSC.offline) { // offline            
+            return GSC.PingDot("#csv_ping", false);
           }
           GSC.GetCsvInfo = function () {};
           $("#a_flush").attr("disabled", "disabled");
@@ -611,56 +602,51 @@
 
         // get auth code
         $("#a_getcode").click(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#csv_ping", false);
-            return;
+          if (w.GSC.offline) { // offline            
+            return GSC.PingDot("#csv_ping", false);
           }
           $.post("/admin/CreateAuthCode", function(data) {
             GSC.CopyClipboard(data.data.hash);
-            M.toast({html: "code in clipboard: [" + data.data.hash + "] ❤"});
+            M.toast({html: "{{ l.a_clipboardcopy }} [" + data.data.hash + "]"});
           });
         });
 
         // delete auth code
         $("#a_delcode").click(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#csv_ping", false);
-            return;
+          if (w.GSC.offline) { // offline            
+            return GSC.PingDot("#csv_ping", false);
           }
           $.post("/admin/DeleteAuthCode", function(data) {
-            M.toast({html: "code deleted ⛔"});
+            M.toast({html: "{{ l.a_codedeleted }}"});
+            GSC.CopyClipboard("");
           });
         });
 
         $("#a_logout").click(function () {
           setCookie("logout", "logout", 0);
-          if (GSC.offline) {
-            window.location.replace("/");
-          } else {
-            window.location.replace("/logout");
-          }
+          GSC.offline ? window.location.replace("/") : window.location.replace("/logout");
         });
 
       });
 
-      // CSV timer
+      // CSV info timer
       w.GSC.init.push(function () {
         w.GSC.names.push("CSV timer");
         if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
-        setInterval(function(){window.GSC.GetCsvInfo()}, 2000);
+        setInterval(function() {
+          window.GSC.GetCsvInfo();
+        }, 5000);
       });
 
-      // Admin UI
+      // admin UI
       w.GSC.init.push(function () {
         w.GSC.names.push("Admin UI");
         GSC.AdminUI();
       });
 
-      // PS Insights
+      // update PSI cache
       w.GSC.init.push(function () {
-        w.GSC.names.push("Update PS Insights cache");
+        w.GSC.names.push("Update PSI cache");
         $.get("/admin/GetPSInsights?" + Date.now());
       });
 

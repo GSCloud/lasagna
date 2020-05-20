@@ -38,10 +38,10 @@ defined("DATA") || define("DATA", ROOT . "/data");
 defined("WWW") || define("WWW", ROOT . "/www");
 
 /** @const Configuration file, full path */
-defined("CONFIG") || define("CONFIG", ROOT . "/config.neon");
+defined("CONFIG") || define("CONFIG", APP . "/config.neon");
 
 /** @const Private configuration file, full path */
-defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", ROOT . "/config_private.neon");
+defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", APP . "/config_private.neon");
 
 /** @const Website templates folder */
 defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
@@ -55,11 +55,11 @@ defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
 /** @const Website uploads folder */
 defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
 
-/** @const Temporary files folder */
-defined("TEMP") || define("TEMP", ROOT . "/temp");
-
 /** @const Log files folder */
 defined("LOGS") || define("LOGS", ROOT . "/logs");
+
+/** @const Temporary files folder */
+defined("TEMP") || define("TEMP", ROOT . "/temp");
 
 /** @const True if running from command line interface */
 define("CLI", (bool) (PHP_SAPI == "cli"));
@@ -70,92 +70,19 @@ define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || C
 // COMPOSER
 require_once ROOT . "/vendor/autoload.php";
 
-/**
- * Check if file exists
- *
- * @param string $file
- * @return void
- */
-function check_file($file)
-{
-    if (!file_exists($file) || !is_readable($file)) {
-        ob_end_clean();
-        header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><b>File: $file</b>\n\n";
-        exit;
-    }
-}
-
-/**
- * Check if folder exists, optional check for writes
- *
- * @param string $folder
- * @param boolean $writable
- * @return void
- */
-function check_folder($folder, $writable = false)
-{
-    if (!file_exists($folder) || !is_readable($folder)) {
-        ob_end_clean();
-        header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Core Corrupted</h2><b>Folder: $folder</b>\n\n";
-        exit;
-    }
-    if ((bool) $writable === true) {
-        if (!is_writable($folder)) {
-            ob_end_clean();
-            header("HTTP/1.1 500 Internal Server Error");
-            echo "<h1>Internal Server Error</h1><h2>Write Access Denied</h2><b>Folder: $folder</b>\n\n";
-            exit;
-        }
-    }
-}
-
-// SANITY CHECKS
-check_file(CONFIG);
-check_file(ROOT . "/VERSION");
-check_folder(CACHE, true);
-check_folder(DATA, true);
-check_folder(PARTIALS);
-check_folder(TEMP, true);
-check_folder(TEMPLATES);
-check_folder(WWW);
-
 // CONFIGURATION
-$cfg = @Neon::decode(@file_get_contents(CONFIG));
+if (!$cfg = @file_get_contents(CONFIG)) {
+    $cfg = "dbg: TRUE";
+}
+$cfg = @Neon::decode($cfg);
 if (file_exists(CONFIG_PRIVATE)) {
     $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
 }
+
+// TIME ZONE
 date_default_timezone_set((string) ($cfg["date_default_timezone"] ?? "Europe/Prague"));
 
-/**
- * Check variables
- *
- * @param array $arr array by reference
- * @param string $key key
- * @param mixed $default default value (optional)
- * @return void
- */
-function check_var(&$arr, $key, $default = null)
-{
-    if (!array_key_exists($key, $arr)) {
-        if ($default !== null) {
-            $arr[$key] = $default;
-            return;
-        }
-        ob_end_clean();
-        header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Internal Server Error</h1><h2>Corrupted Configuration</h2><b>$arr: $key</b>\n\n";
-        exit;
-    }
-}
-
-// SANITY CHECKS
-check_var($cfg, "app", "app");
-check_var($cfg, "canonical_url");
-check_var($cfg, "minify", false);
-
-// DEBUGGER CONFIGURATION
+// DEBUGGER
 if (($_SERVER["SERVER_NAME"] ?? "") == "localhost") {
     if (($cfg["dbg"] ?? null) === false) {
         defined("DEBUG") || define("DEBUG", false); // DISABLED via configuration
@@ -173,30 +100,30 @@ defined("DEBUG") || define("DEBUG", (bool) ($cfg["dbg"] ?? false)); // set via c
 if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
     Debugger::$logSeverity = 15; // https://www.php.net/manual/en/errorfunc.constants.php
     Debugger::$maxDepth = (int) ($cfg["DEBUG_MAX_DEPTH"] ?? 10);
-    Debugger::$maxLength = (int) ($cfg["DEBUG_MAX_LENGTH"] ?? 1000);
+    Debugger::$maxLength = (int) ($cfg["DEBUG_MAX_LENGTH"] ?? 5000);
     Debugger::$scream = (bool) ($cfg["DEBUG_SCREAM"] ?? true);
     Debugger::$showBar = (bool) ($cfg["DEBUG_SHOW_BAR"] ?? true);
     Debugger::$showFireLogger = (bool) ($cfg["DEBUG_SHOW_FIRELOGGER"] ?? false);
     Debugger::$showLocation = (bool) ($cfg["DEBUG_SHOW_LOCATION"] ?? false);
-    Debugger::$strictMode = (bool) ($cfg["DEBUG_STRICT_MODE"] ?? false);
+    Debugger::$strictMode = (bool) ($cfg["DEBUG_STRICT_MODE"] ?? true);
+
     // debug cookie name: tracy-debug
     if ($cfg["DEBUG_COOKIE"] ?? null) {
         $address = $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"];
         $debug_cookie = (string) $cfg["DEBUG_COOKIE"]; // private config value
         Debugger::enable(
-            "${debug_cookie}@${address}", CACHE, (string) ($cfg["DEBUG_EMAIL"] ?? "")
+            "${debug_cookie}@${address}", LOGS, (string) ($cfg["DEBUG_EMAIL"] ?? "")
         );
     } else {
-        //Debugger::enable(Debugger::DEVELOPMENT, CACHE);
-        Debugger::enable(Debugger::DETECT, CACHE);
+        Debugger::enable(Debugger::DETECT, LOGS);
     }
 }
-Debugger::timer("RUN"); // start measuring performance
+Debugger::timer("RUN"); // measure performance - START
 
 // DATA POPULATION
 $base58 = new \Tuupola\Base58;
-$data = (array) $cfg;
-$data["cfg"] = $cfg;
+$data = $cfg;
+$data["cfg"] = $cfg; // backup
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 $data["VERSION"] = $version = trim(@file_get_contents(ROOT . "/VERSION") ?? "", "\r\n");

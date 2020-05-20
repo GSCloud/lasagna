@@ -1,6 +1,6 @@
 {
   "name": "lasagna.gscloud.cz",
-  "version": "1.0.0",
+  "version": "1.9.0",
   "description": "Tesseract LASAGNA",
   "main": "gulpfile.js",
   "dependencies": {
@@ -25,7 +25,7 @@
     "url": "git@gscloud:gscloud/lasagna.git"
   },
   "author": "Fred Brooker",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [
     "tesseract",
     "lasagna",

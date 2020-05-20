@@ -23,6 +23,8 @@ class AdminPresenter extends APresenter
 
     /**
      * Main controller
+     * 
+     * @return object Singleton instance
      */
     public function process()
     {
@@ -88,30 +90,6 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData($arr, $extras);
                 break;
 
-            // @TODO UNFINISHED
-            case "GetCfAnalytics":
-                $this->checkPermission("admin");
-                $cf = $this->getCfg("cf");
-                if (!is_array($cf)) { // error
-                    return $this->writeJsonData(400, $extras);
-                }
-                $uri = "";
-                $apikey = $cf["apikey"] ?? null;
-                $email = $cf["email"] ?? null;
-                $zoneid = $cf["zoneid"] ?? null;
-                if ($email && $apikey && $zoneid) {
-                    $f = "Cloudflare_Analytics_$zoneid";
-                    if (!$data = Cache::read($f, "minute")) {
-                        if ($data = @file_get_contents($uri)) {
-                            Cache::write($f, $data, "minute");
-                        }
-                    }
-                } else { // error
-                    return $this->writeJsonData(500, $extras);
-                }
-                return $this->writeJsonData(json_decode($data), $extras);
-                break;
-
             case "GetPSInsights":
                 $this->checkPermission("admin");
                 $base = urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);
@@ -119,7 +97,7 @@ class AdminPresenter extends APresenter
                 $hash = hash("sha256", $base);
                 $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
                 $f = "PageSpeed_Insights_${hash}";
-                if (!$data = Cache::read($f, "minute")) {
+                if (!$data = Cache::read($f, "minute")) { // read data from Google
                     if ($data = @file_get_contents($uri)) {
                         Cache::write($f, $data, "minute");
                     } else { // error
@@ -131,29 +109,66 @@ class AdminPresenter extends APresenter
 
             case "GetUpdateToken":
                 $this->checkPermission("admin");
-                $file = DATA . "/" . self::ADMIN_KEY;
-                $key = trim(@file_get_contents($file));
-                try {
-                    if (!$key) { // create random key file
-                        file_put_contents($file, hash("sha256", random_bytes(256) . time()));
-                        @chmod($file, 0660);
-                        $this->addMessage("ADMIN: keyfile created");
-                    }
-                } catch (Exception $e) { // error
-                    $this->addError("500: Internal Server Error");
-                    $this->setLocation("/err/500");
-                    exit;
-                }
-                $arr = "";
+                $code = "";
+                $key = $this->readAdminKey();
                 $user = $this->getCurrentUser();
-                if ($user["id"] ?? null) {
+                if ($user["id"] ?? null && $key) {
                     $hashid = hash("sha256", $user["id"]);
-                    $arr = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
-                } else { // error
-                    $this->unauthorized_access();
+                    $code = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
+                    $this->addAuditMessage("GET UPDATE TOKEN");
+                    return $this->writeJsonData($code, $extras);
                 }
-                $this->addAuditMessage("GET UPDATE TOKEN");
-                return $this->writeJsonData($arr, $extras);
+                $this->unauthorized_access();
+                break;
+
+            case "FlushCacheRemote":
+                $user = $_GET["user"] ?? null;
+                $token = $_GET["token"] ?? null;
+                $key = $this->readAdminKey();
+                if ($user && $token && $key) {
+                    $code = hash("sha256", $key . $user);
+                    if ($code == $token) {
+                        $this->flush_cache();
+                        $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
+                        echo $_SERVER["HTTP_HOST"] . " FlushCacheRemote OK\n";
+                        exit;
+                    }
+                }
+                $this->unauthorized_access();
+                break;
+
+            case "CoreUpdateRemote":
+                $user = $_GET["user"] ?? null;
+                $token = $_GET["token"] ?? null;
+                $key = $this->readAdminKey();
+                if ($user && $token && $key) {
+                    $code = hash("sha256", $key . $user);
+                    if ($code == $token) {
+                        $this->setForceCsvCheck();
+                        $this->postloadAppData("app_data");
+                        $this->flush_cache();
+                        $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
+                        echo $_SERVER["HTTP_HOST"] . " CoreUpdateRemote OK\n";
+                        exit;
+                    }
+                }
+                $this->unauthorized_access();
+                break;
+
+            case "RebuildNonceRemote":
+                $user = $_GET["user"] ?? null;
+                $token = $_GET["token"] ?? null;
+                $key = $this->readAdminKey();
+                if ($user && $token && $key) {
+                    $code = hash("sha256", $key . $user);
+                    if ($code == $token) {
+                        $this->rebuildNonce();
+                        $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
+                        echo $_SERVER["HTTP_HOST"] . " RebuildNonceRemote OK \n";
+                        exit;
+                    }
+                }
+                $this->unauthorized_access();
                 break;
 
             case "FlushCache":
@@ -181,10 +196,10 @@ class AdminPresenter extends APresenter
                     $user["entropy"] = hash("sha256", random_bytes(8) . (string) time()); // random entropy
                     $json = json_encode($user);
                     $hash = substr(hash("sha256", $json), 0, 8); // return 8 chars of SHA256
-                    file_put_contents($file, $json, LOCK_EX);
+                    file_put_contents($file, $json, LOCK_EX); // @todo check write fail!
                     $this->addAuditMessage("CREATE AUTH CODE");
                 }
-                return $this->writeJsonData(["hash" => $hash, "status" => "OK",], $extras);
+                return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
                 break;
 
             case "DeleteAuthCode":
@@ -192,7 +207,7 @@ class AdminPresenter extends APresenter
                 $user = $this->getCurrentUser();
                 if ($user["id"] ?? null) {
                     $file = DATA . "/identity_" . $user["id"] . ".json";
-                    if (file_exists($file)) {
+                    if (file_exists($file)) { // delete identity if exists
                         @unlink($file);
                     }
                     $this->addAuditMessage("DELETE AUTH CODE");
@@ -226,8 +241,7 @@ class AdminPresenter extends APresenter
                 }
                 if (file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
-                        // error
-                        return $this->writeJsonData([
+                        return $this->writeJsonData([ // error
                             "code" => 500,
                             "status" => "Data copy to backup file failed.",
                             "profile" => $profile,
@@ -236,8 +250,7 @@ class AdminPresenter extends APresenter
                     };
                 }
                 if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
-                    // error
-                    return $this->writeJsonData([
+                    return $this->writeJsonData([ // error
                         "code" => 500,
                         "status" => "Data write to history file failed.",
                         "profile" => $profile,
@@ -245,8 +258,7 @@ class AdminPresenter extends APresenter
                     ], $extras);
                 };
                 if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
-                    // error
-                    return $this->writeJsonData([
+                    return $this->writeJsonData([ // error
                         "code" => 500,
                         "status" => "Data write to file failed.",
                         "profile" => $profile,
@@ -259,68 +271,6 @@ class AdminPresenter extends APresenter
                     "profile" => $profile,
                     "hash" => $hash,
                 ], $extras);
-                break;
-
-            case "FlushCacheRemote":
-                $user = $_GET["user"] ?? null;
-                $token = $_GET["token"] ?? null;
-                if ($user && $token) {
-                    $file = DATA . "/" . self::ADMIN_KEY;
-                    $key = trim(@file_get_contents($file));
-                    if (!$key) {
-                        $this->unauthorized_access();
-                    }
-                    $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
-                        $this->flush_cache();
-                        $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
-                        echo $_SERVER["HTTP_HOST"] . " FlushCacheRemote OK\n";
-                        exit;
-                    }
-                }
-                $this->unauthorized_access();
-                break;
-
-            case "CoreUpdateRemote":
-                $user = $_GET["user"] ?? null;
-                $token = $_GET["token"] ?? null;
-                if ($user && $token) {
-                    $file = DATA . "/" . self::ADMIN_KEY;
-                    $key = trim(@file_get_contents($file));
-                    if (!$key) {
-                        $this->unauthorized_access();
-                    }
-                    $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
-                        $this->setForceCsvCheck();
-                        $this->postloadAppData("app_data");
-                        $this->flush_cache();
-                        $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
-                        echo $_SERVER["HTTP_HOST"] . " CoreUpdateRemote OK\n";
-                        exit;
-                    }
-                }
-                $this->unauthorized_access();
-                break;
-
-            case "RebuildNonceRemote":
-                $user = $_GET["user"] ?? null;
-                $token = $_GET["token"] ?? null;
-                if ($user && $token) {
-                    $file = DATA . "/" . self::ADMIN_KEY;
-                    $key = trim(@file_get_contents($file));
-                    if (!$key) {
-                        $this->unauthorized_access();
-                    }
-                    $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
-                        $this->rebuild_nonce();
-                        $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
-                        echo $_SERVER["HTTP_HOST"] . " RebuildNonceRemote OK \n";
-                        exit;
-                    }
-                }
-                $this->unauthorized_access();
                 break;
 
             default:
@@ -336,19 +286,17 @@ class AdminPresenter extends APresenter
      *
      * @return object Singleton instance
      */
-    private function rebuild_nonce()
+    private function rebuildNonce()
     {
-        $file = DATA . "/" . self::IDENTITY_NONCE;
-        @unlink($file);
+        @unlink(DATA . "/" . self::IDENTITY_NONCE);
         clearstatcache();
-        $this->setIdentity();
-        return $this;
+        return $this->setIdentity();
     }
 
     /**
      * Flush cache
      *
-     * @return void
+     * @return object Singleton instance
      */
     private function flush_cache()
     {
@@ -358,7 +306,7 @@ class AdminPresenter extends APresenter
         if ($lock->acquire()) {
             try {
                 @ob_flush();
-                foreach ($this->getData("cache_profiles") as $k => $v) { // clear all caches
+                foreach ($this->getData("cache_profiles") as $k => $v) { // clear all cache profiles
                     Cache::clear($k);
                     Cache::clear("${k}_file");
                 }
@@ -378,12 +326,13 @@ class AdminPresenter extends APresenter
             $this->setLocation("/err/429");
             exit;
         }
-        return;
+        return $this;
     }
 
     /**
      * Unauthorized access
-     *
+     * 
+     * @return void
      */
     private function unauthorized_access()
     {
@@ -397,7 +346,6 @@ class AdminPresenter extends APresenter
      *
      * @param string $val log line
      * @param int $key array index
-     * @return void
      */
     public function decorateLogs(&$val, $key)
     {
@@ -409,6 +357,43 @@ class AdminPresenter extends APresenter
         unset($x[5]);
         $y = implode("</td><td>", $x);
         $val = "<td>$y</td>";
+    }
+
+    /**
+     * Create admin key
+     *
+     * @return object Singleton instance
+     */
+    private function createAdminKey()
+    {
+        $f = DATA . "/" . self::ADMIN_KEY;
+        if (!\file_exists($f)) {
+            if (!file_put_contents($f, hash("sha256", random_bytes(256) . time()))) {
+                $this->addError("500: Internal Server Error");
+                $this->setLocation("/err/500");
+                exit;
+            }
+            @chmod($f, 0660);
+            $this->addMessage("ADMIN: keyfile created");
+        }
+        return $this;
+    }
+
+    /**
+     * Read admin key
+     *
+     * @return string admin key
+     */
+    private function readAdminKey()
+    {
+        $f = DATA . "/" . self::ADMIN_KEY;
+        if (\file_exists($f)) {
+            $key = trim(@file_get_contents($f));
+        } else {
+            $this->createAdminKey();
+            $key = trim(@file_get_contents($f));
+        }
+        return $key ?? null;
     }
 
 }

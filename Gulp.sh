@@ -4,17 +4,9 @@
 dir="$(dirname "$0")"
 . $dir"/_includes.sh"
 
-info "Uninstall Node and Yarn?"
-yes_or_no && {
-  info "Removing Node and Yarn ..."
-  sudo apt-get remove -yq nodejs yarn
-  sudo rm -rf /usr/lib/node_modules
-}
-
-command -v nodejs >/dev/null 2>&1 || {
+command -v node >/dev/null 2>&1 || {
   info "Installing Node ..."
-  curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
-  sudo apt-get install -y nodejs
+  sudo snap install node --classic --channel=9
 
   info "Installing gulp ..."
   sudo npm rm --global gulp
@@ -22,24 +14,14 @@ command -v nodejs >/dev/null 2>&1 || {
   sudo npm install --global gulp-cli
 }
 
-command -v yarn >/dev/null 2>&1 || {
-  info "Installing Yarn ..."
-  curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  sudo apt-get update -qq
-  sudo apt-get install -y yarn
-}
-
 echo -e "\n"
 
-v=`node --version`
+v=`node --version 2>/dev/null`
 info "node version: "$v
-v=`npm --version`
+v=`npm --version 2>/dev/null`
 info "npm version: "$v
-v=`npx --version`
-info "npx version: "$v
-v=`yarn --version`
-info "yarn version: "$v
+v=`gulp --version 2>/dev/null`
+info "gulp: "$v
 
 echo -e "\n"
 

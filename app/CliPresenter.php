@@ -9,6 +9,7 @@
 
 namespace GSC;
 
+use Cake\Cache\Cache;
 use League\CLImate\CLImate;
 
 /**
@@ -49,14 +50,14 @@ class CliPresenter extends APresenter
     public function help()
     {
         $climate = new CLImate;
-
         $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
+        $climate->out("\t <bold>cache</bold> \t\t - clear cache");
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
-        $climate->out("\t <bold>unit</bold> \t\t - Unit test");
         $climate->out("\t <bold>local</bold> \t\t - local CI test");
-        $climate->out("\t <bold>prod</bold> \t\t - production CI test\n");
-
+        $climate->out("\t <bold>prod</bold> \t\t - production CI test");
+        $climate->out("\t <bold>temp</bold> \t\t - clear temp");
+        $climate->out("\t <bold>unit</bold> \t\t - run Unit test");
         return $this;
     }
 
@@ -94,6 +95,7 @@ class CliPresenter extends APresenter
      */
     public function selectModule($module, $argc, $argv)
     {
+        $climate = new CLImate;
         switch ($module) {
             case "local":
             case "prod":
@@ -101,6 +103,23 @@ class CliPresenter extends APresenter
             case "testprod":
                 require_once "CiTester.php";
                 new CiTester($this->getCfg(), $this->getPresenter(), $module);
+                break;
+
+            case "cache":
+                foreach ($this->getData("cache_profiles") as $k => $v) { // clear all cache profiles
+                    Cache::clear($k);
+                    Cache::clear("${k}_file");
+                }
+                @array_map("unlink", glob(CACHE . "/*.php"));
+                @array_map("unlink", glob(CACHE . "/*.tmp"));
+                @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
+                clearstatcache();
+                $climate->out("Cleaner: <bold>cache cleaned</bold>\n");
+                break;
+
+            case "temp":
+                @array_map("unlink", glob(TEMP . "/*"));
+                $climate->out("Cleaner: <bold>temp cleaned</bold>\n");
                 break;
 
             case "unit":
