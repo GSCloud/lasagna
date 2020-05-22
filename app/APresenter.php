@@ -602,7 +602,7 @@ abstract class APresenter implements IPresenter
      */
     public function getIP()
     {
-        return $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "N/A";
+        return $_SERVER["HTTP_CF_CONNECTING_IP"] ?? $_SERVER["HTTP_X_FORWARDED_FOR"] ?? $_SERVER["REMOTE_ADDR"] ?? "127.0.0.1";
     }
 
     /**
@@ -614,9 +614,10 @@ abstract class APresenter implements IPresenter
     {
         return strtr(implode("_",
             [
-                $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
-                $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
-                $_SERVER["HTTP_USER_AGENT"] ?? "UA",
+                CLI ? "CLI_USER" : "",
+                CLI ? "" : $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
+                CLI ? "" :$_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
+                CLI ? "" : $_SERVER["HTTP_USER_AGENT"] ?? "N/A",
                 $this->getIP(),
             ]),
             " ", "_");
@@ -715,6 +716,14 @@ abstract class APresenter implements IPresenter
      */
     public function getIdentity()
     {
+        if (CLI) {
+            return [
+                "id" => 666,
+                "ip" => "127.0.0.1",
+                "name" => "CLI",
+            ];
+        }
+
         // check current identity
         $id = $this->identity["id"] ?? null;
         $email = $this->identity["email"] ?? null;
@@ -727,7 +736,7 @@ abstract class APresenter implements IPresenter
             $this->setIdentity(); // initialize nonce
             return $this->identity;
         }
-        if ($nonce = @file_get_contents($file) === false) {
+        if (!$nonce = @file_get_contents($file)) {
             $this->addError("500: Internal Server Error -> cannot read nonce file");
             $this->setLocation("/err/500");
             exit;
@@ -742,13 +751,6 @@ abstract class APresenter implements IPresenter
             "name" => "",
             "time" => 0,
         ];
-        if (CLI) { // mock identity for CLI
-            $i = [
-                "email" => "f@mxd.cz",
-                "id" => 666,
-                "name" => "Mr. Robot",
-            ];
-        }
         do {
             if (isset($_GET["identity"])) { // URL identity
                 $tls = "";
@@ -1038,6 +1040,10 @@ abstract class APresenter implements IPresenter
      */
     public function setLocation($location = null, $code = 303)
     {
+        if (CLI) {
+            echo $location;
+            return $this;
+        }
         $code = (int) $code;
         if (empty($location)) {
             $location = "/?nonce=" . substr(hash("sha256", random_bytes(4) . (string) time()), 0, 4);
@@ -1066,11 +1072,14 @@ abstract class APresenter implements IPresenter
      */
     public function checkRateLimit($max = null)
     {
-        if (CLI) return;
+        if (CLI) {
+            return;
+        }
+
         $f = "user_rate_limit_{$this->getUID()}";
         $rate = (int) (Cache::read($f, "limiter") ?? 0);
         Cache::write($f, ++$rate, "limiter");
-        $max ??= self::LIMITER_MAXIMUM;
+        $max??=self::LIMITER_MAXIMUM;
         if (!LOCALHOST && $rate > (int) $max) { // over limits && NOT localhost
             $this->setLocation("/err/420");
         }
@@ -1083,8 +1092,11 @@ abstract class APresenter implements IPresenter
      * @return integer current rate limit
      */
     public function getRateLimit()
-    {      
-        if (CLI) return false;
+    {
+        if (CLI) {
+            return false;
+        }
+
         return Cache::read("user_rate_limit_{$this->getUID()}", "limiter");
     }
 
@@ -1411,7 +1423,7 @@ abstract class APresenter implements IPresenter
             $this->addCritical("EMPTY readAppData() filename parameter!");
             return null;
         }
-        if (!$csv = Cache::read($file, "csv")) { // read CSV            
+        if (!$csv = Cache::read($file, "csv")) { // read CSV
             $csv = @file_get_contents(DATA . "/${file}.csv");
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");

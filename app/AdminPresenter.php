@@ -46,7 +46,7 @@ class AdminPresenter extends APresenter
         function getFileLines($f)
         {
             try {
-                if (!file_exists($f)) {
+                if (!\file_exists($f)) {
                     return -1;
                 }
                 $file = new \SplFileObject($f, "r");
@@ -65,8 +65,8 @@ class AdminPresenter extends APresenter
                 $this->setHeaderHTML();
                 $f = DATA . "/AuditLog.txt";
                 $logs = file($f);
-                array_walk($logs, array($this, "decorateLogs"));
-                $data["content"] = array_reverse($logs);
+                \array_walk($logs, array($this, "decorateLogs"));
+                $data["content"] = \array_reverse($logs);
                 return $this->setData("output", $this->setData($data)->renderHTML("auditlog"));
                 break;
 
@@ -81,7 +81,7 @@ class AdminPresenter extends APresenter
                         "csv" => $v,
                         "lines" => getFileLines(DATA . "/${k}.csv"),
                         "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
-                        "timestamp" => file_exists(DATA . "/${k}.csv") ? @filemtime(DATA . "/${k}.csv") : null,
+                        "timestamp" => \file_exists(DATA . "/${k}.csv") ? @filemtime(DATA . "/${k}.csv") : null,
                     ];
                     if ($arr[$k]["lines"] === -1) {
                         unset($arr[$k]);
@@ -98,7 +98,7 @@ class AdminPresenter extends APresenter
                 $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
                 $f = "PageSpeed_Insights_${hash}";
                 if (!$data = Cache::read($f, "minute")) { // read data from Google
-                    if ($data = @file_get_contents($uri)) {
+                    if ($data = @\file_get_contents($uri)) {
                         Cache::write($f, $data, "minute");
                     } else { // error
                         return $this->writeJsonData(500, $extras);
@@ -118,7 +118,7 @@ class AdminPresenter extends APresenter
                     $this->addAuditMessage("GET UPDATE TOKEN");
                     return $this->writeJsonData($code, $extras);
                 }
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
             case "RebuildAdminKeyRemote":
@@ -137,7 +137,7 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     }
                 }
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
             case "FlushCacheRemote":
@@ -147,7 +147,7 @@ class AdminPresenter extends APresenter
                 if ($user && $token && $key) {
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
-                        $this->flush_cache();
+                        $this->flushCache();
                         $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
@@ -156,7 +156,7 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     }
                 }
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
             case "CoreUpdateRemote":
@@ -168,7 +168,7 @@ class AdminPresenter extends APresenter
                     if ($code == $token) {
                         $this->setForceCsvCheck();
                         $this->postloadAppData("app_data");
-                        $this->flush_cache();
+                        $this->flushCache();
                         $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
@@ -177,7 +177,7 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     }
                 }
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
             case "RebuildNonceRemote":
@@ -196,7 +196,7 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     }
                 }
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
             case "RebuildSecureKeyRemote":
@@ -215,12 +215,12 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     }
                 }
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
             case "FlushCache":
                 $this->checkPermission("admin");
-                $this->flush_cache();
+                $this->flushCache();
                 $this->addAuditMessage("FLUSH CACHE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
@@ -229,7 +229,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $this->setForceCsvCheck();
                 $this->postloadAppData("app_data");
-                $this->flush_cache();
+                $this->flushCache();
                 $this->addAuditMessage("CORE UPDATE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
@@ -243,7 +243,7 @@ class AdminPresenter extends APresenter
                     $user["entropy"] = hash("sha256", random_bytes(8) . (string) time()); // random entropy
                     $json = json_encode($user);
                     $hash = substr(hash("sha256", $json), 0, 8); // return 8 chars of SHA256
-                    file_put_contents($file, $json, LOCK_EX); // @todo check write fail!
+                    \file_put_contents($file, $json, LOCK_EX); // @todo check write fail!
                     $this->addAuditMessage("CREATE AUTH CODE");
                 }
                 return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
@@ -254,8 +254,8 @@ class AdminPresenter extends APresenter
                 $user = $this->getCurrentUser();
                 if ($user["id"] ?? null) {
                     $file = DATA . "/identity_" . $user["id"] . ".json";
-                    if (file_exists($file)) { // delete identity if exists
-                        @unlink($file);
+                    if (\file_exists($file)) { // delete identity if exists
+                        \unlink($file);
                     }
                     $this->addAuditMessage("DELETE AUTH CODE");
                 }
@@ -286,8 +286,8 @@ class AdminPresenter extends APresenter
                 if ($x != 3) { // error
                     return $this->writeJsonData(400, $extras);
                 }
-                if (file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
-                    if (@copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
+                if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
+                    if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
                         return $this->writeJsonData([ // error
                             "code" => 500,
                             "status" => "Data copy to backup file failed.",
@@ -296,7 +296,7 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     };
                 }
-                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
+                if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
                     return $this->writeJsonData([ // error
                         "code" => 500,
                         "status" => "Data write to history file failed.",
@@ -304,7 +304,7 @@ class AdminPresenter extends APresenter
                         "hash" => $hash,
                     ], $extras);
                 };
-                if (@file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
+                if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
                     return $this->writeJsonData([ // error
                         "code" => 500,
                         "status" => "Data write to file failed.",
@@ -321,7 +321,7 @@ class AdminPresenter extends APresenter
                 break;
 
             default:
-                $this->unauthorized_access();
+                $this->unauthorizedAccess();
                 break;
 
         }
@@ -336,7 +336,7 @@ class AdminPresenter extends APresenter
     private function rebuildNonce()
     {
         if (\file_exists(DATA . "/" . self::IDENTITY_NONCE)) {
-            @unlink(DATA . "/" . self::IDENTITY_NONCE);
+            unlink(DATA . "/" . self::IDENTITY_NONCE);
         }
         clearstatcache();
         return $this->setIdentity();
@@ -350,7 +350,7 @@ class AdminPresenter extends APresenter
     private function rebuildAdminKey()
     {
         if (\file_exists(DATA . "/" . self::ADMIN_KEY)) {
-            @unlink(DATA . "/" . self::ADMIN_KEY);
+            unlink(DATA . "/" . self::ADMIN_KEY);
         }
         return $this->createAdminKey();
     }
@@ -365,7 +365,7 @@ class AdminPresenter extends APresenter
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
         $key = trim($key, "/.");
         if (\file_exists(DATA . "/${key}")) {
-            @unlink(DATA . "/${key}");
+            unlink(DATA . "/${key}");
         }
         clearstatcache();
         return $this->setIdentity();
@@ -376,7 +376,7 @@ class AdminPresenter extends APresenter
      *
      * @return object Singleton instance
      */
-    private function flush_cache()
+    private function flushCache()
     {
         $store = new FlockStore();
         $factory = new Factory($store);
@@ -389,9 +389,9 @@ class AdminPresenter extends APresenter
                     Cache::clear("${k}_file");
                 }
                 clearstatcache();
-                @array_map("unlink", glob(CACHE . "/*.php"));
-                @array_map("unlink", glob(CACHE . "/*.tmp"));
-                @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
+                array_map("unlink", glob(CACHE . "/*.php"));
+                array_map("unlink", glob(CACHE . "/*.tmp"));
+                array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
                 if (!LOCALHOST) {
                     // purge cache if run on server only
                     $this->CloudflarePurgeCache($this->getCfg("cf"));
@@ -412,7 +412,7 @@ class AdminPresenter extends APresenter
      *
      * @return void
      */
-    private function unauthorized_access()
+    private function unauthorizedAccess()
     {
         $this->setLocation("/err/401");
         exit;
@@ -445,12 +445,12 @@ class AdminPresenter extends APresenter
     {
         $f = DATA . "/" . self::ADMIN_KEY;
         if (!\file_exists($f)) {
-            if (!file_put_contents($f, hash("sha256", random_bytes(256) . time()))) {
+            if (!\file_put_contents($f, hash("sha256", random_bytes(256) . time()))) {
                 $this->addError("500: Internal Server Error");
                 $this->setLocation("/err/500");
                 exit;
             }
-            @chmod($f, 0660);
+            @\chmod($f, 0660);
             $this->addMessage("ADMIN: keyfile created");
         }
         return $this;
@@ -465,10 +465,10 @@ class AdminPresenter extends APresenter
     {
         $f = DATA . "/" . self::ADMIN_KEY;
         if (\file_exists($f)) {
-            $key = trim(@file_get_contents($f));
+            $key = trim(@\file_get_contents($f));
         } else {
             $this->createAdminKey();
-            $key = trim(@file_get_contents($f));
+            $key = trim(@\file_get_contents($f));
         }
         return $key ?? null;
     }
