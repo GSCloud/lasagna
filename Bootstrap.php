@@ -22,44 +22,47 @@ error_reporting(E_ALL);
 @ini_set("display_errors", true);
 
 // CONSTANTS (in SPECIFIC ORDER !!!)
+/** @const DIRECTORY_SEPARATOR */
+defined("DS") || define("DS", DIRECTORY_SEPARATOR);
+
 /** @const Bootstrap root folder */
 defined("ROOT") || define("ROOT", __DIR__);
 
 /** @const Application folder */
-defined("APP") || define("APP", ROOT . "/app");
+defined("APP") || define("APP", ROOT . DS . "app");
 
-/** @const Cache and logs folder, defaults to "cache" */
-defined("CACHE") || define("CACHE", ROOT . "/temp");
+/** @const Cache and logs folder, defaults to "temp" */
+defined("CACHE") || define("CACHE", ROOT . DS . "temp");
 
 /** @const Application data folder, defaults to "data" */
-defined("DATA") || define("DATA", ROOT . "/data");
+defined("DATA") || define("DATA", ROOT . DS . "data");
 
 /** @const Website assets folder, defaults to "www" */
-defined("WWW") || define("WWW", ROOT . "/www");
+defined("WWW") || define("WWW", ROOT . DS . "www");
 
 /** @const Configuration file, full path */
-defined("CONFIG") || define("CONFIG", APP . "/config.neon");
+defined("CONFIG") || define("CONFIG", APP . DS . "config.neon");
 
 /** @const Private configuration file, full path */
-defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", APP . "/config_private.neon");
+defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", APP . DS . "config_private.neon");
 
 /** @const Website templates folder */
-defined("TEMPLATES") || define("TEMPLATES", WWW . "/templates");
+defined("TEMPLATES") || define("TEMPLATES", WWW . DS . "templates");
 
-/** @const Website template partials folder */
-defined("PARTIALS") || define("PARTIALS", WWW . "/partials");
+/** @const Website templates partials folder */
+defined("PARTIALS") || define("PARTIALS", WWW . DS . "partials");
 
 /** @const Website downloads folder */
-defined("DOWNLOAD") || define("DOWNLOAD", WWW . "/download");
+defined("DOWNLOAD") || define("DOWNLOAD", WWW . DS . "download");
 
 /** @const Website uploads folder */
-defined("UPLOAD") || define("UPLOAD", WWW . "/upload");
+defined("UPLOAD") || define("UPLOAD", WWW . DS . "upload");
 
 /** @const Log files folder */
-defined("LOGS") || define("LOGS", ROOT . "/logs");
+defined("LOGS") || define("LOGS", ROOT . DS . "logs");
 
 /** @const Temporary files folder */
-defined("TEMP") || define("TEMP", ROOT . "/temp");
+defined("TEMP") || define("TEMP", ROOT . DS . "temp");
 
 /** @const True if running from command line interface */
 define("CLI", (bool) (PHP_SAPI == "cli"));
@@ -143,4 +146,4 @@ $data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${no
 $data["ALPHA"] = (in_array($host, (array) ($cfg["alpha_hosts"] ?? [])));
 $data["BETA"] = (in_array($host, (array) ($cfg["beta_hosts"] ?? [])));
 
-require_once APP . "/App.php";
+require_once APP . DS . "App.php";

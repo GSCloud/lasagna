@@ -636,7 +636,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set user identity
      *
-     * @param array $identity Identity associative array
+     * @param array $identity Identity array
      * @return object Singleton instance
      */
     public function setIdentity($identity = [])
@@ -653,11 +653,11 @@ abstract class APresenter implements IPresenter
             "name" => "",
             "time" => 0,
         ];
-        $file = DATA . "/" . self::IDENTITY_NONCE; // nonce file
+        $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
         if (!file_exists($file)) {
             try {
                 $nonce = hash("sha256", random_bytes(256) . time());
-                if (@file_put_contents($file, $nonce, LOCK_EX) === false) {
+                if (file_put_contents($file, $nonce, LOCK_EX) === false) {
                     throw new \Exception("File write failed!");
                 }
                 @chmod($file, 0660);
@@ -668,13 +668,12 @@ abstract class APresenter implements IPresenter
                 exit;
             }
         }
-        if ($nonce = @file_get_contents($file) === false) {
+        if (!$nonce = @file_get_contents($file)) {
             $this->addError("500: Internal Server Error -> cannot read nonce file");
             $this->setLocation("/err/500");
             exit;
         }
         $i["nonce"] = substr(trim($nonce), 0, 8); // final nonce
-
         // check all keys
         if (array_key_exists("avatar", $identity)) {
             $i["avatar"] = (string) $identity["avatar"];
@@ -702,9 +701,9 @@ abstract class APresenter implements IPresenter
         // set new identity
         $this->identity = $out;
         if ($out["id"]) {
-            $this->setCookie($this->getCfg("app"), json_encode($out)); // encrypted cookie
+            $this->setCookie($this->getCfg("app") ?? "app", json_encode($out)); // encrypted cookie
         } else {
-            $this->clearCookie($this->getCfg("app")); // clear cookie
+            $this->clearCookie($this->getCfg("app") ?? "app"); // clear cookie
         }
         return $this;
     }
@@ -734,7 +733,7 @@ abstract class APresenter implements IPresenter
         if ($id && $email && $name) {
             return $this->identity;
         }
-        $file = DATA . "/" . self::IDENTITY_NONCE; // nonce file
+        $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
         if (!file_exists($file)) {
             $this->setIdentity(); // initialize nonce
             return $this->identity;
@@ -760,13 +759,13 @@ abstract class APresenter implements IPresenter
                 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
                     $tls = "s";
                 }
-                $this->setCookie($this->getCfg("app"), $_GET["identity"]); // set cookie
+                $this->setCookie($this->getCfg("app") ?? "app", $_GET["identity"]); // set cookie
                 $this->setLocation("http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
                 exit;
             }
-            if (isset($_COOKIE[$this->getCfg("app")])) { // COOKIE identity
+            if (isset($_COOKIE[$this->getCfg("app") ?? "app"])) { // COOKIE identity
                 $x = 0;
-                $q = json_decode($this->getCookie($this->getCfg("app")), true);
+                $q = json_decode($this->getCookie($this->getCfg("app") ?? "app"), true);
                 if (!is_array($q)) {
                     $x++;
                 } else {
@@ -1043,10 +1042,6 @@ abstract class APresenter implements IPresenter
      */
     public function setLocation($location = null, $code = 303)
     {
-        if (CLI) {
-            echo $location;
-            return $this;
-        }
         $code = (int) $code;
         if (empty($location)) {
             $location = "/?nonce=" . substr(hash("sha256", random_bytes(4) . (string) time()), 0, 4);
@@ -1061,7 +1056,7 @@ abstract class APresenter implements IPresenter
     public function logout()
     {
         $this->setIdentity([]);
-        $this->clearCookie($this->getCfg("app"));
+        $this->clearCookie($this->getCfg("app") ?? "app");
         header('Clear-Site-Data: "cookies"');
         $this->setLocation();
         exit;

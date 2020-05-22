@@ -91,13 +91,15 @@ class LoginPresenter extends APresenter
                 $this->addAuditMessage("GOOGLE OAUTH LOGIN");
 
 /*
-// debugging
+// DEBUGGING START
+
                 dump("NEW IDENTITY:");
                 dump($this->getIdentity());
                 dump("OAuth IDENTITY:");
                 dump($ownerDetails);
                 exit;
-*/
+
+/* DEBUGGING END */
 
                 if ($this->getUserGroup() == "admin") {
                     // set Tracy debug cookie

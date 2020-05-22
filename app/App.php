@@ -48,8 +48,8 @@ defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? nu
 defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
 
 // include GCP keys
-if (GCP_KEYS && \file_exists(APP . "/" . GCP_KEYS)) {
-    putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . "/" . GCP_KEYS);
+if (GCP_KEYS && \file_exists(APP . DS . GCP_KEYS)) {
+    putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . DS . GCP_KEYS);
 }
 
 /**
