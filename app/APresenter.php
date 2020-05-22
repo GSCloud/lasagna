@@ -718,9 +718,12 @@ abstract class APresenter implements IPresenter
     {
         if (CLI) {
             return [
-                "id" => 666,
+                "country" => "XX",
+                "email" => "user@example.com",
+                "id" => 1,
                 "ip" => "127.0.0.1",
-                "name" => "CLI",
+                "name" => "CLI User",
+                "time" => time(),    
             ];
         }
 

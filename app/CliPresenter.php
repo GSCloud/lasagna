@@ -76,9 +76,10 @@ class CliPresenter extends APresenter
     {
         $climate = new CLImate;
         if ($argc != 3) {
-            $climate->out("Examples:\n");
-            $climate->out('<bold>app</bold> \'$app->showConst()\'');
-            $climate->out('<bold>app</bold> \'dump($app->getIdentity())\'');
+            $climate->out("Examples:");
+            $climate->out("\t" . '<bold>app</bold> \'$app->showConst()\'');
+            $climate->out("\t" . '<bold>app</bold> \'dump($app->getCurrentUser())\'');
+            $climate->out("\t" . '<bold>app</bold> \'dump($app->getIdentity())\'');
         } else {
             try {
                 eval(trim($argv[2]) . ";");
