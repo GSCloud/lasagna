@@ -23,7 +23,7 @@ class AdminPresenter extends APresenter
 
     /**
      * Main controller
-     * 
+     *
      * @return object Singleton instance
      */
     public function process()
@@ -121,26 +121,48 @@ class AdminPresenter extends APresenter
                 $this->unauthorized_access();
                 break;
 
-            case "FlushCacheRemote":
-                $user = $_GET["user"] ?? null;
-                $token = $_GET["token"] ?? null;
+            case "RebuildAdminKeyRemote":
                 $key = $this->readAdminKey();
+                $token = $_GET["token"] ?? null;
+                $user = $_GET["user"] ?? null;
+                if ($user && $token && $key) {
+                    $code = hash("sha256", $key . $user);
+                    if ($code == $token) {
+                        $this->rebuildAdminKey();
+                        $this->addAuditMessage("REBUILD ADMIN KEY REMOTE [$user]");
+                        return $this->writeJsonData([
+                            "host" => $_SERVER["HTTP_HOST"],
+                            "function" => "RebuildAdminKeyRemote",
+                            "message" => "OK",
+                        ], $extras);
+                    }
+                }
+                $this->unauthorized_access();
+                break;
+
+            case "FlushCacheRemote":
+                $key = $this->readAdminKey();
+                $token = $_GET["token"] ?? null;
+                $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->flush_cache();
                         $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
-                        echo $_SERVER["HTTP_HOST"] . " FlushCacheRemote OK\n";
-                        exit;
+                        return $this->writeJsonData([
+                            "host" => $_SERVER["HTTP_HOST"],
+                            "function" => "FlushCacheRemote",
+                            "message" => "OK",
+                        ], $extras);
                     }
                 }
                 $this->unauthorized_access();
                 break;
 
             case "CoreUpdateRemote":
-                $user = $_GET["user"] ?? null;
-                $token = $_GET["token"] ?? null;
                 $key = $this->readAdminKey();
+                $token = $_GET["token"] ?? null;
+                $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
@@ -148,24 +170,49 @@ class AdminPresenter extends APresenter
                         $this->postloadAppData("app_data");
                         $this->flush_cache();
                         $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
-                        echo $_SERVER["HTTP_HOST"] . " CoreUpdateRemote OK\n";
-                        exit;
+                        return $this->writeJsonData([
+                            "host" => $_SERVER["HTTP_HOST"],
+                            "function" => "CoreUpdateRemote",
+                            "message" => "OK",
+                        ], $extras);
                     }
                 }
                 $this->unauthorized_access();
                 break;
 
             case "RebuildNonceRemote":
-                $user = $_GET["user"] ?? null;
-                $token = $_GET["token"] ?? null;
                 $key = $this->readAdminKey();
+                $token = $_GET["token"] ?? null;
+                $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
                     $code = hash("sha256", $key . $user);
                     if ($code == $token) {
                         $this->rebuildNonce();
                         $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
-                        echo $_SERVER["HTTP_HOST"] . " RebuildNonceRemote OK \n";
-                        exit;
+                        return $this->writeJsonData([
+                            "host" => $_SERVER["HTTP_HOST"],
+                            "function" => "RebuildNonceRemote",
+                            "message" => "OK",
+                        ], $extras);
+                    }
+                }
+                $this->unauthorized_access();
+                break;
+
+            case "RebuildSecureKeyRemote":
+                $key = $this->readAdminKey();
+                $token = $_GET["token"] ?? null;
+                $user = $_GET["user"] ?? null;
+                if ($user && $token && $key) {
+                    $code = hash("sha256", $key . $user);
+                    if ($code == $token) {
+                        $this->rebuildSecureKey();
+                        $this->addAuditMessage("REBUILD SECURE KEY REMOTE [$user]");
+                        return $this->writeJsonData([
+                            "host" => $_SERVER["HTTP_HOST"],
+                            "function" => "RebuildSecureKeyRemote",
+                            "message" => "OK",
+                        ], $extras);
                     }
                 }
                 $this->unauthorized_access();
@@ -288,7 +335,38 @@ class AdminPresenter extends APresenter
      */
     private function rebuildNonce()
     {
-        @unlink(DATA . "/" . self::IDENTITY_NONCE);
+        if (\file_exists(DATA . "/" . self::IDENTITY_NONCE)) {
+            @unlink(DATA . "/" . self::IDENTITY_NONCE);
+        }
+        clearstatcache();
+        return $this->setIdentity();
+    }
+
+    /**
+     * Rebuild admin key
+     *
+     * @return object Singleton instance
+     */
+    private function rebuildAdminKey()
+    {
+        if (\file_exists(DATA . "/" . self::ADMIN_KEY)) {
+            @unlink(DATA . "/" . self::ADMIN_KEY);
+        }
+        return $this->createAdminKey();
+    }
+
+    /**
+     * Rebuild secure key
+     *
+     * @return object Singleton instance
+     */
+    private function rebuildSecureKey()
+    {
+        $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
+        $key = trim($key, "/.");
+        if (\file_exists(DATA . "/${key}")) {
+            @unlink(DATA . "/${key}");
+        }
         clearstatcache();
         return $this->setIdentity();
     }
@@ -331,12 +409,11 @@ class AdminPresenter extends APresenter
 
     /**
      * Unauthorized access
-     * 
+     *
      * @return void
      */
     private function unauthorized_access()
     {
-        $this->addError("401: UNAUTHORIZED ACCESS");
         $this->setLocation("/err/401");
         exit;
     }

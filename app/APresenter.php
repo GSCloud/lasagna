@@ -961,6 +961,7 @@ abstract class APresenter implements IPresenter
             return $this->cookies[$name] ?? null;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
+        $key = trim($key, "/.");
         $keyfile = DATA . "/${key}";
         if (file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
@@ -985,7 +986,8 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
-        $keyfile = DATA . "/$key";
+        $key = trim($key, "/.");
+        $keyfile = DATA . "/${key}";
         if (file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
@@ -1437,15 +1439,13 @@ abstract class APresenter implements IPresenter
     {
         $out = [];
         $code = 200;
+        $locale = [];
         $out["timestamp"] = time();
         $out["version"] = (string) ($this->getCfg("version") ?? "v1");
-        // locales
-        $locale = [];
-        if (is_array($this->getCfg("locales"))) {
+        if (is_array($this->getCfg("locales"))) { // locales
             $locale = $this->getLocale("en");
         }
-        // last decoding error
-        switch (json_last_error()) {
+        switch (json_last_error()) { // last decoding error
             case JSON_ERROR_NONE:
                 $code = 200;
                 $msg = "DATA OK";

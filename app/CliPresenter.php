@@ -52,6 +52,7 @@ class CliPresenter extends APresenter
         $climate = new CLImate;
         $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
+        $climate->out("\t <bold>clearall</bold> \t - clear all temporary files");
         $climate->out("\t <bold>clearcache</bold> \t - clear cache");
         $climate->out("\t <bold>clearci</bold> \t - clear CI logs");
         $climate->out("\t <bold>clearlogs</bold> \t - clear logs");
@@ -95,10 +96,17 @@ class CliPresenter extends APresenter
      * @param array $argv ARGV
      * @return void
      */
-    public function selectModule($module, $argc, $argv)
+    public function selectModule($module, $argc = null, $argv = null)
     {
         $climate = new CLImate;
         switch ($module) {
+            case "clearall":
+                $this->selectModule("clearcache");
+                $this->selectModule("clearci");
+                $this->selectModule("clearlogs");
+                $this->selectModule("cleartemp");
+                break;
+
             case "local":
             case "prod":
             case "testlocal":
@@ -112,30 +120,32 @@ class CliPresenter extends APresenter
                     Cache::clear($k);
                     Cache::clear("${k}_file");
                 }
-                $c = count(glob(CACHE . "/*"));
-                @array_map("unlink", glob(CACHE . "/*.php"));
-                @array_map("unlink", glob(CACHE . "/*.tmp"));
-                @array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
+                array_map("unlink", glob(CACHE . "/*.php"));
+                array_map("unlink", glob(CACHE . "/*.tmp"));
+                array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
                 clearstatcache();
-                $climate->out("Cleaner: <bold>$c files - cache + Redis cleaned</bold>\n");
+                $climate->out("Cleaner: CACHE + Redis - <bold>all cleaned 🐱</bold>");
                 break;
 
             case "clearci":
-                $c = count(glob(ROOT . "/ci/*"));
-                @array_map("unlink", glob(ROOT . "/ci/*"));
-                $climate->out("Cleaner: <bold>$c files - CI logs cleaned</bold>\n");
+                $files = glob(ROOT . "/ci/*");
+                $c = count($files);
+                array_map("unlink", $files);
+                $climate->out("Cleaner: CI logs - <bold>$c files cleaned 🐱</bold>");
                 break;
 
             case "clearlogs":
-                $c = count(glob(LOGS . "/*"));
-                @array_map("unlink", glob(LOGS . "/*"));
-                $climate->out("Cleaner: <bold>$c files - logs cleaned</bold>\n");
+                $files = glob(LOGS . "/*");
+                $c = count($files);
+                array_map("unlink", $files);
+                $climate->out("Cleaner: LOGS - <bold>$c files cleaned 🐱</bold>");
                 break;
 
             case "cleartemp":
-                $c = count(glob(TEMP . "/*"));
-                @array_map("unlink", glob(TEMP . "/*"));
-                $climate->out("Cleaner: <bold>$c files - temp cleaned</bold>\n");
+                $files = glob(TEMP . "/*");
+                $c = count($files);
+                array_map("unlink", $files);
+                $climate->out("Cleaner: TEMP - <bold>$c files cleaned 🐱</bold>");
                 break;
 
             case "unit":
@@ -156,6 +166,5 @@ class CliPresenter extends APresenter
                 $this->help();
                 break;
         }
-        exit;
     }
 }

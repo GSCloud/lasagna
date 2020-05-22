@@ -126,7 +126,9 @@
             <option value="" disabled selected>&hellip;</option>
             <option value="CoreUpdateRemote">Core Data Update</option>
             <option value="FlushCacheRemote">Flush Local Cache</option>
-            <option value="RebuildNonceRemote">Refresh Auth Nonce</option>
+            <option value="RebuildNonceRemote">Rebuild Auth Nonce</option>
+            <option value="RebuildSecureKeyRemote">Rebuild Cookie Secure Key</option>
+            <option value="RebuildAdminKeyRemote">Rebuild Administration Secure Key</option>
           </select>
         </div>
       </div>
@@ -282,8 +284,11 @@
       // PingDot()
       if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
         if (!dot) return;
-        if (status) status = "green";
-          else status = "red";
+        if (status) {
+          status = "green";
+        } else {
+          status = "red";
+        }
         $(dot).html("&#8226;").css({
           color: status,
           opacity: 1
@@ -292,10 +297,11 @@
 
       // GetCsvInfo()
       if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
-        if (w.GSC.offline) {
-          GSC.PingDot("#csv_ping", false);
-          return;
+        if (w.GSC.offline) { // offline
+          return GSC.PingDot("#csv_ping", false);
         }
+
+        // API: GetCsvInfo
         $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
             GSC.PingDot("#csv_ping");
             var content = "";
@@ -319,40 +325,43 @@
               }
               moment.locale("{{ lang }}");
               content += (link + " {{ l.a_age }}&nbsp;" +
-                moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() +
-                "<br>"
+                moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "<br>"
               );
             }
             $("#a_update_info").html(content);
           })
           .fail(function () {
             GSC.PingDot("#csv_ping", false);
-            $("#a_update_info").html('<i class="material-icons large">mood_bad</i>');
+            $("#a_update_info").addClass("bigemoji").html('🤯');
           });
       }
 
       // GetPSInsights()
       if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
-        var t = "#a_ps_insights_info";
-        if (w.GSC.offline) {
-          GSC.PingDot("#psi_ping", false);
-          return;
+        if (GSC.offline) { // offline
+          M.toast({html: "offline 📶"});
+          return GSC.PingDot("#psi_ping", false);
         }
+        var t = "#a_ps_insights_info";
         GSC.ShowLoader(t);
 
+        // API: GetPSInsights
         $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
-            console.log("Lighthouse data:", data.data.lighthouseResult);
             GSC.PingDot("#psi_ping");
             $("#psi_row").hide();
-            $(t).html('<h2 class="orange-text a_reset a_h2">' + data.data.lighthouseResult.categories.performance.score * 100 + "&nbsp;%</h2>");
-            $(t).append("Lighthouse version:&nbsp;<span class=bold>" + data.data.lighthouseResult.lighthouseVersion + "</span> ");
-            $(t).append("Total timing:&nbsp;<span class=bold>" + data.data.lighthouseResult.timing.total + "&nbsp;ms</span> ");
-            $(t).slideDown();
+            if (data.data && data.data.lighthouseResult) {
+              $(t).html('<h2 class="orange-text a_reset a_h2">' + data.data.lighthouseResult.categories.performance.score * 100 + "&nbsp;%</h2>");
+              $(t).append("Lighthouse version:&nbsp;<span class=bold>" + data.data.lighthouseResult.lighthouseVersion + "</span><br> ");
+              $(t).append("Total timing:&nbsp;<span class=bold>" + data.data.lighthouseResult.timing.total + "&nbsp;msec.</span> ");
+              $(t).slideDown();
+            } else {
+              $(t).html('GetPSInsights ERROR 🤯').slideDown();
+            }
             $("#a_ps_insights").removeAttr("disabled");
           })
           .fail(function () {
             GSC.PingDot("#psi_ping", false);
-            $(t).html('<i class="material-icons large">mood_bad</i>').slideDown();
+            $(t).html('GetPSInsights ERROR 🤯').slideDown();
             $("#a_ps_insights").removeAttr("disabled");
           });
       }
@@ -364,10 +373,13 @@
         $("#admin_main h4").addClass("a_reset a_h4");
         $("#admin_main h5").addClass("a_reset a_h5");
         $("#admin_main p").addClass("a_reset");
+
+        // remove tooltips for touch display
         if (w.GSC.touch) {
           if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
         }
 
+        // editor block doubleclick
         $(".summernote").dblclick(function () {
           $(".summernote").unbind("dblclick");
           GSC.DeploySummernote();
@@ -383,10 +395,9 @@
 
         // save all
         $("#a_summernote").click(function () {
-          if (w.GSC.offline) {
-            // offline
-            GSC.PingDot("#summer_ping", false);
-            return;
+          if (GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
+            return GSC.PingDot("#summer_ping", false);
           }
           $("#a_summernote").attr("disabled", "disabled");
           var id;
@@ -398,8 +409,9 @@
             }
             $(obj).summernote("destroy");
           });
-          console.log("UpdateArticles write", {data});
-          $.post("/admin/UpdateArticles", { // API call
+
+          // API: UpdateArticles
+          $.post("/admin/UpdateArticles", {
             profile: GSC.profile,
             hash: "{{ request_path_hash }}",
             data: JSON.stringify(data)
@@ -421,7 +433,7 @@
           }).fail(function() {
             $("#a_summernote").removeAttr("disabled");
             GSC.PingDot("#summer_ping", false);
-            alert("ERROR!");
+            M.toast({html: "ERROR 🤯"});
           });
         });
 
@@ -512,11 +524,12 @@
         }
         GSC.profile = profile;
         setCookie("profile", profile);
+
         $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
         $("#SiteSelect").formSelect();
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
 
-        // web profile select
+        // web profile selector
         $("#SiteSelect").change(function () {
           if (!$("#SiteSelect").val()) return;
           var profile = $("#SiteSelect").val().trim();
@@ -524,12 +537,15 @@
           window.location.href = window.location.pathname + "?profile=" + profile;
         });
 
-        // remote fn select
+        // remote function selector
         $("#RemoteFnSelect").change(function () {
           if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
             return GSC.PingDot("#sectok_ping", false);
           }
           if (!$("#RemoteFnSelect").val()) return;
+
+          // API: GetUpdateToken
           $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
             var s = $("#RemoteFnSelect").val();
             var t = data.data[0];
@@ -541,33 +557,46 @@
             $("#a_security_token").val("N/A");
             GSC.PingDot("#sectok_ping", false);
             GSC.CopyClipboard("");
+            M.toast({html: s + " ERROR 🤯"});
           });
         });
 
-        // update Google data
+        // update CSV data
         $("#a_update").click(function () {
-          if (w.GSC.offline) { // offline            
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
           $("#a_update").attr("disabled", "disabled");
           GSC.ShowLoader("#a_update_info");
-          setTimeout(function(){$("#a_update").removeAttr("disabled")}, 30E3);
+          setTimeout(function () {
+            $("#a_update").removeAttr("disabled");
+          }, 30E3);
+
+          // API: CoreUpdate
           $.post("/admin/CoreUpdate");
         });
 
-        // show PS Insights
+        // show Google PSI
         $("#a_ps_insights").click(function () {
-          if (w.GSC.offline) { // offline            
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
             return GSC.PingDot("#psi_ping", false);
           }
-          $(this).attr("disabled", "disabled");
+          $("#a_ps_insights").attr("disabled", "disabled");
           GSC.PingDot("#psi_ping");
           GSC.GetPSInsights();
         });
 
         // invoke Summernote editor
         $("#a_summernote").click(function () {
-          GSC.ReadArticles(function(){GSC.DeploySummernote()});
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
+            return GSC.PingDot("#psi_ping", false);
+          }
+          GSC.ReadArticles(function () {
+            GSC.DeploySummernote();
+          });
         });
 
         // toggle emoji panel
@@ -591,33 +620,42 @@
 
         // flush cache
         $("#a_flush").click(function () {
-          if (w.GSC.offline) { // offline            
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
           GSC.GetCsvInfo = function () {};
           $("#a_flush").attr("disabled", "disabled");
+
+          // API: FlushCache
           $.post("/admin/FlushCache");
           window.location.reload(true);
         });
 
         // get auth code
         $("#a_getcode").click(function () {
-          if (w.GSC.offline) { // offline            
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
+
+          // API: CreateAuthCode
           $.post("/admin/CreateAuthCode", function(data) {
             GSC.CopyClipboard(data.data.hash);
-            M.toast({html: "{{ l.a_clipboardcopy }} [" + data.data.hash + "]"});
+            M.toast({html: "CreateAuthCode {{ l.a_clipboardcopy }} [" + data.data.hash + "] 🆗"});
           });
         });
 
         // delete auth code
         $("#a_delcode").click(function () {
-          if (w.GSC.offline) { // offline            
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
+
+          // API: DeleteAuthCode
           $.post("/admin/DeleteAuthCode", function(data) {
-            M.toast({html: "{{ l.a_codedeleted }}"});
+            M.toast({html: "DeleteAuthCode {{ l.a_codedeleted }} 🆗"});
             GSC.CopyClipboard("");
           });
         });
@@ -635,18 +673,20 @@
         if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
         setInterval(function() {
           window.GSC.GetCsvInfo();
-        }, 5000);
+        }, 2000);
       });
 
-      // admin UI
+      // show admin UI
       w.GSC.init.push(function () {
         w.GSC.names.push("Admin UI");
         GSC.AdminUI();
       });
 
-      // update PSI cache
+      // load PSI into cache
       w.GSC.init.push(function () {
         w.GSC.names.push("Update PSI cache");
+
+        // API: GetPSInsights
         $.get("/admin/GetPSInsights?" + Date.now());
       });
 

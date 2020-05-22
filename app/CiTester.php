@@ -56,7 +56,6 @@ class CiTester
         $i = 0;
         $pages = [];
         $redirects = [];
-
         foreach ($presenter as $p) {
             if (strpos($p["path"], "[") !== false) {
                 $u = "<bold><blue>${target}${p['path']}</blue></bold>";
@@ -120,6 +119,7 @@ class CiTester
         do {
             $mrc = curl_multi_exec($multi, $active);
         } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+
         while ($active && $mrc == CURLM_OK) {
             if (curl_multi_select($multi) != -1) {
                 do {
@@ -142,6 +142,7 @@ class CiTester
             $m = curl_multi_getcontent($ch[$i]);
             @file_put_contents(ROOT . "/ci/${f2}.curl.txt", $m);
             curl_multi_remove_handle($multi, $ch[$i]);
+
             // separate headers and content
             $information = explode("\r\n\r\n", $m);
             $headers = [];
@@ -156,7 +157,7 @@ class CiTester
             $content = implode("\r\n\r\n", $content);
             $headers = implode("\r\n\r\n", $headers);
             $code = curl_getinfo($ch[$i], CURLINFO_HTTP_CODE);
-            $time = curl_getinfo($ch[$i], CURLINFO_TOTAL_TIME);
+            $time = round(curl_getinfo($ch[$i], CURLINFO_TOTAL_TIME) * 1000, 1);
             $length = strlen($content);
 
             // assert JSON
@@ -186,18 +187,16 @@ class CiTester
                 $bad++;
                 $http_code = false;
             }
-            // OK
-            if ($bad == 0) {
+            if ($bad == 0) { // OK
                 $climate->out(
-                    "${u1} length: <green>${length}</green> code: <green>${code}</green> time: <green>${time}</green> format: <blue>$jsformat</blue> JScode: <green>$jscode</green>"
+                    "${u1} length: <green>${length}</green> code: <green>${code}</green> time: <green>${time} ms</green> format: <blue>$jsformat</blue> JScode: <green>$jscode</green>"
                 );
                 @file_put_contents(ROOT . "/ci/tests_${f1}.assert.txt",
                     "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time};$jsformat;$jscode\n", FILE_APPEND | LOCK_EX);
-            } else {
-                // error
+            } else { // error
                 $errors++;
                 $climate->out(
-                    "<red>${u1} length: <bold>${length}</bold> code: <bold>${code}</bold> assert: <bold>${x['assert_httpcode']}</bold> time: ${time} format: $jsformat JScode: $jscode</red>\007"
+                    "<red>${u1} length: <bold>${length}</bold> code: <bold>${code}</bold> assert: <bold>${x['assert_httpcode']}</bold> time: ${time} ms format: $jsformat JScode: $jscode</red>\007"
                 );
                 @file_put_contents(ROOT . "/ci/errors_${f1}.assert.txt",
                     "${u2};length:${length};code:${code};assert:${x['assert_httpcode']};time:${time};format:$jsformat;jscode:$jscode\n", FILE_APPEND | LOCK_EX);
@@ -206,8 +205,9 @@ class CiTester
         }
         curl_multi_close($multi);
 
-        $time = round((float) \Tracy\Debugger::timer("CITEST") * 1000, 2);
-        $climate->out("\nTotal time: <bold><green>$time ms</green></bold>");
+        $time = round((float) \Tracy\Debugger::timer("CITEST"), 2);
+        $climate->out("\nTotal time: <bold><green>$time s</green></bold>");
+
         if ($errors) {
             $climate->out("\nErrors: <bold>" . $errors . "\007\n");
         }

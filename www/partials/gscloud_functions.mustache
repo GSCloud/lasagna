@@ -40,7 +40,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
   }
 
-  // "online" feature detection and event bind
+  // "online" feature detection and binding
   if ("onLine" in navigator) {
     w.addEventListener("load", function () {
       w.addEventListener("online", checkNetwork);
@@ -54,8 +54,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     if (key === undefined) return false;
     if (value === undefined) return false;
     if (days === undefined) days = 31;
-    if (days === 0) {
-      // session cookie
+    if (days === 0) { // session cookie      
       document.cookie = key + "=" + value + ";path=/";
     } else {
       var date = new Date();
@@ -293,18 +292,23 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // DELAYED UI bindings
     GSC.init.push(function () {
       GSC.names.push("UI bindings");
+
       $(".sethlcs").click(function () {
         setCookie("hl", "cs");
       });
+
       $(".sethlen").click(function () {
         setCookie("hl", "en");
       });
+
       $("#update-message").click(function () {
         window.location.reload(true);
       });
+
       $(".summernote>ul").each(function (i, obj) {
         $(obj).addClass("browser-default");
       });
+
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
