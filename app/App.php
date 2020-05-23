@@ -16,7 +16,7 @@ use Monolog\Logger;
 use Nette\Neon\Neon;
 
 // SANITY CHECK
-foreach (["APP", "CACHE", "DATA", "LOGS", "ROOT", "TEMP"] as $x) {
+foreach (["APP", "CACHE", "DATA", "DS", "LOGS", "ROOT", "TEMP"] as $x) {
     if (!\defined($x)) {
         die("FATAL ERROR: sanity check failed!");
     }
@@ -39,7 +39,7 @@ defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"))
 defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
 
 /** @const Monolog filename, full path */
-defined("MONOLOG") || define("MONOLOG", LOGS . "/MONOLOG_" . SERVER . "_" . PROJECT . ".log");
+defined("MONOLOG") || define("MONOLOG", LOGS . DS . "MONOLOG_" . SERVER . "_" . PROJECT . ".log");
 
 /** @const Google Cloud Platform project ID */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
@@ -142,12 +142,12 @@ $data["multisite_profiles_json"] = json_encode($multisite_profiles);
 // ROUTING CONFIGURATION
 $router = [];
 $routes = $cfg["routes"] ?? [ // configuration can override defaults
-    "/router_defaults.neon",
-    "/router_admin.neon",
-    "/router.neon",
+    "router_defaults.neon",
+    "router_admin.neon",
+    "router.neon",
 ];
 foreach ($routes as $r) {
-    $r = APP . "/${r}";
+    $r = APP . DS . $r;
     if (($content = @file_get_contents($r)) === false) {
         logger("Error in routing table: $r", Logger::EMERGENCY);
         if (ob_get_level()) {

@@ -397,7 +397,7 @@ abstract class APresenter implements IPresenter
         if (is_null($template)) {
             return "";
         }
-        $type = (file_exists(TEMPLATES . "/${template}.mustache")) ? 1 : 0;
+        $type = (file_exists(TEMPLATES . DS . "${template}.mustache")) ? 1 : 0;
         $renderer = new \Mustache_Engine(array(
             "template_class_prefix" => "__" . SERVER . "_" . PROJECT . "_",
             "cache" => TEMP,
@@ -542,7 +542,7 @@ abstract class APresenter implements IPresenter
     public function addAuditMessage($message = null)
     {
         if (!is_null($message) || !empty($message)) {
-            $file = DATA . "/AuditLog.txt";
+            $file = DATA . DS . "AuditLog.txt";
             $date = date("c");
             $message = trim($message);
             $i = $this->getIdentity();
@@ -616,7 +616,7 @@ abstract class APresenter implements IPresenter
             [
                 CLI ? "CLI_USER" : "",
                 CLI ? "" : $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
-                CLI ? "" :$_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
+                CLI ? "" : $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
                 CLI ? "" : $_SERVER["HTTP_USER_AGENT"] ?? "N/A",
                 $this->getIP(),
             ]),
@@ -722,7 +722,7 @@ abstract class APresenter implements IPresenter
                 "id" => 1,
                 "ip" => "127.0.0.1",
                 "name" => "CLI User",
-                "time" => time(),    
+                "time" => time(),
             ];
         }
 
@@ -965,8 +965,8 @@ abstract class APresenter implements IPresenter
             return $this->cookies[$name] ?? null;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
-        $key = trim($key, "/.");
-        $keyfile = DATA . "/${key}";
+        $key = trim($key, "/.\\");
+        $keyfile = DATA . DS . $key;
         if (file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
@@ -990,8 +990,8 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
-        $key = trim($key, "/.");
-        $keyfile = DATA . "/${key}";
+        $key = trim($key, "/.\\");
+        $keyfile = DATA . DS . $key;
         if (file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
@@ -1212,7 +1212,7 @@ abstract class APresenter implements IPresenter
                     $csv = false;
                     $subfile = strtolower($k);
                     if ($csv === false) {
-                        $csv = @file_get_contents(DATA . "/${subfile}.csv");
+                        $csv = @file_get_contents(DATA . DS . "${subfile}.csv");
                         if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                         }
@@ -1220,7 +1220,7 @@ abstract class APresenter implements IPresenter
 
                     // 2. read from CSV file backup
                     if ($csv === false) {
-                        $csv = @file_get_contents(DATA . "/${subfile}.bak");
+                        $csv = @file_get_contents(DATA . DS . "${subfile}.bak");
                         if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                             continue; // skip this CSV
@@ -1357,7 +1357,7 @@ abstract class APresenter implements IPresenter
         if ($name && $csvkey) {
             if (Cache::read($file, "csv") === false || $force === true) {
                 $data = false;
-                if (!file_exists(DATA . "/${file}.csv")) {
+                if (!file_exists(DATA . DS . "${file}.csv")) {
                     $force = true;
                 }
                 if ($force) {
@@ -1367,19 +1367,19 @@ abstract class APresenter implements IPresenter
                     Cache::write($file, $data, "csv");
                     // @todo add OPERATION LOCK!!!
                     // delete old backup
-                    if (file_exists(DATA . "/${file}.bak")) {
-                        if (@unlink(DATA . "/${file}.bak") === false) {
+                    if (file_exists(DATA . DS . "${file}.bak")) {
+                        if (@unlink(DATA . DS . "${file}.bak") === false) {
                             $this->addError("FILE: Deleting ${file}.bak failed!");
                         }
                     }
                     // move CSV to backup
-                    if (file_exists(DATA . "/${file}.csv")) {
-                        if (@rename(DATA . "/${file}.csv", DATA . "/${file}.bak") === false) {
+                    if (file_exists(DATA . DS . "${file}.csv")) {
+                        if (@rename(DATA . DS . "${file}.csv", DATA . DS . "${file}.bak") === false) {
                             $this->addError("FILE: Backuping ${file}.csv failed!");
                         }
                     }
                     // write new CSV
-                    if (@file_put_contents(DATA . "/${file}.csv", $data, LOCK_EX) === false) {
+                    if (@file_put_contents(DATA . DS . "${file}.csv", $data, LOCK_EX) === false) {
                         $this->addError("FILE: Saving data to ${file}.csv failed!");
                         return false;
                     }
@@ -1422,12 +1422,12 @@ abstract class APresenter implements IPresenter
             return null;
         }
         if (!$csv = Cache::read($file, "csv")) { // read CSV
-            $csv = @file_get_contents(DATA . "/${file}.csv");
+            $csv = @file_get_contents(DATA . DS . "${file}.csv");
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
-            $csv = @file_get_contents(DATA . "/${file}.bak"); // read CSV backup
+            $csv = @file_get_contents(DATA . DS . "${file}.bak"); // read CSV backup
             if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;

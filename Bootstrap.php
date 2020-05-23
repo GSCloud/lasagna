@@ -71,7 +71,7 @@ define("CLI", (bool) (PHP_SAPI == "cli"));
 define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
 
 // COMPOSER
-require_once ROOT . "/vendor/autoload.php";
+require_once ROOT . DS . "vendor" . DS . "autoload.php";
 
 // CONFIGURATION
 if (!$cfg = @file_get_contents(CONFIG)) {
@@ -129,11 +129,11 @@ $data = $cfg;
 $data["cfg"] = $cfg; // backup
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
-$data["VERSION"] = $version = trim(@file_get_contents(ROOT . "/VERSION") ?? "", "\r\n");
-$data["VERSION_DATE"] = date("j. n. Y", @filemtime(ROOT . "/VERSION") ?? time());
-$data["REVISIONS"] = (int) trim(@file_get_contents(ROOT . "/REVISIONS") ?? "0", "\r\n");
+$data["VERSION"] = $version = trim(@file_get_contents(ROOT . DS . "VERSION") ?? "", "\r\n");
+$data["VERSION_DATE"] = date("j. n. Y", @filemtime(ROOT . DS . "VERSION") ?? time());
+$data["REVISIONS"] = (int) trim(@file_get_contents(ROOT . DS . "REVISIONS") ?? "0", "\r\n");
 $data["DATA_VERSION"] = null;
-$data["cdn"] = $data["CDN"] = "/cdn-assets/$version";
+$data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/") : "";
 $data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";

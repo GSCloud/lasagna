@@ -1,12 +1,11 @@
 <?php
 
-define("ROOT", __DIR__ . "/..");
+defined("DS") || define("DS", DIRECTORY_SEPARATOR);
+defined("ROOT") || define("ROOT", __DIR__ . DS . "..");
 
 #define("DEBUG", true);
 
 /** @const DIRECTORY_SEPARATOR */
-defined("DS") || define("DS", DIRECTORY_SEPARATOR);
-#defined("ROOT") || define("ROOT", __DIR__);
 #defined("APP") || define("APP", ROOT . DS . "app");
 #defined("CACHE") || define("CACHE", ROOT . DS . "temp");
 #defined("DATA") || define("DATA", ROOT . DS . "data");
@@ -20,4 +19,4 @@ defined("DS") || define("DS", DIRECTORY_SEPARATOR);
 #defined("LOGS") || define("LOGS", ROOT . DS . "logs");
 #defined("TEMP") || define("TEMP", ROOT . DS . "temp");
 
-require_once ROOT . "/Bootstrap.php";
+require_once ROOT . DS . "Bootstrap.php";

@@ -85,12 +85,12 @@ class Doctor
 
         validate("file\t<bold>CONFIG</bold> as " . CONFIG, check_exist(CONFIG));
         validate("file\t<bold>CONFIG_PRIVATE</bold> as " . CONFIG_PRIVATE, check_exist(CONFIG_PRIVATE));
-        validate("file\t<bold>REVISIONS</bold> in ROOT", check_exist(ROOT . "/REVISIONS"));
-        validate("file\t<bold>VERSION</bold> in ROOT", check_exist(ROOT . "/VERSION"));
-        validate("file\t<bold>_site_cfg.sh</bold> in ROOT", check_exist(ROOT . "/_site_cfg.sh"));
-        validate("file\t<bold>router.neon</bold> in APP", check_exist(APP . "/router.neon"));
-        validate("file\t<bold>router_admin.neon</bold> in APP", check_exist(APP . "/router_admin.neon"));
-        validate("file\t<bold>router_defaults.neon</bold> in APP", check_exist(APP . "/router_defaults.neon"));
+        validate("file\t<bold>REVISIONS</bold> in ROOT", check_exist(ROOT . DS . "REVISIONS"));
+        validate("file\t<bold>VERSION</bold> in ROOT", check_exist(ROOT . DS . "VERSION"));
+        validate("file\t<bold>_site_cfg.sh</bold> in ROOT", check_exist(ROOT . DS . "_site_cfg.sh"));
+        validate("file\t<bold>router.neon</bold> in APP", check_exist(APP . DS . "router.neon"));
+        validate("file\t<bold>router_admin.neon</bold> in APP", check_exist(APP . DS . "router_admin.neon"));
+        validate("file\t<bold>router_defaults.neon</bold> in APP", check_exist(APP . DS . "router_defaults.neon"));
         echo "\n";
 
         $climate->out("\n<blue><bold>Writables");
@@ -98,7 +98,7 @@ class Doctor
         validate("writable\t<bold>DATA</bold>", check_write(DATA));
         validate("writable\t<bold>LOGS</bold>", check_write(LOGS));
         validate("writable\t<bold>TEMP</bold>", check_write(TEMP));
-        validate("writable\t<bold>ci</bold> in ROOT", check_write(ROOT . "/ci"));
+        validate("writable\t<bold>ci</bold> in ROOT", check_write(ROOT . DS . "ci"));
 
         $climate->out("\n<blue><bold>PHP");
         validate("Zend version <bold>7.4+", (PHP_VERSION_ID >= 70400));
