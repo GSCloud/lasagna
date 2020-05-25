@@ -8,8 +8,20 @@ DEBUG_COOKIE: "cookievalue"
 goauth_client_id: "someid.apps.googleusercontent.com"
 goauth_secret: ""
 
-# Google Cloud Platfrom keys
-gcp_keys: "/keys/some.json"
+# Google Cloud Platform keys (in app/)
+gcp_keys: "key-hash.json"
+
+# Google Drive backup
+#google_drive_backup: ""
+
+# external links
+external_links: [
+#  [
+#    name: "Google Docs - DevOps"
+#    title: "some title"
+#    link: "https://..."
+#  ]
+]
 
 # Google
 google: [

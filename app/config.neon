@@ -3,6 +3,11 @@
 #dbg: TRUE
 minify: TRUE
 
+# Android update - data from local domain?
+#loadlocal: TRUE
+#android_updateurl_local: "http://xxx/"
+#android_updateurl_remote: "https://xxx.gscloud.cz/"
+
 # CORE
 app: lasagna
 canonical_url: "https://lasagna.gscloud.cz/"
@@ -27,6 +32,9 @@ google: [
 #  analytics: "https://analytics.google.com/analytics/web/#/report-home/xxx"
 ]
 
+# Android app id
+#android_app: "cz.mxd.xxx"
+
 alpha_hosts: [
   alasagna.gscloud.cz
 ]
@@ -48,7 +56,7 @@ redis: [
 ]
 
 multisite_profiles: [
-  v2: [
+  lasagna_v2: [
     lasagna2.gscloud.cz
   ]
 ]

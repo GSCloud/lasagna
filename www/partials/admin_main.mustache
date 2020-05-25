@@ -117,6 +117,10 @@
             data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
+          <a href="/admin/clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
+            data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
+            <i class="fas fa-power-off"></i>
+            {{ l.a_clear_browser }}</a>
         </div>
       </div>
       <div class="row center white hide-on-small-only">
@@ -674,6 +678,7 @@
         setInterval(function() {
           window.GSC.GetCsvInfo();
         }, 5000);
+        GSC.GetCsvInfo();
       });
 
       // show admin UI

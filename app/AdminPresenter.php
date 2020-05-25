@@ -60,6 +60,11 @@ class AdminPresenter extends APresenter
         $view = $match["params"]["p"] ?? null;
         $extras = ["name" => "LASAGNA Core", "fn" => $view];
         switch ($view) {
+            case "clearbrowserdata":
+                header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+                $this->setLocation();
+                break;
+
             case "AuditLog":
                 $this->checkPermission("admin");
                 $this->setHeaderHTML();
