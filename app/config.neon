@@ -25,20 +25,23 @@ goauth_redirect: "https://lasagna.gscloud.cz/login"
 local_goauth_origin: "http://localhost:8009"
 local_goauth_redirect: "http://localhost:8009/login"
 
-# Google
+# Google misc.
 google: [
-  ua: "UA-89950317-12"
-#  map_query: ""
 #  analytics: "https://analytics.google.com/analytics/web/#/report-home/xxx"
+#  map_query: ""
+  ua: "UA-89950317-12"
 ]
 
 # Android app id
 #android_app: "cz.mxd.xxx"
 
 alpha_hosts: [
+  lasagna
   alasagna.gscloud.cz
 ]
+
 beta_hosts: [
+  lasagna
   blasagna.gscloud.cz
 ]
 
@@ -56,6 +59,11 @@ redis: [
 ]
 
 multisite_profiles: [
+  default: [
+    lasagna
+    alasagna.gscloud.cz
+    blasagna.gscloud.cz
+  ]
   lasagna_v2: [
     lasagna2.gscloud.cz
   ]
