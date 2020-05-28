@@ -808,16 +808,16 @@
         },
         {
             "name": "google/grpc-gcp",
-            "version": "0.1.4",
+            "version": "0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GoogleCloudPlatform/grpc-gcp-php.git",
-                "reference": "e1ec44c0c39bd204868e2a2ed3cc87ed9006984e"
+                "reference": "bb9bdbf62f6ae4e73d5209d85b1d0a0b9855ff36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/grpc-gcp-php/zipball/e1ec44c0c39bd204868e2a2ed3cc87ed9006984e",
-                "reference": "e1ec44c0c39bd204868e2a2ed3cc87ed9006984e",
+                "url": "https://api.github.com/repos/GoogleCloudPlatform/grpc-gcp-php/zipball/bb9bdbf62f6ae4e73d5209d85b1d0a0b9855ff36",
+                "reference": "bb9bdbf62f6ae4e73d5209d85b1d0a0b9855ff36",
                 "shasum": ""
             },
             "require": {
@@ -834,29 +834,31 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Grpc\\Gcp\\": "src/",
-                    "": "src/generated/"
-                }
+                    "Grpc\\Gcp\\": "src/"
+                },
+                "classmap": [
+                    "src/generated/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
             "description": "gRPC GCP library for channel management",
-            "time": "2019-02-14T02:21:15+00:00"
+            "time": "2020-05-26T17:21:09+00:00"
         },
         {
             "name": "google/protobuf",
-            "version": "v3.12.1",
+            "version": "v3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "60f57530e64537a1fbec50e1ad47d87befd2d0fd"
+                "reference": "571f9a4ba39826a18611ae568d97b6007954c070"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/60f57530e64537a1fbec50e1ad47d87befd2d0fd",
-                "reference": "60f57530e64537a1fbec50e1ad47d87befd2d0fd",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/571f9a4ba39826a18611ae568d97b6007954c070",
+                "reference": "571f9a4ba39826a18611ae568d97b6007954c070",
                 "shasum": ""
             },
             "require": {
@@ -884,7 +886,7 @@
             "keywords": [
                 "proto"
             ],
-            "time": "2020-05-21T01:33:38+00:00"
+            "time": "2020-05-27T17:57:58+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -1762,16 +1764,16 @@
         },
         {
             "name": "nette/utils",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "2c17d16d8887579ae1c0898ff94a3668997fd3eb"
+                "reference": "488f58378bba71767e7831c83f9e0fa808bf83b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/2c17d16d8887579ae1c0898ff94a3668997fd3eb",
-                "reference": "2c17d16d8887579ae1c0898ff94a3668997fd3eb",
+                "url": "https://api.github.com/repos/nette/utils/zipball/488f58378bba71767e7831c83f9e0fa808bf83b9",
+                "reference": "488f58378bba71767e7831c83f9e0fa808bf83b9",
                 "shasum": ""
             },
             "require": {
@@ -1784,7 +1786,7 @@
             },
             "suggest": {
                 "ext-gd": "to use Image",
-                "ext-iconv": "to use Strings::webalize() and toAscii()",
+                "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
                 "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
                 "ext-json": "to use Nette\\Utils\\Json",
                 "ext-mbstring": "to use Strings::lower() etc...",
@@ -1836,7 +1838,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2020-02-09T14:10:55+00:00"
+            "time": "2020-05-27T09:58:51+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
