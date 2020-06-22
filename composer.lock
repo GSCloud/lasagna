@@ -262,16 +262,16 @@
         },
         {
             "name": "cheprasov/php-redis-client",
-            "version": "1.9.1",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cheprasov/php-redis-client.git",
-                "reference": "b605615c256efa5ee3c8d750147f8d085eefaab7"
+                "reference": "c3594e0bbc8ee1bc2c11c889ce5dfa0d3b8a6f9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cheprasov/php-redis-client/zipball/b605615c256efa5ee3c8d750147f8d085eefaab7",
-                "reference": "b605615c256efa5ee3c8d750147f8d085eefaab7",
+                "url": "https://api.github.com/repos/cheprasov/php-redis-client/zipball/c3594e0bbc8ee1bc2c11c889ce5dfa0d3b8a6f9a",
+                "reference": "c3594e0bbc8ee1bc2c11c889ce5dfa0d3b8a6f9a",
                 "shasum": ""
             },
             "require": {
@@ -297,9 +297,9 @@
                     "email": "acheprasov84@gmail.com"
                 }
             ],
-            "description": "Php client for Redis. It is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from 2.6 to 5.0",
+            "description": "Php client for Redis. It is a fast, fully-functional and user-friendly client for Redis, optimized for performance. RedisClient supports the latest versions of Redis starting from 2.6 to 6.0",
             "homepage": "http://github.com/cheprasov/php-redis-client",
-            "time": "2019-10-27T18:56:48+00:00"
+            "time": "2020-06-20T13:05:24+00:00"
         },
         {
             "name": "chillerlan/php-qrcode",
