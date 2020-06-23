@@ -112,7 +112,7 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.0.8",
+            "version": "4.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
@@ -159,16 +159,16 @@
         },
         {
             "name": "cakephp/core",
-            "version": "4.0.8",
+            "version": "4.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "47634837aedcef333e8d8cf235467e645181c226"
+                "reference": "44f2d71250fa8e2d88e93580987bfc2ab0f4455b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/47634837aedcef333e8d8cf235467e645181c226",
-                "reference": "47634837aedcef333e8d8cf235467e645181c226",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/44f2d71250fa8e2d88e93580987bfc2ab0f4455b",
+                "reference": "44f2d71250fa8e2d88e93580987bfc2ab0f4455b",
                 "shasum": ""
             },
             "require": {
@@ -205,20 +205,20 @@
                 "core",
                 "framework"
             ],
-            "time": "2020-05-21T21:18:40+00:00"
+            "time": "2020-06-12T16:55:29+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "4.0.8",
+            "version": "4.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "f4f151efcd2b952a619c9a62acd8b068c264fcde"
+                "reference": "21772f1f404c651890ab10277f32f7a2d77872d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/f4f151efcd2b952a619c9a62acd8b068c264fcde",
-                "reference": "f4f151efcd2b952a619c9a62acd8b068c264fcde",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/21772f1f404c651890ab10277f32f7a2d77872d6",
+                "reference": "21772f1f404c651890ab10277f32f7a2d77872d6",
                 "shasum": ""
             },
             "require": {
@@ -258,7 +258,7 @@
                 "string",
                 "utility"
             ],
-            "time": "2020-05-21T05:06:55+00:00"
+            "time": "2020-05-29T20:56:19+00:00"
         },
         {
             "name": "cheprasov/php-redis-client",
@@ -896,16 +896,16 @@
         },
         {
             "name": "grpc/grpc",
-            "version": "1.27.0",
+            "version": "1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grpc/grpc-php.git",
-                "reference": "a461cb1a975dde305c73168aa4494b90c3801c62"
+                "reference": "31952d18884d91c674b73f8b4da831f708706f20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/a461cb1a975dde305c73168aa4494b90c3801c62",
-                "reference": "a461cb1a975dde305c73168aa4494b90c3801c62",
+                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/31952d18884d91c674b73f8b4da831f708706f20",
+                "reference": "31952d18884d91c674b73f8b4da831f708706f20",
                 "shasum": ""
             },
             "require": {
@@ -933,7 +933,7 @@
             "keywords": [
                 "rpc"
             ],
-            "time": "2020-01-23T19:27:18+00:00"
+            "time": "2020-06-23T01:49:02+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
