@@ -514,16 +514,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "077d6ae98d550161d3b2a0ba283bdce785c74d85"
+                "reference": "f6752236dbb2d641d50dffee789e553e2fda129d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/077d6ae98d550161d3b2a0ba283bdce785c74d85",
-                "reference": "077d6ae98d550161d3b2a0ba283bdce785c74d85",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/f6752236dbb2d641d50dffee789e553e2fda129d",
+                "reference": "f6752236dbb2d641d50dffee789e553e2fda129d",
                 "shasum": ""
             },
             "require": {
@@ -562,7 +562,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2020-07-08T19:11:36+00:00"
+            "time": "2020-07-22T18:24:05+00:00"
         },
         {
             "name": "google/cloud",
@@ -1325,16 +1325,16 @@
         },
         {
             "name": "league/oauth2-google",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-google.git",
-                "reference": "cfe9b0ae69eb5dbac64a282f04410b731f6b9c04"
+                "reference": "18d1889897a8b18d85ecadacf74c9274d678d943"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/cfe9b0ae69eb5dbac64a282f04410b731f6b9c04",
-                "reference": "cfe9b0ae69eb5dbac64a282f04410b731f6b9c04",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/18d1889897a8b18d85ecadacf74c9274d678d943",
+                "reference": "18d1889897a8b18d85ecadacf74c9274d678d943",
                 "shasum": ""
             },
             "require": {
@@ -1372,20 +1372,20 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2019-11-16T14:11:06+00:00"
+            "time": "2020-07-24T15:16:12+00:00"
         },
         {
             "name": "monolog/monolog",
-            "version": "1.25.4",
+            "version": "1.25.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "3022efff205e2448b560c833c6fbbf91c3139168"
+                "reference": "1817faadd1846cd08be9a49e905dc68823bc38c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/3022efff205e2448b560c833c6fbbf91c3139168",
-                "reference": "3022efff205e2448b560c833c6fbbf91c3139168",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1817faadd1846cd08be9a49e905dc68823bc38c0",
+                "reference": "1817faadd1846cd08be9a49e905dc68823bc38c0",
                 "shasum": ""
             },
             "require": {
@@ -1459,7 +1459,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-22T07:31:27+00:00"
+            "time": "2020-07-23T08:35:51+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -2671,16 +2671,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.10",
+            "version": "v4.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "b2c6895cf282cfc11fae859e8b418c95dbb5d6f8"
+                "reference": "26e443cc7c1d45f8b37e3355369ce82ba2e0d847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/b2c6895cf282cfc11fae859e8b418c95dbb5d6f8",
-                "reference": "b2c6895cf282cfc11fae859e8b418c95dbb5d6f8",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/26e443cc7c1d45f8b37e3355369ce82ba2e0d847",
+                "reference": "26e443cc7c1d45f8b37e3355369ce82ba2e0d847",
                 "shasum": ""
             },
             "require": {
@@ -2746,7 +2746,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-09T14:02:17+00:00"
+            "time": "2020-07-23T11:31:42+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
