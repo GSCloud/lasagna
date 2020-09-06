@@ -112,16 +112,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "a46f108a842a76aad8c58bd5d41a07288b3e40b5"
+                "reference": "78daa16d20e4f2046d76c6b69d73cad51749516b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/a46f108a842a76aad8c58bd5d41a07288b3e40b5",
-                "reference": "a46f108a842a76aad8c58bd5d41a07288b3e40b5",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/78daa16d20e4f2046d76c6b69d73cad51749516b",
+                "reference": "78daa16d20e4f2046d76c6b69d73cad51749516b",
                 "shasum": ""
             },
             "require": {
@@ -155,11 +155,11 @@
                 "caching",
                 "cakephp"
             ],
-            "time": "2020-06-22T08:33:27+00:00"
+            "time": "2020-08-26T08:52:15+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -209,7 +209,7 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "4.1.3",
+            "version": "4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
