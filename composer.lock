@@ -112,16 +112,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.1.4",
+            "version": "4.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "78daa16d20e4f2046d76c6b69d73cad51749516b"
+                "reference": "f940b2b70f2786be431606b8e9b0fdad773b49f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/78daa16d20e4f2046d76c6b69d73cad51749516b",
-                "reference": "78daa16d20e4f2046d76c6b69d73cad51749516b",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/f940b2b70f2786be431606b8e9b0fdad773b49f9",
+                "reference": "f940b2b70f2786be431606b8e9b0fdad773b49f9",
                 "shasum": ""
             },
             "require": {
@@ -155,11 +155,11 @@
                 "caching",
                 "cakephp"
             ],
-            "time": "2020-08-26T08:52:15+00:00"
+            "time": "2020-09-23T15:04:09+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "4.1.4",
+            "version": "4.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -209,7 +209,7 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "4.1.4",
+            "version": "4.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
@@ -1126,20 +1126,20 @@
         },
         {
             "name": "league/climate",
-            "version": "3.5.2",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/climate.git",
-                "reference": "6b53a28a58ad9f5f63042e291eb870cf0d02a9c9"
+                "reference": "61eecbde7645528a855a3afef65c5354093b27b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/climate/zipball/6b53a28a58ad9f5f63042e291eb870cf0d02a9c9",
-                "reference": "6b53a28a58ad9f5f63042e291eb870cf0d02a9c9",
+                "url": "https://api.github.com/repos/thephpleague/climate/zipball/61eecbde7645528a855a3afef65c5354093b27b2",
+                "reference": "61eecbde7645528a855a3afef65c5354093b27b2",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1",
+                "php": "^7.2",
                 "psr/log": "^1.0",
                 "seld/cli-prompt": "^1.0"
             },
@@ -1183,7 +1183,7 @@
                 "php",
                 "terminal"
             ],
-            "time": "2019-12-01T15:25:43+00:00"
+            "time": "2020-10-04T16:02:59+00:00"
         },
         {
             "name": "league/csv",
