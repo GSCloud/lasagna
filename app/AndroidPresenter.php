@@ -43,9 +43,7 @@ class AndroidPresenter extends APresenter
             }
             $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
             StringFilters::trim_html_comment($output);
-            if (\is_writable(WWW . "/android_${language}.html")) {
-                file_put_contents(WWW . "/android_${language}.html", $output);
-            }
+            file_put_contents(WWW . "/upload/android_${language}.html", $output);
         }
         return $this->setData("output", $output);
     }
