@@ -4,6 +4,9 @@
 dir="$(dirname "$0")"
 . $dir"/_includes.sh"
 
+git commit -am "web sync"
+git push origin master
+
 VERSION=`git rev-parse HEAD`
 echo $VERSION > VERSION
 REVISIONS=`git rev-list --all --count`
