@@ -122,10 +122,10 @@ GetError:
   ]
 
 GetQR:
-  path: "/qr/[a:type]/[**:text]"
+  path: "/qr/[a:size]/[**:text]"
   api: true
   api_description: "Get QR code"
-  api_info: "Parameters:\n<b><type></b> - image type\n<b><text></b> - text to render\n\nReturns: image data"
+  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image type\n<b><text></b> - text to render\n\nReturns: image data"
   method: GET|POST
   presenter: core
 
