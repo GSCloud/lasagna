@@ -4,9 +4,11 @@
 .php1{position:relative;left:+0.1em}
 .php2{position:relative;left:+0.0em}
 .php3{position:relative;left:-0.1em}
+.summernote{border:2px dashed #ccc;padding:1rem!important}
+.summernote::before{content:"📝";position:relative;top:-3rem;left:-1rem}
 .btnmargin{margin:2px;margin-bottom:5px}
 .bigemoji{font-size:5em}
-.faces::after{content:"🌸";animation-name:faces;animation-duration:3s}
+.faces::after{content:"🌸";animation-name:faces;animation-duration:1s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
 @keyframes faces{10%{content:"🌼"}20%{content:"🌳"}30%{content:"🌺"}40%{content:"🌵"}50%{content:"🌶"}60%{content:"🍇"}70%{content:"🍄"}80%{content:"🍓"}90%{content:"🌽"}}
 .a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
@@ -60,7 +62,7 @@
         <i class="fab fa-google"></i>
         {{ l.a_google_analytics }}</a>
       <a style="margin:2px;" class="tooltipped waves-effect lime waves-light btn" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://onesignal.com">
+        data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://app.onesignal.com/login">
         <i class="fas fa-bell"></i>
         {{ l.a_onesignal }}</a>
     </div>
@@ -461,7 +463,7 @@
           disableDragAndDrop: true,
           height: 200,
           lang: '{{#langcs}}cs-CZ{{/langcs}}{{#langen}}en-US{{/langen}}',
-          maximumImageFileSize: 1024*1024*2,
+          maximumImageFileSize: 1024*1024*4,
           placeholder: '{{#langcs}}Vítejte v editoru Summernote!{{/langcs}}{{#langen}}Welcome to Summernote editor!{{/langen}}',
           callbacks: {
             onChange: function(contents, $editable) {
@@ -473,7 +475,7 @@
             'p', 'blockquote', 'pre', 'h2', 'h3', 'h4', 'h5', 'h6'
           ],
           fontSizes: [
-            '8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '36', '48' , '64', '82', '100', '130', '150', '200'
+            '6', '7', '8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '30', '36', '42', '48', '55', '64', '82', '100', '130', '160', '200'
           ],
           toolbar: [
             ['style', ['style', 'add-text-tags', 'addclass']],
@@ -700,16 +702,20 @@
 
 </script>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/theme/material.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/mode/xml/xml.min.js" defer></script>
-
-<script src="{{ cdn }}/js/moment.min.js" defer></script>
-<script src="{{ cdn }}/js/grapheme.min.js" defer></script>
-
+<!-- SUMMERNOTE editor //-->
 <script src="{{ cdn }}/summernote/summernote-lite.js" defer></script>
 {{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
 <link href="{{ cdn }}/summernote/summernote-lite.css" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/material.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/xml/xml.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/htmlmixed/htmlmixed.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/html-lint.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/hint/html-hint.min.js" defer></script>
+
+<script src="{{ cdn }}/js/moment.min.js" defer></script>
+<script src="{{ cdn }}/js/grapheme.min.js" defer></script>
 
 {{/admin_group_admin}}
