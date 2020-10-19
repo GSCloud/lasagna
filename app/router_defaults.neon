@@ -125,15 +125,15 @@ GetQR:
   path: "/qr/[a:size]/[**:text]"
   api: true
   api_description: "Get QR code"
-  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image type\n<b><text></b> - text to render\n\nReturns: image data"
+  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size (like T-shirts)\n<b><text></b> - text to render\n\nReturns: image"
   method: GET|POST
   presenter: core
 
 ReadBook:
   path: "/epub/[**:path]"
   api: true
-  api_description: "Read ebook in epub format"
-  api_info: "Parameters:\n<b><path></b> - relative path to epub file"
+  api_description: "Read ebook in EPUB format"
+  api_info: "Parameters:\n<b><path></b> - relative path to EPUB file under www/"
   method: GET
   presenter: core
   template: epub
