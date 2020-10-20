@@ -461,10 +461,10 @@
           codeviewIframeFilter: true,
           dialogsInBody: false,
           disableDragAndDrop: true,
-          height: 200,
+          height: 250,
           lang: '{{#langcs}}cs-CZ{{/langcs}}{{#langen}}en-US{{/langen}}',
           maximumImageFileSize: 1024*1024*4,
-          placeholder: '{{#langcs}}Vítejte v editoru Summernote!{{/langcs}}{{#langen}}Welcome to Summernote editor!{{/langen}}',
+          placeholder: '{{#langcs}}Vítejte v Summernote!{{/langcs}}{{#langen}}Welcome to Summernote!{{/langen}}',
           callbacks: {
             onChange: function(contents, $editable) {
               $('div.note-btn-group.note-custom>button>i.fa-save').css('color', 'red');
@@ -508,7 +508,7 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI bindings");
 
-        // motýle :)
+        // motýle 🦋
         if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(100);
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {

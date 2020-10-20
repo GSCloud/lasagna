@@ -92,6 +92,7 @@ $cache_profiles = array_replace([
     "tenminutes" => "+10 minutes",
     "tenseconds" => "+10 seconds",
 ], (array) ($cfg["cache_profiles"] ?? []));
+
 foreach ($cache_profiles as $k => $v) {
     Cache::setConfig("${k}_file", [
         "className" => "Cake\Cache\Engine\FileEngine", // fallback file engine
@@ -146,6 +147,7 @@ $routes = $cfg["routes"] ?? [ // configuration can override defaults
     "router_admin.neon",
     "router.neon",
 ];
+
 foreach ($routes as $r) {
     $r = APP . DS . $r;
     if (($content = @file_get_contents($r)) === false) {

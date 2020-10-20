@@ -22,8 +22,9 @@ if [ ! -z "$1" ]; then
 fi
 
 chown $USER:$USER .
-chgrp www-data ci data
 chmod 0777 ci logs temp www/download www/upload
-find ./ -type f -exec chmod 0644 {} \;
+chgrp www-data ci data www/download www/upload
+find www/ -type f -exec chmod 0644 {} \;
+find ./ -type f -iname "*.sh" -exec chmod +x {} \;
 
 info "Remote fixer: $dir DONE"
