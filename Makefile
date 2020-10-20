@@ -22,6 +22,7 @@ doctor:
 	@/bin/bash ./cli.sh doctor
 
 sync:
+	@git commit -am "sync"
 	@/bin/bash ./SYNC.sh x
 	@/bin/bash ./SYNC.sh b
 
