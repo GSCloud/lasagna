@@ -31,6 +31,7 @@ class AdminPresenter extends APresenter
         $cfg = $this->getCfg();
         $data = $this->getData();
         $match = $this->getMatch();
+
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $g = $this->getUserGroup();
         if ($g) {
@@ -59,6 +60,7 @@ class AdminPresenter extends APresenter
 
         $view = $match["params"]["p"] ?? null;
         $extras = ["name" => "LASAGNA Core", "fn" => $view];
+
         switch ($view) {
             case "clearbrowserdata":
                 header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
