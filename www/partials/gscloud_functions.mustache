@@ -310,10 +310,10 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       });
 
       if (document.documentElement.clientWidth > 1120) {
-        $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="">🏡</a>/li>');
+        $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="/">🏡</a></li>');
       }
       $('#nav-mobile').append('<li><a href="/login">🔒</a></li>');
-      $('.main-header').append('<div style="padding:1em" class="right"><a href="/login">&nbsp;🔒&nbsp;</a></div>');
+      $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="/login">&nbsp;🔒&nbsp;</a></div>');
 
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
