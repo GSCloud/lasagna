@@ -309,8 +309,11 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         $(obj).addClass("browser-default");
       });
 
+      if (document.documentElement.clientWidth > 1120) {
+        $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="">🏡</a>/li>');
+      }
       $('#nav-mobile').append('<li><a href="/login">🔒</a></li>');
-      $('.main-header').append('<div class="right"><br><a href="/login">&nbsp;🔒&nbsp;&nbsp;</a></div>');
+      $('.main-header').append('<div style="padding:1em" class="right"><a href="/login">&nbsp;🔒&nbsp;</a></div>');
 
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
