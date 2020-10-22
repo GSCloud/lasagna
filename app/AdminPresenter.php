@@ -31,12 +31,16 @@ class AdminPresenter extends APresenter
         $cfg = $this->getCfg();
         $data = $this->getData();
         $match = $this->getMatch();
-
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $g = $this->getUserGroup();
         if ($g) {
-            $data["admin_group_${g}"] = true;
+            $data["admin_group_${g}"] = true; // for templating
         }
+        $view = $match["params"]["p"] ?? null;
+        $extras = [
+            "name" => "Tesseract LASAGNA Core",
+            "fn" => $view,
+        ];
 
         /**
          * Get number of lines in a file
@@ -58,9 +62,7 @@ class AdminPresenter extends APresenter
             }
         }
 
-        $view = $match["params"]["p"] ?? null;
-        $extras = ["name" => "LASAGNA Core", "fn" => $view];
-
+        // modules
         switch ($view) {
             case "clearbrowserdata":
                 header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
@@ -101,14 +103,17 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $base = urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);
                 $key = $this->getCfg("google.pagespeedinsights_key") ?? "";
+                if (!$key) {
+                    return $this->writeJsonData(401, $extras); // unauthorized
+                }
                 $hash = hash("sha256", $base);
                 $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
                 $f = "PageSpeed_Insights_${hash}";
                 if (!$data = Cache::read($f, "minute")) { // read data from Google
                     if ($data = @\file_get_contents($uri)) {
                         Cache::write($f, $data, "minute");
-                    } else { // error
-                        return $this->writeJsonData(500, $extras);
+                    } else {
+                        return $this->writeJsonData(500, $extras); // error
                     }
                 }
                 return $this->writeJsonData(json_decode($data), $extras);
@@ -118,6 +123,9 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $code = "";
                 $key = $this->readAdminKey();
+                if (!$key) {
+                    return $this->writeJsonData(500, $extras); // unauthorized
+                }
                 $user = $this->getCurrentUser();
                 if ($user["id"] ?? null && $key) {
                     $hashid = hash("sha256", $user["id"]);
@@ -130,6 +138,9 @@ class AdminPresenter extends APresenter
 
             case "RebuildAdminKeyRemote":
                 $key = $this->readAdminKey();
+                if (!$key) {
+                    return $this->writeJsonData(500, $extras); // unauthorized
+                }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
@@ -149,6 +160,9 @@ class AdminPresenter extends APresenter
 
             case "FlushCacheRemote":
                 $key = $this->readAdminKey();
+                if (!$key) {
+                    return $this->writeJsonData(500, $extras); // unauthorized
+                }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
@@ -168,6 +182,9 @@ class AdminPresenter extends APresenter
 
             case "CoreUpdateRemote":
                 $key = $this->readAdminKey();
+                if (!$key) {
+                    return $this->writeJsonData(500, $extras); // unauthorized
+                }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
@@ -189,6 +206,9 @@ class AdminPresenter extends APresenter
 
             case "RebuildNonceRemote":
                 $key = $this->readAdminKey();
+                if (!$key) {
+                    return $this->writeJsonData(500, $extras); // unauthorized
+                }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
@@ -208,6 +228,9 @@ class AdminPresenter extends APresenter
 
             case "RebuildSecureKeyRemote":
                 $key = $this->readAdminKey();
+                if (!$key) {
+                    return $this->writeJsonData(500, $extras); // unauthorized
+                }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key) {
@@ -252,8 +275,9 @@ class AdminPresenter extends APresenter
                     $hash = substr(hash("sha256", $json), 0, 8); // return 8 chars of SHA256
                     \file_put_contents($file, $json, LOCK_EX); // @todo check write fail!
                     $this->addAuditMessage("CREATE AUTH CODE");
+                    return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
                 }
-                return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
+                return $this->writeJsonData(401, $extras); // error
                 break;
 
             case "DeleteAuthCode":
@@ -265,8 +289,9 @@ class AdminPresenter extends APresenter
                         \unlink($file);
                     }
                     $this->addAuditMessage("DELETE AUTH CODE");
+                    return $this->writeJsonData(["status" => "OK"], $extras);
                 }
-                return $this->writeJsonData(["status" => "OK"], $extras);
+                return $this->writeJsonData(401, $extras); // error
                 break;
 
             case "UpdateArticles":
@@ -290,8 +315,8 @@ class AdminPresenter extends APresenter
                         $x++;
                     }
                 }
-                if ($x != 3) { // error
-                    return $this->writeJsonData(400, $extras);
+                if ($x != 3) {
+                    return $this->writeJsonData(400, $extras); // error
                 }
                 if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
@@ -330,7 +355,6 @@ class AdminPresenter extends APresenter
             default:
                 $this->unauthorizedAccess();
                 break;
-
         }
         return $this;
     }
@@ -371,6 +395,9 @@ class AdminPresenter extends APresenter
     {
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
         $key = trim($key, "/.");
+        if (!$key) {
+            return $this->writeJsonData(500, $extras); // error
+        }
         if (\file_exists(DATA . "/${key}")) {
             unlink(DATA . "/${key}");
         }
@@ -408,7 +435,7 @@ class AdminPresenter extends APresenter
                 $lock->release();
             }
         } else {
-            $this->setLocation("/err/429");
+            $this->setLocation("/err/429"); // error
             exit;
         }
         return $this;
@@ -479,5 +506,4 @@ class AdminPresenter extends APresenter
         }
         return $key ?? null;
     }
-
 }

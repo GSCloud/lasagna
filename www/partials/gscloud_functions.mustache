@@ -309,6 +309,8 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         $(obj).addClass("browser-default");
       });
 
+      $('#nav-mobile').append('<li><a href="/login">🔒</a></li>');
+
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
