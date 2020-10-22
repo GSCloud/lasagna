@@ -9,13 +9,12 @@ git push origin master
 
 VERSION=`git rev-parse HEAD`
 echo $VERSION > VERSION
+
 REVISIONS=`git rev-list --all --count`
 echo $REVISIONS > REVISIONS
 
-rm -rf cache
 rm -rf logs/* temp/*
-mkdir -p ci logs temp
-mkdir -p www/cdn-assets
+mkdir -p app ci data temp www/cdn-assets www/download www/upload
 ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 
 info "Version: $VERSION Revisions: $REVISIONS"

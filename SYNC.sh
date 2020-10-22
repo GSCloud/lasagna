@@ -19,7 +19,7 @@ if [ -z "${DEST}" ]; then fail "Error in _site_cfg.sh !"; fi
 if [ -z "${HOST}" ]; then fail "Error in _site_cfg.sh !"; fi
 if [ -z "${USER}" ]; then fail "Error in _site_cfg.sh !"; fi
 
-mkdir -p app ci data www/cdn-assets www/download www/upload
+mkdir -p app ci data temp www/cdn-assets www/download www/upload
 chmod 0777 www/download www/upload
 find www/ -type f -exec chmod 0644 {} \;
 find . -type f -iname "*.sh" -exec chmod +x {} \;
