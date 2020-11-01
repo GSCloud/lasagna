@@ -27,28 +27,24 @@
         text = text.replace(new RegExp(/['\"\n\r]*/, "g"), "");
         url = url.replace(new RegExp(/['\"\n\r\s]*/, "g"), "");
         title = title.replace(new RegExp(/['\"\n\r]*/, "g"), "");
-        return '<a class="webshareicon" onclick="var that=this;this.style.transition=\'filter 0s\';this.style.filter=\'invert(100%)\';' +
-          'setTimeout(function(){that.style.transition=\'all 2s\';that.style.filter=\'\';},1);window.WebShare(\'' +
-          text + '\', \'' + url + '\', \'' + title + '\')" aria-hidden="true" style="display:inline-block;margin:8px">' +
-          '<i class="fas fa-share-alt-square"></i></a>';
+//        return '<a class="webshareicon" onclick="var that=this;this.style.transition=\'filter 0s\';this.style.filter=\'invert(100%)\';' +
+//          'setTimeout(function(){that.style.transition=\'all 2s\';that.style.filter=\'\';},1);window.WebShare(\'' +
+//          text + '\', \'' + url + '\', \'' + title + '\')" aria-hidden="true" style="display:inline-block;margin:8px">' +
+//          '<i class="fas fa-share-alt-square"></i></a>';
+        return '<a onclick="window.WebShare(\''
+          + text + '\', \''
+          + url + '\', \''
+          + title + '\')" class="webshareicon" aria-hidden="true" style="display:inline-block;margin:8px"></a>';
       }
 
       var el = document.getElementsByClassName("webshare");
       for (var i = 0; i < el.length; i++) {
         el[i].style.display = "block";
-
-        // element animation
         el[i].addEventListener("click", function () {
-          var that = this;
-          this.style.transition = "filter 0s";
-          this.style.filter = "invert(100%)";
-          setTimeout(function () {
-            that.style.transition = "all 2s";
-            that.style.filter = "";
-          }, 1);
           window.WebShare();
         });
       }
+
     }
   }
 
