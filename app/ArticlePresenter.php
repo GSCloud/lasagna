@@ -42,6 +42,8 @@ class ArticlePresenter extends APresenter
             StringFilters::correct_text_spacing($data["l"][$k], $data["lang"]);
         }
 
+        $data["container_switch_article"] = true; // turn ON article view in content switcher
+
         // output rendering
         $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
         StringFilters::trim_html_comment($output); // strip comments
