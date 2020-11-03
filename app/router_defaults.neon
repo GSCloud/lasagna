@@ -37,14 +37,14 @@ swjs:
 androidjs:
   api: true
   api_description: "Get Android JS"
-  api_info: "Returns: version SHA256 hash (string) + Android JS (string)."
+  api_info: "Returns (JSON): version SHA256 hash (string) + Android JS (string)."
   path: /android/js
   presenter: core
 
 androidcss:
   api: true
   api_description: "Get Android CSS"
-  api_info: "Returns: version SHA256 hash (string) + Android CSS (string)."
+  api_info: "Returns (JSON): version SHA256 hash (string) + Android CSS (string)."
   path: /android/css
   presenter: core
 
@@ -62,14 +62,14 @@ api:
   path: /api
   api: true
   api_description: "Show REST API dashboard"
-  api_info: "This page, exactly! :)"
+  api_info: "This page, exactly! 🐱"
   presenter: core
 
 GetCoreVersion:
   path: /version/core
   api: true
   api_description: "Get core version"
-  api_info: "Returns: version SHA256 hash (string) + number of git revisions (integer)."
+  api_info: "Returns (JSON): version SHA256 hash (string) + number of git revisions (integer)."
   assert_json: true
   method: GET|POST
   presenter: core
@@ -78,7 +78,7 @@ GetCsDataVersion:
   path: /cs/version/data
   api: true
   api_description: "Get Czech locale version"
-  api_info: "Returns: version SHA256 hash (string)."
+  api_info: "Returns (JSON): version SHA256 hash (string)."
   assert_json: true
   language: cs
   method: GET|POST
@@ -88,7 +88,7 @@ GetEnDataVersion:
   path: /en/version/data
   api: true
   api_description: "Get English locale version"
-  api_info: "Returns: version SHA256 hash (string)."
+  api_info: "Returns (JSON): version SHA256 hash (string)."
   assert_json: true
   language: en
   method: GET|POST
@@ -97,12 +97,32 @@ GetEnDataVersion:
 ReadArticles:
   path: '/ReadArticles/[a:profile]/[a:hash]'
   api: true
-  api_description: "Get articles data"
-  api_info: "Parameters:\n<b><a:profile></b> - hexadecimal profile name,\n<b><a:hash></b> - hexadecimal URL stub hash.\n\nReturns: HTML data (JSON) + checksum hash (string)."
+  api_description: "Get articles as JSON"
+  api_info: "Parameters:\n<b><a:profile></b> - profile name,\n<b><a:hash></b> - hexadecimal URL stub hash.\n\nReturns (JSON): HTML data (JSON) + checksum hash (string)."
   api_example: [
     "ReadArticles/default/3b8b91c75627bee566dcb88f4805901b20a3eab2520bcff8d26c87157a035026"
   ]
   assert_json: true
+  method: GET
+  presenter: core
+
+GetCSArticleHTMLexport:
+  path: '/cs/exportHTML/[a:profile]/[**:trailing]'
+  language: cs
+  api: true
+  api_description: "Get articles as HTML"
+  api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
+  assert_json: false
+  method: GET
+  presenter: core
+
+GetENArticleHTMLexport:
+  path: '/en/exportHTML/[a:profile]/[**:trailing]'
+  language: en
+  api: true
+  api_description: "Get articles as HTML"
+  api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
+  assert_json: false
   method: GET
   presenter: core
 
@@ -115,25 +135,28 @@ GetError:
   method: GET|POST
   presenter: error
   api_example: [
-    "err/403"
     "err/404"
     "err/420"
     "err/500"
   ]
 
 GetQR:
-  path: "/qr/[a:size]/[**:text]"
+  path: "/qr/[s|m|l|x:size]/[**:trailing]"
   api: true
-  api_description: "Get QR code"
-  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size (like T-shirts)\n<b><text></b> - text to render\n\nReturns: image"
+  api_description: "Get QR code as image"
+  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size,\n<b><trailing></b> - text to render.\n\nReturns (binary): image."
   method: GET|POST
   presenter: core
+  api_example: [
+    "qr/s/Hello World!"
+    "qr/m/https://example.com"
+  ]
 
 ReadBook:
   path: "/epub/[**:path]"
   api: true
   api_description: "Read ebook in EPUB format"
-  api_info: "Parameters:\n<b><path></b> - relative path to EPUB file under www/"
+  api_info: "Parameters:\n<b><path></b> - relative path to EPUB file under www/\n\nReturns (HTML): EPUB reader."
   method: GET
   presenter: core
   template: epub
