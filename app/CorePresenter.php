@@ -38,7 +38,6 @@ class CorePresenter extends APresenter
         $extras = ["name" => "LASAGNA Core", "fn" => $view];
 
         switch ($view) {
-
             case "manifest":
                 $this->setHeaderJson();
                 $lang = $_GET["lang"] ?? "cs";
@@ -47,7 +46,6 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
                 break;
-
             case "sitemap":
                 $this->setHeaderText();
                 $map = [];
@@ -58,7 +56,9 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
                 break;
-
+            case "GetQR":
+                return $this->setData("output", $this->renderHTML("nasrat"));
+                break;
             case "swjs":
                 $this->setHeaderJavaScript();
                 $map = [];
@@ -69,7 +69,6 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sw.js"));
                 break;
-
             case "api":
                 $this->setHeaderHTML();
                 $map = [];
@@ -80,7 +79,7 @@ class CorePresenter extends APresenter
                         $info = \htmlspecialchars($info);
                         $info = preg_replace(
                             array('#href=&quot;(.*)&quot;#', '#&lt;(/?(?:pre|a|b|br|em|u|ul|li|ol)(\shref=".*")?/?)&gt;#'),
-                            array('href="\1"', '<\1>'), 
+                            array('href="\1"', '<\1>'),
                             $info
                         );
                         $map[] = [
@@ -103,46 +102,48 @@ class CorePresenter extends APresenter
                 });
                 return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
                 break;
-
             case "androidjs":
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
                     $content = \file_get_contents($file);
+                    $time = \filemtime(WWW . "/js/android-app.js") ?? null;
                     $version = hash("sha256", $content);
                 } else {
                     $content = null;
                     $version = null;
+                    $time = null;
                 }
                 $d = [
-                    "version" => $version,
                     "js" => $content,
+                    "timestamp" => $time,
+                    "version" => $version,
                 ];
                 return $this->writeJsonData($d, $extras);
                 break;
-
             case "androidcss":
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
                     $content = \file_get_contents($file);
+                    $time = \filemtime(WWW . "/css/android.css") ?? null;
                     $version = hash("sha256", $content);
                 } else {
                     $content = null;
                     $version = null;
+                    $time = null;
                 }
                 $d = [
-                    "version" => $version,
                     "css" => $content,
+                    "timestamp" => $time,
+                    "version" => $version,
                 ];
                 return $this->writeJsonData($d, $extras);
                 break;
-
             case "GetCoreVersion":
                 $d = [];
                 $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
                 return $this->writeJsonData($d, $extras);
                 break;
-
             case "ReadArticles":
                 $x = 0;
                 if (isset($match["params"]["profile"])) {
@@ -153,7 +154,7 @@ class CorePresenter extends APresenter
                     $hash = trim($match["params"]["hash"]);
                     $x++;
                 }
-                if ($x !== 2) { // ERROR                    
+                if ($x !== 2) { // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
                 $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
