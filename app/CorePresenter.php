@@ -11,7 +11,6 @@ namespace GSC;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
-use Tracy\Debugger;
 
 /**
  * Core Presenter
@@ -134,7 +133,7 @@ class CorePresenter extends APresenter
                     'imageTransparent' => false,
                 ]);
                 header('Content-type: image/png');
-                echo (new QRCode($options))->render($text ?? "");
+                echo (new QRCode($options))->render($text ?? "", CACHE . "/" . hash("sha256", $text) . ".png");
                 exit;
                 break;
             case "swjs":

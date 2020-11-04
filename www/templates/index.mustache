@@ -39,7 +39,6 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 {{>head_favicons}}
 {{>head_googleanalytics}}
 {{>head_html5shim}}
-<!-- custom code -->
 {{>head_custom}}
 
 <style>
@@ -90,7 +89,6 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 </style>
 
 {{>onesignal}}
-<!-- custom code -->
 {{>head_post}}
 
 <link rel="stylesheet" href="/css/materialize.min.css">
@@ -104,15 +102,24 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 
 {{>body_pre}}
 
-<!-- helpers -->
-<div class="black-text white bold text-center" tabindex="-1" id="update-message">{{ l.page_outdated }}<br><a class="waves-effect blue waves-light btn"><i class="fas fa-sync"></i>&nbsp;{{ l.page_outdated_button }}</a></div>
-<div class="white-text bold red left" aria-hidden="true" tabindex="-1" id="offline-message"><i class="fas fa-plug"></i>&nbsp;offline</div>
+<!-- OUTDATED helper -->
+<div class="black-text white bold text-center" tabindex="-1" id="update-message">{{ l.page_outdated }}
+  <br><a class="waves-effect blue waves-light btn"><i class="fas fa-sync"></i>&nbsp;{{ l.page_outdated_button }}</a>
+</div>
+
+<!-- OFFLINE helper -->
+<div class="white-text bold red left" aria-hidden="true" tabindex="-1" id="offline-message">
+  <i class="fas fa-plug"></i>&nbsp;offline
+</div>
 
 <!-- preloader -->
-<div id="loader" class="hidden"><img src="{{ cdn }}/img/loading.png" width=128 height=128 alt="Loading&hellip;" class="w3-spin" style="opacity:0" onload="this.style.opacity=1"><div id="loader_motto">{{ l.motto }}</div></div>
+<div id="loader" class="hidden">
+  <img src="{{ cdn }}/img/loading.png" width=128 height=128 alt="Loading&hellip;" class="w3-spin" style="opacity:0" onload="this.style.opacity=1">
+  <div id="loader_motto">{{ l.motto }}</div>
+</div>
 
 <script>
-//  GSC
+// GSC
 !(function(c,e){var a=document.getElementById("loader");a.className=a.className.replace(/\bhidden\b/g,"");a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+(b+1)+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version="{{ DATA_VERSION }}";a.LASAGNA.data.timestamp=a.LASAGNA.core.timestamp;a.loaderOff=function(){var a=document.getElementById("loader");a&&a.parentNode.removeChild(a);if(a=document.getElementById("divbody"))document.getElementById("divbody").className=document.getElementById("divbody").className.replace(/\bhidden\b/g,"w3-animate-opacity")};c.GSC=a;setTimeout("GSC.loaderOff();",3E3);})(window);
 </script>
 
@@ -120,11 +127,15 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 
   <div id="divbody">
     <script>document.getElementById("divbody").className="hidden";</script>
+
     {{>body_cookieconsent}}
     {{>container_switcher}}
+
   </div>
+
   {{>body_resources}}
   {{>body_custom}}
   {{>body_post}}
+
 </body>
 </html>
