@@ -56,6 +56,10 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
                 break;
+            case "GetCSArticleHTMLexport":
+            case "GetENArticleHTMLexport":
+                return $this->setData("output", $this->renderHTML("fuck"));
+                break;
             case "GetQR":
                 return $this->setData("output", $this->renderHTML("nasrat"));
                 break;

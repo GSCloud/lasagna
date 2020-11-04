@@ -112,6 +112,9 @@ GetCSArticleHTMLexport:
   api: true
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
+  api_example: [
+    "cs/exportHTML/default/demo"
+  ]
   assert_json: false
   method: GET
   presenter: core
@@ -122,6 +125,9 @@ GetENArticleHTMLexport:
   api: true
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
+  api_example: [
+    "en/exportHTML/default/demo"
+  ]
   assert_json: false
   method: GET
   presenter: core
