@@ -9,6 +9,10 @@
 
 namespace GSC;
 
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
+use Tracy\Debugger;
+
 /**
  * Core Presenter
  */
@@ -32,15 +36,18 @@ class CorePresenter extends APresenter
         }
 
         $data = $this->getData();
+        $match = $this->getMatch();
         $presenter = $this->getPresenter();
         $view = $this->getView();
-        $match = $this->getMatch();
-        $extras = ["name" => "LASAGNA Core", "fn" => $view];
+        $extras = [
+            "name" => "LASAGNA Core",
+            "fn" => $view,
+        ];
 
         switch ($view) {
             case "manifest":
                 $this->setHeaderJson();
-                $lang = $_GET["lang"] ?? "cs";
+                $lang = $_GET["lang"] ?? "cs"; // language switch by parameter
                 if (!in_array($lang, ["cs", "en"])) {
                     $lang = "cs";
                 }
@@ -58,17 +65,84 @@ class CorePresenter extends APresenter
                 break;
             case "GetCSArticleHTMLexport":
             case "GetENArticleHTMLexport":
-                return $this->setData("output", $this->renderHTML("fuck"));
+                $language = \strtolower($presenter[$view]["language"]) ?? "cs";
+                $x = 0;
+                if (isset($match["params"]["profile"])) {
+                    $profile = trim($match["params"]["profile"]);
+                    $x++;
+                }
+                if (isset($match["params"]["trailing"])) {
+                    $path = trim($match["params"]["trailing"]);
+                    $x++;
+                }
+                if ($x !== 2) { // ERROR
+                    return $this->writeJsonData(400, $extras);
+                }
+                $html = '';
+                if ($path == "!") {
+                    $path = $language;
+                } else {
+                    $path = $language . "/" . $path;
+                }
+                $hash = hash("sha256", $path);
+                $file = DATA . "/summernote_${profile}_${hash}.json";
+                if (\file_exists($file)) {
+                    $html = \json_decode(@\file_get_contents(DATA . "/summernote_${profile}_${hash}.json"), true);
+                    if (\is_array($html)) {
+                        $html = \join("\n", $html);
+                    } else {
+                        $html = '';
+                    }
+                }
+                return $this->setHeaderHTML()->setData("output", $this->renderHTML($html));
                 break;
             case "GetQR":
-                return $this->setData("output", $this->renderHTML("nasrat"));
+                $x = 0;
+                if (isset($match["params"]["size"])) {
+                    $size = trim($match["params"]["size"]);
+                    switch ($size) {
+                        case "s":
+                            $scale = 5;
+                            break;
+                        case "m":
+                            $scale = 8;
+                            break;
+                        case "l":
+                            $scale = 10;
+                            break;
+                        case "x":
+                            $scale = 15;
+                            break;
+                        default:
+                            $scale = 5;
+                    }
+                    $x++;
+                }
+                if (isset($match["params"]["trailing"])) {
+                    $text = trim($match["params"]["trailing"]);
+                    $x++;
+                }
+                if ($x !== 2) { // ERROR
+                    return $this->writeJsonData(400, $extras);
+                }
+                $options = new QROptions([
+                    'version' => 7,
+                    'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+                    'eccLevel' => QRCode::ECC_L,
+                    'scale' => $scale,
+                    'imageBase64' => false,
+                    'imageTransparent' => false,
+                ]);
+                header('Content-type: image/png');
+                echo (new QRCode($options))->render($text ?? "");
+                exit;
                 break;
             case "swjs":
                 $this->setHeaderJavaScript();
                 $map = [];
                 foreach ($presenter as $p) {
                     if (isset($p["sitemap"]) && $p["sitemap"]) {
-                        $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
+                        $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
                     }
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sw.js"));
@@ -101,7 +175,7 @@ class CorePresenter extends APresenter
                         ];
                     }
                 }
-                usort($map, function ($a, $b) {
+                \usort($map, function ($a, $b) {
                     return strcmp($a["desc"], $b["desc"]);
                 });
                 return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
@@ -109,43 +183,42 @@ class CorePresenter extends APresenter
             case "androidjs":
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
-                    $content = \file_get_contents($file);
+                    $content = @\file_get_contents($file);
                     $time = \filemtime(WWW . "/js/android-app.js") ?? null;
-                    $version = hash("sha256", $content);
+                    $version = \hash("sha256", $content);
                 } else {
                     $content = null;
                     $version = null;
                     $time = null;
                 }
-                $d = [
+                return $this->writeJsonData([
                     "js" => $content,
                     "timestamp" => $time,
                     "version" => $version,
-                ];
-                return $this->writeJsonData($d, $extras);
+                ], $extras);
                 break;
             case "androidcss":
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
-                    $content = \file_get_contents($file);
+                    $content = @\file_get_contents($file);
                     $time = \filemtime(WWW . "/css/android.css") ?? null;
-                    $version = hash("sha256", $content);
+                    $version = \hash("sha256", $content);
                 } else {
                     $content = null;
                     $version = null;
                     $time = null;
                 }
-                $d = [
+                return $this->writeJsonData([
                     "css" => $content,
                     "timestamp" => $time,
                     "version" => $version,
-                ];
-                return $this->writeJsonData($d, $extras);
+                ], $extras);
                 break;
             case "GetCoreVersion":
                 $d = [];
-                $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
+                $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
+                $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
                 return $this->writeJsonData($d, $extras);
                 break;
             case "ReadArticles":
@@ -161,10 +234,12 @@ class CorePresenter extends APresenter
                 if ($x !== 2) { // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
-                $file = DATA . "/summernote_" . $profile . "_" . $hash . ".json";
                 $data = "";
-                if (file_exists($file)) {
-                    $data = @file_get_contents($file);
+                $time = null;
+                $file = DATA . "/summernote_${profile}_${hash}.json";
+                if (\file_exists($file)) {
+                    $data = @\file_get_contents($file);
+                    $time = \filemtime(DATA . "/summernote_${profile}_${hash}.json");
                 }
                 $crc = hash("sha256", $data);
                 if (isset($_GET["crc"])) {
@@ -177,23 +252,23 @@ class CorePresenter extends APresenter
                     "hash" => $hash,
                     "html" => $data,
                     "profile" => $profile,
+                    "timestamp" => $time,
                 ], $extras);
                 break;
         }
 
-        $language = strtolower($presenter[$view]["language"]) ?? "cs";
+        $language = \strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);
-        $hash = hash('sha256', (string) json_encode($locale));
+        $hash = \hash('sha256', (string) \json_encode($locale));
 
         switch ($view) {
             case "GetCsDataVersion":
             case "GetEnDataVersion":
                 $d = [];
-                $d["LASAGNA"]["data"]["version"] = $hash;
                 $d["LASAGNA"]["data"]["language"] = $language;
+                $d["LASAGNA"]["data"]["version"] = $hash;
                 return $this->writeJsonData($d, $extras);
                 break;
-
             default:
                 ErrorPresenter::getInstance()->process(404);
         }

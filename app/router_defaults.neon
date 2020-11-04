@@ -113,7 +113,7 @@ GetCSArticleHTMLexport:
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
-    "cs/exportHTML/default/demo"
+    "cs/exportHTML/default/id/demo"
   ]
   assert_json: false
   method: GET
@@ -126,7 +126,7 @@ GetENArticleHTMLexport:
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
-    "en/exportHTML/default/demo"
+    "en/exportHTML/default/id/demo"
   ]
   assert_json: false
   method: GET
@@ -159,10 +159,10 @@ GetQR:
   ]
 
 ReadBook:
-  path: "/epub/[**:path]"
+  path: "/epub/[**:trailing]"
   api: true
   api_description: "Read ebook in EPUB format"
-  api_info: "Parameters:\n<b><path></b> - relative path to EPUB file under www/\n\nReturns (HTML): EPUB reader."
+  api_info: "Parameters:\n<b><trailing></b> - relative path to the EPUB file under www/\n\nReturns (HTML): EPUB reader."
   method: GET
   presenter: core
   template: epub

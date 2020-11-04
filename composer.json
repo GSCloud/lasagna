@@ -6,7 +6,7 @@
     "altorouter/altorouter": "^1.2",
     "cakephp/cache": "^4.1",
     "cheprasov/php-redis-client": "^1.10",
-    "chillerlan/php-qrcode": "^3.3",
+    "chillerlan/php-qrcode": "^4.2",
     "cloudflare/sdk": "^1.1",
     "google/cloud": "^0.86",
     "guzzlehttp/guzzle": "^6.5",
