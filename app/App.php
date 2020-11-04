@@ -246,11 +246,11 @@ if ($router[$view]["redirect"] ?? false) {
 }
 
 switch ($presenter[$view]["template"]) {
-    case "epub":
+    case "epub": // skip CSP headers
         break;
 
     default:
-        header(implode(" ", [ // CSP HEADERS
+        header(implode(" ", [ // CSP headers
             "Content-Security-Policy: ",
             "default-src",
             "'unsafe-inline'",

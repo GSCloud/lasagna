@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js" lang="{{ lang }}">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EPUB READER</title>
-  <script src="/js/jszip.min.js"></script>
-  <script src="/js/epub.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{#LOCALHOST}}LOCAL | {{/LOCALHOST}}EPUB READER</title>
+
+    <script src="/js/jszip.min.js"></script>
+    <script src="/js/epub.min.js"></script>
+
+    <link rel="dns-prefetch" href="//connect.facebook.net">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//platform.twitter.com">
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//www.google.com">
+
+    <link rel="preconnect" href="//connect.facebook.net">
+    <link rel="preconnect" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.gstatic.com">
+    <link rel="preconnect" href="//platform.twitter.com">
+    <link rel="preconnect" href="//www.google-analytics.com">
+    <link rel="preconnect" href="//www.google.com">
+
+    {{>head_favicons}}
+    {{>head_googleanalytics}}
+    {{>head_html5shim}}
+
 </head>
 <body>
   <div id="title"></div>
@@ -15,6 +36,8 @@
   <a id="next" href="#next" class="arrow">›</a>
 
   <script>
+  'use strict';
+
     var currentSectionIndex = undefined;
     var book = ePub("/{{ epub }}");
     var rendition = book.renderTo("viewer", {
