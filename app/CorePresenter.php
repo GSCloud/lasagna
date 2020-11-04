@@ -56,15 +56,20 @@ class CorePresenter extends APresenter
 
             case "ReadEpubBook":
                 if (isset($match["params"]["trailing"])) {
-                    $epub = trim($match["params"]["trailing"]);
+                    $epub = \trim($match["params"]["trailing"]);
+                    // security tweaks
+                    $epub = \str_replace("..", "", $epub);
+                    $epub = \str_replace("\\", "", $epub);
+                    $epub = \stri_replace(".epub", "", $epub);
                 }
                 $file = WWW . "/${epub}.epub";
                 if ($epub && \file_exists($file)) {
                     $this->setHeaderHTML();
-                    $data["epub"] = "${epub}.epub";
+                    $data["epub"] = "/${epub}.epub";
                     $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
                     return $this->setData("output", $output);
                 }
+                return $this->writeJsonData(400, $extras);
                 break;
 
             case "GetSitemap":
@@ -72,7 +77,7 @@ class CorePresenter extends APresenter
                 $map = [];
                 foreach ($presenter as $p) {
                     if (isset($p["sitemap"]) && $p["sitemap"]) {
-                        $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
+                        $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
                     }
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
@@ -116,11 +121,7 @@ class CorePresenter extends APresenter
                 $x = 0;
                 if (isset($match["params"]["size"])) {
                     $size = trim($match["params"]["size"]);
-
                     switch ($size) {
-                        case "s":
-                            $scale = 5;
-                            break;
                         case "m":
                             $scale = 8;
                             break;
@@ -130,6 +131,7 @@ class CorePresenter extends APresenter
                         case "x":
                             $scale = 15;
                             break;
+                        case "s":
                         default:
                             $scale = 5;
                     }
@@ -240,6 +242,7 @@ class CorePresenter extends APresenter
                 $d = [];
                 $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
+                $d["LASAGNA"]["core"]["timestamp"] = (int) $data["VERSION_TIMESTAMP"];
                 $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
                 return $this->writeJsonData($d, $extras);
                 break;

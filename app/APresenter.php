@@ -410,7 +410,7 @@ abstract class APresenter implements IPresenter
                     return (string) time();
                 },
                 "sha256_nonce" => function () {
-                    return (string) substr(hash("sha256", random_bytes(8) . (string) time()), 0, 8);
+                    return (string) \substr(\hash("sha256", \random_bytes(8) . (string) \time()), 0, 8);
                 },
                 "convert_hyperlinks" => function ($source, \Mustache_LambdaHelper $lambdaHelper) {
                     $text = $lambdaHelper->render($source);
@@ -490,11 +490,11 @@ abstract class APresenter implements IPresenter
      */
     public function setData($data = null, $value = null)
     {
-        if (is_array($data)) {
+        if (\is_array($data)) {
             $this->data = (array) $data; // $data = new model, replace it
         } else {
             $key = $data; // $data = key index
-            if (is_string($key) && !empty($key)) {
+            if (\is_string($key) && !empty($key)) {
                 $dot = new \Adbar\Dot($this->data);
                 $dot->set($key, $value); // set new value
                 $this->data = (array) $dot->all();
@@ -541,10 +541,10 @@ abstract class APresenter implements IPresenter
      */
     public function addAuditMessage($message = null)
     {
-        if (!is_null($message) || !empty($message)) {
+        if (!\is_null($message) || !empty($message)) {
             $file = DATA . DS . "AuditLog.txt";
             $date = date("c");
-            $message = trim($message);
+            $message = \trim($message);
             $i = $this->getIdentity();
             @file_put_contents($file, "$date;$message;IP:{$i['ip']};NAME:{$i['name']};EMAIL:{$i['email']};\n",
                 FILE_APPEND | LOCK_EX
@@ -561,7 +561,7 @@ abstract class APresenter implements IPresenter
      */
     public function addMessage($message = null)
     {
-        if (!is_null($message) || !empty($message)) {
+        if (!\is_null($message) || !empty($message)) {
             $this->messages[] = (string) $message;
         }
         return $this;
@@ -575,7 +575,7 @@ abstract class APresenter implements IPresenter
      */
     public function addError($message = null)
     {
-        if (!is_null($message) || !empty($message)) {
+        if (!\is_null($message) || !empty($message)) {
             $this->errors[] = (string) $message;
         }
         return $this;
@@ -589,7 +589,7 @@ abstract class APresenter implements IPresenter
      */
     public function addCritical($message = null)
     {
-        if (!is_null($message) || !empty($message)) {
+        if (!\is_null($message) || !empty($message)) {
             $this->criticals[] = (string) $message;
         }
         return $this;
@@ -630,7 +630,7 @@ abstract class APresenter implements IPresenter
      */
     public function getUID()
     {
-        return hash("sha256", $this->getUIDstring());
+        return \hash("sha256", $this->getUIDstring());
     }
 
     /**
@@ -641,7 +641,7 @@ abstract class APresenter implements IPresenter
      */
     public function setIdentity($identity = [])
     {
-        if (!is_array($identity)) {
+        if (!\is_array($identity)) {
             $identity = [];
         }
         $i = [
@@ -654,13 +654,13 @@ abstract class APresenter implements IPresenter
             "time" => 0,
         ];
         $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
-        if (!file_exists($file)) {
+        if (!\file_exists($file)) {
             try {
-                $nonce = hash("sha256", random_bytes(256) . time());
-                if (file_put_contents($file, $nonce, LOCK_EX) === false) {
+                $nonce = \hash("sha256", \random_bytes(256) . \time());
+                if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
                     throw new \Exception("File write failed!");
                 }
-                @chmod($file, 0660);
+                @\chmod($file, 0660);
                 $this->addMessage("ADMIN: nonce file created");
             } catch (Exception $e) {
                 $this->addError("500: Internal Server Error -> cannot create nonce file: " . $e->getMessage());
@@ -668,14 +668,14 @@ abstract class APresenter implements IPresenter
                 exit;
             }
         }
-        if (!$nonce = @file_get_contents($file)) {
+        if (!$nonce = @\file_get_contents($file)) {
             $this->addError("500: Internal Server Error -> cannot read nonce file");
             $this->setLocation("/err/500");
             exit;
         }
-        $i["nonce"] = substr(trim($nonce), 0, 8); // final nonce
+        $i["nonce"] = \substr(\trim($nonce), 0, 8); // final nonce
         // check all keys
-        if (array_key_exists("avatar", $identity)) {
+        if (\array_key_exists("avatar", $identity)) {
             $i["avatar"] = (string) $identity["avatar"];
         }
         if (array_key_exists("email", $identity)) {
@@ -693,7 +693,7 @@ abstract class APresenter implements IPresenter
         $i["time"] = time();
         // shuffle keys
         $out = [];
-        $keys = array_keys($i);
+        $keys = \array_keys($i);
         shuffle($keys);
         foreach ($keys as $k) {
             $out[$k] = $i[$k];
@@ -734,16 +734,16 @@ abstract class APresenter implements IPresenter
             return $this->identity;
         }
         $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
-        if (!file_exists($file)) {
+        if (!\file_exists($file)) {
             $this->setIdentity(); // initialize nonce
             return $this->identity;
         }
-        if (!$nonce = @file_get_contents($file)) {
+        if (!$nonce = @\file_get_contents($file)) {
             $this->addError("500: Internal Server Error -> cannot read nonce file");
             $this->setLocation("/err/500");
             exit;
         }
-        $nonce = substr(trim($nonce), 0, 8); // final nonce
+        $nonce = \substr(\trim($nonce), 0, 8); // final nonce
         $i = [ // empty identity
             "avatar" => "",
             "country" => "",
@@ -766,7 +766,7 @@ abstract class APresenter implements IPresenter
             if (isset($_COOKIE[$this->getCfg("app") ?? "app"])) { // COOKIE identity
                 $x = 0;
                 $q = json_decode($this->getCookie($this->getCfg("app") ?? "app"), true);
-                if (!is_array($q)) {
+                if (!\is_array($q)) {
                     $x++;
                 } else {
                     if (!array_key_exists("email", $q)) {
@@ -880,7 +880,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderCsv()
     {
-        header("Content-Type: text/csv; charset=UTF-8");
+        \header("Content-Type: text/csv; charset=UTF-8");
         return $this;
     }
 
@@ -891,7 +891,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderFile()
     {
-        header("Content-Type: application/octet-stream");
+        \header("Content-Type: application/octet-stream");
         return $this;
     }
 
@@ -902,7 +902,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderHtml()
     {
-        header("Content-Type: text/html; charset=UTF-8");
+        \header("Content-Type: text/html; charset=UTF-8");
         return $this;
     }
 
@@ -913,7 +913,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderJson()
     {
-        header("Content-Type: application/json; charset=UTF-8");
+        \header("Content-Type: application/json; charset=UTF-8");
         return $this;
     }
 
@@ -924,7 +924,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderJavaScript()
     {
-        header("Content-Type: application/javascript; charset=UTF-8");
+        \header("Content-Type: application/javascript; charset=UTF-8");
         return $this;
     }
 
@@ -935,7 +935,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderPdf()
     {
-        header("Content-Type: application/pdf");
+        \header("Content-Type: application/pdf");
         return $this;
     }
 
@@ -946,7 +946,7 @@ abstract class APresenter implements IPresenter
      */
     public function setHeaderText()
     {
-        header("Content-Type: text/plain; charset=UTF-8");
+        \header("Content-Type: text/plain; charset=UTF-8");
         return $this;
     }
 
@@ -965,9 +965,9 @@ abstract class APresenter implements IPresenter
             return $this->cookies[$name] ?? null;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
-        $key = trim($key, "/.\\");
+        $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-        if (file_exists($keyfile)) {
+        if (\file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $this->addError("HALITE: Missing encryption key!");
@@ -990,14 +990,14 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
-        $key = trim($key, "/.\\");
+        $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-        if (file_exists($keyfile)) {
+        if (\file_exists($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $enc = KeyFactory::generateEncryptionKey();
             KeyFactory::save($enc, $keyfile);
-            @chmod($keyfile, self::COOKIE_KEY_FILEMODE);
+            @\chmod($keyfile, self::COOKIE_KEY_FILEMODE);
             $this->addMessage("HALITE: New keyfile created");
         }
         $cookie = new Cookie($enc);
@@ -1044,9 +1044,9 @@ abstract class APresenter implements IPresenter
     {
         $code = (int) $code;
         if (empty($location)) {
-            $location = "/?nonce=" . substr(hash("sha256", random_bytes(4) . (string) time()), 0, 4);
+            $location = "/?nonce=" . \substr(\hash("sha256", \random_bytes(4) . (string) \time()), 0, 4);
         }
-        header("Location: $location", true, ($code > 300) ? $code : 303);
+        \header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
     }
 
@@ -1057,7 +1057,7 @@ abstract class APresenter implements IPresenter
     {
         $this->setIdentity([]);
         $this->clearCookie($this->getCfg("app") ?? "app");
-        header('Clear-Site-Data: "cookies"');
+        \header('Clear-Site-Data: "cookies"');
         $this->setLocation();
         exit;
     }
@@ -1073,7 +1073,6 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return;
         }
-
         $f = "user_rate_limit_{$this->getUID()}";
         $rate = (int) (Cache::read($f, "limiter") ?? 0);
         Cache::write($f, ++$rate, "limiter");
@@ -1094,7 +1093,6 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return false;
         }
-
         return Cache::read("user_rate_limit_{$this->getUID()}", "limiter");
     }
 
@@ -1109,14 +1107,14 @@ abstract class APresenter implements IPresenter
         if (empty($role)) {
             return $this;
         }
-        $role = strtolower(trim((string) $role));
+        $role = \strtolower(\trim((string) $role));
         $email = $this->getIdentity()["email"] ?? "";
         $groups = $this->getCfg("admin_groups") ?? [];
-        if (strlen($role) && strlen($email)) {
-            if (in_array($email, $groups[$role] ?? [], true)) { // email allowed
+        if (\strlen($role) && \strlen($email)) {
+            if (\in_array($email, $groups[$role] ?? [], true)) { // email allowed
                 return $this;
             }
-            if (in_array("*", $groups[$role] ?? [], true)) { // any Google users allowed
+            if (\in_array("*", $groups[$role] ?? [], true)) { // any Google users allowed
                 return $this;
             }
         }
@@ -1137,7 +1135,7 @@ abstract class APresenter implements IPresenter
             return null;
         }
         $mygroup = null;
-        $email = trim((string) $email);
+        $email = \trim((string) $email);
         // search all groups for email or asterisk
         foreach ($this->getCfg("admin_groups") ?? [] as $group => $users) {
             if (in_array($email, $users, true)) {
@@ -1173,11 +1171,11 @@ abstract class APresenter implements IPresenter
     public function postloadAppData($key)
     {
         if (!empty($key)) {
-            if (is_string($key)) {
+            if (\is_string($key)) {
                 $this->csv_postload[] = (string) $key;
                 return $this;
             }
-            if (is_array($key)) {
+            if (\is_array($key)) {
                 $this->csv_postload = array_merge($this->csv_postload, $key);
                 return $this;
             }
@@ -1194,14 +1192,14 @@ abstract class APresenter implements IPresenter
      */
     public function getLocale($language, $key = "KEY")
     {
-        if (!is_array($this->getCfg("locales"))) {
+        if (!\is_array($this->getCfg("locales"))) {
             return null;
         }
         $locale = [];
-        $language = trim(strtoupper((string) $language));
-        $key = trim(strtoupper((string) $key));
+        $language = \trim(\strtoupper((string) $language));
+        $key = \trim(\strtoupper((string) $key));
         $cfg = $this->getCfg();
-        $file = strtolower("${language}_locale");
+        $file = \strtolower("${language}_locale");
         $locale = Cache::read($file, "default");
         if ($locale === false || empty($locale)) {
             if (array_key_exists("locales", $cfg)) {
@@ -1210,10 +1208,10 @@ abstract class APresenter implements IPresenter
 
                     // 1. read from CSV file
                     $csv = false;
-                    $subfile = strtolower($k);
+                    $subfile = \strtolower($k);
                     if ($csv === false) {
                         $csv = @file_get_contents(DATA . DS . "${subfile}.csv");
-                        if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
+                        if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                         }
                     }
@@ -1221,7 +1219,7 @@ abstract class APresenter implements IPresenter
                     // 2. read from CSV file backup
                     if ($csv === false) {
                         $csv = @file_get_contents(DATA . DS . "${subfile}.bak");
-                        if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
+                        if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                             continue; // skip this CSV
                         }
@@ -1243,7 +1241,7 @@ abstract class APresenter implements IPresenter
                     } catch (Exception $e) {
                         $this->addCritical("ERR: $language locale $k CORRUPTED");
                     }
-                    $locale = array_replace($locale, array_combine($keys, $values));
+                    $locale = \array_replace($locale, \array_combine($keys, $values));
                 }
 
                 // git revisions
@@ -1252,9 +1250,9 @@ abstract class APresenter implements IPresenter
                 // find all $ in combined locales array
                 $dolar = ['$' => '$'];
                 foreach ((array) $locale as $a => $b) {
-                    if (substr($a, 0, 1) === '$') {
-                        $a = trim($a, '${}' . "\x20\t\n\r\0\x0B");
-                        if (!strlen($a)) {
+                    if (\substr($a, 0, 1) === '$') {
+                        $a = \trim($a, '${}' . "\x20\t\n\r\0\x0B");
+                        if (!\strlen($a)) {
                             continue;
                         }
                         $dolar['$' . $a] = $b;
@@ -1262,13 +1260,13 @@ abstract class APresenter implements IPresenter
                     }
                 }
                 // replace $ and $$
-                $locale = str_replace(array_keys($dolar), $dolar, $locale);
-                $locale = str_replace(array_keys($dolar), $dolar, $locale);
+                $locale = \str_replace(\array_keys($dolar), $dolar, $locale);
+                $locale = \str_replace(\array_keys($dolar), $dolar, $locale);
             }
         }
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
-                header("HTTP/1.1 500 FATAL ERROR");
+                \header("HTTP/1.1 500 FATAL ERROR");
                 $this->addCritical("ERR: LOCALES CORRUPTED");
                 echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED</h2></body>";
                 exit;
@@ -1291,7 +1289,7 @@ abstract class APresenter implements IPresenter
     public function checkLocales($force = false)
     {
         $locales = $this->getCfg("locales");
-        if (is_array($locales)) {
+        if (\is_array($locales)) {
             foreach ($locales as $name => $csvkey) {
                 $this->csv_preloader($name, $csvkey, (bool) $force);
             }
@@ -1307,7 +1305,7 @@ abstract class APresenter implements IPresenter
      */
     public function CloudflarePurgeCache($cf)
     {
-        if (!is_array($cf)) {
+        if (!\is_array($cf)) {
             return $this;
         }
         $email = $cf["email"] ?? null;
@@ -1319,7 +1317,7 @@ abstract class APresenter implements IPresenter
                 $key = new \Cloudflare\API\Auth\APIKey($email, $apikey);
                 $adapter = new \Cloudflare\API\Adapter\Guzzle($key);
                 $zones = new \Cloudflare\API\Endpoints\Zones($adapter);
-                if (is_array($zoneid)) {
+                if (\is_array($zoneid)) {
                     $myzones = $zoneid;
                 }
                 if (is_string($zoneid)) {
@@ -1350,36 +1348,36 @@ abstract class APresenter implements IPresenter
      */
     private function csv_preloader($name, $csvkey, $force = false)
     {
-        $name = trim((string) $name);
-        $csvkey = trim((string) $csvkey);
+        $name = \trim((string) $name);
+        $csvkey = \trim((string) $csvkey);
         $force = (bool) $force;
-        $file = strtolower($name);
+        $file = \strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, "csv") === false || $force === true) {
                 $data = false;
-                if (!file_exists(DATA . DS . "${file}.csv")) {
+                if (!\file_exists(DATA . DS . "${file}.csv")) {
                     $force = true;
                 }
                 if ($force) {
-                    $data = @file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX . "&time=" . time());
+                    $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX . "&time=" . time());
                 }
-                if (strlen($data) >= self::CSV_MIN_SIZE) {
+                if (\strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, "csv");
                     // @todo add OPERATION LOCK!!!
                     // delete old backup
-                    if (file_exists(DATA . DS . "${file}.bak")) {
-                        if (@unlink(DATA . DS . "${file}.bak") === false) {
+                    if (\file_exists(DATA . DS . "${file}.bak")) {
+                        if (@\unlink(DATA . DS . "${file}.bak") === false) {
                             $this->addError("FILE: Deleting ${file}.bak failed!");
                         }
                     }
                     // move CSV to backup
-                    if (file_exists(DATA . DS . "${file}.csv")) {
-                        if (@rename(DATA . DS . "${file}.csv", DATA . DS . "${file}.bak") === false) {
+                    if (\file_exists(DATA . DS . "${file}.csv")) {
+                        if (@\rename(DATA . DS . "${file}.csv", DATA . DS . "${file}.bak") === false) {
                             $this->addError("FILE: Backuping ${file}.csv failed!");
                         }
                     }
                     // write new CSV
-                    if (@file_put_contents(DATA . DS . "${file}.csv", $data, LOCK_EX) === false) {
+                    if (@\file_put_contents(DATA . DS . "${file}.csv", $data, LOCK_EX) === false) {
                         $this->addError("FILE: Saving data to ${file}.csv failed!");
                         return false;
                     }
@@ -1398,9 +1396,9 @@ abstract class APresenter implements IPresenter
      */
     public function preloadAppData($key = "app_data", $force = false)
     {
-        $key = strtolower(trim((string) $key));
+        $key = \strtolower(\trim((string) $key));
         $cfg = $this->getCfg();
-        if (array_key_exists($key, $cfg)) {
+        if (\array_key_exists($key, $cfg)) {
             foreach ((array) $cfg[$key] as $name => $csvkey) {
                 $this->csv_preloader($name, $csvkey, (bool) $force);
             }
@@ -1416,19 +1414,19 @@ abstract class APresenter implements IPresenter
      */
     public function readAppData($name)
     {
-        $file = strtolower(trim((string) $name));
+        $file = \strtolower(\trim((string) $name));
         if (empty($file)) {
             $this->addCritical("EMPTY readAppData() filename parameter!");
             return null;
         }
         if (!$csv = Cache::read($file, "csv")) { // read CSV
-            $csv = @file_get_contents(DATA . DS . "${file}.csv");
-            if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
+            $csv = @\file_get_contents(DATA . DS . "${file}.csv");
+            if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
-            $csv = @file_get_contents(DATA . DS . "${file}.bak"); // read CSV backup
-            if ($csv !== false || strlen($csv) >= self::CSV_MIN_SIZE) {
+            $csv = @\file_get_contents(DATA . DS . "${file}.bak"); // read CSV backup
+            if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv");
                 return $csv;
             }
@@ -1450,12 +1448,12 @@ abstract class APresenter implements IPresenter
         $out = [];
         $code = 200;
         $locale = [];
-        $out["timestamp"] = time();
+        $out["timestamp"] = \time();
         $out["version"] = (string) ($this->getCfg("version") ?? "v1");
-        if (is_array($this->getCfg("locales"))) { // locales
+        if (\is_array($this->getCfg("locales"))) { // locales
             $locale = $this->getLocale("en");
         }
-        switch (json_last_error()) { // last decoding error
+        switch (\json_last_error()) { // last decoding error
             case JSON_ERROR_NONE:
                 $code = 200;
                 $msg = "DATA OK";
@@ -1488,7 +1486,7 @@ abstract class APresenter implements IPresenter
         if (is_null($data)) {
             $code = 500;
             $msg = "Data is null! Internal server error. 🦄";
-            header("HTTP/1.1 500 Internal Server Error");
+            \header("HTTP/1.1 500 Internal Server Error");
         }
         if (is_string($data)) {
             $data = [$data];
@@ -1546,20 +1544,20 @@ abstract class APresenter implements IPresenter
             }
             if ($m) {
                 $msg = "$m.";
-                header("$h $code $m");
+                \header("$h $code $m");
             }
         }
         // output
         $this->setHeaderJson();
         $out["code"] = (int) $code;
         $out["message"] = $msg;
-        $out["processing_time"] = round((microtime(true) - TESSERACT_START) * 1000, 2) . " ms";
-        $out = array_merge_recursive($out, $headers);
+        $out["processing_time"] = \round((\microtime(true) - TESSERACT_START) * 1000, 2) . " ms";
+        $out = \array_merge_recursive($out, $headers);
         $out["data"] = $data ?? null;
-        if (is_null($switches)) {
-            return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT));
+        if (\is_null($switches)) {
+            return $this->setData("output", \json_encode($out, JSON_PRETTY_PRINT));
         }
-        return $this->setData("output", json_encode($out, JSON_PRETTY_PRINT | $switches));
+        return $this->setData("output", \json_encode($out, JSON_PRETTY_PRINT | $switches));
     }
 
     /**
@@ -1585,17 +1583,20 @@ abstract class APresenter implements IPresenter
         if ($user["id"]) { // no cache for logged users
             $use_cache = false;
         }
+
         // language
         $presenter = $this->getPresenter();
         $view = $this->getView();
-        $data["lang"] = $language = strtolower($presenter[$view]["language"]) ?? "cs";
+        $data["lang"] = $language = \strtolower($presenter[$view]["language"]) ?? "cs";
         $data["lang{$language}"] = true;
         $data["l"] = $l = $this->getLocale($language);
+
         // compute data hash
-        $data["DATA_VERSION"] = hash('sha256', (string) json_encode($l));
+        $data["DATA_VERSION"] = \hash('sha256', (string) \json_encode($l));
+
         // extract request path slug
-        if (($pos = strpos($data["request_path"], $language)) !== false) {
-            $data["request_path_slug"] = substr_replace($data["request_path"], "", $pos, strlen($language));
+        if (($pos = \strpos($data["request_path"], $language)) !== false) {
+            $data["request_path_slug"] = \substr_replace($data["request_path"], "", $pos, \strlen($language));
         } else {
             $data["request_path_slug"] = $data["request_path"] ?? "";
         }
