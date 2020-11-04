@@ -44,6 +44,7 @@ class CorePresenter extends APresenter
         ];
 
         switch ($view) {
+
             case "manifest":
                 $this->setHeaderJson();
                 $lang = $_GET["lang"] ?? "cs"; // language switch by parameter
@@ -52,6 +53,20 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
                 break;
+
+            case "ReadBook":
+                if (isset($match["params"]["trailing"])) {
+                    $epub = trim($match["params"]["trailing"]);
+                }
+                $file = WWW . "/${epub}.epub";
+                if (\file_exists($file)) {
+                    $this->setHeaderHTML();
+                    $data["epub"] = "${epub}.epub";
+                    $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
+                    return $this->setData("output", $output);
+                }
+                break;
+
             case "sitemap":
                 $this->setHeaderText();
                 $map = [];
@@ -62,6 +77,7 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
                 break;
+
             case "GetCSArticleHTMLexport":
             case "GetENArticleHTMLexport":
                 $language = \strtolower($presenter[$view]["language"]) ?? "cs";
@@ -95,10 +111,12 @@ class CorePresenter extends APresenter
                 }
                 return $this->setHeaderHTML()->setData("output", $this->renderHTML($html));
                 break;
+
             case "GetQR":
                 $x = 0;
                 if (isset($match["params"]["size"])) {
                     $size = trim($match["params"]["size"]);
+
                     switch ($size) {
                         case "s":
                             $scale = 5;
@@ -136,6 +154,7 @@ class CorePresenter extends APresenter
                 echo (new QRCode($options))->render($text ?? "", CACHE . "/" . hash("sha256", $text) . ".png");
                 exit;
                 break;
+
             case "swjs":
                 $this->setHeaderJavaScript();
                 $map = [];
@@ -146,6 +165,7 @@ class CorePresenter extends APresenter
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sw.js"));
                 break;
+
             case "api":
                 $this->setHeaderHTML();
                 $map = [];
@@ -179,6 +199,7 @@ class CorePresenter extends APresenter
                 });
                 return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
                 break;
+
             case "androidjs":
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
@@ -196,6 +217,7 @@ class CorePresenter extends APresenter
                     "version" => $version,
                 ], $extras);
                 break;
+
             case "androidcss":
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
@@ -213,6 +235,7 @@ class CorePresenter extends APresenter
                     "version" => $version,
                 ], $extras);
                 break;
+
             case "GetCoreVersion":
                 $d = [];
                 $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
@@ -220,6 +243,7 @@ class CorePresenter extends APresenter
                 $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
                 return $this->writeJsonData($d, $extras);
                 break;
+
             case "ReadArticles":
                 $x = 0;
                 if (isset($match["params"]["profile"])) {
@@ -268,6 +292,7 @@ class CorePresenter extends APresenter
                 $d["LASAGNA"]["data"]["version"] = $hash;
                 return $this->writeJsonData($d, $extras);
                 break;
+
             default:
                 ErrorPresenter::getInstance()->process(404);
         }

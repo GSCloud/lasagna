@@ -245,42 +245,47 @@ if ($router[$view]["redirect"] ?? false) {
     exit;
 }
 
-// CSP HEADERS
-header(implode(" ", [
-    "Content-Security-Policy: ",
-    "default-src",
-    "'unsafe-inline'",
-    "'self'",
-    "https://*;",
-    "connect-src",
-    "'self'",
-    "https://*;",
-    "font-src",
-    "'self'",
-    "'unsafe-inline'",
-    "*.gstatic.com;",
-    "script-src",
-    "*.facebook.net",
-    "*.google-analytics.com",
-    "*.googleapis.com",
-    "*.googletagmanager.com",
-    "*.ytimg.com",
-    "cdn.onesignal.com",
-    "cdnjs.cloudflare.com",
-    "onesignal.com",
-    "platform.twitter.com",
-    "static.cloudflareinsights.com",
-    "'self'",
-    "'unsafe-inline'",
-    "'unsafe-eval';",
-    "img-src",
-    "*",
-    "'self'",
-    "'unsafe-inline'",
-    "data:;",
-    "form-action",
-    "'self';",
-]));
+switch ($presenter[$view]["template"]) {
+    case "epub":
+        break;
+
+    default:
+        header(implode(" ", [ // CSP HEADERS
+            "Content-Security-Policy: ",
+            "default-src",
+            "'unsafe-inline'",
+            "'self'",
+            "https://*;",
+            "connect-src",
+            "'self'",
+            "https://*;",
+            "font-src",
+            "'self'",
+            "'unsafe-inline'",
+            "*.gstatic.com;",
+            "script-src",
+            "*.facebook.net",
+            "*.google-analytics.com",
+            "*.googleapis.com",
+            "*.googletagmanager.com",
+            "*.ytimg.com",
+            "cdn.onesignal.com",
+            "cdnjs.cloudflare.com",
+            "onesignal.com",
+            "platform.twitter.com",
+            "static.cloudflareinsights.com",
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval';",
+            "img-src",
+            "*",
+            "'self'",
+            "'unsafe-inline'",
+            "data:;",
+            "form-action",
+            "'self';",
+        ]));
+}
 
 // SINGLETON CLASS
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";

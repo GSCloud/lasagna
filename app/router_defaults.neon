@@ -161,10 +161,13 @@ GetQR:
   ]
 
 ReadBook:
-  path: "/epub/[**:trailing]"
+  path: "/readEPUB/[**:trailing]"
   api: true
   api_description: "Read ebook in EPUB format"
-  api_info: "Parameters:\n<b><trailing></b> - relative path to the EPUB file under www/\n\nReturns (HTML): EPUB reader."
+  api_info: "Parameters:\n<b><trailing></b> - relative path to the EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
   method: GET
   presenter: core
   template: epub
+  api_example: [
+    "readEPUB/epub/alice"
+  ]
