@@ -19,50 +19,50 @@ defaults:
   use_key: false
   view: home
 
-manifest:
+GetWebManifest:
   path: /manifest.json
   presenter: core
   cached: true
 
-sitemap:
+GetSitemap:
   path: /sitemap.txt
   presenter: core
   cached: true
 
-swjs:
+GetServiceWorker:
   path: /sw.js
   presenter: core
   cached: true
 
-androidjs:
+GetAndroidJs:
   api: true
   api_description: "Get Android JS"
   api_info: "Returns (JSON): version SHA256 hash (string) + Android JS (string)."
   path: /android/js
   presenter: core
 
-androidcss:
+GetAndroidCss:
   api: true
   api_description: "Get Android CSS"
   api_info: "Returns (JSON): version SHA256 hash (string) + Android CSS (string)."
   path: /android/css
   presenter: core
 
-cs_article:
+GetCsArticle:
   path: '/cs/id/[**:trailing]'
   language: cs
   presenter: article
 
-en_article:
+GetEnArticle:
   path: '/en/id/[**:trailing]'
   language: en
   presenter: article
 
-api:
+API:
   path: /api
   api: true
   api_description: "Show REST API dashboard"
-  api_info: "This page, exactly! 🐱"
+  api_info: "This page 🐱"
   presenter: core
 
 GetCoreVersion:
@@ -106,7 +106,7 @@ ReadArticles:
   method: GET
   presenter: core
 
-GetCSArticleHTMLexport:
+GetCsArticleHTMLExport:
   path: '/cs/exportHTML/[a:profile]/[**:trailing]'
   language: cs
   api: true
@@ -114,20 +114,20 @@ GetCSArticleHTMLexport:
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
     "cs/exportHTML/default/!"
-    "en/exportHTML/default/!"
     "cs/exportHTML/default/id/demo"
   ]
   assert_json: false
   method: GET
   presenter: core
 
-GetENArticleHTMLexport:
+GetEnArticleHTMLExport:
   path: '/en/exportHTML/[a:profile]/[**:trailing]'
   language: en
   api: true
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
+    "en/exportHTML/default/!"
     "en/exportHTML/default/id/demo"
   ]
   assert_json: false
@@ -160,7 +160,7 @@ GetQR:
     "qr/m/https://example.com"
   ]
 
-ReadBook:
+ReadEpubBook:
   path: "/readEPUB/[**:trailing]"
   api: true
   api_description: "Read ebook in EPUB format"

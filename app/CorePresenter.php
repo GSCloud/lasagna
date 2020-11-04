@@ -45,21 +45,21 @@ class CorePresenter extends APresenter
 
         switch ($view) {
 
-            case "manifest":
+            case "GetWebManifest":
                 $this->setHeaderJson();
-                $lang = $_GET["lang"] ?? "cs"; // language switch by parameter
+                $lang = $_GET["lang"] ?? "cs"; // language switch by GET parameter
                 if (!in_array($lang, ["cs", "en"])) {
                     $lang = "cs";
                 }
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
                 break;
 
-            case "ReadBook":
+            case "ReadEpubBook":
                 if (isset($match["params"]["trailing"])) {
                     $epub = trim($match["params"]["trailing"]);
                 }
                 $file = WWW . "/${epub}.epub";
-                if (\file_exists($file)) {
+                if ($epub && \file_exists($file)) {
                     $this->setHeaderHTML();
                     $data["epub"] = "${epub}.epub";
                     $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
@@ -67,7 +67,7 @@ class CorePresenter extends APresenter
                 }
                 break;
 
-            case "sitemap":
+            case "GetSitemap":
                 $this->setHeaderText();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -78,8 +78,8 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
                 break;
 
-            case "GetCSArticleHTMLexport":
-            case "GetENArticleHTMLexport":
+            case "GetCsArticleHTMLExport":
+            case "GetEnArticleHTMLExport":
                 $language = \strtolower($presenter[$view]["language"]) ?? "cs";
                 $x = 0;
                 if (isset($match["params"]["profile"])) {
@@ -155,7 +155,7 @@ class CorePresenter extends APresenter
                 exit;
                 break;
 
-            case "swjs":
+            case "GetServiceWorker":
                 $this->setHeaderJavaScript();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -166,7 +166,7 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sw.js"));
                 break;
 
-            case "api":
+            case "API":
                 $this->setHeaderHTML();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -174,13 +174,13 @@ class CorePresenter extends APresenter
                         $info = $p["api_info"] ?? "";
                         StringFilters::convert_eol_to_br($info);
                         $info = \htmlspecialchars($info);
-                        $info = preg_replace(
+                        $info = \preg_replace(
                             array('#href=&quot;(.*)&quot;#', '#&lt;(/?(?:pre|a|b|br|em|u|ul|li|ol)(\shref=".*")?/?)&gt;#'),
                             array('href="\1"', '<\1>'),
                             $info
                         );
                         $map[] = [
-                            "count" => count($p["api_example"]),
+                            "count" => \count($p["api_example"]),
                             "deprecated" => $p["deprecated"] ?? false,
                             "desc" => \htmlspecialchars($p["api_description"] ?? ""),
                             "exam" => $p["api_example"] ?? [],
@@ -189,18 +189,18 @@ class CorePresenter extends APresenter
                             "key" => $p["use_key"] ?? false,
                             "linkit" => !(\strpos($p["path"], "[") ?? false), // do not link path with parameters
                             "method" => \strtoupper($p["method"]),
-                            "path" => trim($p["path"], "/ \t\n\r\0\x0B"),
+                            "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
                             "private" => $p["private"] ?? false,
                         ];
                     }
                 }
                 \usort($map, function ($a, $b) {
-                    return strcmp($a["desc"], $b["desc"]);
+                    return \strcmp($a["desc"], $b["desc"]);
                 });
                 return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
                 break;
 
-            case "androidjs":
+            case "GetAndroidJs":
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
                     $content = @\file_get_contents($file);
@@ -218,7 +218,7 @@ class CorePresenter extends APresenter
                 ], $extras);
                 break;
 
-            case "androidcss":
+            case "GetAndroidCss":
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
                     $content = @\file_get_contents($file);
