@@ -113,6 +113,8 @@ GetCSArticleHTMLexport:
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
+    "cs/exportHTML/default/!"
+    "en/exportHTML/default/!"
     "cs/exportHTML/default/id/demo"
   ]
   assert_json: false
