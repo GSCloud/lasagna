@@ -60,7 +60,7 @@ class CorePresenter extends APresenter
                     // security tweaks
                     $epub = \str_replace("..", "", $epub);
                     $epub = \str_replace("\\", "", $epub);
-                    $epub = \str_replace(".epub", "", $epub);
+                    $epub = \str_ireplace(".epub", "", $epub);
                 }
                 $file = WWW . "/${epub}.epub";
                 if ($epub && \file_exists($file)) {
