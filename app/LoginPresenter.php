@@ -48,10 +48,10 @@ class LoginPresenter extends APresenter
         // check for errors
         $errors = [];
         if (!empty($_GET["error"])) {
-            $errors[] = htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
+            $errors[] = \htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
-            $hint = $email ? strtolower("&login_hint=${email}") : "";
+            $hint = $email ? \strtolower("&login_hint=${email}") : "";
             // check URL for relogin parameter
             if (isset($_GET["relogin"])) {
                 $hint = "";
@@ -65,13 +65,11 @@ class LoginPresenter extends APresenter
                 ]);
             }
             \setcookie("oauth2state", $provider->getState());
-            header("Location: " . $authUrl . $hint, true, 303);
+            \header("Location: " . $authUrl . $hint, true, 303);
             exit;
         } elseif (empty($_GET["state"]) || ($_GET["state"] && !isset($_COOKIE["oauth2state"]))) {
-            // something baaaaaaaaaaaaaad happened!
             $errors[] = "Invalid OAuth state";
         } else {
-
             try {
                 // get access token
                 $token = $provider->getAccessToken("authorization_code", [
@@ -89,27 +87,20 @@ class LoginPresenter extends APresenter
                 ]);
                 $this->addMessage("Google login: " . $ownerDetails->getName() . " " . $ownerDetails->getEmail());
                 $this->addAuditMessage("GOOGLE OAUTH LOGIN");
-
 /*
-// DEBUGGING START
-
                 dump("NEW IDENTITY:");
                 dump($this->getIdentity());
                 dump("OAuth IDENTITY:");
                 dump($ownerDetails);
                 exit;
-
-/* DEBUGGING END */
-
+*/
                 if ($this->getUserGroup() == "admin") {
-                    // set Tracy debug cookie
-                    if ($this->getCfg("DEBUG_COOKIE")) {
+                    if ($this->getCfg("DEBUG_COOKIE")) { // set Tracy debug cookie
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
                 }
                 $this->clearCookie("oauth2state");
-                // store email for the next run
-                if (strlen($ownerDetails->getEmail())) {
+                if (\strlen($ownerDetails->getEmail())) { // store email for the next run
                     \setcookie("login_hint", $ownerDetails->getEmail() ?? "", time() + 86400 * 31, "/", DOMAIN);
                 }
                 $this->clearCookie("oauth2state");
@@ -120,7 +111,7 @@ class LoginPresenter extends APresenter
             }
         }
         // process errors
-        header("HTTP/1.1 400 Bad Request");
+        \header("HTTP/1.1 400 Bad Request");
         $this->clearCookie("login_hint");
         $this->clearCookie("oauth2state");
         $this->clearcookie("return_uri");
