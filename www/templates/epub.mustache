@@ -45,8 +45,8 @@
       height: 600,
       spread: "always"
     });
-
     rendition.display(currentSectionIndex);
+
     book.ready.then(() => {
       var next = document.getElementById("next");
       next.addEventListener("click", function(e){
@@ -59,11 +59,11 @@
         e.preventDefault();
       }, false);
       var keyListener = function(e){
-        // Left Key
+        // left
         if ((e.keyCode || e.which) == 37) {
           book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
         }
-        // Right Key
+        // right
         if ((e.keyCode || e.which) == 39) {
           book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
         }
@@ -92,7 +92,6 @@
     });
 
     rendition.on("relocated", function(location){
-      console.log(location);
       var next = book.package.metadata.direction === "rtl" ?  document.getElementById("prev") : document.getElementById("next");
       var prev = book.package.metadata.direction === "rtl" ?  document.getElementById("next") : document.getElementById("prev");
       if (location.atEnd) {
@@ -117,7 +116,6 @@
     });
 
     window.addEventListener("unload", function () {
-      console.log("unloading");
       this.book.destroy();
     });
 
