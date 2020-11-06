@@ -187,7 +187,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       </div>
     </div>
 
-    <!-- Google -->
+    <!-- GOOGLE -->
     <div class="col l4 m6 s12">
       <div class="row center extrapadding hide-on-small-only">
         <div class="white-text">
@@ -230,7 +230,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       </div>
     </div>
 
-    <!-- PageSpeed Insights -->
+    <!-- PAGESPEED INSIGHTS -->
     <div class="col l4 m6 hide-on-small-only">
       <div class="row center extrapadding">
         <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
@@ -243,7 +243,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         </div>
       </div>
 
-      <!-- icon buttons -->
+      <!-- ICON BUTTONS -->
       <h4 class="center">
         <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
@@ -269,12 +269,13 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
   </div>
 
-  <!-- emojis -->
+  <!-- EMOJIS -->
   <div id="emojis" class="row center" style="display:none">{{>emoji}}</div>
 </div>
 
 <script>
   (function (w, d, undefined) {
+
     if (getCookie("logout")) {
       d.getElementById("admin_main").style.display = "none";
       setCookie("motyle", "true");
@@ -406,7 +407,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         $("#a_summernote").text("{{ l.a_save_all }}");
         $("#a_summernote").unbind("click");
 
-        // save all
+        // SAVE ALL button
         $("#a_summernote").click(function () {
           if (GSC.offline) { // offline
             M.toast({html: "offline 📶"});
@@ -524,7 +525,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         $("#a_summernote").removeAttr("disabled");
       }
 
-      // Summernote plugins
+      // Summernote plugins - empty
       w.GSC.init.push(function () {
         w.GSC.names.push("Summernote plugins (empty)");
       });
@@ -533,7 +534,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI bindings");
 
-        // motýle 🦋
+        // 🦋
         if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(100);
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {
@@ -555,7 +556,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         }
         GSC.profile = profile;
         setCookie("profile", profile);
-
         $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
         $("#SiteSelect").formSelect();
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
@@ -599,11 +599,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             return GSC.PingDot("#csv_ping", false);
           }
           $("#a_update").attr("disabled", "disabled");
-          GSC.ShowLoader("#a_update_info");
           setTimeout(function () {
             $("#a_update").removeAttr("disabled");
           }, 30E3);
-
           // API: CoreUpdate
           $.post("/admin/CoreUpdate");
         });
@@ -657,7 +655,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }
           GSC.GetCsvInfo = function () {};
           $("#a_flush").attr("disabled", "disabled");
-
           // API: FlushCache
           $.post("/admin/FlushCache");
           window.location.reload(true);
@@ -669,7 +666,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
-
           // API: CreateAuthCode
           $.post("/admin/CreateAuthCode", function(data) {
             GSC.CopyClipboard(data.data.hash);
@@ -683,7 +679,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
-
           // API: DeleteAuthCode
           $.post("/admin/DeleteAuthCode", function(data) {
             M.toast({html: "DeleteAuthCode {{ l.a_codedeleted }} 🆗"});
@@ -714,10 +709,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         GSC.AdminUI();
       });
 
-      // load PSI into cache
+      // load PSI in the background (caching)
       w.GSC.init.push(function () {
         w.GSC.names.push("Update PSI cache");
-
         // API: GetPSInsights
         $.get("/admin/GetPSInsights?" + Date.now());
       });
@@ -727,7 +721,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
 </script>
 
-<!-- SUMMERNOTE editor //-->
+<!-- SUMMERNOTE -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/material-darker.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/display/fullscreen.min.css" rel="stylesheet">
