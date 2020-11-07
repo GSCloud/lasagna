@@ -1,4 +1,5 @@
 <script>
+  // inject Twitter platform
   window.twttr = (function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0],
       t = window.twttr || {};
@@ -27,7 +28,7 @@
       dnt: true,
       hashtags: hashtags,
       lang: "{{ lang }}",
-      related: "FredBrooker",
+      related: "",
       text: text
     });
   }

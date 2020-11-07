@@ -1,5 +1,6 @@
 <script>
 'use strict';
+
 // polyfills
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
@@ -321,17 +322,18 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       // LOGIN buttons
       {{#LOCALHOST}}
       if (!GSC.isadmin) {
-        $('#nav-mobile').append('<li><a href="{{{{ local_goauth_redirect }}}}">🔒</a></li>');
+        $('#nav-mobile').append('<li><a href="{{{{ local_goauth_redirect }}}}">🔒 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ local_goauth_redirect }}">&nbsp;🔒&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
       {{^LOCALHOST}}
       if (!GSC.isadmin) {
-        $('#nav-mobile').append('<li><a href="{{{{ goauth_redirect }}}}">🔒</a></li>');
+        $('#nav-mobile').append('<li><a href="{{{{ goauth_redirect }}}}">🔒 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ goauth_redirect }}">&nbsp;🔒&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
 
+      // mobile WebShare button
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');

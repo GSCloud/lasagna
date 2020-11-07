@@ -1,7 +1,8 @@
-<!-- https://documentation.onesignal.com/docs/onesignal-service-worker-faq -->
-
 {{^LOCALHOST}}
 {{#l.onesignal_appid}}
+
+<!-- https://documentation.onesignal.com/docs/onesignal-service-worker-faq -->
+
 <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
 <script>
   var OneSignal = window.OneSignal || [];
@@ -11,5 +12,6 @@
     });
   });
 </script>
+
 {{/l.onesignal_appid}}
 {{/LOCALHOST}}

@@ -1,11 +1,8 @@
-
-<a class="webshare" aria-hidden="true" style="display:none;font-size:1.2em;width:100%">
-  <i class="fas fa-share-alt-square"></i>&nbsp;{{ l.webshare_button }}</a>
+<a class="webshare" aria-hidden="true" style="display:none;font-size:1.2em;width:100%">{{ l.webshare_button }}</a>
 
 <script>
   // touch devices feature only
   if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
-
     // feature detection
     if (navigator.share) {
       if (typeof window.WebShare !== "function") window.WebShare = function (text, url, title) {
