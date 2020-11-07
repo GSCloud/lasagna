@@ -319,27 +319,28 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="/">🏡</a></li>');
       }
 
+      // mobile WebShare button
+      if (GSC.touch) {
+        if (typeof window.WebShareFactory === "function") {
+          $("#nav-mobile").append('<li class="right">' + WebShareFactory() + '</li>');
+          $(".webshareicon").append("{{ l.webshare_button }}");
+        }
+      }
+
       // LOGIN buttons
       {{#LOCALHOST}}
       if (!GSC.isadmin) {
-        $('#nav-mobile').append('<li><a href="{{{{ local_goauth_redirect }}}}">🔒 LOGIN</a></li>');
+        $('#nav-mobile').append('<li><a class="right" href="{{ local_goauth_redirect }}">🔒 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ local_goauth_redirect }}">&nbsp;🔒&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
       {{^LOCALHOST}}
       if (!GSC.isadmin) {
-        $('#nav-mobile').append('<li><a href="{{{{ goauth_redirect }}}}">🔒 LOGIN</a></li>');
+        $('#nav-mobile').append('<li><a class="right" href="{{ goauth_redirect }}">🔒 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ goauth_redirect }}">&nbsp;🔒&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
 
-      // mobile WebShare button
-      if (GSC.touch) {
-        if (typeof window.WebShareFactory === "function") {
-          $("#nav-mobile").append('<li>' + WebShareFactory() + '</li>');
-          $(".webshareicon").append("{{ l.webshare_button }}");
-        }
-      }
     });
 
   }
