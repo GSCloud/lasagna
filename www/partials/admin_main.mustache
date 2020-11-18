@@ -604,6 +604,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }, 30E3);
           // API: CoreUpdate
           $.post("/admin/CoreUpdate");
+          M.toast({html: "{{ l.a_processing_data }}"});
         });
 
         // show Google PSI
