@@ -89,7 +89,10 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       <div class="row center extrapadding">
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
-        <p>PHP ver. <b>{{ PHP_VERSION }}</b></p>
+        <p>
+          PHP ver. <b>{{ PHP_VERSION }}</b><br>
+          App ver. <b>{{ VERSION_SHORT }} / {{ VERSION_DATE }}</b><br>
+        </p>
         <div class="col s12 white">
           <label>{{ l.a_sites }}</label>
           <select id="SiteSelect">
