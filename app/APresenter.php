@@ -241,7 +241,7 @@ abstract class APresenter implements IPresenter
      *
      * @return void
      */
-    private function __sleep()
+    public final function __sleep()
     {}
 
     /**
@@ -249,7 +249,7 @@ abstract class APresenter implements IPresenter
      *
      * @return void
      */
-    private function __wakeup()
+    public final function __wakeup()
     {}
 
     /**
