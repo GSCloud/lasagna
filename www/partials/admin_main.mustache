@@ -34,7 +34,7 @@ div.checkbox.sn-checkbox-open-in-new-window>label>input[type=checkbox]{opacity:1
 div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!important;position:relative!important;margin:5px!important}
 </style>
 
-<!-- Motýle -->
+<!-- motýle -->
 <span style="position:fixed;left:0;top:0;z-index:999999" class="motyle btn white hide-on-med-and-down">🦋</span>
 <span style="position:fixed;right:0;top:0;z-index:999999" class="motyle btn white hide-on-large-only">🦋</span>
 
@@ -130,10 +130,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
-          <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
-            data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
-            <i class="fas fa-power-off"></i>
-            {{ l.a_clear_browser }}</a>
         </div>
       </div>
       <div class="row center white hide-on-small-only">
@@ -186,6 +182,10 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               {{ l.a_logout }}</a>
             <a target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
               <i class="fas fa-list"></i></a>
+            <br>
+            <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
+              data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
+              <i class="fas fa-power-off"></i>{{ l.a_clear_browser }}</a>
           </div>
         </div>
       </div>
