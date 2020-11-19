@@ -126,7 +126,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fas fa-cloud-sun"></i>
             {{ l.a_flush }}</a>
-          <a href="/admin/clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
+          <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
             data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
             <i class="fas fa-power-off"></i>
             {{ l.a_clear_browser }}</a>
@@ -648,6 +648,18 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           $("#emojis").toggle("fast");
         });
 
+        // clear browser data
+        $("#a_clearbrowserdata").click(function () {
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
+            return GSC.PingDot("#csv_ping", false);
+          }
+          GSC.GetCsvInfo = function () {};
+          $("#a_clearbrowserdata").attr("disabled", "disabled");
+          M.toast({html: "💤💤💤"});
+          window.location.replace("/admin/clearbrowserdata");
+        });
+
         // flush cache
         $("#a_flush").click(function () {
           if (w.GSC.offline) { // offline
@@ -658,6 +670,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           $("#a_flush").attr("disabled", "disabled");
           // API: FlushCache
           $.post("/admin/FlushCache");
+          M.toast({html: "🌈"});
           window.location.reload(true);
         });
 
@@ -670,7 +683,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           // API: CreateAuthCode
           $.post("/admin/CreateAuthCode", function(data) {
             GSC.CopyClipboard(data.data.hash);
-            M.toast({html: "CreateAuthCode {{ l.a_clipboardcopy }} [" + data.data.hash + "] 🆗"});
+            M.toast({html: "CreateAuthCode 🆗 {{ l.a_clipboardcopy }} [" + data.data.hash + "]"});
           });
         });
 
@@ -682,7 +695,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }
           // API: DeleteAuthCode
           $.post("/admin/DeleteAuthCode", function(data) {
-            M.toast({html: "DeleteAuthCode {{ l.a_codedeleted }} 🆗"});
+            M.toast({html: "DeleteAuthCode 🆗 {{ l.a_codedeleted }}"});
             GSC.CopyClipboard("");
           });
         });
@@ -700,7 +713,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
         setInterval(function() {
           window.GSC.GetCsvInfo();
-        }, 5000);
+        }, 2500);
         GSC.GetCsvInfo();
       });
 
