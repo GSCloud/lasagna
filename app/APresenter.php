@@ -1362,13 +1362,17 @@ abstract class APresenter implements IPresenter
                     $force = true;
                 }
                 if ($force) {
-                    if (strpos($csvkey, "?gid=") > 0) { // settings contain full path incl. the POSTFIX
-                        $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey);
+                    if (\strpos($csvkey, "https") === 0) { // contains full path
+                        $data = @\file_get_contents($csvkey);
                     } else {
-                        $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX);
-                    }                    
+                        if (\strpos($csvkey, "?gid=") > 0) { // contains path incl. parameters
+                            $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey);
+                        } else {
+                            $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX);
+                        }
+                    }
                 }
-                if (strpos($data, "!DOCTYPE html") > 0) {
+                if (\strpos($data, "!DOCTYPE html") > 0) {
                     $data = ""; // we got HTML document
                 }
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {
@@ -1434,8 +1438,8 @@ abstract class APresenter implements IPresenter
             $csv = false;
             if (file_exists(DATA . DS . "${file}.csv")) {
                 $csv = @\file_get_contents(DATA . DS . "${file}.csv");
-            } 
-            if (strpos($csv, "!DOCTYPE html") > 0) {
+            }
+            if (\strpos($csv, "!DOCTYPE html") > 0) {
                 $csv = false; // we got HTML document
             }
             if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
@@ -1445,8 +1449,8 @@ abstract class APresenter implements IPresenter
             $csv = false;
             if (\file_exists(DATA . DS . "${file}.bak")) {
                 $csv = @\file_get_contents(DATA . DS . "${file}.bak"); // read CSV backup
-            }            
-            if (strpos($csv, "!DOCTYPE html") > 0) {
+            }
+            if (\strpos($csv, "!DOCTYPE html") > 0) {
                 $csv = false; // we got HTML document
             }
             \copy(DATA . DS . "${file}.bak", DATA . DS . "${file}.csv");
