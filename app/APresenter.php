@@ -1362,8 +1362,11 @@ abstract class APresenter implements IPresenter
                     $force = true;
                 }
                 if ($force) {
-                    //$data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX . "&time=" . time());
-                    $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX);
+                    if (strpos($csvkey, "?gid=") > 0) { // settings contain full path incl. the POSTFIX
+                        $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey);
+                    } else {
+                        $data = @\file_get_contents(self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX);
+                    }                    
                 }
                 if (strpos($data, "!DOCTYPE html") > 0) {
                     $data = ""; // we got HTML document
