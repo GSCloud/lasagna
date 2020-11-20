@@ -1,3 +1,4 @@
+
 {{#android_app}}
 <meta name="google-play-app" content="{{ android_app }}">
 {{/android_app}}
@@ -20,6 +21,7 @@
 <meta name="keywords" content="{{ l.meta_keywords }}">
 <meta name="theme-color" content="{{ design.theme_color }}">
 <meta name="viewport" content="{{#l.meta_viewport}}{{ l.meta_viewport }}{{/l.meta_viewport}}{{^l.meta_viewport}}width=device-width,initial-scale=1,maximum-scale=3{{/l.meta_viewport}}">
+
 <meta property="article:author" content="{{ l.article_author }}">
 <meta property="article:publisher" content="{{ l.article_publisher }}">
 {{#l.fb_admins}}<meta property="fb:admins" content="{{ l.fb_admins }}">{{/l.fb_admins}}
@@ -30,6 +32,7 @@
 <meta property="og:title" content="{{ l.og_title }}">
 <meta property="og:type" content="{{#l.og_type}}{{ l.og_type }}{{/l.og_type}}{{^l.og_type}}website{{/l.og_type}}">
 <meta property="og:url" content="{{#l.og_url}}{{ l.og_url }}{{/l.og_url}}{{^l.og_url}}{{ canonical_url }}{{ request_path }}{{/l.og_url}}">
+
 <meta name="twitter:card" content="{{#l.twitter_card}}{{ l.twitter_card }}{{/l.twitter_card}}{{^l.twitter_card}}summary{{/l.twitter_card}}">
 <meta name="twitter:creator" content="{{ l.twitter_creator }}">
 <meta name="twitter:description" content="{{ l.twitter_description }}">
