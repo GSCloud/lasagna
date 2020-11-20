@@ -72,7 +72,7 @@ class CorePresenter extends APresenter
                 return $this->writeJsonData(400, $extras);
                 break;
 
-            case "GetSitemap":
+            case "GetTXTSitemap":
                 $this->setHeaderText();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -81,6 +81,17 @@ class CorePresenter extends APresenter
                     }
                 }
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.txt"));
+                break;
+
+            case "GetXMLSitemap":
+                $this->setHeaderText();
+                $map = [];
+                foreach ($presenter as $p) {
+                    if (isset($p["sitemap"]) && $p["sitemap"]) {
+                        $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
+                    }
+                }
+                return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sitemap.xml"));
                 break;
 
             case "GetCsArticleHTMLExport":
