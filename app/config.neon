@@ -28,7 +28,7 @@ local_goauth_redirect: "http://localhost:8009/login"
 # Google misc.
 google: [
 #  analytics: "https://analytics.google.com/analytics/web/#/report-home/xxx"
-#  map_query: ""
+#  map_query: "Prague,Czechia"
   ua: "UA-89950317-12"
   google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
 ]

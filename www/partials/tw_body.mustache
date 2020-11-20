@@ -1,4 +1,5 @@
 <script>
+
   // inject Twitter platform
   window.twttr = (function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0],
@@ -19,7 +20,7 @@
     if (text === undefined) text = "";
     if (hashtags === undefined) hashtags = "";
     if (!el) {
-      console.log("missing DOM element to append Twitter button:\n\nwindow.TwitterShareFactory(el, text, url, hashtags)");
+      console.log("ERROR: missing DOM element to append Twitter button!");
       return false;
     }
     url = url || "{{ canonical_url }}{{ request_path }}";
