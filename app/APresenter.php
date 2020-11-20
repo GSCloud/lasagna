@@ -78,7 +78,7 @@ interface IPresenter
     public function logout();
     public function postloadAppData($key);
     public function preloadAppData($key, $force);
-    public function readAppData($name, $force);
+    public function readAppData($name);
     public function renderHTML($template);
     public function writeJsonData($data, $headers = [], $switches = null);
 
@@ -1426,28 +1426,27 @@ abstract class APresenter implements IPresenter
      * Read application CSV data
      *
      * @param string $name CSV nickname (foobar)
-     * @param boolean $force force load? (optional)
      * @return string CSV data
      */
-    public function readAppData($name, $force = false)
+    public function readAppData($name)
     {
         $name = \trim((string) $name);
-        $force = (bool) $force;
         $file = \strtolower($name);
         if (empty($file)) {
             $this->addCritical("EMPTY readAppData() filename parameter!");
             return null;
         }
-        if (!$csv = Cache::read($file, "csv") || $force === true) { // read CSV from cache
+        if (!$csv = Cache::read($file, "csv")) { // read CSV from cache
             $csv = false;
             if (file_exists(DATA . DS . "${file}.csv")) {
-                $csv = @\file_get_contents(DATA . DS . "${file}.csv");
+                $csv = \file_get_contents(DATA . DS . "${file}.csv");
             }
             if (\strpos($csv, "!DOCTYPE html") > 0) {
                 $csv = false; // we got HTML document, try backup
             }
             if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
                 Cache::write($file, $csv, "csv"); // store into cache
+                //dump($csv);exit;
                 return $csv; // OK
             }
             $csv = false;
