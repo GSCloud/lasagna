@@ -50,7 +50,7 @@ class CliPresenter extends APresenter
     public function help()
     {
         $climate = new CLImate;
-        $climate->out("Usage: php -f Bootstrap.php <command> [<parameters>...] \n");
+        $climate->out("\nUsage: php -f Bootstrap.php <command> [<parameters>...] \n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
         $climate->out("\t <bold>clearall</bold> \t - clear all temporary files");
         $climate->out("\t <bold>clearcache</bold> \t - clear cache");
@@ -60,7 +60,7 @@ class CliPresenter extends APresenter
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
         $climate->out("\t <bold>local</bold> \t\t - local CI test");
         $climate->out("\t <bold>prod</bold> \t\t - production CI test");
-        $climate->out("\t <bold>unit</bold> \t\t - run Unit test");
+        $climate->out("\t <bold>unit</bold> \t\t - run Unit test\n");
         return $this;
     }
 
