@@ -78,7 +78,7 @@ interface IPresenter
     public function logout();
     public function postloadAppData($key);
     public function preloadAppData($key, $force);
-    public function readAppData($name);
+    public function readAppData($name, $force);
     public function renderHTML($template);
     public function writeJsonData($data, $headers = [], $switches = null);
 
@@ -1426,6 +1426,7 @@ abstract class APresenter implements IPresenter
      * Read application CSV data
      *
      * @param string $name CSV nickname (foobar)
+     * @param boolean $force force load? (optional)
      * @return string CSV data
      */
     public function readAppData($name, $force = false)
