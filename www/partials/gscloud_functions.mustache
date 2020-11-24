@@ -330,14 +330,14 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       // LOGIN buttons
       {{#LOCALHOST}}
       if (!GSC.isadmin) {
-        $('#nav-mobile').append('<li class="right-align"><a href="{{ local_goauth_redirect }}">🔒 LOGIN</a></li>');
-        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ local_goauth_redirect }}">&nbsp;🔒&nbsp;</a></div>');
+        $('#nav-mobile').append('<li class="right-align"><a href="{{ local_goauth_redirect }}">🔓 LOGIN</a></li>');
+        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ local_goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
       {{^LOCALHOST}}
       if (!GSC.isadmin) {
-        $('#nav-mobile').append('<li class="right-align"><a href="{{ goauth_redirect }}">🔒 LOGIN</a></li>');
-        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ goauth_redirect }}">&nbsp;🔒&nbsp;</a></div>');
+        $('#nav-mobile').append('<li class="right-align"><a href="{{ goauth_redirect }}">🔓 LOGIN</a></li>');
+        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a href="{{ goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
 
