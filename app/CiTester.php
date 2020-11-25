@@ -112,7 +112,7 @@ class CiTester
             curl_setopt($ch[$i], CURLOPT_MAXREDIRS, 5);
             curl_setopt($ch[$i], CURLOPT_NOBODY, false);
             curl_setopt($ch[$i], CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch[$i], CURLOPT_TIMEOUT, 20);
+            curl_setopt($ch[$i], CURLOPT_TIMEOUT, 10);
             curl_multi_add_handle($multi, $ch[$i]);
             $i++;
         }
