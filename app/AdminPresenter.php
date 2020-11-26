@@ -461,7 +461,7 @@ class AdminPresenter extends APresenter
     public function decorateLogs(&$val, $key)
     {
         $x = explode(";", $val);
-        array_walk($x, function (&$value, &$key) {
+        array_walk($x, function (&$value, $key) {
             $value = str_replace("EMAIL:", "", $value);
             $value = str_replace("NAME:", "", $value);
         });
