@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{#LOCALHOST}}LOCAL | {{/LOCALHOST}}EPUB READER</title>
+  <title>{{#LOCALHOST}}LOCAL | {{/LOCALHOST}}EPUB</title>
 
   <script src="/js/jszip.min.js"></script>
   <script src="/js/epub.min.js"></script>
@@ -62,7 +62,6 @@
       padding: 0;
       position: relative;
       margin: 10px auto;
-      background: white url('ajax-loader.gif') center center no-repeat;
       top: calc(50vh - 400px);
     }
 
@@ -75,8 +74,6 @@
       width: 800px;
       margin: 0 auto;
       position: relative;
-      background: url('ajax-loader.gif') center center no-repeat;
-
     }
 
     #viewer.scrolled .epub-container {
@@ -91,11 +88,26 @@
     }
 
     #prev {
-      left: 0;
+      left: 30px;
     }
 
     #next {
-      right: 0;
+      right: 30px;
+    }
+
+    .arrow {
+      position: fixed;
+      top: 5%;
+      margin-top: 0px;
+      font-size: 50px;
+      color: #E2E2E2;
+      font-family: arial, sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      text-decoration: none;
     }
 
     #toc {
@@ -118,32 +130,32 @@
         content: "";
       }
 
+      .arrow {
+        position: fixed;
+        top: 5%;
+        margin-top: -32px;
+        font-size: 64px;
+        color: #E2E2E2;
+        font-family: arial, sans-serif;
+        font-weight: bold;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        text-decoration: none;
+      }
+
       #viewer.spreads.single:after {
         display: none;
       }
 
       #prev {
-        left: 40px;
+        left: 100px;
       }
 
       #next {
-        right: 40px;
+        right: 100px;
       }
-    }
-
-    .arrow {
-      position: fixed;
-      top: 50%;
-      margin-top: -32px;
-      font-size: 64px;
-      color: #E2E2E2;
-      font-family: arial, sans-serif;
-      font-weight: bold;
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-      text-decoration: none;
     }
 
     .navlink {
@@ -327,7 +339,7 @@
   <a id="next" href="#next" class="arrow">›</a>
 
   <script>
-    'use strict';
+  'use strict';
 
     var currentSectionIndex = undefined;
     var book = ePub("{{ epub }}");
@@ -349,13 +361,12 @@
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
         e.preventDefault();
       }, false);
+
       var keyListener = function (e) {
-        // left
-        if ((e.keyCode || e.which) == 37) {
+        if ((e.keyCode || e.which) == 37) { // left
           book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
         }
-        // right
-        if ((e.keyCode || e.which) == 39) {
+        if ((e.keyCode || e.which) == 39) { // right
           book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
         }
       };
