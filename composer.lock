@@ -1916,16 +1916,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "f3d5f789a8e33bc13922f9b37cced28fb272adc6"
+                "reference": "d0427c1811462dbb6c503143eabe5478b26685f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/f3d5f789a8e33bc13922f9b37cced28fb272adc6",
-                "reference": "f3d5f789a8e33bc13922f9b37cced28fb272adc6",
+                "url": "https://api.github.com/repos/nette/utils/zipball/d0427c1811462dbb6c503143eabe5478b26685f7",
+                "reference": "d0427c1811462dbb6c503143eabe5478b26685f7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2 <8.1"
+            },
+            "conflict": {
+                "nette/di": "<3.0.6"
             },
             "require-dev": {
                 "nette/tester": "~2.0",
@@ -1990,7 +1993,7 @@
                 "issues": "https://github.com/nette/utils/issues",
                 "source": "https://github.com/nette/utils/tree/v3.2.0"
             },
-            "time": "2020-11-25T21:14:11+00:00"
+            "time": "2020-11-25T23:47:50+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
