@@ -105,13 +105,13 @@ script_sources: [
 locales: [
   default: "2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay"
   admin: "2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk"
-  micro: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
+  lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
 ]
 
 lasagna_sheets: [
   default: "1z2a5X7HVR9To7FvxMfRm_6ZxHeTVljUO8BjjMkI3phI"
   admin: "1iwJNAuvHQtNOgxQfQK5TYtROzCwFOBFGeo7Vj-7_48Q"
-  micro: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
+  lasagna: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
 ]
 
 design: [
