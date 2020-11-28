@@ -1,10 +1,12 @@
 {{#android_app}}
 <meta name="google-play-app" content="{{ android_app }}">
+<link rel="alternate" href="android-app://{{ android_app }}">
 {{/android_app}}
-<meta name="mobile-web-app-capable" content="yes">
+
 {{#google.google-site-verification}}
 <meta name="google-site-verification" content="{{ google.google-site-verification }}">
 {{/google.google-site-verification}}
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="{{#design.status_bar}}{{ design.status_bar }}{{/design.status_bar}}{{^design.status_bar}}black{{/design.status_bar}}">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="{{ l.title }}">
