@@ -99,14 +99,14 @@ class CorePresenter extends APresenter
                 $language = "en";
                 $l = $this->getLocale($language);
                 if (class_exists("\\GSC\\RSSPresenter")) {
-                    $map = RSSPresenter::getInstance()->process(); // get items map from RSSPresenter
+                    $map = RSSPresenter::getInstance()->process() ?? []; // get items map from RSSPresenter
                 } else {
                     $map = [];
                 }
                 $this->setData("rss_channel_description", $l["meta_description"] ?? "");
                 $this->setData("rss_channel_link", $l['$canonical_url'] ?? "");
                 $this->setData("rss_channel_title", $l["title"] ?? "");
-                return $this->setData("output", $this->setData("rss_items", $map)->renderHTML("rss.xml"));
+                return $this->setData("output", $this->setData("rss_items", (array) $map)->renderHTML("rss.xml"));
                 break;
 
             case "GetCsArticleHTMLExport":
