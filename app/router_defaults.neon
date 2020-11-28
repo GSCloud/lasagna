@@ -34,6 +34,11 @@ GetXMLSitemap:
   presenter: core
   cached: true
 
+GetRSSXML:
+  path: /rss.xml
+  presenter: core
+  cached: true
+
 GetServiceWorker:
   path: /sw.js
   presenter: core

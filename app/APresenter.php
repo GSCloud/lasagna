@@ -68,6 +68,7 @@ interface IPresenter
     public function setHeaderJson();
     public function setHeaderPdf();
     public function setHeaderText();
+    public function setHeaderXML();
     public function setIdentity($identity);
     public function setLocation($locationm, $code);
 
@@ -948,6 +949,17 @@ abstract class APresenter implements IPresenter
     public function setHeaderText()
     {
         \header("Content-Type: text/plain; charset=UTF-8");
+        return $this;
+    }
+
+    /**
+     * Set HTTP header for XML content
+     *
+     * @return object Singleton instance
+     */
+    public function setHeaderXML()
+    {
+        \header('Content-Type: application/xml; charset=utf-8');
         return $this;
     }
 
