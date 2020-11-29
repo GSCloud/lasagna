@@ -387,6 +387,11 @@ class AdminPresenter extends APresenter
                 return true;
                 break;
         }
+        $key = $this->readAdminKey();
+        $gkey = $_GET["key"] ?? null;
+        if ($key && $key == $gkey) {
+            return true;
+        }
         return false;
     }
 
