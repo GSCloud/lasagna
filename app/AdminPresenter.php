@@ -38,9 +38,10 @@ class AdminPresenter extends APresenter
         }
         $view = $match["params"]["p"] ?? null;
         $extras = [
-            "ip_address" => $this->getIP(),
-            "name" => "Tesseract LASAGNA Core",
+            "override" => (bool) $this->isLocalAdmin(),
             "fn" => $view,
+            "ip" => $this->getIP(),
+            "name" => "Tesseract LASAGNA Core",
         ];
 
         /**
