@@ -436,21 +436,21 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             hash: "{{ request_path_hash }}",
             data: JSON.stringify(data)
           }, function (data) {
-            console.log("UpdateArticles result",{data});
+            console.log("UpdateArticles result", {data});
           }).done(function() {
             GSC.PingDot("#summer_ping");
             $("#a_summernote").removeAttr("disabled");
             GSC.AdminUI();
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
-
             $("#a_summernote").click(function () {
               GSC.ReadArticles(function () {
                 GSC.DeploySummernote();
               });
             });
             GSC.summernote_on = false;
-          }).fail(function() {
+          }).fail(function(xhr, status, error) {
+            alert(error);
             $("#a_summernote").removeAttr("disabled");
             GSC.PingDot("#summer_ping", false);
             M.toast({html: "ERROR 🤯"});

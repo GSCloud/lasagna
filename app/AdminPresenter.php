@@ -323,7 +323,7 @@ class AdminPresenter extends APresenter
                 if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
                         return $this->writeJsonData([ // error
-                            "code" => 500,
+                            "code" => 401,
                             "status" => "Data copy to backup file failed.",
                             "profile" => $profile,
                             "hash" => $hash,
@@ -332,7 +332,7 @@ class AdminPresenter extends APresenter
                 }
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
                     return $this->writeJsonData([ // error
-                        "code" => 500,
+                        "code" => 401,
                         "status" => "Data write to history file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
