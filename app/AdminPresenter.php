@@ -38,6 +38,7 @@ class AdminPresenter extends APresenter
         }
         $view = $match["params"]["p"] ?? null;
         $extras = [
+            "ip_address" => $this->getIP(),
             "name" => "Tesseract LASAGNA Core",
             "fn" => $view,
         ];
@@ -143,9 +144,9 @@ class AdminPresenter extends APresenter
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
-                if ($user && $token && $key) {
+                if ($user && $token && $key || $this->isLocalAdmin()) {
                     $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
+                    if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildAdminKey();
                         $this->addAuditMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         return $this->writeJsonData([
@@ -165,9 +166,9 @@ class AdminPresenter extends APresenter
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
-                if ($user && $token && $key) {
+                if ($user && $token && $key || $this->isLocalAdmin()) {
                     $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
+                    if ($code == $token || $this->isLocalAdmin()) {
                         $this->flushCache();
                         $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
                         return $this->writeJsonData([
@@ -187,9 +188,9 @@ class AdminPresenter extends APresenter
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
-                if ($user && $token && $key) {
+                if ($user && $token && $key || $this->isLocalAdmin()) {
                     $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
+                    if ($code == $token || $this->isLocalAdmin()) {
                         $this->setForceCsvCheck();
                         $this->postloadAppData("app_data");
                         $this->flushCache();
@@ -211,9 +212,9 @@ class AdminPresenter extends APresenter
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
-                if ($user && $token && $key) {
+                if ($user && $token && $key || $this->isLocalAdmin()) {
                     $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
+                    if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildNonce();
                         $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
                         return $this->writeJsonData([
@@ -233,9 +234,9 @@ class AdminPresenter extends APresenter
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
-                if ($user && $token && $key) {
+                if ($user && $token && $key || $this->isLocalAdmin()) {
                     $code = hash("sha256", $key . $user);
-                    if ($code == $token) {
+                    if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildSecureKey();
                         $this->addAuditMessage("REBUILD SECURE KEY REMOTE [$user]");
                         return $this->writeJsonData([
@@ -371,6 +372,22 @@ class AdminPresenter extends APresenter
         }
         clearstatcache();
         return $this->setIdentity();
+    }
+
+    /**
+     * Check if we are a local administrator
+     *
+     * @return boolean are we?
+     */
+    private function isLocalAdmin()
+    {
+        $ip = $_SERVER["REMOTE_ADDR"];
+        switch ($ip) {
+            case "127.0.0.1":
+                return true;
+                break;
+        }
+        return false;
     }
 
     /**
