@@ -14,7 +14,6 @@ REVISIONS=`git rev-list --all --count`
 echo $REVISIONS > REVISIONS
 
 rm -rf logs/* temp/*
-mkdir -p app ci data temp www/cdn-assets www/download www/upload
 ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 
 info "Version: $VERSION Revisions: $REVISIONS"
