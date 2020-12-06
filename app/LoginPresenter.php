@@ -107,7 +107,7 @@ class LoginPresenter extends APresenter
                     \setcookie("login_hint", $ownerDetails->getEmail() ?? "", time() + 86400 * 31, "/", DOMAIN);
                 }
                 $this->clearCookie("oauth2state");
-                $this->setLocation("/${nonce}");
+                $this->setLocation();
                 exit;
             } catch (Exception $e) {
                 $this->addError("Google OAuth: " . $e->getMessage());

@@ -31,12 +31,12 @@ class AdminPresenter extends APresenter
         $cfg = $this->getCfg();
         $data = $this->getData();
         $match = $this->getMatch();
+        $view = $match["params"]["p"] ?? null;
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $g = $this->getUserGroup();
         if ($g) {
             $data["admin_group_${g}"] = true; // for templating
         }
-        $view = $match["params"]["p"] ?? null;
         $extras = [
             "override" => (bool) $this->isLocalAdmin(),
             "fn" => $view,
@@ -66,6 +66,14 @@ class AdminPresenter extends APresenter
 
         // modules
         switch ($view) {
+            case "upload":
+                $this->checkPermission("admin");
+                foreach ($_FILES as $key => &$file) {
+                    move_uploaded_file($file["tmp_name"], UPLOAD . DS . basename($file["name"]));
+                }
+                dump($_FILES);
+                break;
+
             case "clearbrowserdata":
                 header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
                 $this->setLocation();

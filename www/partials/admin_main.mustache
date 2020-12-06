@@ -12,10 +12,10 @@
 .bigemoji{font-size:5em}
 /* Admin panel */
 .a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
-#admin_main {padding-top:5px}
-#admin_main {font-size:14px!important}
+#admin_main {padding-top:5px;font-size:14px!important}
 #admin_main .row{margin-bottom:5px}
 #admin_main,#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5{font-family:Arial!important}
+.dragover{border:4px dashed blue!important}
 .extrapadding{padding:5px;border-radius:5px}
 .nowrap{white-space:nowrap}
 .protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
@@ -90,6 +90,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     <div class="col l4 m6 s12">
       <div class="row center extrapadding">
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
+        <div id="uploader_progress"></div>
         <p id="a_update_info"></p>
         <p>
           PHP ver. <b>{{ PHP_VERSION }}</b><br>
@@ -106,6 +107,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         </div>
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
         <a id="a_emoji" style="margin:5px" class="waves-effect blue waves btn faces emojianim"></a>
+        <a id="a_upload" style="margin:5px" class="waves-effect blue waves btn">📂</a>
+        <a id="a_files" style="margin:5px" class="waves-effect blue waves btn">🗃</a>
         <a id="a_summernote" style="margin:5px" class="tooltipped waves-effect green waves-light btn"
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
           <i class="fas fa-edit"></i>
@@ -736,6 +739,62 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         $.get("/admin/GetPSInsights?" + Date.now());
       });
 
+      // set uploader
+      w.GSC.init.push(function () {
+        w.GSC.names.push("Uploader");
+        ZeroUpload.setURL('/admin/upload');
+        ZeroUpload.setMaxFiles(100);
+        ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
+        ZeroUpload.on('complete', function (response) {
+          M.toast({html: "Upload complete!"});
+        });
+        ZeroUpload.on('start', function (files, userData) {
+          M.toast({html: "Upload started!"});
+        });
+        ZeroUpload.on('error', function(type, message, userData) {
+          var s;
+          switch (type) {
+            case 'maxbytes':
+              s = '{{ l.a_upload_maxbytes }}';
+              break;
+            case 'unsupported':
+              s = '{{ l.a_upload_unsupported }}';
+              break;
+            case 'maxfiles':
+              s = '{{ l.a_upload_maxfiles }}';
+              break;
+            case 'filetype':
+              s = '{{ l.a_upload_filetype }}';
+              break;
+            case 'http':
+              s = '{{ l.a_upload_http }}';
+              break;
+            default:
+              s = '{{ l.a_upload_ajax }}';
+          }
+    		  M.toast({html: s});
+	      });
+        ZeroUpload.on('progress', function(progress, userData) {
+          $('#uploader_progress').html(
+            '<h6>UPLOAD</h6><div><strong>Progress:</strong> ' + progress.percent + ', ' +
+            progress.elapsedHuman + ' elapsed</div>' +
+            '<div><strong>Sent:</strong> ' + progress.dataSentHuman + ' of ' +
+            progress.dataTotalHuman + ' (' + progress.dataRateHuman + ')</div>' +
+            '<div><strong>Remaining:</strong> ' + progress.remainingTimeHuman + '</div>'
+          );
+        });
+        ZeroUpload.init();
+        ZeroUpload.addDropTarget('#admin_main');
+        $("#a_upload").click(function() {
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
+            return GSC.PingDot("#csv_ping", false);
+          }
+          $('#uploader_progress').html('');
+          ZeroUpload.chooseFiles();
+        });
+      });
+
     }
   })(window, document);
 
@@ -756,5 +815,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
 <script src="{{ cdn }}/js/moment-with-locales.min.js" defer></script>
 <script src="{{ cdn }}/js/grapheme.min.js" defer></script>
+<script src="{{ cdn }}/js/zeroupload.min.js" defer></script>
 
 {{/admin_group_admin}}
