@@ -10,6 +10,7 @@ info "Setting up ..."
 find . -name "*.sh" -exec chmod +x {} \;
 mkdir -p ci data logs temp www/cdn-assets www/download www/upload
 sudo chmod 0777 ci data logs temp www/download www/upload
+sudo chown -R www-data:www-data data
 sudo chgrp -R www-data ci data www www/cdn-assets www/download www/upload
 sudo apt install php7.4-cli php7.4-curl php7.4-mbstring php7.4-zip
 

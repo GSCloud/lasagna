@@ -1009,12 +1009,11 @@ abstract class APresenter implements IPresenter
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $enc = KeyFactory::generateEncryptionKey();
-            if (is_writable($keyfile)) {
+            if (is_writable(DATA)) {
                 KeyFactory::save($enc, $keyfile);
                 @\chmod($keyfile, self::COOKIE_KEY_FILEMODE);
                 $this->addMessage("HALITE: New keyfile created");
-            }
-            else {
+            } else {
                 $this->addError("HALITE: Cannot write encryption key!");
             }
         }
@@ -1030,7 +1029,6 @@ abstract class APresenter implements IPresenter
         }
         if (!CLI) {
             $cookie->store($name, (string) $data, time() + self::COOKIE_TTL, "/", DOMAIN, $secure, $httponly, $samesite);
-
         }
         $this->cookies[$name] = (string) $data;
         return $this;
