@@ -1021,15 +1021,16 @@ abstract class APresenter implements IPresenter
         $cookie = new Cookie($enc);
         if (DOMAIN == "localhost") {
             $httponly = true;
-            $samesite = "strict";
+            $samesite = "";
             $secure = false;
         } else {
             $httponly = true;
-            $samesite = "strict";
+            $samesite = "";
             $secure = true;
         }
         if (!CLI) {
             $cookie->store($name, (string) $data, time() + self::COOKIE_TTL, "/", DOMAIN, $secure, $httponly, $samesite);
+
         }
         $this->cookies[$name] = (string) $data;
         return $this;

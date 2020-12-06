@@ -28,6 +28,7 @@ class LoginPresenter extends APresenter
 
         $cfg = $this->getCfg();
         $nonce = "?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 8);
+
         // set return URI
         $refhost = parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
         $uri = "/${nonce}";
@@ -45,6 +46,7 @@ class LoginPresenter extends APresenter
                 "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"],
             ]);
         } finally {}
+
         // check for errors
         $errors = [];
         if (!empty($_GET["error"])) {
@@ -52,6 +54,7 @@ class LoginPresenter extends APresenter
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
             $hint = $email ? \strtolower("&login_hint=${email}") : "";
+
             // check URL for relogin parameter
             if (isset($_GET["relogin"])) {
                 $hint = "";
