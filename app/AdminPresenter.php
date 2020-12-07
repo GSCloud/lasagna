@@ -68,13 +68,17 @@ class AdminPresenter extends APresenter
         switch ($view) {
             case "upload":
                 $this->checkPermission("admin");
+                $x = [];
                 foreach ($_FILES as $key => &$file) {
-                    move_uploaded_file($file["tmp_name"], UPLOAD . DS . basename($file["name"]));
+                    $b = trim(strtr(basename($file["name"]), " ", "_"));
+                    if (move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
+                        $x[$b] = urlencode($b);
+                    }
                 }
-                $c = count($_FILES);
+                $c = count($x);
                 $this->addMessage("FILES UPLOADED: $c");
                 $this->addAuditMessage("FILES UPLOADED: $c");
-                dump($_FILES);
+                return $this->writeJsonData($x, $extras);
                 break;
 
             case "clearbrowserdata":

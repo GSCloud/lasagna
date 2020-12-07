@@ -56,7 +56,7 @@ class CorePresenter extends APresenter
 
             case "ReadEpubBook":
                 if (isset($match["params"]["trailing"])) {
-                    $epub = \trim($match["params"]["trailing"]);
+                    $epub = \urldecode(\trim($match["params"]["trailing"]));
                     // security tweaks
                     $epub = \str_replace("..", "", $epub);
                     $epub = \str_replace("\\", "", $epub);

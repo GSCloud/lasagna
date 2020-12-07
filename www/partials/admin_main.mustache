@@ -11,6 +11,7 @@
 @keyframes faces{10%{content:"🌼"}20%{content:"🌳"}30%{content:"🌺"}40%{content:"🌵"}50%{content:"🌶"}60%{content:"🍇"}70%{content:"🍄"}80%{content:"🍓"}90%{content:"🌽"}}
 .bigemoji{font-size:5em}
 /* Admin panel */
+.hover {cursor:pointer}
 .a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
 #admin_main {padding-top:5px;font-size:14px!important}
 #admin_main .row{margin-bottom:5px}
@@ -83,6 +84,10 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     {{/external_links}}
   </div>
 
+  <!-- uploads -->
+  <div id="uploader_progress"></div>
+  <div id="file_manager"></div>
+
   <!-- admin grid -->
   <div class="row grid" style="overflow:hidden" style="padding-top:3px">
 
@@ -90,7 +95,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     <div class="col l4 m6 s12">
       <div class="row center extrapadding">
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
-        <div id="uploader_progress"></div>
         <p id="a_update_info"></p>
         <p>
           PHP ver. <b>{{ PHP_VERSION }}</b><br>
@@ -106,13 +110,19 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           </select>
         </div>
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
-        <a id="a_emoji" style="margin:5px" class="waves-effect blue waves btn faces emojianim"></a>
-        <a id="a_upload" style="margin:5px" class="waves-effect blue waves btn">📂</a>
-        <a id="a_files" style="margin:5px" class="waves-effect blue waves btn">🗃</a>
-        <a id="a_summernote" style="margin:5px" class="tooltipped waves-effect green waves-light btn"
-          data-position="top" data-tooltip="{{ l.a_summernote_ttip }}">
-          <i class="fas fa-edit"></i>
-          {{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
+        <a id="a_emoji" 
+          data-position="top" data-tooltip="{{ l.a_emojis_ttip }}" 
+          style="margin:5px" class="tooltipped waves-effect blue waves btn faces emojianim"></a>
+        <a id="a_upload"
+          data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect blue waves btn">📂</a>
+        <a id="a_files"
+          data-position="top" data-tooltip="{{ l.a_files_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect blue waves btn">🗃</a>
+        <a id="a_summernote"
+          data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
+          <i class="fas fa-edit"></i>{{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
       </div>
     </div>
 
@@ -746,10 +756,24 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         ZeroUpload.setMaxFiles(100);
         ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
         ZeroUpload.on('complete', function (response) {
-          M.toast({html: "Upload complete!"});
+          M.toast({html: "Upload complete ❤️"});
+          var s = '';
+          var data = JSON.parse(response.data);
+          if (data && data.data) {
+            for (var i in data.data) {
+              s += '<a target="_blank" href="/upload/' + data.data[i] + '">' + i + '</a>&nbsp;';
+              s += '<span class="hover" data-text="/upload/' + data.data[i] + '">📋</span><br>';
+            }
+            $('#file_manager').html(s);
+            $("#file_manager span").click(function() {
+              var x = $(this).data("text");
+              GSC.CopyClipboard(x);
+              M.toast({html: "📋 " + x});
+            });
+          }
         });
-        ZeroUpload.on('start', function (files, userData) {
-          M.toast({html: "Upload started!"});
+        ZeroUpload.on('start', function(files, userData) {
+          M.toast({html: "Upload started 👷"});
         });
         ZeroUpload.on('error', function(type, message, userData) {
           var s;
