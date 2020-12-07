@@ -622,6 +622,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           setTimeout(function () {
             $("#a_update").removeAttr("disabled");
           }, 30E3);
+
           // API: CoreUpdate
           $.post("/admin/CoreUpdate");
           M.toast({html: "{{ l.a_processing_data }}"});
@@ -740,6 +741,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               // UPLOAD: file delete
               $("#a_file_manager .delete").click(function() {
                 var x = $(this).data("id");
+
+                // API: UploadFileDelete
                 $.post("/admin/UploadFileDelete", {name: x}).done(function(data) {
                   M.toast({html: "❌ " + x});
                   GSC.RenderUploadInfo();
@@ -758,6 +761,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }
           GSC.GetCsvInfo = function() {};
           $("#a_flush").attr("disabled", "disabled");
+
           // API: FlushCache
           $.post("/admin/FlushCache");
           M.toast({html: "🌈"});
@@ -770,6 +774,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
+
           // API: CreateAuthCode
           $.post("/admin/CreateAuthCode", function(data) {
             GSC.CopyClipboard(data.data.hash);
@@ -783,6 +788,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
+
           // API: DeleteAuthCode
           $.post("/admin/DeleteAuthCode", function(data) {
             M.toast({html: "DeleteAuthCode 🆗 {{ l.a_codedeleted }}"});
@@ -816,6 +822,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       // load PSI in the background (caching)
       w.GSC.init.push(function () {
         w.GSC.names.push("Update PSI cache");
+
         // API: GetPSInsights
         $.get("/admin/GetPSInsights?" + Date.now());
       });

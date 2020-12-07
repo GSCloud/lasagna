@@ -85,7 +85,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 if (isset($_POST["name"])) {
                     $f = UPLOAD . DS . \trim($_POST["name"]);
-                    if (file_exists($f)) {
+                    if (\file_exists($f)) {
                         @\unlink($f);
                         $this->addMessage("FILE DELETED: $f");
                         $this->addAuditMessage("FILE DELETED: $f");
