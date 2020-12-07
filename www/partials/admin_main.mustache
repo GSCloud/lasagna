@@ -16,7 +16,7 @@
 #admin_main {padding-top:5px;font-size:14px!important}
 #admin_main .row{margin-bottom:5px}
 #admin_main,#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5{font-family:Arial!important}
-.fileitem{margin:2px;display:inline-block;float:left;border:2px solid #222}
+.fileitem {overflow:hidden;text-overflow:ellipsis}
 .dragover{border:4px dashed blue!important}
 .extrapadding{padding:5px;border-radius:5px}
 .nowrap{white-space:nowrap}
@@ -703,21 +703,30 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               var s = '<h5>{{ l.a_files_ttip }}</h5>';
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
-              var c = 0;
+              var t = 0;
               for (var i in data.data) {
-                c++;
-                s += '<div class="fileitem">' + c + '.&nbsp;<a target="_blank" href="/upload/' + i + '">' + i + '</a>&nbsp;';
-                s += '({{ l.a_age }} ';
+                t++;
+                if (t == 1) {
+                  s += '<div class="row .hide-on-small-only">';
+                }
+                if (t > 4) {
+                  t = 1;
+                  s += '</div><div class="row .hide-on-small-only">';
+                }
+                s += '<div class="left-align col s3"><a target="_blank" href="/upload/' + i + '"><span class="fileitem">' + i + '</span></a><br>';
+                s += '<span class="hide-on-med-and-down">({{ l.a_age }}&nbsp;';
                 s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
                 s += ',&nbsp;';
                 s += GSC.FormatBytes(data.data[i]["size"]);
-                s += ')&nbsp;';
+                s += ')</span>&nbsp;';
                 s += '<span title="📋" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
                 s += '<span title="CDN 📋" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">📋</span>';
                 s += '&nbsp;&nbsp;';
                 s += '<span title="🗑" class="hover delete" data-id="' + i + '">❌</span>';
                 s += '</div>';
               }
+              s += '</div>';
+
               // render HTML
               $('#a_file_manager').html(s);
 
