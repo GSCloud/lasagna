@@ -712,12 +712,17 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 s += ',&nbsp;';
                 s += GSC.FormatBytes(data.data[i]["size"]);
                 s += ')&nbsp;';
-                s += '<span title="📋" class="hover" data-text="{{ BASE }}upload/' + i + '">📋</span>';
-                s += '<span title="CDN 📋" class="hover" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">📋</span>';
+                s += '<span title="📋" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+                s += '<span title="CDN 📋" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">📋</span>';
+                s += '&nbsp;&nbsp;';
+                s += '<span title="🗑" class="hover delete" data-id="' + i + '">❌</span>';
                 s += '</div>';
               }
+              // render HTML
               $('#a_file_manager').html(s);
-              $("#a_file_manager span").click(function() {
+
+              // copy to clipboard
+              $("#a_file_manager .copydata").click(function() {
                 var x = $(this).data("text");
                 GSC.CopyClipboard(x);
                 M.toast({html: "📋 " + x});
@@ -842,7 +847,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         ZeroUpload.on('progress', function(progress, userData) {
           $('#a_uploader_progress').html(
-            '<h5>UPLOAD</h5><div style="padding:1em"><div class="row">' +
+            '<h5>{{ l.a_upload_ttip }}</h5><div style="padding:1em"><div class="row">' +
             '<strong>Progress:</strong> ' + progress.percent + ', ' +
             progress.elapsedHuman + ' elapsed</div>' +
             '<div><strong>Sent:</strong> ' + progress.dataSentHuman + ' of ' +
