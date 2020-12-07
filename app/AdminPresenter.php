@@ -81,6 +81,19 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData($x, $extras);
                 break;
 
+            case "UploadFileDelete":
+                $this->checkPermission("admin");
+                if (isset($_POST["name"])) {
+                    $f = UPLOAD . DS . \trim($_POST["name"]);
+                    if (file_exists($f)) {
+                        @\unlink($f);
+                        $this->addMessage("FILE DELETED: $f");
+                        $this->addAuditMessage("FILE DELETED: $f");
+                        return $this->writeJsonData($f, $extras);
+                    }
+                }
+                break;
+
             case "clearbrowserdata":
                 \header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
                 $this->addMessage("BROWSER DATA CLEARED");

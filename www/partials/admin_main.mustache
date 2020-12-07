@@ -703,6 +703,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               var s = '<h5>{{ l.a_files_ttip }}</h5>';
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
+
+              // UPLOAD: render HTML
               var t = 0;
               for (var i in data.data) {
                 t++;
@@ -726,16 +728,24 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 s += '</div>';
               }
               s += '</div>';
-
-              // render HTML
               $('#a_file_manager').html(s);
 
-              // copy to clipboard
+              // UPLOAD: copy path to clipboard
               $("#a_file_manager .copydata").click(function() {
                 var x = $(this).data("text");
                 GSC.CopyClipboard(x);
                 M.toast({html: "📋 " + x});
               });
+
+              // UPLOAD: file delete
+              $("#a_file_manager .delete").click(function() {
+                var x = $(this).data("id");
+                $.post("/admin/UploadFileDelete", {name: x}).done(function(data) {
+                  M.toast({html: "❌ " + x});
+                  GSC.RenderUploadInfo();
+                });
+              });
+
             }
           });
         }
