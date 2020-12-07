@@ -762,7 +762,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           if (data && data.data) {
             for (var i in data.data) {
               s += '<a target="_blank" href="/upload/' + data.data[i] + '">' + i + '</a>&nbsp;';
-              s += '<span class="hover" data-text="/upload/' + data.data[i] + '">📋</span><br>';
+              s += '<span title="📋" class="hover" data-text="{{ BASE }}upload/' + data.data[i] + '">📋</span>';
+              s += '<span title="CDN 📋" class="hover" data-text="{{ BASE }}{{ cdn }}/upload/' + data.data[i] + '">📋</span>';
+              s += '<br>';
             }
             $('#file_manager').html(s);
             $("#file_manager span").click(function() {
