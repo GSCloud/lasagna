@@ -71,11 +71,16 @@ class AdminPresenter extends APresenter
                 foreach ($_FILES as $key => &$file) {
                     move_uploaded_file($file["tmp_name"], UPLOAD . DS . basename($file["name"]));
                 }
+                $c = count($_FILES);
+                $this->addMessage("FILES UPLOADED: $c");
+                $this->addAuditMessage("FILES UPLOADED: $c");
                 dump($_FILES);
                 break;
 
             case "clearbrowserdata":
                 header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+                $this->addMessage("BROWSER DATA CLEARED");
+                $this->addAuditMessage("BROWSER DATA CLEARED");
                 $this->setLocation();
                 break;
 
@@ -140,6 +145,7 @@ class AdminPresenter extends APresenter
                 if ($user["id"] ?? null && $key) {
                     $hashid = hash("sha256", $user["id"]);
                     $code = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
+                    $this->addMessage("GET UPDATE TOKEN");
                     $this->addAuditMessage("GET UPDATE TOKEN");
                     return $this->writeJsonData($code, $extras);
                 }
@@ -157,10 +163,11 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildAdminKey();
+                        $this->addMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         $this->addAuditMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
-                            "function" => "RebuildAdminKeyRemote",
+                            "function" => $view,
                             "message" => "OK",
                         ], $extras);
                     }
@@ -179,10 +186,11 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->flushCache();
+                        $this->addMessage("FLUSH CACHE REMOTE [$user]");
                         $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
-                            "function" => "FlushCacheRemote",
+                            "function" => $view,
                             "message" => "OK",
                         ], $extras);
                     }
@@ -206,7 +214,7 @@ class AdminPresenter extends APresenter
                         $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
-                            "function" => "CoreUpdateRemote",
+                            "function" => $view,
                             "message" => "OK",
                         ], $extras);
                     }
@@ -225,10 +233,11 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildNonce();
+                        $this->addMessage("REBUILD NONCE REMOTE [$user]");
                         $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
-                            "function" => "RebuildNonceRemote",
+                            "function" => $view,
                             "message" => "OK",
                         ], $extras);
                     }
@@ -247,10 +256,11 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildSecureKey();
+                        $this->addMessage("REBUILD SECURE KEY REMOTE [$user]");
                         $this->addAuditMessage("REBUILD SECURE KEY REMOTE [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
-                            "function" => "RebuildSecureKeyRemote",
+                            "function" => $view,
                             "message" => "OK",
                         ], $extras);
                     }
@@ -284,6 +294,7 @@ class AdminPresenter extends APresenter
                     $json = json_encode($user);
                     $hash = substr(hash("sha256", $json), 0, 8); // return 8 chars of SHA256
                     \file_put_contents($file, $json, LOCK_EX); // @todo check write fail!
+                    $this->addMessage("CREATE AUTH CODE");
                     $this->addAuditMessage("CREATE AUTH CODE");
                     return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
                 }
@@ -298,6 +309,7 @@ class AdminPresenter extends APresenter
                     if (\file_exists($file)) { // delete identity if exists
                         \unlink($file);
                     }
+                    $this->addMessage("DELETE AUTH CODE");
                     $this->addAuditMessage("DELETE AUTH CODE");
                     return $this->writeJsonData(["status" => "OK"], $extras);
                 }
@@ -330,6 +342,7 @@ class AdminPresenter extends APresenter
                 }
                 if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
+                        $this->addError("Data copy to backup file failed.");
                         return $this->writeJsonData([ // error
                             "code" => 401,
                             "status" => "Data copy to backup file failed.",
@@ -339,6 +352,7 @@ class AdminPresenter extends APresenter
                     };
                 }
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
+                    $this->addError("Data write to history file failed.");
                     return $this->writeJsonData([ // error
                         "code" => 401,
                         "status" => "Data write to history file failed.",
@@ -347,6 +361,7 @@ class AdminPresenter extends APresenter
                     ], $extras);
                 };
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
+                    $this->addError("Data write to file failed.");
                     return $this->writeJsonData([ // error
                         "code" => 500,
                         "status" => "Data write to file failed.",
@@ -354,6 +369,7 @@ class AdminPresenter extends APresenter
                         "hash" => $hash,
                     ], $extras);
                 }
+                $this->addMessage("UPDATE ARTICLE $profile - $hash");
                 $this->addAuditMessage("UPDATE ARTICLE $profile - $hash");
                 return $this->writeJsonData([
                     "status" => "OK",
@@ -511,12 +527,13 @@ class AdminPresenter extends APresenter
         $f = DATA . "/" . self::ADMIN_KEY;
         if (!\file_exists($f)) {
             if (!\file_put_contents($f, hash("sha256", random_bytes(256) . time()))) {
-                $this->addError("500: Internal Server Error");
+                $this->addError("CREATE ADMIN KEY: Internal Server Error");
                 $this->setLocation("/err/500");
                 exit;
             }
             @\chmod($f, 0660);
             $this->addMessage("ADMIN: keyfile created");
+            $this->addAuditMessage("ADMIN: keyfile created");
         }
         return $this;
     }

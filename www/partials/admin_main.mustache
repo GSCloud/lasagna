@@ -711,7 +711,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         $("#a_logout").click(function () {
           setCookie("logout", "logout", 0);
-          GSC.offline ? window.location.replace("/") : window.location.replace("/logout");
+          GSC.offline ? window.location.replace("/?nonce=".Date.now()) : window.location.replace("/logout");
         });
 
       });
