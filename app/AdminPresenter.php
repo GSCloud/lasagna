@@ -112,7 +112,7 @@ class AdminPresenter extends APresenter
                         "timestamp" => \file_exists(DATA . "/${k}.csv") ? @\filemtime(DATA . "/${k}.csv") : null,
                     ];
                     if ($arr[$k]["lines"] === -1) {
-                        \unset($arr[$k]);
+                        unset($arr[$k]);
                     }
                 }
                 return $this->writeJsonData($arr, $extras);
