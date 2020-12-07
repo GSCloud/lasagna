@@ -118,6 +118,25 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData($arr, $extras);
                 break;
 
+            case "GetUploadFileInfo":
+                $this->checkPermission("admin");
+                $files = [];
+                if ($handle = opendir(UPLOAD)) {
+                    while (false !== ($entry = readdir($handle))) {
+                        if ($entry != "." && $entry != "..") {
+                            $files[$entry] = [
+                                "name" => $entry,
+                                "size" => filesize(UPLOAD . DS . $entry),
+                                "timestamp" => filemtime(UPLOAD . DS . $entry),
+                            ];
+                        }
+                    }
+                    closedir($handle);
+                }
+                ksort($files);
+                return $this->writeJsonData($files, $extras);
+                break;
+
             case "GetPSInsights":
                 $this->checkPermission("admin");
                 $base = \urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);

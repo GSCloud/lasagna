@@ -85,8 +85,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
   </div>
 
   <!-- uploads -->
-  <div id="uploader_progress"></div>
-  <div id="file_manager"></div>
+  <div id="a_uploader_progress"></div>
+  <div id="a_file_manager"></div>
 
   <!-- admin grid -->
   <div class="row grid" style="overflow:hidden" style="padding-top:3px">
@@ -341,9 +341,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             var now = ~~(Date.now() / 1000);
             for (x in data.data) {
               var link = x;
-              var sheet = data.data[x]["sheet"];
               var csv = data.data[x]["csv"];
               var lines = data.data[x]["lines"];
+              var sheet = data.data[x]["sheet"];
               if (sheet) {
                 link =
                   '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:2px" ' +
@@ -668,7 +668,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // clear browser data
-        $("#a_clearbrowserdata").click(function () {
+        $("#a_clearbrowserdata").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
@@ -679,13 +679,53 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           window.location.replace("/admin/clearbrowserdata");
         });
 
-        // flush cache
-        $("#a_flush").click(function () {
+        // file manager
+        $('#a_files').click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
-          GSC.GetCsvInfo = function () {};
+          // clear file & upload content if present
+          if ($('#a_file_manager').html()) {
+            $('#a_file_manager').html('');
+            $('#a_uploader_progress').html('');
+            return;
+          }
+          $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
+            if (data && data.data) {
+              GSC.PingDot("#summer_ping");
+              var s = '';
+              console.log(data.data);
+              var now = ~~(Date.now() / 1000);
+              moment.locale("{{ lang }}");
+              for (var i in data.data) {
+                s += '<a target="_blank" href="/upload/' + i + '">' + i + '</a>&nbsp;';
+                s += '({{ l.a_age }} ';
+                s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
+                s += ',&nbsp;';
+                s += GSC.FormatBytes(data.data[i]["size"]);
+                s += ')&nbsp;';
+                s += '<span title="📋" class="hover" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+                s += '<span title="CDN 📋" class="hover" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">📋</span>';
+                s += '<br>';
+              }
+              $('#a_file_manager').html(s);
+              $("#a_file_manager span").click(function() {
+                var x = $(this).data("text");
+                GSC.CopyClipboard(x);
+                M.toast({html: "📋 " + x});
+              });
+            }
+          });
+        });
+
+        // flush cache
+        $("#a_flush").click(function() {
+          if (w.GSC.offline) { // offline
+            M.toast({html: "offline 📶"});
+            return GSC.PingDot("#csv_ping", false);
+          }
+          GSC.GetCsvInfo = function() {};
           $("#a_flush").attr("disabled", "disabled");
           // API: FlushCache
           $.post("/admin/FlushCache");
@@ -757,21 +797,25 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
         ZeroUpload.on('complete', function (response) {
           M.toast({html: "Upload complete ❤️"});
-          var s = '';
           var data = JSON.parse(response.data);
           if (data && data.data) {
+            $('#a_files').click();
+            return;
+/*
+            var s = '';
             for (var i in data.data) {
               s += '<a target="_blank" href="/upload/' + data.data[i] + '">' + i + '</a>&nbsp;';
               s += '<span title="📋" class="hover" data-text="{{ BASE }}upload/' + data.data[i] + '">📋</span>';
               s += '<span title="CDN 📋" class="hover" data-text="{{ BASE }}{{ cdn }}/upload/' + data.data[i] + '">📋</span>';
               s += '<br>';
             }
-            $('#file_manager').html(s);
-            $("#file_manager span").click(function() {
+            $('#a_file_manager').html(s);
+            $("#a_file_manager span").click(function() {
               var x = $(this).data("text");
               GSC.CopyClipboard(x);
               M.toast({html: "📋 " + x});
             });
+*/
           }
         });
         ZeroUpload.on('start', function(files, userData) {
@@ -801,7 +845,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     		  M.toast({html: s});
 	      });
         ZeroUpload.on('progress', function(progress, userData) {
-          $('#uploader_progress').html(
+          $('#a_uploader_progress').html(
             '<h6>UPLOAD</h6><div><strong>Progress:</strong> ' + progress.percent + ', ' +
             progress.elapsedHuman + ' elapsed</div>' +
             '<div><strong>Sent:</strong> ' + progress.dataSentHuman + ' of ' +
@@ -816,7 +860,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
-          $('#uploader_progress').html('');
+          $('#a_uploader_progress').html('');
           ZeroUpload.chooseFiles();
         });
       });
