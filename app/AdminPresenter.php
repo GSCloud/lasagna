@@ -535,7 +535,7 @@ class AdminPresenter extends APresenter
             $value = str_replace("EMAIL:", "", $value);
             $value = str_replace("NAME:", "", $value);
         });
-        unset($x[5]);
+        unset($x[5]); // remove column 5
         $y = implode("</td><td>", $x);
         $val = "<td>$y</td>";
     }
