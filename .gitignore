@@ -25,3 +25,5 @@ package-lock.json
 temp/**
 vendor/**
 www/cdn-assets**
+www/download
+www/upload
