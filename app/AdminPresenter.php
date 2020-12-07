@@ -70,19 +70,19 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
-                    $b = trim(strtr(basename($file["name"]), " ", "_"));
-                    if (move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
-                        $x[$b] = urlencode($b);
+                    $b = \strtr(\trim(\basename($file["name"])), " ", "_");
+                    if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
+                        $x[$b] = \urlencode($b);
                     }
                 }
-                $c = count($x);
+                $c = \count($x);
                 $this->addMessage("FILES UPLOADED: $c");
                 $this->addAuditMessage("FILES UPLOADED: $c");
                 return $this->writeJsonData($x, $extras);
                 break;
 
             case "clearbrowserdata":
-                header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+                \header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
                 $this->addMessage("BROWSER DATA CLEARED");
                 $this->addAuditMessage("BROWSER DATA CLEARED");
                 $this->setLocation();
@@ -92,7 +92,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $this->setHeaderHTML();
                 $f = DATA . "/AuditLog.txt";
-                $logs = file($f);
+                $logs = \file($f);
                 \array_walk($logs, array($this, "decorateLogs"));
                 $data["content"] = \array_reverse($logs);
                 return $this->setData("output", $this->setData($data)->renderHTML("auditlog"));
@@ -100,7 +100,7 @@ class AdminPresenter extends APresenter
 
             case "GetCsvInfo":
                 $this->checkPermission("admin");
-                $arr = array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
+                $arr = \array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
                 foreach ($arr as $k => $v) {
                     if (!$k || !$v) {
                         continue;
@@ -109,10 +109,10 @@ class AdminPresenter extends APresenter
                         "csv" => $v,
                         "lines" => getFileLines(DATA . "/${k}.csv"),
                         "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
-                        "timestamp" => \file_exists(DATA . "/${k}.csv") ? @filemtime(DATA . "/${k}.csv") : null,
+                        "timestamp" => \file_exists(DATA . "/${k}.csv") ? @\filemtime(DATA . "/${k}.csv") : null,
                     ];
                     if ($arr[$k]["lines"] === -1) {
-                        unset($arr[$k]);
+                        \unset($arr[$k]);
                     }
                 }
                 return $this->writeJsonData($arr, $extras);
@@ -120,12 +120,12 @@ class AdminPresenter extends APresenter
 
             case "GetPSInsights":
                 $this->checkPermission("admin");
-                $base = urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);
+                $base = \urlencode($cfg["canonical_url"] ?? "https://" . $_SERVER["SERVER_NAME"]);
                 $key = $this->getCfg("google.pagespeedinsights_key") ?? "";
                 if (!$key) {
                     return $this->writeJsonData(401, $extras); // unauthorized
                 }
-                $hash = hash("sha256", $base);
+                $hash = \hash("sha256", $base);
                 $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
                 $f = "PageSpeed_Insights_${hash}";
                 if (!$data = Cache::read($f, "minute")) { // read data from Google
@@ -147,8 +147,8 @@ class AdminPresenter extends APresenter
                 }
                 $user = $this->getCurrentUser();
                 if ($user["id"] ?? null && $key) {
-                    $hashid = hash("sha256", $user["id"]);
-                    $code = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . hash("sha256", $key . $hashid);
+                    $hashid = \hash("sha256", $user["id"]);
+                    $code = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . \hash("sha256", $key . $hashid);
                     $this->addMessage("GET UPDATE TOKEN");
                     $this->addAuditMessage("GET UPDATE TOKEN");
                     return $this->writeJsonData($code, $extras);
