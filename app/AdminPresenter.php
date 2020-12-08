@@ -91,7 +91,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
-                    $b = \strtr(\trim(\basename($file["name"])), " ", "_");
+                    $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                         $x[$b] = \urlencode($b);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX . $b, 50);

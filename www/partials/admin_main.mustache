@@ -707,7 +707,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             if (data && data.data) {
               setCookie("open_filemanager", 1); // remember state
               GSC.PingDot("#summer_ping");
-              var s = '<h5>{{ l.a_files_ttip }}</h5>';
+              var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover">🔃</span></h5>';
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
 
@@ -745,7 +745,11 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               } else {
                 s += '&mdash;&mdash;&mdash;';
               }
-              $('#a_file_manager').hide().html(s).show(200);
+              if ($('#a_file_manager').html() != '') {
+                $('#a_file_manager').html(s).show();
+              } else {
+                $('#a_file_manager').hide().html(s).show(200);
+              }
 
               // UPLOAD: copy path to clipboard
               $("#a_file_manager .copydata").click(function() {
@@ -756,13 +760,16 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
               // UPLOAD: file delete
               $("#a_file_manager .delete").click(function() {
-                var x = $(this).data("id");
+                if (GSC.deleteconfirm || confirm('{{ l.a_delete_tit }}?')) {
+                  GSC.deleteconfirm = true;
+                  var x = $(this).data("id");
 
-                // API: UploadFileDelete
-                $.post("/admin/UploadFileDelete", {name: x}).done(function(data) {
-                  M.toast({html: "❌ " + x});
-                  GSC.RenderUploadInfo();
-                });
+                  // API: UploadFileDelete
+                  $.post("/admin/UploadFileDelete", {name: x}).done(function(data) {
+                    M.toast({html: "❌ " + x});
+                    GSC.RenderUploadInfo();
+                  });
+                }
               });
 
             }
