@@ -214,23 +214,41 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <h5>{{ l.a_google }}</h5>
           <ul class="mono">
             <li>GCP id: {{ gcp_project_id }}
-              {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
-            <li>Google Maps Location Query: {{ google.map_query }}
-              {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
-            <li>Google Analytics UA: {{ google.ua }}
-              {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
-            <li>Google Maps API key: <span title="{{ google.mapsapi_key }}"
-                class="protect">{{ google.mapsapi_key }}</span>
-              {{^google.mapsapi_key}}<i class="red-text fas fa-times"></i>{{/google.mapsapi_key}}</li>
-            <li>PageSpeed Insights API key: <span title="{{ google.pagespeedinsights_key }}" class="protect">{{
-            google.pagespeedinsights_key }}</span>
-              {{^google.pagespeedinsights_key}}<i class="red-text fas fa-times"></i>{{/google.pagespeedinsights_key}}
+              {{^gcp_project_id}}
+              <i class="red-text fas fa-times"></i>
+              {{/gcp_project_id}}
+            </li>
+            <li>Maps Location Query: {{ google.map_query }}
+              {{^google.map_query}}
+              <i class="red-text fas fa-times"></i>
+              {{/google.map_query}}
+            </li>
+            <li>Maps API key: 
+              {{#google.mapsapi_key}}
+              <span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
+              {{/google.mapsapi_key}}
+              {{^google.mapsapi_key}}
+              <i class="red-text fas fa-times"></i>
+              {{/google.mapsapi_key}}
+            </li>
+            <li>Analytics UA: {{ google.ua }}
+              {{^google.ua}}
+              <i class="red-text fas fa-times"></i>
+              {{/google.ua}}
+            </li>
+            <li>PageSpeed Insights API key:
+              {{#google.pagespeedinsights_key}}
+              <span title="{{ google.pagespeedinsights_key }}" class="protect">{{ google.pagespeedinsights_key }}</span>
+              {{/google.pagespeedinsights_key}}
+              {{^google.pagespeedinsights_key}}
+              <i class="red-text fas fa-times"></i>
+              {{/google.pagespeedinsights_key}}
             </li>
           </ul>
           {{^l.onesignal_appid}}
           <div class="row center red-text" style="margin-top:1em">
             <div class="container">
-              {{#convert_hyperlinks}}{{ l.a_onesignal_missing }}{{/convert_hyperlinks}}
+              {{ l.a_onesignal_missing }}
             </div>
           </div>
           {{/l.onesignal_appid}}
