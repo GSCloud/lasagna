@@ -124,7 +124,7 @@ class CorePresenter extends APresenter
                 if ($x !== 2) { // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
-                $html = '';
+                $html = "";
                 if ($path == "!") {
                     $path = $language;
                 } else {
@@ -137,7 +137,7 @@ class CorePresenter extends APresenter
                     if (\is_array($html)) {
                         $html = \join("\n", $html);
                     } else {
-                        $html = '';
+                        $html = "";
                     }
                 }
                 return $this->setHeaderHTML()->setData("output", $this->renderHTML($html));
@@ -171,14 +171,14 @@ class CorePresenter extends APresenter
                     return $this->writeJsonData(400, $extras);
                 }
                 $options = new QROptions([
-                    'version' => 7,
-                    'outputType' => QRCode::OUTPUT_IMAGE_PNG,
-                    'eccLevel' => QRCode::ECC_L,
-                    'scale' => $scale,
-                    'imageBase64' => false,
-                    'imageTransparent' => false,
+                    "version" => 7,
+                    "outputType" => QRCode::OUTPUT_IMAGE_PNG,
+                    "eccLevel" => QRCode::ECC_L,
+                    "scale" => $scale,
+                    "imageBase64" => false,
+                    "imageTransparent" => false,
                 ]);
-                header('Content-type: image/png');
+                header("Content-type: image/png");
                 echo (new QRCode($options))->render($text ?? "", CACHE . "/" . hash("sha256", $text) . ".png");
                 exit;
                 break;
@@ -311,7 +311,7 @@ class CorePresenter extends APresenter
 
         $language = \strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);
-        $hash = \hash('sha256', (string) \json_encode($locale));
+        $hash = \hash("sha256", (string) \json_encode($locale));
 
         switch ($view) {
             case "GetCsDataVersion":

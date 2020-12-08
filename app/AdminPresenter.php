@@ -27,18 +27,18 @@ class AdminPresenter extends APresenter
     /** @var array image constants */
     const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
-            'load' => 'imagecreatefromjpeg',
-            'save' => 'imagejpeg',
-            'quality' => 25,
+            "load" => "imagecreatefromjpeg",
+            "save" => "imagejpeg",
+            "quality" => 25,
         ],
         IMAGETYPE_PNG => [
-            'load' => 'imagecreatefrompng',
-            'save' => 'imagepng',
-            'quality' => 0,
+            "load" => "imagecreatefrompng",
+            "save" => "imagepng",
+            "quality" => 0,
         ],
         IMAGETYPE_GIF => [
-            'load' => 'imagecreatefromgif',
-            'save' => 'imagegif',
+            "load" => "imagecreatefromgif",
+            "save" => "imagegif",
         ],
     ];
 
@@ -236,8 +236,8 @@ class AdminPresenter extends APresenter
                         $this->addMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         $this->addAuditMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         return $this->writeJsonData([
-                            "host" => $_SERVER["HTTP_HOST"],
                             "function" => $view,
+                            "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
                     }
@@ -253,14 +253,14 @@ class AdminPresenter extends APresenter
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key || $this->isLocalAdmin()) {
-                    $code = hash("sha256", $key . $user);
+                    $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->flushCache();
                         $this->addMessage("FLUSH CACHE REMOTE [$user]");
                         $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
                         return $this->writeJsonData([
-                            "host" => $_SERVER["HTTP_HOST"],
                             "function" => $view,
+                            "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
                     }
@@ -276,15 +276,15 @@ class AdminPresenter extends APresenter
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key || $this->isLocalAdmin()) {
-                    $code = hash("sha256", $key . $user);
+                    $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->setForceCsvCheck();
                         $this->postloadAppData("app_data");
                         $this->flushCache();
                         $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
                         return $this->writeJsonData([
-                            "host" => $_SERVER["HTTP_HOST"],
                             "function" => $view,
+                            "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
                     }
@@ -300,14 +300,14 @@ class AdminPresenter extends APresenter
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key || $this->isLocalAdmin()) {
-                    $code = hash("sha256", $key . $user);
+                    $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildNonce();
                         $this->addMessage("REBUILD NONCE REMOTE [$user]");
                         $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
                         return $this->writeJsonData([
-                            "host" => $_SERVER["HTTP_HOST"],
                             "function" => $view,
+                            "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
                     }
@@ -637,7 +637,7 @@ class AdminPresenter extends APresenter
         if (!$type || !self::IMAGE_HANDLERS[$type]) {
             return null;
         }
-        $image = call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
+        $image = call_user_func(self::IMAGE_HANDLERS[$type]["load"], $src);
         if (!$image) {
             return null;
         }
@@ -665,6 +665,6 @@ class AdminPresenter extends APresenter
         }
         \imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $targetWidth, $targetHeight, $width, $height);
         return \call_user_func(
-            self::IMAGE_HANDLERS[$type]['save'], $thumbnail, $dest, self::IMAGE_HANDLERS[$type]['quality']);
+            self::IMAGE_HANDLERS[$type]["save"], $thumbnail, $dest, self::IMAGE_HANDLERS[$type]["quality"]);
     }
 }
