@@ -17,12 +17,12 @@
 .a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
 #admin_main {padding-top:5px;font-size:14px!important}
 #admin_main .row{margin-bottom:5px}
-#admin_main,#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5{font-family:Arial!important}
-.fileitem {overflow:hidden;text-overflow:ellipsis}
+#admin_main,#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6{font-family:Arial!important;text-transform:uppercase}
 .dragover{border:4px dashed blue!important}
 .extrapadding{padding:5px;border-radius:5px}
 .nowrap{white-space:nowrap}
 .protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
+.fileitem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:90%}
 .btnmargin{margin:2px;margin-bottom:5px}
 
 /* ROTATION & TOUCH */
@@ -716,11 +716,13 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 if (t == 1) {
                   s += '<div class="row .hide-on-small-only">';
                 }
-                if (t > 4) { // MAX 4 columns
+                if (t > 6) { // MAX columns
                   t = 1;
                   s += '</div><div class="row .hide-on-small-only">';
                 }
-                s += '<div class="left-align col s3"><a title="{{ l.a_open_tit }}" target="_blank" href="/upload/' + i + '"><span class="fileitem">' + i + '</span></a><br>';
+                s += '<div class="left-align col s2"><a title="{{ l.a_open_tit }}" target="_blank" href="/upload/' + i + '">';
+                if (data.data[i]["thumbnail"]) s += '<img class="responsive-img" src="' + data.data[i]["thumbnail"] + '"><br>';
+                s += '<span class="fileitem">' + i + '</span></a><br>';
                 s += '<span class="hide-on-med-and-down">({{ l.a_age }}&nbsp;';
                 s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
                 s += ',&nbsp;';

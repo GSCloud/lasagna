@@ -18,8 +18,29 @@ use Symfony\Component\Lock\Store\FlockStore;
  */
 class AdminPresenter extends APresenter
 {
-    /** @var string Administration token key filename */
+    /** @var string administration token key filename */
     const ADMIN_KEY = "admin.key";
+
+    /** @var string thumbnail prefix */
+    const THUMB_PREFIX = ".thumb_50px_";
+
+    /** @var array image constants */
+    const IMAGE_HANDLERS = [
+        IMAGETYPE_JPEG => [
+            'load' => 'imagecreatefromjpeg',
+            'save' => 'imagejpeg',
+            'quality' => 25,
+        ],
+        IMAGETYPE_PNG => [
+            'load' => 'imagecreatefrompng',
+            'save' => 'imagepng',
+            'quality' => 0,
+        ],
+        IMAGETYPE_GIF => [
+            'load' => 'imagecreatefromgif',
+            'save' => 'imagegif',
+        ],
+    ];
 
     /**
      * Main controller
@@ -73,6 +94,7 @@ class AdminPresenter extends APresenter
                     $b = \strtr(\trim(\basename($file["name"])), " ", "_");
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                         $x[$b] = \urlencode($b);
+                        $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX . $b, 50);
                     }
                 }
                 $c = \count($x);
@@ -84,12 +106,16 @@ class AdminPresenter extends APresenter
             case "UploadFileDelete":
                 $this->checkPermission("admin");
                 if (isset($_POST["name"])) {
-                    $f = UPLOAD . DS . \trim($_POST["name"]);
-                    if (\file_exists($f)) {
-                        @\unlink($f);
-                        $this->addMessage("FILE DELETED: $f");
-                        $this->addAuditMessage("FILE DELETED: $f");
-                        return $this->writeJsonData($f, $extras);
+                    $f1 = UPLOAD . DS . \trim($_POST["name"]); // original file
+                    $f2 = UPLOAD . DS . self::THUMB_PREFIX . \trim($_POST["name"]); // thumbnail
+                    if (\file_exists($f1)) {
+                        @\unlink($f1);
+                        $this->addMessage("FILE DELETED: $f1");
+                        $this->addAuditMessage("FILE DELETED: $f1");
+                        if (\file_exists($f2)) {
+                            @\unlink($f2);
+                        }
+                        return $this->writeJsonData($f1, $extras);
                     }
                 }
                 break;
@@ -134,13 +160,21 @@ class AdminPresenter extends APresenter
             case "GetUploadFileInfo":
                 $this->checkPermission("admin");
                 $files = [];
-                if ($handle = opendir(UPLOAD)) {
-                    while (false !== ($entry = readdir($handle))) {
+                if ($handle = \opendir(UPLOAD)) {
+                    while (false !== ($entry = \readdir($handle))) {
                         if ($entry != "." && $entry != "..") {
+                            if (\strpos($entry, self::THUMB_PREFIX) === 0) {
+                                continue;
+                            }
+                            $thumbnail = null;
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX . $entry)) {
+                                $thumbnail = "/upload/" . self::THUMB_PREFIX . $entry;
+                            }
                             $files[$entry] = [
                                 "name" => $entry,
-                                "size" => filesize(UPLOAD . DS . $entry),
-                                "timestamp" => filemtime(UPLOAD . DS . $entry),
+                                "size" => \filesize(UPLOAD . DS . $entry),
+                                "thumbnail" => $thumbnail,
+                                "timestamp" => \filemtime(UPLOAD . DS . $entry),
                             ];
                         }
                     }
@@ -589,5 +623,48 @@ class AdminPresenter extends APresenter
             $key = trim(@\file_get_contents($f));
         }
         return $key ?? null;
+    }
+
+    /**
+     * @param $src file source
+     * @param $dest file target
+     * @param $targetWidth output width
+     * @param $targetHeight output height or null
+     */
+    private function createThumbnail($src, $dest, $targetWidth, $targetHeight = null)
+    {
+        $type = \exif_imagetype($src);
+        if (!$type || !self::IMAGE_HANDLERS[$type]) {
+            return null;
+        }
+        $image = call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
+        if (!$image) {
+            return null;
+        }
+        $width = \imagesx($image);
+        $height = \imagesy($image);
+        if ($targetHeight == null) {
+            $ratio = $width / $height;
+            if ($width > $height) {
+                $targetHeight = \floor($targetWidth / $ratio);
+            } else {
+                $targetHeight = $targetWidth;
+                $targetWidth = \floor($targetWidth * $ratio);
+            }
+        }
+        $thumbnail = \imagecreatetruecolor($targetWidth, $targetHeight);
+        if ($type == IMAGETYPE_GIF || $type == IMAGETYPE_PNG) {
+            \imagecolortransparent(
+                $thumbnail,
+                \imagecolorallocate($thumbnail, 0, 0, 0)
+            );
+            if ($type == IMAGETYPE_PNG) {
+                \imagealphablending($thumbnail, false);
+                \imagesavealpha($thumbnail, true);
+            }
+        }
+        \imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $targetWidth, $targetHeight, $width, $height);
+        return \call_user_func(
+            self::IMAGE_HANDLERS[$type]['save'], $thumbnail, $dest, self::IMAGE_HANDLERS[$type]['quality']);
     }
 }
