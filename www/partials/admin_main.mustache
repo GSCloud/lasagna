@@ -733,9 +733,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 s += ',&nbsp;';
                 s += GSC.FormatBytes(data.data[i]["size"]);
                 s += ')</span>&nbsp;';
-                if (ext == "epub") s += '<a target=_blank title="EPUB" class="hover" href="{{ BASE }}readEPUB/upload/' + i + '">📚</a>';
                 s += '<span title="📋 {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
                 s += '<span title="📋 CLOUD CDN {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">☁️</span>';
+                if (ext == "epub") s += '<a target=_blank title="EPUB" class="hover" href="{{ BASE }}epub/upload/' + i + '">📚</a>';
                 s += '&nbsp;&nbsp;';
                 s += '<span title="🗑 {{ l.a_delete_tit }}" class="hover delete" data-id="' + i + '">❌</span>';
                 s += '</div>';

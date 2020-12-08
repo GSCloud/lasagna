@@ -55,6 +55,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "ReadEpubBook":
+            case "ReadEpubBook2":
                 if (isset($match["params"]["trailing"])) {
                     $epub = \urldecode(\trim($match["params"]["trailing"]));
                     // security tweaks
