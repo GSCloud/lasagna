@@ -174,7 +174,7 @@ ReadEpubBook:
   path: "/readEPUB/[**:trailing]"
   api: true
   api_description: "Read ebook in EPUB format"
-  api_info: "Parameters:\n<b><trailing></b> - relative path to the EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
+  api_info: "Parameters:\n<b><trailing></b> - relative path to EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
   method: GET
   presenter: core
   template: epub
@@ -186,10 +186,10 @@ ReadEpubBook2:
   path: "/epub/[**:trailing]"
   api: true
   api_description: "Read ebook in EPUB format"
-  api_info: "Parameters:\n<b><trailing></b> - relative path to the EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
+  api_info: "Parameters:\n<b><trailing></b> - relative path to EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
   method: GET
   presenter: core
   template: epub
   api_example: [
-    "readEPUB/epub/alice"
+    "epub/epub/alice"
   ]
