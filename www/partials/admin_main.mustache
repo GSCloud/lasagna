@@ -710,7 +710,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               var s = '<h5>{{ l.a_files_ttip }}</h5>';
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
-              var windowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
 
               // UPLOAD: render HTML
               var t = 0;
@@ -723,9 +722,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                   t = 1;
                   s += '</div><div class="row .hide-on-small-only">';
                 }
-                s += '<div class="left-align col s2"><a title="{{ l.a_open_tit }}" onclick="javascript:window.open(\'/upload/' + i +
-                  '\', \'preview\', ' + windowFeatures + ');" target="_blank" href="/upload/' + i + '">';
-                if (data.data[i]["thumbnail"]) s += '<img class="responsive-img" width=25% src="' + data.data[i]["thumbnail"] + '"><br>';
+                s += '<div class="left-align col s2"><a title="{{ l.a_open_tit }}" class="hover" onclick="javascript:window.open(\'/upload/' + i +
+                  '\', \'preview\', \'location,resizable,scrollbars,status\');">';
+                if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img" width=25% src="' + data.data[i]["thumbnail"] + '"><br>';
                 s += '<span class="fileitem">' + i + '</span></a><br>';
                 s += '<span class="hide-on-med-and-down">({{ l.a_age }}&nbsp;';
                 s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
