@@ -99,7 +99,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <p id="a_update_info"></p>
         <p>
           PHP ver. <b>{{ PHP_VERSION }}</b><br>
-          App ver. <b>{{ VERSION_SHORT }} / {{ VERSION_DATE }}</b><br>
+          App ver. <b>{{ VERSION_SHORT }}</b> / <b>{{ VERSION_DATE }}</b> / rev. <b>{{ REVISIONS }}</b><br>
         </p>
         <div class="col s12 white">
           <label>{{ l.a_sites }}</label>
@@ -124,6 +124,27 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
           <i class="fas fa-edit"></i>{{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
+        <div class="container">
+
+          {{#request_path_slug}}
+          {{#GET.profile}}
+          <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">🌍 exportHTML</a>&nbsp;&nbsp;
+          {{/GET.profile}}
+          {{^GET.profile}}
+          <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">🌍 exportHTML</a>&nbsp;&nbsp;
+          {{/GET.profile}}
+          {{/request_path_slug}}
+
+          {{^request_path_slug}}
+          {{#GET.profile}}
+          <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">🌍 exportHTML</a>&nbsp;&nbsp;
+          {{/GET.profile}}
+          {{^GET.profile}}
+          <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/default/!">🌍 exportHTML</a>&nbsp;&nbsp;
+          {{/GET.profile}}
+          {{/request_path_slug}}
+
+        </div>
       </div>
     </div>
 
@@ -388,7 +409,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           })
           .fail(function () {
             GSC.PingDot("#csv_ping", false);
-            $("#a_update_info").addClass("bigemoji").html('ERROR 🤯');
+            $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
           });
       }
 
@@ -411,13 +432,13 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               $(t).append("Total timing:&nbsp;<span class=bold>" + data.data.lighthouseResult.timing.total + "&nbsp;msec.</span> ");
               $(t).slideDown();
             } else {
-              $(t).html('GetPSInsights ERROR 🤯').slideDown();
+              $(t).html("GetPSInsights ERROR 🤯").slideDown();
             }
             $("#a_ps_insights").removeAttr("disabled");
           })
           .fail(function () {
             GSC.PingDot("#psi_ping", false);
-            $(t).html('GetPSInsights ERROR 🤯').slideDown();
+            $(t).html("GetPSInsights ERROR 🤯").slideDown();
             $("#a_ps_insights").removeAttr("disabled");
           });
       }
@@ -513,8 +534,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             contents: '<span title="full-screen"><i class="fas fa-expand"></i></span>',
             codeviewKeepButton: true,
             click: function (e) {
-              context.invoke('fullscreen.toggle');
-              context.invoke('codeview.toggle');
+              context.invoke("fullscreen.toggle");
+              context.invoke("codeview.toggle");
             }
           });
           return button.render();
@@ -526,38 +547,38 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           codeviewIframeFilter: true,
           dialogsInBody: false,
           disableDragAndDrop: true,
-          height: 250,
+          height: 300,
           codemirror: {
-            theme: 'material-darker'
+            theme: "material-darker"
           },
           lang: '{{#langcs}}cs-CZ{{/langcs}}{{#langen}}en-US{{/langen}}',
-          maximumImageFileSize: 1024*1024*8,
+          maximumImageFileSize: 1024*1024*4,
           placeholder: '{{#langcs}}Vítejte v Summernote!{{/langcs}}{{#langen}}Welcome to Summernote!{{/langen}}',
           callbacks: {
             onChange: function(contents, $editable) {
-              $('div.note-btn-group.note-custom>button>span').css('color', 'red');
+              $("div.note-btn-group.note-custom>button>span").css("color", "red");
             }
           },
-          tableClassName: 'table table-bordered striped highlight responsive-table',
+          tableClassName: "table table-bordered striped highlight responsive-table",
           styleTags: [
-            'p', 'blockquote', 'pre', 'h2', 'h3', 'h4', 'h5', 'h6',
+            "p", "blockquote", "pre", "h2", "h3", "h4", "h5", "h6",
           ],
           lineHeights: [
-            '0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'
+            "0.2", "0.3", "0.4", "0.5", "0.6", "0.8", "1.0", "1.2", "1.4", "1.5", "2.0", "3.0"
           ],
           fontSizes: [
-            '6', '7', '8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '30', '36', '42', '48', '55', '64', '82', '100', '130', '160', '200'
+            "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "30", "36", "42", "48", "55", "64", "82", "100", "130", "160", "200"
           ],
           toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'fontsize', 'fontname', 'strikethrough', 'superscript', 'subscript', 'clear']],
-            ['color', ['forecolor', 'backcolor', 'color']],
-            ['paragraph', ['ul', 'ol', 'paragraph', 'height']],
-            ['table', ['table']],
-            ['insert', ['hr', 'link', 'picture', 'video']],
-            ['history', ['undo', 'redo']],
-            ['view', ['fs']],
-            ['custom', ['saveall']],
+            ["style", ["style"]],
+            ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
+            ["color", ["forecolor", "backcolor", "color"]],
+            ["paragraph", ["ul", "ol", "paragraph", "height"]],
+            ["table", ["table"]],
+            ["insert", ["hr", "link", "picture", "video"]],
+            ["history", ["undo", "redo"]],
+            ["view", ["fs"]],
+            ["custom", ["saveall"]],
           ],
           buttons: {
             saveall: SaveAllButton,
@@ -567,9 +588,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         $("#a_summernote").removeAttr("disabled");
       }
 
-      // Summernote plugins - empty
+      // Summernote plugins
       w.GSC.init.push(function () {
-        w.GSC.names.push("Summernote plugins (empty)");
+        w.GSC.names.push("Summernote plugins");
       });
 
       // admin UI bindings
@@ -704,7 +725,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // file manager
-        $('#a_files').click(function() {
+        $("#a_files").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
@@ -712,8 +733,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           // clear file & upload content if present
           if (getCookie("open_filemanager")) {
             delCookie("open_filemanager");
-            $('#a_file_manager').hide(50);
-            $('#a_uploader_progress').html('');
+            $("#a_file_manager").hide(50);
+            $("#a_uploader_progress").html("");
             return;
           }
           GSC.RenderUploadInfo();
@@ -759,14 +780,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 s += '</div>';
               }
               if (t) {
-                s += '</div>';
+                s += "</div>";
               } else {
-                s += '&mdash;&mdash;&mdash;';
+                s += "&mdash;&mdash;&mdash;";
               }
-              if ($('#a_file_manager').html() != '') {
-                $('#a_file_manager').html(s).show();
+              if ($("#a_file_manager").html() != "") {
+                $("#a_file_manager").html(s).show();
               } else {
-                $('#a_file_manager').hide().html(s).show(200);
+                $("#a_file_manager").hide().html(s).show(200);
               }
 
               // UPLOAD: copy path to clipboard
@@ -778,7 +799,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
               // UPLOAD: file delete
               $("#a_file_manager .delete").click(function() {
-                if (GSC.deleteconfirm || confirm('{{ l.a_delete_tit }}?')) {
+                if (GSC.deleteconfirm || confirm("{{ l.a_delete_tit }}?")) {
                   GSC.deleteconfirm = true;
                   var x = $(this).data("id");
 
@@ -860,7 +881,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         GSC.AdminUI();
         // filemanager state
         if (getCookie("open_filemanager")) {
-          $('#a_file_manager').hide();
+          $("#a_file_manager").hide();
           GSC.RenderUploadInfo();
         }
       });
@@ -876,11 +897,11 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       // set uploader
       w.GSC.init.push(function () {
         w.GSC.names.push("Uploader");
-        ZeroUpload.setURL('/admin/upload');
+        ZeroUpload.setURL("/admin/upload");
         ZeroUpload.setMaxFiles(100);
         ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
-        ZeroUpload.on('complete', function (response) {
+        ZeroUpload.on("complete", function (response) {
           M.toast({html: "Upload complete ❤️"});
           var data = JSON.parse(response.data);
           if (data && data.data) {
@@ -890,36 +911,36 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }
         });
 
-        ZeroUpload.on('start', function(files, userData) {
+        ZeroUpload.on("start", function(files, userData) {
           M.toast({html: "Upload started 👷"});
         });
 
-        ZeroUpload.on('error', function(type, message, userData) {
+        ZeroUpload.on("error", function(type, message, userData) {
           var s;
           switch (type) {
-            case 'maxbytes':
-              s = '{{ l.a_upload_maxbytes }}';
+            case "maxbytes":
+              s = "{{ l.a_upload_maxbytes }}";
               break;
-            case 'unsupported':
-              s = '{{ l.a_upload_unsupported }}';
+            case "unsupported":
+              s = "{{ l.a_upload_unsupported }}";
               break;
-            case 'maxfiles':
-              s = '{{ l.a_upload_maxfiles }}';
+            case "maxfiles":
+              s = "{{ l.a_upload_maxfiles }}";
               break;
-            case 'filetype':
-              s = '{{ l.a_upload_filetype }}';
+            case "filetype":
+              s = "{{ l.a_upload_filetype }}";
               break;
-            case 'http':
-              s = '{{ l.a_upload_http }}';
+            case "http":
+              s = "{{ l.a_upload_http }}";
               break;
             default:
-              s = '{{ l.a_upload_ajax }}';
+              s = "{{ l.a_upload_ajax }}";
           }
     		  M.toast({html: s});
 	      });
 
-        ZeroUpload.on('progress', function(progress, userData) {
-          $('#a_uploader_progress').show(200).html(
+        ZeroUpload.on("progress", function(progress, userData) {
+          $("#a_uploader_progress").show(200).html(
             '<h5>{{ l.a_upload_ttip }}</h5><div style="padding:1em"><div class="row">' +
             '<strong>Progress:</strong> ' + progress.percent + ', ' +
             progress.elapsedHuman + ' elapsed</div>' +
@@ -929,7 +950,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           );
         });
         ZeroUpload.init();
-        ZeroUpload.addDropTarget('#admin_main');
+        ZeroUpload.addDropTarget("#admin_main");
 
         // UI: upload button
         $("#a_upload").click(function() {
@@ -937,7 +958,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
-          $('#a_uploader_progress').html('');
+          $("#a_uploader_progress").html("");
           ZeroUpload.chooseFiles();
         });
       });

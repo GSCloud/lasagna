@@ -65,7 +65,7 @@ multisite_profiles: [
     alasagna.gscloud.cz
     blasagna.gscloud.cz
   ]
-  lasagna_v2: [
+  v2: [
     lasagna2.gscloud.cz
   ]
 ]

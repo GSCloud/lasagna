@@ -116,29 +116,15 @@ ReadArticles:
   method: GET
   presenter: core
 
-GetCsArticleHTMLExport:
-  path: '/cs/exportHTML/[a:profile]/[**:trailing]'
+GetArticleHTMLExport:
+  path: '/[a:lang]/exportHTML/[a:profile]/[**:trailing]'
   language: cs
   api: true
   api_description: "Get articles as HTML"
-  api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
+  api_info: "Parameters:\n<b><a:lang></b> - language code,\n<a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
     "cs/exportHTML/default/!"
     "cs/exportHTML/default/id/demo"
-  ]
-  assert_json: false
-  method: GET
-  presenter: core
-
-GetEnArticleHTMLExport:
-  path: '/en/exportHTML/[a:profile]/[**:trailing]'
-  language: en
-  api: true
-  api_description: "Get articles as HTML"
-  api_info: "Parameters:\n<b><a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
-  api_example: [
-    "en/exportHTML/default/!"
-    "en/exportHTML/default/id/demo"
   ]
   assert_json: false
   method: GET
@@ -170,9 +156,9 @@ GetQR:
     "qr/m/https://example.com"
   ]
 
-ReadEpubBook:
+ReadEpubBook1:
   path: "/readEPUB/[**:trailing]"
-  api: true
+  api: false
   api_description: "Read ebook in EPUB format"
   api_info: "Parameters:\n<b><trailing></b> - relative path to EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
   method: GET

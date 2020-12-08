@@ -54,7 +54,7 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
                 break;
 
-            case "ReadEpubBook":
+            case "ReadEpubBook1":
             case "ReadEpubBook2":
                 if (isset($match["params"]["trailing"])) {
                     $epub = \urldecode(\trim($match["params"]["trailing"]));
@@ -110,10 +110,12 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $this->setData("rss_items", (array) $map)->renderHTML("rss.xml"));
                 break;
 
-            case "GetCsArticleHTMLExport":
-            case "GetEnArticleHTMLExport":
-                $language = \strtolower($presenter[$view]["language"]) ?? "cs";
+            case "GetArticleHTMLExport":
                 $x = 0;
+                if (isset($match["params"]["lang"])) {
+                    $language = strtolower(substr(trim($match["params"]["lang"]), 0, 2));
+                    $x++;
+                }
                 if (isset($match["params"]["profile"])) {
                     $profile = trim($match["params"]["profile"]);
                     $x++;
@@ -122,7 +124,7 @@ class CorePresenter extends APresenter
                     $path = trim($match["params"]["trailing"]);
                     $x++;
                 }
-                if ($x !== 2) { // ERROR
+                if ($x !== 3) { // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
                 $html = "";
