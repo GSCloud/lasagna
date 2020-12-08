@@ -68,6 +68,9 @@ multisite_profiles: [
   v2: [
     lasagna2.gscloud.cz
   ]
+  v3: [
+    lasagna3.gscloud.cz
+  ]
 ]
 
 v2: [
