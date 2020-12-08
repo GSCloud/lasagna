@@ -63,7 +63,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
   }
 
-  // getCookie()
+    // getCookie()
   if (typeof window.getCookie !== "function") window.getCookie = function (key) {
     if (key === undefined) return false;
     var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
@@ -170,6 +170,14 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         d.getSelection().removeAllRanges();
         d.getSelection().addRange(selected);
       }
+    }
+
+    // GSC.GetFileExtension()
+    if (typeof GSC.GetFileExtension !== "function") GSC.GetFileExtension = function (filename) {
+      if (filename) {
+          return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+      }
+      return "";
     }
 
     // GSC.CopyThisText()
