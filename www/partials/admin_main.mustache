@@ -721,7 +721,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                   s += '</div><div class="row .hide-on-small-only">';
                 }
                 s += '<div class="left-align col s2"><a title="{{ l.a_open_tit }}" target="_blank" href="/upload/' + i + '">';
-                if (data.data[i]["thumbnail"]) s += '<img class="responsive-img" src="' + data.data[i]["thumbnail"] + '"><br>';
+                if (data.data[i]["thumbnail"]) s += '<img class="responsive-img" width=25% src="' + data.data[i]["thumbnail"] + '"><br>';
                 s += '<span class="fileitem">' + i + '</span></a><br>';
                 s += '<span class="hide-on-med-and-down">({{ l.a_age }}&nbsp;';
                 s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();

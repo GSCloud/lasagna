@@ -29,7 +29,7 @@ class AdminPresenter extends APresenter
         IMAGETYPE_JPEG => [
             "load" => "imagecreatefromjpeg",
             "save" => "imagejpeg",
-            "quality" => 25,
+            "quality" => 30,
         ],
         IMAGETYPE_PNG => [
             "load" => "imagecreatefrompng",
