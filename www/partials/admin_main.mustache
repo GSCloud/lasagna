@@ -692,8 +692,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             return GSC.PingDot("#csv_ping", false);
           }
           // clear file & upload content if present
-          if ($('#a_file_manager').html()) {
-            $('#a_file_manager').html('');
+          if (getCookie("open_filemanager")) {
+            delCookie("open_filemanager");
+            $('#a_file_manager').hide(50);
             $('#a_uploader_progress').html('');
             return;
           }
@@ -704,6 +705,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
           $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
             if (data && data.data) {
+              setCookie("open_filemanager", 1); // remember state
               GSC.PingDot("#summer_ping");
               var s = '<h5>{{ l.a_files_ttip }}</h5>';
               var now = ~~(Date.now() / 1000);
@@ -720,7 +722,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                   t = 1;
                   s += '</div><div class="row .hide-on-small-only">';
                 }
-                s += '<div class="left-align col s2"><a title="{{ l.a_open_tit }}" target="_blank" href="/upload/' + i + '">';
+                s += '<div class="left-align col s2"><a title="{{ l.a_open_tit }}" onclick="javascript:window.open(\'/upload/' + i + '\')" target="_blank" href="/upload/' + i + '">';
                 if (data.data[i]["thumbnail"]) s += '<img class="responsive-img" width=25% src="' + data.data[i]["thumbnail"] + '"><br>';
                 s += '<span class="fileitem">' + i + '</span></a><br>';
                 s += '<span class="hide-on-med-and-down">({{ l.a_age }}&nbsp;';
@@ -739,7 +741,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               } else {
                 s += '&mdash;&mdash;&mdash;';
               }
-              $('#a_file_manager').html(s);
+              $('#a_file_manager').hide().html(s).show(200);
 
               // UPLOAD: copy path to clipboard
               $("#a_file_manager .copydata").click(function() {
@@ -827,6 +829,11 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       w.GSC.init.push(function () {
         w.GSC.names.push("Admin UI");
         GSC.AdminUI();
+        // filemanager state
+        if (getCookie("open_filemanager")) {
+          $('#a_file_manager').hide();
+          GSC.RenderUploadInfo();
+        }
       });
 
       // load PSI in the background (caching)
@@ -848,6 +855,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           M.toast({html: "Upload complete ❤️"});
           var data = JSON.parse(response.data);
           if (data && data.data) {
+            setCookie("open_filemanager", 1); // remember state
             GSC.RenderUploadInfo();
             return;
           }
@@ -882,7 +890,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 	      });
 
         ZeroUpload.on('progress', function(progress, userData) {
-          $('#a_uploader_progress').html(
+          $('#a_uploader_progress').show(200).html(
             '<h5>{{ l.a_upload_ttip }}</h5><div style="padding:1em"><div class="row">' +
             '<strong>Progress:</strong> ' + progress.percent + ', ' +
             progress.elapsedHuman + ' elapsed</div>' +
