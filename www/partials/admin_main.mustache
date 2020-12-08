@@ -1,16 +1,18 @@
 {{#admin_group_admin}}
 
 <style>
-/* PHP chars */
+/* PHP CHARS */
 .php1{position:relative;left:+0.1em}
 .php2{position:relative;left:+0.0em}
 .php3{position:relative;left:-0.1em}
-/* Emojis */
+
+/* EMOJIS */
 .faces::after{content:"🌸";animation-name:faces;animation-duration:1s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
 @keyframes faces{10%{content:"🌼"}20%{content:"🌳"}30%{content:"🌺"}40%{content:"🌵"}50%{content:"🌶"}60%{content:"🍇"}70%{content:"🍄"}80%{content:"🍓"}90%{content:"🌽"}}
 .bigemoji{font-size:5em}
-/* Admin panel */
+
+/* ADMIN PANEL */
 .hover {cursor:pointer}
 .a_reset{font-family:Arial!important;font-size:14px!important}.a_h2{font-size:5em!important;font-weight:700!important}.a_h4{font-size:3em!important;font-weight:700!important}.a_h5{font-size:2em!important;font-weight:700!important}
 #admin_main {padding-top:5px;font-size:14px!important}
@@ -22,11 +24,13 @@
 .nowrap{white-space:nowrap}
 .protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
 .btnmargin{margin:2px;margin-bottom:5px}
-/* Rotation & touch */
+
+/* ROTATION & TOUCH */
 #a_rotate_device{display:none}
 [touch="true"] #a_rotate_device{display:block}
 #emojis{cursor:crosshair}
-/* Summernote */
+
+/* SUMMERNOTE */
 .summernote{border:2px dashed #ccc;padding:1rem!important}
 .summernote::before{content:"📝";position:relative;top:-3rem;left:-1rem}
 .panel-heading.note-toolbar .note-font .dropdown-menu,.panel-heading.note-toolbar .note-style .dropdown-menu{min-width:245px;padding:5px}
@@ -36,20 +40,20 @@ div.checkbox.sn-checkbox-open-in-new-window>label>input[type=checkbox]{opacity:1
 div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!important;position:relative!important;margin:5px!important}
 </style>
 
-<!-- motýle -->
+<!-- MOTÝLE -->
 <span style="position:fixed;left:0;top:0;z-index:999999" class="motyle btn white hide-on-med-and-down">🦋</span>
 <span style="position:fixed;right:0;top:0;z-index:999999" class="motyle btn white hide-on-large-only">🦋</span>
 
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
 
-  <!-- device rotation -->
+  <!-- DEVICE ROTATION INFO -->
   <div id="a_rotate_device" class="row center" style="padding-top:3px">
     {{ l.a_rotate_device }}
   </div>
 
   {{>admin_custom}}
 
-  <!-- external services buttons -->
+  <!-- EXTERNAL SERVICES -->
   <div class="row center black hide-on-small-only">
     <div class="extrapadding hide-on-small-only" style="padding-top:3px">
       <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
@@ -77,15 +81,15 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     </div>
   </div>
 
+  <!-- EXTERNAL LINKS -->
   <div class="row center black">
-    <!-- external links -->
     {{#external_links}}
       <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text"
         data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
     {{/external_links}}
   </div>
 
-  <!-- admin grid -->
+  <!-- ADMIN GRID -->
   <div class="row grid" style="overflow:hidden" style="padding-top:3px">
 
     <!-- DATA -->
@@ -211,9 +215,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <ul class="mono">
             <li>GCP id: {{ gcp_project_id }}
               {{^gcp_project_id}}<i class="red-text fas fa-times"></i>{{/gcp_project_id}}</li>
-            <li>Google Maps Query: {{ google.map_query }}
+            <li>Google Maps Location Query: {{ google.map_query }}
               {{^google.map_query}}<i class="red-text fas fa-times"></i>{{/google.map_query}}</li>
-            <li>Google Analytics: {{ google.ua }}
+            <li>Google Analytics UA: {{ google.ua }}
               {{^google.ua}}<i class="red-text fas fa-times"></i>{{/google.ua}}</li>
             <li>Google Maps API key: <span title="{{ google.mapsapi_key }}"
                 class="protect">{{ google.mapsapi_key }}</span>
@@ -904,17 +908,20 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/material-darker.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/display/fullscreen.min.css" rel="stylesheet">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/xml/xml.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/display/fullscreen.min.js" defer></script>
-
 <link href="{{ cdn }}/summernote/summernote-lite.min.css" rel="stylesheet">
 <script src="{{ cdn }}/summernote/summernote-lite.min.js" defer></script>
 {{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
 
+<!-- MOMENT -->
 <script src="{{ cdn }}/js/moment-with-locales.min.js" defer></script>
+
+<!-- GRAPHEME -->
 <script src="{{ cdn }}/js/grapheme.min.js" defer></script>
+
+<!-- ZEROUPLOAD -->
 <script src="{{ cdn }}/js/zeroupload.min.js" defer></script>
 
 {{/admin_group_admin}}
