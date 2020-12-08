@@ -716,23 +716,27 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 if (t == 1) {
                   s += '<div class="row .hide-on-small-only">';
                 }
-                if (t > 4) {
+                if (t > 4) { // MAX 4 columns
                   t = 1;
                   s += '</div><div class="row .hide-on-small-only">';
                 }
-                s += '<div class="left-align col s3"><a target="_blank" href="/upload/' + i + '"><span class="fileitem">' + i + '</span></a><br>';
+                s += '<div class="left-align col s3"><a title="{{ l.a_open_tit }}" target="_blank" href="/upload/' + i + '"><span class="fileitem">' + i + '</span></a><br>';
                 s += '<span class="hide-on-med-and-down">({{ l.a_age }}&nbsp;';
                 s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
                 s += ',&nbsp;';
                 s += GSC.FormatBytes(data.data[i]["size"]);
                 s += ')</span>&nbsp;';
-                s += '<span title="📋" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
-                s += '<span title="CDN 📋" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">📋</span>';
+                s += '<span title="📋 {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+                s += '<span title="CDN 📋 {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">☁️</span>';
                 s += '&nbsp;&nbsp;';
-                s += '<span title="🗑" class="hover delete" data-id="' + i + '">❌</span>';
+                s += '<span title="🗑 {{ l.a_delete_tit }}" class="hover delete" data-id="' + i + '">❌</span>';
                 s += '</div>';
               }
-              s += '</div>';
+              if (t) {
+                s += '</div>';
+              } else {
+                s += '&mdash;&mdash;&mdash;';
+              }
               $('#a_file_manager').html(s);
 
               // UPLOAD: copy path to clipboard
