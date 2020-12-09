@@ -208,9 +208,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <div class="row center">
             <strong>{{user.name}}</strong><br>
             <i style="font-size:smaller">{{user.email}}</i><br>
-            <a id="a_getcode" class="btnmargin xtooltipped waves-effect blue waves-light btn"
+            <a id="a_getcode" class="btnmargin waves-effect blue waves-light btn"
               data-position="top" data-tooltip="">📲</a>
-            <a id="a_delcode" class="btnmargin xtooltipped waves-effect red waves-light btn"
+            <a id="a_delcode" class="btnmargin waves-effect red waves-light btn"
               data-position="top" data-tooltip="">📴</a>
             <br>
             <a id="a_logout" class="tooltipped waves-effect green waves-light btn"
@@ -222,7 +222,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             <br>
             <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
               data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
-              <i class="fas fa-power-off"></i>{{ l.a_clear_browser }}</a>
+              <i class="fas fa-power-off"></i>
+              {{ l.a_clear_browser }}</a>
           </div>
         </div>
       </div>
@@ -497,9 +498,11 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }).done(function() {
             GSC.PingDot("#summer_ping");
             $("#a_summernote").removeAttr("disabled");
+
             GSC.AdminUI();
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
+
             $("#a_summernote").click(function () {
               GSC.ReadArticles(function () {
                 GSC.DeploySummernote();
@@ -518,13 +521,68 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         var SaveAllButton = function (context) {
           var ui = $.summernote.ui;
           var button = ui.button({
+            className: 'note-btn-bold blue',
             contents: '<span title="💾"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_save }}</b></span>',
             codeviewKeepButton: false,
-            click: function (e) {
+            click: function(e) {
               $("#a_summernote").click();
             }
           });
           return button.render();
+        }
+
+        // DestroyButton() button
+        var DestroyButton = function (context) {
+          var ui = $.summernote.ui;
+          var button = ui.button({
+            className: 'note-btn-bold',
+            contents: '<span title="X"><i class="fas fa-close"></i>&nbsp;X<b>{{ l.a_close }}</b></span>',
+            codeviewKeepButton: true,
+            click: function(e) {
+              //context.invoke('destroy');
+              $(".summernote").each(function (i, obj) {
+                $(obj).summernote("destroy");
+                GSC.AdminUI();
+                $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
+                $("#a_summernote").unbind("click");
+
+                $("#a_summernote").click(function () {
+                  GSC.ReadArticles(function () {
+                    GSC.DeploySummernote();
+                  });
+                });
+                GSC.summernote_on = false;
+              });
+            }
+          });
+          return button.render();
+        }
+
+        // HistorySelector() listbox
+        var HistorySelector = function(context) {
+          var ui = $.summernote.ui;
+          var list = ui.buttonGroup([
+            ui.button({
+              className: 'dropdown-toggle',
+              contents: '<span class="fa fa-clock"></span> <span class="caret"></span>',
+              data: {
+                toggle: 'dropdown'
+              }
+            }),
+            ui.dropdown({
+              className: 'dropdown-style',
+              //contents: "<ol><li>hello</li><li>hello Europe</li><li>hello great Europe</li></ol>",
+              contents: "<ol></ol>",
+              callback: function($dropdown) {
+                $dropdown.find('li').each(function() {
+                  $(this).click(function() {
+                    context.invoke("editor.insertText", $(this).html());
+                  });
+                });
+              }
+            })
+          ]);
+          return list.render();
         }
 
         // FullScreen() button
@@ -556,7 +614,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           placeholder: '{{#langcs}}Vítejte v Summernote!{{/langcs}}{{#langen}}Welcome to Summernote!{{/langen}}',
           callbacks: {
             onChange: function(contents, $editable) {
-              $("div.note-btn-group.note-custom>button>span").css("color", "red");
+              $("div.note-btn-group.note-custom2>button").removeClass("blue").addClass("red");
             }
           },
           tableClassName: "table table-bordered striped highlight responsive-table",
@@ -578,27 +636,27 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             ["insert", ["hr", "link", "picture", "video"]],
             ["history", ["undo", "redo"]],
             ["view", ["fs"]],
-            ["custom", ["saveall"]],
+            ["custom1", ["hist"]],
+            ["custom2", ["saveall", "destroy"]],
           ],
           buttons: {
             saveall: SaveAllButton,
-            fs: FullScreenButton
+            fs: FullScreenButton,
+            hist: HistorySelector,
+            destroy: DestroyButton
           }
         });
         $("#a_summernote").removeAttr("disabled");
       }
 
-      // Summernote plugins
-      w.GSC.init.push(function () {
-        w.GSC.names.push("Summernote plugins");
-      });
-
       // admin UI bindings
       w.GSC.init.push(function () {
         w.GSC.names.push("admin UI bindings");
 
-        // 🦋
-        if (getCookie("motyle") === "false" || !getCookie("motyle")) $("#admin_main").show(100);
+        // 🦋 cookie check
+        if (getCookie("motyle") == "false" || !getCookie("motyle")) $("#admin_main").show(100);
+
+        // UI: 🦋
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {
             window.scrollTo(0, 0);
