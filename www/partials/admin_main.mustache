@@ -129,18 +129,26 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           {{#request_path_slug}}
           {{#GET.profile}}
           <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">🌍 exportHTML</a>&nbsp;&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{^GET.profile}}
           <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">🌍 exportHTML</a>&nbsp;&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
 
           {{^request_path_slug}}
           {{#GET.profile}}
           <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">🌍 exportHTML</a>&nbsp;&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{^GET.profile}}
           <a target=_blank href="{{ BASE }}{{ lang }}/exportHTML/default/!">🌍 exportHTML</a>&nbsp;&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
 
@@ -831,7 +839,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 s += GSC.FormatBytes(data.data[i]["size"]);
                 s += ')</span>&nbsp;';
                 s += '<span title="📋 {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
-                s += '<span title="📋 CLOUD CDN {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">☁️</span>';
+                //s += '<span title="📋 CLOUD CDN {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">☁️</span>';
                 if (ext == "epub") s += '<a target=_blank title="EPUB" class="hover" href="{{ BASE }}epub/upload/' + i + '">📚</a>';
                 s += '&nbsp;&nbsp;';
                 s += '<span title="🗑 {{ l.a_delete_tit }}" class="hover delete" data-id="' + i + '">❌</span>';

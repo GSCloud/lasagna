@@ -1,18 +1,19 @@
 <script>
 'use strict';
 
-// polyfills
+// polyfills @TODO delete?
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
 (function (w, d, undefined) {
+
   // add scroll progress element
   var pbar = "_" + Date.now();
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
     "beforeend", '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
   );
 
-  // check scroll progress
+  // scroll progress bar
   w.onscroll = function () {
     var winScroll = d.body.scrollTop || d.documentElement.scrollTop;
     var height = d.documentElement.scrollHeight - d.documentElement.clientHeight;
@@ -49,7 +50,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     });
   }
 
-  // setCookie()
+  // setCookie() general function
   if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days) {
     if (key === undefined) return false;
     if (value === undefined) return false;
@@ -63,14 +64,14 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
   }
 
-    // getCookie()
+    // getCookie() general function
   if (typeof window.getCookie !== "function") window.getCookie = function (key) {
     if (key === undefined) return false;
     var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
     return v ? v[2] : null;
   }
 
-  // delCookie()
+  // delCookie() general function
   if (typeof window.delCookie !== "function") window.delCookie = function (key) {
     if (key === undefined) return false;
     var date = new Date();
@@ -78,7 +79,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
   }
 
-  if (w.GSC) {
+  if (w.GSC) { // GSC namespace
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.profile = null;
@@ -123,7 +124,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
         "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
       ];
-
       if (dateString === undefined) {
         var z = new Date();
       } else {
@@ -172,7 +172,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       }
     }
 
-    // GSC.GetFileExtension()
+    // GSC.GetFileExtension() - parse filename and get a file extension
     if (typeof GSC.GetFileExtension !== "function") GSC.GetFileExtension = function (filename) {
       if (filename) {
           return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
@@ -180,22 +180,23 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       return "";
     }
 
-    // GSC.CopyThisText()
+    // GSC.CopyThisText() - copy text from an element to clipboard / or copy data element
     if (typeof GSC.CopyThisText !== "function") GSC.CopyThisText = function (that) {
       if (that) {
-        var t = $(that).text().trim();
+        var t = $(that).data("copy").trim();
+        if (!t) t = $(that).text().trim();
         GSC.CopyClipboard(t);
-        M.toast({html: t});
+        M.toast({html: "📋 " + t});
       }
     }
 
-    // GSC.CopyThisHtml()
+    // GSC.CopyThisHtml() - copy HTML from an element to clipboard
     if (typeof GSC.CopyThisHtml !== "function") GSC.CopyThisHtml = function (that) {
       if (that) {
         var t = $(that).text().trim();
         var h = $(that).html().trim();
         GSC.CopyClipboard(h);
-        M.toast({html: t});
+        M.toast({html: "📋 " + t});
       }
     }
 
@@ -228,11 +229,11 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           setTimeout("GSC.VersionCheck();", 60000);
         }
       }
-
+      //  do repeat checks - 10 secs.
       setTimeout("GSC.VersionCheck()", 10000);
     });
 
-    // GSC.SetProfile()
+    // GSC.SetProfile() - set Lasagna GSC.profile
     GSC.init.push(function () {
       GSC.names.push("GSC.SetProfile()");
 
@@ -252,7 +253,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
     });
 
-    // GSC.ReadArticles()
+    // GSC.ReadArticles() - read remote articles / create HTML parts
     GSC.init.push(function () {
       GSC.names.push("GSC.ReadArticles()");
 
@@ -275,6 +276,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
                   }
                   $("#" + p).html(obj[p]);
                 }
+                // fix classnames for Summernote
                 $(".summernote ul").addClass("browser-default");
                 $(".summernote img").addClass("responsive-img");
               } else {
@@ -284,7 +286,8 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           }
           if (typeof callback === "function") callback();
         });
-        setTimeout("GSC.ReadArticles()", 30000);
+        //  do repeat checks - 10 secs.
+        setTimeout("GSC.ReadArticles()", 10000);
       }
 
       GSC.SetProfile();
@@ -312,22 +315,22 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         setCookie("hl", "en");
       });
 
-      // UPDATE button
+      // set UPDATE button
       $("#update-message").click(function () {
         window.location.reload(true);
       });
 
-      // default bullets for Summernote data
+      // set default bullets for Summernote data
       $(".summernote>ul").each(function (i, obj) {
         $(obj).addClass("browser-default");
       });
 
-      // HOME button
+      // create HOME button
       if (document.documentElement.clientWidth > 1120) {
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="/">🏡</a></li>');
       }
 
-      // mobile WebShare button
+      // create mobile WebShare button for touch devices
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li class="right-align">' + WebShareFactory() + '</li>');
@@ -335,7 +338,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         }
       }
 
-      // LOGIN buttons
+      // create LOGIN buttons
       {{#LOCALHOST}}
       if (!GSC.isadmin) {
         $('#nav-mobile').append('<li class="right-align"><a href="{{ local_goauth_redirect }}">🔓 LOGIN</a></li>');
