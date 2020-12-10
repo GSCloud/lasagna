@@ -7,7 +7,7 @@
 .php3{position:relative;left:-0.1em;text-transform:lowercase!important}
 
 /* EMOJIS */
-.faces::after{content:"🌸";animation-name:faces;animation-duration:1s}
+.faces::after{font-family:monospace,monospace;content:"🌸";animation-name:faces;animation-duration:1s}
 .emojianim::after{animation-timing-function:linear;animation-iteration-count:infinite}
 @keyframes faces{10%{content:"🌼"}20%{content:"🌳"}30%{content:"🌺"}40%{content:"🌵"}50%{content:"🌶"}60%{content:"🍇"}70%{content:"🍄"}80%{content:"🍓"}90%{content:"🌽"}}
 .bigemoji{font-size:5em}
@@ -84,7 +84,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
   <!-- EXTERNAL LINKS -->
   <div class="row center black">
     {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text"
+      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" style="padding:4px"
         data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
     {{/external_links}}
   </div>
@@ -110,20 +110,22 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             {{/multisite_names}}
           </select>
         </div>
+
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
+
         <a id="a_emoji" 
           data-position="top" data-tooltip="{{ l.a_emojis_ttip }}" 
           style="margin:5px" class="tooltipped waves-effect blue waves btn faces emojianim"></a>
         <a id="a_upload"
           data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect blue waves btn">📂</a>
+          style="margin:5px" class="tooltipped waves-effect blue waves btn"><i class="fas fa-upload"></i></a>
         <a id="a_files"
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect blue waves btn">🗃</a>
+          style="margin:5px" class="tooltipped waves-effect blue waves btn"><i class="fas fa-folder"></i></a>
         <a id="a_summernote"
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
-          <i class="fas fa-edit"></i>{{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
+          <i class="fas fa-edit"></i>&nbsp;{{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
         <div class="container">
 
           {{#request_path_slug}}
