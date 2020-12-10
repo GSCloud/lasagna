@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{#LOCALHOST}}LOCAL | {{/LOCALHOST}}EPUB</title>
 
+  <script src="/js/jquery.min.js"></script>
   <script src="/js/jszip.min.js"></script>
   <script src="/js/epub.min.js"></script>
 
@@ -33,7 +34,6 @@
       background: #fafafa;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: #333;
-
       position: absolute;
       height: 100%;
       width: 100%;
@@ -329,10 +329,86 @@
       fill: #777;
     }
 
+    #design {
+      font-size: 14px;
+      margin: 10px auto;
+      text-align: center;
+    }
+
+    #design .a1, #design .a2, #design .a3, #design .dm {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    #design .a1 {
+      font-size: 14px;
+    }
+
+    #design .a2 {
+      font-size: 18px;
+    }
+
+    #design .a3 {
+      font-size: 24px;
+    }
+
+    #design .dm {
+      display: none;
+    }
+
   </style>
+<script>
+
+// setCookie() general function
+if (typeof window.setCookie !== "function") window.setCookie = function (key, value, days) {
+  if (key === undefined) return false;
+  if (value === undefined) return false;
+  if (days === undefined) days = 31;
+  if (days === 0) { // session cookie      
+    document.cookie = key + "=" + value + ";path=/";
+  } else {
+    var date = new Date();
+    date.setTime(date.getTime() + (parseInt(days) * 86400));
+    document.cookie = key + "=" + value + ";path=/" + ";expires=" + date.toGMTString();
+  }
+}
+
+// getCookie() general function
+if (typeof window.getCookie !== "function") window.getCookie = function (key) {
+  if (key === undefined) return false;
+  var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+  return v ? v[2] : null;
+}
+
+// delCookie() general function
+if (typeof window.delCookie !== "function") window.delCookie = function (key) {
+  if (key === undefined) return false;
+  var date = new Date();
+  date.setTime(0);
+  document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
+}
+
+function setFontSize(size) {
+  if (size) {
+    setCookie("fontsize", size);
+  } else {
+    var size = getCookie("fontsize");
+  }
+  var id = $('.epub-view').find('iframe').attr('id');
+  if (id && size) $(document.getElementById(id).contentWindow.document.body).css('font-size', size);
+}
+
+</script>
+
 </head>
 <body>
   <div id="title"></div>
+  <div id="design">
+    <div onclick="javascript:setFontSize('14px');" class="a1">A</div>
+    <div onclick="javascript:setFontSize('18px');" class="a2">A</div>
+    <div onclick="javascript:setFontSize('24px');" class="a3">A</div>
+    <div class="dm">DM</div>
+  </div>
   <select id="toc"></select>
   <div id="viewer" class="spreads"></div>
   <a id="prev" href="#prev" class="arrow">‹</a>
@@ -355,19 +431,23 @@
       next.addEventListener("click", function (e) {
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
         e.preventDefault();
+        setFontSize();
       }, false);
       var prev = document.getElementById("prev");
       prev.addEventListener("click", function (e) {
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
         e.preventDefault();
+        setFontSize();
       }, false);
 
       var keyListener = function (e) {
         if ((e.keyCode || e.which) == 37) { // left
           book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
+          setFontSize();
         }
         if ((e.keyCode || e.which) == 39) { // right
           book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
+          setFontSize();
         }
       };
       rendition.on("keyup", keyListener);
@@ -375,7 +455,9 @@
     })
 
     var title = document.getElementById("title");
+
     rendition.on("rendered", function (section) {
+      setFontSize();
       var current = book.navigation && book.navigation.get(section.href);
       if (current) {
         var $select = document.getElementById("toc");
