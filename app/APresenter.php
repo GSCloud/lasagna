@@ -1072,7 +1072,7 @@ abstract class APresenter implements IPresenter
         $this->setIdentity();
         $this->clearCookie($this->getCfg("app") ?? "app");
         \header('Clear-Site-Data: "cookies"');
-        $this->setLocation();
+        $this->setLocation("/?logout");
         exit;
     }
 
