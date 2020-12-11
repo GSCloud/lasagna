@@ -832,7 +832,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
               var last = [];
-              if (localStorage["last_upload"]) {
+              if (localStorage["last_upload"]) { // preprocess last uploads
                 var x = JSON.parse(localStorage["last_upload"]);
                 for (var i in x) last[i] = x[i];
               }
@@ -850,7 +850,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 }
                 var ext = GSC.GetFileExtension(i); // extension
                 var border = "";
-                if (last[i]) {
+                if (last[i]) { // set border for last uploads
                   border = ' style="border:1px solid #444" ';
                 }
                 s += '<div ' + border + ' class="left-align col s2"><a title="{{ l.a_open_tit }}" class="hover" onclick="javascript:window.open(\'/upload/' + i +
