@@ -57,9 +57,6 @@ $x = $cfg["app"] ?? $cfg["canonical_url"] ?? $cfg["goauth_origin"] ?? "";
 defined("CACHEPREFIX") || define("CACHEPREFIX",
     "cache_" . hash("sha256", $x) . "_");
 
-/** @const Cookie time to live (1 month) */
-defined("COOKIE_TTL") || define("COOKIE_TTL", 86400 * 31);
-
 /** @const Domain name, extracted from $_SERVER */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 

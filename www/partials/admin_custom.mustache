@@ -29,7 +29,7 @@
             callback(data);
           }).fail(function () {
             $(el).html(
-              "<span class=text-red style='cursor:pointer' onclick='location.reload(1);'><b>API&nbsp;ERR</b>&nbsp;🔄</span>&nbsp;"
+              "<span class=text-red style='cursor:pointer' onclick='location.reload(1);'><b>API&nbsp;ERROR</b>&nbsp;🔄</span>&nbsp;"
             );
           });
         }
@@ -37,7 +37,7 @@
         // show error info
         function err(data) {
           $(data.el).html(
-            "<span class=text-red style='cursor:pointer' onclick='location.reload(1);'><b>ERR&nbsp;"
+            "<span class=text-red style='cursor:pointer' onclick='location.reload(1);'><b>API&nbsp;ERROR:&nbsp;"
               + data.code
               + "</b>&nbsp;🔄</span>&nbsp;");
         }
