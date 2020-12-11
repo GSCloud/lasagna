@@ -335,25 +335,38 @@
       text-align: center;
     }
 
-    #design .a1, #design .a2, #design .a3, #design .dm {
+    #design .a1, #design .a2, #design .a3, #design .bw {
       display: inline-block;
       cursor: pointer;
     }
 
     #design .a1 {
       font-size: 14px;
+      padding: 1em;
+      margin: 5px;
+      font-weight: bold;
     }
 
     #design .a2 {
       font-size: 18px;
+      padding: 1em;
+      margin: 5px;
+      font-weight: bold;
     }
 
     #design .a3 {
       font-size: 24px;
+      padding: 1em;
+      margin: 5px;
+      font-weight: bold;
     }
 
-    #design .dm {
-      display: none;
+    #design .bw {
+      font-size: 18px;
+      color: #fff!important;
+      padding: 4px;
+      font-weight: bold;
+      background-color: #000!important;
     }
 
   </style>
@@ -388,6 +401,7 @@ if (typeof window.delCookie !== "function") window.delCookie = function (key) {
   document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
 }
 
+// set sub-iframe font size
 function setFontSize(size) {
   if (size) {
     setCookie("fontsize", size);
@@ -396,6 +410,36 @@ function setFontSize(size) {
   }
   var id = $('.epub-view').find('iframe').attr('id');
   if (id && size) $(document.getElementById(id).contentWindow.document.body).css('font-size', size);
+}
+
+// switch colors
+function switchColors(set) {
+  var bw = getCookie("bw");
+  if (set) {
+    if (!bw || bw == 0) {
+      setCookie("bw", 1);
+      bw = 1;
+    } else {
+      delCookie("bw");
+      bw = 0;
+    }
+  } else {
+    if (bw) {
+      bw = 1;
+    } else {
+      bw = 0;
+    }
+  }
+  var id = $('.epub-view').find('iframe').attr('id');
+  if (id && bw) $(document.getElementById(id).contentWindow.document.body).css('background-color', "#000");
+  if (id && bw) $(document.getElementById(id).contentWindow.document.body).css('color', "#fff");
+  if (id && !bw) $(document.getElementById(id).contentWindow.document.body).css('background-color', "#fff");
+  if (id && !bw) $(document.getElementById(id).contentWindow.document.body).css('color', "#000");
+
+  if (id && bw) $(document.body).css('background-color', "#000");
+  if (id && bw) $(document.body).css('color', "#fff");
+  if (id && !bw) $(document.body).css('background-color', "#fff");
+  if (id && !bw) $(document.body).css('color', "#000");
 }
 
 </script>
@@ -407,7 +451,7 @@ function setFontSize(size) {
     <div onclick="javascript:setFontSize('14px');" class="a1">A</div>
     <div onclick="javascript:setFontSize('18px');" class="a2">A</div>
     <div onclick="javascript:setFontSize('24px');" class="a3">A</div>
-    <div class="dm">DM</div>
+    <div onclick="javascript:switchColors(true);" class="bw">TEXT</div>
   </div>
   <select id="toc"></select>
   <div id="viewer" class="spreads"></div>
@@ -432,22 +476,26 @@ function setFontSize(size) {
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
         e.preventDefault();
         setFontSize();
+        switchColors();
       }, false);
       var prev = document.getElementById("prev");
       prev.addEventListener("click", function (e) {
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
         e.preventDefault();
         setFontSize();
+        switchColors();
       }, false);
 
       var keyListener = function (e) {
         if ((e.keyCode || e.which) == 37) { // left
           book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
           setFontSize();
+          switchColors();
         }
         if ((e.keyCode || e.which) == 39) { // right
           book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
           setFontSize();
+          switchColors();
         }
       };
       rendition.on("keyup", keyListener);
@@ -458,6 +506,7 @@ function setFontSize(size) {
 
     rendition.on("rendered", function (section) {
       setFontSize();
+      switchColors();
       var current = book.navigation && book.navigation.get(section.href);
       if (current) {
         var $select = document.getElementById("toc");
@@ -513,7 +562,6 @@ function setFontSize(size) {
         var option = document.createElement("option");
         option.textContent = chapter.label;
         option.setAttribute("ref", chapter.href);
-
         docfrag.appendChild(option);
       });
       $select.appendChild(docfrag);
