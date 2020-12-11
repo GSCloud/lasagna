@@ -133,13 +133,18 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">exportHTML 🌍</a>&nbsp;
           <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>&nbsp;&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
+
           {{^GET.profile}}
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">exportHTML 🌍</a>&nbsp;
           <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>&nbsp;&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
 
@@ -148,13 +153,18 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">exportHTML 🌍</a>&nbsp;
           <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>&nbsp;&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
+
           {{^GET.profile}}
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/default/!">exportHTML 🌍</a>&nbsp;
           <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>&nbsp;&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>&nbsp;
+          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
 
@@ -818,14 +828,13 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             if (data && data.data) {
               setCookie("open_filemanager", 1); // remember state
               GSC.PingDot("#summer_ping");
-              var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover">🔃</span></h5>';
+              var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover"><i class="green-text fas fa-sync-alt"></i></span></h5>';
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
 
               // UPLOAD: render HTML
               var t = 0;
               for (var i in data.data) {
-                // columns solver
                 t++;
                 if (t == 1) {
                   s += '<div class="row .hide-on-small-only">';
@@ -845,7 +854,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 s += GSC.FormatBytes(data.data[i]["size"]);
                 s += ')</span>&nbsp;';
                 s += '<span title="📋 {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
-                //s += '<span title="📋 CLOUD CDN {{ l.a_copy_tit }}" class="hover copydata" data-text="{{ BASE }}{{ cdn }}/upload/' + i + '">☁️</span>';
                 if (ext == "epub") s += '<a target=_blank title="EPUB" class="hover" href="{{ BASE }}epub/upload/' + i + '">📚</a>';
                 s += '&nbsp;&nbsp;';
                 s += '<span title="🗑 {{ l.a_delete_tit }}" class="hover delete" data-id="' + i + '">❌</span>';
