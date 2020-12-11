@@ -24,27 +24,28 @@ class CorePresenter extends APresenter
      */
     public function process()
     {
-        if (isset($_GET["api"])) {
-            $api = (string) $_GET["api"];
-            $key = $this->getCfg("ci_tester.api_key") ?? null;
-            if ($key !== $api) {
-                $this->checkRateLimit();
-            }
-        } else {
-            $this->checkRateLimit();
-        }
-
+/* remove Rate Limiter
+if (isset($_GET["api"])) {
+$api = (string) $_GET["api"];
+$key = $this->getCfg("ci_tester.api_key") ?? null;
+if ($key !== $api) {
+$this->checkRateLimit();
+}
+} else {
+$this->checkRateLimit();
+}
+ */
         $data = $this->getData();
         $match = $this->getMatch();
         $presenter = $this->getPresenter();
         $view = $this->getView();
+
         $extras = [
             "name" => "LASAGNA Core",
             "fn" => $view,
         ];
 
         switch ($view) {
-
             case "GetWebManifest":
                 $this->setHeaderJson();
                 $lang = $_GET["lang"] ?? "cs"; // language switch by GET parameter
@@ -56,6 +57,7 @@ class CorePresenter extends APresenter
 
             case "ReadEpubBook1":
             case "ReadEpubBook2":
+                $this->checkRateLimit();
                 if (isset($match["params"]["trailing"])) {
                     $epub = \urldecode(\trim($match["params"]["trailing"]));
                     // security tweaks
@@ -111,6 +113,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetArticleHTMLExport":
+                // do NOT rate limit this call!
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
                     $language = strtolower(substr(trim($match["params"]["lang"]), 0, 2));
@@ -124,8 +127,8 @@ class CorePresenter extends APresenter
                     $path = trim($match["params"]["trailing"]);
                     $x++;
                 }
-                if ($x !== 3) { // ERROR
-                    return $this->writeJsonData(400, $extras);
+                if ($x !== 3) { // parameters ERROR, render empty HTML
+                    return $this->setHeaderHTML()->setData("output", "");
                 }
                 $html = "";
                 if ($path == "!") {
@@ -143,10 +146,12 @@ class CorePresenter extends APresenter
                         $html = "";
                     }
                 }
+                // @todo process subtasks (remote calls)
                 return $this->setHeaderHTML()->setData("output", $this->renderHTML($html));
                 break;
 
             case "GetQR":
+                $this->checkRateLimit();
                 $x = 0;
                 if (isset($match["params"]["size"])) {
                     $size = trim($match["params"]["size"]);
@@ -198,6 +203,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "API":
+                $this->checkRateLimit();
                 $this->setHeaderHTML();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -232,6 +238,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetAndroidJs":
+                $this->checkRateLimit();
                 $file = WWW . "/js/android-app.js";
                 if (\file_exists($file)) {
                     $content = @\file_get_contents($file);
@@ -250,6 +257,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetAndroidCss":
+                $this->checkRateLimit();
                 $file = WWW . "/css/android.css";
                 if (\file_exists($file)) {
                     $content = @\file_get_contents($file);
@@ -268,6 +276,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetCoreVersion":
+                $this->checkRateLimit();
                 $d = [];
                 $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
                 $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
@@ -277,6 +286,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "ReadArticles":
+                $this->checkRateLimit();
                 $x = 0;
                 if (isset($match["params"]["profile"])) {
                     $profile = trim($match["params"]["profile"]);
@@ -295,6 +305,8 @@ class CorePresenter extends APresenter
                 if (\file_exists($file)) {
                     $data = @\file_get_contents($file);
                     $time = \filemtime(DATA . "/summernote_${profile}_${hash}.json");
+                } else {
+                    return $this->writeJsonData(400, $extras);
                 }
                 $crc = hash("sha256", $data);
                 if (isset($_GET["crc"])) {
@@ -312,6 +324,7 @@ class CorePresenter extends APresenter
                 break;
         }
 
+        // get language and locale
         $language = \strtolower($presenter[$view]["language"]) ?? "cs";
         $locale = $this->getLocale($language);
         $hash = \hash("sha256", (string) \json_encode($locale));
