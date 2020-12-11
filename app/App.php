@@ -328,7 +328,9 @@ switch ($presenter[$view]["template"]) {
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
 \Tracy\Debugger::timer("PROCESS");
+// set and process model
 $app = $controller::getInstance()->setData($data)->process();
+// get model back
 $data = $app->getData();
 
 // ANALYTICS DATA
