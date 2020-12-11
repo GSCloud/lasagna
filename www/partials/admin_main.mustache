@@ -132,18 +132,18 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           {{#GET.profile}}
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">exportHTML 🌍</a>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
 
           {{^GET.profile}}
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">exportHTML 🌍</a>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
@@ -152,18 +152,18 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           {{#GET.profile}}
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">exportHTML 🌍</a>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
 
           {{^GET.profile}}
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/default/!">exportHTML 🌍</a>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>&nbsp;
-          <span onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
@@ -366,7 +366,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
     if (getCookie("logout")) {
       d.getElementById("admin_main").style.display = "none";
-      setCookie("motyle", "true");
+      setCookie("motyle", "true", {{ CONST.COOKIE_TTL }});
     }
     delCookie("logout");
 
@@ -684,7 +684,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         $(".motyle").click(function() {
           $("#admin_main").toggle(200, function () {
             window.scrollTo(0, 0);
-            setCookie("motyle", $("#admin_main").is(":hidden"));
+            setCookie("motyle", $("#admin_main").is(":hidden"), {{ CONST.COOKIE_TTL }});
           })
         });
 
@@ -700,7 +700,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           }
         }
         GSC.profile = profile;
-        setCookie("profile", profile);
+        setCookie("profile", profile, {{ CONST.COOKIE_TTL }});
         $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
         $("#SiteSelect").formSelect();
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
@@ -709,7 +709,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         $("#SiteSelect").change(function () {
           if (!$("#SiteSelect").val()) return;
           var profile = $("#SiteSelect").val().trim();
-          setCookie("profile", profile);
+          setCookie("profile", profile, {{ CONST.COOKIE_TTL }});
           window.location.href = window.location.pathname + "?profile=" + profile;
         });
 
@@ -826,7 +826,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
           $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
             if (data && data.data) {
-              setCookie("open_filemanager", 1); // remember state
+              setCookie("open_filemanager", 1, {{ CONST.COOKIE_TTL }}); // remember state
               GSC.PingDot("#summer_ping");
               var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover"><i class="green-text fas fa-sync-alt"></i></span></h5>';
               var now = ~~(Date.now() / 1000);
@@ -939,7 +939,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         $("#a_logout").click(function () {
-          setCookie("logout", "logout", 0);
+          setCookie("logout", "logout");
           GSC.offline ? window.location.replace("/?nonce=".Date.now()) : window.location.replace("/logout");
         });
 
@@ -985,7 +985,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           M.toast({html: "Upload complete ❤️"});
           var data = JSON.parse(response.data);
           if (data && data.data) {
-            setCookie("open_filemanager", 1); // remember state
+            setCookie("open_filemanager", 1, {{ CONST.COOKIE_TTL }}); // remember state
             GSC.RenderUploadInfo();
             return;
           }

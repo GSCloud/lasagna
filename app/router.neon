@@ -12,3 +12,13 @@ en:
   language: en
   path: /en
   sitemap: true
+
+APIDemo:
+  language: en
+  path: /api/v1/APIDemo
+  api: true
+  api_description: "API demo"
+  api_info: "Returns (JSON): array of object records."
+  assert_json: true
+  presenter: api
+  sitemap: true

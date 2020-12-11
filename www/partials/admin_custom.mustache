@@ -10,11 +10,10 @@
   (function (w, d, undefined) {
 
     if (w.GSC.init) {
-
       w.GSC.init.push(function () {
-        w.GSC.names.push("admin UI - custom");
+        w.GSC.names.push("admin UI - custom panel");
 
-        // add info block
+        // info block
         var count = 0;
 
         function addBlock(param, callback) {
@@ -43,10 +42,21 @@
               + "</b>&nbsp;🔄</span>&nbsp;");
         }
 
+        addBlock({
+          url: "/api/v1/APIDemo"
+        }, function (data) {
+          if (data && data.data) {
+            $(data.el).html("<span>API DEMO<b><a target=_blank title='"
+              + data.uri + "' rel=nofollow href='"
+              + data.url + "'>"
+              + data.data.length + "&nbsp;🔗</a></b></span>");
+          } else {
+            err(data);
+          }
+        });
 
       });
     }
-
   })(window, document);
 
 </script>

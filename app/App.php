@@ -17,15 +17,48 @@ use Nette\Neon\Neon;
 
 // SANITY CHECK
 foreach (["APP", "CACHE", "DATA", "DS", "LOGS", "ROOT", "TEMP"] as $x) {
-    if (!\defined($x)) {
+    if (!defined($x)) {
         die("FATAL ERROR: Sanity check for '$x' failed!");
     }
 }
+foreach (["cfg"] as $x) {
+    if (!isset($x)) {
+        die("FATAL ERROR: Sanity check for '$x' failed!");
+    }
+}
+
+// DATA POPULATION
+$base58 = new \Tuupola\Base58;
+$data = $cfg;
+$data["cfg"] = $cfg; // backup
+$data["GET"] = array_map("htmlspecialchars", $_GET);
+$data["POST"] = array_map("htmlspecialchars", $_POST);
+$data["VERSION"] = $version = trim(@file_get_contents(ROOT . DS . "VERSION") ?? "", "\r\n");
+$data["VERSION_DATE"] = date("j. n. Y", @filemtime(ROOT . DS . "VERSION") ?? time());
+$data["VERSION_TIMESTAMP"] = @filemtime(ROOT . DS . "VERSION") ?? time();
+$data["REVISIONS"] = (int) trim(@file_get_contents(ROOT . DS . "REVISIONS") ?? "0", "\r\n");
+$data["PHP_VERSION"] = PHP_VERSION_ID;
+$data["DATA_VERSION"] = null;
+$data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
+$data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
+$data["base"] = $data["BASE"] = $host ? (($_SERVER["HTTPS"] ?? "off" == "on") ? "https://${host}/" : "http://${host}/") : "";
+$data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";
+$data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
+$data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
+$data["LOCALHOST"] = (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI;
+$data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 4), 16, 10));
+$data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4);
+$data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
+$data["ALPHA"] = (in_array($host, (array) ($cfg["alpha_hosts"] ?? [])));
+$data["BETA"] = (in_array($host, (array) ($cfg["beta_hosts"] ?? [])));
 
 /** @const Cache prefix */
 $x = $cfg["app"] ?? $cfg["canonical_url"] ?? $cfg["goauth_origin"] ?? "";
 defined("CACHEPREFIX") || define("CACHEPREFIX",
     "cache_" . hash("sha256", $x) . "_");
+
+/** @const Cookie time to live (1 month) */
+defined("COOKIE_TTL") || define("COOKIE_TTL", 86400 * 31);
 
 /** @const Domain name, extracted from $_SERVER */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
@@ -63,7 +96,7 @@ if (GCP_KEYS && \file_exists(APP . DS . GCP_KEYS)) {
 function logger($message, $severity = Logger::INFO)
 {
     if (empty($message) || is_null(GCP_PROJECTID) || is_null(GCP_KEYS)) {
-        return;
+        return false;
     }
     if (ob_get_level()) {
         ob_end_clean();
@@ -78,6 +111,7 @@ function logger($message, $severity = Logger::INFO)
             "severity" => $severity,
         ]);
     } finally {}
+    return true;
 }
 
 // CACHING PROFILES
