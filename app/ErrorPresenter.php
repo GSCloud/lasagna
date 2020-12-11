@@ -46,11 +46,13 @@ class ErrorPresenter extends APresenter
             }
         }
         if (!isset(self::CODESET[$code])) {
-            $code = 400;
+            $code = 404;
         }
         $error = self::CODESET[$code];
         header("HTTP/1.1 ${code} ${error}");
-        $template = "<body><center><h1><br>🤔 WebApp Error $code 💣</h1><h2>" . self::CODESET[$code] . "<br><br><br></h2><h1><a style='color:red;text-decoration:none' href='/'>RELOAD ↻</a></h1><img alt='' src='/img/logo.png'></body>";
+        $template = "<body><center><h1><br>🤔 WebApp Error $code 💣</h1><h2>"
+            . self::CODESET[$code]
+            . "<br><br><br></h2><h1><a style='color:red;text-decoration:none' href='/'>RELOAD ↻</a></h1><img alt='' src='/img/logo.png'></body>";
         return $this->setData("output", $this->renderHTML($template));
     }
 }

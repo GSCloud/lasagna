@@ -50,14 +50,18 @@ class ApiPresenter extends APresenter
         // API calls
         switch ($view) {
             case "APIDemo":
-                if ($use_cache && $cache = Cache::read($view, self::API_CACHE)) {
-                    return $this->writeJsonData($cache, $extras);
+                if ($use_cache && $data = Cache::read($view, self::API_CACHE)) {
+                    return $this->writeJsonData($data, $extras);
                 }
+                // populate data model
                 $data = [];
                 $data[] = "Hello!";
                 $data[] = "Hello Europe!";
                 $data[] = "Hello World!";
-                Cache::write($view, $data, self::API_CACHE);
+                // save model to cache
+                if ($use_cache) {
+                    Cache::write($view, $data, self::API_CACHE);
+                }
                 return $this->writeJsonData($data, $extras);
                 break;
             default:
