@@ -1085,7 +1085,7 @@ abstract class APresenter implements IPresenter
     public function checkRateLimit($max = null)
     {
         if (CLI) {
-            return;
+            return $this;
         }
         $f = "user_rate_limit_{$this->getUID()}";
         $rate = (int) (Cache::read($f, "limiter") ?? 0);
@@ -1093,6 +1093,7 @@ abstract class APresenter implements IPresenter
         $max??=self::LIMITER_MAXIMUM;
         if (!LOCALHOST && $rate > (int) $max) { // over limits && NOT localhost
             $this->setLocation("/err/420");
+            exit;
         }
         return $this;
     }
@@ -1133,6 +1134,7 @@ abstract class APresenter implements IPresenter
             }
         }
         $this->setLocation("/err/401"); // not authorized
+        exit;
     }
 
     /**
