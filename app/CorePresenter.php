@@ -146,8 +146,27 @@ $this->checkRateLimit();
                         $html = "";
                     }
                 }
-                // @todo process subtasks (remote calls)
-                return $this->setHeaderHTML()->setData("output", $this->renderHTML($html));
+                $counter = (int) ($_SERVER["HTTP_X_COUNTER"] ?? 0);
+                preg_match_all('/\[remote_content url="([^]]*)"\]/', $html, $matches);
+                $codes = [];
+                $remotes = [];
+                $c = 0;
+                foreach ($matches[0]??=[] as $match) {
+                    if ($match) {
+                        $codes[$c] = $match;
+                    }
+                    $c++;
+                }
+                $c = 0;
+                foreach ($matches[1]??=[] as $match) {
+                    if ($match && strpos($codes[$c], $match)) {
+                        $remotes[$c] = $match;
+                    }
+                    $c++;
+                }
+                dump($codes);
+                dump($remotes);
+                return $this->setHeaderHTML()->setData("output", $html);
                 break;
 
             case "GetQR":

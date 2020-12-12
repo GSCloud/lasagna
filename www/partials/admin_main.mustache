@@ -131,18 +131,20 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           {{#request_path_slug}}
           {{#GET.profile}}
           <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">exportHTML 🌍</a>&nbsp;
+            href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">🌍 exportHTML</a>
           <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>
+          &nbsp;
           <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
 
           {{^GET.profile}}
           <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">exportHTML 🌍</a>&nbsp;
+            href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">🌍 exportHTML</a>
           <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>
+          &nbsp;
           <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
@@ -151,18 +153,20 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           {{^request_path_slug}}
           {{#GET.profile}}
           <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">exportHTML 🌍</a>&nbsp;
+            href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">🌍 exportHTML</a>
           <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>
+          &nbsp;
           <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
 
           {{^GET.profile}}
           <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/default/!">exportHTML 🌍</a>&nbsp;
+            href="{{ BASE }}{{ lang }}/exportHTML/default/!">🌍 exportHTML</a>
           <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>&nbsp;
+            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>
+          &nbsp;
           <span title="WordPress remote content embed" onclick="javascript:GSC.CopyThisText(this)" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>WP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}

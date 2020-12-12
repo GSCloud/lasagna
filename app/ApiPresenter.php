@@ -16,10 +16,10 @@ use RedisClient\RedisClient;
  */
 class ApiPresenter extends APresenter
 {
-    /** @var int max. access hits */
+    /** @var int API max. access hits */
     const MAX_API_HITS = 1000;
 
-    /** @var string API access time limit */
+    /** @var string API time limit range in seconds. */
     const ACCESS_TIME_LIMIT = 3599;
 
     /** @var string API cache profile */
@@ -33,8 +33,8 @@ class ApiPresenter extends APresenter
         setlocale(LC_ALL, "cs_CZ.utf8");
         $view = $this->getView();
 
-        //$use_cache = true;
-        $use_cache = false;
+        $use_cache = true;
+        //$use_cache = false;
 
         // general API properties
         $extras = [
