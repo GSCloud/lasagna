@@ -173,14 +173,15 @@ $this->checkRateLimit();
                 }
                 foreach ($remotes as $key => $uri) {
                     if ($nofetch) {
-                        $out = "";
+                        $out = "<!-- no fetch -->";
                     } else {
                         $ch = curl_init();
                         curl_setopt_array($ch, array(
                             CURLOPT_URL => $uri,
+                            CURLOPT_CONNECTTIMEOUT => 5,
                             CURLOPT_COOKIE => "NOFETCH=true",
                             CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_VERBOSE => 1,
+                            CURLOPT_TIMEOUT => 5,
                         ));
                         $out = curl_exec($ch);
                         curl_close($ch);
