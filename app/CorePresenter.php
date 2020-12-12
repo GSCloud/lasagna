@@ -114,6 +114,11 @@ $this->checkRateLimit();
 
             case "GetArticleHTMLExport":
                 // do NOT rate limit this call!
+                $counter = (int) ($_SERVER["HTTP_X_RECURSIVE_COUNTER"] ?? 0);
+                if ($counter > 3) {
+                    return $this->setHeaderHTML()->setData("output", ""); // ERROR
+                }
+                $counter++;
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
                     $language = strtolower(substr(trim($match["params"]["lang"]), 0, 2));
@@ -127,30 +132,29 @@ $this->checkRateLimit();
                     $path = trim($match["params"]["trailing"]);
                     $x++;
                 }
-                if ($x !== 3) { // parameters ERROR, render empty HTML
-                    return $this->setHeaderHTML()->setData("output", "");
+                if ($x !== 3) {
+                    return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                $html = "";
                 if ($path == "!") {
                     $path = $language;
                 } else {
                     $path = $language . "/" . $path;
                 }
+                $html = "";
                 $hash = hash("sha256", $path);
-                $file = DATA . "/summernote_${profile}_${hash}.json";
-                if (\file_exists($file)) {
-                    $html = \json_decode(@\file_get_contents(DATA . "/summernote_${profile}_${hash}.json"), true);
+                $f = DATA . "/summernote_${profile}_${hash}.json";
+                if (\file_exists($f)) {
+                    $html = \json_decode(@\file_get_contents($f), true);
                     if (\is_array($html)) {
                         $html = \join("\n", $html);
-                    } else {
-                        $html = "";
                     }
+                } else {
+                    return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                $counter = (int) ($_SERVER["HTTP_X_COUNTER"] ?? 0);
                 preg_match_all('/\[remote_content url="([^]]*)"\]/', $html, $matches);
+                $c = 0;
                 $codes = [];
                 $remotes = [];
-                $c = 0;
                 foreach ($matches[0]??=[] as $match) {
                     if ($match) {
                         $codes[$c] = $match;
@@ -164,8 +168,7 @@ $this->checkRateLimit();
                     }
                     $c++;
                 }
-                dump($codes);
-                dump($remotes);
+                dump($codes, $remotes);
                 return $this->setHeaderHTML()->setData("output", $html);
                 break;
 
