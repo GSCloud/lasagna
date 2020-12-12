@@ -340,14 +340,12 @@ $this->checkRateLimit();
                 if ($x !== 2) { // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
+                $f = DATA . "/summernote_${profile}_${hash}.json";
                 $data = "";
                 $time = null;
-                $file = DATA . "/summernote_${profile}_${hash}.json";
-                if (\file_exists($file)) {
-                    $data = @\file_get_contents($file);
-                    $time = \filemtime(DATA . "/summernote_${profile}_${hash}.json");
-                } else {
-                    return $this->writeJsonData(400, $extras);
+                if (\file_exists($f)) {
+                    $data = @\file_get_contents($f);
+                    $time = \filemtime($f);
                 }
                 $crc = hash("sha256", $data);
                 if (isset($_GET["crc"])) {
