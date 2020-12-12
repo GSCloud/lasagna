@@ -113,12 +113,8 @@ $this->checkRateLimit();
                 break;
 
             case "GetArticleHTMLExport":
-                // do NOT rate limit this call!
-                $counter = (int) ($_SERVER["HTTP_X_RECURSIVE_COUNTER"] ?? 0);
-                if ($counter > 3) {
-                    return $this->setHeaderHTML()->setData("output", ""); // ERROR
-                }
-                $counter++;
+                // NOT rate limit this call!
+                $nofetch = $_COOKIE["NOFETCH"] ?? false; // extra check
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
                     $language = strtolower(substr(trim($match["params"]["lang"]), 0, 2));
@@ -135,7 +131,7 @@ $this->checkRateLimit();
                 if ($x !== 3) {
                     return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                if ($path == "!") {
+                if ($path == "!") { // homepage
                     $path = $language;
                 } else {
                     $path = $language . "/" . $path;
@@ -163,12 +159,34 @@ $this->checkRateLimit();
                 }
                 $c = 0;
                 foreach ($matches[1]??=[] as $match) {
+/*
+                    if ($match && strpos($codes[$c], $match)
+                    && $match == $data["base"] . $data["request_path"]) { // exclude itself!
+                    $html = str_replace($codes[$c], "", $html);
+                    continue;
+                    }
+*/
                     if ($match && strpos($codes[$c], $match)) {
                         $remotes[$c] = $match;
                     }
                     $c++;
                 }
-                dump($codes, $remotes);
+                foreach ($remotes as $key => $uri) {
+                    if ($nofetch) {
+                        $out = "";
+                    } else {
+                        $ch = curl_init();
+                        curl_setopt_array($ch, array(
+                            CURLOPT_URL => $uri,
+                            CURLOPT_COOKIE => "NOFETCH=true",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_VERBOSE => 1,
+                        ));
+                        $out = curl_exec($ch);
+                        curl_close($ch);
+                    }
+                    $html = str_replace($codes[$key], $out, $html);
+                }
                 return $this->setHeaderHTML()->setData("output", $html);
                 break;
 
