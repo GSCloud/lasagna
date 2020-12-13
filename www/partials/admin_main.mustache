@@ -115,7 +115,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         <a id="a_emoji" 
           data-position="top" data-tooltip="{{ l.a_emojis_ttip }}" 
-          style="margin:5px" class="tooltipped waves-effect blue waves btn faces emojianim"></a>
+          style="margin:5px" class="tooltipped waves-effect grey waves btn faces emojianim"></a>
         <a id="a_files"
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
           style="margin:5px" class="tooltipped waves-effect blue waves btn"><i class="fas fa-folder"></i></a>
@@ -125,7 +125,11 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <a id="a_summernote"
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
-          <i class="fas fa-edit"></i>&nbsp;{{ l.a_summernote }}</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
+          <i class="fas fa-edit"></i>&nbsp;{{ l.a_summernote }}</a>
+        <a id="a_article"
+          data-position="top" data-tooltip="{{ l.a_article_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
+          <i class="fas fa-plus-square"></i>&nbsp;URL</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
         <div class="container">
 
           {{#request_path_slug}}
@@ -495,6 +499,15 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           GSC.DeploySummernote();
         });
       }
+
+      // click + URL button
+      $("#a_article").click(function () {
+        var name = prompt('{{ l.a_article_add_prompt }}').trim();
+        name = name.replace(/['"/\\]/g, '');
+        if (name.length && name != '!') {
+          location.pathname = '{{ lang }}/id/' + name;
+        }
+      });
 
       // GSC.DeploySummernote()
       if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
