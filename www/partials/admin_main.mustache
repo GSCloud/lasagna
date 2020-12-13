@@ -554,7 +554,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var ui = $.summernote.ui;
           var button = ui.button({
             className: 'note-btn-bold blue',
-            contents: '<span title="💾"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_save }}</b></span>',
+            contents: '<span title="💾 {{ l.a_save }}"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_save }}</b></span>',
             codeviewKeepButton: false,
             click: function(e) {
               $("#a_summernote").click();
@@ -568,7 +568,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var ui = $.summernote.ui;
           var button = ui.button({
             className: 'note-btn-bold',
-            contents: '<span title="X"><i class="fas fa-close"></i>&nbsp;X<b>{{ l.a_close }}</b></span>',
+            contents: '<span title="[X] {{ l.a_close }}"><i class="fas fa-window-close"></i>&nbsp;<b>{{ l.a_close }}</b></span>',
             codeviewKeepButton: true,
             click: function(e) {
               //context.invoke('destroy');
