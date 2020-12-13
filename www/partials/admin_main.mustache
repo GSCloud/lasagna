@@ -863,7 +863,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                 if (last[i]) { // set border for last uploads
                   border = ' style="border:1px solid #444" ';
                 }
-                s += '<div ' + border + ' class="left-align col s2"><a title="{{ l.a_open_tit }}" class="hover" ';
+                s += '<div ' + border + ' class="left-align col l2 m2 s12"><a title="{{ l.a_open_tit }}" class="hover" ';
                 s += 'onclick="javascript:window.open(\'/upload/' + i + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
                 if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img" height=50px src="' + data.data[i]["thumbnail"] + '"><br>';
                 s += '<span title="' + i + '" class="fileitem">' + i + '</span></a><br>';
