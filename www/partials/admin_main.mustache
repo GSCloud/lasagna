@@ -1001,7 +1001,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
         ZeroUpload.on("complete", function (response) {
-          M.toast({html: "Upload complete ❤️"});
+          M.toast({html: "Upload complete 🆗"});
           var data = JSON.parse(response.data);
           if (data && data.data) {
             setCookie("open_filemanager", 1); // remember state
@@ -1071,12 +1071,12 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 </script>
 
 <!-- SUMMERNOTE -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/material-darker.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/display/fullscreen.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/xml/xml.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/display/fullscreen.min.js" defer></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/material-darker.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/addon/display/fullscreen.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/addon/display/fullscreen.min.js" defer></script>
 <link href="{{ cdn }}/summernote/summernote-lite.min.css" rel="stylesheet">
 <script src="{{ cdn }}/summernote/summernote-lite.min.js" defer></script>
 {{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
