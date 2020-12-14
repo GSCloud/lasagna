@@ -24,17 +24,6 @@ class CorePresenter extends APresenter
      */
     public function process()
     {
-/* remove Rate Limiter
-if (isset($_GET["api"])) {
-$api = (string) $_GET["api"];
-$key = $this->getCfg("ci_tester.api_key") ?? null;
-if ($key !== $api) {
-$this->checkRateLimit();
-}
-} else {
-$this->checkRateLimit();
-}
- */
         $data = $this->getData();
         $match = $this->getMatch();
         $presenter = $this->getPresenter();
@@ -58,15 +47,16 @@ $this->checkRateLimit();
             case "ReadEpubBook1":
             case "ReadEpubBook2":
                 $this->checkRateLimit();
+                $epub = null;
                 if (isset($match["params"]["trailing"])) {
                     $epub = \urldecode(\trim($match["params"]["trailing"]));
-                    // security tweaks
+                    // tweaks
                     $epub = \str_replace("..", "", $epub);
                     $epub = \str_replace("\\", "", $epub);
                     $epub = \str_ireplace(".epub", "", $epub);
+                    $file = WWW . "/${epub}.epub";
                 }
-                $file = WWW . "/${epub}.epub";
-                if ($epub && \file_exists($file)) {
+                if ($epub && \file_exists($file) && \is_readable($file)) {
                     $this->setHeaderHTML();
                     $data["epub"] = "/${epub}.epub";
                     $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
