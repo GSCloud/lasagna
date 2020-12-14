@@ -391,30 +391,30 @@ class AdminPresenter extends APresenter
                 $x = 0;
                 if (isset($_POST["data"])) {
                     $data = (string) trim((string) $_POST["data"]);
-                    $data_nows = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove all whitespace
+                    $data_nows = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove all extra whitespace
                     $x++;
                 }
                 if (isset($_POST["profile"])) {
                     $profile = trim((string) $_POST["profile"]);
-                    $profile = preg_replace('/[^a-z0-9]+/', '', strtolower($profile)); // allow only alphanumeric
-                    if (strlen($profile)) {
+                    $profile = preg_replace('/[^a-z0-9_-]+/', '', strtolower($profile)); // fix profile ID
+                    if (strlen($profile)) { // profile ID
                         $x++;
                     }
                 }
                 if (isset($_POST["path"])) {
                     $path = trim((string) $_POST["path"]);
-                    if (strlen($path)) {
+                    if (strlen($path)) { // URL path
                         $x++;
                     }
                 }
                 if (isset($_POST["hash"])) {
                     $hash = trim((string) $_POST["hash"]);
-                    if (strlen($hash) == 64) { // SHA256 hexadecimal
+                    if (strlen($hash) == 64) { // SHA 256 hexadecimal
                         $x++;
                     }
                 }
                 if ($x != 4) {
-                    return $this->writeJsonData(400, $extras); // error
+                    return $this->writeJsonData(500, $extras); // error 500
                 }
                 if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
