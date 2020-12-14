@@ -502,7 +502,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
       // click + URL button
       $("#a_article").click(function () {
-        var name = prompt('{{ l.a_article_add_prompt }}').trim();
+        var name = prompt('{{ l.a_article_add_prompt }}:').trim();
         name = name.replace(/['"/\\]/g, '');
         if (name.length && name != '!') {
           location.pathname = '{{ lang }}/id/' + name;
@@ -537,6 +537,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           $.post("/admin/UpdateArticles", {
             profile: GSC.profile,
             hash: "{{ request_path_hash }}",
+            path: "{{ request_path }}",
             data: JSON.stringify(data)
           }, function (data) {
             console.log("UpdateArticles result", {data});

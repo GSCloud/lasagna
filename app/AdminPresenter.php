@@ -401,44 +401,60 @@ class AdminPresenter extends APresenter
                         $x++;
                     }
                 }
+                if (isset($_POST["path"])) {
+                    $path = trim((string) $_POST["path"]);
+                    if (strlen($path)) {
+                        $x++;
+                    }
+                }
                 if (isset($_POST["hash"])) {
                     $hash = trim((string) $_POST["hash"]);
                     if (strlen($hash) == 64) { // SHA256 hexadecimal
                         $x++;
                     }
                 }
-                if ($x != 3) {
+                if ($x != 4) {
                     return $this->writeJsonData(400, $extras); // error
                 }
                 if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
-                        $this->addError("Data copy to backup file failed.");
+                        $this->addError("Articles copy to backup file failed.");
                         return $this->writeJsonData([ // error
                             "code" => 401,
-                            "status" => "Data copy to backup file failed.",
+                            "status" => "Articles copy to backup file failed.",
                             "profile" => $profile,
                             "hash" => $hash,
                         ], $extras);
                     };
                 }
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
-                    $this->addError("Data write to history file failed.");
+                    $this->addError("Articles write to history file failed.");
                     return $this->writeJsonData([ // error
                         "code" => 401,
-                        "status" => "Data write to history file failed.",
+                        "status" => "Articles write to history file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
                     ], $extras);
                 };
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
-                    $this->addError("Data write to file failed.");
+                    $this->addError("Articles write to file failed.");
                     return $this->writeJsonData([ // error
                         "code" => 500,
-                        "status" => "Data write to file failed.",
+                        "status" => "Articles write to file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
                     ], $extras);
                 }
+                // save article meta data
+                $p = [];
+                $f = DATA . "/summernote_articles_${profile}.txt";
+                if (\file_exists($f) && \is_readable($f)) {
+                    $p = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                }
+                $p[] = $path;
+                \sort($p, SORT_LOCALE_STRING);
+                @\file_put_contents($f, \implode("\n", $p), LOCK_EX);
+                // OK
                 $this->addMessage("UPDATE ARTICLE $profile - $hash");
                 $this->addAuditMessage("UPDATE ARTICLE $profile - $hash");
                 return $this->writeJsonData([
