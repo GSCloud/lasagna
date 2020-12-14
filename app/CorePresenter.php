@@ -147,7 +147,7 @@ $this->checkRateLimit();
                 } else {
                     return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                preg_match_all('/\[remote_content url="([^]]*)"\]/', $html, $matches);
+                preg_match_all('/\[remote_content url="([^]\"\n]*)"\]/', $html, $matches);
                 $c = 0;
                 $codes = [];
                 $remotes = [];
@@ -159,32 +159,31 @@ $this->checkRateLimit();
                 }
                 $c = 0;
                 foreach ($matches[1]??=[] as $match) {
-/*
-                    if ($match && strpos($codes[$c], $match)
-                    && $match == $data["base"] . $data["request_path"]) { // exclude itself!
-                    $html = str_replace($codes[$c], "", $html);
-                    continue;
-                    }
-*/
                     if ($match && strpos($codes[$c], $match)) {
                         $remotes[$c] = $match;
                     }
                     $c++;
                 }
+                $cache = []; // temp in-RAM cache
                 foreach ($remotes as $key => $uri) {
                     if ($nofetch) {
                         $out = "<!-- no fetch -->";
                     } else {
-                        $ch = curl_init();
-                        curl_setopt_array($ch, array(
-                            CURLOPT_URL => $uri,
-                            CURLOPT_CONNECTTIMEOUT => 5,
-                            CURLOPT_COOKIE => "NOFETCH=true",
-                            CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_TIMEOUT => 5,
-                        ));
-                        $out = curl_exec($ch);
-                        curl_close($ch);
+                        if (isset($cache[$uri])) {
+                            $out = $cache[$uri];
+                        } else {
+                            $ch = curl_init();
+                            curl_setopt_array($ch, array(
+                                CURLOPT_URL => $uri,
+                                CURLOPT_CONNECTTIMEOUT => 3,
+                                CURLOPT_COOKIE => "NOFETCH=true",
+                                CURLOPT_RETURNTRANSFER => true,
+                                CURLOPT_TIMEOUT => 10,
+                            ));
+                            $out = curl_exec($ch);
+                            curl_close($ch);
+                            $cache[$uri] = $out;
+                        }
                     }
                     $html = str_replace($codes[$key], $out, $html);
                 }
