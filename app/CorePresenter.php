@@ -164,10 +164,10 @@ $this->checkRateLimit();
                     }
                     $c++;
                 }
-                $cache = []; // temp in-RAM cache
+                $cache = []; // temp. in-RAM cache
                 foreach ($remotes as $key => $uri) {
                     if ($nofetch) {
-                        $out = "<!-- no fetch -->";
+                        $out = "";
                     } else {
                         if (isset($cache[$uri])) {
                             $out = $cache[$uri];
@@ -187,6 +187,8 @@ $this->checkRateLimit();
                     }
                     $html = str_replace($codes[$key], $out, $html);
                 }
+                $html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html); // remove script tags
+                $html = preg_replace('/<!--(.*)-->/Uis', '', $html); // remove HTML comments
                 return $this->setHeaderHTML()->setData("output", $html);
                 break;
 
