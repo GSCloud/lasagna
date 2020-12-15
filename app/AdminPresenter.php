@@ -92,6 +92,9 @@ class AdminPresenter extends APresenter
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
                     $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
+                    if (\strpos($b, self::THUMB_PREFIX) === 0) { // do not allow thumbnail filenames
+                        continue;
+                    }
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                         $x[$b] = \urlencode($b);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX . $b, 50);
@@ -155,6 +158,23 @@ class AdminPresenter extends APresenter
                     }
                 }
                 return $this->writeJsonData($arr, $extras);
+                break;
+
+            case "GetArticlesInfo":
+                $this->checkPermission("admin");
+                $data = [];
+                $profile = "default";
+                if (isset($_GET["profile"])) { // profile ID
+                    $profile = \trim((string) $_GET["profile"]);
+                }
+                $profile = \preg_replace('/[^a-z0-9_-]+/', '', \strtolower($profile)); // fix profile ID
+                if ($profile) {
+                    $f = DATA . "/summernote_articles_${profile}.txt";
+                    if (\file_exists($f) && \is_readable($f)) {
+                        $data = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                    }
+                }
+                return $this->writeJsonData($data, $extras);
                 break;
 
             case "GetUploadFileInfo":
@@ -230,7 +250,7 @@ class AdminPresenter extends APresenter
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key || $this->isLocalAdmin()) {
-                    $code = hash("sha256", $key . $user);
+                    $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildAdminKey();
                         $this->addMessage("REBUILD ADMIN KEY REMOTE [$user]");
@@ -359,11 +379,11 @@ class AdminPresenter extends APresenter
                 $user = $this->getCurrentUser();
                 $hash = null;
                 if ($user["id"] ?? null) {
-                    $file = DATA . "/identity_" . $user["id"] . ".json";
-                    $user["entropy"] = hash("sha256", random_bytes(8) . (string) time()); // random entropy
-                    $json = json_encode($user);
+                    $f = DATA . "/identity_" . $user["id"] . ".json";
+                    $user["entropy"] = \hash("sha256", \random_bytes(8) . (string) \time()); // random entropy
+                    $json = \json_encode($user);
                     $hash = substr(hash("sha256", $json), 0, 8); // return 8 chars of SHA256
-                    \file_put_contents($file, $json, LOCK_EX); // @todo check write fail!
+                    @\file_put_contents($f, $json, LOCK_EX); // @todo check write fail!
                     $this->addMessage("CREATE AUTH CODE");
                     $this->addAuditMessage("CREATE AUTH CODE");
                     return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
@@ -375,9 +395,9 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $user = $this->getCurrentUser();
                 if ($user["id"] ?? null) {
-                    $file = DATA . "/identity_" . $user["id"] . ".json";
-                    if (\file_exists($file)) { // delete identity if exists
-                        \unlink($file);
+                    $f = DATA . "/identity_" . $user["id"] . ".json";
+                    if (\file_exists($f)) {
+                        \unlink($f); // delete identity
                     }
                     $this->addMessage("DELETE AUTH CODE");
                     $this->addAuditMessage("DELETE AUTH CODE");
@@ -390,26 +410,26 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $x = 0;
                 if (isset($_POST["data"])) {
-                    $data = (string) trim((string) $_POST["data"]);
-                    $data_nows = preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove all extra whitespace
+                    $data = (string) \trim((string) $_POST["data"]);
+                    $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST["data"]); // remove all extra whitespace
                     $x++;
                 }
                 if (isset($_POST["profile"])) {
-                    $profile = trim((string) $_POST["profile"]);
-                    $profile = preg_replace('/[^a-z0-9_-]+/', '', strtolower($profile)); // fix profile ID
-                    if (strlen($profile)) { // profile ID
+                    $profile = \trim((string) $_POST["profile"]);
+                    $profile = \preg_replace('/[^a-z0-9_-]+/', '', \strtolower($profile)); // fix profile ID
+                    if (\strlen($profile)) { // profile ID
                         $x++;
                     }
                 }
                 if (isset($_POST["path"])) {
-                    $path = trim((string) $_POST["path"]);
-                    if (strlen($path)) { // URL path
+                    $path = \trim((string) $_POST["path"]);
+                    if (\strlen($path)) { // URL path
                         $x++;
                     }
                 }
                 if (isset($_POST["hash"])) {
-                    $hash = trim((string) $_POST["hash"]);
-                    if (strlen($hash) == 64) { // SHA 256 hexadecimal
+                    $hash = \trim((string) $_POST["hash"]);
+                    if (\strlen($hash) == 64) { // SHA 256 hexadecimal
                         $x++;
                     }
                 }
@@ -479,9 +499,9 @@ class AdminPresenter extends APresenter
     private function rebuildNonce()
     {
         if (\file_exists(DATA . "/" . self::IDENTITY_NONCE)) {
-            unlink(DATA . "/" . self::IDENTITY_NONCE);
+            @\unlink(DATA . "/" . self::IDENTITY_NONCE);
         }
-        clearstatcache();
+        \clearstatcache();
         return $this->setIdentity();
     }
 
@@ -514,7 +534,7 @@ class AdminPresenter extends APresenter
     private function rebuildAdminKey()
     {
         if (\file_exists(DATA . "/" . self::ADMIN_KEY)) {
-            unlink(DATA . "/" . self::ADMIN_KEY);
+            @\unlink(DATA . "/" . self::ADMIN_KEY);
         }
         return $this->createAdminKey();
     }
@@ -527,14 +547,14 @@ class AdminPresenter extends APresenter
     private function rebuildSecureKey()
     {
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key"; // secure key
-        $key = trim($key, "/.");
+        $key = \trim($key, "/.");
         if (!$key) {
             return $this->writeJsonData(500, $extras); // error
         }
         if (\file_exists(DATA . "/${key}")) {
-            unlink(DATA . "/${key}");
+            @\unlink(DATA . "/${key}");
         }
-        clearstatcache();
+        \clearstatcache();
         return $this->setIdentity();
     }
 
@@ -550,15 +570,15 @@ class AdminPresenter extends APresenter
         $lock = $factory->createLock("core-update");
         if ($lock->acquire()) {
             try {
-                @ob_flush();
+                @\ob_flush();
                 foreach ($this->getData("cache_profiles") as $k => $v) { // clear all cache profiles
                     Cache::clear($k);
                     Cache::clear("${k}_file");
                 }
-                clearstatcache();
-                array_map("unlink", glob(CACHE . "/*.php"));
-                array_map("unlink", glob(CACHE . "/*.tmp"));
-                array_map("unlink", glob(CACHE . "/" . CACHEPREFIX . "*"));
+                \clearstatcache();
+                \array_map("unlink", \glob(CACHE . "/*.php"));
+                \array_map("unlink", \glob(CACHE . "/*.tmp"));
+                \array_map("unlink", \glob(CACHE . "/" . CACHEPREFIX . "*"));
                 if (!LOCALHOST) {
                     // purge cache if run on server only
                     $this->CloudflarePurgeCache($this->getCfg("cf"));
@@ -593,13 +613,13 @@ class AdminPresenter extends APresenter
      */
     public function decorateLogs(&$val, $key)
     {
-        $x = explode(";", $val);
-        array_walk($x, function (&$value, $key) {
-            $value = str_replace("EMAIL:", "", $value);
-            $value = str_replace("NAME:", "", $value);
+        $x = \explode(";", $val);
+        \array_walk($x, function (&$value, $key) {
+            $value = \str_replace("EMAIL:", "", $value);
+            $value = \str_replace("NAME:", "", $value);
         });
         unset($x[5]); // remove column 5
-        $y = implode("</td><td>", $x);
+        $y = \implode("</td><td>", $x);
         $val = "<td>$y</td>";
     }
 
@@ -612,7 +632,7 @@ class AdminPresenter extends APresenter
     {
         $f = DATA . "/" . self::ADMIN_KEY;
         if (!\file_exists($f)) {
-            if (!\file_put_contents($f, hash("sha256", random_bytes(256) . time()))) {
+            if (!\file_put_contents($f, \hash("sha256", \random_bytes(256) . \time()))) {
                 $this->addError("CREATE ADMIN KEY: Internal Server Error");
                 $this->setLocation("/err/500");
                 exit;
@@ -632,11 +652,11 @@ class AdminPresenter extends APresenter
     private function readAdminKey()
     {
         $f = DATA . "/" . self::ADMIN_KEY;
-        if (\file_exists($f)) {
-            $key = trim(@\file_get_contents($f));
+        if (\file_exists($f) && \is_readable($f)) {
+            $key = \trim(@\file_get_contents($f));
         } else {
             $this->createAdminKey();
-            $key = trim(@\file_get_contents($f));
+            $key = \trim(@\file_get_contents($f));
         }
         return $key ?? null;
     }
@@ -653,7 +673,7 @@ class AdminPresenter extends APresenter
         if (!$type || !self::IMAGE_HANDLERS[$type]) {
             return null;
         }
-        $image = call_user_func(self::IMAGE_HANDLERS[$type]["load"], $src);
+        $image = \call_user_func(self::IMAGE_HANDLERS[$type]["load"], $src);
         if (!$image) {
             return null;
         }
