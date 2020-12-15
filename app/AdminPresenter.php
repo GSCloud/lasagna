@@ -171,7 +171,7 @@ class AdminPresenter extends APresenter
                 if ($profile) {
                     $f = DATA . "/summernote_articles_${profile}.txt";
                     if (\file_exists($f) && \is_readable($f)) {
-                        $data = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                        $data = @\file($f, FILE_IGNORE_NEW_LINES);
                     }
                 }
                 return $this->writeJsonData($data, $extras);
