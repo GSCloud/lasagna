@@ -85,14 +85,14 @@ class AdminPresenter extends APresenter
             }
         }
 
-        // modules
+        // API calls
         switch ($view) {
             case "upload":
                 $this->checkPermission("admin");
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
                     $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
-                    if (\strpos($b, self::THUMB_PREFIX) === 0) { // do not allow thumbnail filenames
+                    if (\strpos($b, self::THUMB_PREFIX) === 0) { // don't allow thumbnail filenames
                         continue;
                     }
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
@@ -106,7 +106,7 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData($x, $extras);
                 break;
 
-            case "UploadFileDelete":
+            case "UploadedFileDelete":
                 $this->checkPermission("admin");
                 if (isset($_POST["name"])) {
                     $f1 = UPLOAD . DS . \trim($_POST["name"]); // original file

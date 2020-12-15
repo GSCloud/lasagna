@@ -130,8 +130,15 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           data-position="top" data-tooltip="{{ l.a_article_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
           <i class="fas fa-plus-square"></i>&nbsp;URL</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
-        <div class="container">
 
+        <div class="col s12 white">
+          <label>URL</label>
+          <select id="UrlSelect">
+            <option value="" disabled selected>&hellip;</option>
+          </select>
+        </div>
+
+        <div class="container">
           {{#request_path_slug}}
           {{#GET.profile}}
           <a target=_blank
@@ -179,8 +186,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>RCWP📋</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
-
         </div>
+
       </div>
     </div>
 
@@ -374,7 +381,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 </div>
 
 <script>
-  (function (w, d, undefined) {
+  (function(w, d, undefined) {
 
     if (getCookie("logout")) {
       d.getElementById("admin_main").style.display = "none";
@@ -388,7 +395,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       w.GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
       // ShowLoader()
-      if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
+      if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function(t) {
         if (!t) return;
         $(t).html(
           '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
@@ -396,7 +403,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       }
 
       // PingDot()
-      if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
+      if (!w.GSC.PingDot) w.GSC.PingDot = function(dot, status = true) {
         if (!dot) return;
         if (status) {
           status = "green";
@@ -410,13 +417,13 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       }
 
       // GetCsvInfo()
-      if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
+      if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function() {
         if (w.GSC.offline) { // offline
           return GSC.PingDot("#csv_ping", false);
         }
 
         // API: GetCsvInfo
-        $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
+        $.get("/admin/GetCsvInfo?" + Date.now(), function(data) {
             GSC.PingDot("#csv_ping");
             var content = "";
             var now = ~~(Date.now() / 1000);
@@ -444,14 +451,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             }
             $("#a_update_info").html(content);
           })
-          .fail(function () {
+          .fail(function() {
             GSC.PingDot("#csv_ping", false);
             $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
           });
       }
 
       // GetPSInsights()
-      if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
+      if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function() {
         if (GSC.offline) { // offline
           M.toast({html: "offline 📶"});
           return GSC.PingDot("#psi_ping", false);
@@ -460,7 +467,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         GSC.ShowLoader(t);
 
         // API: GetPSInsights
-        $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
+        $.get("/admin/GetPSInsights?" + Date.now(), function(data) {
             GSC.PingDot("#psi_ping");
             $("#psi_row").hide();
             if (data.data && data.data.lighthouseResult) {
@@ -473,7 +480,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             }
             $("#a_ps_insights").removeAttr("disabled");
           })
-          .fail(function () {
+          .fail(function() {
             GSC.PingDot("#psi_ping", false);
             $(t).html("GetPSInsights ERROR 🤯").slideDown();
             $("#a_ps_insights").removeAttr("disabled");
@@ -481,7 +488,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       }
 
       // GSC.AdminUI()
-      if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+      if (!w.GSC.AdminUI) w.GSC.AdminUI = function() {
         $("#admin_main div").addClass("a_reset");
         $("#admin_main h2").addClass("a_reset a_h2");
         $("#admin_main h4").addClass("a_reset a_h4");
@@ -494,14 +501,24 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         }
 
         // editor block doubleclick
-        $(".summernote").dblclick(function () {
+        $(".summernote").dblclick(function() {
           $(".summernote").unbind("dblclick");
           GSC.DeploySummernote();
+        });
+
+        // API - GetArticlesInfo
+        $.get("/admin/GetArticlesInfo?" + Date.now(), function(data) {
+          if (data && data.data) {
+            for (var i in data.data) {
+              $('#UrlSelect').append("<option value='" + data.data[i] + "'>" + data.data[i] + "</option>");
+            }
+            $('#UrlSelect').formSelect(); // populate form data
+          }
         });
       }
 
       // click + URL button
-      $("#a_article").click(function () {
+      $("#a_article").click(function() {
         var name = prompt('{{ l.a_article_add_prompt }}:').trim();
         name = name.replace(/['"/\\]/g, '');
         if (name.length && name != '!') {
@@ -510,14 +527,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       });
 
       // GSC.DeploySummernote()
-      if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+      if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function() {
         GSC.summernote_on = true;
         $("#a_summernote").attr("disabled", "disabled");
         $("#a_summernote").text("{{ l.a_save_all }}");
         $("#a_summernote").unbind("click");
 
         // SAVE ALL button
-        $("#a_summernote").click(function () {
+        $("#a_summernote").click(function() {
           if (GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#summer_ping", false);
@@ -525,7 +542,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           $("#a_summernote").attr("disabled", "disabled");
           var id;
           var data = {};
-          $(".summernote").each(function (i, obj) { // collect HTML data
+          $(".summernote").each(function(i, obj) { // collect HTML data
             id = $(obj).attr("id");
             if (id) {
               data[id] = $(obj).summernote("code");
@@ -539,7 +556,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             hash: "{{ request_path_hash }}",
             path: "{{ request_path }}",
             data: JSON.stringify(data)
-          }, function (data) {
+          }, function(data) {
             console.log("UpdateArticles result", {data});
           }).done(function() {
             GSC.PingDot("#summer_ping");
@@ -549,8 +566,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
             $("#a_summernote").unbind("click");
 
-            $("#a_summernote").click(function () {
-              GSC.ReadArticles(function () {
+            $("#a_summernote").click(function() {
+              GSC.ReadArticles(function() {
                 GSC.DeploySummernote();
               });
             });
@@ -565,7 +582,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // SaveAllButton() button
-        var SaveAllButton = function (context) {
+        var SaveAllButton = function(context) {
           var ui = $.summernote.ui;
           var button = ui.button({
             className: 'note-btn-bold blue',
@@ -579,7 +596,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         }
 
         // DestroyButton() button
-        var DestroyButton = function (context) {
+        var DestroyButton = function(context) {
           var ui = $.summernote.ui;
           var button = ui.button({
             className: 'note-btn-bold',
@@ -587,14 +604,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             codeviewKeepButton: true,
             click: function(e) {
               //context.invoke('destroy');
-              $(".summernote").each(function (i, obj) {
+              $(".summernote").each(function(i, obj) {
                 $(obj).summernote("destroy");
                 GSC.AdminUI();
                 $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
                 $("#a_summernote").unbind("click");
 
-                $("#a_summernote").click(function () {
-                  GSC.ReadArticles(function () {
+                $("#a_summernote").click(function() {
+                  GSC.ReadArticles(function() {
                     GSC.DeploySummernote();
                   });
                 });
@@ -633,12 +650,12 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         }
 
         // FullScreen() button
-        var FullScreenButton = function (context) {
+        var FullScreenButton = function(context) {
           var ui = $.summernote.ui;
           var button = ui.button({
             contents: '<span title="full-screen"><i class="fas fa-expand"></i></span>',
             codeviewKeepButton: true,
-            click: function (e) {
+            click: function(e) {
               context.invoke("fullscreen.toggle");
               context.invoke("codeview.toggle");
             }
@@ -697,7 +714,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       }
 
       // admin UI bindings
-      w.GSC.init.push(function () {
+      w.GSC.init.push(function() {
         w.GSC.names.push("admin UI bindings");
 
         // 🦋 cookie check
@@ -705,7 +722,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         // UI: 🦋
         $(".motyle").click(function() {
-          $("#admin_main").toggle(200, function () {
+          $("#admin_main").toggle(200, function() {
             window.scrollTo(0, 0);
             setCookie("motyle", $("#admin_main").is(":hidden"));
           })
@@ -725,19 +742,26 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         GSC.profile = profile;
         setCookie("profile", profile);
         $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
-        $("#SiteSelect").formSelect();
+        $("#SiteSelect").formSelect();  // populate form data
         $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
 
         // web profile selector
-        $("#SiteSelect").change(function () {
+        $("#SiteSelect").change(function() {
           if (!$("#SiteSelect").val()) return;
           var profile = $("#SiteSelect").val().trim();
           setCookie("profile", profile);
           window.location.href = window.location.pathname + "?profile=" + profile;
         });
 
+        // articles URL selector
+        $("#UrlSelect").change(function() {
+          if ($('#UrlSelect').val()) {
+            window.location.pathname = $('#UrlSelect').val();
+          }
+        });
+
         // remote function selector
-        $("#RemoteFnSelect").change(function () {
+        $("#RemoteFnSelect").change(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#sectok_ping", false);
@@ -745,14 +769,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           if (!$("#RemoteFnSelect").val()) return;
 
           // API: GetUpdateToken
-          $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
+          $.get("/admin/GetUpdateToken?" + Date.now(), function(data) {
             var s = $("#RemoteFnSelect").val();
             var t = data.data[0];
             t = t.replace(/[a-zA-Z]*\?/, s + "?");
             GSC.CopyClipboard(t);
             GSC.PingDot("#sectok_ping");
             M.toast({html: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }}"});
-          }).fail(function () {
+          }).fail(function() {
             $("#a_security_token").val("N/A");
             GSC.PingDot("#sectok_ping", false);
             GSC.CopyClipboard("");
@@ -761,13 +785,13 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // update CSV data
-        $("#a_update").click(function () {
+        $("#a_update").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
           $("#a_update").attr("disabled", "disabled");
-          setTimeout(function () {
+          setTimeout(function() {
             $("#a_update").removeAttr("disabled");
           }, 30E3);
 
@@ -777,7 +801,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // show Google PSI
-        $("#a_ps_insights").click(function () {
+        $("#a_ps_insights").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#psi_ping", false);
@@ -788,26 +812,26 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // invoke Summernote editor
-        $("#a_summernote").click(function () {
+        $("#a_summernote").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#psi_ping", false);
           }
-          GSC.ReadArticles(function () {
+          GSC.ReadArticles(function() {
             GSC.DeploySummernote();
           });
         });
 
         // toggle emoji panel
-        $("#a_emoji").click(function () {
+        $("#a_emoji").click(function() {
           if (!GSC.emojicc) {
             var splitter = new GraphemeSplitter();
             var graphemes = splitter.splitGraphemes($("#emojis").text());
-            var arr = graphemes.map(function (x) {
+            var arr = graphemes.map(function(x) {
               return '<span class="ccemoji">' + x + '</span>';
             });
             $("#emojis").html(arr.join(""));
-            $(".ccemoji").click(function () {
+            $(".ccemoji").click(function() {
               var x = $(this).text();
               GSC.CopyClipboard(x);
               M.toast({html: x, classes: "bigemoji"});
@@ -823,7 +847,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
           }
-          GSC.GetCsvInfo = function () {};
+          GSC.GetCsvInfo = function() {};
           $("#a_clearbrowserdata").attr("disabled", "disabled");
           M.toast({html: "💤💤💤"});
           window.location.replace("/admin/clearbrowserdata");
@@ -847,7 +871,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         // GSC.RenderUploadInfo()
         if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
-          $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
+          $.get("/admin/GetUploadFileInfo?" + Date.now(), function(data) {
             if (data && data.data) {
               setCookie("open_filemanager", 1); // remember state
               GSC.PingDot("#summer_ping");
@@ -916,8 +940,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
                   GSC.deleteconfirm = true;
                   var x = $(this).data("id");
 
-                  // API: UploadFileDelete
-                  $.post("/admin/UploadFileDelete", {name: x}).done(function(data) {
+                  // API: UploadedFileDelete
+                  $.post("/admin/UploadedFileDelete", {name: x}).done(function(data) {
                     M.toast({html: "❌ " + x});
                     GSC.RenderUploadInfo();
                   });
@@ -944,7 +968,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // get auth code
-        $("#a_getcode").click(function () {
+        $("#a_getcode").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
@@ -958,7 +982,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         });
 
         // delete auth code
-        $("#a_delcode").click(function () {
+        $("#a_delcode").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
             return GSC.PingDot("#csv_ping", false);
@@ -971,7 +995,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           });
         });
 
-        $("#a_logout").click(function () {
+        $("#a_logout").click(function() {
           setCookie("logout", "logout");
           GSC.offline ? window.location.replace("/?nonce=".Date.now()) : window.location.replace("/logout");
         });
@@ -979,7 +1003,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       });
 
       // CSV info timer
-      w.GSC.init.push(function () {
+      w.GSC.init.push(function() {
         w.GSC.names.push("CSV timer");
         if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
         setInterval(function() {
@@ -989,7 +1013,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       });
 
       // show admin UI
-      w.GSC.init.push(function () {
+      w.GSC.init.push(function() {
         w.GSC.names.push("Admin UI");
         GSC.AdminUI();
         // filemanager state
@@ -1000,7 +1024,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       });
 
       // load PSI in the background (caching)
-      w.GSC.init.push(function () {
+      w.GSC.init.push(function() {
         w.GSC.names.push("Update PSI cache");
 
         // API: GetPSInsights
@@ -1008,14 +1032,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       });
 
       // set uploader
-      w.GSC.init.push(function () {
+      w.GSC.init.push(function() {
         w.GSC.names.push("Uploader");
 
         ZeroUpload.setURL("/admin/upload");
         ZeroUpload.setMaxFiles(100);
         ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
-        ZeroUpload.on("complete", function (response) {
+        ZeroUpload.on("complete", function(response) {
           M.toast({html: "Upload complete 🆗"});
           var data = JSON.parse(response.data);
           if (data && data.data) {
