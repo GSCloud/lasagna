@@ -30,10 +30,12 @@ class CorePresenter extends APresenter
         $view = $this->getView();
 
         $extras = [
-            "name" => "LASAGNA Core",
             "fn" => $view,
+            "ip" => $this->getIP(),
+            "name" => "Tesseract LASAGNA Core",
         ];
 
+        // API calls
         switch ($view) {
             case "GetWebManifest":
                 $this->setHeaderJson();

@@ -58,11 +58,12 @@ class AdminPresenter extends APresenter
         if ($g) {
             $data["admin_group_${g}"] = true; // for templating
         }
+
         $extras = [
-            "override" => (bool) $this->isLocalAdmin(),
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "Tesseract LASAGNA Core",
+            "name" => "Tesseract LASAGNA Admin Core",
+            "override" => (bool) $this->isLocalAdmin(),
         ];
 
         /**
