@@ -133,9 +133,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         <div class="col s12 white">
           <label>URL</label>
-          <select id="UrlSelect">
-            <option value="" disabled selected>&hellip;</option>
-          </select>
+          <select id="UrlSelect"></select>
         </div>
 
         <div class="container">
@@ -509,6 +507,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         // API - GetArticlesInfo
         $.get("/admin/GetArticlesInfo?" + Date.now(), function(data) {
           if (data && data.data) {
+            $('#UrlSelect').html('<option value="" disabled selected>&hellip;</option>');
             for (var i in data.data) {
               $('#UrlSelect').append("<option value='" + data.data[i] + "'>" + data.data[i] + "</option>");
             }
