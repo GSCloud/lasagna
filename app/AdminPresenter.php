@@ -421,11 +421,9 @@ class AdminPresenter extends APresenter
                         $x++;
                     }
                 }
-                if (isset($_POST["path"])) {
+                if (isset($_POST["path"])) { // URL path
                     $path = \trim((string) $_POST["path"]);
-                    if (\strlen($path)) { // URL path
-                        $x++;
-                    }
+                    $x++;
                 }
                 if (isset($_POST["hash"])) {
                     $hash = \trim((string) $_POST["hash"]);
