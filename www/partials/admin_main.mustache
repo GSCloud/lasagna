@@ -575,6 +575,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             GSC.summernote_on = false;
           }).fail(function(xhr, status, error) {
             alert(error); // show error message
+            alert(status); // show status message
             $("#a_summernote").removeAttr("disabled");
             GSC.PingDot("#summer_ping", false);
             M.toast({html: "ERROR 🤯"});
