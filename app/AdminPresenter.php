@@ -171,7 +171,7 @@ class AdminPresenter extends APresenter
                 if ($profile) {
                     $f = DATA . "/summernote_articles_${profile}.txt";
                     if (\file_exists($f) && \is_readable($f)) {
-                        $data = @\file($f, FILE_IGNORE_NEW_LINES);
+                        $data = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                     }
                 }
                 return $this->writeJsonData($data, $extras);
@@ -421,9 +421,11 @@ class AdminPresenter extends APresenter
                         $x++;
                     }
                 }
-                if (isset($_POST["path"])) { // URL path
+                if (isset($_POST["path"])) {
                     $path = \trim((string) $_POST["path"]);
-                    $x++;
+                    if (\strlen($path)) { // URL path
+                        $x++;
+                    }
                 }
                 if (isset($_POST["hash"])) {
                     $hash = \trim((string) $_POST["hash"]);

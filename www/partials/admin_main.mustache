@@ -552,9 +552,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
           // API: UpdateArticles (POST - save all articles data)
           $.post("/admin/UpdateArticles", {
-            profile: GSC.profile,
             hash: "{{ request_path_hash }}",
-            path: "{{ request_path }}",
+            path: window.location.pathname,
+            profile: GSC.profile,
             data: JSON.stringify(data)
           }, function(data) {
             console.log("UpdateArticles result", {data});
@@ -755,7 +755,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         // articles URL selector
         $("#UrlSelect").change(function() {
-          window.location.pathname = '/' + $('#UrlSelect').val();
+          window.location.pathname = $('#UrlSelect').val();
         });
 
         // remote function selector
