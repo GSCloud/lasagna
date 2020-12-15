@@ -473,7 +473,7 @@ class AdminPresenter extends APresenter
                 }
                 $p[] = $path;
                 \sort($p, SORT_LOCALE_STRING);
-                @\file_put_contents($f, \implode("\n", $p), LOCK_EX);
+                \file_put_contents($f, \implode("\n", $p), LOCK_EX);
                 // OK
                 $this->addMessage("UPDATE ARTICLE $profile - $hash");
                 $this->addAuditMessage("UPDATE ARTICLE $profile - $hash");
