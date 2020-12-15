@@ -61,6 +61,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 #offline-message{opacity:0;visibility:hidden;padding:3px;position:fixed;bottom:10px;left:0;font-size:1em;transition:0.5s;font-family:Arial!important}
 [offline="true"] #offline-message{visibility:visible;opacity:1;z-index:9999999}
 .progress-container{width:100%;height:8px;background:#ccc;position:fixed;bottom:0;z-index:9999999}.progress-bar{height:8px;background: #4caf50;width:0%}
+.bold{font-weight:bold}
 </style>
 
 <link rel="stylesheet" href="/css/materialize.min.css">
@@ -80,7 +81,12 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
     <p>
       <b>{{ desc }}</b>
       <br>
-      <a target="_blank" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</a>
+      {{#linkit}}
+      <a target="_blank" class="blue-text bold" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</a>
+      {{/linkit}}
+      {{^linkit}}
+      <b class="blue-text" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</b>
+      {{/linkit}}
       {{#count}}
       <br>
       <br>
