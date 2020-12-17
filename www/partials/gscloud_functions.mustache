@@ -203,7 +203,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // GSC.VersionCheck()
     GSC.init.push(function () {
       GSC.names.push("GSC.VersionCheck()");
-
       if (typeof GSC.VersionCheck !== "function") GSC.VersionCheck = function () {
         if (!GSC.offline) {
           $.post("/version/core", function (post) {
@@ -236,7 +235,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // GSC.SetProfile() - set Lasagna GSC.profile
     GSC.init.push(function () {
       GSC.names.push("GSC.SetProfile()");
-
       if (typeof GSC.SetProfile !== "function") GSC.SetProfile = function () {
         var profiles = [];
         var params = new window.URLSearchParams(window.location.search);
@@ -256,10 +254,10 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // GSC.ReadArticles() - read remote articles / create HTML parts
     GSC.init.push(function () {
       GSC.names.push("GSC.ReadArticles()");
-
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
         if (GSC.summernote_on || GSC.offline) {
-          setTimeout("GSC.ReadArticles();", 5000);
+          //  do repeat checks - 10 secs.
+          setTimeout("GSC.ReadArticles();", 10000);
           return;
         }
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
@@ -304,32 +302,26 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // DELAYED UI bindings
     GSC.init.push(function () {
       GSC.names.push("geneal UI - bindings");
-
       // set CS language
       $(".sethlcs").click(function () {
         setCookie("hl", "cs");
       });
-
       // set EN language
       $(".sethlen").click(function () {
         setCookie("hl", "en");
       });
-
       // set UPDATE button
       $("#update-message").click(function () {
         window.location.reload(true);
       });
-
       // set default bullets for Summernote data
       $(".summernote>ul").each(function (i, obj) {
         $(obj).addClass("browser-default");
       });
-
       // create HOME button
       if (document.documentElement.clientWidth > 1120) {
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="/">🏡</a></li>');
       }
-
       // create mobile WebShare button for touch devices
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
