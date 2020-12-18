@@ -122,7 +122,6 @@ class CiTester
         do {
             $mrc = curl_multi_exec($multi, $active);
         } while ($mrc == CURLM_CALL_MULTI_PERFORM);
-
         while ($active && $mrc == CURLM_OK) {
             if (curl_multi_select($multi) != -1) {
                 do {

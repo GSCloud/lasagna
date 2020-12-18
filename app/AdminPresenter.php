@@ -26,17 +26,17 @@ class AdminPresenter extends APresenter
 
     /** @var array image constants */
     const IMAGE_HANDLERS = [
-        IMAGETYPE_JPEG => [
+        "IMAGETYPE_JPEG" => [
             "load" => "imagecreatefromjpeg",
             "save" => "imagejpeg",
-            "quality" => 30,
+            "quality" => 50,
         ],
-        IMAGETYPE_PNG => [
+        "IMAGETYPE_PNG" => [
             "load" => "imagecreatefrompng",
             "save" => "imagepng",
             "quality" => 0,
         ],
-        IMAGETYPE_GIF => [
+        "IMAGETYPE_GIF" => [
             "load" => "imagecreatefromgif",
             "save" => "imagegif",
         ],
@@ -62,7 +62,7 @@ class AdminPresenter extends APresenter
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "Tesseract LASAGNA Admin Core",
+            "name" => "Tesseract LASAGNA Admin Module",
             "override" => (bool) $this->isLocalAdmin(),
         ];
 
@@ -81,7 +81,7 @@ class AdminPresenter extends APresenter
                 $file = new \SplFileObject($f, "r");
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return -1;
             }
         }
@@ -124,7 +124,7 @@ class AdminPresenter extends APresenter
                 }
                 break;
 
-            case "clearbrowserdata":
+            case "ClearBrowserData":
                 \header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
                 $this->addMessage("BROWSER DATA CLEARED");
                 $this->addAuditMessage("BROWSER DATA CLEARED");
@@ -228,11 +228,10 @@ class AdminPresenter extends APresenter
 
             case "GetUpdateToken":
                 $this->checkPermission("admin");
-                $code = "";
-                $key = $this->readAdminKey();
-                if (!$key) {
-                    return $this->writeJsonData(500, $extras); // unauthorized
+                if (!$key = $this->readAdminKey()) {
+                    return $this->writeJsonData(500, $extras); // error
                 }
+                $code = "";
                 $user = $this->getCurrentUser();
                 if ($user["id"] ?? null && $key) {
                     $hashid = \hash("sha256", $user["id"]);
@@ -245,9 +244,8 @@ class AdminPresenter extends APresenter
                 break;
 
             case "RebuildAdminKeyRemote":
-                $key = $this->readAdminKey();
-                if (!$key) {
-                    return $this->writeJsonData(500, $extras); // unauthorized
+                if (!$key = $this->readAdminKey()) {
+                    return $this->writeJsonData(500, $extras); // error
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
@@ -258,7 +256,6 @@ class AdminPresenter extends APresenter
                         $this->addMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         $this->addAuditMessage("REBUILD ADMIN KEY REMOTE [$user]");
                         return $this->writeJsonData([
-                            "function" => $view,
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
@@ -268,9 +265,8 @@ class AdminPresenter extends APresenter
                 break;
 
             case "FlushCacheRemote":
-                $key = $this->readAdminKey();
-                if (!$key) {
-                    return $this->writeJsonData(500, $extras); // unauthorized
+                if (!$key = $this->readAdminKey()) {
+                    return $this->writeJsonData(500, $extras); // error
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
@@ -281,7 +277,6 @@ class AdminPresenter extends APresenter
                         $this->addMessage("FLUSH CACHE REMOTE [$user]");
                         $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
                         return $this->writeJsonData([
-                            "function" => $view,
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
@@ -291,21 +286,19 @@ class AdminPresenter extends APresenter
                 break;
 
             case "CoreUpdateRemote":
-                $key = $this->readAdminKey();
-                if (!$key) {
-                    return $this->writeJsonData(500, $extras); // unauthorized
+                if (!$key = $this->readAdminKey()) {
+                    return $this->writeJsonData(500, $extras); // error
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
                 if ($user && $token && $key || $this->isLocalAdmin()) {
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
-                        $this->setForceCsvCheck();
+                        $this->setForceCsvCheck(true);
                         $this->postloadAppData("app_data");
                         $this->flushCache();
                         $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
                         return $this->writeJsonData([
-                            "function" => $view,
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
                         ], $extras);
@@ -315,9 +308,8 @@ class AdminPresenter extends APresenter
                 break;
 
             case "RebuildNonceRemote":
-                $key = $this->readAdminKey();
-                if (!$key) {
-                    return $this->writeJsonData(500, $extras); // unauthorized
+                if (!$key = $this->readAdminKey()) {
+                    return $this->writeJsonData(500, $extras); // error
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
@@ -338,9 +330,8 @@ class AdminPresenter extends APresenter
                 break;
 
             case "RebuildSecureKeyRemote":
-                $key = $this->readAdminKey();
-                if (!$key) {
-                    return $this->writeJsonData(500, $extras); // unauthorized
+                if (!$key = $this->readAdminKey()) {
+                    return $this->writeJsonData(500, $extras); // error
                 }
                 $token = $_GET["token"] ?? null;
                 $user = $_GET["user"] ?? null;
@@ -369,7 +360,7 @@ class AdminPresenter extends APresenter
 
             case "CoreUpdate":
                 $this->checkPermission("admin");
-                $this->setForceCsvCheck();
+                $this->setForceCsvCheck(true);
                 $this->postloadAppData("app_data");
                 $this->flushCache();
                 $this->addAuditMessage("CORE UPDATE");
@@ -384,7 +375,7 @@ class AdminPresenter extends APresenter
                     $f = DATA . "/identity_" . $user["id"] . ".json";
                     $user["entropy"] = \hash("sha256", \random_bytes(8) . (string) \time()); // random entropy
                     $json = \json_encode($user);
-                    $hash = substr(hash("sha256", $json), 0, 8); // return 8 chars of SHA256
+                    $hash = \substr(\hash("sha256", $json), 0, 8); // return 8 chars of SHA256
                     @\file_put_contents($f, $json, LOCK_EX); // @todo check write fail!
                     $this->addMessage("CREATE AUTH CODE");
                     $this->addAuditMessage("CREATE AUTH CODE");
@@ -582,6 +573,7 @@ class AdminPresenter extends APresenter
                 \array_map("unlink", \glob(CACHE . "/*.php"));
                 \array_map("unlink", \glob(CACHE . "/*.tmp"));
                 \array_map("unlink", \glob(CACHE . "/" . CACHEPREFIX . "*"));
+                \clearstatcache();
                 if (!LOCALHOST) {
                     // purge cache if run on server only
                     $this->CloudflarePurgeCache($this->getCfg("cf"));
@@ -591,7 +583,7 @@ class AdminPresenter extends APresenter
                 $lock->release();
             }
         } else {
-            $this->setLocation("/err/429"); // error
+            $this->setLocation("/err/429"); // error - cannot acquire a lock
             exit;
         }
         return $this;
@@ -617,7 +609,7 @@ class AdminPresenter extends APresenter
     public function decorateLogs(&$val, $key)
     {
         $x = \explode(";", $val);
-        \array_walk($x, function (&$value, $key) {
+        \array_walk($x, function(&$value, $key) {
             $value = \str_replace("EMAIL:", "", $value);
             $value = \str_replace("NAME:", "", $value);
         });

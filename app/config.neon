@@ -1,6 +1,7 @@
-### LASAGNA
+### TESSERACT LASAGNA
 
 #dbg: TRUE
+#dbg: FALSE
 minify: TRUE
 
 # Android update - data from local domain?

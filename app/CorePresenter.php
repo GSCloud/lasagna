@@ -32,17 +32,15 @@ class CorePresenter extends APresenter
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "Tesseract LASAGNA Core",
+            "name" => "Tesseract LASAGNA Core Module",
         ];
 
         // API calls
         switch ($view) {
             case "GetWebManifest":
+                // do NOT rate limit this call!
                 $this->setHeaderJson();
-                $lang = $_GET["lang"] ?? "cs"; // language switch by GET parameter
-                if (!in_array($lang, ["cs", "en"])) {
-                    $lang = "cs";
-                }
+                $lang = $this->validateLanguage($_GET["lang"] ?? "en"); // language set by GET parameter
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
                 break;
 
@@ -68,6 +66,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetTXTSitemap":
+                $this->checkRateLimit();
                 $this->setHeaderText();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -79,6 +78,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetXMLSitemap":
+                $this->checkRateLimit();
                 $this->setHeaderXML();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -90,8 +90,9 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetRSSXML":
+                // do NOT rate limit this call!
                 $this->setHeaderXML();
-                $language = "en";
+                $language = "en"; // set to English
                 $l = $this->getLocale($language);
                 if (class_exists("\\GSC\\RSSPresenter")) {
                     $map = RSSPresenter::getInstance()->process() ?? []; // get items map from RSSPresenter
@@ -105,7 +106,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetArticleHTMLExport":
-                // NOT rate limit this call!
+                // do NOT rate limit this call!
                 $nofetch = $_COOKIE["NOFETCH"] ?? false; // extra check
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
@@ -129,7 +130,7 @@ class CorePresenter extends APresenter
                     $path = $language . "/" . $path;
                 }
                 $html = "";
-                $hash = hash("sha256", $path);
+                $hash = \hash("sha256", $path);
                 $f = DATA . "/summernote_${profile}_${hash}.json";
                 if (\file_exists($f)) {
                     $html = \json_decode(@\file_get_contents($f), true);
@@ -139,7 +140,7 @@ class CorePresenter extends APresenter
                 } else {
                     return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                preg_match_all('/\[remote_content url="([^]\"\n]*)"\]/', $html, $matches);
+                \preg_match_all('/\[remote_content url="([^]\"\n]*)"\]/', $html, $matches);
                 $c = 0;
                 $codes = [];
                 $remotes = [];
@@ -156,7 +157,7 @@ class CorePresenter extends APresenter
                     }
                     $c++;
                 }
-                $cache = []; // temp. in-RAM cache
+                $cache = []; // in-RAM cache
                 foreach ($remotes as $key => $uri) {
                     if ($nofetch) {
                         $out = "";
@@ -164,23 +165,23 @@ class CorePresenter extends APresenter
                         if (isset($cache[$uri])) {
                             $out = $cache[$uri];
                         } else {
-                            $ch = curl_init();
-                            curl_setopt_array($ch, array(
+                            $ch = \curl_init();
+                            \curl_setopt_array($ch, array(
                                 CURLOPT_URL => $uri,
-                                CURLOPT_CONNECTTIMEOUT => 3,
+                                CURLOPT_CONNECTTIMEOUT => 5,
                                 CURLOPT_COOKIE => "NOFETCH=true",
                                 CURLOPT_RETURNTRANSFER => true,
                                 CURLOPT_TIMEOUT => 10,
                             ));
-                            $out = curl_exec($ch);
-                            curl_close($ch);
+                            $out = \curl_exec($ch);
+                            \curl_close($ch);
                             $cache[$uri] = $out;
                         }
                     }
-                    $html = str_replace($codes[$key], $out, $html);
+                    $html = \str_replace($codes[$key], $out, $html);
                 }
-                $html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html); // remove script tags
-                $html = preg_replace('/<!--(.*)-->/Uis', '', $html); // remove HTML comments
+                $html = \preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html); // remove script tags
+                $html = \preg_replace('/<!--(.*)-->/Uis', '', $html); // remove HTML comments
                 return $this->setHeaderHTML()->setData("output", $html);
                 break;
 
@@ -188,7 +189,7 @@ class CorePresenter extends APresenter
                 $this->checkRateLimit();
                 $x = 0;
                 if (isset($match["params"]["size"])) {
-                    $size = trim($match["params"]["size"]);
+                    $size = \trim($match["params"]["size"]);
                     switch ($size) {
                         case "m":
                             $scale = 8;
@@ -206,7 +207,7 @@ class CorePresenter extends APresenter
                     $x++;
                 }
                 if (isset($match["params"]["trailing"])) {
-                    $text = trim($match["params"]["trailing"]);
+                    $text = \trim($match["params"]["trailing"]);
                     $x++;
                 }
                 if ($x !== 2) { // ERROR
@@ -220,12 +221,13 @@ class CorePresenter extends APresenter
                     "imageBase64" => false,
                     "imageTransparent" => false,
                 ]);
-                header("Content-type: image/png");
+                \header("Content-type: image/png");
                 echo (new QRCode($options))->render($text ?? "", CACHE . "/" . hash("sha256", $text) . ".png");
-                exit;
+                exit; // finish here - just not to mangle the PNG!
                 break;
 
             case "GetServiceWorker":
+                // do NOT rate limit this call!
                 $this->setHeaderJavaScript();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -258,7 +260,7 @@ class CorePresenter extends APresenter
                             "finished" => $p["finished"] ?? false,
                             "info" => $info ? "<br><blockquote>${info}</blockquote>" : "",
                             "key" => $p["use_key"] ?? false,
-                            "linkit" => !(\strpos($p["path"], "[") ?? false), // do not link path with parameters
+                            "linkit" => !(\strpos($p["path"], "[") ?? false), // do not link to path with parameters!
                             "method" => \strtoupper($p["method"]),
                             "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
                             "private" => $p["private"] ?? false,
@@ -273,10 +275,10 @@ class CorePresenter extends APresenter
 
             case "GetAndroidJs":
                 $this->checkRateLimit();
-                $file = WWW . "/js/android-app.js";
-                if (\file_exists($file)) {
-                    $content = @\file_get_contents($file);
-                    $time = \filemtime(WWW . "/js/android-app.js") ?? null;
+                $f = WWW . "/js/android-app.js";
+                if (\file_exists($f)) {
+                    $content = @\file_get_contents($f);
+                    $time = \filemtime($f) ?? null;
                     $version = \hash("sha256", $content);
                 } else {
                     $content = null;
@@ -292,10 +294,10 @@ class CorePresenter extends APresenter
 
             case "GetAndroidCss":
                 $this->checkRateLimit();
-                $file = WWW . "/css/android.css";
-                if (\file_exists($file)) {
-                    $content = @\file_get_contents($file);
-                    $time = \filemtime(WWW . "/css/android.css") ?? null;
+                $f = WWW . "/css/android.css";
+                if (\file_exists($f)) {
+                    $content = @\file_get_contents($f);
+                    $time = \filemtime($f) ?? null;
                     $version = \hash("sha256", $content);
                 } else {
                     $content = null;
@@ -342,7 +344,7 @@ class CorePresenter extends APresenter
                 }
                 $crc = hash("sha256", $data);
                 if (isset($_GET["crc"])) {
-                    if ($_GET["crc"] == $crc) { // not modified
+                    if ($_GET["crc"] == $crc) { // NOT MODIFIED
                         return $this->writeJsonData(304, $extras);
                     }
                 }
@@ -374,5 +376,24 @@ class CorePresenter extends APresenter
                 ErrorPresenter::getInstance()->process(404);
         }
         return $this;
+    }
+
+    /**
+     * Validate system language
+     *
+     * @param string $lang language 2-char code
+     * @return string correct language code
+     */
+    private function validateLanguage($lang = "en") {
+        $lang = \substr(\strtolower((string) $lang), 0, 2);
+        if (!\in_array($lang, [
+            "cs",
+            //"de",
+            "en",
+            "sk",
+        ])) {
+            $lang = "en";
+        }
+        return $lang;
     }
 }
