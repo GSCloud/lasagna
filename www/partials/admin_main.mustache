@@ -861,7 +861,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             return GSC.PingDot("#csv_ping", false);
           }
           // clear file & upload content if present
-          if (getCookie("open_filemanager")) {
+          if (getCookie("open_filemanager") == 1) {
             delCookie("open_filemanager");
             $("#a_file_manager").hide(50);
             $("#a_uploader_progress").html("");
@@ -922,6 +922,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               } else {
                 s += "&mdash;&mdash;&mdash;";
               }
+              // show content
               if ($("#a_file_manager").html() != "") {
                 $("#a_file_manager").html(s).show();
               } else {
@@ -1018,7 +1019,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         w.GSC.names.push("Admin UI");
         GSC.AdminUI();
         // filemanager state
-        if (getCookie("open_filemanager")) {
+        if (getCookie("open_filemanager") == 1) {
           $("#a_file_manager").hide();
           GSC.RenderUploadInfo();
         }
@@ -1041,7 +1042,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           M.toast({html: "Upload COMPLETE 🆗"});
           var data = JSON.parse(response.data);
           if (data && data.data) {
-            setCookie("open_filemanager", 1); // remember state
+            setCookie("open_filemanager", 1);
             localStorage["last_upload"] = JSON.stringify(data.data);
             GSC.RenderUploadInfo();
             return;
