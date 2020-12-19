@@ -26,19 +26,28 @@ class AdminPresenter extends APresenter
 
     /** @var array image constants */
     const IMAGE_HANDLERS = [
-        "IMAGETYPE_JPEG" => [
+        IMAGETYPE_JPEG => [
             "load" => "imagecreatefromjpeg",
             "save" => "imagejpeg",
             "quality" => 50,
         ],
-        "IMAGETYPE_PNG" => [
+        IMAGETYPE_PNG => [
             "load" => "imagecreatefrompng",
             "save" => "imagepng",
-            "quality" => 0,
+            "quality" => 6,
         ],
-        "IMAGETYPE_GIF" => [
+        IMAGETYPE_GIF => [
             "load" => "imagecreatefromgif",
             "save" => "imagegif",
+        ],
+        IMAGETYPE_WEBP => [
+            "load" => "imagecreatefromwebp",
+            "save" => "imagewebp",
+            "quality" => 50,
+        ],
+        IMAGETYPE_BMP => [
+            "load" => "imagecreatefrombmp",
+            "save" => "imagebmp",
         ],
     ];
 
