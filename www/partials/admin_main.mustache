@@ -928,7 +928,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             if (data && data.data) {
               setCookie("open_filemanager", 1); // remember state
               GSC.PingDot("#summer_ping");
-              var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover"><i class="green-text fas fa-sync-alt"></i></span></h5>';
+              var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover">';
+              s += '<i class="blue-text fas fa-sync-alt"></i></span></h5>';
               var now = ~~(Date.now() / 1000);
               moment.locale("{{ lang }}");
 
