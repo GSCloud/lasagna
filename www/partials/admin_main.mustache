@@ -100,7 +100,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     <!-- DATA -->
     <div class="col l4 m6 s12">
       <div class="row center extrapadding">
-        <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
+          <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
         <p style="font-size:10px!important">
           PHP ver. <b>{{ PHP_VERSION }}</b><br>
@@ -118,6 +118,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         </div>
 
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
+        <br>
 
         <div class="col s12 white">
           <label>{{ l.a_articles }}</label>
@@ -197,6 +198,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
     <!-- CACHE -->
     <div class="col l4 m6 s12">
+
       <div class="row center extrapadding">
         <h5>{{ l.a_cache }}</h5>
         <div class="container">
@@ -216,6 +218,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             {{ l.a_flush }}</a>
         </div>
       </div>
+
       <div class="row center white hide-on-small-only">
         <div class="col s12 white">
           <label>{{ l.a_remotefns }}</label>
@@ -229,13 +232,112 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           </select>
         </div>
       </div>
+
+      <!-- PAGESPEED INSIGHTS -->
+      <div class="hide-on-small-only">
+        <div class="row center extrapadding">
+          <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
+          <p id="a_ps_insights_info"></p>
+          <div id="psi_row" class="row center">
+            <a id="a_ps_insights" class="tooltipped waves-effect green waves-light btn" data-position="top"
+              data-tooltip="{{ l.a_ps_insights_ttip }}">
+              <i class="fab fa-google"></i>
+              {{ l.a_ps_insights }}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GOOGLE -->
+      <div class="">
+        <div class="row center extrapadding hide-on-small-only">
+          <div class="white-text">
+            <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i></h5>
+            <ul id="variables" class="mono hide">
+              <li>GCP id: {{ gcp_project_id }}
+                {{^gcp_project_id}}
+                <i class="red-text fas fa-times"></i>
+                {{/gcp_project_id}}
+              </li>
+              <li>Maps Location Query: {{ google.map_query }}
+                {{^google.map_query}}
+                <i class="red-text fas fa-times"></i>
+                {{/google.map_query}}
+              </li>
+              <li>Maps API key: 
+                {{#google.mapsapi_key}}
+                <span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
+                {{/google.mapsapi_key}}
+                {{^google.mapsapi_key}}
+                <i class="red-text fas fa-times"></i>
+                {{/google.mapsapi_key}}
+              </li>
+              <li>Analytics UA: {{ google.ua }}
+                {{^google.ua}}
+                <i class="red-text fas fa-times"></i>
+                {{/google.ua}}
+              </li>
+              <li>PageSpeed Insights API key:
+                {{#google.pagespeedinsights_key}}
+                <span title="{{ google.pagespeedinsights_key }}" class="protect">{{ google.pagespeedinsights_key }}</span>
+                {{/google.pagespeedinsights_key}}
+                {{^google.pagespeedinsights_key}}
+                <i class="red-text fas fa-times"></i>
+                {{/google.pagespeedinsights_key}}
+              </li>
+              {{^l.onesignal_appid}}
+              <div class="row center red-text" style="margin-top:1em">
+                <div class="container">
+                  {{ l.a_onesignal_missing }}
+                </div>
+              </div>
+              {{/l.onesignal_appid}}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHANGELOG -->
+      <div class="hide-on-small-only">
+        <div class="row center extrapadding">
+          <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i></h5>
+          <div id="news" class="row grey-text hide" style="margin-top:1em">
+            <div class="grey-text left-align container">
+              {{ l.a_changelog }}
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- PERMISSIONS -->
     <div class="col l4 m6 s12">
+
+      <!-- current user -->
+      <div class="row center">
+        <h5>{{ l.a_groups_permissions }}</h5>
+        <strong>{{user.name}}</strong><br>
+        <i style="font-size:smaller">{{user.email}}</i><br>
+        <a id="a_getcode" class="btnmargin waves-effect blue waves-light btn"
+          data-position="top" data-tooltip="">📲</a>
+        <a id="a_delcode" class="btnmargin waves-effect red waves-light btn"
+          data-position="top" data-tooltip="">📴</a>
+        <br>
+        <a id="a_logout" class="tooltipped waves-effect green waves-light btn"
+          data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
+          <i class="fas fa-sign-out-alt"></i>
+          {{ l.a_logout }}</a>
+        <a target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
+          <i class="fas fa-list"></i></a>
+        <br>
+        <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
+          data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
+          <i class="fas fa-power-off"></i>
+          {{ l.a_clear_browser }}</a>
+      </div>
+
       <div class="row center extrapadding">
         <div class="white-text">
-          <h5>{{ l.a_groups_permissions }}</h5>
           <div class="row center hide-on-small-only">
             <strong>ADMIN</strong>
             <div class="container">
@@ -252,101 +354,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               </p>
             </div>
           </div>
-          <div class="row center">
-            <strong>{{user.name}}</strong><br>
-            <i style="font-size:smaller">{{user.email}}</i><br>
-            <a id="a_getcode" class="btnmargin waves-effect blue waves-light btn"
-              data-position="top" data-tooltip="">📲</a>
-            <a id="a_delcode" class="btnmargin waves-effect red waves-light btn"
-              data-position="top" data-tooltip="">📴</a>
-            <br>
-            <a id="a_logout" class="tooltipped waves-effect green waves-light btn"
-              data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
-              <i class="fas fa-sign-out-alt"></i>
-              {{ l.a_logout }}</a>
-            <a target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
-              <i class="fas fa-list"></i></a>
-            <br>
-            <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
-              data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
-              <i class="fas fa-power-off"></i>
-              {{ l.a_clear_browser }}</a>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- GOOGLE -->
-    <div class="col l4 m6 s12">
-      <div class="row center extrapadding hide-on-small-only">
-        <div class="white-text">
-          <h5>{{ l.a_google }}</h5>
-          <ul class="mono">
-            <li>GCP id: {{ gcp_project_id }}
-              {{^gcp_project_id}}
-              <i class="red-text fas fa-times"></i>
-              {{/gcp_project_id}}
-            </li>
-            <li>Maps Location Query: {{ google.map_query }}
-              {{^google.map_query}}
-              <i class="red-text fas fa-times"></i>
-              {{/google.map_query}}
-            </li>
-            <li>Maps API key: 
-              {{#google.mapsapi_key}}
-              <span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
-              {{/google.mapsapi_key}}
-              {{^google.mapsapi_key}}
-              <i class="red-text fas fa-times"></i>
-              {{/google.mapsapi_key}}
-            </li>
-            <li>Analytics UA: {{ google.ua }}
-              {{^google.ua}}
-              <i class="red-text fas fa-times"></i>
-              {{/google.ua}}
-            </li>
-            <li>PageSpeed Insights API key:
-              {{#google.pagespeedinsights_key}}
-              <span title="{{ google.pagespeedinsights_key }}" class="protect">{{ google.pagespeedinsights_key }}</span>
-              {{/google.pagespeedinsights_key}}
-              {{^google.pagespeedinsights_key}}
-              <i class="red-text fas fa-times"></i>
-              {{/google.pagespeedinsights_key}}
-            </li>
-          </ul>
-          {{^l.onesignal_appid}}
-          <div class="row center red-text" style="margin-top:1em">
-            <div class="container">
-              {{ l.a_onesignal_missing }}
-            </div>
-          </div>
-          {{/l.onesignal_appid}}
-        </div>
-      </div>
-    </div>
-
-    <!-- CHANGELOG -->
-    <div class="col l4 m6 hide-on-small-only">
-      <div class="row center extrapadding">
-        <h5>{{ l.a_changes }}</h5>
-        <div class="row grey-text" style="margin-top:1em">
-          <div class="grey-text left-align container">
-            {{ l.a_changelog }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGESPEED INSIGHTS -->
-    <div class="col l4 m6 hide-on-small-only">
-      <div class="row center extrapadding">
-        <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
-        <p id="a_ps_insights_info"></p>
-        <div id="psi_row" class="row center">
-          <a id="a_ps_insights" class="tooltipped waves-effect green waves-light btn" data-position="top"
-            data-tooltip="{{ l.a_ps_insights_ttip }}">
-            <i class="fab fa-google"></i>
-            {{ l.a_ps_insights }}</a>
         </div>
       </div>
 
@@ -372,6 +380,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <i class="fas fa-warehouse"></i></a>
         {{/google_drive_backup}}
       </h4>
+
     </div>
 
   </div>
@@ -503,6 +512,18 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         if (w.GSC.touch) {
           if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
         }
+
+        // show variables on click
+        $(".open_google").click(function() {
+          this.remove();
+          $("#variables").removeClass('hide').show(200);
+        });
+
+        // show news on click
+        $(".open_news").click(function() {
+          this.remove();
+          $("#news").removeClass('hide').show(200);
+        });
 
         // editor block doubleclick
         $(".summernote").dblclick(function() {
