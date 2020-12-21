@@ -174,8 +174,13 @@ class CorePresenter extends APresenter
                                 CURLOPT_TIMEOUT => 10,
                             ));
                             $out = \curl_exec($ch);
-                            \curl_close($ch);
+                            // find <body> content if possible
+                            \preg_match("/<body.*\/body>/s", $out, $m);
+                            if (count($m) != 0) {
+                                $out = "{$m[0]}";
+                            }
                             $cache[$uri] = $out;
+                            \curl_close($ch);
                         }
                     }
                     $html = \str_replace($codes[$key], $out, $html);
@@ -384,7 +389,8 @@ class CorePresenter extends APresenter
      * @param string $lang language 2-char code
      * @return string correct language code
      */
-    private function validateLanguage($lang = "en") {
+    private function validateLanguage($lang = "en")
+    {
         $lang = \substr(\strtolower((string) $lang), 0, 2);
         if (!\in_array($lang, [
             "cs",

@@ -591,7 +591,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var ui = $.summernote.ui;
           var button = ui.button({
             className: 'note-btn-bold blue',
-            contents: '<span title="💾 {{ l.a_save }}"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_save }}</b></span>',
+            contents: '<span title="💾 {{ l.a_summer_save }}"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_summer_save }}</b></span>',
             codeviewKeepButton: false,
             click: function(e) {
               $("#a_summernote").click();
@@ -605,7 +605,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var ui = $.summernote.ui;
           var button = ui.button({
             className: 'note-btn-bold',
-            contents: '<span title="[X] {{ l.a_close }}"><i class="fas fa-window-close"></i>&nbsp;<b>{{ l.a_close }}</b></span>',
+            contents: '<span title="[X] {{ l.a_summer_close }}"><i class="fas fa-window-close"></i>&nbsp;<b>{{ l.a_summer_close }}</b></span>',
             codeviewKeepButton: true,
             click: function(e) {
               //context.invoke('destroy');
@@ -633,7 +633,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var list = ui.buttonGroup([
             ui.button({
               className: 'dropdown-toggle',
-              contents: '<span class="fa fa-clock"></span> <span class="caret"></span>',
+              contents: '<span title="{{ l.a_summer_history }}" class="fas fa-history"></span> <span class="caret"></span>',
               data: {
                 toggle: 'dropdown'
               }
@@ -641,11 +641,39 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             ui.dropdown({
               className: 'dropdown-style',
               //contents: "<ol><li>hello</li><li>hello Europe</li><li>hello great Europe</li></ol>",
-              contents: "<ol></ol>",
+              contents: "<ul></ul>",
               callback: function($dropdown) {
                 $dropdown.find('li').each(function() {
                   $(this).click(function() {
                     context.invoke("editor.insertText", $(this).html());
+                  });
+                });
+              }
+            })
+          ]);
+          return list.render();
+        }
+
+        // PluginSelector() listbox
+        var PluginSelector = function(context) {
+          var ui = $.summernote.ui;
+          var list = ui.buttonGroup([
+            ui.button({
+              className: 'dropdown-toggle',
+              contents: '<span title="{{ l.a_summer_plugins }}" class="fas fa-plug"></span> <span class="caret"></span>',
+              data: {
+                toggle: 'dropdown'
+              }
+            }),
+            ui.dropdown({
+              className: 'dropdown-style',
+              contents: '<ol><li data-copy=\'[remote_content url=""]\'>remote_content</li></ol>',
+              callback: function($dropdown) {
+                $dropdown.find('li').each(function() {
+                  $(this).click(function() {
+                    context.invoke('editor.restoreRange'); 
+                    context.invoke('editor.focus'); 
+                    context.invoke("editor.insertText", $(this).data("copy"));
                   });
                 });
               }
@@ -705,14 +733,15 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             ["insert", ["hr", "link", "picture", "video"]],
             ["history", ["undo", "redo"]],
             ["view", ["fs"]],
-            ["custom1", ["hist"]],
+            ["custom1", ["plugins", "history"]],
             ["custom2", ["saveall", "destroy"]],
           ],
           buttons: {
             saveall: SaveAllButton,
             fs: FullScreenButton,
-            hist: HistorySelector,
-            destroy: DestroyButton
+            history: HistorySelector,
+            destroy: DestroyButton,
+            plugins: PluginSelector,
           }
         });
         $("#a_summernote").removeAttr("disabled");
