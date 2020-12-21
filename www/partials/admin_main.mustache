@@ -944,7 +944,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               for (var i in data.data) {
                 t++;
                 if (t == 1) {
-                  s += '<div class="row .hide-on-small-only">';
+                  s += '<hr><div class="row .hide-on-small-only">';
                 }
                 if (t > 6) { // MAX columns
                   t = 1;
@@ -978,7 +978,9 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               } else {
                 s += "&mdash;&mdash;&mdash;";
               }
+
               // show content
+              document.getElementById("a_file_manager").scrollIntoView();
               if ($("#a_file_manager").html() != "") {
                 $("#a_file_manager").html(s).show();
               } else {
