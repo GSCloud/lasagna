@@ -251,7 +251,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       <div class="">
         <div class="row center extrapadding hide-on-small-only">
           <div class="white-text">
-            <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i></h5>
+            <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i>
+              <i class="hover close_google fas fa-arrow-up blue-text hide"></i></h5>
             <ul id="variables" class="mono hide">
               <li>GCP id: {{ gcp_project_id }}
                 {{^gcp_project_id}}
@@ -299,7 +300,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       <!-- CHANGELOG -->
       <div class="hide-on-small-only">
         <div class="row center extrapadding">
-          <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i></h5>
+          <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i>
+            <i class="hover close_news fas fa-arrow-up blue-text hide"></i></h5>
           <div id="news" class="row grey-text hide" style="margin-top:1em">
             <div class="grey-text left-align container">
               {{ l.a_changelog }}
@@ -515,14 +517,30 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         // show variables on click
         $(".open_google").click(function() {
-          this.remove();
-          $("#variables").removeClass('hide').show(200);
+          $(this).hide();
+          $(".close_google").removeClass('hide').show();
+          $("#variables").removeClass('hide').hide().show(200);
         });
 
         // show news on click
         $(".open_news").click(function() {
-          this.remove();
-          $("#news").removeClass('hide').show(200);
+          $(this).hide();
+          $(".close_news").removeClass('hide').show();
+          $("#news").removeClass('hide').hide().show(200);
+        });
+
+        // hide variables on click
+        $(".close_google").click(function() {
+          $(this).hide();
+          $(".open_google").removeClass('hide').show();
+          $("#variables").hide(200);
+        });
+
+        // hide news on click
+        $(".close_news").click(function() {
+          $(this).hide();
+          $(".open_news").removeClass('hide').show();
+          $("#news").hide(200);
         });
 
         // editor block doubleclick
