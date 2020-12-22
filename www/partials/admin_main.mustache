@@ -122,7 +122,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         <div class="col s12 white">
           <label>{{ l.a_articles }}</label>
-          <select id="ArticleArticleURLSelect"></select>
+          <select id="ArticleURLSelect"></select>
         </div>
 
         <a id="a_emoji" 
@@ -551,6 +551,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         // API: GetArticlesInfo
         $.get("/admin/GetArticlesInfo?" + Date.now(), function(data) {
+          console.log(data);
           if (data && data.data) {
             $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
             for (var i in data.data) {
