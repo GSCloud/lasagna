@@ -90,7 +90,7 @@ class AdminPresenter extends APresenter
                 $file = new \SplFileObject($f, "r");
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
-            } catch (\Exception $e) {
+            } catch (\Exception$e) {
                 return -1;
             }
         }
@@ -157,12 +157,14 @@ class AdminPresenter extends APresenter
                     if (!$k || !$v) {
                         continue;
                     }
-                    $arr[$k] = [
-                        "csv" => $v,
-                        "lines" => getFileLines(DATA . "/${k}.csv"),
-                        "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
-                        "timestamp" => \file_exists(DATA . "/${k}.csv") ? @\filemtime(DATA . "/${k}.csv") : null,
-                    ];
+                    if (\file_exists(DATA . "/${k}.csv") && \is_readable(DATA . "/${k}.csv")) {
+                        $arr[$k] = [
+                            "csv" => $v,
+                            "lines" => getFileLines(DATA . "/${k}.csv"),
+                            "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
+                            "timestamp" => \filemtime(DATA . "/${k}.csv"),
+                        ];
+                    }
                     if ($arr[$k]["lines"] === -1) {
                         unset($arr[$k]);
                     }
@@ -198,7 +200,7 @@ class AdminPresenter extends APresenter
                                 continue;
                             }
                             $thumbnail = null;
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX . $entry)) {
                                 $thumbnail = "/upload/" . self::THUMB_PREFIX . $entry;
                             }
                             $files[$entry] = [
@@ -438,7 +440,7 @@ class AdminPresenter extends APresenter
                 if ($x != 4) {
                     return $this->writeJsonData(500, $extras); // error 500
                 }
-                if (\file_exists(DATA . "/summernote_${profile}_${hash}.json")) {
+                if (\file_exists(DATA . "/summernote_${profile}_${hash}.json") && \is_readable(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
                         $this->addError("Articles copy to backup file failed.");
                         return $this->writeJsonData([ // error
@@ -618,7 +620,7 @@ class AdminPresenter extends APresenter
     public function decorateLogs(&$val, $key)
     {
         $x = \explode(";", $val);
-        \array_walk($x, function(&$value, $key) {
+        \array_walk($x, function (&$value, $key) {
             $value = \str_replace("EMAIL:", "", $value);
             $value = \str_replace("NAME:", "", $value);
         });
@@ -666,6 +668,8 @@ class AdminPresenter extends APresenter
     }
 
     /**
+     * Create thumbnail from source image if possible
+     * 
      * @param $src file source
      * @param $dest file target
      * @param $targetWidth output width
