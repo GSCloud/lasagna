@@ -26,9 +26,10 @@ info "gulp: "$v
 echo -e "\n"
 
 info "Recreate project?"
-yes_or_no && {
+#yes_or_no && {
+echo "" && {
   rm -rf ./node_modules >/dev/null 2>&1
-  npm init
+#  npm init
   npm install --save-dev gulp
   npm install exec
   npm install gulp-autoprefixer

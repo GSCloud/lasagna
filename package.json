@@ -30,5 +30,8 @@
     "tesseract",
     "lasagna",
     "gscloud"
-  ]
+  ],
+  "directories": {
+    "doc": "doc"
+  }
 }
