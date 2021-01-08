@@ -9,6 +9,9 @@
 
 namespace GSC;
 
+/**
+ * String filters interface
+ */
 interface IStringFilters
 {
     public static function convert_eol_to_br(&$content);
@@ -19,7 +22,7 @@ interface IStringFilters
 }
 
 /**
- * String Filters
+ * String filters - modify content passed by a reference
  */
 class StringFilters implements IStringFilters
 {
@@ -27,7 +30,7 @@ class StringFilters implements IStringFilters
     /**
      * Convert EOLs to <br>
      *
-     * @param string $content by reference
+     * @param string $content (by reference)
      * @return void
      */
     public static function convert_eol_to_br(&$content)
@@ -39,28 +42,29 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Convert EOLs+hypehn or star to <br>+dot
+     * Convert EOL + hyphen/star to HTML
      *
-     * @param string $content by reference
+     * @param string $content (by reference)
      * @return void
      */
     public static function convert_eolhyphen_to_brdot(&$content)
     {
         $content = str_replace(array(
-            "<br>* ",
-            "<br>- ",
             "\n* ",
             "\n- ",
+            "\r\n* ",
+            "\r\n- ",
         ), "<br>•&nbsp;", (string) $content);
+        // fix for the beginning of the string content
         if ((substr($content, 0, 2) == "- ") || (substr($content, 0, 2) == "* ")) {
             $content = "•&nbsp;" . substr($content, 2);
         }
     }
 
     /**
-     * Trim various EOLs
+     * Trim various EOL combinations
      *
-     * @param string $content by reference
+     * @param string $content (by reference)
      * @return void
      */
     public static function trim_eol(&$content)
@@ -75,7 +79,7 @@ class StringFilters implements IStringFilters
     /**
      * Trim THML comments
      *
-     * @param string $content by reference
+     * @param string $content (by reference)
      * @return void
      */
     public static function trim_html_comment(&$content)
@@ -90,31 +94,33 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Correct text spacing for various languages
+     * Correct text spacing
      *
-     * @param string $content by reference
-     * @param string $language (optional "cs" or "en")
+     * @param string $content (by reference)
+     * @param string $language (optional: "cs", "en" - for now)
      * @return void
      */
-    public static function correct_text_spacing(&$content, $language = "cs")
+    public static function correct_text_spacing(&$content, $language = "en")
     {
+        $language = strtolower(trim($language));
         switch ($language) {
-            case "en":
-                $content = self::correct_text_spacing_en($content);
+            case "sk":
+            case "cs":
+                $content = self::_correct_text_spacing_cs($content);
                 break;
 
             default:
-                $content = self::correct_text_spacing_cs($content);
+                $content = self::_correct_text_spacing_en($content);
         }
     }
 
     /**
-     * Correct text spacing for English
+     * Correct text spacing for English language
      *
      * @param string $content
      * @return string
      */
-    public static function correct_text_spacing_en($content)
+    public static function _correct_text_spacing_en($content)
     {
         $replace = array(
             "  " => " ",
@@ -180,12 +186,12 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Correct text spacing for Czech
+     * Correct text spacing for Czech language
      *
      * @param string $content
      * @return string
      */
-    public static function correct_text_spacing_cs($content)
+    public static function _correct_text_spacing_cs($content)
     {
         $replace = array(
             "  " => " ",
