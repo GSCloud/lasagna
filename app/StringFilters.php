@@ -35,6 +35,10 @@ class StringFilters implements IStringFilters
      */
     public static function convert_eol_to_br(&$content)
     {
+        if (!is_string($content)) {
+            return;
+        }
+
         $content = str_replace(array(
             "\n",
             "\r\n",
@@ -49,13 +53,18 @@ class StringFilters implements IStringFilters
      */
     public static function convert_eolhyphen_to_brdot(&$content)
     {
+        if (!is_string($content)) {
+            return;
+        }
+
         $content = str_replace(array(
             "\n* ",
             "\n- ",
             "\r\n* ",
             "\r\n- ",
         ), "<br>•&nbsp;", (string) $content);
-        // fix for the beginning of the string content
+
+        // fix for the beginning of the string
         if ((substr($content, 0, 2) == "- ") || (substr($content, 0, 2) == "* ")) {
             $content = "•&nbsp;" . substr($content, 2);
         }
@@ -69,6 +78,10 @@ class StringFilters implements IStringFilters
      */
     public static function trim_eol(&$content)
     {
+        if (!is_string($content)) {
+            return;
+        }
+
         $content = str_replace(array(
             "\r\n",
             "\n",
@@ -84,12 +97,23 @@ class StringFilters implements IStringFilters
      */
     public static function trim_html_comment(&$content)
     {
+        if (!is_string($content)) {
+            return;
+        }
+
         $body = "<body";
         $c = explode($body, (string) $content, 2);
+        $regex = '/<!--(.|\s)*?-->/';
+
+        // fix only comments inside body
         if (count($c) == 2) {
-            $regex = '/<!--(.|\s)*?-->/';
             $c[1] = preg_replace($regex, "<!-- comment removed -->", $c[1]);
             $content = $c[0] . $body . $c[1];
+        }
+
+        // fix the whole string (there is no <body)
+        if (count($c) == 1) {
+            $content = preg_replace($regex, "<!-- comment removed -->", $content);
         }
     }
 
@@ -102,7 +126,11 @@ class StringFilters implements IStringFilters
      */
     public static function correct_text_spacing(&$content, $language = "en")
     {
-        $language = strtolower(trim($language));
+        if (!is_string($content)) {
+            return;
+        }
+
+        $language = strtolower(trim((string) $language));
         switch ($language) {
             case "sk":
             case "cs":
@@ -117,11 +145,15 @@ class StringFilters implements IStringFilters
     /**
      * Correct text spacing for English language
      *
-     * @param string $content
+     * @param string $content textual data
      * @return string
      */
     public static function _correct_text_spacing_en($content)
     {
+        if (!is_string($content)) {
+            return;
+        }
+
         $replace = array(
             "  " => " ",
             " % " => "&nbsp;% ",
@@ -188,11 +220,15 @@ class StringFilters implements IStringFilters
     /**
      * Correct text spacing for Czech language
      *
-     * @param string $content
+     * @param string $content textual data
      * @return string
      */
     public static function _correct_text_spacing_cs($content)
     {
+        if (!is_string($content)) {
+            return;
+        }
+
         $replace = array(
             "  " => " ",
             " % " => "&nbsp;%",
