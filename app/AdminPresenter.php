@@ -230,10 +230,10 @@ class AdminPresenter extends APresenter
                                 $thumbnail = "/upload/" . self::THUMB_PREFIX50 . $entry;
                             }
                             if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX150 . $entry)) {
-                                $thumbnail = "/upload/" . self::THUMB_PREFIX150 . $entry;
+                                $thumbnail150 = "/upload/" . self::THUMB_PREFIX150 . $entry;
                             }
                             if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX320 . $entry)) {
-                                $thumbnail = "/upload/" . self::THUMB_PREFIX320 . $entry;
+                                $thumbnail320 = "/upload/" . self::THUMB_PREFIX320 . $entry;
                             }
                             $files[$entry] = [
                                 "name" => $entry,
