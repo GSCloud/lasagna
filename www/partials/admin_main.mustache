@@ -13,8 +13,8 @@
 .bigemoji{font-size:5em}
 .emoji-list i {font-style: normal!important}
 .emoji-list {
-    min-width: 300px !important;
-    height: 300px;
+    min-width: 400px !important;
+    /*height: 400px;*/
     padding: 5px;
     overflow: scroll;
     display: inline-block;
@@ -682,17 +682,17 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var ui = $.summernote.ui;
           var list = ui.buttonGroup([
             ui.button({
-              className: 'dropdown-toggle',
+              className: "dropdown-toggle",
               contents: '<span title="{{ l.a_summer_history_ttip }}" class="fas fa-history"></span> <span class="caret"></span>',
               data: {
-                toggle: 'dropdown'
+                toggle: "dropdown"
               }
             }),
             ui.dropdown({
-              className: 'dropdown-style',
+              className: "dropdown-style",
               contents: "<ul></ul>",
               callback: function($dropdown) {
-                $dropdown.find('li').each(function() {
+                $dropdown.find("li").each(function() {
                   $(this).click(function() {
                     context.invoke("editor.insertText", $(this).html());
                   });
@@ -705,38 +705,33 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         // EmojiSelector() listbox
         var EmojiSelector = function(context) {
+          var list = "";
+          var emoji = "😀,😁,😂,😃,😄,😅,😆,😇,😉,😊,😋,😌,😍,🥰,🥳,🥴,🥵,🥶,🤡,🤯,🤣,🤤,🤥,🤦,🤧,🤨,🤩,🤪,🤫,🤬,🥺,😎,😏,😐,😑,😒,😓,😔,😕,😖,"
+                + "😗,😘,😙,😚,😛,😜,😝,😞,😟,😠,😡,😈,😢,😣,😤,😥,😦,😧,😨,😩,😪,😫,😬,😭,😮,😯,😰,🤢,🤭,🤮,😱,😲,😳,😴,😵,😶,😷,😸,😹,😺,"
+                + "🤐,🤑,🤒,🤓,🤔,🤕,😻,😼,😽,😾,😿,🙀,🙁,🙂,🙃,🙄,🧐,🤗,👹,👺,👻,👼,👽,👾,👿,💀,👣,👤,👥,🙅,🙆,🙋,🙍,🙎,🙇,🙈,🙉,🙊,🙏,🤠,"
+                + "🧑,🧒,🧓,🧔,🧕,🧖,👦,👧,👨,👩,👪,👫,👬,👭,👮,👯,👰,👱,👲,👳,👴,👵,👶,👷,👸,🚭,🚷,🚯,🚱,🚳,🔞,📵,🔇,🔕,🚫,🚮,🚰,🚹,🚺,🚻,"
+                + "🚼,🛂,🛃,🛄,🛅,🕐,🕑,🕒,🕓,🕔,🕕,🕖,🕗,🕘,🕙,🕚,🕛";
+          var emojis = emoji.split(",");
+          for (i = 0; i < emojis.length; i++) {
+            list += "<i>" + emojis[i] + "</i>";
+          }
           var ui = $.summernote.ui;
           var list = ui.buttonGroup([
             ui.button({
-              className: 'dropdown-toggle',
+              className: "dropdown-toggle",
               contents: '<span title="{{ l.a_summer_emoji_ttip }}" class="fas fa-smile"></span> <span class="caret"></span>',
               data: {
-                toggle: 'dropdown'
+                toggle: "dropdown"
               }
             }),
             ui.dropdown({
-              className: 'dropdown-style emoji-list',
-              contents:
-                  "<i>😀</i><i>😁</i><i>😂</i><i>😃</i><i>😄</i><i>😅</i><i>😆</i><i>😇</i><i>😉</i><i>😊</i>"
-                + "<i>😋</i><i>😌</i><i>😍</i><i>🥰</i><i>🥳</i><i>🥴</i><i>🥵</i><i>🥶</i><i>🤡</i><i>🤯</i>"
-                + "<i>🤣</i><i>🤤</i><i>🤥</i><i>🤦</i><i>🤧</i><i>🤨</i><i>🤩</i><i>🤪</i><i>🤫</i><i>🤬</i>"
-                + "<i>🥺</i><i>😎</i><i>😏</i><i>😐</i><i>😑</i><i>😒</i><i>😓</i><i>😔</i><i>😕</i><i>😖</i>"
-                + "<i>😗</i><i>😘</i><i>😙</i><i>😚</i><i>😛</i><i>😜</i><i>😝</i><i>😞</i><i>😟</i><i>😠</i>"
-                + "<i>😡</i><i>😈</i><i>😢</i><i>😣</i><i>😤</i><i>😥</i><i>😦</i><i>😧</i><i>😨</i><i>😩</i>"
-                + "<i>😪</i><i>😫</i><i>😬</i><i>😭</i><i>😮</i><i>😯</i><i>😰</i><i>🤢</i><i>🤭</i><i>🤮</i>"
-                + "<i>😱</i><i>😲</i><i>😳</i><i>😴</i><i>😵</i><i>😶</i><i>😷</i><i>😸</i><i>😹</i><i>😺</i>"
-                + "<i>🤐</i><i>🤑</i><i>🤒</i><i>🤓</i><i>🤔</i><i>🤕</i><i>😻</i><i>😼</i><i>😽</i><i>😾</i>"
-                + "<i>😿</i><i>🙀</i><i>🙁</i><i>🙂</i><i>🙃</i><i>🙄</i><i>🧐</i><i>🤗</i><i>👹</i><i>👺</i>"
-                + "<i>👻</i><i>👼</i><i>👽</i><i>👾</i><i>👿</i><i>💀</i><i>👣</i><i>👤</i><i>👥</i><i>🙅</i>"
-                + "<i>🙆</i><i>🙋</i><i>🙍</i><i>🙎</i><i>🙇</i><i>🙈</i><i>🙉</i><i>🙊</i><i>🙏</i><i>🤠</i>"
-                + "<i>🧑</i><i>🧒</i><i>🧓</i><i>🧔</i><i>🧕</i><i>🧖</i><i>👦</i><i>👧</i><i>👨</i><i>👩</i>"
-                + "<i>👪</i><i>👫</i><i>👬</i><i>👭</i><i>👮</i><i>👯</i><i>👰</i><i>👱</i><i>👲</i><i>👳</i>"
-                + "<i>👴</i><i>👵</i><i>👶</i><i>👷</i><i>👸</i>",
+              className: "dropdown-style emoji-list",
+              contents: list,
               callback: function($dropdown) {
-                $dropdown.find('i').each(function() {
+                $dropdown.find("i").each(function() {
                   $(this).click(function() {
-                    context.invoke('editor.restoreRange');
-                    context.invoke('editor.focus');
+                    context.invoke("editor.restoreRange");
+                    context.invoke("editor.focus");
                     context.invoke("editor.insertText", $(this).html());
                   });
                 });
@@ -751,20 +746,20 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           var ui = $.summernote.ui;
           var list = ui.buttonGroup([
             ui.button({
-              className: 'dropdown-toggle',
+              className: "dropdown-toggle",
               contents: '<span title="{{ l.a_summer_plugins_ttip }}" class="fas fa-plug"></> <span class="caret"></span>',
               data: {
-                toggle: 'dropdown'
+                toggle: "dropdown"
               }
             }),
             ui.dropdown({
-              className: 'dropdown-style',
+              className: "dropdown-style",
               contents: '<ol><li data-copy=\' [remote_content url=""] \'>remote_content</li></ol>',
               callback: function($dropdown) {
-                $dropdown.find('li').each(function() {
+                $dropdown.find("li").each(function() {
                   $(this).click(function() {
-                    context.invoke('editor.restoreRange');
-                    context.invoke('editor.focus');
+                    context.invoke("editor.restoreRange");
+                    context.invoke("editor.focus");
                     context.invoke("editor.insertText", $(this).data("copy"));
                   });
                 });
