@@ -953,7 +953,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           $("#emojis").toggle("fast");
         });
 
-        // clear browser data
+        // clear browser
         $("#a_clearbrowserdata").click(function() {
           if (w.GSC.offline) { // offline
             M.toast({html: "offline 📶"});
@@ -962,7 +962,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           GSC.GetCsvInfo = function() {};
           $("#a_clearbrowserdata").attr("disabled", "disabled");
           M.toast({html: "💤💤💤"});
-          window.location.replace("/admin/ClearBrowserData");
+          window.location.replace("/admin/clearbrowser");
         });
 
         // file manager

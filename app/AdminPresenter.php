@@ -151,7 +151,21 @@ class AdminPresenter extends APresenter
                 }
                 break;
 
-            case "ClearBrowserData":
+            case "clearcache":
+                \header('Clear-Site-Data: "cache"');
+                $this->addMessage("BROWSER CACHE CLEARED");
+                $this->addAuditMessage("BROWSER CACHE CLEARED");
+                $this->setLocation();
+                break;
+
+            case "clearcookies":
+                \header('Clear-Site-Data: "cookies"');
+                $this->addMessage("BROWSER COOKIES CLEARED");
+                $this->addAuditMessage("BROWSER COOKIES CLEARED");
+                $this->setLocation();
+                break;
+
+            case "clearbrowser":
                 \header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
                 $this->addMessage("BROWSER DATA CLEARED");
                 $this->addAuditMessage("BROWSER DATA CLEARED");

@@ -302,26 +302,38 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // DELAYED UI bindings
     GSC.init.push(function () {
       GSC.names.push("geneal UI - bindings");
+
+      // set SK language
+      $(".sethlsk").click(function () {
+        setCookie("hl", "sk");
+      });
+
       // set CS language
       $(".sethlcs").click(function () {
         setCookie("hl", "cs");
       });
+
       // set EN language
       $(".sethlen").click(function () {
         setCookie("hl", "en");
       });
+
       // set UPDATE button
       $("#update-message").click(function () {
-        window.location.reload(true);
+        //window.location.reload(true);
+        window.location.replace("/clearcache");
       });
+
       // set default bullets for Summernote data
       $(".summernote>ul").each(function (i, obj) {
         $(obj).addClass("browser-default");
       });
+
       // create HOME button
       if (document.documentElement.clientWidth > 1120) {
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="/">🏡</a></li>');
       }
+
       // create mobile WebShare button for touch devices
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
