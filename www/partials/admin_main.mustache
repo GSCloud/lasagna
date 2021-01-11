@@ -12,15 +12,7 @@
 @keyframes faces{10%{content:"🌼"}20%{content:"🌳"}30%{content:"🌺"}40%{content:"🌵"}50%{content:"🌶"}60%{content:"🍇"}70%{content:"🍄"}80%{content:"🍓"}90%{content:"🌽"}}
 .bigemoji{font-size:5em}
 .emoji-list i {font-style: normal!important}
-.emoji-list {
-    min-width: 400px !important;
-    /*height: 400px;*/
-    padding: 5px;
-    overflow: scroll;
-    display: inline-block;
-    cursor: pointer;
-    margin: 1px; 
-}
+.emoji-list {min-width: 400px !important;padding:5px;overflow:scroll;display:inline-block;cursor:pointer;margin:1px}
 
 /* ADMIN PANEL */
 label{color:#000;font-weight:bold}
@@ -640,7 +632,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         var SaveAllButton = function(context) {
           var ui = $.summernote.ui;
           var button = ui.button({
-            className: 'note-btn-bold blue',
+            className: "note-btn-bold blue",
             contents: '<span title="💾 {{ l.a_summer_save_ttip }}"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_summer_save }}</b></span>',
             codeviewKeepButton: false,
             click: function(e) {
@@ -654,17 +646,15 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         var DestroyButton = function(context) {
           var ui = $.summernote.ui;
           var button = ui.button({
-            className: 'note-btn-bold',
+            className: "note-btn-bold",
             contents: '<span title="{{ l.a_summer_close_ttip }}"><i class="fas fa-window-close"></i>&nbsp;<b>{{ l.a_summer_close }}</b></span>',
             codeviewKeepButton: true,
             click: function(e) {
-              //context.invoke('destroy');
               $(".summernote").each(function(i, obj) {
                 $(obj).summernote("destroy");
                 GSC.AdminUI();
                 $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
                 $("#a_summernote").unbind("click");
-
                 $("#a_summernote").click(function() {
                   GSC.ReadArticles(function() {
                     GSC.DeploySummernote();
@@ -820,7 +810,8 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             ["insert", ["hr", "link", "picture", "video"]],
             ["history", ["undo", "redo"]],
             ["view", ["fs"]],
-            ["custom1", ["emojis", "plugins", "history"]],
+            ["emoji", ["emojis"]],
+            ["custom1", ["plugins", "history"]],
             ["close", ["destroy"]],
             ["custom2", ["saveall"]],
           ],
