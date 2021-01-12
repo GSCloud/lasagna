@@ -605,6 +605,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             data: JSON.stringify(data)
           }, function(data) {
             console.log("UpdateArticles result", {data});
+            M.toast({html: "💾 {{ l.a_saved_ok }}"});
           }).done(function() {
             GSC.PingDot("#summer_ping");
             $("#a_summernote").removeAttr("disabled");
