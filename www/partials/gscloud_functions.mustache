@@ -7,7 +7,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
 (function (w, d, undefined) {
 
-  // add scroll progress element
+  // add scroll progress bar element
   var pbar = "_" + Date.now();
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
     "beforeend", '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
@@ -331,7 +331,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       // create HOME button
       if (document.documentElement.clientWidth > 1120) {
-        $('div.navbar-fixed>nav>div>ul').prepend('<li><a href="/">🏡</a></li>');
+        $('div.navbar-fixed>nav>div>ul').prepend('<li><a title="{{ l.home }}" href="/">🏡</a></li>');
       }
 
       // create mobile WebShare button for touch devices
