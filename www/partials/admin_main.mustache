@@ -1,15 +1,15 @@
 {{#admin_group_admin}}
 
 <style>
-/* PHP CHARS */
+/* PHP LOGO */
 .php1{position:relative;left:+0.1em;text-transform:lowercase!important}
 .php2{position:relative;left:+0.0em;text-transform:lowercase!important}
 .php3{position:relative;left:-0.1em;text-transform:lowercase!important}
 
 /* EMOJIS */
+.bigemoji{font-size:5em}
 .emoji-list i {font-style: normal!important}
 .emoji-list {min-width: 400px;padding:5px;overflow:scroll;display:inline-block;cursor:pointer;margin:1px}
-.bigemoji{font-size:5em}
 @media (max-width:599px) {
   .emoji-list * {margin: 5px}
   .emoji-list {min-width: 300px!important}
@@ -55,6 +55,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 <span style="position:fixed;left:0;top:0;z-index:999999" class="motyle btn white hide-on-med-and-down">🦋</span>
 <span style="position:fixed;right:0;top:0;z-index:999999" class="motyle btn white hide-on-large-only">🦋</span>
 
+<!-- ADMIN PANEL -->
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important">
 
   <!-- DEVICE ROTATION INFO -->
@@ -62,6 +63,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     {{ l.a_rotate_device }}
   </div>
 
+  <!-- CUSTOM ADMIN PANEL -->
   {{>admin_custom}}
 
   <!-- EXTERNAL SERVICES -->
@@ -124,7 +126,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         </div>
 
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
-        <br>
 
         <div class="col s12 white">
           <label>{{ l.a_articles }}</label>
@@ -361,7 +362,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
               </p>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -370,7 +370,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
         <a rel="noreferrer noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
-          data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz/index.php?disp=bootstrap">
+          data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz">
           <i class="fas fa-server"></i></a>
         <a rel="noreferrer noopener" target="_blank" class="tooltipped red-text text"
           data-position="top" data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}">
@@ -389,12 +389,12 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       </h4>
 
     </div>
-
   </div>
 
   <!-- UPLOADS -->
   <div id="a_uploader_progress"></div>
   <div id="a_file_manager"></div>
+
 </div>
 
 <script>

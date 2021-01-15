@@ -1,5 +1,6 @@
 (function (w, d, undefined) {
 
+  // check logout cookie
   if (getCookie("logout")) {
     d.getElementById("admin_main").style.display = "none";
     setCookie("motyle", "true");
@@ -12,23 +13,23 @@
     w.GSC.profile = "default";
     w.GSC.data.multisite_profiles = {{ multisite_profiles_json }};
 
-    // ShowLoader()
-    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (t) {
-      if (!t) return;
-      $(t).html(
+    // ShowLoader() - show rotating image loader inside element
+    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
+      if (!el) return;
+      $(el).html(
         '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
       );
     }
 
-    // PingDot()
-    if (!w.GSC.PingDot) w.GSC.PingDot = function (dot, status = true) {
-      if (!dot) return;
+    // PingDot() - render red or green dot inside element
+    if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
+      if (!el) return;
       if (status) {
         status = "green";
       } else {
         status = "red";
       }
-      $(dot).html("&#8226;").css({
+      $(el).html("&#8226;").css({
         color: status,
         opacity: 1
       }).fadeTo("slow", 0);
@@ -39,7 +40,6 @@
       if (w.GSC.offline) { // offline
         return GSC.PingDot("#csv_ping", false);
       }
-
       // API: GetCsvInfo
       $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
           GSC.PingDot("#csv_ping");
@@ -78,9 +78,7 @@
     // GetPSInsights()
     if (!w.GSC.GetPSInsights) w.GSC.GetPSInsights = function () {
       if (GSC.offline) { // offline
-        M.toast({
-          html: "offline 📶"
-        });
+        M.toast({html: "offline 📶"});
         return GSC.PingDot("#psi_ping", false);
       }
       var t = "#a_ps_insights_info";
@@ -114,7 +112,6 @@
       $("#admin_main h4").addClass("a_reset a_h4");
       $("#admin_main h5").addClass("a_reset a_h5");
       $("#admin_main p").addClass("a_reset");
-
       // remove tooltips for touch display
       if (w.GSC.touch) {
         if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
@@ -186,9 +183,7 @@
       // SAVE ALL button
       $("#a_summernote").click(function () {
         if (GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#summer_ping", false);
         }
         $("#a_summernote").attr("disabled", "disabled");
@@ -212,31 +207,24 @@
           console.log("UpdateArticles result", {
             data
           });
-          M.toast({
-            html: "💾 {{ l.a_saved_ok }}"
-          });
+          M.toast({html: "💾 {{ l.a_saved_ok }}"});
         }).done(function () {
           GSC.PingDot("#summer_ping");
           $("#a_summernote").removeAttr("disabled");
-
           GSC.AdminUI();
           $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
           $("#a_summernote").unbind("click");
-
           $("#a_summernote").click(function () {
             GSC.ReadArticles(function () {
               GSC.DeploySummernote();
             });
           });
-
           GSC.summernote_on = false;
         }).fail(function (xhr, status, error) {
           alert(error); // show error message
           $("#a_summernote").removeAttr("disabled");
           GSC.PingDot("#summer_ping", false);
-          M.toast({
-            html: "ERROR 🤯"
-          });
+          M.toast({html: "ERROR 🤯"});
         });
       });
 
@@ -692,9 +680,7 @@
       // remote function selector
       $("#RemoteFnSelect").change(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#sectok_ping", false);
         }
         if (!$("#RemoteFnSelect").val()) return;
@@ -706,25 +692,19 @@
           t = t.replace(/[a-zA-Z]*\?/, s + "?");
           GSC.CopyClipboard(t);
           GSC.PingDot("#sectok_ping");
-          M.toast({
-            html: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }}"
-          });
+          M.toast({html: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }}"});
         }).fail(function () {
           $("#a_security_token").val("N/A");
           GSC.PingDot("#sectok_ping", false);
           GSC.CopyClipboard("");
-          M.toast({
-            html: s + " ERROR 🤯"
-          });
+          M.toast({html: s + " ERROR 🤯"});
         });
       });
 
       // update CSV data
       $("#a_update").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
         $("#a_update").attr("disabled", "disabled");
@@ -734,17 +714,13 @@
 
         // API: CoreUpdate
         $.post("/admin/CoreUpdate");
-        M.toast({
-          html: "{{ l.a_processing_data }}"
-        });
+        M.toast({html: "{{ l.a_processing_data }}"});
       });
 
       // show Google PSI
       $("#a_ps_insights").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#psi_ping", false);
         }
         $("#a_ps_insights").attr("disabled", "disabled");
@@ -755,9 +731,7 @@
       // invoke Summernote editor
       $("#a_summernote").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#psi_ping", false);
         }
         GSC.ReadArticles(function () {
@@ -768,25 +742,19 @@
       // clear browser
       $("#a_clearbrowserdata").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
         GSC.GetCsvInfo = function () {};
         $("#a_clearbrowserdata").attr("disabled", "disabled");
-        M.toast({
-          html: "💤💤💤"
-        });
+        M.toast({html: "💤💤💤"});
         window.location.replace("/admin/clearbrowser");
       });
 
       // file manager
       $("#a_files").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
         // clear file & upload content if present
@@ -870,9 +838,7 @@
             $("#a_file_manager .copydata").click(function () {
               var x = $(this).data("text");
               GSC.CopyClipboard(x);
-              M.toast({
-                html: "📋 " + x
-              });
+              M.toast({html: "📋 " + x});
             });
 
             // UPLOAD: file delete
@@ -885,9 +851,7 @@
                 $.post("/admin/UploadedFileDelete", {
                   name: x
                 }).done(function (data) {
-                  M.toast({
-                    html: "❌ " + x
-                  });
+                  M.toast({html: "❌ " + x});
                   GSC.RenderUploadInfo();
                 });
               }
@@ -900,9 +864,7 @@
       // flush cache
       $("#a_flush").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
         GSC.GetCsvInfo = function () {};
@@ -910,44 +872,33 @@
 
         // API: FlushCache
         $.post("/admin/FlushCache");
-        M.toast({
-          html: "🌈"
-        });
         window.location.reload(true);
       });
 
       // get auth code
       $("#a_getcode").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
 
         // API: CreateAuthCode
         $.post("/admin/CreateAuthCode", function (data) {
           GSC.CopyClipboard(data.data.hash);
-          M.toast({
-            html: "CreateAuthCode 🆗 {{ l.a_clipboardcopy }} [" + data.data.hash + "]"
-          });
+          M.toast({html: "CreateAuthCode 🆗 {{ l.a_clipboardcopy }} [" + data.data.hash + "]"});
         });
       });
 
       // delete auth code
       $("#a_delcode").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
 
         // API: DeleteAuthCode
         $.post("/admin/DeleteAuthCode", function (data) {
-          M.toast({
-            html: "DeleteAuthCode 🆗 {{ l.a_codedeleted }}"
-          });
+          M.toast({html: "DeleteAuthCode 🆗 {{ l.a_codedeleted }}"});
           GSC.CopyClipboard("");
         });
       });
@@ -994,9 +945,7 @@
       ZeroUpload.setMaxFiles(100);
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
       ZeroUpload.on("complete", function (response) {
-        M.toast({
-          html: "Upload COMPLETE 🆗"
-        });
+        M.toast({html: "Upload 🆗"});
         var data = JSON.parse(response.data);
         if (data && data.data) {
           setCookie("open_filemanager", 1);
@@ -1006,9 +955,7 @@
         }
       });
       ZeroUpload.on("start", function (files, userData) {
-        M.toast({
-          html: "Uploading ... 👷"
-        });
+        M.toast({html: "Upload ... 👷"});
       });
       ZeroUpload.on("error", function (type, message, userData) {
         var s;
@@ -1032,9 +979,7 @@
           default:
             s = "{{ l.a_upload_ajax }}";
         }
-        M.toast({
-          html: s
-        });
+        M.toast({html: s});
       });
       ZeroUpload.on("progress", function (progress, userData) {
         $("#a_uploader_progress").show(200).html(
@@ -1054,9 +999,7 @@
       // UI: upload button
       $("#a_upload").click(function () {
         if (w.GSC.offline) { // offline
-          M.toast({
-            html: "offline 📶"
-          });
+          M.toast({html: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
         $("#a_uploader_progress").html("");
