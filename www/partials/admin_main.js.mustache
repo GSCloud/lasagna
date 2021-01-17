@@ -11,7 +11,7 @@
   if (w.GSC.init) {
     w.GSC.data = {};
     w.GSC.profile = "default";
-    w.GSC.data.multisite_profiles = {{ multisite_profiles_json }};
+    w.GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}');
 
     // ShowLoader() - show rotating image loader inside element
     if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
@@ -40,6 +40,7 @@
       if (w.GSC.offline) { // offline
         return GSC.PingDot("#csv_ping", false);
       }
+
       // API: GetCsvInfo
       $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
           GSC.PingDot("#csv_ping");
@@ -50,6 +51,7 @@
             var csv = data.data[x]["csv"];
             var lines = data.data[x]["lines"];
             var sheet = data.data[x]["sheet"];
+            if (!data.data[x]["sheet"]) continue;
             if (sheet) {
               link =
                 '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:2px" ' +

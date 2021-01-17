@@ -1,7 +1,6 @@
 !.gitignore
 !composer.lock
 *.bak
-*.csv
 *.lock
 *.tar
 *.tgz

@@ -83,7 +83,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.profile = null;
-    GSC.data.multisite_profiles = {{ multisite_profiles_json }};
+    GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}'); 
 
     // feature detection: "touch"
     GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?

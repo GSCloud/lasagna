@@ -10,16 +10,16 @@
 .bigemoji{font-size:5em}
 .emoji-list i {font-style: normal!important}
 .emoji-list {min-width: 400px;padding:5px;overflow:scroll;display:inline-block;cursor:pointer;margin:1px}
-@media (max-width:599px) {
+@media (max-width:599px) { /* smaller box for mobiles */
   .emoji-list * {margin: 5px}
   .emoji-list {min-width: 300px!important}
 }
-@media (max-width:1023px) {
-  .emoji-list {position:relative!important;left:0!important}
-}
-@media (min-width:600px) {
+@media (min-width:600px) { /* bigger box */
   .emoji-list * {margin: 2px}
   .emoji-list {min-width: 400px!important}
+}
+@media (max-width:1023px) { /* fixed box position to the left for mobiles and tablets */
+  .emoji-list {position:relative!important;left:0!important}
 }
 
 /* ADMIN PANEL */
@@ -137,7 +137,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
         <a id="a_files"
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect blue waves btn"><i class="fas fa-folder"></i></a>
+          style="margin:5px" class="tooltipped waves-effect blue waves btn"><i class="fas fa-archive"></i></a>
         <a id="a_upload"
           data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
           style="margin:5px" class="tooltipped waves-effect blue waves btn"><i class="fas fa-upload"></i></a>

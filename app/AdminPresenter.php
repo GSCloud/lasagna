@@ -178,6 +178,7 @@ class AdminPresenter extends APresenter
                 $f = DATA . "/AuditLog.txt";
                 $logs = \file($f);
                 \array_walk($logs, array($this, "decorateLogs"));
+                //dump($logs);exit;
                 $data["content"] = \array_reverse($logs);
                 return $this->setData("output", $this->setData($data)->renderHTML("auditlog"));
                 break;
@@ -185,6 +186,7 @@ class AdminPresenter extends APresenter
             case "GetCsvInfo":
                 $this->checkPermission("admin");
                 $arr = \array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
+                //dump($arr);exit;
                 foreach ($arr as $k => $v) {
                     if (!$k || !$v) {
                         continue;
@@ -196,9 +198,9 @@ class AdminPresenter extends APresenter
                             "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
                             "timestamp" => \filemtime(DATA . "/${k}.csv"),
                         ];
-                    }
-                    if ($arr[$k]["lines"] === -1) {
-                        unset($arr[$k]);
+                        if ($arr[$k]["lines"] === -1) {
+                            unset($arr[$k]);
+                        }
                     }
                 }
                 return $this->writeJsonData($arr, $extras);
@@ -668,13 +670,18 @@ class AdminPresenter extends APresenter
     public function decorateLogs(&$val, $key)
     {
         $x = \explode(";", $val);
+        unset($x[5]); // remove column 6
         \array_walk($x, function (&$value, $key) {
             $value = \str_replace("EMAIL:", "", $value);
             $value = \str_replace("NAME:", "", $value);
         });
-        unset($x[5]); // remove column 5
         $y = \implode("</td><td>", $x);
-        $val = "<td>$y</td>";
+        $z = "<td>$y</td>";
+        // add column classes
+        for ($i = 1; $i <= 5; $i++) {
+            $z = preg_replace("/<td>/", "<td class='alogcol${i}'>", $z, 1);
+        }
+        $val = $z;
     }
 
     /**
@@ -717,7 +724,7 @@ class AdminPresenter extends APresenter
 
     /**
      * Create thumbnail from source image if possible
-     * 
+     *
      * @param $src file source
      * @param $dest file target
      * @param $targetWidth output width
