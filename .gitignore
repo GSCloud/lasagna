@@ -18,6 +18,7 @@ app/*.json
 app/config_private.neon
 ci/**
 data/**
+doc/phpdoc-cache-*
 logs/**
 node_modules/**
 package-lock.json

@@ -671,14 +671,14 @@ class AdminPresenter extends APresenter
     {
         $x = \explode(";", $val);
         unset($x[5]); // remove column 6
-        \array_walk($x, function (&$value, $key) {
+        \array_walk($x, function (&$value, $key) { // remove some strings
             $value = \str_replace("IP:", "", $value);
             $value = \str_replace("EMAIL:", "", $value);
             $value = \str_replace("NAME:", "", $value);
         });
         $y = \implode("</td><td>", $x);
         $z = "<td>$y</td>";
-        for ($i = 1; $i <= 5; $i++) { // add column classes
+        for ($i = 1; $i <= 5; $i++) { // add 5 column classes
             $z = preg_replace("/<td>/", "<td class='alogcol${i}'>", $z, 1);
         }
         $val = $z;
