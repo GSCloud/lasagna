@@ -71,7 +71,9 @@
           }
           $("#a_update_info").html(content);
         })
-        .fail(function () {
+        .fail(function (e) {
+          if (e.status == 401) location.reload(true); // force reload when HTTP 401
+          if (e.status == 403) location.reload(true); // force reload when HTTP 403
           GSC.PingDot("#csv_ping", false);
           $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
         });
@@ -120,6 +122,7 @@
       }
 
       // show variables on click
+      $(".open_google").unbind();
       $(".open_google").click(function () {
         $(this).hide();
         $(".close_google").removeClass('hide').show();
@@ -127,6 +130,7 @@
       });
 
       // show news on click
+      $(".open_news").unbind();
       $(".open_news").click(function () {
         $(this).hide();
         $(".close_news").removeClass('hide').show();
@@ -134,6 +138,7 @@
       });
 
       // hide variables on click
+      $(".close_google").unbind();
       $(".close_google").click(function () {
         $(this).hide();
         $(".open_google").removeClass('hide').show();
@@ -141,14 +146,16 @@
       });
 
       // hide news on click
+      $(".close_news").unbind();
       $(".close_news").click(function () {
         $(this).hide();
         $(".open_news").removeClass('hide').show();
         $("#news").hide(200);
       });
 
-      // editor block doubleclick
-      $(".summernote").dblclick(function () {
+      // editor block click
+      $(".summernote").unbind();
+      $(".summernote").click(function () {
         $(".summernote").unbind("dblclick");
         GSC.DeploySummernote();
       });
@@ -183,6 +190,7 @@
       $("#a_summernote").unbind("click");
 
       // SAVE ALL button
+      $("#a_summernote").unbind();
       $("#a_summernote").click(function () {
         if (GSC.offline) { // offline
           M.toast({html: "offline 📶"});
@@ -212,16 +220,6 @@
           GSC.PingDot("#summer_ping");
           $("#a_summernote").removeAttr("disabled");
           GSC.AdminUI();
-          /*
-          $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
-          $("#a_summernote").unbind("click");
-          $("#a_summernote").click(function () {
-            GSC.ReadArticles(function () {
-              GSC.DeploySummernote();
-            });
-          });
-          GSC.summernote_on = false;
-          */
         }).fail(function (xhr, status, error) {
           alert(error); // show error message
           $("#a_summernote").removeAttr("disabled");
