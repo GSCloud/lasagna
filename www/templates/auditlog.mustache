@@ -96,6 +96,12 @@ if (width < 800) $(".alogcol2").each(function() {
   if (width < 400) x= x.substring(x, 30);
   $(this).html(x);
 });
+if (width < 800) $(".alogcol3").each(function() {
+  var x = $(this).html();
+  if (width < 800) x= x.substring(x, 50);
+  if (width < 400) x= x.substring(x, 30);
+  $(this).html(x);
+});
 
 </script>
 </body>
