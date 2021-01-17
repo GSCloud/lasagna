@@ -72,8 +72,8 @@
           $("#a_update_info").html(content);
         })
         .fail(function (e) {
-          if (e.status == 401) location.reload(true); // force reload when HTTP 401
-          if (e.status == 403) location.reload(true); // force reload when HTTP 403
+          if (e.status == 401) location.reload(); // reload when HTTP 401 - Unauthorized
+          if (e.status == 403) location.reload(); // reload when HTTP 403 - Forbidden
           GSC.PingDot("#csv_ping", false);
           $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
         });
@@ -872,7 +872,7 @@
 
         // API: FlushCache
         $.post("/admin/FlushCache");
-        window.location.reload(true);
+        window.location.reload(); // reload window
       });
 
       // get auth code
