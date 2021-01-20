@@ -50,9 +50,11 @@ class ErrorPresenter extends APresenter
         }
         $error = self::CODESET[$code];
         header("HTTP/1.1 ${code} ${error}");
-        $template = "<body><center><h1><br>🤔 WebApp Error $code 💣</h1><h2>"
+        $template = '<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="x-ua-compatible" content="IE=edge"><body><center><h1>'
+            . "<br>🤔 WebApp Error &ndash; #$code 💣</h1><h2>"
             . self::CODESET[$code]
-            . "<br><br><br></h2><h1><a style='color:red;text-decoration:none' href='/'>RELOAD ↻</a></h1><img alt='' src='/img/logo.png'></body>";
+            . '<br></h2><h1><a rel=nofollow style="color:red;text-decoration:none" href="/">RELOAD ↻</a></h1>'
+            . '<img alt="dead robot" src=/img/error.png></body></html>';
         return $this->setData("output", $this->renderHTML($template));
     }
 }
