@@ -4,7 +4,12 @@
 #dbg: FALSE
 minify: TRUE
 
-# Android update - data from local domain?
+# DISABLING SWITCHES for Facebook, Twitter and Google Analytics integrations
+#fb_disable: TRUE
+#tw_disable: TRUE
+#ga_disable: TRUE
+
+# ANDROID UPDATE - data from local domain?
 #loadlocal: TRUE
 #android_updateurl_local: "http://xxx/"
 #android_updateurl_remote: "https://xxx.gscloud.cz/"
