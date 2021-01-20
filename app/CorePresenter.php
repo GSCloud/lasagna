@@ -39,6 +39,7 @@ class CorePresenter extends APresenter
         switch ($view) {
             case "GetWebManifest":
                 // do NOT rate limit this call!
+                //$this->checkRateLimit();
                 $this->setHeaderJson();
                 $lang = $this->validateLanguage($_GET["lang"] ?? "en"); // language set by GET parameter
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
@@ -66,7 +67,8 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetTXTSitemap":
-                $this->checkRateLimit();
+                // do NOT rate limit this call!
+                //$this->checkRateLimit();
                 $this->setHeaderText();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -78,7 +80,8 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetXMLSitemap":
-                $this->checkRateLimit();
+                // do NOT rate limit this call!
+                //$this->checkRateLimit();
                 $this->setHeaderXML();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -91,6 +94,7 @@ class CorePresenter extends APresenter
 
             case "GetRSSXML":
                 // do NOT rate limit this call!
+                //$this->checkRateLimit();
                 $this->setHeaderXML();
                 $language = "en"; // set to English
                 $l = $this->getLocale($language);
@@ -106,7 +110,8 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetArticleHTMLExport":
-                // do NOT rate limit this call!
+                // special rate limit value!
+                $this->checkRateLimit(100);
                 $nofetch = $_COOKIE["NOFETCH"] ?? false; // extra check
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
@@ -137,8 +142,8 @@ class CorePresenter extends APresenter
                     if (\is_array($html)) {
                         $html = \join("\n", $html);
                     }
-                } else {
-                    return $this->setHeaderHTML()->setData("output", ""); // ERROR
+                } else { // ERROR - file not found!
+                    return ErrorPresenter::getInstance()->process(404);
                 }
                 \preg_match_all('/\[remote_content url="([^]\"\n]*)"\]/', $html, $matches);
                 $c = 0;
