@@ -224,7 +224,7 @@
           alert(error); // show error message
           $("#a_summernote").removeAttr("disabled");
           GSC.PingDot("#summer_ping", false);
-          M.toast({html: "ERROR 🤯"});
+          M.toast({html: "{{ l.a_error_general }}"});
         });
       });
 
@@ -697,7 +697,7 @@
           $("#a_security_token").val("N/A");
           GSC.PingDot("#sectok_ping", false);
           GSC.CopyClipboard("");
-          M.toast({html: s + " ERROR 🤯"});
+          M.toast({html: "{{ l.a_error_general }}"});
         });
       });
 
@@ -945,7 +945,7 @@
       ZeroUpload.setMaxFiles(100);
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
       ZeroUpload.on("complete", function (response) {
-        M.toast({html: "Upload 🆗"});
+        M.toast({html: "{{ l.a_uploading_finished }}"});
         var data = JSON.parse(response.data);
         if (data && data.data) {
           setCookie("open_filemanager", 1);
@@ -955,7 +955,7 @@
         }
       });
       ZeroUpload.on("start", function (files, userData) {
-        M.toast({html: "Upload ... 👷"});
+        M.toast({html: "{{ l.a_uploading }}"});
       });
       ZeroUpload.on("error", function (type, message, userData) {
         var s;
