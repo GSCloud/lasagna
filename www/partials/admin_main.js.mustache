@@ -759,22 +759,27 @@
         }
         // clear file & upload content if present
         if (getCookie("open_filemanager") == 1) {
-          delCookie("open_filemanager");
-          $("#a_file_manager").hide(50);
-          $("#a_uploader_progress").html("");
-          return;
+          return GSC.CloseFileManager();
         }
         GSC.RenderUploadInfo();
       });
 
+      // GSC.CloseFileManager
+      if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
+          delCookie("open_filemanager");
+          $("#a_file_manager").hide(50);
+          $("#a_uploader_progress").html("");
+      }
+
       // GSC.RenderUploadInfo()
-      if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function () {
+      if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
         $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
           if (data && data.data) {
             setCookie("open_filemanager", 1); // remember state
             GSC.PingDot("#summer_ping");
-            var s = '<h5>{{ l.a_files_ttip }} <span onclick="javascript:GSC.RenderUploadInfo();" class="hover">';
-            s += '<i class="blue-text fas fa-sync-alt"></i></span></h5>';
+            var s = '<h5>{{ l.a_files_ttip }} ';
+            s += '<span title="reload" onclick="javascript:GSC.RenderUploadInfo()" class="hover"><i class="blue-text fas fa-sync-alt"></i></span>&nbsp;';
+            s += '<span title="close" onclick="javascript:GSC.CloseFileManager()" class="hover">❌</span></h5>';
             var now = ~~(Date.now() / 1000);
             moment.locale("{{ lang }}");
 

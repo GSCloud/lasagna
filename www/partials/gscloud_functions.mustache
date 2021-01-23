@@ -225,11 +225,11 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               }
             }
           });
-          setTimeout("GSC.VersionCheck();", 60000);
+          setTimeout("GSC.VersionCheck();", 20000);
         }
       }
       //  do repeat checks - 10 secs.
-      setTimeout("GSC.VersionCheck()", 10000);
+      setTimeout("GSC.VersionCheck()", 5000);
     });
 
     // GSC.SetProfile() - set Lasagna GSC.profile
@@ -330,7 +330,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       });
 
       // create HOME button
-      if (document.documentElement.clientWidth > 1120) {
+      if (document.documentElement.clientWidth > 1023) {
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a title="{{ l.home }}" href="/">🏡</a></li>');
       }
 
