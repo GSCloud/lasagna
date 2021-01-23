@@ -1,7 +1,7 @@
 <script>
 'use strict';
 
-// polyfills @TODO delete?
+// polyfills
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
@@ -64,7 +64,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     }
   }
 
-    // getCookie() general function
+  // getCookie() general function
   if (typeof window.getCookie !== "function") window.getCookie = function (key) {
     if (key === undefined) return false;
     var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
@@ -82,12 +82,14 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
   if (w.GSC) { // GSC namespace
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
+    GSC.iseditor = {{#admin_group_editor}}true{{/admin_group_editor}}{{^admin_group_editor}}false{{/admin_group_editor}};
+    GSC.islogged = {{#admin}}true{{/admin}}{{^admin}}false{{/admin}};
+    GSC.istester = {{#admin_group_tester}}true{{/admin_group_tester}}{{^admin_group_tester}}false{{/admin_group_tester}};
     GSC.profile = null;
     GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}'); 
 
     // feature detection: "touch"
-    GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ?
-      true : false;
+    GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ? true : false;
     if (GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
     // GSC.FormatBytes()
@@ -225,14 +227,15 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
               }
             }
           });
+          //  do repeat checks
           setTimeout("GSC.VersionCheck();", 20000);
         }
       }
-      //  do repeat checks - 10 secs.
+      //  do repeat checks
       setTimeout("GSC.VersionCheck()", 5000);
     });
 
-    // GSC.SetProfile() - set Lasagna GSC.profile
+    // GSC.SetProfile()
     GSC.init.push(function () {
       GSC.names.push("GSC.SetProfile()");
       if (typeof GSC.SetProfile !== "function") GSC.SetProfile = function () {
@@ -256,7 +259,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       GSC.names.push("GSC.ReadArticles()");
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function (callback) {
         if (GSC.summernote_on || GSC.offline) {
-          //  do repeat checks - 10 secs.
+          //  do repeat checks
           setTimeout("GSC.ReadArticles();", 10000);
           return;
         }
@@ -284,7 +287,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           }
           if (typeof callback === "function") callback();
         });
-        //  do repeat checks - 10 secs.
+        //  do repeat checks
         setTimeout("GSC.ReadArticles()", 10000);
       }
 
@@ -302,38 +305,30 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
     // DELAYED UI bindings
     GSC.init.push(function () {
       GSC.names.push("geneal UI - bindings");
-
       // set SK language
       $(".sethlsk").click(function () {
         setCookie("hl", "sk");
       });
-
       // set CS language
       $(".sethlcs").click(function () {
         setCookie("hl", "cs");
       });
-
       // set EN language
       $(".sethlen").click(function () {
         setCookie("hl", "en");
       });
-
       // set UPDATE button
       $("#update-message").click(function () {
-        //window.location.reload(true);
         window.location.replace("/clearcache");
       });
-
       // set default bullets for Summernote data
       $(".summernote>ul").each(function (i, obj) {
         $(obj).addClass("browser-default");
       });
-
       // create HOME button
       if (document.documentElement.clientWidth > 1023) {
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a title="{{ l.home }}" href="/">🏡</a></li>');
       }
-
       // create mobile WebShare button for touch devices
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
@@ -344,7 +339,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
       // create LOGIN buttons
       {{#LOCALHOST}}
-      if (!GSC.isadmin) {
+      if (!GSC.islogged) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="{{ local_goauth_redirect }}">🔓 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a title="{{ l.a_login_ttip }}" href="{{ local_goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
       } else {
@@ -353,7 +348,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       }
       {{/LOCALHOST}}
       {{^LOCALHOST}}
-      if (!GSC.isadmin) {
+      if (!GSC.islogged) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="{{ goauth_redirect }}">🔓 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a title="{{ l.a_login_ttip }}" href="{{ goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
       } else {
@@ -361,7 +356,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
       }
       {{/LOCALHOST}}
-
     });
 
   }
