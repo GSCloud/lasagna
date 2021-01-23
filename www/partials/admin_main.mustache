@@ -350,17 +350,23 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           <div class="row center hide-on-small-only">
             <strong>ADMIN</strong>
             <div class="container">
-              <p class="orange-text">
-                {{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
-                {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
-              </p>
+              <p class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
+                {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}</p>
+            </div>
+            <strong>EDITOR</strong>
+            <div class="container">
+              <p class="orange-text">{{#admin_groups.editor}}{{ . }} {{/admin_groups.editor}}
+                {{^admin_groups.editor}}<i class="red-text fas fa-times"></i>{{/admin_groups.editor}}</p>
+            </div>
+            <strong>TESTER</strong>
+            <div class="container">
+              <p class="orange-text">{{#admin_groups.tester}}{{ . }} {{/admin_groups.tester}}
+                {{^admin_groups.tester}}<i class="red-text fas fa-times"></i>{{/admin_groups.tester}}</p>
             </div>
             <strong>DEFAULT</strong>
             <div class="container">
-              <p class="orange-text">
-                {{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
-                {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}
-              </p>
+              <p class="orange-text">{{#admin_groups.default}}{{ . }} {{/admin_groups.default}}
+                {{^admin_groups.default}}<i class="red-text fas fa-times"></i>{{/admin_groups.default}}</p>
             </div>
           </div>
         </div>
