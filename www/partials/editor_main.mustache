@@ -1,4 +1,3 @@
-{{#admin_group_admin}}
 <style>
 /* PHP LOGO */
 .php1{position:relative;left:+0.1em;text-transform:lowercase!important}
@@ -223,83 +222,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
             {{ l.a_flush }}</a>
         </div>
       </div>
-      <div class="row center white hide-on-small-only">
-        <div class="col s12 white">
-          <label>{{ l.a_remotefns }}</label>
-          <select id="RemoteFnSelect">
-            <option value="" disabled selected>&hellip;</option>
-            <option value="CoreUpdateRemote">Core Data Update</option>
-            <option value="FlushCacheRemote">Flush Local Cache</option>
-            <option value="RebuildNonceRemote">Rebuild Auth Nonce</option>
-            <option value="RebuildSecureKeyRemote">Rebuild Cookie Secure Key</option>
-            <option value="RebuildAdminKeyRemote">Rebuild Administration Secure Key</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- PAGESPEED INSIGHTS -->
-      <div class="hide-on-small-only">
-        <div class="row center extrapadding">
-          <h5>{{ l.a_optimizations }}&nbsp;<span id="psi_ping" class="mono">&nbsp;</span></h5>
-          <p id="a_ps_insights_info"></p>
-          <div id="psi_row" class="row center">
-            <a id="a_ps_insights" class="tooltipped waves-effect green waves-light btn" data-position="top"
-              data-tooltip="{{ l.a_ps_insights_ttip }}">
-              <i class="fab fa-google"></i>
-              {{ l.a_ps_insights }}</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- GOOGLE -->
-      <div class="">
-        <div class="row center extrapadding hide-on-small-only">
-          <div class="white-text">
-            <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i>
-              <i class="hover close_google fas fa-arrow-up blue-text hide"></i></h5>
-            <ul id="variables" class="mono hide">
-              <li>GCP id: {{ gcp_project_id }}
-                {{^gcp_project_id}}
-                <i class="red-text fas fa-times"></i>
-                {{/gcp_project_id}}
-              </li>
-              <li>Maps Location Query: {{ google.map_query }}
-                {{^google.map_query}}
-                <i class="red-text fas fa-times"></i>
-                {{/google.map_query}}
-              </li>
-              <li>Maps API key: 
-                {{#google.mapsapi_key}}
-                <span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
-                {{/google.mapsapi_key}}
-                {{^google.mapsapi_key}}
-                <i class="red-text fas fa-times"></i>
-                {{/google.mapsapi_key}}
-              </li>
-              <li>Analytics UA: {{ google.ua }}
-                {{^google.ua}}
-                <i class="red-text fas fa-times"></i>
-                {{/google.ua}}
-              </li>
-              <li>PageSpeed Insights API key:
-                {{#google.pagespeedinsights_key}}
-                <span title="{{ google.pagespeedinsights_key }}" class="protect">{{ google.pagespeedinsights_key }}</span>
-                {{/google.pagespeedinsights_key}}
-                {{^google.pagespeedinsights_key}}
-                <i class="red-text fas fa-times"></i>
-                {{/google.pagespeedinsights_key}}
-              </li>
-              {{^l.onesignal_appid}}
-              <div class="row center red-text" style="margin-top:1em">
-                <div class="container">
-                  {{ l.a_onesignal_missing }}
-                </div>
-              </div>
-              {{/l.onesignal_appid}}
-            </ul>
-          </div>
-        </div>
-      </div>
 
       <!-- CHANGELOG -->
       <div class="hide-on-small-only">
@@ -347,19 +269,10 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <h5>{{ l.a_groups_permissions }}</h5>
         <strong>{{user.name}}</strong><br>
         <i style="font-size:smaller">{{user.email}}</i><br>
-        <!--
-        <a id="a_getcode" class="btnmargin waves-effect blue waves-light btn"
-          data-position="top" data-tooltip="">📲</a>
-        <a id="a_delcode" class="btnmargin waves-effect red waves-light btn"
-          data-position="top" data-tooltip="">📴</a>
-        <br>
-        -->
         <a id="a_logout" class="tooltipped waves-effect green waves-light btn"
           data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
           <i class="fas fa-sign-out-alt"></i>
           {{ l.a_logout }}</a>
-        <a target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
-          <i class="fas fa-list"></i></a>
         <br>
         <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
           data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
@@ -404,7 +317,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 </div>
 
 <script>
-{{>admin_main.js.mustache}}
+{{>editor_main.js.mustache}}
 </script>
 
 <!-- SUMMERNOTE -->
@@ -423,12 +336,3 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
 <!-- ZEROUPLOAD -->
 <script src="{{ cdn }}/js/zeroupload.min.js" defer></script>
-{{/admin_group_admin}}
-
-{{#admin_group_editor}}
-{{>editor_main}}
-{{/admin_group_editor}}
-
-{{#admin_group_tester}}
-{{>tester_main}}
-{{/admin_group_tester}}

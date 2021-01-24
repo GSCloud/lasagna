@@ -1,0 +1,144 @@
+(function (w, d, undefined) {
+
+  // check logout cookie
+  if (getCookie("logout")) {
+    d.getElementById("admin_main").style.display = "none";
+    setCookie("motyle", "true");
+  }
+  delCookie("logout");
+
+  // start GSC.init
+  if (w.GSC.init) {
+    w.GSC.data = {};
+    w.GSC.profile = "default";
+    w.GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}');
+
+    // ShowLoader() - show rotating image loader inside element
+    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
+      if (!el) return;
+      $(el).html(
+        '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
+      );
+    }
+
+    // PingDot() - render red or green dot inside element
+    if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
+      if (!el) return;
+      if (status) {
+        status = "green";
+      } else {
+        status = "red";
+      }
+      $(el).html("&#8226;").css({
+        color: status,
+        opacity: 1
+      }).fadeTo("slow", 0);
+    }
+
+    // GSC.AdminUI()
+    if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+      $("#admin_main div").addClass("a_reset");
+      $("#admin_main h2").addClass("a_reset a_h2");
+      $("#admin_main h4").addClass("a_reset a_h4");
+      $("#admin_main h5").addClass("a_reset a_h5");
+      $("#admin_main p").addClass("a_reset");
+      // remove tooltips for touch display
+      if (w.GSC.touch) {
+        if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
+      }
+      // show variables
+      $(".open_google").unbind();
+      $(".open_google").click(function () {
+        $(this).hide();
+        $(".close_google").removeClass('hide').show();
+        $("#variables").removeClass('hide').hide().show(200);
+      });
+      // show news
+      $(".open_news").unbind();
+      $(".open_news").click(function () {
+        $(this).hide();
+        $(".close_news").removeClass('hide').show();
+        $("#news").removeClass('hide').hide().show(200);
+      });
+      // hide variables
+      $(".close_google").unbind();
+      $(".close_google").click(function () {
+        $(this).hide();
+        $(".open_google").removeClass('hide').show();
+        $("#variables").hide(200);
+      });
+      // hide news
+      $(".close_news").unbind();
+      $(".close_news").click(function () {
+        $(this).hide();
+        $(".open_news").removeClass('hide').show();
+        $("#news").hide(200);
+      });
+    }
+
+    // admin UI bindings
+    w.GSC.init.push(function () {
+      w.GSC.names.push("admin UI - bindings");
+      if (!getCookie("motyle") || getCookie("motyle") == "false") {
+        $("#admin_main").show(100);
+      }
+      // UI: 🦋
+      $(".motyle").click(function () {
+        $("#admin_main").toggle(200, function () {
+          window.scrollTo(0, 0);
+          setCookie("motyle", $("#admin_main").is(":hidden"));
+        })
+      });
+
+      // setup profiles
+      var profiles = [];
+      var params = new window.URLSearchParams(window.location.search);
+      var profile = params.get("profile");
+      for (var i in GSC.data.multisite_profiles) profiles.push(i);
+      if (!profiles.includes(profile)) {
+        profile = getCookie("profile");
+        if (!profiles.includes(profile)) {
+          profile = "default";
+        }
+      }
+      GSC.profile = profile;
+      setCookie("profile", profile);
+      $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
+      $("#SiteSelect").formSelect(); // populate form data
+      $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
+
+      // web profile selector
+      $("#SiteSelect").change(function () {
+        if (!$("#SiteSelect").val()) return;
+        var profile = $("#SiteSelect").val().trim();
+        setCookie("profile", profile);
+        window.location.href = window.location.pathname + "?profile=" + profile;
+      });
+
+      // clear browser
+      $("#a_clearbrowserdata").click(function () {
+        if (w.GSC.offline) { // offline
+          M.toast({html: "offline 📶"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        $("#a_clearbrowserdata").attr("disabled", "disabled");
+        M.toast({html: "💤💤💤"});
+        window.location.replace("/admin/clearbrowser");
+      });
+
+      $("#a_logout").click(function () {
+        setCookie("logout", "logout");
+        GSC.offline ? window.location.replace("/?nonce=".Date.now()) : window.location.replace("/logout");
+      });
+
+    });
+
+    // show admin UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("Admin UI");
+      GSC.AdminUI();
+    });
+
+    // end GSC.init
+  }
+})(window, document);
