@@ -7,7 +7,7 @@
   }
   delCookie("logout");
 
-  // start GSC.init
+  // GSC.init
   if (w.GSC.init) {
     w.GSC.data = {};
     w.GSC.profile = "default";
@@ -35,7 +35,7 @@
       }).fadeTo("slow", 0);
     }
 
-    // GSC.AdminUI()
+    // AdminUI()
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");

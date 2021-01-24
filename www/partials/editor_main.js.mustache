@@ -7,7 +7,7 @@
   }
   delCookie("logout");
 
-  // start GSC.init
+  // GSC.init
   if (w.GSC.init) {
     w.GSC.data = {};
     w.GSC.profile = "default";
@@ -108,7 +108,7 @@
         });
     }
 
-    // GSC.AdminUI()
+    // AdminUI()
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
@@ -166,7 +166,7 @@
       });
     }
 
-    // click + URL button
+    // click + button
     $("#a_article").click(function () {
       var name = prompt('{{ l.a_article_add_prompt }}:').trim();
       name = name.replace(/['"/\\]/g, '');
@@ -175,7 +175,7 @@
       }
     });
 
-    // GSC.DeploySummernote()
+    // DeploySummernote()
     if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
       GSC.summernote_on = true;
       $("#a_summernote").attr("disabled", "disabled");
@@ -310,6 +310,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -344,6 +345,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -378,6 +380,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -412,6 +415,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -446,6 +450,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -480,6 +485,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -514,6 +520,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
                 });
               });
             }
@@ -542,6 +549,7 @@
                   context.invoke("editor.restoreRange");
                   context.invoke("editor.focus");
                   context.invoke("editor.insertText", $(this).data("copy"));
+                  GSC.CopyClipboard($(this).data("copy"));
                 });
               });
             }
