@@ -100,7 +100,7 @@ class AdminPresenter extends APresenter
         // API calls
         switch ($view) {
             case "upload":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
                     $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
@@ -127,7 +127,7 @@ class AdminPresenter extends APresenter
                 break;
 
             case "UploadedFileDelete":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 if (isset($_POST["name"])) {
                     $f1 = UPLOAD . DS . \trim($_POST["name"]); // original file
                     $f2 = UPLOAD . DS . self::THUMB_PREFIX50 . \trim($_POST["name"]); // thumbnail
@@ -184,7 +184,7 @@ class AdminPresenter extends APresenter
                 break;
 
             case "GetCsvInfo":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $arr = \array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
                 //dump($arr);exit;
                 foreach ($arr as $k => $v) {
@@ -207,7 +207,7 @@ class AdminPresenter extends APresenter
                 break;
 
             case "GetArticlesInfo":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $data = [];
                 $profile = "default";
                 if (isset($_GET["profile"])) { // profile ID
@@ -225,7 +225,7 @@ class AdminPresenter extends APresenter
                 break;
 
             case "GetUploadFileInfo":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $files = [];
                 if ($handle = \opendir(UPLOAD)) {
                     while (false !== ($entry = \readdir($handle))) {
@@ -413,14 +413,14 @@ class AdminPresenter extends APresenter
                 break;
 
             case "FlushCache":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $this->flushCache();
                 $this->addAuditMessage("FLUSH CACHE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
             case "CoreUpdate":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $this->setForceCsvCheck(true);
                 $this->postloadAppData("app_data");
                 $this->flushCache();
@@ -461,7 +461,7 @@ class AdminPresenter extends APresenter
                 break;
 
             case "UpdateArticles":
-                $this->checkPermission("admin");
+                $this->checkPermission("admin,editor");
                 $x = 0;
                 if (isset($_POST["data"])) {
                     $data = (string) \trim((string) $_POST["data"]);
