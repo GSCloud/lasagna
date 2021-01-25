@@ -155,7 +155,7 @@
       });
       // API: GetArticlesInfo
       $.get("/admin/GetArticlesInfo?" + Date.now(), function (data) {
-        console.log(data);
+        //console.log(data);
         if (data && data.data) {
           $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
           for (var i in data.data) {

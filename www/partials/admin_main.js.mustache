@@ -46,6 +46,7 @@
           GSC.PingDot("#csv_ping");
           var content = "";
           var now = ~~(Date.now() / 1000);
+          moment.locale("{{ lang }}");
           for (x in data.data) {
             var link = x;
             var csv = data.data[x]["csv"];
@@ -64,7 +65,6 @@
                 csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                 lines + '&nbsp;</a>&nbsp;';
             }
-            moment.locale("{{ lang }}");
             content += (link + " {{ l.a_age }}&nbsp;" +
               moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "<br>"
             );
@@ -155,7 +155,7 @@
       });
       // API: GetArticlesInfo
       $.get("/admin/GetArticlesInfo?" + Date.now(), function (data) {
-        console.log(data);
+        //console.log(data);
         if (data && data.data) {
           $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
           for (var i in data.data) {
