@@ -12,7 +12,6 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
     "beforeend", '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
   );
-
   // scroll progress bar
   w.onscroll = function() {
     var winScroll = d.body.scrollTop || d.documentElement.scrollTop;
@@ -335,6 +334,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li class="right-align">' + WebShareFactory() + '</li>');
           $(".webshareicon").append("{{ l.webshare_button }}");
+          $(".webshare-container").removeClass("hide").show();
         }
       }
 
