@@ -115,6 +115,9 @@ class AdminPresenter extends APresenter
                     }
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                         $x[$b] = \urlencode($b);
+                        @\unlink(UPLOAD . DS . self::THUMB_PREFIX50 . $b);
+                        @\unlink(UPLOAD . DS . self::THUMB_PREFIX150 . $b);
+                        @\unlink(UPLOAD . DS . self::THUMB_PREFIX320 . $b);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX50 . $b, 50);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX150 . $b, 150);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX320 . $b, 320);
@@ -130,22 +133,16 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin,editor");
                 if (isset($_POST["name"])) {
                     $f1 = UPLOAD . DS . \trim($_POST["name"]); // original file
-                    $f2 = UPLOAD . DS . self::THUMB_PREFIX50 . \trim($_POST["name"]); // thumbnail
-                    $f3 = UPLOAD . DS . self::THUMB_PREFIX150 . \trim($_POST["name"]); // thumbnail
-                    $f4 = UPLOAD . DS . self::THUMB_PREFIX320 . \trim($_POST["name"]); // thumbnail
+                    $f2 = UPLOAD . DS . self::THUMB_PREFIX50 . \trim($_POST["name"]); // thumbnail 50 px
+                    $f3 = UPLOAD . DS . self::THUMB_PREFIX150 . \trim($_POST["name"]); // thumbnail 150 px
+                    $f4 = UPLOAD . DS . self::THUMB_PREFIX320 . \trim($_POST["name"]); // thumbnail 320 px
                     if (\file_exists($f1)) {
                         @\unlink($f1);
+                        @\unlink($f2);
+                        @\unlink($f3);
+                        @\unlink($f4);
                         $this->addMessage("FILE DELETED: $f1");
                         $this->addAuditMessage("FILE DELETED: $f1");
-                        if (\file_exists($f2)) {
-                            @\unlink($f2);
-                        }
-                        if (\file_exists($f3)) {
-                            @\unlink($f3);
-                        }
-                        if (\file_exists($f4)) {
-                            @\unlink($f4);
-                        }
                         return $this->writeJsonData($f1, $extras);
                     }
                 }
@@ -178,7 +175,6 @@ class AdminPresenter extends APresenter
                 $f = DATA . "/AuditLog.txt";
                 $logs = \file($f);
                 \array_walk($logs, array($this, "decorateLogs"));
-                //dump($logs);exit;
                 $data["content"] = \array_reverse($logs);
                 return $this->setData("output", $this->setData($data)->renderHTML("auditlog"));
                 break;
@@ -186,7 +182,6 @@ class AdminPresenter extends APresenter
             case "GetCsvInfo":
                 $this->checkPermission("admin,editor");
                 $arr = \array_merge($cfg["locales"] ?? [], $cfg["app_data"] ?? []);
-                //dump($arr);exit;
                 foreach ($arr as $k => $v) {
                     if (!$k || !$v) {
                         continue;
@@ -451,7 +446,7 @@ class AdminPresenter extends APresenter
                 if ($user["id"] ?? null) {
                     $f = DATA . "/identity_" . $user["id"] . ".json";
                     if (\file_exists($f)) {
-                        \unlink($f); // delete identity
+                        @\unlink($f); // delete identity
                     }
                     $this->addMessage("DELETE AUTH CODE");
                     $this->addAuditMessage("DELETE AUTH CODE");
