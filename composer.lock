@@ -2805,16 +2805,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.18",
+            "version": "v4.4.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "8017f2ecc7de4b6cc1585d502e65ea4f56d42051"
+                "reference": "efcf444cbf19166f8e078761b951622a1e7d36db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/8017f2ecc7de4b6cc1585d502e65ea4f56d42051",
-                "reference": "8017f2ecc7de4b6cc1585d502e65ea4f56d42051",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/efcf444cbf19166f8e078761b951622a1e7d36db",
+                "reference": "efcf444cbf19166f8e078761b951622a1e7d36db",
                 "shasum": ""
             },
             "require": {
@@ -2822,10 +2822,10 @@
                 "psr/log": "~1.0"
             },
             "conflict": {
-                "doctrine/dbal": "<2.5"
+                "doctrine/dbal": "<2.6"
             },
             "require-dev": {
-                "doctrine/dbal": "^2.5|^3.0",
+                "doctrine/dbal": "^2.6|^3.0",
                 "predis/predis": "~1.0"
             },
             "type": "library",
@@ -2851,7 +2851,7 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Symfony Lock Component",
+            "description": "Creates and manages locks, a mechanism to provide exclusive access to a shared resource",
             "homepage": "https://symfony.com",
             "keywords": [
                 "cas",
@@ -2862,7 +2862,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v4.4.18"
+                "source": "https://github.com/symfony/lock/tree/v4.4.19"
             },
             "funding": [
                 {
@@ -2878,7 +2878,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-14T10:21:37+00:00"
+            "time": "2021-01-27T09:09:26+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
