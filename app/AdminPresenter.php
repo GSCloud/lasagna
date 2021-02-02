@@ -101,7 +101,6 @@ class AdminPresenter extends APresenter
         switch ($view) {
             case "upload":
                 $this->checkPermission("admin,editor");
-                //$this->checkPermission("admin");
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
                     $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
