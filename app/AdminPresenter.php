@@ -116,9 +116,15 @@ class AdminPresenter extends APresenter
                     }
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                         $x[$b] = \urlencode($b);
-                        @\unlink(UPLOAD . DS . self::THUMB_PREFIX50 . $b);
-                        @\unlink(UPLOAD . DS . self::THUMB_PREFIX150 . $b);
-                        @\unlink(UPLOAD . DS . self::THUMB_PREFIX320 . $b);
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX50 . $b);
+                        }
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX150 . $b);
+                        }
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX320 . $b);
+                        }
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX50 . $b, 50);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX150 . $b, 150);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX320 . $b, 320);
