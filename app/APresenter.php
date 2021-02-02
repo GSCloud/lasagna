@@ -311,7 +311,7 @@ abstract class APresenter implements IPresenter
         defined("TESSERACT_STOP") || define("TESSERACT_STOP", ((float) $usec + (float) $sec));
         $add = "; processing: " . round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " ms"
             . "; request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
-
+        $google_logger = null;
         try {
             if (count($criticals) + count($errors) + count($messages)) {
                 if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
@@ -322,8 +322,6 @@ abstract class APresenter implements IPresenter
                         ]);
                         $google_logger = $logging->logger(PROJECT);
                     }
-                } else {
-                    $google_logger = null;
                 }
             }
             if (count($criticals)) {
