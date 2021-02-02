@@ -125,6 +125,9 @@ class AdminPresenter extends APresenter
                         if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $b)) {
                             \unlink(UPLOAD . DS . self::THUMB_PREFIX320 . $b);
                         }
+                        if (stripos($b, ".epub")) {
+                            continue;
+                        }
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX50 . $b, 50);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX150 . $b, 150);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX320 . $b, 320);
