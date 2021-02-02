@@ -17,7 +17,6 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Monolog\Processor\IntrospectionProcessor;
 use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\WebProcessor;
 use ParagonIE\Halite\Cookie;
@@ -301,7 +300,6 @@ abstract class APresenter implements IPresenter
         $consolehandler = new BrowserConsoleHandler(Logger::INFO);
         $monolog->pushHandler($consolehandler);
         $monolog->pushHandler($streamhandler);
-        $monolog->pushProcessor(new IntrospectionProcessor);
         $monolog->pushProcessor(new MemoryUsageProcessor);
         $monolog->pushProcessor(new WebProcessor);
 
