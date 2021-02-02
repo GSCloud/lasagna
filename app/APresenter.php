@@ -315,11 +315,13 @@ abstract class APresenter implements IPresenter
         try {
             if (count($criticals) + count($errors) + count($messages)) {
                 if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
-                    $logging = new LoggingClient([
-                        "projectId" => GCP_PROJECTID,
-                        "keyFilePath" => APP . DS . GCP_KEYS,
-                    ]);
-                    $google_logger = $logging->logger(PROJECT);
+                    if (file_exists(APP . DS . GCP_KEYS)) {
+                        $logging = new LoggingClient([
+                            "projectId" => GCP_PROJECTID,
+                            "keyFilePath" => APP . DS . GCP_KEYS,
+                        ]);
+                        $google_logger = $logging->logger(PROJECT);
+                    }
                 } else {
                     $google_logger = null;
                 }
@@ -1391,7 +1393,7 @@ abstract class APresenter implements IPresenter
                     $this->addMessage("FILE: fetching ${remote}");
                     try {
                         $data = @\file_get_contents($remote);
-                    } catch(\Exception $e) {
+                    } catch (\Exception$e) {
                         $this->addError("ERROR: fetching ${remote}");
                         $this->addAuditMessage("ERROR: fetching ${remote}");
                         $data = "";
