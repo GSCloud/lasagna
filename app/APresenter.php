@@ -309,12 +309,11 @@ abstract class APresenter implements IPresenter
 
         list($usec, $sec) = explode(" ", microtime());
         defined("TESSERACT_STOP") || define("TESSERACT_STOP", ((float) $usec + (float) $sec));
-        $add = "| processing: " . round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " msec."
-            . "| request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
+        $add = "; processing: " . round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " ms"
+            . "; request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
 
         try {
             if (count($criticals) + count($errors) + count($messages)) {
-                // log errors to GCP for valid project, keys and NOT localhost
                 if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
                     $logging = new LoggingClient([
                         "projectId" => GCP_PROJECTID,
