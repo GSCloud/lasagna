@@ -91,17 +91,16 @@ class Doctor
         validate("file\t<bold>router.neon</bold> in APP", check_exist(APP . DS . "router.neon"));
         validate("file\t<bold>router_admin.neon</bold> in APP", check_exist(APP . DS . "router_admin.neon"));
         validate("file\t<bold>router_defaults.neon</bold> in APP", check_exist(APP . DS . "router_defaults.neon"));
-        echo "\n";
 
-        $climate->out("\n<blue><bold>Writables");
+        $climate->out("\n<blue><bold>Writable folders");
         validate("writable\t<bold>CACHE</bold>", check_write(CACHE));
         validate("writable\t<bold>DATA</bold>", check_write(DATA));
         validate("writable\t<bold>LOGS</bold>", check_write(LOGS));
         validate("writable\t<bold>TEMP</bold>", check_write(TEMP));
         validate("writable\t<bold>ci</bold> in ROOT (used for CI tests)", check_write(ROOT . DS . "ci"));
 
-        $climate->out("\n<blue><bold>PHP");
-        validate("Zend v<bold>" . PHP_VERSION_ID, (PHP_VERSION_ID >= 70400));
+        $climate->out("\n<blue><bold>PHP core settings");
+        validate("Zend version <bold>" . PHP_VERSION_ID, (PHP_VERSION_ID >= 70400));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
         validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
