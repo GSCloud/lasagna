@@ -24,7 +24,7 @@ class Doctor
      *
      * @return void
      */
-    private static function bad()
+    public static function bad()
     {
         self::$err++;
     }
@@ -43,7 +43,7 @@ class Doctor
                 throw new \Exception("Empty check_exist() parameter!");
             }
             if (!file_exists($f) || !is_readable($f)) {
-                Doctor::bad();
+                \GSC\Doctor::bad();
                 return false;
             }
             return true;
@@ -55,7 +55,7 @@ class Doctor
                 throw new \Exception("Empty check_write() parameter!");
             }
             if (!is_writable($f)) {
-                Doctor::bad();
+                \GSC\Doctor::bad();
                 return false;
             }
             return true;
@@ -101,7 +101,7 @@ class Doctor
         validate("writable\t<bold>ci</bold> in ROOT", check_write(ROOT . DS . "ci"));
 
         $climate->out("\n<blue><bold>PHP");
-        validate("Zend version <bold>7.4+", (PHP_VERSION_ID >= 70400));
+        validate("Zend version <bold>" . PHP_VERSION_ID, (PHP_VERSION_ID >= 70400));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
         validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
