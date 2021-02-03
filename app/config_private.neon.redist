@@ -1,15 +1,17 @@
-### XXX
 ### PRIVATE CONFIGURATION
 
+#force debug
+#dbg: TRUE
+
 # cookie: tracy-debug
-DEBUG_COOKIE: "cookievalue"
+#DEBUG_COOKIE: "cookievalue"
 
 # Google OAuth 2.0
-goauth_client_id: "someid.apps.googleusercontent.com"
-goauth_secret: ""
+#goauth_client_id: "someid.apps.googleusercontent.com"
+#goauth_secret: ""
 
 # Google Cloud Platform keys (in app/)
-gcp_keys: "key-hash.json"
+#gcp_keys: "key-hash.json"
 
 # Google Drive backup
 #google_drive_backup: ""
@@ -25,8 +27,8 @@ external_links: [
 
 # Google
 google: [
-  mapsapi_key: "some_key"
-  pagespeedinsights_key: "some_key"
+#  mapsapi_key: "some_key"
+#  pagespeedinsights_key: "some_key"
 ]
 
 # Cloudflare
@@ -41,14 +43,14 @@ cf: [
 
 # admin groups
 admin_groups: [
-  default: [
-    *
+  admin: [
+    joe@foo.bar
+    mike@foo.bar
   ]
   editor: [
     editor@foo.bar
   ]
-  admin: [
-    joe@foo.bar
-    mike@foo.bar
+  default: [
+    *
   ]
 ]
