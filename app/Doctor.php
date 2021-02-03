@@ -87,7 +87,7 @@ class Doctor
         validate("file\t<bold>CONFIG_PRIVATE</bold> as " . CONFIG_PRIVATE, check_exist(CONFIG_PRIVATE));
         validate("file\t<bold>REVISIONS</bold> in ROOT", check_exist(ROOT . DS . "REVISIONS"));
         validate("file\t<bold>VERSION</bold> in ROOT", check_exist(ROOT . DS . "VERSION"));
-        validate("file\t<bold>_site_cfg.sh</bold> in ROOT", check_exist(ROOT . DS . "_site_cfg.sh"));
+        validate("file\t<bold>_site_cfg.sh</bold> in ROOT (used for syncing)", check_exist(ROOT . DS . "_site_cfg.sh"));
         validate("file\t<bold>router.neon</bold> in APP", check_exist(APP . DS . "router.neon"));
         validate("file\t<bold>router_admin.neon</bold> in APP", check_exist(APP . DS . "router_admin.neon"));
         validate("file\t<bold>router_defaults.neon</bold> in APP", check_exist(APP . DS . "router_defaults.neon"));
@@ -98,10 +98,10 @@ class Doctor
         validate("writable\t<bold>DATA</bold>", check_write(DATA));
         validate("writable\t<bold>LOGS</bold>", check_write(LOGS));
         validate("writable\t<bold>TEMP</bold>", check_write(TEMP));
-        validate("writable\t<bold>ci</bold> in ROOT", check_write(ROOT . DS . "ci"));
+        validate("writable\t<bold>ci</bold> in ROOT (used for CI tests)", check_write(ROOT . DS . "ci"));
 
         $climate->out("\n<blue><bold>PHP");
-        validate("Zend version <bold>" . PHP_VERSION_ID, (PHP_VERSION_ID >= 70400));
+        validate("Zend v<bold>" . PHP_VERSION_ID, (PHP_VERSION_ID >= 70400));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
         validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
