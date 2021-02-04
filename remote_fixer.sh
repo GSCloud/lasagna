@@ -2,6 +2,7 @@
 
 dir="$(dirname "$0")"
 cd $dir
+
 . $dir"/_includes.sh"
 . $dir"/_site_cfg.sh"
 
