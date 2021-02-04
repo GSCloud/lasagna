@@ -17,4 +17,6 @@ if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 export $(grep -v '^#' .env | xargs -d '\n')
 
 google-chrome http://localhost:9000 &
-docker run --rm --name tesseract -p 9000:80 -v "$(pwd)"/www/:/var/www/html/ -v "$(pwd)"/app/:/var/www/app/ $TAG
+
+#docker run --rm --name tesseract -p 9000:80 -v "$(pwd)"/www/:/var/www/html/ -v "$(pwd)"/app/:/var/www/app/ $TAG
+docker run --rm --name tesseract -p 9000:80 $TAG
