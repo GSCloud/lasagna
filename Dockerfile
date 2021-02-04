@@ -8,7 +8,7 @@ RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && ln -s /var/www/html /var/www/www
 RUN a2enmod rewrite expires headers
 ADD vendor /var/www/vendor
-COPY _includes.sh .env Bootstrap.php cli.sh README.md REVISIONS VERSION /var/www/
+COPY _includes.sh .env Bootstrap.php cli.sh docker_updater.sh README.md REVISIONS VERSION /var/www/
 COPY data/admin.csv data/default.csv /var/www/data/
 WORKDIR /var/www/
 EXPOSE 80
