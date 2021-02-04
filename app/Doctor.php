@@ -87,7 +87,12 @@ class Doctor
         validate("file\t<bold>CONFIG_PRIVATE</bold> as " . CONFIG_PRIVATE, check_exist(CONFIG_PRIVATE));
         validate("file\t<bold>REVISIONS</bold> in ROOT", check_exist(ROOT . DS . "REVISIONS"));
         validate("file\t<bold>VERSION</bold> in ROOT", check_exist(ROOT . DS . "VERSION"));
-        validate("file\t<bold>_site_cfg.sh</bold> in ROOT (used for syncing)", check_exist(ROOT . DS . "_site_cfg.sh"));
+
+        // check for .env (not in Docker image)
+        if (file_exists(ROOT . DS . ".env")) {
+            validate("file\t<bold>_site_cfg.sh</bold> in ROOT (used for syncing)", check_exist(ROOT . DS . "_site_cfg.sh"));
+        }
+
         validate("file\t<bold>router.neon</bold> in APP", check_exist(APP . DS . "router.neon"));
         validate("file\t<bold>router_admin.neon</bold> in APP", check_exist(APP . DS . "router_admin.neon"));
         validate("file\t<bold>router_defaults.neon</bold> in APP", check_exist(APP . DS . "router_defaults.neon"));

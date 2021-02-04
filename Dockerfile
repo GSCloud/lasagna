@@ -10,6 +10,6 @@ RUN a2enmod rewrite expires headers
 COPY app/*.php app/config.neon app/router* /var/www/app/
 COPY vendor /var/www/vendor
 COPY www /var/www/html
-COPY _includes.sh .env Bootstrap.php cli.sh docker_updater.sh README.md REVISIONS VERSION /var/www/
+COPY _includes.sh Bootstrap.php cli.sh docker_updater.sh README.md REVISIONS VERSION /var/www/
 WORKDIR /var/www/
 EXPOSE 80
