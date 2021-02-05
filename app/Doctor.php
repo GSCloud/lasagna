@@ -104,13 +104,15 @@ class Doctor
         validate("writable\t<bold>TEMP</bold>", check_write(TEMP));
         validate("writable\t<bold>ci</bold> in ROOT (used for CI tests)", check_write(ROOT . DS . "ci"));
 
-        $climate->out("\n<blue><bold>PHP core settings");
+        $climate->out("\n<blue><bold>PHP core");
         validate("Zend version <bold>" . PHP_VERSION_ID, (PHP_VERSION_ID >= 70400));
         validate("lib <bold>curl", (in_array("curl", get_loaded_extensions())));
+        validate("lib <bold>gd", (in_array("gd", get_loaded_extensions())));
+        validate("lib <bold>imagick", (in_array("imagick", get_loaded_extensions())));
         validate("lib <bold>json", (in_array("json", get_loaded_extensions())));
         validate("lib <bold>mbstring", (in_array("mbstring", get_loaded_extensions())));
-        validate("lib <bold>sodium", (in_array("sodium", get_loaded_extensions())));
         validate("lib <bold>redis", (in_array("redis", get_loaded_extensions())));
+        validate("lib <bold>sodium", (in_array("sodium", get_loaded_extensions())));
         echo "\n";
 
         if (self::$err) {

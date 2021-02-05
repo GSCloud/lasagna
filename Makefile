@@ -1,7 +1,7 @@
 all: info
 
 info:
-	@echo "\n\e[1;32m👾 Welcome to Tesseract Lasagna 👾\n"
+	@echo "\n\e[1;32m👾 Welcome to Tesseract 👾\n"
 
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
 	@echo "🆘 \e[0;1mmake dd\e[0m - update Docker data"
