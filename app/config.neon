@@ -61,7 +61,11 @@ redis: [
   #password: ""
   #persistent: true
   #unix_socket: ""
+
+  # disable REDIS
+  #port: 0 
   port: 6377
+
   timeout: 1
 ]
 
