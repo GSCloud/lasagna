@@ -41,9 +41,9 @@ class LoginPresenter extends APresenter
         try {
             $provider = new \League\OAuth2\Client\Provider\Google([
                 // set OAuth 2.0 credentials
-                "clientId" => $cfg["goauth_client_id"],
-                "clientSecret" => $cfg["goauth_secret"],
-                "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"],
+                "clientId" => $cfg["goauth_client_id"] ?? null,
+                "clientSecret" => $cfg["goauth_secret"] ?? null,
+                "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"] ?? null : $cfg["goauth_redirect"] ?? null,
             ]);
         } finally {}
 
