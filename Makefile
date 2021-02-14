@@ -41,7 +41,7 @@ prodtest:
 	@/bin/bash ./cli.sh prod
 
 build:
-	@echo "\n🔨 \e[1;32m Building Docker image\e[0m"
+	@echo "\n🔨 \e[1;32m Building image\e[0m"
 	@/bin/bash ./bin/build.sh
 
 push:
@@ -49,7 +49,7 @@ push:
 	@docker push gscloudcz/tesseract-lasagna:latest
 
 testrun:
-	@echo "\n🔨 \e[1;32m Testing Docker image\e[0m"
+	@echo "\n🔨 \e[1;32m Testing image\e[0m"
 	@/bin/bash ./bin/testrun.sh
 
 dd:

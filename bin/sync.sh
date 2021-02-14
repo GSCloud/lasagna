@@ -27,10 +27,12 @@ chmod 0777 www/download www/upload
 find www/ -type f -exec chmod 0644 {} \;
 find . -type f -iname "*.sh" -exec chmod +x {} \;
 
-VERSION=`git rev-parse HEAD`
+VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
-REVISIONS=`git rev-list --all --count`
+
+REVISIONS=$(git rev-list --all --count)
 echo $REVISIONS > REVISIONS
+
 ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 info "Version: $VERSION Revisions: $REVISIONS"
 

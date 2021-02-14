@@ -13,6 +13,7 @@ if [ ! -n $(id -Gn "$(whoami)" | grep -c "docker") ]
     then if [ "$(id -u)" != "0" ]; then fail "Add yourself to the 'docker' group or run this script as root!"; fi
 fi
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
+
 export $(grep -v '^#' .env | xargs -d '\n')
 
 google-chrome http://localhost:9000 &

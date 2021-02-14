@@ -5,10 +5,9 @@ dir="$(dirname "$0")"
 . $dir"/_includes.sh"
 
 command -v node >/dev/null 2>&1 || {
-  info "Installing Node ..."
+  info Installing Node.js
   sudo snap install node --classic --channel=9
-
-  info "Installing gulp ..."
+  info Installing gulp
   sudo npm rm --global gulp
   sudo rm -f /usr/bin/gulp >/dev/null 2>&1
   sudo npm install --global gulp-cli
@@ -16,12 +15,9 @@ command -v node >/dev/null 2>&1 || {
 
 echo -e "\n"
 
-v=`node --version 2>/dev/null`
-info "node version: "$v
-v=`npm --version 2>/dev/null`
-info "npm version: "$v
-v=`gulp --version 2>/dev/null`
-info "gulp: "$v
+info node $(node --version 2>/dev/null)
+info npm $(npm --version 2>/dev/null)
+info gulp $(gulp --version 2>/dev/null)
 
 echo -e "\n"
 
