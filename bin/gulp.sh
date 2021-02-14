@@ -11,15 +11,12 @@ command -v node >/dev/null 2>&1 || {
   sudo npm rm --global gulp
   sudo rm -f /usr/bin/gulp >/dev/null 2>&1
   sudo npm install --global gulp-cli
+  echo -e "\n"
 }
-
-echo -e "\n"
 
 info node $(node --version 2>/dev/null)
 info npm $(npm --version 2>/dev/null)
 info gulp $(gulp --version 2>/dev/null)
-
-echo -e "\n"
 
 info "Recreate project?"
 yes_or_no && {
