@@ -6,7 +6,7 @@ info:
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
 	@echo "🆘 \e[0;1mmake dd\e[0m - update Docker data"
 	@echo "🆘 \e[0;1mmake push\e[0m - push image into the registry"
-	@echo "🆘 \e[0;1mmake run\e[0m - test Docker image"
+	@echo "🆘 \e[0;1mmake testrun\e[0m - test Docker image"
 
 	@echo ""
 
@@ -48,7 +48,7 @@ push:
 	@echo "\n🔨 \e[1;32m Pushing image to DockerHub\e[0m"
 	@docker push gscloudcz/tesseract-lasagna:latest
 
-run:
+testrun:
 	@echo "\n🔨 \e[1;32m Testing Docker image\e[0m"
 	@/bin/bash ./bin/testrun.sh
 
