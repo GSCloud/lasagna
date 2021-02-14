@@ -3,7 +3,6 @@
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-cd $ABSDIR
 
 command -v docker >/dev/null 2>&1 || { echo "Docker is NOT installed!"; exit;}
 
