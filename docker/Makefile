@@ -19,20 +19,20 @@ info:
 	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies\n"
 
 docs:
-	@/bin/bash ./bin/create_pdf.sh
+	@/bin/bash ./create_pdf.sh
 
 update:
-	@/bin/bash ./bin/update.sh
+	@/bin/bash ./UPDATE.sh
 
 install:
-	@/bin/bash ./bin/install.sh
+	@/bin/bash ./INSTALL.sh
 
 doctor:
 	@/bin/bash ./cli.sh doctor
 
 sync:
-	@/bin/bash ./bin/sync.sh x
-	@/bin/bash ./bin/sync.sh b
+	@/bin/bash ./SYNC.sh x
+	@/bin/bash ./SYNC.sh b
 
 test:
 	@/bin/bash ./cli.sh local
@@ -42,7 +42,7 @@ prodtest:
 
 build:
 	@echo "\n🔨 \e[1;32m Building Docker image\e[0m"
-	@/bin/bash ./bin/build.sh
+	@/bin/bash ./BUILD.sh
 
 push:
 	@echo "\n🔨 \e[1;32m Pushing image to DockerHub\e[0m"
@@ -50,9 +50,9 @@ push:
 
 run:
 	@echo "\n🔨 \e[1;32m Testing Docker image\e[0m"
-	@/bin/bash ./bin/testrun.sh
+	@/bin/bash ./TESTRUN.sh
 
 dd:
-	docker exec tesseract bash ./docker_updater.sh
+	docker exec -ti tesseract bash ./docker_updater.sh
 
 everything: docs update sync
