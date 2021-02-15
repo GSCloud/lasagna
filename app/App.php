@@ -15,11 +15,10 @@ use Google\Cloud\Logging\LoggingClient;
 use Monolog\Logger;
 use Nette\Neon\Neon;
 
-// user-defined error handler
+// USER-DEFINED ERROR HANDLER
 function exception_error_handler($severity, $message, $file, $line)
 {
-    if (!(error_reporting() & $severity)) {
-        // This error code is not included in error_reporting
+    if (!(error_reporting() & $severity)) { // this error code is not included in error_reporting
         return;
     }
     throw new \Exception("ERROR: $message FILE: $file LINE: $line");
