@@ -7,8 +7,8 @@ FROM php:${CODE_VERSION}
 
 RUN apt-get update -qq && apt-get upgrade -yqq && apt-get install -yqq --no-install-recommends curl openssl redis
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions gd redis
 
+RUN install-php-extensions gd redis
 RUN a2enmod rewrite expires headers
 RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && chmod 0777 /var/www/ci /var/www/data /var/www/logs /var/www/temp \

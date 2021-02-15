@@ -17,4 +17,5 @@ export $(grep -v '^#' .env | xargs -d '\n')
 if [ -z "$TAG" ]; then fail "Missing TAG definition!"; fi
 
 docker build --pull -t $TAG .
-#docker run --rm --name tesseract $TAG ./cli.sh doctor
+#docker build --pull --no-cache -t $TAG .
+
