@@ -40,7 +40,7 @@ class ApiPresenter extends APresenter
         $extras = [
             "access_time_limit" => self::ACCESS_TIME_LIMIT,
             "api_quota" => (int) self::MAX_API_HITS,
-            "api_usage" => $this->accessLimiter(),
+            "api_usage" => $this->getData("redis.port") > 0 ? $this->accessLimiter() : 0,
             "cache_time_limit" => $this->getData("cache_profiles")[self::API_CACHE],
             "fn" => $view,
             "name" => "TESSERACT",
@@ -53,17 +53,20 @@ class ApiPresenter extends APresenter
                 if ($use_cache && $data = Cache::read($view, self::API_CACHE)) {
                     return $this->writeJsonData($data, $extras);
                 }
+
                 // populate data model
                 $data = [];
                 $data[] = "Hello!";
                 $data[] = "Hello Europe!";
                 $data[] = "Hello World!";
+
                 // save model to cache
                 if ($use_cache) {
                     Cache::write($view, $data, self::API_CACHE);
                 }
                 return $this->writeJsonData($data, $extras);
                 break;
+
             default:
                 return ErrorPresenter::getInstance()->process(404);
         }

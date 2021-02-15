@@ -172,6 +172,8 @@ class CiTester
                     $bad++;
                     $json = false;
                     $jsformat = "JSON_ERROR";
+                    $climate->out('!!! JSON ERRROR !!!');
+                    $climate->out($content);
                 } else {
                     $jsformat = "JSON";
                     if ($arr["code"] == 200) {
@@ -179,6 +181,7 @@ class CiTester
                     } else {
                         $jscode = "BAD_CODE:" . $arr["code"];
                         $bad++;
+                        $climate->out('!!! JSON CODE ERRROR !!!');
                     }
                 }
             }
@@ -188,6 +191,7 @@ class CiTester
             if ($code != $x["assert_httpcode"]) {
                 $bad++;
                 $http_code = false;
+                $climate->out('!!! HTTP CODE ERRROR !!!');
             }
             if ($bad == 0) { // OK
                 $climate->out(
