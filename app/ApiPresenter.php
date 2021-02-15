@@ -83,9 +83,11 @@ class ApiPresenter extends APresenter
         $hour = date("H");
         $uid = $this->getUID();
         $key = "access_limiter_" . SERVER . "_" . PROJECT . "_" . APPNAME . "_{$hour}_{$uid}";
+        $host = $this->getData("redis.host") ?? "127.0.0.1";
+        $port = $this->getData("redis.port") ?? "6379";
         $redis = new RedisClient([
-            'server' => '127.0.0.1:6377',
-            'timeout' => 1,
+            "server" => "$host:$port",
+            "timeout" => 1,
         ]);
         try {
             $val = (int) @$redis->get($key);
