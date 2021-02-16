@@ -316,22 +316,22 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 
       <!-- ICON BUTTONS -->
       <h4 class="center">
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
+        <a title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fab fa-git"></i></a>
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
+        <a title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
           data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz">
           <i class="fas fa-server"></i></a>
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped red-text text"
+        <a title="{{ l.a_lasagna_manual_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped red-text text"
           data-position="top" data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}">
           <i class="fas fa-dna"></i></a>
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped white-text text" data-position="top"
+        <a title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped white-text text" data-position="top"
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}">
           <i class="fas fa-clone"></i></a>
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
+        <a title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped blue-text text" data-position="top"
           data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz" style="font-size:0.8em">
           <span class="php1">p</span><span class="php2">h</span><span class="php3">p</span></a>
         {{#google_drive_backup}}
-        <a rel="noreferrer noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
+        <a title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped brown-text text" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}">
           <i class="fas fa-warehouse"></i></a>
         {{/google_drive_backup}}
@@ -354,14 +354,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           data-position="top" data-tooltip="">📴</a>
         <br>
         -->
-        <a id="a_logout" class="tooltipped waves-effect green waves-light btn"
+        <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
           data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
           <i class="fas fa-sign-out-alt"></i>
           {{ l.a_logout }}</a>
-        <a target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
+        <a title="auditlog" target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
           <i class="fas fa-list"></i></a>
         <br>
-        <a id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
+        <a title="{{ l.a_clear_browser_ttip }}" id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
           data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
           <i class="fas fa-power-off"></i>
           {{ l.a_clear_browser }}</a>

@@ -8,10 +8,9 @@
         <div id="user1" class="summernote"><div class="progress"><div class="indeterminate"></div></div></div>
       </div>
     </div>
-    <h5 id="websharetest">&nbsp;webshare test&nbsp;</h5>
-    <h4>Emoji & specials</h4>
+    <h4>Emoji & Specials</h4>
     <div id="emojisdemo">
-      🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀🍁🍂🍃🍄🍅🍆🍇🍈🍉🍊🍋🍌🍍🍎🍏🍐🍑🍒🍓
+      🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀
     </div>
     <div class="container">
       <div class="row left-align">
@@ -28,7 +27,7 @@
 
       w.GSC.init.push(function () {
         w.GSC.names.push("demo - WebShare API");
-        if (typeof window.WebShareFactory === "function") $('#websharetest').append(WebShareFactory(
+        if (typeof window.WebShareFactory === "function") $("#emojisdemo").append(WebShareFactory(
           'WebShare API works!', '', 'DEMO'));
       });
 
