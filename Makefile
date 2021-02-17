@@ -18,44 +18,44 @@ info:
 	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies\n"
 
 docs:
-	@/bin/bash ./bin/create_pdf.sh
+	@bash ./bin/create_pdf.sh
 
 update:
-	@/bin/bash ./bin/update.sh
+	@bash ./bin/update.sh
 
 install:
-	@/bin/bash ./bin/install.sh
+	@bash ./bin/install.sh
 
 doctor:
-	@/bin/bash ./cli.sh doctor
+	@bash ./cli.sh doctor
 
 sync:
-	@/bin/bash ./bin/sync.sh x
-	@/bin/bash ./bin/sync.sh b
+	@bash ./bin/sync.sh x
+	@bash ./bin/sync.sh b
 
 test:
-	@/bin/bash ./cli.sh local
+	@bash ./cli.sh local
 
 prodtest:
-	@/bin/bash ./cli.sh prod
+	@bash ./cli.sh prod
 
 build:
-	@echo "\n🔨 \e[1;32m Building image\e[0m"
-	@/bin/bash ./bin/build.sh
+	@echo "🔨 \e[1;32m Building image\e[0m"
+	@bash ./bin/build.sh
 
 gulp:
-	@echo "\n🔨 \e[1;32m Fixing gulp\e[0m"
-	@/bin/bash ./bin/gulp.sh
+	@echo "🔨 \e[1;32m Fixing gulp\e[0m"
+	@bash ./bin/gulp.sh
 
 push:
-	@echo "\n🔨 \e[1;32m Pushing image\e[0m"
+	@echo "🔨 \e[1;32m Pushing image\e[0m"
 	@docker push gscloudcz/tesseract-lasagna:latest
 
 testrun:
-	@echo "\n🔨 \e[1;32m Testing image\e[0m"
-	@/bin/bash ./bin/testrun.sh
+	@echo "🔨 \e[1;32m Testing image\e[0m"
+	@bash ./bin/testrun.sh
 
 dd:
 	docker exec tesseract bash ./docker_updater.sh
 
-everything: docs update sync
+everything: update sync
