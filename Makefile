@@ -1,10 +1,10 @@
 all: info
 
 info:
-	@echo "\n\e[1;32m👾 Welcome to Tesseract 👾\n"
+	@echo "\e[1;32m👾 Welcome to Tesseract 👾\n"
 
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
-	@echo "🆘 \e[0;1mmake dd\e[0m - update Docker data"
+	@echo "🆘 \e[0;1mmake du\e[0m - update Docker data"
 	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
 	@echo "🆘 \e[0;1mmake testrun\e[0m - test Docker image\n"
 
@@ -55,7 +55,7 @@ testrun:
 	@echo "🔨 \e[1;32m Testing image\e[0m"
 	@bash ./bin/testrun.sh
 
-dd:
-	docker exec tesseract bash ./docker_updater.sh
+du:
+	@bash ./bin/update_docker.sh
 
 everything: update sync

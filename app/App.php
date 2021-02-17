@@ -152,7 +152,7 @@ foreach ($cache_profiles as $k => $v) {
             "className" => "Cake\Cache\Engine\RedisEngine",
             "database" => $cfg["redis"]["database"] ?? 0,
             "duration" => $v,
-            "fallback" => "${k}_file", // use fallback File engine filename
+            "fallback" => "${k}_file", // use fallback
             "host" => $cfg["redis"]["host"] ?? "127.0.0.1",
             "password" => $cfg["redis"]["password"] ?? "",
             "path" => CACHE,
@@ -163,10 +163,19 @@ foreach ($cache_profiles as $k => $v) {
             "unix_socket" => $cfg["redis"]["unix_socket"] ?? "",
         ]);
     } else {
-        // do not use REDIS
+        // no REDIS !!!
+        Cache::setConfig("${k}_file", [
+            "className" => "Cake\Cache\Engine\FileEngine", // File engine
+            "duration" => $v,
+            "fallback" => false,
+            "lock" => true,
+            "path" => CACHE,
+            "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+        ]);
         Cache::setConfig($k, [
             "className" => "Cake\Cache\Engine\FileEngine", // File engine
             "duration" => $v,
+            "fallback" => false,
             "lock" => true,
             "path" => CACHE,
             "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
