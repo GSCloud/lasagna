@@ -550,20 +550,18 @@ abstract class APresenter implements IPresenter
         }
 
         // Telegram support
-        $curl_obj = curl_init();
-        if ($this->getCurrentUser()["name"] === "") {
-            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message);
-        } else {
-            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message . " / " . $this->getCurrentUser()["name"]);
-        }
         $chid = $this->getData("telegram.bot_ch_id") ?? null;
         $apikey = $this->getData("telegram.bot_apikey") ?? null;
-        if ($chid && $apikey) {
-            $query = "?chat_id=" . $chid . "&text=${message}";
-            curl_setopt($curl_obj, CURLOPT_URL, "https://api.telegram.org/bot" . $apikey . "/sendMessage" . $query);
-            curl_setopt($curl_obj, CURLOPT_RETURNTRANSFER, true);
-            $response = curl_exec($curl_obj);
-            curl_close($curl_obj);
+        if ($this->getCurrentUser()["name"] !== "") {
+            $curl_obj = curl_init();
+            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message . " / " . $this->getCurrentUser()["name"]);
+            if ($chid && $apikey) {
+                $query = "?chat_id=" . $chid . "&text=${message}";
+                curl_setopt($curl_obj, CURLOPT_URL, "https://api.telegram.org/bot" . $apikey . "/sendMessage" . $query);
+                curl_setopt($curl_obj, CURLOPT_RETURNTRANSFER, true);
+                curl_exec($curl_obj);
+                curl_close($curl_obj);
+            }
         }
         return $this;
     }
