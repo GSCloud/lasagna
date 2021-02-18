@@ -146,7 +146,7 @@ foreach ($cache_profiles as $k => $v) {
             "duration" => $v,
             "lock" => true,
             "path" => CACHE,
-            "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+            "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_" . CACHEPREFIX,
         ]);
         Cache::setConfig($k, [
             "className" => "Cake\Cache\Engine\RedisEngine",
@@ -158,7 +158,7 @@ foreach ($cache_profiles as $k => $v) {
             "path" => CACHE,
             "persistent" => false,
             "port" => $cfg["redis"]["port"] ?? 6379,
-            "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+            "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_" . CACHEPREFIX,
             "timeout" => $cfg["redis"]["timeout"] ?? 1,
             "unix_socket" => $cfg["redis"]["unix_socket"] ?? "",
         ]);
@@ -170,7 +170,7 @@ foreach ($cache_profiles as $k => $v) {
             "fallback" => false,
             "lock" => true,
             "path" => CACHE,
-            "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+            "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_" . CACHEPREFIX,
         ]);
         Cache::setConfig($k, [
             "className" => "Cake\Cache\Engine\FileEngine", // File engine
@@ -178,7 +178,7 @@ foreach ($cache_profiles as $k => $v) {
             "fallback" => false,
             "lock" => true,
             "path" => CACHE,
-            "prefix" => CACHEPREFIX . SERVER . PROJECT . APPNAME . "_",
+            "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_" . CACHEPREFIX,
         ]);
     }
 }
