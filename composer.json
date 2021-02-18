@@ -14,7 +14,7 @@
         "league/csv": "^9.6",
         "league/oauth2-client": "^2.6",
         "league/oauth2-google": "^3.0",
-        "monolog/monolog": "^1.25",
+        "monolog/monolog": "^1.0",
         "mustache/mustache": "^2.13",
         "nette/finder": "^2.5",
         "nette/neon": "^2.4",
