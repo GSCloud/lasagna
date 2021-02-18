@@ -37,6 +37,11 @@ class CorePresenter extends APresenter
 
         // API calls
         switch ($view) {
+            case "PingBack":
+                $this->checkRateLimit();
+                return $this->writeJsonData([200 => "OK"], $extras);
+                break;
+
             case "GetWebManifest":
                 // do NOT rate limit this call!
                 //$this->checkRateLimit();
