@@ -551,7 +551,11 @@ abstract class APresenter implements IPresenter
 
         // Telegram support
         $curl_obj = curl_init();
-        $message = htmlspecialchars("🤖 ".APPNAME . " (" . DOMAIN . ")" . ": " . $message . " / ". $this->getCurrentUser()["name"]);
+        if ($this->getCurrentUser()["name"] === "") {
+            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message);
+        } else {
+            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message . " / " . $this->getCurrentUser()["name"]);
+        }
         $chid = $this->getData("telegram.bot_ch_id") ?? null;
         $apikey = $this->getData("telegram.bot_apikey") ?? null;
         if ($chid && $apikey) {
@@ -1363,7 +1367,6 @@ abstract class APresenter implements IPresenter
                         if ($zone->id == $myzone) {
                             $zones->cachePurgeEverything($zone->id);
                             $this->addMessage("CF: zone ${myzone} purged");
-                            $this->addAuditMessage("CF: zone ${myzone} purged");
                         }
                     }
                 }
