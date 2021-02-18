@@ -551,7 +551,7 @@ abstract class APresenter implements IPresenter
 
         // Telegram support
         $curl_obj = curl_init();
-        $message = htmlspecialchars("🤖 ".APPNAME . " (" . SERVER . ")" . ": " . $message);
+        $message = htmlspecialchars("🤖 ".APPNAME . " (" . DOMAIN . ")" . ": " . $message . " / ". $this->getCurrentUser()["name"]);
         $chid = $this->getData("telegram.bot_ch_id") ?? null;
         $apikey = $this->getData("telegram.bot_apikey") ?? null;
         if ($chid && $apikey) {
