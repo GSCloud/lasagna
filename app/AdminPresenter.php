@@ -134,7 +134,6 @@ class AdminPresenter extends APresenter
                 }
                 $c = \count($x);
                 $this->addMessage("FILES UPLOADED: $c");
-                $this->addAuditMessage("FILES UPLOADED: $c");
                 return $this->writeJsonData($x, $extras);
                 break;
 
@@ -151,7 +150,6 @@ class AdminPresenter extends APresenter
                         @\unlink($f3);
                         @\unlink($f4);
                         $this->addMessage("FILE DELETED: $f1");
-                        $this->addAuditMessage("FILE DELETED: $f1");
                         return $this->writeJsonData($f1, $extras);
                     }
                 }
@@ -160,21 +158,18 @@ class AdminPresenter extends APresenter
             case "clearcache":
                 \header('Clear-Site-Data: "cache"');
                 $this->addMessage("BROWSER CACHE CLEARED");
-                $this->addAuditMessage("BROWSER CACHE CLEARED");
                 $this->setLocation();
                 break;
 
             case "clearcookies":
                 \header('Clear-Site-Data: "cookies"');
                 $this->addMessage("BROWSER COOKIES CLEARED");
-                $this->addAuditMessage("BROWSER COOKIES CLEARED");
                 $this->setLocation();
                 break;
 
             case "clearbrowser":
                 \header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
                 $this->addMessage("BROWSER DATA CLEARED");
-                $this->addAuditMessage("BROWSER DATA CLEARED");
                 $this->setLocation();
                 break;
 
@@ -419,7 +414,6 @@ class AdminPresenter extends APresenter
             case "FlushCache":
                 $this->checkPermission("admin,editor");
                 $this->flushCache();
-                $this->addAuditMessage("FLUSH CACHE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
@@ -428,7 +422,6 @@ class AdminPresenter extends APresenter
                 $this->setForceCsvCheck(true);
                 $this->postloadAppData("app_data");
                 $this->flushCache();
-                $this->addAuditMessage("CORE UPDATE");
                 return $this->writeJsonData(["status" => "OK"], $extras);
                 break;
 
@@ -443,7 +436,6 @@ class AdminPresenter extends APresenter
                     $hash = \substr(\hash("sha256", $json), 0, 8); // return 8 chars of SHA256
                     @\file_put_contents($f, $json, LOCK_EX); // @todo check write fail!
                     $this->addMessage("CREATE AUTH CODE");
-                    $this->addAuditMessage("CREATE AUTH CODE");
                     return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
                 }
                 return $this->writeJsonData(401, $extras); // error
@@ -458,7 +450,6 @@ class AdminPresenter extends APresenter
                         @\unlink($f); // delete identity
                     }
                     $this->addMessage("DELETE AUTH CODE");
-                    $this->addAuditMessage("DELETE AUTH CODE");
                     return $this->writeJsonData(["status" => "OK"], $extras);
                 }
                 return $this->writeJsonData(401, $extras); // error
