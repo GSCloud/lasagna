@@ -30,9 +30,7 @@ class ApiPresenter extends APresenter
      */
     public function process()
     {
-        setlocale(LC_ALL, "cs_CZ.utf8");
         $view = $this->getView();
-
         $use_cache = true;
         //$use_cache = false;
 
@@ -47,6 +45,7 @@ class ApiPresenter extends APresenter
             "uuid" => $this->getUID(),
         ];
 
+        setlocale(LC_ALL, "cs_CZ.utf8");
         // API calls
         switch ($view) {
             case "APIDemo":
