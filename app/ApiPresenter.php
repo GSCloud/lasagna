@@ -45,7 +45,7 @@ class ApiPresenter extends APresenter
             "uuid" => $this->getUID(),
         ];
 
-        setlocale(LC_ALL, "cs_CZ.utf8");
+        //setlocale(LC_ALL, "cs_CZ.utf8");
         // API calls
         switch ($view) {
             case "APIDemo":
