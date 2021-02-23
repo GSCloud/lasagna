@@ -113,13 +113,8 @@ exit;
                 $this->addError("Google OAuth: " . $e->getMessage());
             }
         }
-        // process errors
-        \header("HTTP/1.1 400 Bad Request");
-        $this->clearCookie("login_hint");
-        $this->clearCookie("oauth2state");
-        $this->clearcookie("return_uri");
-        echo "<html><body><center><h1>😐 AUTHENTICATION ERROR 😐</h1>";
-        echo '<h2><a href="/login?relogin">RELOAD ↻</a></h2><hr>';
+        // error
+        $this->setLocation("/err/403");
         exit;
     }
 }
