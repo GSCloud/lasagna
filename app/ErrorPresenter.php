@@ -65,7 +65,7 @@ class ErrorPresenter extends APresenter
         $template = '<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="x-ua-compatible" content="IE=edge"><body><center><h1>'
             . "<br>🤔 Web App Error #${code} 💣</h1><h2>" . self::CODESET[$code]
             . '<br></h2><h1><a rel=nofollow style="color:red;text-decoration:none" href="/">RELOAD ↻</a></h1>'
-            . '<img alt="' . $error . '" src=/img/' . $img . '></body></html>';
+            . '<img height="100%" alt="' . $error . '" src=/img/' . $img . '></body></html>';
         return $this->setData("output", $this->renderHTML($template));
     }
 }
