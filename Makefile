@@ -4,7 +4,7 @@ info:
 	@echo "\e[1;32m👾 Welcome to Tesseract 👾\n"
 
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
-	@echo "🆘 \e[0;1mmake du\e[0m - update Docker data"
+	@echo "🆘 \e[0;1mmake du\e[0m - Docker update running container"
 	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
 	@echo "🆘 \e[0;1mmake run\e[0m - test Docker image\n"
 
@@ -58,4 +58,4 @@ run:
 du:
 	@bash ./bin/update_docker.sh
 
-everything: update sync
+everything: update doctor test sync

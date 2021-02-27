@@ -15,7 +15,7 @@ fi
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 export $(grep -v '^#' .env | xargs -d '\n')
 
-which google-chrome && google-chrome http://localhost:9000 &
+command -v google-chrome >/dev/null 2>&1 && google-chrome http://localhost:$PORT &
 
-docker run --rm --name $NAME -p $PORT:80 $TAG
 #docker run --rm --name $NAME -p $PORT:80 -v "$(pwd)"/www/:/var/www/html/ -v "$(pwd)"/app/:/var/www/app/ $TAG
+docker run --rm --name $NAME -p $PORT:80 $TAG
