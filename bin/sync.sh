@@ -3,9 +3,8 @@
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-
 dir="$(dirname "$0")"
-. $dir"/_includes.sh"
+. "$dir/_includes.sh"
 
 if [ -z "$GLOBALSYNC" ]; then
   if [ -n "$1" ]; then export BETA="$1"; else export BETA="b"; fi

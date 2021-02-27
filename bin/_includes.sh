@@ -7,11 +7,12 @@ info() {
 
 warn() {
   echo -e " \e[1;33m***\e[0;1m ${*}\e[0m" 1>&2
+  sleep 1
 }
 
 fail() {
   echo -e " \e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
-  sleep 5
+  sleep 1
   exit 1
 }
 

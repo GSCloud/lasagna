@@ -3,11 +3,10 @@
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-
 dir="$(dirname "$0")"
-. $dir"/_includes.sh"
+. "$dir/_includes.sh"
 
-info "Setting up ..."
+info "Setting things up 👶"
 
 find . -name "*.sh" -exec chmod +x {} \;
 mkdir -p ci data logs temp www/cdn-assets www/download www/upload
@@ -20,7 +19,7 @@ sudo apt-get install -yq libapache2-mod-php8.0 openssl php-imagick php-redis \
   php8.0 php8.0-cli php8.0-curl php8.0-gd php8.0-intl php8.0-mbstring php8.0-readline php8.0-xml php8.0-zip
 sudo a2enmod php8.0 expires headers rewrite
 
-which composer || fail PHP composer is not installed!
+command -v composer >/dev/null 2>&1 || fail PHP composer is not installed!
 [ ! -d "vendor" ] &&  make update
 
-echo -en "\n\nRun \e[1m\e[4mmake doctor\e[0m to check your configuration.\n\n"
+echo -en "\n\nRun \e[1m\e[4mmake doctor\e[0m to check your configuration 💖\n\n"

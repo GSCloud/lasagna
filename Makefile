@@ -6,7 +6,7 @@ info:
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
 	@echo "🆘 \e[0;1mmake du\e[0m - update Docker data"
 	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
-	@echo "🆘 \e[0;1mmake testrun\e[0m - test Docker image\n"
+	@echo "🆘 \e[0;1mmake run\e[0m - test Docker image\n"
 
 	@echo "🆘 \e[0;1mmake docs\e[0m - build documentation"
 	@echo "🆘 \e[0;1mmake doctor\e[0m - Tesseract doctor"
@@ -40,19 +40,19 @@ prodtest:
 	@bash ./cli.sh prod
 
 build:
-	@echo "🔨 \e[1;32m Building image\e[0m"
+	@echo "🔨 \e[1;32m Building image\e[0m\n"
 	@bash ./bin/build.sh
 
 gulp:
-	@echo "🔨 \e[1;32m Fixing gulp\e[0m"
+	@echo "🔨 \e[1;32m Setting gulp\e[0m\n"
 	@bash ./bin/gulp.sh
 
 push:
-	@echo "🔨 \e[1;32m Pushing image\e[0m"
-	@docker push gscloudcz/tesseract-lasagna:latest
+	@echo "🔨 \e[1;32m Pushing image\e[0m\n"
+	@bash ./bin/push.sh
 
-testrun:
-	@echo "🔨 \e[1;32m Testing image\e[0m"
+run:
+	@echo "🔨 \e[1;32m Testing image\e[0m\n"
 	@bash ./bin/testrun.sh
 
 du:

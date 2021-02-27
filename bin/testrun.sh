@@ -3,20 +3,19 @@
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-
 dir="$(dirname "$0")"
-. $dir"/_includes.sh"
+. "$dir/_includes.sh"
 
 command -v docker >/dev/null 2>&1 || fail "Docker is NOT installed!"
 
 if [ ! -n $(id -Gn "$(whoami)" | grep -c "docker") ]
     then if [ "$(id -u)" != "0" ]; then fail "Add yourself to the 'docker' group or run this script as root!"; fi
 fi
-if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 
+if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 export $(grep -v '^#' .env | xargs -d '\n')
 
-[[ which google-chrome ]] && google-chrome http://localhost:9000 &
+which google-chrome && google-chrome http://localhost:9000 &
 
-#docker run --rm --name tesseract -p 9000:80 -v "$(pwd)"/www/:/var/www/html/ -v "$(pwd)"/app/:/var/www/app/ $TAG
-docker run --rm --name tesseract -p 9000:80 $TAG
+docker run --rm --name $NAME -p $PORT:80 $TAG
+#docker run --rm --name $NAME -p $PORT:80 -v "$(pwd)"/www/:/var/www/html/ -v "$(pwd)"/app/:/var/www/app/ $TAG

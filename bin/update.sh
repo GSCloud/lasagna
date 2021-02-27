@@ -3,9 +3,8 @@
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-
 dir="$(dirname "$0")"
-. $dir"/_includes.sh"
+. "$dir/_includes.sh"
 
 git commit -am "web sync"
 git push origin master
