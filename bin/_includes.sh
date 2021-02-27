@@ -12,7 +12,6 @@ warn() {
 
 fail() {
   echo -e " \e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
-  sleep 1
   exit 1
 }
 

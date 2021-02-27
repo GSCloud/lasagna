@@ -31,7 +31,7 @@ doctor:
 
 sync:
 	@bash ./bin/sync.sh x
-	@bash ./bin/sync.sh b
+	#@bash ./bin/sync.sh b
 
 test:
 	@bash ./cli.sh local

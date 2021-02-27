@@ -23,4 +23,4 @@ info "Version: $VERSION Revisions: $REVISIONS"
 command -v composer >/dev/null 2>&1 || fail PHP composer is not installed!
 composer update --no-plugins --no-scripts
 
-info Done.
+exit 0

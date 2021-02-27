@@ -14,8 +14,13 @@ fi
 
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 export $(grep -v '^#' .env | xargs -d '\n')
+[ -z "$NAME" ] && fail "Missing NAME definition!"
+[ -z "$PORT" ] && fail "Missing PORT definition!"
+[ -z "$TAG" ] && fail "Missing TAG definition!"
 
 command -v google-chrome >/dev/null 2>&1 && google-chrome http://localhost:$PORT &
 
 #docker run --rm --name $NAME -p $PORT:80 -v "$(pwd)"/www/:/var/www/html/ -v "$(pwd)"/app/:/var/www/app/ $TAG
 docker run --rm --name $NAME -p $PORT:80 $TAG
+
+exit 0
