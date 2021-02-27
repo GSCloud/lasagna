@@ -58,4 +58,4 @@ run:
 du:
 	@bash ./bin/update_docker.sh
 
-everything: update doctor test sync
+everything: update doctor test sync prodtest
