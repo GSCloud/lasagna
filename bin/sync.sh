@@ -24,6 +24,7 @@ if [ -z "${USER}" ]; then fail "Error in _site_cfg.sh !"; fi
 
 mkdir -p app ci data temp www/cdn-assets www/download www/upload
 chmod 0777 www/download www/upload >/dev/null 2>&1
+
 find www/ -type f -exec chmod 0644 {} \; >/dev/null 2>&1
 find . -type f -iname "*.sh" -exec chmod +x {} \;
 

@@ -63,8 +63,7 @@ class ErrorPresenter extends APresenter
         $img = "error.png";
         if (\file_exists(WWW . "/img/${code}.png")) {
             $img = "${code}.png";
-        }
-        if (\file_exists(WWW . "/img/${code}.jpg")) {
+        } elseif (\file_exists(WWW . "/img/${code}.jpg")) {
             $img = "${code}.jpg";
         }
         $template = '<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="x-ua-compatible" content="IE=edge"><body><center><h1>'

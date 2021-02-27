@@ -19,6 +19,7 @@ info npm $(npm --version 2>/dev/null)
 info gulp $(gulp --version 2>/dev/null)
 
 info "Recreate project?"
+
 yes_or_no && {
   rm -rf ./node_modules >/dev/null 2>&1
   npm init
