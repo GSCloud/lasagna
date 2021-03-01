@@ -30,7 +30,8 @@
         "there4/php-analytics-event": "^1.2",
         "tracy/tracy": "^2.8",
         "tuupola/base58": "^0.2.3",
-        "nette/mail": "^3.1"
+        "nette/mail": "^3.1",
+        "paragonie/easydb": "^2.11"
     },
     "autoload": {
         "psr-4": {
