@@ -39,6 +39,12 @@ test:
 prodtest:
 	@bash ./cli.sh prod
 
+local:
+	@bash ./cli.sh local
+
+prod:
+	@bash ./cli.sh prod
+
 build:
 	@echo "🔨 \e[1;32m Building image\e[0m\n"
 	@bash ./bin/build.sh

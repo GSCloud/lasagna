@@ -120,16 +120,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.2.3",
+            "version": "4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "3bd1dd78fc716da13903a6943d690d967a5190f4"
+                "reference": "47776a3d0a70703ad91db3ba0a38df9ac4e7774f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/3bd1dd78fc716da13903a6943d690d967a5190f4",
-                "reference": "3bd1dd78fc716da13903a6943d690d967a5190f4",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/47776a3d0a70703ad91db3ba0a38df9ac4e7774f",
+                "reference": "47776a3d0a70703ad91db3ba0a38df9ac4e7774f",
                 "shasum": ""
             },
             "require": {
@@ -169,11 +169,11 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cache"
             },
-            "time": "2021-01-24T16:00:30+00:00"
+            "time": "2021-02-28T00:12:55+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "4.2.3",
+            "version": "4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -230,7 +230,7 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "4.2.3",
+            "version": "4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
@@ -1841,20 +1841,20 @@
         },
         {
             "name": "nette/tester",
-            "version": "v2.3.5",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tester.git",
-                "reference": "86d0e32ac2011c734d8def8e90ec65522b644bc4"
+                "reference": "0988c33459b49bfd6c8d06e16f29de96eba341e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/86d0e32ac2011c734d8def8e90ec65522b644bc4",
-                "reference": "86d0e32ac2011c734d8def8e90ec65522b644bc4",
+                "url": "https://api.github.com/repos/nette/tester/zipball/0988c33459b49bfd6c8d06e16f29de96eba341e7",
+                "reference": "0988c33459b49bfd6c8d06e16f29de96eba341e7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2 <8.1"
             },
             "require-dev": {
                 "ext-simplexml": "*",
@@ -1866,7 +1866,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -1906,9 +1906,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/tester/issues",
-                "source": "https://github.com/nette/tester/tree/v2.3.5"
+                "source": "https://github.com/nette/tester/tree/v2.4.0"
             },
-            "time": "2021-01-31T22:45:55+00:00"
+            "time": "2021-03-01T15:27:25+00:00"
         },
         {
             "name": "nette/utils",
