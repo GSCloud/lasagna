@@ -935,16 +935,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.15.3",
+            "version": "v3.15.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "f22e60e5deb972ded0115c620a99b3f1ac2f4824"
+                "reference": "c4a8128a7df155fce4faba3087b27dcdfe3ece2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/f22e60e5deb972ded0115c620a99b3f1ac2f4824",
-                "reference": "f22e60e5deb972ded0115c620a99b3f1ac2f4824",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/c4a8128a7df155fce4faba3087b27dcdfe3ece2e",
+                "reference": "c4a8128a7df155fce4faba3087b27dcdfe3ece2e",
                 "shasum": ""
             },
             "require": {
@@ -974,9 +974,9 @@
             ],
             "support": {
                 "issues": "https://github.com/protocolbuffers/protobuf-php/issues",
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.15.3"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.15.5"
             },
-            "time": "2021-02-25T23:39:41+00:00"
+            "time": "2021-03-05T01:43:13+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -1444,16 +1444,16 @@
         },
         {
             "name": "league/oauth2-google",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-google.git",
-                "reference": "18d1889897a8b18d85ecadacf74c9274d678d943"
+                "reference": "6b79441f244040760bed5fdcd092a2bda7cf34c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/18d1889897a8b18d85ecadacf74c9274d678d943",
-                "reference": "18d1889897a8b18d85ecadacf74c9274d678d943",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/6b79441f244040760bed5fdcd092a2bda7cf34c6",
+                "reference": "6b79441f244040760bed5fdcd092a2bda7cf34c6",
                 "shasum": ""
             },
             "require": {
@@ -1493,9 +1493,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/oauth2-google/issues",
-                "source": "https://github.com/thephpleague/oauth2-google/tree/3.0.3"
+                "source": "https://github.com/thephpleague/oauth2-google/tree/3.0.4"
             },
-            "time": "2020-07-24T15:16:12+00:00"
+            "time": "2021-01-27T16:09:03+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1912,16 +1912,16 @@
         },
         {
             "name": "nette/utils",
-            "version": "v3.2.1",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "2bc2f58079c920c2ecbb6935645abf6f2f5f94ba"
+                "reference": "967cfc4f9a1acd5f1058d76715a424c53343c20c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/2bc2f58079c920c2ecbb6935645abf6f2f5f94ba",
-                "reference": "2bc2f58079c920c2ecbb6935645abf6f2f5f94ba",
+                "url": "https://api.github.com/repos/nette/utils/zipball/967cfc4f9a1acd5f1058d76715a424c53343c20c",
+                "reference": "967cfc4f9a1acd5f1058d76715a424c53343c20c",
                 "shasum": ""
             },
             "require": {
@@ -1991,9 +1991,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v3.2.1"
+                "source": "https://github.com/nette/utils/tree/v3.2.2"
             },
-            "time": "2021-01-11T03:05:59+00:00"
+            "time": "2021-03-03T22:53:25+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -2991,16 +2991,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.19",
+            "version": "v4.4.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "efcf444cbf19166f8e078761b951622a1e7d36db"
+                "reference": "5004691f5b01616d55b41dc9e1f22d4bbd0c15a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/efcf444cbf19166f8e078761b951622a1e7d36db",
-                "reference": "efcf444cbf19166f8e078761b951622a1e7d36db",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/5004691f5b01616d55b41dc9e1f22d4bbd0c15a3",
+                "reference": "5004691f5b01616d55b41dc9e1f22d4bbd0c15a3",
                 "shasum": ""
             },
             "require": {
@@ -3048,7 +3048,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v4.4.19"
+                "source": "https://github.com/symfony/lock/tree/v4.4.20"
             },
             "funding": [
                 {
@@ -3064,7 +3064,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T09:09:26+00:00"
+            "time": "2021-02-14T12:29:41+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
