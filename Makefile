@@ -64,5 +64,5 @@ run:
 du:
 	@bash ./bin/update_docker.sh
 
-everything: update doctor test sync prodtest
-reimage: update doctor test build run
+everything: doctor test update sync prodtest
+reimage: doctor test update build run
