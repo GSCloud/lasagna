@@ -1,5 +1,5 @@
 #!/bin/bash
-#@author Filip Oščádal <oscadal@gscloud.cz>
+#@author Filip Oščádal <git@gscloud.cz>
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
@@ -20,6 +20,7 @@ sudo apt-get install -yq libapache2-mod-php8.0 openssl php-imagick php-redis \
 sudo a2enmod php8.0 expires headers rewrite
 
 command -v composer >/dev/null 2>&1 || fail PHP composer is not installed!
+
 [ ! -d "vendor" ] &&  make update
 
 echo -en "\n\nRun \e[1m\e[4mmake doctor\e[0m to check your configuration 💖\n\n"

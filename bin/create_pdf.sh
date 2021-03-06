@@ -1,5 +1,5 @@
 #!/bin/bash
-#@author Filip Oščádal <oscadal@gscloud.cz>
+#@author Filip Oščádal <git@gscloud.cz>
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
@@ -18,3 +18,5 @@ find . -type d \( -path ./node_modules -o -path ./vendor \) -prune -false -o -in
 
 # phpdocumentor
 docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) -v $(pwd):/data phpdoc/phpdoc run -d . -t ./doc --ignore "vendor/*,temp/*"
+
+exit 0

@@ -1,5 +1,5 @@
 #!/bin/bash
-#@author Filip Oščádal <oscadal@gscloud.cz>
+#@author Filip Oščádal <git@gscloud.cz>
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
