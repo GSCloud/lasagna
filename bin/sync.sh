@@ -11,15 +11,25 @@ if [ -z "$GLOBALSYNC" ]; then
     export BETA=""
     info Branch: ${BETA:-MAIN}
   fi
-  sleep 3
 fi
 
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 export $(grep -v '^#' .env | xargs -d '\n')
 
+if [ "$BETA" == "a" ]; then
+  export DEST=$DESTA
+fi
+if [ "$BETA" == "b" ]; then
+  export DEST=$DESTB
+fi
+
 [ -z "$DEST" ] && fail "Missing DEST definition!"
 [ -z "$HOST" ] && fail "Missing HOST definition!"
 [ -z "$USER" ] && fail "Missing USER definition!"
+
+info HOST: $HOST
+info USER: $USER
+info DEST: $DEST
 
 mkdir -p app ci data temp www/cdn-assets www/download www/upload
 chmod 0777 www/download www/upload >/dev/null 2>&1
@@ -40,7 +50,6 @@ rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
   .env \
   *.json \
   *.php \
-  _includes.sh \
   LICENSE \
   REVISIONS \
   VERSION \
