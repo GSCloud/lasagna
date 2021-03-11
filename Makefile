@@ -1,3 +1,4 @@
+#@author Filip Oščádal <git@gscloud.cz>
 all: info
 
 info:
@@ -15,9 +16,10 @@ info:
 	@echo "🆘 \e[0;1mmake prodtest\e[0m - production integration test"
 	@echo "🆘 \e[0;1mmake sync\e[0m - sync to the remote"
 	@echo "🆘 \e[0;1mmake test\e[0m - local integration test"
-	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies\n"
+	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies"
 
 docs:
+	@echo "🔨 \e[1;32m Creating documentation\e[0m\n"
 	@bash ./bin/create_pdf.sh
 
 update:

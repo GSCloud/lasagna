@@ -1,8 +1,6 @@
 #!/bin/bash
 #@author Filip Oščádal <git@gscloud.cz>
 
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
 
@@ -14,6 +12,7 @@ fi
 
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 export $(grep -v '^#' .env | xargs -d '\n')
+
 [ -z "$NAME" ] && fail "Missing NAME definition!"
 [ -z "$PORT" ] && fail "Missing PORT definition!"
 [ -z "$TAG" ] && fail "Missing TAG definition!"

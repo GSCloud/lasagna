@@ -1,14 +1,12 @@
 #!/bin/bash
 #@author Filip Oščádal <git@gscloud.cz>
 
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
 
 command -v node >/dev/null 2>&1 || {
   info "Installing Node.js"
-  sudo snap install node --classic --channel=9
+  sudo snap install node --classic --channel=13
   info "Installing gulp"
   sudo npm rm --global gulp
   sudo rm -f /usr/bin/gulp >/dev/null 2>&1
@@ -36,3 +34,5 @@ yes_or_no && {
   npm install gulp-uglify
   npm install gulp-util
 }
+
+exit 0

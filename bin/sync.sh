@@ -1,8 +1,6 @@
 #!/bin/bash
 #@author Filip Oščádal <git@gscloud.cz>
 
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
 
@@ -15,11 +13,13 @@ if [ -z "$GLOBALSYNC" ]; then
   fi
   sleep 3
 fi
-. "_site_cfg.sh"
 
-if [ -z "${DEST}" ]; then fail "Error in _site_cfg.sh !"; fi
-if [ -z "${HOST}" ]; then fail "Error in _site_cfg.sh !"; fi
-if [ -z "${USER}" ]; then fail "Error in _site_cfg.sh !"; fi
+if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
+export $(grep -v '^#' .env | xargs -d '\n')
+
+[ -z "$DEST" ] && fail "Missing DEST definition!"
+[ -z "$HOST" ] && fail "Missing HOST definition!"
+[ -z "$USER" ] && fail "Missing USER definition!"
 
 mkdir -p app ci data temp www/cdn-assets www/download www/upload
 chmod 0777 www/download www/upload >/dev/null 2>&1
@@ -37,13 +37,13 @@ ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 info "Version: $VERSION Revisions: $REVISIONS"
 
 rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
+  .env \
   *.json \
   *.php \
+  _includes.sh \
   LICENSE \
   REVISIONS \
   VERSION \
-  _includes.sh \
-  _site_cfg.sh \
   app \
   cli.sh \
   remote_fixer.sh \
@@ -52,3 +52,5 @@ rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
   ${USER}@${HOST}:${DEST}'/' | grep -E -v '/$'
 
 ssh root@$HOST $DEST/remote_fixer.sh ${BETA}
+
+exit 0

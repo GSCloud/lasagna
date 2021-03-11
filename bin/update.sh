@@ -1,8 +1,6 @@
 #!/bin/bash
 #@author Filip Oščádal <git@gscloud.cz>
 
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
 
@@ -20,7 +18,7 @@ ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
 
 info "Version: $VERSION Revisions: $REVISIONS"
 
-command -v composer >/dev/null 2>&1 || fail PHP composer is not installed!
+command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 
 composer update --no-plugins --no-scripts
 

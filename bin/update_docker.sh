@@ -1,8 +1,6 @@
 #!/bin/bash
 #@author Filip Oščádal <git@gscloud.cz>
 
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
 
@@ -10,10 +8,11 @@ command -v docker >/dev/null 2>&1 || fail "Docker is NOT installed!"
 
 [ ! -r ".env" ] && fail "Missing .env file!"
 export $(grep -v '^#' .env | xargs -d '\n')
+
 [ -z "$NAME" ] && fail "Missing NAME definition!"
 [ "$(docker container inspect -f '{{.State.Status}}' $NAME 2>&1)" == "running" ] || fail "Container '$NAME' is not running!"
 
-info "Updating CSV data from Google ..."
+info "Updating CSV data from Google"
 
 # connect to container and run CSV updater
 docker exec $NAME ./docker_updater.sh
