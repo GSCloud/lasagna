@@ -5,8 +5,6 @@ defined("ROOT") || define("ROOT", __DIR__ . DS . "..");
 
 //define("DEBUG", true);
 
-/** @const DIRECTORY_SEPARATOR */
-
 //defined("APP") || define("APP", ROOT . DS . "app");
 //defined("CACHE") || define("CACHE", ROOT . DS . "temp");
 //defined("DATA") || define("DATA", ROOT . DS . "data");
