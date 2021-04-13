@@ -32,7 +32,7 @@ class ApiPresenter extends APresenter
     {
         $view = $this->getView();
         $use_cache = true;
-        //$use_cache = false;
+        $use_cache = false;
 
         // general API properties
         $extras = [
