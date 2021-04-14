@@ -119,7 +119,7 @@ abstract class APresenter implements IPresenter
     const GS_SHEET_POSTFIX = "/edit#gid=0";
 
     /** @var integer Access limiter max.  hits */
-    const LIMITER_MAXIMUM = 50;
+    const LIMITER_MAXIMUM = 500;
 
     /** @var string Identity nonce filename */
     const IDENTITY_NONCE = "identity_nonce.key";
@@ -642,6 +642,9 @@ abstract class APresenter implements IPresenter
      */
     public function getUID()
     {
+        if (LOCALHOST) { // return random UID for localhost
+            return \hash("sha256", random_bytes(100));
+        }
         return \hash("sha256", $this->getUIDstring());
     }
 
