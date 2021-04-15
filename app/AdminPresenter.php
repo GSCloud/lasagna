@@ -487,29 +487,32 @@ class AdminPresenter extends APresenter
                 }
                 if (\file_exists(DATA . "/summernote_${profile}_${hash}.json") && \is_readable(DATA . "/summernote_${profile}_${hash}.json")) {
                     if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
-                        $this->addError("Articles copy to backup file failed.");
+                        $this->addError("Article $path copy to backup file failed.");
+                        $this->addAuditMessage("Article $path copy to backup file failed.");
                         return $this->writeJsonData([ // error
                             "code" => 401,
-                            "status" => "Articles copy to backup file failed.",
+                            "status" => "Article copy to backup file failed.",
                             "profile" => $profile,
                             "hash" => $hash,
                         ], $extras);
                     };
                 }
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
-                    $this->addError("Articles write to history file failed.");
+                    $this->addError("Article $path write to history file failed.");
+                    $this->addAuditMessage("Article $path write to history file failed.");
                     return $this->writeJsonData([ // error
                         "code" => 401,
-                        "status" => "Articles write to history file failed.",
+                        "status" => "Article write to history file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
                     ], $extras);
                 };
                 if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
-                    $this->addError("Articles write to file failed.");
+                    $this->addError("Article $path write to file failed.");
+                    $this->addAuditMessage("Article $path write to file failed.");
                     return $this->writeJsonData([ // error
                         "code" => 500,
-                        "status" => "Articles write to file failed.",
+                        "status" => "Article write to file failed.",
                         "profile" => $profile,
                         "hash" => $hash,
                     ], $extras);
@@ -525,8 +528,8 @@ class AdminPresenter extends APresenter
                 $p = \array_unique($p, SORT_LOCALE_STRING);
                 \file_put_contents($f, \implode("\n", $p), LOCK_EX);
                 // OK
-                $this->addMessage("UPDATE ARTICLE $profile - $hash");
-                $this->addAuditMessage("UPDATE ARTICLE $profile - $hash");
+                $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
+                $this->addAuditMessage("Article $profile - $path updated");
                 return $this->writeJsonData([
                     "status" => "OK",
                     "profile" => $profile,
