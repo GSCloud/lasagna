@@ -13,8 +13,8 @@ fi
 [ ! -r ".env" ] && fail "Missing .env file!"
 source ".env"
 
-[ -z "$TAG" ] && fail "Missing TAG definition!"
+[ -z "${TAG}" ] && fail "Missing TAG definition!"
 
-docker push $TAG
+docker push ${TAG}
 
 exit 0

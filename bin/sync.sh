@@ -60,6 +60,6 @@ rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
   www \
   ${USER}@${HOST}:${DEST}'/' | grep -E -v '/$'
 
-ssh root@$HOST $DEST/remote_fixer.sh ${BETA}
+ssh ${USER}@${HOST} ${DEST}/remote_fixer.sh ${BETA}
 
 exit 0
