@@ -29,13 +29,11 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
 <link rel="manifest" href="/manifest.json?lang={{ lang }}">
-
 {{>head_meta}}
 {{>head_favicons}}
 {{>head_googleanalytics}}
 {{>head_html5shim}}
 {{>head_custom}}
-
 <style>
 /* Material icons */
 @font-face {
@@ -68,45 +66,36 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 }
 /* CSS reset */
 html{min-width:320px!important;line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}
-/* preloader */
-#loader{position:fixed;top:50%;left:50%;margin-top:-64px;margin-left:-64px}#loader_motto{font-size:1.5em;font-family:monospace;width:100%;text-align:center;position:fixed;bottom:2em;left:0;padding:1em}
-.bold{font-weight:bold!important}.hidden{display:none!important}.mono{font-family:Consolas,Monaco,'Lucida Console','Liberation Mono','DejaVu Sans Mono','Bitstream Vera Sans Mono','Courier New',monospace}.noscript{font-size:0.8em}.pointer{cursor:pointer}.text-center{text-align:center}.text-monospace{font-family:'Courier New',Courier,monospace}.w3-animate-opacity{animation:opac 0.5s}@keyframes opac{from{opacity:0}to{opacity:1}}.w3-spin{animation:w3-spin 1s infinite cubic-bezier(0.25,0.1,0.25,1)}@keyframes w3-spin{0%{transform:rotate(0deg)}100%{transform:rotate(359deg)}}
 /* CSS helpers */
 a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important;font-size:inherit!important;font-family:inherit!important;font-weight:inherit!important}
-/* update */
+/* update message */
 #update-message{display:none;width:100%;padding:5px;font-size:1em;position:fixed;top:0;right:0;z-index:9999;font-family:Arial!important}
-/* offline */
+/* offline notification */
 #offline-message{opacity:0;visibility:hidden;padding:10px;position:fixed;bottom:10px;left:0;font-size:1em;transition:0.5s;font-family:Arial!important;font-size:2em}
 [offline="true"] #offline-message{visibility:visible;opacity:1;z-index:9999999}
-/* progress */
+/* progress indicator */
 .progress-container{width:100%;height:8px;background:#ccc;position:fixed;bottom:0;z-index:9999999}.progress-bar{height:8px;background: #4caf50;width:0%}
-/* summernote */
+/* summernote fixes */
 .summernote:empty{display:none}.footer-copyright a{font-weight:bold}
 </style>
 {{>onesignal}}
 {{>head_post}}
 <link rel="stylesheet" href="{{ cdn }}/css/materialize.min.css">
-<script src="{{ cdn }}/js/jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 </head>
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
-<noscript>
-{{>noscript}}
-</noscript>
+<noscript>{{>noscript}}</noscript>
 {{>body_pre}}
-<!-- OUTDATED helper -->
+<!-- UPDATE helper -->
 <div class="black-text white bold text-center" tabindex="-1" id="update-message">{{ l.page_outdated }}
   <br><a href="javascript:void(0);" class="waves-effect blue waves-light btn"><i class="fas fa-sync"></i>&nbsp;{{ l.page_outdated_button }}</a>
 </div>
 <!-- OFFLINE helper -->
 <div aria-hidden="true" tabindex="-1" id="offline-message">📵</div>
-<!-- preloader -->
-<div id="loader" class="hidden">
-  <img src="{{ cdn }}/img/loading.png" width=128 height=128 alt="Loading&hellip;" class="w3-spin" style="opacity:0" onload="this.style.opacity=1">
-  <div id="loader_motto">{{ l.motto }}</div>
-</div>
 <script>
 // GSC init
 !(function(c,e){a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+(b+1)+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version="{{ DATA_VERSION }}";a.LASAGNA.data.timestamp=a.LASAGNA.core.timestamp;c.GSC=a;})(window);
+window.GSC.loaderOff = function() {}
 </script>
 {{>gscloud_functions}}
 <div>

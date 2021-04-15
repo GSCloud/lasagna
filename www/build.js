@@ -28,8 +28,6 @@ window.cookieconsent.initialise({
   "static": (window.cceudata.ui.static == "true")
 });
 
-window.GSC.loaderOff();
-
 window.addEventListener("load", function() {
   if ("serviceWorker" in navigator) {
     console.log("Service worker...");

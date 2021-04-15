@@ -1,5 +1,3 @@
-window.GSC.loaderOff();
-
 window.addEventListener("load", function() {
   if ("serviceWorker" in navigator) {
     console.log("Service worker...");

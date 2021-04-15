@@ -642,9 +642,11 @@ abstract class APresenter implements IPresenter
      */
     public function getUID()
     {
+        /*
         if (LOCALHOST) { // return random UID for localhost
             return \hash("sha256", random_bytes(100));
         }
+        */
         return \hash("sha256", $this->getUIDstring());
     }
 

@@ -30,22 +30,26 @@ class ApiPresenter extends APresenter
      */
     public function process()
     {
+        setlocale(LC_ALL, "cs_CZ.utf8");
+
         $view = $this->getView();
         $use_cache = true;
-        $use_cache = false;
+        //$use_cache = false;
 
         // general API properties
+        error_reporting(E_ALL ^ E_DEPRECATED); // temp. fix for broken Redis lib @ PHP 8.0
         $extras = [
             "access_time_limit" => self::ACCESS_TIME_LIMIT,
             "api_quota" => (int) self::MAX_API_HITS,
-            "api_usage" => $this->getData("redis.port") > 0 ? $this->accessLimiter() : 0,
+            "api_usage" => $this->getData("redis.port") > 0 ? (int) $this->accessLimiter() : null,
             "cache_time_limit" => $this->getData("cache_profiles")[self::API_CACHE],
+            "cached" => (bool) $use_cache,
             "fn" => $view,
             "name" => "TESSERACT",
             "uuid" => $this->getUID(),
         ];
+        error_reporting(E_ALL);
 
-        //setlocale(LC_ALL, "cs_CZ.utf8");
         // API calls
         switch ($view) {
             case "APIDemo":
@@ -101,9 +105,10 @@ class ApiPresenter extends APresenter
             @$redis->incr($key);
             @$redis->expire($key, self::ACCESS_TIME_LIMIT);
             @$redis->exec();
+            $val = (int) @$redis->get($key);
         } catch (Exception $e) {
             return 0;
         }
-        return $val++;
+        return $val;
     }
 }

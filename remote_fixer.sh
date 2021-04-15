@@ -34,7 +34,7 @@ fi
 chown $USER:$USER .
 chmod 0777 ci data logs temp www/download www/upload 2>/dev/null
 chown www-data:www-data ci data www/download www/upload 2>/dev/null
+
 find www/ -type f -exec chmod 0644 {} 2>/dev/null \;
-find ./ -type f -iname "*.sh" -exec chmod +x {} 2>/dev/null \;
 
 exit 0
