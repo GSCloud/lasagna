@@ -7,7 +7,7 @@ dir="$(dirname "$0")"
 command -v docker >/dev/null 2>&1 || fail "Docker is NOT installed!"
 
 [ ! -r ".env" ] && fail "Missing .env file!"
-export $(grep -v '^#' .env | xargs -d '\n')
+source .env
 
 [ -z "$NAME" ] && fail "Missing NAME definition!"
 [ "$(docker container inspect -f '{{.State.Status}}' $NAME 2>&1)" == "running" ] || fail "Container '$NAME' is not running!"

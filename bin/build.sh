@@ -11,7 +11,7 @@ if [ ! -n $(id -Gn "$(whoami)" | grep -c "docker") ]
 fi
 
 [ ! -r ".env" ] && fail "Missing .env file!"
-export $(grep -v '^#' .env | xargs -d '\n')
+source ".env"
 
 [ -z "$TAG" ] && fail "Missing TAG definition!"
 

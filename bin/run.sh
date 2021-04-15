@@ -11,7 +11,7 @@ if [ ! -n $(id -Gn "$(whoami)" | grep -c "docker") ]
 fi
 
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
-export $(grep -v '^#' .env | xargs -d '\n')
+source .env
 
 [ -z "$NAME" ] && fail "Missing NAME definition!"
 [ -z "$PORT" ] && fail "Missing PORT definition!"
