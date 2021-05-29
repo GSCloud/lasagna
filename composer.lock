@@ -935,16 +935,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.16.0",
+            "version": "v3.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "29d9722e5c3b4d21b49acd820ac486e2b92096df"
+                "reference": "a3aa9415fb6f331322728793f345c1eafc320970"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/29d9722e5c3b4d21b49acd820ac486e2b92096df",
-                "reference": "29d9722e5c3b4d21b49acd820ac486e2b92096df",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/a3aa9415fb6f331322728793f345c1eafc320970",
+                "reference": "a3aa9415fb6f331322728793f345c1eafc320970",
                 "shasum": ""
             },
             "require": {
@@ -974,9 +974,9 @@
             ],
             "support": {
                 "issues": "https://github.com/protocolbuffers/protobuf-php/issues",
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.16.0"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.17.0"
             },
-            "time": "2021-05-07T01:06:10+00:00"
+            "time": "2021-05-13T02:14:44+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -2353,16 +2353,16 @@
         },
         {
             "name": "paragonie/sodium_compat",
-            "version": "v1.15.4",
+            "version": "v1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/sodium_compat.git",
-                "reference": "8a93bfe047c7f699f819459de8ddda144cd636a4"
+                "reference": "928e0565c9fe4f60b8f09119656c1aa418fc84ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/8a93bfe047c7f699f819459de8ddda144cd636a4",
-                "reference": "8a93bfe047c7f699f819459de8ddda144cd636a4",
+                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/928e0565c9fe4f60b8f09119656c1aa418fc84ab",
+                "reference": "928e0565c9fe4f60b8f09119656c1aa418fc84ab",
                 "shasum": ""
             },
             "require": {
@@ -2433,9 +2433,9 @@
             ],
             "support": {
                 "issues": "https://github.com/paragonie/sodium_compat/issues",
-                "source": "https://github.com/paragonie/sodium_compat/tree/v1.15.4"
+                "source": "https://github.com/paragonie/sodium_compat/tree/v1.16.0"
             },
-            "time": "2021-04-17T09:00:05+00:00"
+            "time": "2021-05-14T03:03:19+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2991,16 +2991,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.21",
+            "version": "v4.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "e95b36dd178eb43b02e84b90635399da4a9c3120"
+                "reference": "0859e744a614e96260949f10d9ac4b8adc8cdd0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/e95b36dd178eb43b02e84b90635399da4a9c3120",
-                "reference": "e95b36dd178eb43b02e84b90635399da4a9c3120",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/0859e744a614e96260949f10d9ac4b8adc8cdd0f",
+                "reference": "0859e744a614e96260949f10d9ac4b8adc8cdd0f",
                 "shasum": ""
             },
             "require": {
@@ -3048,7 +3048,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v4.4.21"
+                "source": "https://github.com/symfony/lock/tree/v4.4.23"
             },
             "funding": [
                 {
@@ -3064,7 +3064,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-24T08:30:27+00:00"
+            "time": "2021-05-04T12:06:07+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
