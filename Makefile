@@ -64,5 +64,6 @@ du:
 	@echo "🔨 \e[1;32m Updating\e[0m\n"
 	@bash ./bin/update_docker.sh
 
-everything: doctor test update sync prodtest
+everything: doctor test update sync prod
+
 reimage: doctor test update build run

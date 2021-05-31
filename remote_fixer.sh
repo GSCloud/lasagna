@@ -10,12 +10,13 @@ mkdir -p app ci data logs temp www/cdn-assets www/download www/upload
     echo -en "Missing .env file!\n"
     exit 1
 }
-export $(grep -v '^#' .env | xargs -d '\n')
+source .env
 
 [ -z "$ORIG" ] && {
     echo "Missing ORIG definition!"
     exit 1
 }
+
 [ -z "$USER" ] && {
     echo "Missing USER definition!"
     exit 1
