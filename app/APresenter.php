@@ -350,7 +350,9 @@ abstract class APresenter implements IPresenter
                 }
 
             }
-        } finally {}
+        } finally {
+            exit();
+        }
     }
 
     /**
