@@ -94,7 +94,7 @@ class ApiPresenter extends APresenter
         ]);
         try {
             $val = (int) @$redis->get($key);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return 0;
         }
         if ($val > self::MAX_API_HITS) { // over limit!
@@ -106,7 +106,7 @@ class ApiPresenter extends APresenter
             @$redis->expire($key, self::ACCESS_TIME_LIMIT);
             @$redis->exec();
             $val = (int) @$redis->get($key);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return 0;
         }
         return $val;
