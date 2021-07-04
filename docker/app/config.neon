@@ -1,7 +1,7 @@
 ### DOCKER TESSERACT LASAGNA
 
-#dbg: TRUE
-dbg: FALSE
+dbg: TRUE
+#dbg: FALSE
 minify: TRUE
 
 # DISABLING SWITCHES for Facebook, Twitter and Google Analytics integrations
