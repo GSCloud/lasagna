@@ -7,17 +7,17 @@ info:
 	@echo "\e[1;32m👾 Welcome to ${APP_NAME}\n"
 
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
-	@echo "🆘 \e[0;1mmake run\e[0m - run Docker image"
 	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
-	@echo "🆘 \e[0;1mmake du\e[0m - update running Docker container\n"
+	@echo "🆘 \e[0;1mmake run\e[0m - run Docker image\n"
+	@echo "🆘 \e[0;1mmake du\e[0m - update running Docker container"
 
-	@echo "🆘 \e[0;1mmake install\e[0m - install Tesseract locally"
-	@echo "🆘 \e[0;1mmake doctor\e[0m - run Tesseract doctor"
-	@echo "🆘 \e[0;1mmake gulp\e[0m - install/update Gulp"
-	@echo "🆘 \e[0;1mmake update\e[0m - update package dependencies"
+	@echo "🆘 \e[0;1mmake install\e[0m - install"
+	@echo "🆘 \e[0;1mmake doctor\e[0m - Tesseract doctor"
+	@echo "🆘 \e[0;1mmake gulp\e[0m - install/update Gulp installation"
+	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies"
 	@echo "🆘 \e[0;1mmake test\e[0m - local integration test"
-	@echo "🆘 \e[0;1mmake prod\e[0m - production (remote) integration test"
-	@echo "🆘 \e[0;1mmake sync\e[0m - sync installation to the remote host"
+	@echo "🆘 \e[0;1mmake prod\e[0m - production integration test"
+	@echo "🆘 \e[0;1mmake sync\e[0m - sync to the remote"
 	@echo "🆘 \e[0;1mmake docs\e[0m - build documentation"
 
 docs:
