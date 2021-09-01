@@ -27,6 +27,6 @@ command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 composer update --no-plugins --no-scripts
 
 # recalculate favicons
-#cd www/img && . ./create_favicons.sh
+cd www/img && . ./create_favicons.sh
 
 exit 0
