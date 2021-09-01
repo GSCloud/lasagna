@@ -1,22 +1,58 @@
 {
-  "name": "{{ l.title }}",
-  "short_name": "{{ l.title_short }}",
-  "icons": [{
-      "src": "/img/favicon-192.webp",
-      "type": "image/webp",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/img/favicon-512.webp",
-      "type": "image/webp",
-      "sizes": "512x512"
-    }
-  ],
-  "background_color": "{{#design.background_color}}{{ design.background_color }}{{/design.background_color}}{{^design.background_color}}#fff{{/design.background_color}}",
-  "display": "{{#design.display}}{{ design.display }}{{/design.display}}{{^design.display}}standalone{{/design.display}}",
-  "gcm_sender_id": "482941778795",
-  "gcm_sender_id_comment": "OneSignal",
-  "scope": "/",
-  "start_url": ".",
-  "theme_color": "{{#design.theme_color}}{{ design.theme_color }}{{/design.theme_color}}{{^design.theme_color}}#000{{/design.theme_color}}"
+    "name": "{{ l.title }}",
+    "short_name": "{{ l.title_short }}",
+    "description": "{{ l.meta_description }}",
+    "icons": [{
+            "src": "/img/favicon-64.webp",
+            "type": "image/webp",
+            "sizes": "64x64",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/favicon-120.webp",
+            "type": "image/webp",
+            "sizes": "120x120",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/favicon-144.webp",
+            "type": "image/webp",
+            "sizes": "144x144",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/favicon-152.webp",
+            "type": "image/webp",
+            "sizes": "152x152",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/favicon-192.webp",
+            "type": "image/webp",
+            "sizes": "192x192",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/favicon-384.webp",
+            "type": "image/webp",
+            "sizes": "384x384",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/favicon-512.webp",
+            "type": "image/webp",
+            "sizes": "512x512",
+            "purpose": "any maskable"
+        }
+    ],
+    "scope": "/",
+    "start_url": "/",
+    "display": "{{#design.display}}{{ design.display }}{{/design.display}}{{^design.display}}standalone{{/design.display}}",
+    "theme_color": "{{#design.theme_color}}{{ design.theme_color }}{{/design.theme_color}}{{^design.theme_color}}#000{{/design.theme_color}}",
+    "background_color": "{{#design.background_color}}{{ design.background_color }}{{/design.background_color}}{{^design.background_color}}#fff{{/design.background_color}}",
+    "lang": "en",
+    "mobileAppIOS": "true",
+    "appleStatusBarStyle": "default",
+    "gcm_sender_id": "482941778795",
+    "gcm_sender_id_comment": "OneSignal"
 }
