@@ -1,5 +1,11 @@
 csp: [
     "Content-Security-Policy: "
+    "report-to"
+    " https://gscloud.cz;"
+    "report-uri"
+    "https://gscloud.cz;"
+    "object-src"
+    "'none';"
     "default-src"
     "'unsafe-inline'"
     "'self'"
