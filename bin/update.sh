@@ -4,16 +4,6 @@
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
 
-# CRLF normalization
-git add --renormalize .
-
-# add new files
-git add -A
-
-# commit automatic changes
-git commit -am "automatic web sync"
-git push origin master
-
 # create VERSION file
 VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
@@ -33,5 +23,15 @@ composer update --no-plugins --no-scripts
 
 # recalculate favicons
 cd www/img && . ./create_favicons.sh
+
+# CRLF normalization
+git add --renormalize .
+
+# add new files
+git add -A
+
+# commit changes
+git commit -am "automatic update"
+git push origin master
 
 exit 0
