@@ -120,7 +120,7 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.3.0",
+            "version": "4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
@@ -173,16 +173,16 @@
         },
         {
             "name": "cakephp/core",
-            "version": "4.3.0",
+            "version": "4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "7ff150e558cd0d3dfc89cf95cf92ce325a3df187"
+                "reference": "4726edc33d282c833b948618ca58b776db89de53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/7ff150e558cd0d3dfc89cf95cf92ce325a3df187",
-                "reference": "7ff150e558cd0d3dfc89cf95cf92ce325a3df187",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/4726edc33d282c833b948618ca58b776db89de53",
+                "reference": "4726edc33d282c833b948618ca58b776db89de53",
                 "shasum": ""
             },
             "require": {
@@ -226,20 +226,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/core"
             },
-            "time": "2021-10-11T16:29:09+00:00"
+            "time": "2021-10-26T20:01:16+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "4.3.0",
+            "version": "4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "2a16f2a61b287914e9d6f904deeec286596d2a8f"
+                "reference": "fee2cf64752ac2516af6ac86c95e3e961a8ead7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/2a16f2a61b287914e9d6f904deeec286596d2a8f",
-                "reference": "2a16f2a61b287914e9d6f904deeec286596d2a8f",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/fee2cf64752ac2516af6ac86c95e3e961a8ead7f",
+                "reference": "fee2cf64752ac2516af6ac86c95e3e961a8ead7f",
                 "shasum": ""
             },
             "require": {
@@ -285,7 +285,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2021-10-18T18:25:06+00:00"
+            "time": "2021-10-26T20:01:16+00:00"
         },
         {
             "name": "cheprasov/php-redis-client",
@@ -523,16 +523,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v5.4.0",
+            "version": "v5.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "d2113d9b2e0e349796e72d2a63cf9319100382d2"
+                "reference": "83b609028194aa042ea33b5af2d41a7427de80e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d2113d9b2e0e349796e72d2a63cf9319100382d2",
-                "reference": "d2113d9b2e0e349796e72d2a63cf9319100382d2",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/83b609028194aa042ea33b5af2d41a7427de80e6",
+                "reference": "83b609028194aa042ea33b5af2d41a7427de80e6",
                 "shasum": ""
             },
             "require": {
@@ -574,9 +574,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v5.4.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v5.5.1"
             },
-            "time": "2021-06-23T19:00:23+00:00"
+            "time": "2021-11-08T20:18:51+00:00"
         },
         {
             "name": "google/auth",
@@ -3085,16 +3085,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.27",
+            "version": "v4.4.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "6ca476d4ac992802f2a4043929f68f1818449486"
+                "reference": "567d29b1bc6e3937652054dafc069151d17824a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/6ca476d4ac992802f2a4043929f68f1818449486",
-                "reference": "6ca476d4ac992802f2a4043929f68f1818449486",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/567d29b1bc6e3937652054dafc069151d17824a9",
+                "reference": "567d29b1bc6e3937652054dafc069151d17824a9",
                 "shasum": ""
             },
             "require": {
@@ -3143,7 +3143,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v4.4.27"
+                "source": "https://github.com/symfony/lock/tree/v4.4.33"
             },
             "funding": [
                 {
@@ -3159,7 +3159,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-23T15:41:52+00:00"
+            "time": "2021-10-05T20:27:01+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3698,16 +3698,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.8.7",
+            "version": "v2.8.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "8e708de7c611f626c8792d43f1c78812ea24e6f6"
+                "reference": "1a18df64f6b745962e9a0bdf87eccfc62309e593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/8e708de7c611f626c8792d43f1c78812ea24e6f6",
-                "reference": "8e708de7c611f626c8792d43f1c78812ea24e6f6",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/1a18df64f6b745962e9a0bdf87eccfc62309e593",
+                "reference": "1a18df64f6b745962e9a0bdf87eccfc62309e593",
                 "shasum": ""
             },
             "require": {
@@ -3725,7 +3725,7 @@
                 "nette/tester": "^2.2",
                 "nette/utils": "^3.0",
                 "phpstan/phpstan": "^0.12",
-                "psr/log": "^1.0"
+                "psr/log": "^1.0 || ^2.0 || ^3.0"
             },
             "type": "library",
             "extra": {
@@ -3766,9 +3766,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/tracy/issues",
-                "source": "https://github.com/nette/tracy/tree/v2.8.7"
+                "source": "https://github.com/nette/tracy/tree/v2.8.8"
             },
-            "time": "2021-08-24T16:26:27+00:00"
+            "time": "2021-11-08T23:40:20+00:00"
         },
         {
             "name": "tuupola/base58",
