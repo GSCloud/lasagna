@@ -6,6 +6,8 @@ OUT_DIR="$2"
 
 if [ -z "$INPUT" ]; then INPUT="logo.png"; fi
 if [ -z "$OUT_DIR" ]; then OUT_DIR="."; fi
+
+
 if [ ! -d "$OUT_DIR" ]; then
   echo "ERROR: Output directory does not exist." >&2
   exit 1
@@ -21,6 +23,37 @@ if [ -f $INPUT ]; then
   for size in ${SIZES[@]}; do
     convert -flatten -background none -resize ${size}x${size} $INPUT $OUT_DIR/favicon-${size}.png
     convert -flatten -background none -resize ${size}x${size} $INPUT $OUT_DIR/favicon-${size}.webp
+    if [ -f favicon-${size}.png ]; then
+      echo -ne "\e[0mconverting square: \e[92m$size px\e[0m\033[0K\r"
+    else
+      echo "ERROR: Could not process input file $INPUT" >&2
+      exit 1
+    fi
+  done
+else
+  echo "ERROR: Input file $INPUT does not exist." >&2
+  exit 1
+fi
+
+INPUT="$1"
+OUT_DIR="$2"
+
+if [ -z "$INPUT" ]; then INPUT="logo_mobile.png"; fi
+if [ -z "$OUT_DIR" ]; then OUT_DIR="."; fi
+
+if [ ! -d "$OUT_DIR" ]; then
+  echo "ERROR: Output directory does not exist." >&2
+  exit 1
+fi
+if ! [ -x "$(command -v convert)" ]; then
+  echo "ERROR: convert not found. Check if ImageMagick is installed." >&2
+  exit 1
+fi
+
+if [ -f $INPUT ]; then
+  SIZES=(192 512)
+  for size in ${SIZES[@]}; do
+    convert -flatten -background none -resize ${size}x${size} $INPUT $OUT_DIR/favicon-${size}.png
     if [ -f favicon-${size}.png ]; then
       echo -ne "\e[0mconverting square: \e[92m$size px\e[0m\033[0K\r"
     else
