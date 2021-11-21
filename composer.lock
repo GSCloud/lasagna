@@ -334,16 +334,16 @@
         },
         {
             "name": "chillerlan/php-qrcode",
-            "version": "4.3.1",
+            "version": "4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
-                "reference": "be3beb936c21fe53a4e7e8f7f3582e9f02443666"
+                "reference": "b625396e0752d79747a55205ae7e191eeb459dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/be3beb936c21fe53a4e7e8f7f3582e9f02443666",
-                "reference": "be3beb936c21fe53a4e7e8f7f3582e9f02443666",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/b625396e0752d79747a55205ae7e191eeb459dcd",
+                "reference": "b625396e0752d79747a55205ae7e191eeb459dcd",
                 "shasum": ""
             },
             "require": {
@@ -352,7 +352,7 @@
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phan/phan": "^3.2.2",
+                "phan/phan": "^5.3",
                 "phpunit/phpunit": "^9.5",
                 "setasign/fpdf": "^1.8.2"
             },
@@ -396,7 +396,7 @@
             ],
             "support": {
                 "issues": "https://github.com/chillerlan/php-qrcode/issues",
-                "source": "https://github.com/chillerlan/php-qrcode/tree/4.3.1"
+                "source": "https://github.com/chillerlan/php-qrcode/tree/4.3.2"
             },
             "funding": [
                 {
@@ -408,7 +408,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2021-01-05T21:21:28+00:00"
+            "time": "2021-11-18T08:46:03+00:00"
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -982,16 +982,16 @@
         },
         {
             "name": "grpc/grpc",
-            "version": "1.39.0",
+            "version": "1.42.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/grpc/grpc-php.git",
-                "reference": "101485614283d1ecb6b2ad1d5b95dc82495931db"
+                "reference": "9fa44f104cb92e924d4da547323a97f3d8aca6d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/101485614283d1ecb6b2ad1d5b95dc82495931db",
-                "reference": "101485614283d1ecb6b2ad1d5b95dc82495931db",
+                "url": "https://api.github.com/repos/grpc/grpc-php/zipball/9fa44f104cb92e924d4da547323a97f3d8aca6d4",
+                "reference": "9fa44f104cb92e924d4da547323a97f3d8aca6d4",
                 "shasum": ""
             },
             "require": {
@@ -1020,9 +1020,9 @@
                 "rpc"
             ],
             "support": {
-                "source": "https://github.com/grpc/grpc-php/tree/v1.39.0"
+                "source": "https://github.com/grpc/grpc-php/tree/v1.42.0"
             },
-            "time": "2021-07-23T23:04:53+00:00"
+            "time": "2021-11-19T08:13:51+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
