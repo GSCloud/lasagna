@@ -24,7 +24,7 @@ if [ -f $INPUT ]; then
     convert -flatten -background none -resize ${size}x${size} $INPUT $OUT_DIR/favicon-${size}.png
     convert -flatten -background none -resize ${size}x${size} $INPUT $OUT_DIR/favicon-${size}.webp
     if [ -f favicon-${size}.png ]; then
-      echo -ne "\e[0mconverting square: \e[92m$size px\e[0m\033[0K\r"
+      echo -ne "\e[0mconverting icon: \e[92m$size px\e[0m\033[0K\r"
     else
       echo "ERROR: Could not process input file $INPUT" >&2
       exit 1
@@ -55,13 +55,13 @@ if [ -f $INPUT ]; then
   for size in ${SIZES[@]}; do
     convert -flatten -background none -resize ${size}x${size} $INPUT $OUT_DIR/favicon-${size}.png
     if [ -f favicon-${size}.png ]; then
-      echo -ne "\e[0mconverting square: \e[92m$size px\e[0m\033[0K\r"
+      echo -ne "\e[0mconverting mobile icon: \e[92m$size px\e[0m\033[0K\r"
     else
       echo "ERROR: Could not process input file $INPUT" >&2
       exit 1
     fi
   done
 else
-  echo "ERROR: Input file $INPUT does not exist." >&2
-  exit 1
+  echo "WARNING: Input file $INPUT does not exist." >&2
+  exit 0
 fi
