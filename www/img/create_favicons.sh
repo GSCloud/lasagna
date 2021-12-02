@@ -7,7 +7,6 @@ OUT_DIR="$2"
 if [ -z "$INPUT" ]; then INPUT="logo.png"; fi
 if [ -z "$OUT_DIR" ]; then OUT_DIR="."; fi
 
-
 if [ ! -d "$OUT_DIR" ]; then
   echo "ERROR: Output directory does not exist." >&2
   exit 1

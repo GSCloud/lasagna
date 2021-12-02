@@ -1,17 +1,20 @@
 "use strict";
+//@author Filip Oščádal <git@gscloud.cz>
 
 var version = "{{ version }}_{{ VERSION_SHORT }}";
 var core = [
   {{#sitemap}}"/{{ . }}",{{/sitemap}}
+  "{{ cdn }}/api",
   "{{ cdn }}/build.css",
   "{{ cdn }}/build.js",
-  "{{ cdn }}/img/favicon-128.webp",
   "{{ cdn }}/img/favicon-16.webp",
+  "{{ cdn }}/img/favicon-128.webp",
   "{{ cdn }}/img/favicon-180.webp",
+  "{{ cdn }}/img/favicon-192.png",
   "{{ cdn }}/img/favicon-192.webp",
+  "{{ cdn }}/img/favicon-512.png",
   "{{ cdn }}/img/favicon-512.webp",
   "{{ cdn }}/img/logo.webp",
-  "{{ cdn }}/api",
 ];
 
 self.addEventListener("install", function (event) {
@@ -24,39 +27,36 @@ self.addEventListener("install", function (event) {
   );
 });
 self.addEventListener("fetch", function (event) {
-  if (!(event.request.url.indexOf('http') === 0)) return;
-  if (event.request.method !== "GET") {
-    return;
-  }
+  if (!(event.request.url.indexOf('http') === 0)) return; // ignore extensions scheme
+  if (event.request.method !== "GET") return; // cache only GET requests
   if (event.request.url.indexOf("/logout") !== -1) {
-    console.log("NO caching for %s", event.request.url);
+    console.log("No caching for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/login") !== -1) {
-    console.log("NO caching for %s", event.request.url);
+    console.log("No caching for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("?nonce") !== -1) {
-    console.log("NO caching for %s", event.request.url);
+    console.log("No caching for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/api/") !== -1) {
-    console.log("NO caching for %s", event.request.url);
+    console.log("No caching for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/exportHTML/") !== -1) {
-    console.log("NO caching for  %s", event.request.url);
+    console.log("No caching for  %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/embed/") !== -1) {
-    console.log("NO caching for  %s", event.request.url);
+    console.log("No caching for  %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/print/") !== -1) {
-    console.log("NO caching for  %s", event.request.url);
+    console.log("No caching for  %s", event.request.url);
     return;
   }
-  //console.log("fetch event for", event.request.url);
 
   event.respondWith(
     caches.match(event.request)
