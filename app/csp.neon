@@ -15,6 +15,7 @@ csp: [
     "https://*;"
     "font-src"
     "'self'"
+    "data:"
     "'unsafe-inline'"
     "*.gstatic.com;"
     "script-src"
