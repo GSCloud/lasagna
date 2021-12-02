@@ -88,15 +88,17 @@ class LoginPresenter extends APresenter
                     "id" => $ownerDetails->getId(),
                     "name" => $ownerDetails->getName(),
                 ]);
-                $this->addMessage("Google login: " . $ownerDetails->getName() . " " . $ownerDetails->getEmail());
+                //$this->addMessage("Google login: " . $ownerDetails->getName() . " " . $ownerDetails->getEmail());
                 $this->addAuditMessage("GOOGLE OAUTH LOGIN");
-/*
-dump("NEW IDENTITY:");
-dump($this->getIdentity());
-dump("OAuth IDENTITY:");
-dump($ownerDetails);
-exit;
- */
+
+                /*
+                dump("NEW IDENTITY:");
+                dump($this->getIdentity());
+                dump("OAuth IDENTITY:");
+                dump($ownerDetails);
+                exit;
+                */
+
                 if ($this->getUserGroup() == "admin") {
                     if ($this->getCfg("DEBUG_COOKIE")) { // set Tracy debug cookie
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
