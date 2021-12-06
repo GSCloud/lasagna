@@ -15,6 +15,7 @@ echo $REVISIONS > REVISIONS
 # clear space
 rm -rf logs/* temp/*
 ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
+find www/cdn-assets/ -type l -mtime +30 -delete
 
 info "Version: $VERSION Revisions: $REVISIONS"
 
