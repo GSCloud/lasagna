@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d27c724e35575acc582596ecc6852461",
+    "content-hash": "4dd7e5992a4e813acfa38d746fe282d8",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -1291,16 +1291,16 @@
         },
         {
             "name": "league/climate",
-            "version": "3.8.0",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/climate.git",
-                "reference": "f9d68014ddebd5c4893e99cd4cf1b99f8195ff7f"
+                "reference": "5c717c3032c5118be7ad2395dbe0813d9894e8c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/climate/zipball/f9d68014ddebd5c4893e99cd4cf1b99f8195ff7f",
-                "reference": "f9d68014ddebd5c4893e99cd4cf1b99f8195ff7f",
+                "url": "https://api.github.com/repos/thephpleague/climate/zipball/5c717c3032c5118be7ad2395dbe0813d9894e8c7",
+                "reference": "5c717c3032c5118be7ad2395dbe0813d9894e8c7",
                 "shasum": ""
             },
             "require": {
@@ -1350,9 +1350,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/climate/issues",
-                "source": "https://github.com/thephpleague/climate/tree/3.8.0"
+                "source": "https://github.com/thephpleague/climate/tree/3.7.0"
             },
-            "time": "2022-01-22T13:03:45+00:00"
+            "time": "2021-01-10T20:18:52+00:00"
         },
         {
             "name": "league/csv",
