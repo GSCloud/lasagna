@@ -133,7 +133,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\logger\u0028\u0029",
             "name": "logger",
-            "summary": "Stackdriver\u0020logger",
+            "summary": "Google\u0020Stackdriver",
             "url": "namespaces/gsc.html#function_logger"
         },                {
             "fqsen": "\\GSC\\APresenter",
