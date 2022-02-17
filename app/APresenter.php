@@ -560,7 +560,7 @@ abstract class APresenter implements IPresenter
         $apikey = $this->getData("telegram.bot_apikey") ?? null;
         if ($this->getCurrentUser()["name"] !== "") {
             $curl_obj = curl_init();
-            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message . " / " . $this->getCurrentUser()["name"]);
+            $message = htmlspecialchars("🤖 " . APPNAME . " (" . DOMAIN . ")" . ": " . $message . " [" . $this->getCurrentUser()["name"] . "]");
             if ($chid && $apikey) {
                 $query = "?chat_id=" . $chid . "&text=${message}";
                 curl_setopt($curl_obj, CURLOPT_URL, "https://api.telegram.org/bot" . $apikey . "/sendMessage" . $query);

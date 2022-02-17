@@ -529,7 +529,7 @@ class AdminPresenter extends APresenter
                 \file_put_contents($f, \implode("\n", $p), LOCK_EX);
                 // OK
                 $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
-                $this->addAuditMessage("Article $profile - $path updated");
+                //$this->addAuditMessage("Article $profile - $path updated");
                 return $this->writeJsonData([
                     "status" => "OK",
                     "profile" => $profile,
