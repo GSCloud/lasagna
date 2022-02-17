@@ -523,7 +523,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AaddCritical\u0028\u0029",
             "name": "addCritical",
-            "summary": "messages",
+            "summary": "message\u0020adders",
             "url": "classes/GSC-IPresenter.html#method_addCritical"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AaddError\u0028\u0029",
@@ -543,7 +543,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCriticals\u0028\u0029",
             "name": "getCriticals",
-            "summary": "",
+            "summary": "message\u0020getters",
             "url": "classes/GSC-IPresenter.html#method_getCriticals"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetErrors\u0028\u0029",
@@ -558,7 +558,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCfg\u0028\u0029",
             "name": "getCfg",
-            "summary": "getters",
+            "summary": "general\u0020getters",
             "url": "classes/GSC-IPresenter.html#method_getCfg"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCookie\u0028\u0029",
@@ -633,7 +633,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AcheckLocales\u0028\u0029",
             "name": "checkLocales",
-            "summary": "checks",
+            "summary": "general\u0020checks",
             "url": "classes/GSC-IPresenter.html#method_checkLocales"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AcheckPermission\u0028\u0029",
@@ -648,7 +648,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AsetCookie\u0028\u0029",
             "name": "setCookie",
-            "summary": "setters",
+            "summary": "general\u0020setters",
             "url": "classes/GSC-IPresenter.html#method_setCookie"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AsetData\u0028\u0029",
@@ -713,7 +713,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AclearCookie\u0028\u0029",
             "name": "clearCookie",
-            "summary": "tools",
+            "summary": "various\u0020tools",
             "url": "classes/GSC-IPresenter.html#method_clearCookie"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AcloudflarePurgeCache\u0028\u0029",
@@ -758,12 +758,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "abstract",
+            "summary": "abstract\u0020method\u0020used\u0020in\u0020controllers",
             "url": "classes/GSC-IPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetInstance\u0028\u0029",
             "name": "getInstance",
-            "summary": "singleton",
+            "summary": "singleton\u0020instances",
             "url": "classes/GSC-IPresenter.html#method_getInstance"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetTestInstance\u0028\u0029",
