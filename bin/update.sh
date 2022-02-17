@@ -22,6 +22,8 @@ info "Version: $VERSION Revisions: $REVISIONS"
 command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 composer update --no-plugins --no-scripts
 
+gulp
+
 # recalculate favicons
 cd www/img && . ./create_favicons.sh
 
