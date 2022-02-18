@@ -1,88 +1,80 @@
 <div id="gscmodal" class="modal a_reset" style="color:#000!important">
-  <div class="modal-content">
-    <p style="color:#000!important;font-family:Arial!important;font-size:1.3em">{{ l.$generator }}</p>
-    <div class="row center">
-      <div class="col l4 m6 s12">
-        <p>{{ l.a_footer_app }}:
-          <br>
-          {{ VERSION_SHORT }}</p>
-      </div>
-      <div class="col l4 m6 s12">
-        <p>{{ l.a_footer_date }}:
-          <br>
-          {{ VERSION_DATE }}</p>
-      </div>
-      <div class="col l4 m6 s12">
+    <div class="modal-content">
+        <p style="color:#000!important;font-family:Arial!important;font-size:1.3em">{{ l.$generator }}</p>
+        <div class="container row center">
+            <div class="col l4 m6 s12">
+                <p>{{ l.a_footer_app }}:
+                    <br>
+                    {{ VERSION_SHORT }}</p>
+            </div>
+            <div class="col l4 m6 s12">
+                <p>{{ l.a_footer_date }}:
+                    <br>
+                    {{ VERSION_DATE }}</p>
+            </div>
+            <div class="col l4 m6 s12">
 
-        {{#LOCALHOST}}
-        <a rel="nofollow"
-          href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
-          class="waves-effect waves-light blue btn-large z-depth-3">
-          {{ l.a_login }}<i class="material-icons right">cloud</i>
-        </a>
-        {{/LOCALHOST}}
-        {{^LOCALHOST}}
-        <a rel="nofollow"
-          href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
-          class="waves-effect waves-light blue btn-large z-depth-3">
-          {{ l.a_login }}<i class="material-icons right">cloud</i>
-        </a>
-        {{/LOCALHOST}}
+                {{#LOCALHOST}}
+                <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
+                    class="waves-effect waves-light blue btn-large z-depth-3">
+                    {{ l.a_login }}<i class="material-icons right">cloud</i>
+                </a>
+                {{/LOCALHOST}}
+                {{^LOCALHOST}}
+                <a rel="nofollow" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
+                    class="waves-effect waves-light blue btn-large z-depth-3">
+                    {{ l.a_login }}<i class="material-icons right">cloud</i>
+                </a>
+                {{/LOCALHOST}}
 
-        <br>
-        <br>
+                <br>
+                <br>
 
-        {{#LOCALHOST}}
-        <a rel="nofollow"
-          href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
-          class="waves-effect waves-light red btn-large z-depth-3">
-          {{ l.a_relogin }}<i class="material-icons right">cloud</i>
-        </a>
-        {{/LOCALHOST}}
-        {{^LOCALHOST}}
-        <a rel="nofollow"
-          href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
-          class="waves-effect waves-light red btn-large z-depth-3">
-          {{ l.a_relogin }}<i class="material-icons right">cloud</i>
-        </a>
-        {{/LOCALHOST}}
+                {{#LOCALHOST}}
+                <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
+                    class="waves-effect waves-light red btn-large z-depth-3">
+                    {{ l.a_relogin }}<i class="material-icons right">cloud</i>
+                </a>
+                {{/LOCALHOST}}
+                {{^LOCALHOST}}
+                <a rel="nofollow" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
+                    class="waves-effect waves-light red btn-large z-depth-3">
+                    {{ l.a_relogin }}<i class="material-icons right">cloud</i>
+                </a>
+                {{/LOCALHOST}}
 
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="footer-copyright">
-  <div class="row center">
-    <img class="responsive-img" src="{{ cdn }}/img/gsc.png"
-      style="margin:1em" alt="GS Cloud s.r.o." title="GS Cloud s.r.o." width=32>
-
-    <img class="responsive-img" src="{{ cdn }}/img/pwa.png"
-      style="margin:1em" alt="Progressive Web App" title="Progressive Web App" width=64>
-
-    <img class="responsive-img" src="{{ cdn }}/img/materialize.svg"
-      style="margin:1em" alt="Materialize CSS" title="Materialize CSS" width=64>
-
-    <br>
-    2017-2022&nbsp;<a rel="noopener" target="_blank" class="white-text" href="https://mxd.cz/{{ utm }}">
-      {{ l.author }}</a>&nbsp;&mdash;&nbsp;<a rel="noopener" target="_blank" class="white-text"
-      href="https://gscloud.cz/{{ lang }}{{ utm }}">{{ l.$gsc }}</a>
-
-    <br>
-    <a rel="noopener" target="_blank" class="white-text"
-      href="https://gscloud.cz/privacy-policy.pdf">🕵&nbsp;{{ l.privacy_policy }}</a>&nbsp;&nbsp; <a rel="noopener"
-      target="_blank" class="white-text" href="/GDPR.pdf">🇪🇺&nbsp;GDPR</a>&nbsp;
-
-    &nbsp;<a rel="noopener" target="_blank" class="white-text" href="mailto:support@gscloud.cz">🆘&nbsp;support@gscloud.cz</a>
-
-    <br>
-    {{ l.poweredby }} &nbsp;<a rel="noopener" target="_blank" class="white-text" title="Tesseract LASAGNA on GitHub"
-      href="https://github.com/GSCloud/lasagna"><i class="fab fa-git"></i></a>
-
-    <br>
-    <a class="modal-trigger" href="#gscmodal">
-      <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:50%"
-        src="{{ cdn }}/img/LASAGNA_logo.png" alt="Tesseract LASAGNA" width="80" height="80">
-    </a>
-  </div>
+    <div class="row center">2017-2022&nbsp;<a rel="noopener" target="_blank" class="white-text" href="https://mxd.cz/{{ utm }}">
+            {{ l.author }}</a>&nbsp;&mdash;&nbsp;<a rel="noopener" target="_blank" class="white-text"
+            href="https://gscloud.cz/{{ lang }}{{ utm }}">{{ l.$gsc }}</a><br>
+        <a rel="noopener" target="_blank" class="white-text"
+            href="https://gscloud.cz/privacy-policy.pdf">🕵&nbsp;{{ l.privacy_policy }}</a>&nbsp;&nbsp; <a
+            rel="noopener" target="_blank" class="white-text" href="/GDPR.pdf">🇪🇺&nbsp;GDPR</a>&nbsp;
+        &nbsp;<a rel="noopener" target="_blank" class="white-text"
+            href="mailto:support@gscloud.cz">🆘&nbsp;support@gscloud.cz</a><br>
+        {{ l.poweredby }} &nbsp;<a rel="noopener" target="_blank" class="white-text" title="Tesseract LASAGNA on GitHub"
+            href="https://github.com/GSCloud/lasagna"><i class="fab fa-git"></i></a>
+        <div class="container row center">
+            <div class="row center">
+                <div class="valign-wrapper">
+                    <img class="responsive-img" src="{{ cdn }}/img/gsc.png" style="margin:1em" alt="{{ l.$gsc }}"
+                        title="{{ l.$gsc }}" width=32>
+                    <img class="responsive-img" src="{{ cdn }}/img/pwa.png" style="margin:1em" alt="Progressive Web App"
+                        title="Progressive Web App" width=64>
+                    <img class="responsive-img" src="{{ cdn }}/img/materialize.svg" style="margin:1em"
+                        alt="Materialize CSS" title="Materialize CSS" width=64>
+                    <a class="modal-trigger" href="#gscmodal">
+                        <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:15%"
+                            src="{{ cdn }}/img/LASAGNA_logo.png" alt="Tesseract LASAGNA" title="{{ l.$generator }}"
+                            width="64" height="64">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
