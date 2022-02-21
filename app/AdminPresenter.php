@@ -22,9 +22,13 @@ class AdminPresenter extends APresenter
     const ADMIN_KEY = "admin.key";
 
     /** @var string thumbnail prefix */
+    const THUMB_PREFIX32 = ".thumb_32px_";
     const THUMB_PREFIX50 = ".thumb_50px_";
+    const THUMB_PREFIX64 = ".thumb_64px_";
+    const THUMB_PREFIX128 = ".thumb_128px_";
     const THUMB_PREFIX150 = ".thumb_150px_";
     const THUMB_PREFIX320 = ".thumb_320px_";
+    const THUMB_PREFIX512 = ".thumb_512px_";
 
     /** @var array image constants */
     const IMAGE_HANDLERS = [
@@ -92,7 +96,7 @@ class AdminPresenter extends APresenter
                 $file = new \SplFileObject($f, "r");
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
-            } catch (\Exception$e) {
+            } catch (\Exception $e) {
                 return -1;
             }
         }
@@ -104,19 +108,43 @@ class AdminPresenter extends APresenter
                 $x = [];
                 foreach ($_FILES as $key => &$file) {
                     $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
-                    if (\strpos($b, self::THUMB_PREFIX50) === 0) { // don't allow thumbnail filenames
+
+                    // don't allow thumbnail filenames
+                    if (\strpos($b, self::THUMB_PREFIX32) === 0) {
                         continue;
                     }
-                    if (\strpos($b, self::THUMB_PREFIX150) === 0) { // don't allow thumbnail filenames
+                    if (\strpos($b, self::THUMB_PREFIX50) === 0) {
                         continue;
                     }
-                    if (\strpos($b, self::THUMB_PREFIX320) === 0) { // don't allow thumbnail filenames
+                    if (\strpos($b, self::THUMB_PREFIX64) === 0) {
                         continue;
                     }
+                    if (\strpos($b, self::THUMB_PREFIX128) === 0) {
+                        continue;
+                    }
+                    if (\strpos($b, self::THUMB_PREFIX150) === 0) {
+                        continue;
+                    }
+                    if (\strpos($b, self::THUMB_PREFIX320) === 0) {
+                        continue;
+                    }
+                    if (\strpos($b, self::THUMB_PREFIX512) === 0) {
+                        continue;
+                    }
+
                     if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                         $x[$b] = \urlencode($b);
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX32 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX32 . $b);
+                        }
                         if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $b)) {
                             \unlink(UPLOAD . DS . self::THUMB_PREFIX50 . $b);
+                        }
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX64 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX64 . $b);
+                        }
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX128 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX128 . $b);
                         }
                         if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $b)) {
                             \unlink(UPLOAD . DS . self::THUMB_PREFIX150 . $b);
@@ -124,16 +152,28 @@ class AdminPresenter extends APresenter
                         if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $b)) {
                             \unlink(UPLOAD . DS . self::THUMB_PREFIX320 . $b);
                         }
+                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX512 . $b)) {
+                            \unlink(UPLOAD . DS . self::THUMB_PREFIX512 . $b);
+                        }
                         if (stripos($b, ".epub")) {
                             continue;
                         }
+                        $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX32 . $b, 32);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX50 . $b, 50);
+                        $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX64 . $b, 64);
+                        $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX128 . $b, 128);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX150 . $b, 150);
                         $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX320 . $b, 320);
+                        $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX512 . $b, 512);
+                        if (stripos($b, ".webp")) {
+                            continue;
+                        }
+                        $info = pathinfo($b);
+                        $c = $info['filename'];
+                        $this->createThumbnail(UPLOAD . DS . $b, UPLOAD . DS . $c . '.webp');
                     }
                 }
-                $c = \count($x);
-                $this->addMessage("FILES UPLOADED: $c");
+                $this->addMessage("FILES UPLOADED: " . \count($x));
                 return $this->writeJsonData($x, $extras);
                 break;
 
@@ -141,15 +181,23 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin,editor");
                 if (isset($_POST["name"])) {
                     $f1 = UPLOAD . DS . \trim($_POST["name"]); // original file
-                    $f2 = UPLOAD . DS . self::THUMB_PREFIX50 . \trim($_POST["name"]); // thumbnail 50 px
-                    $f3 = UPLOAD . DS . self::THUMB_PREFIX150 . \trim($_POST["name"]); // thumbnail 150 px
-                    $f4 = UPLOAD . DS . self::THUMB_PREFIX320 . \trim($_POST["name"]); // thumbnail 320 px
+                    $f2 = UPLOAD . DS . self::THUMB_PREFIX32 . \trim($_POST["name"]);
+                    $f3 = UPLOAD . DS . self::THUMB_PREFIX50 . \trim($_POST["name"]);
+                    $f4 = UPLOAD . DS . self::THUMB_PREFIX64 . \trim($_POST["name"]);
+                    $f5 = UPLOAD . DS . self::THUMB_PREFIX128 . \trim($_POST["name"]);
+                    $f6 = UPLOAD . DS . self::THUMB_PREFIX150 . \trim($_POST["name"]);
+                    $f7 = UPLOAD . DS . self::THUMB_PREFIX320 . \trim($_POST["name"]);
+                    $f8 = UPLOAD . DS . self::THUMB_PREFIX512 . \trim($_POST["name"]);
                     if (\file_exists($f1)) {
                         @\unlink($f1);
                         @\unlink($f2);
                         @\unlink($f3);
                         @\unlink($f4);
-                        $this->addMessage("FILE DELETED: $f1");
+                        @\unlink($f5);
+                        @\unlink($f6);
+                        @\unlink($f7);
+                        @\unlink($f8);
+                        $this->addMessage("FILE DELETED: $f1 + thumbnails");
                         return $this->writeJsonData($f1, $extras);
                     }
                 }
@@ -168,7 +216,7 @@ class AdminPresenter extends APresenter
                 break;
 
             case "clearbrowser":
-                \header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+                \header('Clear-Site-Data: "cache", "cookies", "storage"');
                 $this->addMessage("BROWSER DATA CLEARED");
                 $this->setLocation();
                 break;
@@ -229,7 +277,16 @@ class AdminPresenter extends APresenter
                 if ($handle = \opendir(UPLOAD)) {
                     while (false !== ($entry = \readdir($handle))) {
                         if ($entry != "." && $entry != "..") {
+                            if (\strpos($entry, self::THUMB_PREFIX32) === 0) {
+                                continue;
+                            }
                             if (\strpos($entry, self::THUMB_PREFIX50) === 0) {
+                                continue;
+                            }
+                            if (\strpos($entry, self::THUMB_PREFIX64) === 0) {
+                                continue;
+                            }
+                            if (\strpos($entry, self::THUMB_PREFIX128) === 0) {
                                 continue;
                             }
                             if (\strpos($entry, self::THUMB_PREFIX150) === 0) {
@@ -238,11 +295,27 @@ class AdminPresenter extends APresenter
                             if (\strpos($entry, self::THUMB_PREFIX320) === 0) {
                                 continue;
                             }
-                            $thumbnail = null;
+                            if (\strpos($entry, self::THUMB_PREFIX512) === 0) {
+                                continue;
+                            }
+                            $thumbnail32 = null;
+                            $thumbnail50 = null;
+                            $thumbnail64 = null;
+                            $thumbnail128 = null;
                             $thumbnail150 = null;
                             $thumbnail320 = null;
+                            $thumbnail512 = null;
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX32 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX32 . $entry)) {
+                                $thumbnail32 = "/upload/" . self::THUMB_PREFIX32 . $entry;
+                            }
                             if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX50 . $entry)) {
-                                $thumbnail = "/upload/" . self::THUMB_PREFIX50 . $entry;
+                                $thumbnail50 = "/upload/" . self::THUMB_PREFIX50 . $entry;
+                            }
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX64 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX64 . $entry)) {
+                                $thumbnail64 = "/upload/" . self::THUMB_PREFIX64 . $entry;
+                            }
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX128 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX128 . $entry)) {
+                                $thumbnail128 = "/upload/" . self::THUMB_PREFIX128 . $entry;
                             }
                             if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX150 . $entry)) {
                                 $thumbnail150 = "/upload/" . self::THUMB_PREFIX150 . $entry;
@@ -250,12 +323,20 @@ class AdminPresenter extends APresenter
                             if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX320 . $entry)) {
                                 $thumbnail320 = "/upload/" . self::THUMB_PREFIX320 . $entry;
                             }
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX512 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX512 . $entry)) {
+                                $thumbnail512 = "/upload/" . self::THUMB_PREFIX512 . $entry;
+                            }
                             $files[$entry] = [
                                 "name" => $entry,
                                 "size" => \filesize(UPLOAD . DS . $entry),
-                                "thumbnail" => $thumbnail,
+                                "thumbnail" => $thumbnail50,
+                                "thumbnail32" => $thumbnail32,
+                                "thumbnail50" => $thumbnail50,
+                                "thumbnail64" => $thumbnail64,
+                                "thumbnail128" => $thumbnail128,
                                 "thumbnail150" => $thumbnail150,
                                 "thumbnail320" => $thumbnail320,
+                                "thumbnail512" => $thumbnail512,
                                 "timestamp" => \filemtime(UPLOAD . DS . $entry),
                             ];
                         }
@@ -728,7 +809,7 @@ class AdminPresenter extends APresenter
      * @param $targetWidth output width
      * @param $targetHeight output height or null
      */
-    private function createThumbnail($src, $dest, $targetWidth, $targetHeight = null)
+    private function createThumbnail($src, $dest, $targetWidth = null, $targetHeight = null)
     {
         $type = \exif_imagetype($src);
         if (!$type || !self::IMAGE_HANDLERS[$type]) {
@@ -740,6 +821,9 @@ class AdminPresenter extends APresenter
         }
         $width = \imagesx($image);
         $height = \imagesy($image);
+        if ($targetWidth == null) {
+            $targetWidth = $width;
+        }
         if ($targetHeight == null) {
             $ratio = $width / $height;
             if ($width > $height) {

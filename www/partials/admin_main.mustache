@@ -30,7 +30,7 @@ label{color:#000;font-weight:bold}
 .a_h2{font-size:5em!important;font-weight:700!important}
 .a_h3{font-size:4em!important;font-weight:700!important}
 .a_h4{font-size:3em!important;font-weight:700!important}
-.a_h5{font-size:2em!important;font-weight:700!important}
+.a_h5{font-size:2em!important;font-weight:700!important;background-color:#444;color:#fff;border-radius:3px}
 .btnmargin{margin:2px;margin-bottom:5px}
 .dragover{border:4px dashed blue!important}
 .extrapadding{padding:5px;border-radius:5px}
@@ -321,9 +321,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <a title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped orange-text text" data-position="top"
           data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz">
           <i class="fas fa-server"></i></a>
-        <a title="{{ l.a_lasagna_manual_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped red-text text"
-          data-position="top" data-tooltip="{{ l.a_lasagna_manual_ttip }}" href="{{ l.a_lasagna_manual_url }}">
-          <i class="fas fa-dna"></i></a>
         <a title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="tooltipped white-text text" data-position="top"
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}">
           <i class="fas fa-clone"></i></a>
@@ -347,24 +344,12 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <h5>{{ l.a_groups_permissions }}</h5>
         <strong>{{user.name}}</strong><br>
         <i style="font-size:smaller">{{user.email}}</i><br>
-        <!--
-        <a id="a_getcode" class="btnmargin waves-effect blue waves-light btn"
-          data-position="top" data-tooltip="">📲</a>
-        <a id="a_delcode" class="btnmargin waves-effect red waves-light btn"
-          data-position="top" data-tooltip="">📴</a>
-        <br>
-        -->
         <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
           data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
           <i class="fas fa-sign-out-alt"></i>
           {{ l.a_logout }}</a>
         <a title="auditlog" target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
           <i class="fas fa-list"></i></a>
-        <br>
-        <a title="{{ l.a_clear_browser_ttip }}" id="a_clearbrowserdata" style="margin:5px;" class="tooltipped waves-effect red waves-light btn"
-          data-position="top" data-tooltip="{{ l.a_clear_browser_ttip }}">
-          <i class="fas fa-power-off"></i>
-          {{ l.a_clear_browser }}</a>
       </div>
 
       <div class="row center extrapadding">

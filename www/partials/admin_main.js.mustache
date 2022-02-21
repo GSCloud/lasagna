@@ -774,15 +774,18 @@
             s += '<span title="close" onclick="javascript:GSC.CloseFileManager()" class="hover">❌</span></h5>';
             var now = ~~(Date.now() / 1000);
             moment.locale("{{ lang }}");
+
             // preprocess last uploads
             var last = [];
             if (localStorage["last_upload"]) {
               var x = JSON.parse(localStorage["last_upload"]);
               for (var i in x) last[i] = x[i];
             }
+
             // UPLOAD: render HTML
             var t = 0;
             for (var i in data.data) {
+              if (data.data[i]["thumbnail"] === null) continue;
               t++;
               if (t == 1) {
                 s += '<hr><div class="row">';
@@ -818,6 +821,7 @@
             } else {
               s += "&mdash;&mdash;&mdash;";
             }
+            
             // show content
             document.getElementById("a_uploader_progress").scrollIntoView();
             window.scrollBy(0, -100);
@@ -826,12 +830,14 @@
             } else {
               $("#a_file_manager").hide().html(s).show(200);
             }
+            
             // UPLOAD: copy path to clipboard
             $("#a_file_manager .copydata").click(function () {
               var x = $(this).data("text");
               GSC.CopyClipboard(x);
               M.toast({html: "📋 " + x});
             });
+            
             // UPLOAD: file delete
             $("#a_file_manager .delete").click(function () {
               if (GSC.deleteconfirm || confirm("{{ l.a_delete_tit }}?")) {
