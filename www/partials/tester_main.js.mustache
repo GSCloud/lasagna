@@ -13,6 +13,14 @@
     w.GSC.profile = "default";
     w.GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}');
 
+    // ShowLoader() - show rotating image loader inside element
+    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
+      if (!el) return;
+      $(el).html(
+        '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
+      );
+    }
+
     // PingDot() - render red or green dot inside element
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
       if (!el) return;
