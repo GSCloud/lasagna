@@ -7,23 +7,28 @@
 .bigemoji{font-size:5em}
 .emoji-list i {font-style: normal!important}
 .emoji-list {min-width: 400px;padding:5px;overflow:scroll;display:inline-block;cursor:pointer;margin:1px}
+
 @media (max-width:599px) { /* smaller mobile box */
   .emoji-list * {margin: 5px}
   .emoji-list {min-width: 300px!important}
 }
+
 @media (min-width:600px) { /* bigger desktop box */
   .emoji-list * {margin: 2px}
   .emoji-list {min-width: 400px!important}
 }
+
 @media (max-width:1023px) { /* fixed box position to the left for mobiles and tablets */
   .emoji-list {position:relative!important;left:0!important}
 }
 
 /* ADMIN PANEL */
 label{color:#000;font-weight:bold}
+
 #admin_main{font-family:Arial!important;padding-top:5px;font-size:14px!important}
 #admin_main .row{margin-bottom:5px}
 #admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6{font-family:Arial!important}
+
 .a_reset{font-family:Arial!important;font-size:14px!important}
 .a_h2{font-size:5em!important;font-weight:700!important}
 .a_h3{font-size:4em!important;font-weight:700!important}
@@ -47,5 +52,6 @@ label{color:#000;font-weight:bold}
 .panel-heading.note-toolbar .note-font .dropdown-menu,.panel-heading.note-toolbar .note-style .dropdown-menu{min-width:245px;padding:5px}
 .panel-heading.note-toolbar .note-font .dropdown-menu>div:first-child,.panel-heading.note-toolbar .note-style .dropdown-menu>div:first-child{margin-right:5px}
 .note-add-text-tags-btn{font-family:"Times New Roman",serif;min-width:30px}
+
 div.checkbox.sn-checkbox-open-in-new-window>label>input[type=checkbox]{opacity:1!important;position:relative!important;margin:5px!important}
 div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!important;position:relative!important;margin:5px!important}
