@@ -13,14 +13,6 @@
     w.GSC.profile = "default";
     w.GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}');
 
-    // ShowLoader() - show rotating image loader inside element
-    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
-      if (!el) return;
-      $(el).html(
-        '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
-      );
-    }
-
     // PingDot() - render red or green dot inside element
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
       if (!el) return;
@@ -108,17 +100,19 @@
         });
     }
 
-    // AdminUI()
+    // admin UI
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
       $("#admin_main h4").addClass("a_reset a_h4");
       $("#admin_main h5").addClass("a_reset a_h5");
       $("#admin_main p").addClass("a_reset");
+
       // remove tooltips for touch display
       if (w.GSC.touch) {
         if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
       }
+
       // show variables
       $(".open_google").unbind();
       $(".open_google").click(function () {
@@ -126,6 +120,7 @@
         $(".close_google").removeClass('hide').show();
         $("#variables").removeClass('hide').hide().show(200);
       });
+
       // show news
       $(".open_news").unbind();
       $(".open_news").click(function () {
@@ -133,6 +128,7 @@
         $(".close_news").removeClass('hide').show();
         $("#news").removeClass('hide').hide().show(200);
       });
+
       // hide variables
       $(".close_google").unbind();
       $(".close_google").click(function () {
@@ -140,6 +136,7 @@
         $(".open_google").removeClass('hide').show();
         $("#variables").hide(200);
       });
+
       // hide news
       $(".close_news").unbind();
       $(".close_news").click(function () {
@@ -147,12 +144,14 @@
         $(".open_news").removeClass('hide').show();
         $("#news").hide(200);
       });
+
       // editor block click
       $(".summernote").unbind();
       $(".summernote").click(function () {
         $(".summernote").unbind("dblclick");
         GSC.DeploySummernote();
       });
+
       // click + button
       $("#a_article").click(function () {
         var name = prompt('{{ l.a_article_add_prompt }}:').trim();
@@ -161,6 +160,7 @@
           location.pathname = '{{ lang }}/id/' + name;
         }
       });
+
       // API: GetArticlesInfo
       $.get("/admin/GetArticlesInfo?" + Date.now(), function (data) {
         //console.log(data);
@@ -197,6 +197,7 @@
             data[id] = $(obj).summernote("code");
           }
         });
+
         // API: UpdateArticles (POST - save all articles data)
         $.post("/admin/UpdateArticles", {
           hash: "{{ request_path_hash }}",
@@ -607,8 +608,8 @@
           ["table", ["table"]],
           ["insert", ["hr", "link", "picture", "video"]],
           ["history", ["undo", "redo"]],
-          ["view", ["fs"]],
           ["emojis", ["emoji1", "emoji2", "emoji3", "emoji4", "emoji5", "emoji6", "emoji7"]],
+          ["view", ["fs"]],
           ["custom1", ["plugins", "history"]],
           ["close", ["destroy"]],
           ["custom2", ["saveall"]],
@@ -729,18 +730,6 @@
         GSC.ReadArticles(function () {
           GSC.DeploySummernote();
         });
-      });
-
-      // clear browser
-      $("#a_clearbrowserdata").click(function () {
-        if (w.GSC.offline) { // offline
-          M.toast({html: "offline 📶"});
-          return GSC.PingDot("#csv_ping", false);
-        }
-        GSC.GetCsvInfo = function () {};
-        $("#a_clearbrowserdata").attr("disabled", "disabled");
-        M.toast({html: "💤💤💤"});
-        window.location.replace("/admin/clearbrowser");
       });
 
       // file manager
@@ -983,6 +972,7 @@
           '<div><strong>Remaining:</strong> ' + progress.remainingTimeHuman + '</div></div>'
         );
       });
+
       // init uploader
       ZeroUpload.init();
       ZeroUpload.addDropTarget("#admin_main");

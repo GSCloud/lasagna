@@ -1,58 +1,4 @@
-<style>
-/* PHP LOGO */
-.php1{position:relative;left:+0.1em;text-transform:lowercase!important}
-.php2{position:relative;left:+0.0em;text-transform:lowercase!important}
-.php3{position:relative;left:-0.1em;text-transform:lowercase!important}
-
-/* EMOJIS */
-.bigemoji{font-size:5em}
-.emoji-list i {font-style: normal!important}
-.emoji-list {min-width: 400px;padding:5px;overflow:scroll;display:inline-block;cursor:pointer;margin:1px}
-@media (max-width:599px) { /* smaller box for mobiles */
-  .emoji-list * {margin: 5px}
-  .emoji-list {min-width: 300px!important}
-}
-@media (min-width:600px) { /* bigger box */
-  .emoji-list * {margin: 2px}
-  .emoji-list {min-width: 400px!important}
-}
-@media (max-width:1023px) { /* fixed box position to the left for mobiles and tablets */
-  .emoji-list {position:relative!important;left:0!important}
-}
-
-/* ADMIN PANEL */
-label{color:#000;font-weight:bold}
-#admin_main{font-family:Arial!important;padding-top:5px;font-size:14px!important}
-#admin_main .row{margin-bottom:5px}
-#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6{font-family:Arial!important;text-transform:uppercase}
-.a_reset{font-family:Arial!important;font-size:14px!important}
-.a_h2{font-size:5em!important;font-weight:700!important}
-.a_h3{font-size:4em!important;font-weight:700!important}
-.a_h4{font-size:3em!important;font-weight:700!important}
-.a_h5{font-size:2em!important;font-weight:700!important;background-color:#444;color:#fff;border-radius:3px}
-.btnmargin{margin:2px;margin-bottom:5px}
-.dragover{border:4px dashed blue!important}
-.extrapadding{padding:5px;border-radius:5px}
-.hover{cursor:pointer}
-.nowrap{white-space:nowrap}
-.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
-.mobilebutt{font-size:1em}
-
-/* ROTATION & TOUCH */
-#a_rotate_device{display:none}
-[touch="true"] #a_rotate_device{display:block}
-
-/* SUMMERNOTE */
-.summernote{border:2px dashed #ccc;padding:1rem!important}
-.summernote::before{content:"📝";position:relative;top:-3rem;left:-1rem}
-.panel-heading.note-toolbar .note-font .dropdown-menu,.panel-heading.note-toolbar .note-style .dropdown-menu{min-width:245px;padding:5px}
-.panel-heading.note-toolbar .note-font .dropdown-menu>div:first-child,.panel-heading.note-toolbar .note-style .dropdown-menu>div:first-child{margin-right:5px}
-.note-add-text-tags-btn{font-family:"Times New Roman",serif;min-width:30px}
-div.checkbox.sn-checkbox-open-in-new-window>label>input[type=checkbox]{opacity:1!important;position:relative!important;margin:5px!important}
-div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!important;position:relative!important;margin:5px!important}
-</style>
-
-<!-- MOTÝLE -->
+<!-- WRENCH -->
 <span style="position:fixed;left:0;top:0;z-index:999999" class="motyle btn white hide-on-med-and-down">🛠️</span>
 <span style="position:fixed;right:0;top:0;z-index:999999" class="motyle btn white hide-on-large-only">🛠️</span>
 
@@ -64,31 +10,31 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     {{ l.a_rotate_device }}
   </div>
 
-  <!-- CUSTOM ADMIN PANEL -->
+  <!-- CUSTOM PANEL -->
   {{>admin_custom}}
 
   <!-- EXTERNAL SERVICES -->
   <div class="row center black hide-on-small-only">
     <div class="extrapadding hide-on-small-only" style="padding-top:3px">
-      <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
         <i class="fab fa-google"></i>
         {{ l.a_google_account }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
         <i class="fab fa-google"></i>
         {{ l.a_google_password }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
         href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
         <i class="fab fa-google"></i>
         {{ l.a_google_search }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect teal waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_analytics_ttip }}"
         href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
         <i class="fab fa-google"></i>
         {{ l.a_google_analytics }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect lime waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect indigo waves-light btn" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://app.onesignal.com/login">
         <i class="fas fa-bell"></i>
         {{ l.a_onesignal }}</a>
@@ -98,7 +44,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
   <!-- EXTERNAL LINKS -->
   <div class="row center black">
     {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" style="padding:4px;line-height:2em"
+      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" style="padding:4px;line-height:2em;border-radius:2px"
         data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
     {{/external_links}}
   </div>
@@ -111,10 +57,10 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
       <div class="row center extrapadding">
           <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
-        <p style="font-size:10px!important">
-          PHP ver. <b>{{ PHP_VERSION }}</b><br>
+        <p style="font-size:12px!important">
+          PHP <b>{{ PHP_VERSION }}</b><br>
           Tesseract LASAGNA 2.0<br>
-          App ver. <b>{{ VERSION_SHORT }}</b> / <b>{{ VERSION_DATE }}</b> / rev. <b>{{ REVISIONS }}</b><br>
+          App <b>{{ VERSION_SHORT }}</b> / <b>{{ VERSION_DATE }}</b> / rev. <b>{{ REVISIONS }}</b><br>
         </p>
         <div class="col s12 white">
           <label>{{ l.a_profiles }}</label>
@@ -207,7 +153,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
         <h5>{{ l.a_cache }}</h5>
         <div class="container">
           <span class="nowrap">default: <b>{{ cache_profiles.default }}</b></span>&nbsp;
-          <span class="nowrap">CSV: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
+          <span class="nowrap">CSVs: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
           <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
           <span class="nowrap">{{ l.a_webpage }}: <b>{{ cache_profiles.page }}</b></span>
         </div>
@@ -261,7 +207,7 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
     <!-- PERMISSIONS -->
     <div class="col l4 m6 s12">
 
-      <!-- current user -->
+      <!-- CURRENT USER -->
       <div class="row center">
         <h5>{{ l.a_groups_permissions }}</h5>
         <strong>{{user.name}}</strong><br>
@@ -298,7 +244,6 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -313,12 +258,14 @@ div.checkbox.sn-checkbox-use-protocol>label>input[type=checkbox]{opacity:1!impor
 </script>
 
 <!-- SUMMERNOTE -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/theme/material-darker.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/addon/display/fullscreen.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/codemirror.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/xml/xml.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/addon/display/fullscreen.min.js" defer></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/display/fullscreen.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/display/fullscreen.min.js" defer></script>
+
 <link href="{{ cdn }}/summernote/summernote-lite.min.css" rel="stylesheet">
 <script src="{{ cdn }}/summernote/summernote-lite.min.js" defer></script>
 {{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}

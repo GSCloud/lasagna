@@ -13,14 +13,6 @@
     w.GSC.profile = "default";
     w.GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}');
 
-    // ShowLoader() - show rotating image loader inside element
-    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
-      if (!el) return;
-      $(el).html(
-        '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
-      );
-    }
-
     // PingDot() - render red or green dot inside element
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
       if (!el) return;
@@ -35,17 +27,19 @@
       }).fadeTo("slow", 0);
     }
 
-    // AdminUI()
+    // admin UI
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
       $("#admin_main h4").addClass("a_reset a_h4");
       $("#admin_main h5").addClass("a_reset a_h5");
       $("#admin_main p").addClass("a_reset");
+
       // remove tooltips for touch display
       if (w.GSC.touch) {
         if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
       }
+
       // show variables
       $(".open_google").unbind();
       $(".open_google").click(function () {
@@ -53,6 +47,7 @@
         $(".close_google").removeClass('hide').show();
         $("#variables").removeClass('hide').hide().show(200);
       });
+
       // show news
       $(".open_news").unbind();
       $(".open_news").click(function () {
@@ -60,6 +55,7 @@
         $(".close_news").removeClass('hide').show();
         $("#news").removeClass('hide').hide().show(200);
       });
+
       // hide variables
       $(".close_google").unbind();
       $(".close_google").click(function () {
@@ -67,6 +63,7 @@
         $(".open_google").removeClass('hide').show();
         $("#variables").hide(200);
       });
+
       // hide news
       $(".close_news").unbind();
       $(".close_news").click(function () {
@@ -82,7 +79,8 @@
       if (!getCookie("motyle") || getCookie("motyle") == "false") {
         $("#admin_main").show(100);
       }
-      // UI: 🦋
+
+      // wrench
       $(".motyle").click(function () {
         $("#admin_main").toggle(200, function () {
           window.scrollTo(0, 0);
@@ -115,17 +113,7 @@
         window.location.href = window.location.pathname + "?profile=" + profile;
       });
 
-      // clear browser
-      $("#a_clearbrowserdata").click(function () {
-        if (w.GSC.offline) { // offline
-          M.toast({html: "offline 📶"});
-          return GSC.PingDot("#csv_ping", false);
-        }
-        $("#a_clearbrowserdata").attr("disabled", "disabled");
-        M.toast({html: "💤💤💤"});
-        window.location.replace("/admin/clearbrowser");
-      });
-
+      // logout
       $("#a_logout").click(function () {
         setCookie("logout", "logout");
         GSC.offline ? window.location.replace("/?nonce=".Date.now()) : window.location.replace("/logout");
