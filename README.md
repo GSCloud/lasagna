@@ -14,7 +14,7 @@ Tesseract LASAGNA is a Model View Presenter CMS that uses Google Sheets for basi
 * secure encrypted cookie authentication
 * no PHP sessions
 
-### HTML5 + Design
+### HTML 5 + Design
 
 * PWA (Progressive Web App)
 * Font Awesome icons

@@ -3,8 +3,8 @@ include .env
 
 all: info
 info:
-	@echo "\e[1;32m👾 Welcome to ${APP_NAME}\n"
-
+	@echo "\e[1;32m👾 Welcome to ${APP_NAME}"
+	@echo ""
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
 	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
 	@echo "🆘 \e[0;1mmake run\e[0m - run Docker image"
@@ -30,7 +30,6 @@ info:
 	@echo "🆘 \e[0;1mmake everything\e[0m - build: doctor clearall test update sync prod"
 	@echo "🆘 \e[0;1mmake reimage\e[0m - build: doctor test update build run"
 	@echo ""
-
 docs:
 	@echo "🔨 \e[1;32m Creating documentation\e[0m\n"
 	@bash ./bin/create_pdf.sh
@@ -73,6 +72,5 @@ run:
 du:
 	@echo "🔨 \e[1;32m Updating\e[0m\n"
 	@bash ./bin/update_docker.sh
-
 everything: doctor clearall test update sync prod
 reimage: doctor test update build run
