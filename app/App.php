@@ -203,7 +203,10 @@ $data["multisite_profiles_json"] = json_encode($multisite_profiles);
 $router = [];
 $routes = $cfg["routes"] ?? [ // configuration can override defaults
     "router_defaults.neon",
+    "router_core.neon",
+    "router_extras.neon",
     "router_admin.neon",
+    "router_api.neon",
     "router.neon",
 ];
 

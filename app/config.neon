@@ -1,4 +1,5 @@
-### TESSERACT LASAGNA
+#@author Filip Oščádal <git@gscloud.cz>
+### TESSERACT LASAGNA main config
 
 #dbg: TRUE
 dbg: FALSE

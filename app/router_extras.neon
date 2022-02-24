@@ -1,0 +1,88 @@
+#@author Filip Oščádal <git@gscloud.cz>
+# extra routes, not mandatory for the project
+
+GetAndroidJs:
+  api: true
+  api_description: "Get Android JS"
+  api_info: "Returns (JSON): version SHA256 hash (string) + Android JS (string)."
+  path: /android/js
+  presenter: core
+
+GetAndroidCss:
+  api: true
+  api_description: "Get Android CSS"
+  api_info: "Returns (JSON): version SHA256 hash (string) + Android CSS (string)."
+  path: /android/css
+  presenter: core
+
+GetCsArticle:
+  path: '/cs/id/[**:trailing]'
+  language: cs
+  presenter: article
+
+GetEnArticle:
+  path: '/en/id/[**:trailing]'
+  language: en
+  presenter: article
+
+ReadArticles:
+  path: '/ReadArticles/[a:profile]/[a:hash]'
+  api: true
+  api_description: "Get articles as JSON"
+  api_info: "Parameters:\n<b><a:profile></b> - profile name,\n<b><a:hash></b> - hexadecimal URL stub hash.\n\nReturns (JSON): HTML data (JSON) + checksum hash (string)."
+  api_example: [
+    "ReadArticles/default/3b8b91c75627bee566dcb88f4805901b20a3eab2520bcff8d26c87157a035026"
+  ]
+  assert_json: true
+  method: GET
+  presenter: core
+
+GetArticleHTMLExport:
+  path: '/[a:lang]/exportHTML/[a:profile]/[**:trailing]'
+  language: cs
+  api: true
+  api_description: "Get articles as HTML"
+  api_info: "Parameters:\n<b><a:lang></b> - language code,\n<a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
+  api_example: [
+    "cs/exportHTML/default/!"
+    "cs/exportHTML/default/id/demo"
+  ]
+  assert_json: false
+  method: GET
+  presenter: core
+
+GetQR:
+  path: "/qr/[s|m|l|x:size]/[**:trailing]"
+  api: true
+  api_description: "Get QR code as image"
+  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size,\n<b><trailing></b> - text to render.\n\nReturns (binary): image."
+  method: GET|POST
+  presenter: core
+  api_example: [
+    "qr/s/Hello World!"
+    "qr/m/https://example.com"
+  ]
+
+ReadEpubBook1:
+  path: "/readEPUB/[**:trailing]"
+  api: false
+  api_description: "Read ebook in EPUB format"
+  api_info: "Parameters:\n<b><trailing></b> - relative path to EPUB file (without .epub extension) under www/\n\nReturns (HTML): EPUB reader."
+  method: GET
+  presenter: core
+  template: epub
+  api_example: [
+    "readEPUB/epub/alice"
+  ]
+
+ReadEpubBook2:
+  path: "/epub/[**:trailing]"
+  api: true
+  api_description: "Read ebook in EPUB format"
+  api_info: "Alias to /readEPUB/"
+  method: GET
+  presenter: core
+  template: epub
+  api_example: [
+    "epub/epub/alice"
+  ]

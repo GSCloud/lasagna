@@ -1,3 +1,6 @@
+#@author Filip Oščádal <git@gscloud.cz>
+# admin routes, mandatory for login and administration
+
 admin:
   method: GET|POST|DELETE
   path: '/admin/[a:p]'

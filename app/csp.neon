@@ -1,3 +1,6 @@
+#@author Filip Oščádal <git@gscloud.cz>
+# CSP Headers
+
 csp: [
     "Content-Security-Policy: "
     "report-to"

@@ -1,0 +1,80 @@
+#@author Filip Oščádal <git@gscloud.cz>
+# core routes, mandatory
+
+GetWebManifest:
+  path: /manifest.json
+  presenter: core
+  cached: true
+
+GetTXTSitemap:
+  path: /sitemap.txt
+  presenter: core
+  cached: true
+
+GetXMLSitemap:
+  path: /sitemap.xml
+  presenter: core
+  cached: true
+
+GetRSSXML:
+  path: /rss.xml
+  presenter: core
+  cached: true
+
+GetServiceWorker:
+  path: /sw.js
+  presenter: core
+  cached: true
+
+PingBack:
+  path: /pingback
+  api: true
+  api_description: "Ping back for remote monitoring service"
+  api_info: "Returns (JSON): ok."
+  assert_json: true
+  method: GET|POST
+  presenter: core
+
+GetCoreVersion:
+  path: /version/core
+  api: true
+  api_description: "Get core version"
+  api_info: "Returns (JSON): SHA256 hash (string), number of git revisions (integer), modification timestamp (integer), modification date (D. M. YYYY)."
+  assert_json: true
+  method: GET|POST
+  presenter: core
+
+GetCsDataVersion:
+  path: /cs/version/data
+  api: true
+  api_description: "Get Czech locale version"
+  api_info: "Returns (JSON): SHA256 hash (string)."
+  assert_json: true
+  language: cs
+  method: GET|POST
+  presenter: core
+
+GetEnDataVersion:
+  path: /en/version/data
+  api: true
+  api_description: "Get English locale version"
+  api_info: "Returns (JSON): SHA256 hash (string)."
+  assert_json: true
+  language: en
+  method: GET|POST
+  presenter: core
+
+GetError:
+  path: '/err/[i:code]'
+  api: true
+  api_description: "Get error page"
+  api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
+  cached: true
+  method: GET|POST
+  presenter: error
+  api_example: [
+    "err/404"
+    "err/420"
+    "err/500"
+  ]
+
