@@ -1,5 +1,5 @@
 #@author Filip Oščádal <git@gscloud.cz>
-# core routes, mandatory
+# core routes, mandatory - see CorePresenter.php
 
 GetWebManifest:
   path: /manifest.json

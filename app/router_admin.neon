@@ -1,5 +1,5 @@
 #@author Filip Oščádal <git@gscloud.cz>
-# admin routes, mandatory for login and administration
+# admin routes, mandatory for login and administration - see AdminPresenter.php
 
 admin:
   method: GET|POST|DELETE
