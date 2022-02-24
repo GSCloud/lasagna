@@ -270,6 +270,8 @@ class CorePresenter extends APresenter
                 break;
 
             case "API":
+            case "API1":
+            case "API2":
                 $this->checkRateLimit();
                 $this->setHeaderHTML();
                 $map = [];
