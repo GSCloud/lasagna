@@ -865,14 +865,14 @@
             "autoload": {
                 "psr-4": {
                     "Google\\Api\\": "src/Api",
-                    "Google\\ApiCore\\": "src/ApiCore",
-                    "Google\\Cloud\\": "src/Cloud",
                     "Google\\Iam\\": "src/Iam",
-                    "Google\\Jison\\": "src/Jison",
-                    "Google\\LongRunning\\": "src/LongRunning",
                     "Google\\Rpc\\": "src/Rpc",
                     "Google\\Type\\": "src/Type",
-                    "GPBMetadata\\Google\\": "metadata"
+                    "Google\\Cloud\\": "src/Cloud",
+                    "Google\\Jison\\": "src/Jison",
+                    "Google\\ApiCore\\": "src/ApiCore",
+                    "GPBMetadata\\Google\\": "metadata",
+                    "Google\\LongRunning\\": "src/LongRunning"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3054,12 +3054,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
