@@ -35,6 +35,7 @@ docs:
 	@bash ./bin/create_pdf.sh
 update:
 	@bash ./bin/update.sh
+	@make clearall
 clearall:
 	@bash ./cli.sh clearall
 clearcache:

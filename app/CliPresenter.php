@@ -125,28 +125,28 @@ class CliPresenter extends APresenter
                 array_map("unlink", glob(CACHE . DS . "*.tmp"));
                 array_map("unlink", glob(CACHE . DS . CACHEPREFIX . "*"));
                 clearstatcache();
-                $climate->out("Cleaner: CACHE + Redis - <bold>all cleaned 🐱</bold>");
+                $climate->out("Cleaner: global cache + Redis: <bold>all cleaned 🧹</bold>");
                 break;
 
             case "clearci":
                 $files = glob(ROOT . DS . "ci" . DS . "*");
                 $c = count($files);
                 array_map("unlink", $files);
-                $climate->out("Cleaner: CI logs - <bold>$c files cleaned 🐱</bold>");
+                $climate->out("Cleaner: CI logs: <bold>$c file(s) cleaned 🧹</bold>");
                 break;
 
             case "clearlogs":
                 $files = glob(LOGS . DS . "*");
                 $c = count($files);
                 array_map("unlink", $files);
-                $climate->out("Cleaner: LOGS - <bold>$c files cleaned 🐱</bold>");
+                $climate->out("Cleaner: LOGS: <bold>$c file(s) cleaned 🧹</bold>");
                 break;
 
             case "cleartemp":
                 $files = glob(TEMP . DS . "*");
                 $c = count($files);
                 array_map("unlink", $files);
-                $climate->out("Cleaner: TEMP - <bold>$c files cleaned 🐱</bold>");
+                $climate->out("Cleaner: TEMP - <bold>$c file(s) cleaned 🧹</bold>");
                 break;
 
             case "unit":
