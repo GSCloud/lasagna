@@ -2,6 +2,7 @@
 include .env
 
 all: info
+
 info:
 	@echo "\e[1;32m👾 Welcome to ${APP_NAME}"
 	@echo ""
@@ -73,5 +74,6 @@ run:
 du:
 	@echo "🔨 \e[1;32m Updating\e[0m\n"
 	@bash ./bin/update_docker.sh
+
 everything: doctor clearall test update sync prod
 reimage: doctor test update build run
