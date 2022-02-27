@@ -1,49 +1,54 @@
-== Tesseract LASAGNA - Modern MVP Framework
+== Tesseract LASAGNA: MVP PWA Framework
 
 === Concept
 
 *Tesseract LASAGNA* is a fast, modern and modular PHP OOP framework for
-rapid prototyping of *Progressive Web Apps* (PWA). Tesseract uses Google
-Sheets CSV exports as data inputs, builds the Model from CSV layers
-(hence the lasagna effect), abstract based Presenters are used to
-process the model and export data in TEXT, JSON, XML or HTML5 formats.
-View is built as a set of Mustache templates and partials. +
-Tesseract is Composer based, defines a RESTful API, has a basic command
-line interface support (CLI) and incorporates continuous integration
-(CI) testing.
+rapid prototyping of *Progressive Web Apps* (PWA). Tesseract uses
+_Google Sheets CSV exports_ as a data input, it builds the Model from
+CSV layers (hence the LASAGNA codename). Abstract based Presenters are
+used to process the Model and to export resulting data in TEXT, JSON,
+XML or HTML5 formats (or any other custom format). View is built as a
+set of Mustache templates and partials (can be also rendered in the
+browser). +
+Tesseract is _Composer_ component based, defines a complex *RESTful
+API*, has a _command line interface_ (CLI) support and incorporates
+_continuous integration_ (CI) testing.
 
 === Basic Functionality
 
 ==== Index
 
 Tesseract starts parsing the *www/index.php* file, that’s targeted at
-the Apache *.htaccess* configuration file via Mod_rewrite. *Index.php*
-can contain various constant definitions and overrides. It loads the
-*Boostrap.php* core file from the aplication root folder.
+the Apache level via *.htaccess* configuration file using _Mod_rewrite_.
+*Index* can contain various constant definitions and overrides. *Index*
+then loads the *Boostrap.php* core file from the aplication root folder.
 
 ==== Bootstrap
 
-*Bootstrap.php* sets core constants and the application environment,
-*Nette Debugger* is also instantiated on the fly. It loads the *App.php*
-core file from the *app/* folder.
+*Bootstrap* sets core constants and the application environment, *Nette
+Debugger* is also instantiated on the fly. Bootstrap then loads the
+*App.php* core file from the *app/* folder (the location can be
+overriden via a constant).
 
 ==== App
 
-*App.php* processes the application configurations (public and private),
-sets caching models (Redis support is optional), URL routing, emmits CSP
-headers and sets the Model (array). It loads the corresponding
-_presenter_ based on the routing table. It can also run a _CLI
-presenter_, if the command line invocation is detected. When the
-_presenter_ returns updated Model back, the output data is echoed and
-final headers are set (including debug information). Normal runtime then
-ends here.
+*App* processes the application configuration files (public and
+private), sets caching mechanisms (optional Redis support), configures
+URL routing, emmits CSP headers and sets the core *Model*
+(multidimensional array). *App* then loads the corresponding _presenter_
+based on the actual URI and the coresponding route. It can also run a
+_CLI presenter_, if the CLI is detected. +
+When the _presenter_ ``returns'' the updated Model back, the output is
+echoed and final headers are set (including some optional debugging
+information). Runtime ends here.
 
 ==== Presenters
 
-Presenters are subclasses based on an abstract class *APresenter.php*
-and define at least the _process_ method, that is called from the
-*App.php*. The _process_ method can either output the processed data or
-return it inside the Model back to *App.php.**
+*Presenters* are subclass instances based on an _abstract class_
+*APresenter.php* and define at least the _process_ method, that is
+called from the *App*. The _process_ method can either output the
+resulting data or return it encapsulated inside the Model back to the
+*App*
 
 === Filesystem Hierarchy
 
