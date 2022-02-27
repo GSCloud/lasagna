@@ -1,4 +1,39 @@
-# Tesseract LASAGNA
+# Tesseract LASAGNA - Modern MVP Framework
 
-## Modern MVP framework
+## Concept
 
+**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses Google Sheets CSV exports as data inputs, builds the Model from CSV layers (hence the lasagna effect), abstract based Presenters are used to process the model and export data in TEXT, JSON, XML or HTML5 formats. View is built as a set of Mustache templates and partials.  
+Tesseract is Composer based, defines a RESTful API, has a basic command line interface support (CLI) and incorporates continuous integration (CI) testing.
+
+## Basic Functionality
+
+### Index
+
+Tesseract starts parsing the **www/index.php** file, that's targeted at the Apache **.htaccess** configuration file via Mod_rewrite. **Index.php** can contain various constant definitions and overrides. It loads the **Boostrap.php** core file from the aplication root folder.
+
+### Bootstrap
+
+**Bootstrap.php** sets core constants and the application environment, **Nette Debugger** is also instantiated on the fly. It loads the **App.php** core file from the **app/** folder.
+
+### App
+
+**App.php** processes the application configurations (public and private), sets caching models (Redis support is optional), URL routing, emmits CSP headers and sets the Model (array). It loads the corresponding presenter based on the routing table.
+
+### Presenters
+
+Presenters are subclasses based on an abstract class **APresenter.php** and define at least the *process* method, that is called from the **App.php**.
+
+## Filesystem Hierarchy
+
+- **apache/** - Apache configuration example
+- **app/** - Presenters and NE-ON configurations
+- **bin/** - bash scripts for Makefile
+- **ci/** - Continous Integration output
+- **data/** - private data, encryption keys, CSV imports...
+- **doc/** - phpDocumentor generated documentation
+- **docker/** - files to be inserted into the Docker container
+- **logs/** - logs
+- **node_modules/** - Node.js modules for Gulp
+- **temp/** - temporary files, Mustache compiled templates
+- **vendor/** - Composer generated vendor classes
+- **www/** - static assets (CSS, JS, fonts, images) and CDN hash-links

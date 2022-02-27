@@ -77,7 +77,7 @@
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    LoginPresenter
+    AdminPresenter
 
         <span class="phpdocumentor-element__extends">
         extends <a href="classes/GSC-APresenter.html"><abbr title="\GSC\APresenter">APresenter</abbr></a>
@@ -88,12 +88,12 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/LoginPresenter.php"><a href="files/app-loginpresenter.html"><abbr title="app/LoginPresenter.php">LoginPresenter.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">15</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 </aside>
 
-            <p class="phpdocumentor-summary">Login Presenter</p>
+            <p class="phpdocumentor-summary">Admin Presenter</p>
 
     <section class="phpdocumentor-description"></section>
 
@@ -110,6 +110,13 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_ADMIN_KEY">ADMIN_KEY</a>
+    <span>
+        &nbsp;= &quot;admin.key&quot;                    </span>
+</dt>
+<dd></dd>
+
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/GSC-APresenter.html#constant_COOKIE_KEY_FILEMODE">COOKIE_KEY_FILEMODE</a>
     <span>
@@ -265,6 +272,13 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_IMAGE_HANDLERS">IMAGE_HANDLERS</a>
+    <span>
+        &nbsp;= [IMAGETYPE_JPEG =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefromjpeg&quot;, &quot;save&quot; =&gt; &quot;imagejpeg&quot;, &quot;quality&quot; =&gt; 50], IMAGETYPE_PNG =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefrompng&quot;, &quot;save&quot; =&gt; &quot;imagepng&quot;, &quot;quality&quot; =&gt; 6], IMAGETYPE_GIF =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefromgif&quot;, &quot;save&quot; =&gt; &quot;imagegif&quot;], IMAGETYPE_WEBP =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefromwebp&quot;, &quot;save&quot; =&gt; &quot;imagewebp&quot;, &quot;quality&quot; =&gt; 50], IMAGETYPE_BMP =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefrombmp&quot;, &quot;save&quot; =&gt; &quot;imagebmp&quot;]]                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/GSC-APresenter.html#constant_LIMITER_MAXIMUM">LIMITER_MAXIMUM</a>
     <span>
         &nbsp;= 100                    </span>
@@ -275,6 +289,55 @@
     <a href="classes/GSC-APresenter.html#constant_LOG_FILEMODE">LOG_FILEMODE</a>
     <span>
         &nbsp;= 0666                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX128">THUMB_PREFIX128</a>
+    <span>
+        &nbsp;= &quot;.thumb_128px_&quot;                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX150">THUMB_PREFIX150</a>
+    <span>
+        &nbsp;= &quot;.thumb_150px_&quot;                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX32">THUMB_PREFIX32</a>
+    <span>
+        &nbsp;= &quot;.thumb_32px_&quot;                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX320">THUMB_PREFIX320</a>
+    <span>
+        &nbsp;= &quot;.thumb_320px_&quot;                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX50">THUMB_PREFIX50</a>
+    <span>
+        &nbsp;= &quot;.thumb_50px_&quot;                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX512">THUMB_PREFIX512</a>
+    <span>
+        &nbsp;= &quot;.thumb_512px_&quot;                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX64">THUMB_PREFIX64</a>
+    <span>
+        &nbsp;= &quot;.thumb_64px_&quot;                    </span>
 </dt>
 <dd></dd>
 
@@ -454,6 +517,13 @@
 <dd>Data Expander</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GSC-AdminPresenter.html#method_decorateLogs">decorateLogs()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Decorate log entries</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/GSC-APresenter.html#method_getCfg">getCfg()</a>
     <span>
                         &nbsp;: mixed    </span>
@@ -615,9 +685,9 @@
 <dd>Pre-load application CSV data</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/GSC-LoginPresenter.html#method_process">process()</a>
+    <a href="classes/GSC-AdminPresenter.html#method_process">process()</a>
     <span>
-                        &nbsp;: void    </span>
+                        &nbsp;: object    </span>
 </dt>
 <dd>Main controller</dd>
 
@@ -748,11 +818,74 @@
 <dd>Class constructor</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_createAdminKey">createAdminKey()</a>
+    <span>
+                        &nbsp;: object    </span>
+</dt>
+<dd>Create admin key</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_createThumbnail">createThumbnail()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd>Create thumbnail from source image if possible</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/GSC-APresenter.html#method_csv_preloader">csv_preloader()</a>
     <span>
                         &nbsp;: object    </span>
 </dt>
 <dd>Load CSV data into cache</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_flushCache">flushCache()</a>
+    <span>
+                        &nbsp;: object    </span>
+</dt>
+<dd>Flush cache</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_isLocalAdmin">isLocalAdmin()</a>
+    <span>
+                        &nbsp;: bool    </span>
+</dt>
+<dd>Check if we are a local administrator</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_readAdminKey">readAdminKey()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Read admin key</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_rebuildAdminKey">rebuildAdminKey()</a>
+    <span>
+                        &nbsp;: object    </span>
+</dt>
+<dd>Rebuild admin key</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_rebuildNonce">rebuildNonce()</a>
+    <span>
+                        &nbsp;: object    </span>
+</dt>
+<dd>Rebuild identity nonce</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_rebuildSecureKey">rebuildSecureKey()</a>
+    <span>
+                        &nbsp;: object    </span>
+</dt>
+<dd>Rebuild secure key</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GSC-AdminPresenter.html#method_unauthorizedAccess">unauthorizedAccess()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Unauthorized access</dd>
 
         </dl>
 
@@ -762,8 +895,34 @@
     <section class="phpdocumentor-constants">
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
-            <a href="classes/GSC-LoginPresenter.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/GSC-AdminPresenter.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_ADMIN_KEY">
+        ADMIN_KEY
+        <a href="classes/GSC-AdminPresenter.html#constant_ADMIN_KEY" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">22</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">ADMIN_KEY</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;admin.key&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_COOKIE_KEY_FILEMODE">
         COOKIE_KEY_FILEMODE
@@ -1337,6 +1496,32 @@
 
 </article>
                     <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_IMAGE_HANDLERS">
+        IMAGE_HANDLERS
+        <a href="classes/GSC-AdminPresenter.html#constant_IMAGE_HANDLERS" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">IMAGE_HANDLERS</span>
+    = <span class="phpdocumentor-signature__default-value">[IMAGETYPE_JPEG =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefromjpeg&quot;, &quot;save&quot; =&gt; &quot;imagejpeg&quot;, &quot;quality&quot; =&gt; 50], IMAGETYPE_PNG =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefrompng&quot;, &quot;save&quot; =&gt; &quot;imagepng&quot;, &quot;quality&quot; =&gt; 6], IMAGETYPE_GIF =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefromgif&quot;, &quot;save&quot; =&gt; &quot;imagegif&quot;], IMAGETYPE_WEBP =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefromwebp&quot;, &quot;save&quot; =&gt; &quot;imagewebp&quot;, &quot;quality&quot; =&gt; 50], IMAGETYPE_BMP =&gt; [&quot;load&quot; =&gt; &quot;imagecreatefrombmp&quot;, &quot;save&quot; =&gt; &quot;imagebmp&quot;]]</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LIMITER_MAXIMUM">
         LIMITER_MAXIMUM
         <a href="classes/GSC-APresenter.html#constant_LIMITER_MAXIMUM" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1388,13 +1573,189 @@
     
 
 </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX128">
+        THUMB_PREFIX128
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX128" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">28</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX128</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_128px_&quot;</span>
+</code>
+
+
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX150">
+        THUMB_PREFIX150
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX150" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">29</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX150</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_150px_&quot;</span>
+</code>
+
+
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX32">
+        THUMB_PREFIX32
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX32" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">25</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX32</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_32px_&quot;</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX320">
+        THUMB_PREFIX320
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX320" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">30</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX320</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_320px_&quot;</span>
+</code>
+
+
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX50">
+        THUMB_PREFIX50
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX50" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">26</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX50</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_50px_&quot;</span>
+</code>
+
+
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX512">
+        THUMB_PREFIX512
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX512" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">31</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX512</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_512px_&quot;</span>
+</code>
+
+
+    
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_THUMB_PREFIX64">
+        THUMB_PREFIX64
+        <a href="classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX64" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">27</span>
+</aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">THUMB_PREFIX64</span>
+    = <span class="phpdocumentor-signature__default-value">&quot;.thumb_64px_&quot;</span>
+</code>
+
+
+    
+    
+
+</article>
             </section>
 
         
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/GSC-LoginPresenter.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/GSC-AdminPresenter.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
@@ -1680,7 +2041,7 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/GSC-LoginPresenter.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/GSC-AdminPresenter.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="phpdocumentor-element
@@ -2390,6 +2751,61 @@
             &mdash;
             <section class="phpdocumentor-description"><p>Singleton instance</p>
 </section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_decorateLogs">
+        decorateLogs()
+        <a href="classes/GSC-AdminPresenter.html#method_decorateLogs" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">749</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Decorate log entries</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">decorateLogs</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$val</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$val</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>log line</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$key</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>array index</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
 
     
 </article>
@@ -3339,19 +3755,19 @@
 >
     <h4 class="phpdocumentor-element__name" id="method_process">
         process()
-        <a href="classes/GSC-LoginPresenter.html#method_process" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/GSC-AdminPresenter.html#method_process" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/LoginPresenter.php"><a href="files/app-loginpresenter.html"><abbr title="app/LoginPresenter.php">LoginPresenter.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">65</span>
 </aside>
 
         <p class="phpdocumentor-summary">Main controller</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">process</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                <span class="phpdocumentor-signature__name">process</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -3359,9 +3775,10 @@
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
+    <span class="phpdocumentor-signature__response_type">object</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
+            <section class="phpdocumentor-description"><p>Singleton instance</p>
+</section>
 
     
 </article>
@@ -4138,6 +4555,114 @@
             -private
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_createAdminKey">
+        createAdminKey()
+        <a href="classes/GSC-AdminPresenter.html#method_createAdminKey" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">771</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Create admin key</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">createAdminKey</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>Singleton instance</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_createThumbnail">
+        createThumbnail()
+        <a href="classes/GSC-AdminPresenter.html#method_createThumbnail" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">812</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Create thumbnail from source image if possible</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">createThumbnail</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$src</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$dest</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$targetWidth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$targetHeight</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$src</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>file source</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$dest</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>file target</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$targetWidth</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>output width</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$targetHeight</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>output height or null</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_csv_preloader">
         csv_preloader()
         <a href="classes/GSC-APresenter.html#method_csv_preloader" class="headerlink"><i class="fas fa-link"></i></a>
@@ -4197,6 +4722,250 @@
 
     
 </article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_flushCache">
+        flushCache()
+        <a href="classes/GSC-AdminPresenter.html#method_flushCache" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">700</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Flush cache</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">flushCache</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>Singleton instance</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isLocalAdmin">
+        isLocalAdmin()
+        <a href="classes/GSC-AdminPresenter.html#method_isLocalAdmin" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">647</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Check if we are a local administrator</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">isLocalAdmin</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>are we?</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_readAdminKey">
+        readAdminKey()
+        <a href="classes/GSC-AdminPresenter.html#method_readAdminKey" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">792</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Read admin key</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">readAdminKey</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>admin key</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_rebuildAdminKey">
+        rebuildAdminKey()
+        <a href="classes/GSC-AdminPresenter.html#method_rebuildAdminKey" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">668</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Rebuild admin key</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">rebuildAdminKey</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>Singleton instance</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_rebuildNonce">
+        rebuildNonce()
+        <a href="classes/GSC-AdminPresenter.html#method_rebuildNonce" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">633</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Rebuild identity nonce</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">rebuildNonce</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>Singleton instance</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_rebuildSecureKey">
+        rebuildSecureKey()
+        <a href="classes/GSC-AdminPresenter.html#method_rebuildSecureKey" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">681</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Rebuild secure key</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">rebuildSecureKey</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>Singleton instance</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_unauthorizedAccess">
+        unauthorizedAccess()
+        <a href="classes/GSC-AdminPresenter.html#method_unauthorizedAccess" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/AdminPresenter.php"><a href="files/app-adminpresenter.html"><abbr title="app/AdminPresenter.php">AdminPresenter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">737</span>
+</aside>
+
+        <p class="phpdocumentor-summary">Unauthorized access</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">unauthorizedAccess</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+            <section class="phpdocumentor-description"></section>
+
+    
+</article>
             </section>
 
     </article>
@@ -4213,7 +4982,7 @@
 </section>
             </div>
         </div>
-        <a href="classes/GSC-LoginPresenter.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/GSC-AdminPresenter.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

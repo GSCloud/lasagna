@@ -1,6 +1,111 @@
 Search.appendIndex(
     [
                 {
+            "fqsen": "\\GSC\\AdminPresenter",
+            "name": "AdminPresenter",
+            "summary": "Admin\u0020Presenter",
+            "url": "classes/GSC-AdminPresenter.html"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "Main\u0020controller",
+            "url": "classes/GSC-AdminPresenter.html#method_process"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildNonce\u0028\u0029",
+            "name": "rebuildNonce",
+            "summary": "Rebuild\u0020identity\u0020nonce",
+            "url": "classes/GSC-AdminPresenter.html#method_rebuildNonce"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AisLocalAdmin\u0028\u0029",
+            "name": "isLocalAdmin",
+            "summary": "Check\u0020if\u0020we\u0020are\u0020a\u0020local\u0020administrator",
+            "url": "classes/GSC-AdminPresenter.html#method_isLocalAdmin"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildAdminKey\u0028\u0029",
+            "name": "rebuildAdminKey",
+            "summary": "Rebuild\u0020admin\u0020key",
+            "url": "classes/GSC-AdminPresenter.html#method_rebuildAdminKey"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildSecureKey\u0028\u0029",
+            "name": "rebuildSecureKey",
+            "summary": "Rebuild\u0020secure\u0020key",
+            "url": "classes/GSC-AdminPresenter.html#method_rebuildSecureKey"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AflushCache\u0028\u0029",
+            "name": "flushCache",
+            "summary": "Flush\u0020cache",
+            "url": "classes/GSC-AdminPresenter.html#method_flushCache"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AunauthorizedAccess\u0028\u0029",
+            "name": "unauthorizedAccess",
+            "summary": "Unauthorized\u0020access",
+            "url": "classes/GSC-AdminPresenter.html#method_unauthorizedAccess"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AdecorateLogs\u0028\u0029",
+            "name": "decorateLogs",
+            "summary": "Decorate\u0020log\u0020entries",
+            "url": "classes/GSC-AdminPresenter.html#method_decorateLogs"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AcreateAdminKey\u0028\u0029",
+            "name": "createAdminKey",
+            "summary": "Create\u0020admin\u0020key",
+            "url": "classes/GSC-AdminPresenter.html#method_createAdminKey"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AreadAdminKey\u0028\u0029",
+            "name": "readAdminKey",
+            "summary": "Read\u0020admin\u0020key",
+            "url": "classes/GSC-AdminPresenter.html#method_readAdminKey"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AcreateThumbnail\u0028\u0029",
+            "name": "createThumbnail",
+            "summary": "Create\u0020thumbnail\u0020from\u0020source\u0020image\u0020if\u0020possible",
+            "url": "classes/GSC-AdminPresenter.html#method_createThumbnail"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AADMIN_KEY",
+            "name": "ADMIN_KEY",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_ADMIN_KEY"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX32",
+            "name": "THUMB_PREFIX32",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX32"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX50",
+            "name": "THUMB_PREFIX50",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX50"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX64",
+            "name": "THUMB_PREFIX64",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX64"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX128",
+            "name": "THUMB_PREFIX128",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX128"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX150",
+            "name": "THUMB_PREFIX150",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX150"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX320",
+            "name": "THUMB_PREFIX320",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX320"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003ATHUMB_PREFIX512",
+            "name": "THUMB_PREFIX512",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_THUMB_PREFIX512"
+        },                {
+            "fqsen": "\\GSC\\AdminPresenter\u003A\u003AIMAGE_HANDLERS",
+            "name": "IMAGE_HANDLERS",
+            "summary": "",
+            "url": "classes/GSC-AdminPresenter.html#constant_IMAGE_HANDLERS"
+        },                {
             "fqsen": "\\GSC\\AndroidPresenter",
             "name": "AndroidPresenter",
             "summary": "Android\u0020Presenter",
@@ -48,7 +153,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\logger\u0028\u0029",
             "name": "logger",
-            "summary": "Google\u0020Stackdriver",
+            "summary": "Google\u0020Stackdriver\u0020logger",
             "url": "namespaces/gsc.html#function_logger"
         },                {
             "fqsen": "\\GSC\\APresenter",
@@ -1015,21 +1120,6 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "",
             "url": "classes/GSC-UnitTester.html#method___construct"
-        },                {
-            "fqsen": "\\TESSERACT_START",
-            "name": "TESSERACT_START",
-            "summary": "",
-            "url": "namespaces/default.html#constant_TESSERACT_START"
-        },                {
-            "fqsen": "\\CLI",
-            "name": "CLI",
-            "summary": "",
-            "url": "namespaces/default.html#constant_CLI"
-        },                {
-            "fqsen": "\\LOCALHOST",
-            "name": "LOCALHOST",
-            "summary": "",
-            "url": "namespaces/default.html#constant_LOCALHOST"
         },                {
             "fqsen": "\\",
             "name": "\\",
