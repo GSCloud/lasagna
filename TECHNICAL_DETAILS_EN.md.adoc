@@ -31,14 +31,19 @@ core file from the *app/* folder.
 
 *App.php* processes the application configurations (public and private),
 sets caching models (Redis support is optional), URL routing, emmits CSP
-headers and sets the Model (array). It loads the corresponding presenter
-based on the routing table.
+headers and sets the Model (array). It loads the corresponding
+_presenter_ based on the routing table. It can also run a _CLI
+presenter_, if the command line invocation is detected. When the
+_presenter_ returns updated Model back, the output data is echoed and
+final headers are set (including debug information). Normal runtime then
+ends here.
 
 ==== Presenters
 
 Presenters are subclasses based on an abstract class *APresenter.php*
 and define at least the _process_ method, that is called from the
-*App.php*.
+*App.php*. The _process_ method can either output the processed data or
+return it inside the Model back to *App.php.**
 
 === Filesystem Hierarchy
 

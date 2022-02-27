@@ -203,7 +203,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003A__destruct\u0028\u0029",
             "name": "__destruct",
-            "summary": "Class\u0020destructor",
+            "summary": "Class\u0020destructor\u0020\u002D\u0020the\u0020home\u0020of\u0020many\u0020final\u0020tasks",
             "url": "classes/GSC-APresenter.html#method___destruct"
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003AgetInstance\u0028\u0029",
