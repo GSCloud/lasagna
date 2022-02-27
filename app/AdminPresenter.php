@@ -18,7 +18,7 @@ use Symfony\Component\Lock\Store\FlockStore;
  */
 class AdminPresenter extends APresenter
 {
-    /** @var string administration token key filename */
+    /** @var string administration token key filename, stored in data/ */
     const ADMIN_KEY = "admin.key";
 
     /** @var string thumbnail prefix */
@@ -73,11 +73,10 @@ class AdminPresenter extends APresenter
         if ($g) {
             $data["admin_group_${g}"] = true; // for templating
         }
-
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "Tesseract LASAGNA Admin Module",
+            "name" => "LASAGNA Admin Module",
             "override" => (bool) $this->isLocalAdmin(),
         ];
 
@@ -205,19 +204,19 @@ class AdminPresenter extends APresenter
 
             case "clearcache":
                 \header('Clear-Site-Data: "cache"');
-                $this->addMessage("BROWSER CACHE CLEARED");
+                $this->addMessage("Browser cache cleared");
                 $this->setLocation();
                 break;
 
             case "clearcookies":
                 \header('Clear-Site-Data: "cookies"');
-                $this->addMessage("BROWSER COOKIES CLEARED");
+                $this->addMessage("Browser cookies cleared");
                 $this->setLocation();
                 break;
 
             case "clearbrowser":
                 \header('Clear-Site-Data: "cache", "cookies", "storage"');
-                $this->addMessage("BROWSER DATA CLEARED");
+                $this->addMessage("Browser storage cleared");
                 $this->setLocation();
                 break;
 
@@ -305,25 +304,25 @@ class AdminPresenter extends APresenter
                             $thumbnail150 = null;
                             $thumbnail320 = null;
                             $thumbnail512 = null;
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX32 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX32 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX32 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX32 . $entry)) {
                                 $thumbnail32 = "/upload/" . self::THUMB_PREFIX32 . $entry;
                             }
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX50 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX50 . $entry)) {
                                 $thumbnail50 = "/upload/" . self::THUMB_PREFIX50 . $entry;
                             }
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX64 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX64 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX64 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX64 . $entry)) {
                                 $thumbnail64 = "/upload/" . self::THUMB_PREFIX64 . $entry;
                             }
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX128 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX128 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX128 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX128 . $entry)) {
                                 $thumbnail128 = "/upload/" . self::THUMB_PREFIX128 . $entry;
                             }
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX150 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX150 . $entry)) {
                                 $thumbnail150 = "/upload/" . self::THUMB_PREFIX150 . $entry;
                             }
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX320 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX320 . $entry)) {
                                 $thumbnail320 = "/upload/" . self::THUMB_PREFIX320 . $entry;
                             }
-                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX512 . $entry) && is_readable(UPLOAD . DS . self::THUMB_PREFIX512 . $entry)) {
+                            if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX512 . $entry) && \is_readable(UPLOAD . DS . self::THUMB_PREFIX512 . $entry)) {
                                 $thumbnail512 = "/upload/" . self::THUMB_PREFIX512 . $entry;
                             }
                             $files[$entry] = [
@@ -341,9 +340,9 @@ class AdminPresenter extends APresenter
                             ];
                         }
                     }
-                    closedir($handle);
+                    \closedir($handle);
                 }
-                ksort($files);
+                \ksort($files);
                 return $this->writeJsonData($files, $extras);
                 break;
 
@@ -504,36 +503,6 @@ class AdminPresenter extends APresenter
                 $this->postloadAppData("app_data");
                 $this->flushCache();
                 return $this->writeJsonData(["status" => "OK"], $extras);
-                break;
-
-            case "CreateAuthCode":
-                $this->checkPermission("admin");
-                $user = $this->getCurrentUser();
-                $hash = null;
-                if ($user["id"] ?? null) {
-                    $f = DATA . "/identity_" . $user["id"] . ".json";
-                    $user["entropy"] = \hash("sha256", \random_bytes(8) . (string) \time()); // random entropy
-                    $json = \json_encode($user);
-                    $hash = \substr(\hash("sha256", $json), 0, 8); // return 8 chars of SHA256
-                    @\file_put_contents($f, $json, LOCK_EX); // @todo check write fail!
-                    $this->addMessage("CREATE AUTH CODE");
-                    return $this->writeJsonData(["hash" => $hash, "status" => "OK"], $extras);
-                }
-                return $this->writeJsonData(401, $extras); // error
-                break;
-
-            case "DeleteAuthCode":
-                $this->checkPermission("admin");
-                $user = $this->getCurrentUser();
-                if ($user["id"] ?? null) {
-                    $f = DATA . "/identity_" . $user["id"] . ".json";
-                    if (\file_exists($f)) {
-                        @\unlink($f); // delete identity
-                    }
-                    $this->addMessage("DELETE AUTH CODE");
-                    return $this->writeJsonData(["status" => "OK"], $extras);
-                }
-                return $this->writeJsonData(401, $extras); // error
                 break;
 
             case "UpdateArticles":
@@ -758,7 +727,7 @@ class AdminPresenter extends APresenter
         $y = \implode("</td><td>", $x);
         $z = "<td>$y</td>";
         for ($i = 1; $i <= 5; $i++) { // add 5 column classes
-            $z = preg_replace("/<td>/", "<td class='alogcol${i}'>", $z, 1);
+            $z = \preg_replace("/<td>/", "<td class='alogcol${i}'>", $z, 1);
         }
         $val = $z;
     }

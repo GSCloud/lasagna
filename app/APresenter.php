@@ -283,7 +283,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Class destructor
+     * Class destructor - the home of many final tasks
      */
     public function __destruct()
     {
@@ -291,11 +291,15 @@ abstract class APresenter implements IPresenter
             ob_end_flush();
         }
         ob_start();
+
+        // preload CSV definitions
         foreach ($this->csv_postload as $key) {
             $this->preloadAppData((string) $key, true);
         }
+        // load actual CSV data
         $this->checkLocales((bool) $this->force_csv_check);
 
+        // setup Monolog logger
         $monolog = new Logger("Tesseract log");
         $streamhandler = new StreamHandler(MONOLOG, Logger::INFO, true, self::LOG_FILEMODE);
         $streamhandler->setFormatter(new LineFormatter);
@@ -685,7 +689,7 @@ abstract class APresenter implements IPresenter
                 }
                 @\chmod($file, 0660);
                 $this->addMessage("ADMIN: nonce file created");
-            } catch (\Exception$e) {
+            } catch (\Exception $e) {
                 $this->addError("500: Internal Server Error -> cannot create nonce file: " . $e->getMessage());
                 $this->setLocation("/err/500");
                 exit;
@@ -1286,9 +1290,9 @@ abstract class APresenter implements IPresenter
                         foreach ($records->fetchColumn($language) as $x) {
                             $values[] = $x;
                         }
-                    } catch (\Exception$e) {
-                        $this->addCritical("ERR: $language locale $k CORRUPTED");
-                        $this->addAuditMessage("ERR: $language locale $k CORRUPTED");
+                    } catch (\Exception $e) {
+                        $this->addCritical("ERROR: $language locale $k CORRUPTED!");
+                        $this->addAuditMessage("ERROR: $language locale $k CORRUPTED!");
                         continue;
                     }
                     $locale = \array_replace($locale, \array_combine($keys, $values));
@@ -1317,8 +1321,8 @@ abstract class APresenter implements IPresenter
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
                 \header("HTTP/1.1 500 FATAL ERROR");
-                $this->addCritical("ERR: LOCALES CORRUPTED");
-                echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED</h2></body>";
+                $this->addCritical("ERROR: LOCALES CORRUPTED!");
+                echo "<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED!</h2></body>";
                 exit;
             } else {
                 // second try!
@@ -1391,8 +1395,8 @@ abstract class APresenter implements IPresenter
      * Load CSV data into cache
      *
      * @param string $name CSV nickname (foobar)
-     * @param string $csvkey Google CSV token (partial or full)
-     * @param boolean $force force load? (optional)
+     * @param string $csvkey Google CSV token (partial or full URI to CSV export endpoint)
+     * @param boolean $force force the resource refresh? (optional)
      * @return object Singleton instance
      */
     private function csv_preloader($name, $csvkey, $force = false)
@@ -1420,7 +1424,7 @@ abstract class APresenter implements IPresenter
                     $this->addMessage("FILE: fetching ${remote}");
                     try {
                         $data = @\file_get_contents($remote);
-                    } catch (\Exception$e) {
+                    } catch (\Exception $e) {
                         $this->addError("ERROR: fetching ${remote}");
                         $data = "";
                     }

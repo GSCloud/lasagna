@@ -28,11 +28,10 @@ class CorePresenter extends APresenter
         $match = $this->getMatch();
         $presenter = $this->getPresenter();
         $view = $this->getView();
-
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "Tesseract LASAGNA Core Module",
+            "name" => "LASAGNA Core Module",
         ];
 
         // API calls
@@ -59,8 +58,6 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetWebManifest":
-                // do NOT rate limit this call!
-                //$this->checkRateLimit();
                 $this->setHeaderJson();
                 $lang = $this->validateLanguage($_GET["lang"] ?? "en"); // language set by GET parameter
                 return $this->setData("output", $this->setData("l", $this->getLocale($lang))->renderHTML("manifest"));
@@ -88,8 +85,6 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetTXTSitemap":
-                // do NOT rate limit this call!
-                //$this->checkRateLimit();
                 $this->setHeaderText();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -101,8 +96,6 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetXMLSitemap":
-                // do NOT rate limit this call!
-                //$this->checkRateLimit();
                 $this->setHeaderXML();
                 $map = [];
                 foreach ($presenter as $p) {
@@ -114,8 +107,6 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetRSSXML":
-                // do NOT rate limit this call!
-                //$this->checkRateLimit();
                 $this->setHeaderXML();
                 $language = "en"; // set to English
                 $l = $this->getLocale($language);
@@ -131,26 +122,25 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetArticleHTMLExport":
-                // special rate limit value!
-                $this->checkRateLimit(100);
+                $this->checkRateLimit(100); // special rate limit value!
                 $nofetch = $_COOKIE["NOFETCH"] ?? false; // extra check
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
-                    $language = strtolower(substr(trim($match["params"]["lang"]), 0, 2));
+                    $language = \strtolower(\substr(\trim($match["params"]["lang"]), 0, 2));
                     $x++;
                 }
                 if (isset($match["params"]["profile"])) {
-                    $profile = trim($match["params"]["profile"]);
+                    $profile = \trim($match["params"]["profile"]);
                     $x++;
                 }
                 if (isset($match["params"]["trailing"])) {
-                    $path = trim($match["params"]["trailing"]);
+                    $path = \trim($match["params"]["trailing"]);
                     $x++;
                 }
                 if ($x !== 3) {
                     return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                if ($path == "!") { // homepage
+                if ($path == "!") { // homepage alias
                     $path = $language;
                 } else {
                     $path = $language . "/" . $path;
@@ -178,7 +168,7 @@ class CorePresenter extends APresenter
                 }
                 $c = 0;
                 foreach ($matches[1]??=[] as $match) {
-                    if ($match && strpos($codes[$c], $match)) {
+                    if ($match && \strpos($codes[$c], $match)) {
                         $remotes[$c] = $match;
                     }
                     $c++;
@@ -194,14 +184,13 @@ class CorePresenter extends APresenter
                             $ch = \curl_init();
                             \curl_setopt_array($ch, array(
                                 CURLOPT_URL => $uri,
-                                CURLOPT_CONNECTTIMEOUT => 5,
+                                CURLOPT_CONNECTTIMEOUT => 3,
                                 CURLOPT_COOKIE => "NOFETCH=true",
                                 CURLOPT_RETURNTRANSFER => true,
-                                CURLOPT_TIMEOUT => 10,
+                                CURLOPT_TIMEOUT => 5,
                             ));
                             $out = \curl_exec($ch);
-                            // find <body> content if possible
-                            \preg_match("/<body.*\/body>/s", $out, $m);
+                            \preg_match("/<body.*\/body>/s", $out, $m); // find <body> section if possible
                             if (count($m) != 0) {
                                 $out = "{$m[0]}";
                             }
@@ -253,12 +242,11 @@ class CorePresenter extends APresenter
                     "imageTransparent" => false,
                 ]);
                 \header("Content-type: image/png");
-                echo (new QRCode($options))->render($text ?? "", CACHE . "/" . hash("sha256", $text) . ".png");
+                echo (new QRCode($options))->render($text ?? "", CACHE . "/" . \hash("sha256", $text) . ".png");
                 exit; // finish here - just not to mangle the PNG!
                 break;
 
             case "GetServiceWorker":
-                // do NOT rate limit this call!
                 $this->setHeaderJavaScript();
                 $map = [];
                 foreach ($presenter as $p) {

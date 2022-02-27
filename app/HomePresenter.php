@@ -36,7 +36,8 @@ class HomePresenter extends APresenter
         $use_cache = (bool) (DEBUG ? false : $data["use_cache"] ?? false);
         $cache_key = hash("sha256", join("_", [$data["host"], $data["request_path"], "htmlpage"]));
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
-            return $this->setData("output", $output .= "\n<script>console.log('*** page content cached');</script>");
+            header("X-Cache: HIT");
+            return $this->setData("output", $output);
         }
 
         // fix current locale

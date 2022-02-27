@@ -17,11 +17,11 @@ Tesseract starts parsing the **www/index.php** file, that's targeted at the Apac
 
 ### App
 
-**App.php** processes the application configurations (public and private), sets caching models (Redis support is optional), URL routing, emmits CSP headers and sets the Model (array). It loads the corresponding presenter based on the routing table.
+**App.php** processes the application configurations (public and private), sets caching models (Redis support is optional), URL routing, emmits CSP headers and sets the Model (array). It loads the corresponding *presenter* based on the routing table. It can also run a *CLI presenter*, if the command line invocation is detected. When the *presenter* returns updated Model back, the output data is echoed and final headers are set (including debug information). Normal runtime then ends here.
 
 ### Presenters
 
-Presenters are subclasses based on an abstract class **APresenter.php** and define at least the *process* method, that is called from the **App.php**.
+Presenters are subclasses based on an abstract class **APresenter.php** and define at least the *process* method, that is called from the **App.php**. The *process* method can either output the processed data or return it inside the Model back to *App.php.**
 
 ## Filesystem Hierarchy
 

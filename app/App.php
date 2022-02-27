@@ -275,8 +275,8 @@ foreach ($presenter as $k => $v) {
         }
     }
     $alto->map($v["method"], $v["path"], $k, "route_${k}");
-    if (substr($v["path"], -1) != "/") { // map also slash endings!
-        $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_x");
+    if (substr($v["path"], -1) != "/") { // skip the root route
+        $alto->map($v["method"], $v["path"] . "/", $k, "route_${k}_x"); // map also slash endings
     }
 }
 
