@@ -1,28 +1,41 @@
 #@author Filip Oščádal <git@gscloud.cz>
-# routing defaults
+# router defaults
 
 defaults:
+  # RESTful API
   api: false
   api_description: ""
   api_example: []
   api_info: ""
   api_key: null
 
+  # testing
   assert_httpcode: 200
   assert_json: false
   assert_values: []
 
+  # switches
   cached: false
   deprecated: false
   finished: false
   private: false
+  sitemap: false
   use_key: false
 
-  sethl: false
-  sitemap: false
+  # inner workings
+  alias: null
+  clone: null
 
+  # web interface
+  access_key: null
+  encryption_key: null
   language: cs
+  sethl: false
+
+  # HTTP method
   method: GET
+
+  # MVP
   presenter: home
   template: index
   view: home

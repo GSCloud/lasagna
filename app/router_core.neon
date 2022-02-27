@@ -3,34 +3,43 @@
 
 GetWebManifest:
   path: /manifest.json
-  presenter: core
+  api: true
+  api_description: "PWA manifest."
   cached: true
+  presenter: core
 
 GetTXTSitemap:
   path: /sitemap.txt
-  presenter: core
+  api: true
+  api_description: "Crawler sitemap in TXT format."
   cached: true
+  presenter: core
 
 GetXMLSitemap:
   path: /sitemap.xml
-  presenter: core
+  api: true
+  api_description: "Crawler sitemap in XML format."
   cached: true
+  presenter: core
 
 GetRSSXML:
   path: /rss.xml
-  presenter: core
   cached: true
+  presenter: core
 
 GetServiceWorker:
   path: /sw.js
-  presenter: core
+  api: true
+  api_description: "Service worker."
+  api_info: "Returns (JavaScript): SW code."
   cached: true
+  presenter: core
 
 PingBack:
   path: /pingback
   api: true
   api_description: "Ping back for remote monitoring service"
-  api_info: "Returns (JSON): ok."
+  api_info: "Returns (JSON): status."
   assert_json: true
   method: GET|POST
   presenter: core
