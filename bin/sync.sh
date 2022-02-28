@@ -49,7 +49,9 @@ info "Version: $VERSION Revisions: $REVISIONS"
 rsync -ahz --progress --delete-after --delay-updates --exclude "www/upload" \
   .env \
   *.json \
+  *.pdf \
   *.php \
+  *.txt \
   app \
   bin \
   cli.sh \
