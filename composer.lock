@@ -2778,12 +2778,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Ramsey\\Uuid\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "Ramsey\\Uuid\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3535,8 +3535,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "There4\\Analytics\\": "src/",
-                    "Tests\\": "tests/"
+                    "Tests\\": "tests/",
+                    "There4\\Analytics\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
