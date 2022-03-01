@@ -23,6 +23,7 @@ csp: [
     "*.gstatic.com;"
     "script-src"
     "*.facebook.net"
+    "cdn.nocodeflow.net"
     "*.google-analytics.com"
     "*.googleapis.com"
     "*.googletagmanager.com"
