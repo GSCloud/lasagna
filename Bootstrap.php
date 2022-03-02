@@ -17,7 +17,7 @@ define("TESSERACT_START", microtime(true));
 ob_start();
 error_reporting(E_ALL);
 @ini_set("auto_detect_line_endings", defined("AUTO_DETECT_LINE_ENDINGS") ? AUTO_DETECT_LINE_ENDINGS : true);
-@ini_set("default_socket_timeout", defined("DEFAULT_SOCKET_TIMEOUT") ? DEFAULT_SOCKET_TIMEOUT : 10);
+@ini_set("default_socket_timeout", defined("DEFAULT_SOCKET_TIMEOUT") ? DEFAULT_SOCKET_TIMEOUT : 30);
 @ini_set("display_errors", defined("DISPLAY_ERRORS") ? DISPLAY_ERRORS : true);
 
 // CONSTANTS IN SPECIFIC ORDER *** DO NOT ADD DIRECTORY SEPARATOR TO FOLDER DEFINITIONS!

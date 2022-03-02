@@ -48,7 +48,7 @@ $data["base"] = $data["BASE"] = $host ? (($_SERVER["HTTPS"] ?? "off" == "on") ? 
 $data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";
 $data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/"));
 $data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
-$data["LOCALHOST"] = (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI;
+$data["LOCALHOST"] = (bool) LOCALHOST;
 $data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 4), 16, 10));
 $data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(16) . (string) time()), 0, 16);
 $data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
@@ -362,10 +362,10 @@ $data["csvcache"] = $arr;
 unset($arr);
 
 // GEO BLOCKING
-$blocked = (array) ($data["geoblock"] ?? ["ZZ"]);
-#$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD"]);
+$blocked = (array) ($data["geoblock"] ?? [""]);
+#$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD"]); // use XX to block unknown GEO locations
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
-if (in_array($country, $blocked)) {
+if (!LOCALHOST && in_array($country, $blocked)) {
     header("HTTP/1.1 403 Not Found");
     exit;
 }
