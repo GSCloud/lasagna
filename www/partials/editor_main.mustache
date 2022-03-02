@@ -52,7 +52,7 @@
   <!-- ADMIN GRID -->
   <div class="row grid" style="overflow:hidden" style="padding-top:3px">
 
-    <!-- DATA -->
+    <!-- 1st COLUMN -->
     <div class="col l4 m6 s12">
       <div class="row center extrapadding">
           <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
@@ -147,7 +147,7 @@
       </div>
     </div>
 
-    <!-- CACHE -->
+    <!-- 2nd COLUMN -->
     <div class="col l4 m6 s12">
       <div class="row center extrapadding">
         <h5>{{ l.a_cache }}</h5>
@@ -171,9 +171,9 @@
       <div class="hide-on-small-only">
         <div class="row center extrapadding">
           <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i>
-            <i class="hover close_news fas fa-arrow-up blue-text hide"></i></h5>
+            <i class="hover close_news fas fa-arrow-up blue-text hide"></i>&nbsp;<span class="yellow-text right hide" id="newsdot">!&nbsp;&nbsp;</span></h5>
           <div id="news" class="row grey-text hide" style="margin-top:1em">
-            <div class="grey-text left-align container">
+            <div id="newscontent" class="grey-text left-align container">
               {{ l.a_changelog }}
             </div>
           </div>
@@ -202,7 +202,7 @@
 
     </div>
 
-    <!-- PERMISSIONS -->
+    <!-- 3rd COLUMN -->
     <div class="col l4 m6 s12">
 
       <!-- CURRENT USER -->
@@ -243,6 +243,7 @@
         </div>
       </div>
     </div>
+  
   </div>
 
   <!-- UPLOADS -->

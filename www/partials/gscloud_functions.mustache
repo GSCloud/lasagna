@@ -5,6 +5,16 @@
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
+// compute SHA-256 hash of a string
+async function sha256(message) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hash;
+}
+
 (function(w, d, undefined) {
 
   // add scroll progress bar element
@@ -253,7 +263,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
 
     });
 
-    // GSC.ReadArticles() - read remote articles / create HTML parts
+    // GSC.ReadArticles() - read remote articles / insert HTML
     GSC.init.push(function() {
       GSC.names.push("GSC.ReadArticles()");
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
@@ -262,6 +272,21 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           setTimeout("GSC.ReadArticles();", 10000);
           return;
         }
+        // check for a local copy of the article
+        var html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
+        if (html != "") {
+          var obj = jQuery.parseJSON(html);
+          for (var p in obj) if (obj.hasOwnProperty(p)) {
+            if (obj[p] == "<p><br></p>") {
+              obj[p] = " ";
+            }
+            $("#" + p).html(obj[p]);
+          }
+          // fix classnames for Summernote
+          $(".summernote ul").addClass("browser-default");
+          $(".summernote img").addClass("responsive-img");
+        }
+        // get remote artice
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function(data) {
           if (data && data.data) {
@@ -291,6 +316,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
       }
 
       GSC.SetProfile();
+      /*
       var a = "articles_" + GSC.profile + "_{{ request_path_hash }}";
       if (localStorage && localStorage[a] && localStorage[a].length) {
           var obj = jQuery.parseJSON(localStorage[a]);
@@ -298,6 +324,7 @@ String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[
           $(".summernote ul").addClass("browser-default");
           $(".summernote img").addClass("responsive-img");
       }
+      */
       setTimeout("GSC.ReadArticles();", 1);
     });
 

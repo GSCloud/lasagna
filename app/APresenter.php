@@ -683,20 +683,20 @@ abstract class APresenter implements IPresenter
             try {
                 $nonce = \hash("sha256", \random_bytes(1024) . \time());
                 if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-                    $this->addError("500: Internal Server Error -> cannot write nonce file");
+                    $this->addError("ERROR 500: cannot write nonce file");
                     $this->setLocation("/err/500");
                     exit;
                 }
                 @\chmod($file, 0660);
                 $this->addMessage("ADMIN: nonce file created");
             } catch (\Exception $e) {
-                $this->addError("500: Internal Server Error -> cannot create nonce file: " . $e->getMessage());
+                $this->addError("ERROR 500: cannot create nonce file: " . $e->getMessage());
                 $this->setLocation("/err/500");
                 exit;
             }
         }
         if (!$nonce = @\file_get_contents($file)) {
-            $this->addError("500: Internal Server Error -> cannot read nonce file");
+            $this->addError("ERROR 500: cannot read nonce file");
             $this->setLocation("/err/500");
             exit;
         }
@@ -764,7 +764,7 @@ abstract class APresenter implements IPresenter
             return $this->identity;
         }
         if (!$nonce = @\file_get_contents($file)) {
-            $this->addError("500: Internal Server Error -> cannot read nonce file");
+            $this->addError("ERROR 500: cannot read nonce file");
             $this->setLocation("/err/500");
             exit;
         }
@@ -1082,11 +1082,16 @@ abstract class APresenter implements IPresenter
      */
     public function setLocation($location = null, $code = 303)
     {
+        $code = (int) $code;
         if (empty($location)) {
             $location = "/?nonce=" . $this->getNonce();
         }
-        $code = (int) $code;
-        $this->setCookie("ref", "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+
+        // audit certain messages
+        if (!LOCALHOST && !CLI && $code > 303) {
+            $ref = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+            $this->addAuditMessage("ERROR: ${code}; ref. ${ref}");
+        }
         \header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
     }
@@ -1566,7 +1571,7 @@ abstract class APresenter implements IPresenter
         }
         if (is_null($data)) {
             $code = 500;
-            $msg = "Data is NULL! Internal server error 🦄";
+            $msg = "Data is NULL! Internal Server Error 🦄";
             \header("HTTP/1.1 500 Internal Server Error");
         }
         if (is_string($data)) {

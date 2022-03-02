@@ -64,6 +64,16 @@
         $("#news").removeClass('hide').hide().show(200);
       });
 
+      // show news warning
+      sha256($("#newscontent").html()).then(
+        hash => {
+          if (hash != localStorage.getItem("newshash")) {
+            localStorage.setItem("newshash", hash);
+            $("#newsdot").removeClass("hide");
+            $(".open_news").click();
+          }
+      });
+
       // hide variables
       $(".close_google").unbind();
       $(".close_google").click(function () {
