@@ -50,7 +50,7 @@ $data["request_path"] = $rqp = trim(trim(strtok($_SERVER["REQUEST_URI"] ?? "", "
 $data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
 $data["LOCALHOST"] = (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI;
 $data["VERSION_SHORT"] = $base58->encode(base_convert(substr(hash("sha256", $version), 0, 4), 16, 10));
-$data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(8) . (string) time()), 0, 4);
+$data["nonce"] = $data["NONCE"] = $nonce = substr(hash("sha256", random_bytes(16) . (string) time()), 0, 16);
 $data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${nonce}";
 $data["ALPHA"] = (in_array($host, (array) ($cfg["alpha_hosts"] ?? [])));
 $data["BETA"] = (in_array($host, (array) ($cfg["beta_hosts"] ?? [])));
@@ -361,6 +361,15 @@ if (ENABLE_CSV_CACHE && \is_array($locales = $data["locales"] ?? null)) {
 $data["csvcache"] = $arr;
 unset($arr);
 
+// GEO BLOCKING
+$blocked = (array) ($data["geoblock"] ?? ["ZZ"]);
+#$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD"]);
+$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
+if (in_array($country, $blocked)) {
+    header("HTTP/1.1 403 Not Found");
+    exit;
+}
+
 // CREATE CORE SINGLETON CLASS
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
@@ -371,7 +380,6 @@ $data = $app->getData(); // get model back
 // PREPARE ANALYTICS DATA
 $events = null;
 $data = $app->getData();
-$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUN") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESS") * 1000, 2);
 

@@ -415,7 +415,7 @@ abstract class APresenter implements IPresenter
                     return (string) time();
                 },
                 "sha256_nonce" => function () {
-                    return (string) \substr(\hash("sha256", \random_bytes(8) . (string) \time()), 0, 8);
+                    return $this->getNonce();
                 },
                 "convert_hyperlinks" => function ($source, \Mustache_LambdaHelper$lambdaHelper) {
                     $text = $lambdaHelper->render($source);
@@ -681,7 +681,7 @@ abstract class APresenter implements IPresenter
         $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
         if (!\file_exists($file)) {
             try {
-                $nonce = \hash("sha256", \random_bytes(256) . \time());
+                $nonce = \hash("sha256", \random_bytes(1024) . \time());
                 if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
                     $this->addError("500: Internal Server Error -> cannot write nonce file");
                     $this->setLocation("/err/500");
@@ -700,7 +700,7 @@ abstract class APresenter implements IPresenter
             $this->setLocation("/err/500");
             exit;
         }
-        $i["nonce"] = \substr(\trim($nonce), 0, 8); // nonce
+        $i["nonce"] = \substr(\trim($nonce), 0, 16); // trim nonce to 16 chars only
         // check all keys
         if (\array_key_exists("avatar", $identity)) {
             $i["avatar"] = (string) $identity["avatar"];
@@ -758,8 +758,8 @@ abstract class APresenter implements IPresenter
         if ($id && $email && $name) {
             return $this->identity;
         }
-        $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
-        if (!\file_exists($file)) { // initialize nonce
+        $file = DATA . DS . self::IDENTITY_NONCE;
+        if (!\file_exists($file)) {
             $this->setIdentity(); // set empty identity
             return $this->identity;
         }
@@ -768,7 +768,7 @@ abstract class APresenter implements IPresenter
             $this->setLocation("/err/500");
             exit;
         }
-        $nonce = \substr(\trim($nonce), 0, 8); // nonce
+        $nonce = \substr(\trim($nonce), 0, 16); // trim nonce to 16 chars only
         $i = [ // empty identity
             "avatar" => "",
             "country" => "",
@@ -808,8 +808,7 @@ abstract class APresenter implements IPresenter
                     break;
                 }
                 if ($q["nonce"] == $nonce) { // compare nonces
-                    //$this->setIdentity($q);
-                    $this->identity = $q; // our identity
+                    $this->identity = $q; // set identity
                     break;
                 }
             }
@@ -1083,10 +1082,10 @@ abstract class APresenter implements IPresenter
      */
     public function setLocation($location = null, $code = 303)
     {
-        $code = (int) $code;
         if (empty($location)) {
-            $location = "/?nonce=" . \substr(\hash("sha256", \random_bytes(4) . (string) \time()), 0, 8);
+            $location = "/?nonce=" . $this->getNonce();
         }
+        $code = (int) $code;
         $this->setCookie("ref", "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
         \header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
@@ -1100,8 +1099,7 @@ abstract class APresenter implements IPresenter
         $this->setIdentity();
         $this->clearCookie($this->getCfg("app") ?? "app");
         \header('Clear-Site-Data: "cookies"');
-        $location = "/?logout&nonce=" . \substr(\hash("sha256", \random_bytes(4) . (string) \time()), 0, 8);
-        $this->setLocation($location);
+        $this->setLocation("/?logout&nonce=" . $this->getNonce());
         exit;
     }
 
@@ -1665,10 +1663,10 @@ abstract class APresenter implements IPresenter
 
         // solve caching
         $use_cache = true;
-        if (\array_key_exists("nonce", $_GET)) { // do not cache pages with ?nonce
+        if (\array_key_exists("nonce", $_GET)) { // do not cache pages with nonce
             $use_cache = false;
         }
-        if (\array_key_exists("logout", $_GET)) { // do not cache pages with ?logout
+        if (\array_key_exists("logout", $_GET)) { // do not cache pages with logout
             $use_cache = false;
         }
         if ($group) {
@@ -1705,6 +1703,16 @@ abstract class APresenter implements IPresenter
             $data["request_path_slug"] = $data["request_path"] ?? "";
         }
         return $this;
+    }
+
+    /**
+     * Nonce generator
+     *
+     * @return string nonce (number used once)
+     */
+    private function getNonce()
+    {
+        return (string) \substr(\hash("sha256", \random_bytes(16) . (string) \time()), 0, 16);
     }
 
 }

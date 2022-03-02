@@ -4,7 +4,7 @@
 csp: [
     "Content-Security-Policy: "
     "report-to"
-    " https://gscloud.cz;"
+    "default;"
     "report-uri"
     "https://gscloud.cz;"
     "object-src"
@@ -23,7 +23,7 @@ csp: [
     "*.gstatic.com;"
     "script-src"
     "*.facebook.net"
-    "cdn.nocodeflow.net"
+    "cdn.nocodeflow.net" # anti-Russia banner script
     "*.google-analytics.com"
     "*.googleapis.com"
     "*.googletagmanager.com"
