@@ -14,7 +14,8 @@ Tesseract is _Composer components_ based, the Model defines a complex
 *RESTful API*, has a _command line interface_ (CLI) and incorporates
 _continuous integration_ (CI) testing. +
 Tesseract uses no classical database models and structures, so it is
-quite easy to implement all types of scaling and integration.
+quite easy to implement all types of scaling and integration. The
+acccess model is based on the *master key encrypted cookie*.
 
 === Basic Functionality
 
@@ -72,9 +73,13 @@ resulting data or return it encapsulated inside the Model back to the
 ==== Login
 
 Tesseract login is based solely on the *Google OAuth 2.0* client right
-now. When the user logs in, a special encrypted cookie working as a
-master key is created and set via HTTPS protocol. There’s no database of
-connections or users at all.
+now. +
+When the user logs in, a special encrypted cookie - a master key - is
+created and set via HTTPS protocol. This cookie is protected from
+tampering and its parameters can be modified in the administration
+panel, or remotely via authenticated API calls. +
+There’s no database of connections or authenticated users at all. The
+default login URL is */login* and the default logout URL is */logout*.
 
 ==== Permissions
 
