@@ -54,3 +54,35 @@ There's no database of connections or authenticated users at all. The default lo
 Tesseract has built-in three basic permission levels, that can be easily extended.
 
 Core levels are: 1) **admin** - superuser, 2) **editor** - can refresh data and edit articles, 3) **tester** - no elevated permissions, 4) **authenticated user** - rights the same as level 3, and 5) **unauthenticated user** - unknown identity.
+
+## Basic Features
+
+### Sitemaps
+
+Tesseract generates TXT and XML sitemaps based on the routing tables.  
+[https://lasagna.gscloud.cz/sitemap.txt]
+[https://lasagna.gscloud.cz/sitemap.xml]
+
+### CSP Headers
+
+You can define headers for Content Security Policy within app/csp.neon file. Feel free to modify our defaults.
+
+## Extra Features
+
+### QR Image
+
+The route goes as **qr/[s|m|l|x:size]/[******:trailing]**. The Hello World example is as follows: [https://lasagna.gscloud.cz/qr/s/Hello%20World]
+
+The size of the QR code is defined as your pair of trousers.
+
+### EPUB Ebook Reader
+
+TBD
+
+### WYSIWYG Articles
+
+TBD
+
+### Pingback Monitoring Service
+
+See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
