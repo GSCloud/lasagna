@@ -2,8 +2,10 @@
 
 ## Concept
 
-**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, it builds the Model from CSV layers (hence the LASAGNA codename). Abstract based Presenters are used to process the Model and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). View is built as a set of Mustache templates and partials (can be also rendered in the browser).  
-Tesseract is *Composer* component based, defines a complex **RESTful API**, has a *command line interface* (CLI) support and incorporates *continuous integration* (CI) testing.
+**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, it builds the Model from CSV layers (hence the LASAGNA codename).  
+Abstract based **Presenters** are used to process the **Model** and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). View is built as a set of Mustache templates and partials (can be also rendered in the browser).  
+Tesseract is *Composer components* based, the Model defines a complex **RESTful API**, has a *command line interface* (CLI) and incorporates *continuous integration* (CI) testing.  
+Tesseract uses no classical database models and structures, so it is quite easy to implement all types of scaling and integration.
 
 ## Basic Functionality
 
@@ -38,3 +40,16 @@ When the *presenter* "returns" the updated Model back, the output is echoed and 
 - **temp/** - temporary files, Mustache compiled templates
 - **vendor/** - Composer generated vendor classes
 - **www/** - static assets (CSS, JS, fonts, images) and CDN hash-links
+
+## Administration
+
+### Login
+
+Tesseract login is based solely on the **Google OAuth 2.0** client right now.
+When the user logs in, a special encrypted cookie working as a master key is created and set via HTTPS protocol. There's no database of connections or users at all.
+
+### Permissions
+
+Tesseract has built-in three basic permission levels, that can be easily extended.
+
+Core levels are: 1) **admin** - superuser, 2) **editor** - can refresh data and edit articles, 3) **tester** - no elevated permissions, 4) **authenticated user** - rights the same as level 3, and 5) **unauthenticated user** - unknown identity.

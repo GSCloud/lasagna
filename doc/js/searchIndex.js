@@ -456,6 +456,11 @@ Search.appendIndex(
             "summary": "Data\u0020Expander",
             "url": "classes/GSC-APresenter.html#method_dataExpander"
         },                {
+            "fqsen": "\\GSC\\APresenter\u003A\u003AgetNonce\u0028\u0029",
+            "name": "getNonce",
+            "summary": "Nonce\u0020generator",
+            "url": "classes/GSC-APresenter.html#method_getNonce"
+        },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003ALOG_FILEMODE",
             "name": "LOG_FILEMODE",
             "summary": "",
