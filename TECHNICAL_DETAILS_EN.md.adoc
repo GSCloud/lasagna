@@ -41,9 +41,9 @@ URL routing, emmits CSP headers and sets the core *Model*
 (multidimensional array). *App* then loads the corresponding _presenter_
 based on the actual URI and the coresponding route. It can also run a
 _CLI presenter_, if the CLI is detected. +
-When the _presenter_ ``returns'' the updated Model back, the output is
-echoed and final headers are set (including some optional debugging
-information). Runtime ends here.
+When the _presenter_ returns an updated Model, the output is echoed and
+final headers are set (including some optional debugging information).
+Runtime ends here.
 
 ==== Presenters
 
@@ -78,7 +78,7 @@ When the user logs in, a special encrypted cookie - a master key - is
 created and set via HTTPS protocol. This cookie is protected from
 tampering and its parameters can be modified in the administration
 panel, or remotely via authenticated API calls. +
-There’s no database of connections or authenticated users at all. The
+There is no database of connections or authenticated users at all. The
 default login URL is */login* and the default logout URL is */logout*.
 
 ==== Permissions

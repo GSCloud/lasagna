@@ -20,7 +20,7 @@ Tesseract starts parsing the **www/index.php** file, that's targeted at the Apac
 ### App
 
 **App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis support), configures URL routing, emmits CSP headers and sets the core **Model** (multidimensional array). **App** then loads the corresponding *presenter* based on the actual URI and the coresponding route. It can also run a *CLI presenter*, if the CLI is detected.  
-When the *presenter* "returns" the updated Model back, the output is echoed and final headers are set (including some optional debugging information). Runtime ends here.
+When the *presenter* returns an updated Model, the output is echoed and final headers are set (including some optional debugging information). Runtime ends here.
 
 ### Presenters
 
@@ -47,7 +47,7 @@ When the *presenter* "returns" the updated Model back, the output is echoed and 
 
 Tesseract login is based solely on the **Google OAuth 2.0** client right now.  
 When the user logs in, a special encrypted cookie - a master key - is created and set via HTTPS protocol. This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
-There's no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.  
+There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.  
 
 ### Permissions
 
