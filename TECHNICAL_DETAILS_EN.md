@@ -31,19 +31,31 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 - **apache/** - Apache configuration example
 - **app/** - Presenters and NE-ON configurations
 - **bin/** - bash scripts for Makefile
-- **ci/** - Continous Integration output
-- **data/** - private data, encryption keys, CSV imports...
+- **ci/** - Continous Integration logs
+- **data/** - private data, encryption keys, CSV imports, etc.
 - **doc/** - phpDocumentor generated documentation
 - **docker/** - files to be inserted into the Docker container
-- **logs/** - logs
-- **node_modules/** - Node.js modules for Gulp
+- **logs/** - system logs
+- **node_modules/** - Node.js modules used by Gulp
 - **temp/** - temporary files, Mustache compiled templates
 - **vendor/** - Composer generated vendor classes
-- **www/** - static assets (CSS, JS, fonts, images) and CDN hash-links
+- **www/** - static assets
+  - **www/cdn-assets/** - repository version hash-links to www/
+  - **www/css/** - CSS classes
+  - **www/docs/** - link to doc/
+  - **www/downloads/** - downloadable files
+  - **www/epub/** - ePub files
+  - **www/img/** - images
+  - **www/js/** - JavaScript files
+  - **www/partials/** - Mustache partials
+  - **www/summernote/** - Summernote editor
+  - **www/templates/** - Mustache templates
+  - **www/upload/** - uploads via administration panel
+  - **www/webfonts** - fonts
 
 ## Administration
 
-### Login
+### Login and Logout
 
 Tesseract login is based solely on the **Google OAuth 2.0** client right now.  
 When the user logs in, a special encrypted cookie - a master key - is created and set via HTTPS protocol. This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
