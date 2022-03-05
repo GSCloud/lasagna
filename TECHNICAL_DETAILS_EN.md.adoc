@@ -8,8 +8,8 @@ _Google Sheets CSV exports_ as a data input, it builds the Model from
 CSV layers (hence the LASAGNA codename). +
 Abstract based *Presenters* are used to process the *Model* and to
 export resulting data in TEXT, JSON, XML or HTML5 formats (or any other
-custom format). View is built as a set of Mustache templates and
-partials (can be also rendered in the browser). +
+custom format). *View* is built as a set of Mustache templates and
+_partials_ (can be also rendered in the browser). +
 Tesseract is _Composer components_ based, the Model defines a complex
 *RESTful API*, has a _command line interface_ (CLI) and incorporates
 _continuous integration_ (CI) testing. +
@@ -36,8 +36,8 @@ overriden via a constant).
 ==== App
 
 *App* processes the application configuration files (public and
-private), sets caching mechanisms (optional Redis support), configures
-URL routing, emmits CSP headers and sets the core *Model*
+private), sets caching mechanisms (optional Redis database support),
+configures URL routing, emmits CSP headers and sets the core *Model*
 (multidimensional array). *App* then loads the corresponding _presenter_
 based on the actual URI and the coresponding route. It can also run a
 _CLI presenter_, if the CLI is detected. +
@@ -51,7 +51,7 @@ Runtime ends here.
 *APresenter.php* and define at least the _process_ method, that is
 called from the *App*. The _process_ method can either output the
 resulting data or return it encapsulated inside the Model back to the
-*App*
+*App* for rendering.
 
 === Filesystem Hierarchy
 
@@ -113,8 +113,8 @@ Tesseract generates TXT and XML sitemaps based on the routing tables. +
 
 ==== CSP Headers
 
-You can define headers for Content Security Policy within app/csp.neon
-file. Feel free to modify our defaults.
+You can define headers for Content Security Policy within *app/csp.neon*
+file.
 
 === Extra Features
 
@@ -122,8 +122,6 @@ file. Feel free to modify our defaults.
 
 The route goes as *qr/[s|m|l|x:size]/[******:trailing]*. The Hello World
 example is as follows: [https://lasagna.gscloud.cz/qr/s/Hello%20World]
-
-The size of the QR code is defined as your pair of trousers.
 
 ==== EPUB Ebook Reader
 
@@ -133,6 +131,6 @@ TBD
 
 TBD
 
-==== Pingback Monitoring Service
+==== Pingback Monitoring
 
 See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
