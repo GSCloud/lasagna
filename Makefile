@@ -37,6 +37,7 @@ docs:
 update:
 	@bash ./bin/update.sh
 	@make clearall
+	@echo ""
 clearall:
 	@bash ./cli.sh clearall
 clearcache:
