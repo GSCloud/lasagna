@@ -3,7 +3,7 @@
 ## Koncept
 
 **Tesseract LASAGNA** je rychlý, moderní a modulární PHP OOP framework pro rychlé prototypování **Progresivních webových aplikací** (PWA). Tesseract používá *exporty CSV z Tabulek Google* jako datový vstup, vytváří model z vrstev CSV (odtud kódové označení LASAGNA).
-Abstraktní **Presentery** se používají ke zpracování **Modelu** a exportu výsledných dat ve formátech TEXT, JSON, XML nebo HTML5 (nebo v jakémkoli jiném vlastním formátu). **View** je vytvořen jako sada šablon a *partials* Mustache (lze také vykreslit v prohlížeči).
+Abstraktní **Presentery** se používají ke zpracování **Modelu** a exportu výsledných dat ve formátech TEXT, JSON, XML nebo HTML5 (nebo v jakémkoli jiném vlastním formátu). **View** je vytvořen jako sada šablon a *partials* Mustache (Mustache lze také vykreslit v prohlížeči pomocí JavaScriptu).  
 Tesseract je založen na *komponentách Composer*, Model definuje komplexní **RESTful API**, má *rozhraní příkazového řádku* (CLI) a zahrnuje testování *kontinuální integrace* (CI).
 Tesseract nepoužívá žádné klasické databázové modely a struktury, takže je celkem snadné implementovat všechny typy škálování a integrace. Přístupový model je založen na **šifrovaném cookie klíči**.
 

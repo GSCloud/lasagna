@@ -8,13 +8,14 @@ používá _exporty CSV z Tabulek Google_ jako datový vstup, vytváří model
 z vrstev CSV (odtud kódové označení LASAGNA). Abstraktní *Presentery* se
 používají ke zpracování *Modelu* a exportu výsledných dat ve formátech
 TEXT, JSON, XML nebo HTML5 (nebo v jakémkoli jiném vlastním formátu).
-*View* je vytvořen jako sada šablon a _partials_ Mustache (lze také
-vykreslit v prohlížeči). Tesseract je založen na _komponentách
-Composer_, Model definuje komplexní *RESTful API*, má _rozhraní
-příkazového řádku_ (CLI) a zahrnuje testování _kontinuální integrace_
-(CI). Tesseract nepoužívá žádné klasické databázové modely a struktury,
-takže je celkem snadné implementovat všechny typy škálování a integrace.
-Přístupový model je založen na *šifrovaném cookie klíči*.
+*View* je vytvořen jako sada šablon a _partials_ Mustache (Mustache lze
+také vykreslit v prohlížeči pomocí JavaScriptu). +
+Tesseract je založen na _komponentách Composer_, Model definuje
+komplexní *RESTful API*, má _rozhraní příkazového řádku_ (CLI) a
+zahrnuje testování _kontinuální integrace_ (CI). Tesseract nepoužívá
+žádné klasické databázové modely a struktury, takže je celkem snadné
+implementovat všechny typy škálování a integrace. Přístupový model je
+založen na *šifrovaném cookie klíči*.
 
 === Základy
 

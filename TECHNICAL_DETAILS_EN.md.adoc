@@ -9,7 +9,8 @@ CSV layers (hence the LASAGNA codename). +
 Abstract based *Presenters* are used to process the *Model* and to
 export resulting data in TEXT, JSON, XML or HTML5 formats (or any other
 custom format). *View* is built as a set of Mustache templates and
-_partials_ (can be also rendered in the browser). +
+_partials_ (Mustache can be also rendered in the browser via
+JavaScript). +
 Tesseract is _Composer components_ based, the Model defines a complex
 *RESTful API*, has a _command line interface_ (CLI) and incorporates
 _continuous integration_ (CI) testing. +
