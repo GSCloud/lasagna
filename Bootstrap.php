@@ -22,7 +22,7 @@ error_reporting(E_ALL);
 
 // CONSTANTS IN SPECIFIC ORDER *** DO NOT ADD DIRECTORY SEPARATOR TO FOLDER DEFINITIONS!
 
-/** @const DIRECTORY_SEPARATOR */
+/** @const directory separator */
 defined("DS") || define("DS", DIRECTORY_SEPARATOR);
 
 /** @const root folder */
@@ -37,17 +37,17 @@ defined("CACHE") || define("CACHE", ROOT . DS . "temp");
 /** @const application data folder */
 defined("DATA") || define("DATA", ROOT . DS . "data");
 
-/** @const website assets folder */
+/** @const assets folder */
 defined("WWW") || define("WWW", ROOT . DS . "www");
 
-/** @const configuration file, full path */
+/** @const configuration file */
 defined("CONFIG") || define("CONFIG", APP . DS . "config.neon");
+
+/** @const private configuration file */
+defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", APP . DS . "config_private.neon");
 
 /** @const CSP HEADERS configuration file, full path */
 defined("CSP") || define("CSP", APP . DS . "csp.neon");
-
-/** @const private configuration file, full path */
-defined("CONFIG_PRIVATE") || define("CONFIG_PRIVATE", APP . DS . "config_private.neon");
 
 /** @const templates folder */
 defined("TEMPLATES") || define("TEMPLATES", WWW . DS . "templates");
@@ -73,7 +73,7 @@ defined("CLI") || define("CLI", (bool) (PHP_SAPI == "cli"));
 /** @const TRUE if running server locally */
 defined("LOCALHOST") || define("LOCALHOST", (bool) (($_SERVER["SERVER_NAME"] ?? "") == "localhost") || CLI);
 
-/** @const TRUE = use extra curl_multi cache for CSV */
+/** @const TRUE = enable use of extra curl_multi cache for CSV */
 defined("ENABLE_CSV_CACHE") || define("ENABLE_CSV_CACHE", true);
 
 // load COMPOSER

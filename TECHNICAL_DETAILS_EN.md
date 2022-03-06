@@ -43,7 +43,7 @@ When the *presenter* returns an updated Model, the output is echoed and final he
   - **www/cdn-assets/** - repository version hash-links to www/
   - **www/css/** - CSS classes
   - **www/docs/** - link to doc/
-  - **www/downloads/** - downloadable files
+  - **www/download/** - downloadable files
   - **www/epub/** - ePub files
   - **www/img/** - images
   - **www/js/** - JavaScript files
@@ -52,6 +52,40 @@ When the *presenter* returns an updated Model, the output is echoed and final he
   - **www/templates/** - Mustache templates
   - **www/upload/** - uploads via administration panel
   - **www/webfonts** - fonts
+
+## Constants
+
+### Bootstrap.php
+
+- **APP** - application folder
+- **CACHE** - cache folder
+- **CLI** - TRUE if running from command line interface
+- **CONFIG** - configuration file
+- **CONFIG_PRIVATE** - private configuration file
+- **CSP** - CSP HEADERS configuration file
+- **DATA** - application data folder
+- **DOWNLOAD** - download folder
+- **DS** - directory separator
+- **ENABLE_CSV_CACHE** - enable use of extra curl_multi cache for CSV
+- **LOCALHOST** - TRUE if running server locally
+- **LOGS** - log files folder
+- **PARTIALS** - templates partials folder
+- **ROOT** - root folder
+- **TEMP** - temporary files folder
+- **TEMPLATES** - templates folder
+- **UPLOAD** - upload folder
+- **WWW** - assets folder
+
+### App.php
+
+- **CACHEPREFIX** - cache name prefix
+- **DOMAIN** - domain name
+- **SERVER** - server name
+- **PROJECT** - project name
+- **APPNAME** - application name
+- **MONOLOG** - Monolog log filename
+- **GCP_PROJECTID** - Google Cloud Platform project ID
+- **GCP_KEYS** - Google Cloud Platform JSON auth keys (in app/)
 
 ## Administration
 

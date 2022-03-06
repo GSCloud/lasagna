@@ -55,18 +55,18 @@ $data["utm"] = $data["UTM"] = "?utm_source=${host}&utm_medium=website&nonce=${no
 $data["ALPHA"] = (in_array($host, (array) ($cfg["alpha_hosts"] ?? [])));
 $data["BETA"] = (in_array($host, (array) ($cfg["beta_hosts"] ?? [])));
 
-/** @const Cache prefix */
+/** @const cache name prefix */
 $x = $cfg["app"] ?? $cfg["canonical_url"] ?? $cfg["goauth_origin"] ?? "";
 defined("CACHEPREFIX") || define("CACHEPREFIX",
     "cache_" . hash("sha256", $x) . "_");
 
-/** @const Domain name, extracted from $_SERVER */
+/** @const domain name, extracted from $_SERVER */
 defined("DOMAIN") || define("DOMAIN", strtolower(preg_replace("/[^A-Za-z0-9.-]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 
-/** @const Server name, extracted from $_SERVER */
+/** @const server name, extracted from $_SERVER */
 defined("SERVER") || define("SERVER", strtolower(preg_replace("/[^A-Za-z0-9]/", "", $_SERVER["SERVER_NAME"] ?? "localhost")));
 
-/** @const Project name, default "LASAGNA" */
+/** @const project name, default "LASAGNA" */
 defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
 
 /** @const Application name, default "app" */
@@ -75,7 +75,7 @@ defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
 /** @const Monolog log filename, full path */
 defined("MONOLOG") || define("MONOLOG", LOGS . DS . "MONOLOG_" . SERVER . "_" . PROJECT . ".log");
 
-/** @const GCP Project ID */
+/** @const Google Cloud Platform project ID */
 defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
 
 /** @const Google Cloud Platform JSON auth keys */

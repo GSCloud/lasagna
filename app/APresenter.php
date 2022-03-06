@@ -3,8 +3,9 @@
  * GSC Tesseract LASAGNA
  *
  * @category Framework
- * @author   Fred Brooker <oscadal@gscloud.cz>
+ * @author   Fred Brooker <git@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -94,10 +95,10 @@ interface IPresenter
 abstract class APresenter implements IPresenter
 {
     /** @var integer Octal file mode for logs */
-    const LOG_FILEMODE = 0666;
+    const LOG_FILEMODE = 0664;
 
     /** @var integer Octal file mode for CSV */
-    const CSV_FILEMODE = 0666;
+    const CSV_FILEMODE = 0664;
 
     /** @var integer CSV min. file size */
     const CSV_MIN_SIZE = 42;
