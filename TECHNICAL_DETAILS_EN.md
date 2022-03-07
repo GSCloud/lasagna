@@ -15,7 +15,7 @@ Tesseract starts parsing the **www/index.php** file, that's targeted at the Apac
 
 ### Bootstrap
 
-**Bootstrap** sets core constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap then loads the **App.php** core file from the **app/** folder (the location can be overriden via a constant).
+**Bootstrap** sets core constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap then loads the **App.php** core file from **app/** folder (the location can be overriden via a constant).
 
 ### App
 
@@ -68,24 +68,24 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 
 ### Bootstrap.php
 
-- **APP** - application folder
-- **CACHE** - cache folder
-- **CLI** - TRUE if running from command line interface
-- **CONFIG** - configuration file
-- **CONFIG_PRIVATE** - private configuration file
-- **CSP** - CSP HEADERS configuration file
-- **DATA** - application data folder
-- **DOWNLOAD** - download folder
-- **DS** - directory separator
-- **ENABLE_CSV_CACHE** - enable use of extra curl_multi cache for CSV
-- **LOCALHOST** - TRUE if running server locally
-- **LOGS** - log files folder
-- **PARTIALS** - templates partials folder
-- **ROOT** - root folder
-- **TEMP** - temporary files folder
-- **TEMPLATES** - templates folder
-- **UPLOAD** - upload folder
-- **WWW** - assets folder
+- **APP** - *application* folder
+- **CACHE** - *cache* folder
+- **CLI** - TRUE if running from *command line interface*
+- **CONFIG** - *public configuration* file
+- **CONFIG_PRIVATE** - *private configuration* file
+- **CSP** - *CSP HEADERS* configuration file
+- **DATA** - *application data* folder, also *private data* goes here
+- **DOWNLOAD** - *download* folder
+- **DS** - operating system *directory separator*
+- **ENABLE_CSV_CACHE** - enable use of extra *curl_multi CSV cache*
+- **LOCALHOST** - TRUE if running on *local server*
+- **LOGS** - *log files* folder
+- **PARTIALS** - *Mustache partials* folder
+- **ROOT** - *root* folder
+- **TEMP** - *temporary files* folder
+- **TEMPLATES** - *templates* folder
+- **UPLOAD** - *upload* folder
+- **WWW** - *static assets* folder, also *Apache root*
 
 ### App.php
 
@@ -96,7 +96,7 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 - **APPNAME** - application name
 - **MONOLOG** - Monolog log filename
 - **GCP_PROJECTID** - Google Cloud Platform project ID
-- **GCP_KEYS** - Google Cloud Platform JSON auth keys (in app/)
+- **GCP_KEYS** - Google Cloud Platform JSON auth keys base filename (in **app/**)
 
 ## Administration
 
@@ -112,7 +112,35 @@ Tesseract has built-in three basic permission levels, that can be easily extende
 
 Core levels are: 1) **admin** - superuser, 2) **editor** - can refresh data and edit articles, 3) **tester** - no elevated permissions, 4) **authenticated user** - rights the same as level 3, and 5) **unauthenticated user** - unknown identity.
 
+### Remote Calls
+
+TBD
+
 ## Core Features
+
+## Web Pages
+
+TBD
+
+## Translations
+
+TBD
+
+## PWA Manifest
+
+TBD
+
+## Service Worker
+
+TBD
+
+### Icons
+
+TBD
+
+### Fonts
+
+TBD
 
 ### Sitemaps
 
@@ -122,11 +150,15 @@ Tesseract generates TXT and XML sitemaps based on the routing tables.
 
 ### CSP Headers
 
-You can define headers for Content Security Policy within **app/csp.neon** file.
+You can define headers for *Content Security Policy* in **app/csp.neon** file.
 
 ## Extra Features
 
-### QR Image
+### Articles
+
+TBD
+
+### QR Images
 
 The route goes as **qr/[s|m|l|x:size]/[******:trailing]**. The Hello World example is as follows: [https://lasagna.gscloud.cz/qr/s/Hello%20World]
 
@@ -134,10 +166,14 @@ The route goes as **qr/[s|m|l|x:size]/[******:trailing]**. The Hello World examp
 
 TBD
 
-### WYSIWYG Articles
-
-TBD
-
 ### Pingback Monitoring
 
 See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
+
+### Data Exports
+
+TBD
+
+### Android Data Exports
+
+TBD

@@ -31,8 +31,8 @@ then loads the *Boostrap.php* core file from the aplication root folder.
 
 *Bootstrap* sets core constants and the application environment, *Nette
 Debugger* is also instantiated on the fly. Bootstrap then loads the
-*App.php* core file from the *app/* folder (the location can be
-overriden via a constant).
+*App.php* core file from *app/* folder (the location can be overriden
+via a constant).
 
 ==== App
 
@@ -97,24 +97,24 @@ resulting data or return it encapsulated inside the Model back to the
 
 ==== Bootstrap.php
 
-* *APP* - application folder
-* *CACHE* - cache folder
-* *CLI* - TRUE if running from command line interface
-* *CONFIG* - configuration file
-* *CONFIG_PRIVATE* - private configuration file
-* *CSP* - CSP HEADERS configuration file
-* *DATA* - application data folder
-* *DOWNLOAD* - download folder
-* *DS* - directory separator
-* *ENABLE_CSV_CACHE* - enable use of extra curl_multi cache for CSV
-* *LOCALHOST* - TRUE if running server locally
-* *LOGS* - log files folder
-* *PARTIALS* - templates partials folder
-* *ROOT* - root folder
-* *TEMP* - temporary files folder
-* *TEMPLATES* - templates folder
-* *UPLOAD* - upload folder
-* *WWW* - assets folder
+* *APP* - _application_ folder
+* *CACHE* - _cache_ folder
+* *CLI* - TRUE if running from _command line interface_
+* *CONFIG* - _public configuration_ file
+* *CONFIG_PRIVATE* - _private configuration_ file
+* *CSP* - _CSP HEADERS_ configuration file
+* *DATA* - _application data_ folder, also _private data_ goes here
+* *DOWNLOAD* - _download_ folder
+* *DS* - operating system _directory separator_
+* *ENABLE_CSV_CACHE* - enable use of extra _curl_multi CSV cache_
+* *LOCALHOST* - TRUE if running on _local server_
+* *LOGS* - _log files_ folder
+* *PARTIALS* - _Mustache partials_ folder
+* *ROOT* - _root_ folder
+* *TEMP* - _temporary files_ folder
+* *TEMPLATES* - _templates_ folder
+* *UPLOAD* - _upload_ folder
+* *WWW* - _static assets_ folder, also _Apache root_
 
 ==== App.php
 
@@ -125,7 +125,8 @@ resulting data or return it encapsulated inside the Model back to the
 * *APPNAME* - application name
 * *MONOLOG* - Monolog log filename
 * *GCP_PROJECTID* - Google Cloud Platform project ID
-* *GCP_KEYS* - Google Cloud Platform JSON auth keys (in app/)
+* *GCP_KEYS* - Google Cloud Platform JSON auth keys base filename (in
+*app/*)
 
 === Administration
 
@@ -150,7 +151,35 @@ and edit articles, 3) *tester* - no elevated permissions, 4)
 *authenticated user* - rights the same as level 3, and 5)
 *unauthenticated user* - unknown identity.
 
+==== Remote Calls
+
+TBD
+
 === Core Features
+
+=== Web Pages
+
+TBD
+
+=== Translations
+
+TBD
+
+=== PWA Manifest
+
+TBD
+
+=== Service Worker
+
+TBD
+
+==== Icons
+
+TBD
+
+==== Fonts
+
+TBD
 
 ==== Sitemaps
 
@@ -160,12 +189,16 @@ Tesseract generates TXT and XML sitemaps based on the routing tables. +
 
 ==== CSP Headers
 
-You can define headers for Content Security Policy within *app/csp.neon*
+You can define headers for _Content Security Policy_ in *app/csp.neon*
 file.
 
 === Extra Features
 
-==== QR Image
+==== Articles
+
+TBD
+
+==== QR Images
 
 The route goes as *qr/[s|m|l|x:size]/[******:trailing]*. The Hello World
 example is as follows: [https://lasagna.gscloud.cz/qr/s/Hello%20World]
@@ -174,10 +207,14 @@ example is as follows: [https://lasagna.gscloud.cz/qr/s/Hello%20World]
 
 TBD
 
-==== WYSIWYG Articles
-
-TBD
-
 ==== Pingback Monitoring
 
 See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
+
+==== Data Exports
+
+TBD
+
+==== Android Data Exports
+
+TBD
