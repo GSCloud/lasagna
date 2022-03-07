@@ -37,6 +37,10 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 
 **Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process* method, that is called from the **App**. The *process* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
 
+### Command Line Interface
+
+TBD
+
 ## Filesystem Hierarchy
 
 - **apache/** - Apache configuration example
@@ -174,6 +178,6 @@ See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
 
 TBD
 
-### Android Data Exports
+### Android App Extras
 
 TBD

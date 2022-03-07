@@ -66,6 +66,10 @@ called from the *App*. The _process_ method can either output the
 resulting data or return it encapsulated inside the Model back to the
 *App* for rendering.
 
+==== Command Line Interface
+
+TBD
+
 === Filesystem Hierarchy
 
 * *apache/* - Apache configuration example
@@ -215,6 +219,6 @@ See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
 
 TBD
 
-==== Android Data Exports
+==== Android App Extras
 
 TBD
