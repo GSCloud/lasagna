@@ -118,19 +118,19 @@ TBD
 
 ## Core Features
 
-## Web Pages
+### Web Pages
 
 TBD
 
-## Translations
+### Translations
 
 TBD
 
-## PWA Manifest
+### PWA Manifest
 
 TBD
 
-## Service Worker
+### Service Worker
 
 TBD
 
