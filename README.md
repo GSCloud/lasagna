@@ -2,50 +2,53 @@
 
 ## Modern MVP framework
 
-Tesseract LASAGNA is a Model View Presenter CMS that uses Google Sheets for basic database model and management. No database, just plain HTML, PHP and jQ!
+Tesseract LASAGNA is a Model View Presenter CMS that uses Google Sheets for basic database model and management.
 
 ## Functions
 
-* publishing data from Google Sheets
-* multi-language (unlimited) support
-* WYSIWYG editor & unlimited articles
-* very fast (no database calls)
+* Google Sheets data model
 * horizontally and vertically scalable
-* secure encrypted cookie authentication
+* modularity & speed!
 * no PHP sessions
+* no databases
+* secure encrypted authentication
+* unlimited articles + WYSIWYG editor
+* unlimited languages
 
 ### HTML 5 + Design
 
-* PWA (Progressive Web App)
 * Font Awesome icons
 * Materialize CSS framework
-* responsive design
+* Progressive Web App (PWA)
+* exports to other systems
+* responsive UI design
 * support for Cloudflare CDN
-* exports for WordPress or other CMSs
 
 ### JavaScript
 
+* Facebook Like
+* Facebook Share
 * Summernote editor
+* Twitter Share
+* Twitter Timeline
+* copy 2 clipboard
 * emojis
 * in-page HTML editing
-* update notifications
-* offline mode and touch device detection
-* Clipboard Copy
-* Facebook Share, Facebook Like, Twitter Share, Twitter Timeline
 * mobile WebShare
+* offline mode and touch device detection
+* update notifications
 
 ## PHP
 
-* PHP 7.4+, 8.0+
-* Google OAuth 2 login
-* administration panel
 * CLI support
-* REST API
 * CSP security headers
 * Continuous Integration testing
-* advanced Caching
+* Google OAuth 2 login
+* PHP 7.4+, 8.0+
+* REST API
+* administration panel
+* documentation
 * remote function calls
-* PHPdocumentor documentation (docker generated)
 
 Author: Fred Brooker / Filip Oščádal 💌 <git@gscloud.cz>  
 GS Cloud Ltd. [https://gscloud.cz]

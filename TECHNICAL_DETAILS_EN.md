@@ -39,7 +39,32 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 
 ### Command Line Interface
 
-TBD
+#### Makefile
+
+Run `make` to see the inline documentation.
+
+#### Bootstrap CLI
+
+`php -f Bootstrap.php <command> [<parameter> ...]`
+
+         app '<code>'    - run inline code
+         clearall        - clear all temporary files
+         clearcache      - clear cache
+         clearci         - clear CI logs
+         clearlogs       - clear logs
+         cleartemp       - clear temp
+         doctor          - check system requirements
+         local           - local CI test
+         prod            - production CI test
+         unit            - run Unit test (TBD)
+
+There is a shortcut **./cli.sh** bash file alias the php command.
+
+Examples:
+
+`./cli.sh clearall`
+
+`./cli.sh app`
 
 ## Filesystem Hierarchy
 
@@ -70,15 +95,30 @@ TBD
 
 ## Constants
 
+All constants can be listed by simply running the following command:
+
+`./cli.sh app '$app->showConst()'`
+
+Constants can be only overriden inside **www/index.php**.
+
+### Optional Constants
+
+These default values are set:
+
+- **AUTO_DETECT_LINE_ENDINGS**: true
+- **DEFAULT_SOCKET_TIMEOUT**: 30
+- **DISPLAY_ERRORS**: true
+
 ### Bootstrap.php
 
 - **APP** - *application* folder
 - **CACHE** - *cache* folder
-- **CLI** - TRUE if running from *command line interface*
+- **CLI** - TRUE if running in terminal mode
 - **CONFIG** - *public configuration* file
 - **CONFIG_PRIVATE** - *private configuration* file
 - **CSP** - *CSP HEADERS* configuration file
 - **DATA** - *application data* folder, also *private data* goes here
+- **DEBUG** - TRUE if debugging is enabled
 - **DOWNLOAD** - *download* folder
 - **DS** - operating system *directory separator*
 - **ENABLE_CSV_CACHE** - enable use of extra *curl_multi CSV cache*
@@ -88,6 +128,8 @@ TBD
 - **ROOT** - *root* folder
 - **TEMP** - *temporary files* folder
 - **TEMPLATES** - *templates* folder
+- **TESSERACT_END** - execution UNIX time end
+- **TESSERACT_START** - execution UNIX time start
 - **UPLOAD** - *upload* folder
 - **WWW** - *static assets* folder, also *Apache root*
 
@@ -96,11 +138,11 @@ TBD
 - **CACHEPREFIX** - cache name prefix
 - **DOMAIN** - domain name
 - **SERVER** - server name
-- **PROJECT** - project name
-- **APPNAME** - application name
+- **PROJECT** - project name (higher level)
+- **APPNAME** - application name (lower level)
 - **MONOLOG** - Monolog log filename
-- **GCP_PROJECTID** - Google Cloud Platform project ID
-- **GCP_KEYS** - Google Cloud Platform JSON auth keys base filename (in **app/**)
+- **GCP_PROJECTID** - Google Cloud Platform (GCP) project ID
+- **GCP_KEYS** - GCP auth keys JSON base filename (in **app/**)
 
 ## Administration
 
@@ -181,3 +223,8 @@ TBD
 ### Android App Extras
 
 TBD
+
+## API Documentation
+
+**API** is generated from the routing tables.  
+See the live demo at this URL: [https://lasagna.gscloud.cz/api]

@@ -286,6 +286,8 @@ $data["router"] = $router;
 
 // CLI HANDLER
 if (CLI) {
+    /** @const end global timer */
+    define("TESSERACT_END", microtime(true));
     if (ob_get_level()) {
         ob_end_clean();
     }
@@ -398,6 +400,8 @@ echo $data["output"] ?? "";
 
 // PROCESS DEBUGGING
 if (DEBUG) {
+    /** @const end global timer */
+    define("TESSERACT_END", microtime(true));
     // remove private information
     unset($data["cf"]);
     unset($data["goauth_secret"]);

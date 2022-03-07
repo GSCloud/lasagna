@@ -50,7 +50,7 @@ class CliPresenter extends APresenter
     public function help()
     {
         $climate = new CLImate;
-        $climate->out("\nUsage: php -f Bootstrap.php <command> [<parameters>...] \n");
+        $climate->out("\nUsage: <bold>php -f Bootstrap.php <command> [<parameter> ...]</bold>\n");
         $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
         $climate->out("\t <bold>clearall</bold> \t - clear all temporary files");
         $climate->out("\t <bold>clearcache</bold> \t - clear cache");
@@ -60,7 +60,7 @@ class CliPresenter extends APresenter
         $climate->out("\t <bold>doctor</bold> \t - check system requirements");
         $climate->out("\t <bold>local</bold> \t\t - local CI test");
         $climate->out("\t <bold>prod</bold> \t\t - production CI test");
-        $climate->out("\t <bold>unit</bold> \t\t - run Unit test\n");
+        $climate->out("\t <bold>unit</bold> \t\t - run Unit test (TBD)\n");
         return $this;
     }
 
@@ -106,6 +106,7 @@ class CliPresenter extends APresenter
                 $this->selectModule("clearci");
                 $this->selectModule("clearlogs");
                 $this->selectModule("cleartemp");
+                $climate->out('');
                 break;
 
             case "local":
@@ -125,7 +126,7 @@ class CliPresenter extends APresenter
                 array_map("unlink", glob(CACHE . DS . "*.tmp"));
                 array_map("unlink", glob(CACHE . DS . CACHEPREFIX . "*"));
                 clearstatcache();
-                $climate->out("<bold>Cache files 🧹</bold>");
+                $climate->out("<bold>Cache 🧹</bold>");
                 break;
 
             case "clearci":
@@ -146,7 +147,7 @@ class CliPresenter extends APresenter
                 $files = glob(TEMP . DS . "*");
                 $c = count($files);
                 array_map("unlink", $files);
-                $climate->out("Temp. <bold>$c file(s) 🧹</bold>");
+                $climate->out("Temporary <bold>$c file(s) 🧹</bold>");
                 break;
 
             case "unit":
