@@ -46,10 +46,22 @@ When the _presenter_ returns an updated Model, the output is echoed and
 final headers are set (including some optional debugging information).
 Runtime ends here.
 
-==== Presenters
+==== Router
 
-*Presenters* are subclass instances based on an _abstract class_
-*APresenter.php* and define at least the _process_ method, that is
+*Router* is a part of the *App* script and is defined by joining several
+routing tables (NE-ON format) in the */app* folder.
+
+* *router_defaults.neon* - default values (global)
+* *router_core.neon* - core Tesseract funcionality (global)
+* *router_admin.neon* - administrative routes (global)
+* *router_extras.neon* - extra features (optional)
+* *router_api.neon* - API calls here
+* *router.neon* - web app pages
+
+==== Presenter
+
+*Presenter* is a subclass instance based on an _abstract class_
+*APresenter.php* and defines at least the _process_ method, that is
 called from the *App*. The _process_ method can either output the
 resulting data or return it encapsulated inside the Model back to the
 *App* for rendering.
@@ -117,7 +129,7 @@ resulting data or return it encapsulated inside the Model back to the
 
 === Administration
 
-==== Login and Logout
+==== Authentication
 
 Tesseract login is based solely on the *Google OAuth 2.0* client right
 now. +
@@ -138,7 +150,7 @@ and edit articles, 3) *tester* - no elevated permissions, 4)
 *authenticated user* - rights the same as level 3, and 5)
 *unauthenticated user* - unknown identity.
 
-=== Basic Features
+=== Core Features
 
 ==== Sitemaps
 
