@@ -22,17 +22,17 @@ defaults:
   sitemap: false
   use_key: false
 
-  # inner workings
+  # inner works
   alias: null
   clone: null
 
   # web interface
   access_key: null
   encryption_key: null
-  language: cs
+  language: en
   sethl: false
 
-  # HTTP method
+  # HTTP methods - separated by |
   method: GET
 
   # MVP

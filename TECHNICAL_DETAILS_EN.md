@@ -1,5 +1,7 @@
 # Tesseract LASAGNA: MVP PWA Framework
 
+version: 2.0 beta (2022-03-08)
+
 ## Concept
 
 **Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, it builds the Model from CSV layers (hence the LASAGNA codename).  
@@ -228,3 +230,9 @@ TBD
 
 **API** is generated from the routing tables.  
 See the live demo at this URL: [https://lasagna.gscloud.cz/api]
+
+## What's next?
+
+## CURRENT: Known Bugs
+
+## NEXT: Implementations

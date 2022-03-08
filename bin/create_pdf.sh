@@ -14,11 +14,11 @@ find . -type d \( -path ./node_modules -o -path ./vendor \) -prune -false -o -in
 find . -type d \( -path ./node_modules -o -path ./vendor \) -prune -false -o -iname "*.adoc" -exec echo "Converting {} to PDF" \; \
     -exec docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) -v $(pwd):/documents/ asciidoctor/docker-asciidoctor:1.9.0 asciidoctor-pdf "{}" \;
 
-# remove files
+# cleaning
+find . -maxdepth 1 -iname "*.adoc" -delete
 rm temp/* >/dev/null 2>&1
 
 # phpdocumentor
-#sudo rm -rf doc/
 docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) -v $(pwd):/data phpdoc/phpdoc:3.0 \
     run -d . -t ./doc --ignore "vendor/"
 

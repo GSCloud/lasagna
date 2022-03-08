@@ -1,0 +1,80 @@
+# Tesseract LASAGNA: MVP PWA Framework
+
+## Concept
+
+## Basic Functionality
+
+### Index
+
+### Bootstrap
+
+### App
+
+### Router
+
+### Presenter
+
+### Command Line Interface
+
+#### Makefile
+
+#### Bootstrap CLI
+
+## Filesystem Hierarchy
+
+## Constants
+
+### Optional Constants
+
+### Bootstrap.php
+
+### App.php
+
+## Administration
+
+### Authentication
+
+### Permissions
+
+### Remote Calls
+
+## Core Features
+
+### Web Pages
+
+### Translations
+
+### PWA Manifest
+
+### Service Worker
+
+### Icons
+
+### Fonts
+
+### Sitemaps
+
+### CSP Headers
+
+## Extra Features
+
+### Articles
+
+### QR Images
+
+### EPUB Ebook Reader
+
+### Pingback Monitoring
+
+### Data Exports
+
+### Android App Extras
+
+## API Documentation
+
+## What's next?
+
+## CURRENT: Known Bugs
+
+## NEXT: Implementations
+
