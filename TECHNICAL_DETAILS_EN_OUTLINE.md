@@ -2,6 +2,8 @@
 
 ## Concept
 
+## Installation
+
 ## Basic Functionality
 
 ### Index
@@ -22,9 +24,9 @@
 
 ## Filesystem Hierarchy
 
-## Constants
+## Model
 
-### Optional Constants
+## Constants
 
 ### Bootstrap.php
 
@@ -76,5 +78,5 @@
 
 ## CURRENT: Known Bugs
 
-## NEXT: Implementations
+## FUTURE: TODO Implementations
 

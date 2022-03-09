@@ -20,14 +20,17 @@ class CliPresenter extends APresenter
     /**
      * Main controller
      *
+     * @param argc int count of arguments
      * @return object Singleton instance
      */
-    public function process()
+    public function process($argc = null)
     {
         $climate = new CLImate;
-        $climate->out("\n<bold><green>Tesseract CLI</green></bold>\tapp: "
+        if ($argc != 3) {
+            $climate->out("\n<bold><green>Tesseract CLI</green></bold>\tapp: "
             . $this->getData("VERSION_SHORT")
-            . " (" . str_replace(" ", "", $this->getData("VERSION_DATE")) . ")");
+            . " (" . str_replace(" ", "", $this->getData("VERSION_DATE")) . ")\n");
+        }
         return $this;
     }
 
@@ -53,7 +56,7 @@ class CliPresenter extends APresenter
     public function help()
     {
         $climate = new CLImate;
-        $climate->out("\nUsage: \t <bold>php -f Bootstrap.php <command> [<parameter> ...]</bold>\n");
+        $climate->out("Usage: \t <bold>php -f Bootstrap.php <command> [<parameter> ...]</bold>\n");
         $climate->out("\t <bold>app</bold> '<code>'\t - run inline code");
         $climate->out("\t <bold>clear</bold>\t\t - alias for <bold>clearall</bold>");
         $climate->out("\t <bold>clearall</bold>\t - clear all temporary files");

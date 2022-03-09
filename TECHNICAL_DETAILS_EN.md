@@ -1,13 +1,13 @@
 # Tesseract LASAGNA: MVP PWA Framework
 
-version: 2.0 beta (2022-03-08)
+version: 2.0 beta (2022-03-09)
 
 ## Concept
 
-**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, it builds the Model from CSV layers (hence the LASAGNA codename).  
-Abstract based **Presenters** are used to process the **Model** and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). **View** is built as a set of Mustache templates and *partials* (Mustache can be also rendered in the browser via JavaScript).  
+**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, builds the Model from CSV layers (hence the LASAGNA codename).  
+There are **Presenters** used to process the **Model** and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). **View** is built as a set of Mustache templates and *partials*.  
 Tesseract is *Composer components* based, the Model defines a complex **RESTful API**, has a *command line interface* (CLI) and incorporates *continuous integration* (CI) testing.  
-Tesseract uses no classical database models and structures, so it is quite easy to implement all types of scaling and integration. The acccess model is based on the **master key encrypted cookie**.
+Tesseract uses no database models and structures, so it is quite easy to implement all types of scaling and integration. The acccess model is based on the **master key encrypted cookie**.
 
 ## Installation
 
@@ -23,15 +23,15 @@ and run:
 
 ### Index
 
-Tesseract starts parsing the **www/index.php** file, that's targeted at the Apache level via **.htaccess** configuration file using *Mod_rewrite*. **Index** can contain various constant definitions and overrides. **Index** then loads the **Boostrap.php** core file from the aplication root folder.
+Tesseract starts parsing the **www/index.php** file, that's targeted at the Apache level via **.htaccess** configuration file using *mod_rewrite*. **Index** can contain various constant overrides. **Index** then loads the **Boostrap.php** core file from the root folder.
 
 ### Bootstrap
 
-**Bootstrap** sets core constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap then loads the **App.php** core file from **app/** folder (the location can be overriden via a constant).
+**Bootstrap** sets the constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap loads the **App.php** core file from the **app/** folder (the location can be overriden via a constant).
 
 ### App
 
-**App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis database support), configures URL routing, emmits CSP headers and sets the core **Model** (multidimensional array). **App** then loads the corresponding *presenter* based on the actual URI and the coresponding route. It can also run a *CLI presenter*, if the CLI is detected.  
+**App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis database support), configures URL routing, emmits CSP headers and sets the **Model** (multidimensional array). **App** then loads the corresponding *presenter* based on the actual URI and the route. It can also run a *CLI presenter*, if the CLI is detected.  
 When the *presenter* returns an updated Model, the output is echoed and final headers are set (including some optional debugging information). Runtime ends here.
 
 ### Router
@@ -42,12 +42,12 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 - **router_core.neon** - core Tesseract funcionality (global)
 - **router_admin.neon** - administrative routes (global)
 - **router_extras.neon** - extra features (optional)
-- **router_api.neon** - API calls here
-- **router.neon** - web app pages
+- **router_api.neon** - API calls go here
+- **router.neon** - all the web app pages
 
 ### Presenter
 
-**Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process* method, that is called from the **App**. The *process* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
+**Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process()* method, that is called from the **App**. The *process()* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
 
 ### Command Line Interface
 
@@ -75,7 +75,7 @@ Run **./cli.sh**.
 
 Examples:
 
-`./cli.sh clearall`
+`./cli.sh clear`
 
 `./cli.sh app`
 
@@ -108,32 +108,35 @@ Examples:
 
 ## Model
 
-You can list the Model keys like this:
+**Tesseract Model** is a multi-dimensional array.
+You can list the model keys easily like this:
 
 `./cli.sh app 'dump(array_keys($app->getData()));' | more`
 
-or the whole Model:
+or dump the whole model:
 `./cli.sh app 'dump($app->getData());' | more`
+
+Model is supported by two methods: `getData()` and `setData()`.
+Both methods accept the *dot notation*, e.g.:
+
+`./cli.sh app 'echo $app->getData("router.home.view");'`  
+home
+
+`./cli.sh app 'echo $app->getData("cfg.project")'`  
+LASAGNA
 
 ## Constants
 
-All constants can be listed by simply running the following command:
+Tesseract specific constants can be listed by a command:
 
 `./cli.sh app '$app->showConst()'`
 
-Constants can be only overriden inside **www/index.php**.
-
-### Optional Constants
-
-These default values are set:
-
-- **AUTO_DETECT_LINE_ENDINGS**: true
-- **DEFAULT_SOCKET_TIMEOUT**: 30
-- **DISPLAY_ERRORS**: true
+Constants can be overriden in **www/index.php**, otherwise they are defined in the Boostrap and the App.
 
 ### Bootstrap.php
 
 - **APP** - *application* folder
+- **AUTO_DETECT_LINE_ENDINGS** - Tesseract detects line endings by default
 - **CACHE** - *cache* folder
 - **CLI** - TRUE if running in terminal mode
 - **CONFIG** - *public configuration* file
@@ -141,10 +144,12 @@ These default values are set:
 - **CSP** - *CSP HEADERS* configuration file
 - **DATA** - *application data* folder, also *private data* goes here
 - **DEBUG** - TRUE if debugging is enabled
+- **DEFAULT_SOCKET_TIMEOUT** - 30 seconds timeout
+- **DISPLAY_ERRORS** - Tesseract displays errors by default
 - **DOWNLOAD** - *download* folder
 - **DS** - operating system *directory separator*
 - **ENABLE_CSV_CACHE** - enable use of extra *curl_multi CSV cache*
-- **LOCALHOST** - TRUE if running on *local server*
+- **LOCALHOST** - TRUE if running on a *local server*
 - **LOGS** - *log files* folder
 - **PARTIALS** - *Mustache partials* folder
 - **ROOT** - *root* folder
@@ -153,7 +158,7 @@ These default values are set:
 - **TESSERACT_END** - execution UNIX time end
 - **TESSERACT_START** - execution UNIX time start
 - **UPLOAD** - *upload* folder
-- **WWW** - *static assets* folder, also *Apache root*
+- **WWW** - *static assets* folder, also the *Apache root*
 
 ### App.php
 
@@ -171,8 +176,10 @@ These default values are set:
 ### Authentication
 
 Tesseract login is based solely on the **Google OAuth 2.0** client right now.  
-When the user logs in, a special encrypted cookie - a master key - is created and set via HTTPS protocol. This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
+When the user logs in, a master key - Halite encrypted cookie - is created and set via HTTPS protocol. This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
 There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.
+
+*Halite* is a high-level cryptography interface that relies on libsodium for all of its underlying cryptography operations. Halite was created by Paragon Initiative Enterprises as a result of our continued efforts to improve the ecosystem and make cryptography in PHP safer and easier to implement.
 
 To display the structure of the unencrypted master key, run the following command:
 
@@ -182,19 +189,47 @@ More detailed information can be obtained this way:
 
 `./cli.sh app 'dump($app->getCurrentUser())'`
 
-*Note: These commands will always return an "XX" string for the country code as this information is acquired from the Cloudflare custom header.*
+*Note: These commands always return the string "XX" for the country code, because this information is obtained from the Cloudflare header itself.*
 
 ### Permissions
 
 Tesseract has built-in three basic permission levels, that can be easily extended.
 
-Core levels are: 1) **admin** - superuser, 2) **editor** - can refresh data and edit articles, 3) **tester** - no elevated permissions, 4) **authenticated user** - rights the same as level 3, and 5) **unauthenticated user** - unknown identity.
+Core levels are:
+
+1) **admin** - superuser,
+2) **editor** - can refresh data and edit articles,
+3) **tester** - no elevated permissions,
+4) **authenticated user** - rights the same as level 3, and
+5) **unauthenticated user** - unknown identity.
 
 ### Remote Calls
 
-TBD
+Remote calls are handled by the *AdminPresenter*, administrator can generate the corresponding URIs in the administration panel.
+
+- **CoreUpdateRemote** - download CSV files and rebuild the data cache
+- **FlushCacheRemote** - flush all caches
+- **RebuildAdminKeyRemote** - recreate random admin key (authentication of remote calls)
+- **RebuildNonceRemote** - recreate random nonce (identity nonce)
+- **RebuildSecureKeyRemote** - recreate random secure key (cookie encryption)
+
+*Automation on localhost* is possible via the **admin key** ($domain = domain name, deployed in /www/$domain/ folder), this key is readable only for root/www-data:
+
+`curl https://${domain}/admin/CoreUpdateRemote?key=$(cat /www/${domain}/data/admin.key)`
 
 ## Core Features
+
+### Versioning
+
+All static assets are automatically versioned by using a git version hash. This hash is used to generate a symbolic link in the **www/cdn-assets** folder.
+
+The symbolic link looks like this:
+
+`./cli.sh app 'echo $app->getData("cdn")'`  
+/cdn-assets/4790592b350262b8e1960a96a097de0af1828532
+
+and can be used to version the assets in Mustache template like this:  
+`<image src="{{cdn}}/img/logo.png">`
 
 ### Web Pages
 

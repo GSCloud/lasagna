@@ -224,7 +224,7 @@ class AdminPresenter extends APresenter
                 $this->checkPermission("admin");
                 $this->setHeaderHTML();
                 $f = DATA . "/AuditLog.txt";
-                $logs = \file($f);
+                $logs = \file($f); // TBD - fix large logs
                 \array_walk($logs, array($this, "decorateLogs"));
                 $data["content"] = \array_reverse($logs);
                 return $this->setData("output", $this->setData($data)->renderHTML("auditlog"));

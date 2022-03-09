@@ -293,7 +293,7 @@ if (CLI) {
         @ob_end_clean();
     }
     if (isset($argv[1])) {
-        CliPresenter::getInstance()->setData($data)->process()->selectModule($argv[1], $argc, $argv);
+        CliPresenter::getInstance()->setData($data)->process($argc)->selectModule($argv[1], $argc, $argv);
         exit;
     }
     CliPresenter::getInstance()->setData($data)->process()->help();
