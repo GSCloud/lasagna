@@ -57,20 +57,21 @@ Run `make` to see the inline documentation.
 
 #### Bootstrap CLI
 
+Run **./cli.sh**.
+
 `php -f Bootstrap.php <command> [<parameter> ...]`
 
-         app '<code>'    - run inline code
-         clearall        - clear all temporary files
-         clearcache      - clear cache
-         clearci         - clear CI logs
-         clearlogs       - clear logs
-         cleartemp       - clear temp
-         doctor          - check system requirements
-         local           - local CI test
-         prod            - production CI test
-         unit            - run Unit test (TBD)
-
-There is a shortcut **./cli.sh** bash file alias the php command.
+    app '<code>'    - run inline code
+    clear           - alias for clearall
+    clearall        - clear all temporary files
+    clearcache      - clear cache
+    clearci         - clear CI logs
+    clearlogs       - clear logs
+    cleartemp       - clear temporary files
+    doctor          - check system requirements
+    local           - local CI test
+    prod            - production CI test
+    unit            - run Unit test (TBD)
 
 Examples:
 
