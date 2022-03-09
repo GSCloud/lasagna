@@ -462,6 +462,7 @@ abstract class APresenter implements IPresenter
             "CONST.DOMAIN" => DOMAIN,
             "CONST.DOWNLOAD" => DOWNLOAD,
             "CONST.DS" => DS,
+            "CONST.ENABLE_CSV_CACHE" => ENABLE_CSV_CACHE,
             "CONST.LOGS" => LOGS,
             "CONST.MONOLOG" => MONOLOG,
             "CONST.PARTIALS" => PARTIALS,
@@ -727,10 +728,11 @@ abstract class APresenter implements IPresenter
         }
         // set new identity
         $this->identity = $out;
+        $app = $this->getCfg("app") ?? "app";
         if ($out["id"]) {
-            $this->setCookie($this->getCfg("app") ?? "app", json_encode($out)); // encrypted cookie
+            $this->setCookie($app, json_encode($out)); // encrypted cookie
         } else {
-            $this->clearCookie($this->getCfg("app") ?? "app"); // clear cookie
+            $this->clearCookie($app); // delete cookie
         }
         return $this;
     }
@@ -1069,9 +1071,11 @@ abstract class APresenter implements IPresenter
         if (empty($name)) {
             return $this;
         }
-        unset($_COOKIE[$name]);
-        unset($this->cookies[$name]);
-        \setcookie($name, "", time() - 3600, "/");
+        if (($this->cookies[$name] ?? null) || ($_COOKIE[$name] ?? null)) {
+            unset($_COOKIE[$name]);
+            unset($this->cookies[$name]);
+            \setcookie($name, "", time() - 3600, "/");
+        }
         return $this;
     }
 
@@ -1448,10 +1452,10 @@ abstract class APresenter implements IPresenter
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, "csv");
 
-                    // delete old backup
+                    // remove old backup
                     if (\file_exists(DATA . DS . "${file}.bak")) {
                         if (@\unlink(DATA . DS . "${file}.bak") === false) {
-                            $this->addError("FILE: delete ${file}.bak failed!");
+                            $this->addError("FILE: remove ${file}.bak failed!");
                         }
                     }
 

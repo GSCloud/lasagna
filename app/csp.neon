@@ -23,7 +23,6 @@ csp: [
     "*.gstatic.com;"
     "script-src"
     "*.facebook.net"
-    "cdn.nocodeflow.net" # anti-Russia banner script
     "*.google-analytics.com"
     "*.googleapis.com"
     "*.googletagmanager.com"

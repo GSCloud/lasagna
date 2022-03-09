@@ -365,33 +365,32 @@ $data["csvcache"] = $arr;
 unset($arr);
 
 // GEO BLOCKING
-$blocked = (array) ($data["geoblock"] ?? [""]);
-#$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD"]); // use XX to block unknown GEO locations
+$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD"]); // use XX to block unknown locations
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
 if (!LOCALHOST && in_array($country, $blocked)) {
     header("HTTP/1.1 403 Not Found");
     exit;
 }
 
-// CREATE CORE SINGLETON CLASS
+// CORE SINGLETON CLASS
 $data["controller"] = $p = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
 $controller = "\\GSC\\${p}";
 \Tracy\Debugger::timer("PROCESS");
-$app = $controller::getInstance()->setData($data)->process(); // set and process model
-$data = $app->getData(); // get model back
+$app = $controller::getInstance()->setData($data)->process(); // set Model and start processing
+$data = $app->getData(); // get Model
 
 // PREPARE ANALYTICS DATA
-$events = null;
-$data = $app->getData();
 $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUN") * 1000, 2);
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESS") * 1000, 2);
 
 // SET X-HEADERS
+header("X-Engine: Tesseract 2.0 beta {$data['VERSION_SHORT']}");
 header("X-Country: $country");
+header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");
-header("X-RunTime: $time1 ms");
 
 // SEND ANALYTICS
+//$events = null;
 if (method_exists($app, "SendAnalytics")) {
     $app->setData($data)->SendAnalytics();
 }
@@ -401,11 +400,13 @@ echo $data["output"] ?? "";
 
 // PROCESS DEBUGGING
 if (DEBUG) {
-    /** @const end global timer */
+    /** @const global timer - end */
     define("TESSERACT_END", microtime(true));
+
     // remove private information
     unset($data["cf"]);
     unset($data["goauth_secret"]);
+
     // dumps
     bdump($app->getIdentity(), "identity");
     bdump($data, 'model');

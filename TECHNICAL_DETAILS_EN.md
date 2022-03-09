@@ -4,14 +4,17 @@ version: 2.0 beta (2022-03-09)
 
 ## Concept
 
-**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, builds the Model from CSV layers (hence the LASAGNA codename).  
-There are **Presenters** used to process the **Model** and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). **View** is built as a set of Mustache templates and *partials*.  
-Tesseract is *Composer components* based, the Model defines a complex **RESTful API**, has a *command line interface* (CLI) and incorporates *continuous integration* (CI) testing.  
-Tesseract uses no database models and structures, so it is quite easy to implement all types of scaling and integration. The acccess model is based on the **master key encrypted cookie**.
+**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, builds the Model from CSV layers (hence the LASAGNA codename).
+
+There are **Presenters** used to process the **Model** and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). **View** is built as a set of Mustache templates and *partials*.
+
+Tesseract is based on *Composer components*, the Model defines a complex **RESTful API**, has a *command line interface* (CLI) and incorporates *continuous integration* (CI) testing.
+
+Tesseract uses no database models and structures, so it is quite easy to implement all types of scaling and integration. Acccess is based on the Halite **encrypted master key cookie**.
 
 ## Installation
 
-Clone the repository [https://github.com/GSCloud/lasagna]:
+Clone the repository <https://github.com/GSCloud/lasagna>
 
 `git clone https://github.com/GSCloud/lasagna.git`
 
@@ -57,8 +60,8 @@ Run `make` to see the inline documentation.
 
 #### Bootstrap CLI
 
-Run **./cli.sh**.
-
+`./cli.sh <command> [<parameter> ...]`  
+or  
 `php -f Bootstrap.php <command> [<parameter> ...]`
 
     app '<code>'    - run inline code
@@ -281,11 +284,15 @@ TBD
 
 ### Pingback Monitoring
 
-See the live demo at this URL: [https://lasagna.gscloud.cz/pingback]
+Pingback service posts some detailed information about the state of the server.
+See the live demo at this URL: <https://lasagna.gscloud.cz/pingback>
 
 ### Data Exports
 
-TBD
+Article data can be exported based on the article language (CS), profile (default) and page ID (use '!' for the homepage).
+
+<https://lasagna.gscloud.cz/cs/exportHTML/default/!>
+<https://lasagna.gscloud.cz/cs/exportHTML/default/id/demo>
 
 ### Android App Extras
 
@@ -293,15 +300,20 @@ TBD
 
 ## API Documentation
 
-**API** is generated from the routing tables.  
-See the live demo at this URL: [https://lasagna.gscloud.cz/api]
+**API** is generated from the routing tables on the fly.  
+See the live demo at this URL: <https://lasagna.gscloud.cz/api>
 
 ## What's next?
 
 ## CURRENT: Known Bugs
 
-## FUTURE: TODO Implementations
+- **adbario/php-dot-notation** package contains PHP 8.1 deprecation bugs that can be fixed by overwriting the **vendor/adbario/php-dot-notation/src/Dot.php** file with **app/Dot.php** temporary fix
 
-- **multi-site** support (partially ready)
-- **Dark Mode** support
-- **Configurator UI** setup
+## FUTURE: 👨‍🏭 Implementations
+
+- **Multi-site** - multiple sites support (partially ready)
+- **Dark Mode** - set UI in the dark
+- **Tesseract Configurator** - web based configuration UI
+- **Links Manager** - Links manager UI
+- **SEO Manager** - SEO manager UI
+- **Administration UI** - administration UI reborn

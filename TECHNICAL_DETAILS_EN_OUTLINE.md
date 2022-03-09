@@ -42,6 +42,8 @@
 
 ## Core Features
 
+### Versioning
+
 ### Web Pages
 
 ### Translations
@@ -78,5 +80,5 @@
 
 ## CURRENT: Known Bugs
 
-## FUTURE: TODO Implementations
+## FUTURE: 👨‍🏭 Implementations
 
