@@ -9,6 +9,16 @@ Abstract based **Presenters** are used to process the **Model** and to export re
 Tesseract is *Composer components* based, the Model defines a complex **RESTful API**, has a *command line interface* (CLI) and incorporates *continuous integration* (CI) testing.  
 Tesseract uses no classical database models and structures, so it is quite easy to implement all types of scaling and integration. The acccess model is based on the **master key encrypted cookie**.
 
+## Installation
+
+Clone the repository [https://github.com/GSCloud/lasagna]:
+
+`git clone https://github.com/GSCloud/lasagna.git`
+
+and run:
+
+`cd lasagna;make install`
+
 ## Basic Functionality
 
 ### Index
@@ -94,6 +104,15 @@ Examples:
   - **www/templates/** - Mustache templates
   - **www/upload/** - uploads via administration panel
   - **www/webfonts** - fonts
+
+## Model
+
+You can list the Model keys like this:
+
+`./cli.sh app 'dump(array_keys($app->getData()));' | more`
+
+or the whole Model:
+`./cli.sh app 'dump($app->getData());' | more`
 
 ## Constants
 
@@ -245,4 +264,8 @@ See the live demo at this URL: [https://lasagna.gscloud.cz/api]
 
 ## CURRENT: Known Bugs
 
-## NEXT: Implementations
+## FUTURE: TODO Implementations
+
+- **multi-site** support (partially ready)
+- **Dark Mode** support
+- **Configurator UI** setup

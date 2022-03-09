@@ -288,8 +288,9 @@ $data["router"] = $router;
 if (CLI) {
     /** @const end global timer */
     define("TESSERACT_END", microtime(true));
+
     if (ob_get_level()) {
-        ob_end_clean();
+        @ob_end_clean();
     }
     if (isset($argv[1])) {
         CliPresenter::getInstance()->setData($data)->process()->selectModule($argv[1], $argc, $argv);
