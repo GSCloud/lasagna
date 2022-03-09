@@ -152,7 +152,17 @@ These default values are set:
 
 Tesseract login is based solely on the **Google OAuth 2.0** client right now.  
 When the user logs in, a special encrypted cookie - a master key - is created and set via HTTPS protocol. This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
-There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.  
+There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.
+
+To display the structure of the unencrypted master key, run the following command:
+
+`./cli.sh app 'dump($app->getIdentity())'`
+
+More detailed information can be obtained this way:
+
+`./cli.sh app 'dump($app->getCurrentUser())'`
+
+*Note: These commands will always return an "XX" string for the country code as this information is acquired from the Cloudflare custom header.*
 
 ### Permissions
 

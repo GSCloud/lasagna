@@ -288,8 +288,8 @@ abstract class APresenter implements IPresenter
      */
     public function __destruct()
     {
-        if (ob_get_level()) {
-            ob_end_flush();
+        if (ob_get_level()) { // clear outbut buffering
+            @ob_end_flush();
         }
         ob_start();
 
@@ -418,14 +418,14 @@ abstract class APresenter implements IPresenter
                 "sha256_nonce" => function () {
                     return $this->getNonce();
                 },
-                "convert_hyperlinks" => function ($source, \Mustache_LambdaHelper$lambdaHelper) {
+                "convert_hyperlinks" => function ($source, \Mustache_LambdaHelper $lambdaHelper) {
                     $text = $lambdaHelper->render($source);
                     $text = preg_replace(
                         "/(https)\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/",
                         '<a rel=noopener target=_blank href="$0">$2$3</a>', $text);
                     return (string) $text;
                 },
-                "shuffle_lines" => function ($source, \Mustache_LambdaHelper$lambdaHelper) {
+                "shuffle_lines" => function ($source, \Mustache_LambdaHelper $lambdaHelper) {
                     $text = $lambdaHelper->render($source);
                     $arr = explode("\n", $text);
                     shuffle($arr);
@@ -639,21 +639,21 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
-        return strtr(implode("_",
+        return preg_replace('/__/', "_", strtr(implode("_",
             [
-                CLI ? "CLI_USER" : "",
+                CLI ? "CLI" : "",
                 CLI ? "" : $_SERVER["HTTP_ACCEPT_ENCODING"] ?? "N/A",
                 CLI ? "" : $_SERVER["HTTP_ACCEPT_LANGUAGE"] ?? "N/A",
                 CLI ? "" : $_SERVER["HTTP_USER_AGENT"] ?? "N/A",
                 $this->getIP(),
             ]),
-            " ", "_");
+            " ", "_"));
     }
 
     /**
      * Get universal ID hash
      *
-     * @return string Universal ID SHA-256 hash
+     * @return string SHA-256 hash
      */
     public function getUID()
     {
@@ -745,10 +745,10 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return [
                 "country" => "XX",
-                "email" => "user@example.com",
+                "email" => "john.doe@example.com",
                 "id" => 1,
                 "ip" => "127.0.0.1",
-                "name" => "CLI User",
+                "name" => "John Doe",
             ];
         }
 
@@ -1102,6 +1102,9 @@ abstract class APresenter implements IPresenter
      */
     public function logout()
     {
+        if (CLI) {
+            exit;
+        }
         $this->setIdentity();
         $this->clearCookie($this->getCfg("app") ?? "app");
         \header('Clear-Site-Data: "cookies"');
@@ -1141,7 +1144,10 @@ abstract class APresenter implements IPresenter
     public function getRateLimit()
     {
         if (CLI) {
-            return false;
+            return null;
+        }
+        if (LOCALHOST) {
+            return null;
         }
         return Cache::read("user_rate_limit_{$this->getUID()}", "limiter");
     }
@@ -1154,6 +1160,9 @@ abstract class APresenter implements IPresenter
      */
     public function checkPermission($rolelist = "admin")
     {
+        if (CLI) {
+            return $this;
+        }
         if (empty($rolelist)) {
             return $this;
         }

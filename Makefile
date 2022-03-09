@@ -19,17 +19,18 @@ info:
 	@echo "🆘 \e[0;1mmake clearlogs\e[0m - clear logs"
 	@echo "🆘 \e[0;1mmake cleartemp\e[0m - clear temp"
 	@echo ""
-	@echo "🆘 \e[0;1mmake doctor\e[0m - Tesseract doctor"
+	@echo "🆘 \e[0;1mmake doctor\e[0m - run Tesseract doctor"
 	@echo "🆘 \e[0;1mmake gulp\e[0m - install/update Gulp installation"
 	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies"
-	@echo "🆘 \e[0;1mmake test\e[0m - local integration test"
-	@echo "🆘 \e[0;1mmake prod\e[0m - production integration test"
+	@echo "🆘 \e[0;1mmake test\e[0m - run local integration test"
+	@echo "🆘 \e[0;1mmake prod\e[0m - run production integration test"
+	@echo "🆘 \e[0;1mmake unit\e[0m - run unit test"
 	@echo "🆘 \e[0;1mmake sync\e[0m - sync to the remote"
 	@echo ""
 	@echo "🆘 \e[0;1mmake docs\e[0m - build documentation"
 	@echo ""
-	@echo "🆘 \e[0;1mmake everything\e[0m - build: doctor clearall test update sync prod"
-	@echo "🆘 \e[0;1mmake reimage\e[0m - build: doctor test update build run"
+	@echo "🆘 \e[0;1mmake everything\e[0m - run: doctor clear unit test update sync prod"
+	@echo "🆘 \e[0;1mmake reimage\e[0m - run: doctor clear unit test update build run"
 	@echo ""
 docs:
 	@echo "🔨 \e[1;32m Creating documentation\e[0m\n"
@@ -40,6 +41,9 @@ update:
 	@bash ./bin/update.sh
 	@make clearall
 	@echo ""
+unit:
+	@bash ./cli.sh unit
+clear:
 clearall:
 	@bash ./cli.sh clearall
 clearcache:
@@ -78,5 +82,5 @@ du:
 	@echo "🔨 \e[1;32m Updating\e[0m\n"
 	@bash ./bin/update_docker.sh
 
-everything: doctor clearall test update sync prod
-reimage: doctor test update build run
+everything: doctor clear unit test update sync prod
+reimage: doctor clear unit test update build run

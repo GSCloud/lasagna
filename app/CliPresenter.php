@@ -36,9 +36,12 @@ class CliPresenter extends APresenter
      *
      * @return object Singleton instance
      */
-    public function showConst()
+    private function showConst()
     {
-        dump(get_defined_constants(true)["user"]);
+        $arr = array_filter(get_defined_constants(true)["user"], function ($key) {
+            return !(stripos($key, "sodium") === 0); // filter out Sodium constants
+        }, ARRAY_FILTER_USE_KEY);
+        dump($arr);
         return $this;
     }
 
@@ -50,32 +53,33 @@ class CliPresenter extends APresenter
     public function help()
     {
         $climate = new CLImate;
-        $climate->out("\nUsage: <bold>php -f Bootstrap.php <command> [<parameter> ...]</bold>\n");
-        $climate->out("\t <bold>app</bold> '<code>' \t - run inline code");
-        $climate->out("\t <bold>clearall</bold> \t - clear all temporary files");
-        $climate->out("\t <bold>clearcache</bold> \t - clear cache");
-        $climate->out("\t <bold>clearci</bold> \t - clear CI logs");
-        $climate->out("\t <bold>clearlogs</bold> \t - clear logs");
-        $climate->out("\t <bold>cleartemp</bold> \t - clear temp");
-        $climate->out("\t <bold>doctor</bold> \t - check system requirements");
-        $climate->out("\t <bold>local</bold> \t\t - local CI test");
-        $climate->out("\t <bold>prod</bold> \t\t - production CI test");
-        $climate->out("\t <bold>unit</bold> \t\t - run Unit test (TBD)\n");
+        $climate->out("\nUsage: \t <bold>php -f Bootstrap.php <command> [<parameter> ...]</bold>\n");
+        $climate->out("\t <bold>app</bold> '<code>'\t - run inline code");
+        $climate->out("\t <bold>clear</bold>\t\t - alias for <bold>clearall</bold>");
+        $climate->out("\t <bold>clearall</bold>\t - clear all temporary files");
+        $climate->out("\t <bold>clearcache</bold>\t - clear cache");
+        $climate->out("\t <bold>clearci</bold>\t - clear CI logs");
+        $climate->out("\t <bold>clearlogs</bold>\t - clear logs");
+        $climate->out("\t <bold>cleartemp</bold>\t - clear temporary files");
+        $climate->out("\t <bold>doctor</bold>\t\t - check system requirements");
+        $climate->out("\t <bold>local</bold>\t\t - local CI test");
+        $climate->out("\t <bold>prod</bold>\t\t - production CI test");
+        $climate->out("\t <bold>unit</bold>\t\t - run Unit test (TBD)\n");
         return $this;
     }
 
     /**
      * Evaluate input string
      *
-     * @param object $app this :)
+     * @param object $app this
      * @param int $argc ARGC
      * @param array $argv ARGV
      * @return object Singleton instance
      */
-    public function evaler($app, $argc, $argv)
+    private function evaler($app, $argc, $argv)
     {
         $climate = new CLImate;
-        if ($argc != 3) {
+        if ($argc != 3) { // show examples
             $climate->out("Examples:");
             $climate->out("\t" . '<bold>app</bold> \'$app->showConst()\'');
             $climate->out("\t" . '<bold>app</bold> \'dump($app->getCurrentUser())\'');
@@ -101,6 +105,7 @@ class CliPresenter extends APresenter
     {
         $climate = new CLImate;
         switch ($module) {
+            case "clear":
             case "clearall":
                 $this->selectModule("clearcache");
                 $this->selectModule("clearci");
