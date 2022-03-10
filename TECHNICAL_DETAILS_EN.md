@@ -52,6 +52,11 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 
 **Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process()* method, that is called from the **App**. The *process()* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
 
+### API
+
+**API** is generated from the routing tables on the fly.  
+See the live demo at this URL: <https://lasagna.gscloud.cz/api>
+
 ### Command Line Interface
 
 #### Makefile
@@ -298,18 +303,13 @@ Article data can be exported based on the article language (CS), profile (defaul
 
 TBD
 
-## API Documentation
-
-**API** is generated from the routing tables on the fly.  
-See the live demo at this URL: <https://lasagna.gscloud.cz/api>
-
 ## What's next?
 
 ## CURRENT: Known Bugs
 
 - **adbario/php-dot-notation** package contains PHP 8.1 deprecation bugs that can be fixed by overwriting the **vendor/adbario/php-dot-notation/src/Dot.php** file with **app/Dot.php** temporary fix
 
-## FUTURE: 👨‍🏭 Implementations
+## FUTURE: TODO Implementations
 
 - **Multi-site** - multiple sites support (partially ready)
 - **Dark Mode** - set UI in the dark

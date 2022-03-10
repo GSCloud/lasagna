@@ -16,6 +16,8 @@
 
 ### Presenter
 
+### API
+
 ### Command Line Interface
 
 #### Makefile
@@ -74,11 +76,9 @@
 
 ### Android App Extras
 
-## API Documentation
-
 ## What's next?
 
 ## CURRENT: Known Bugs
 
-## FUTURE: 👨‍🏭 Implementations
+## FUTURE: TODO Implementations
 
