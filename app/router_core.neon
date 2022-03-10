@@ -31,7 +31,7 @@ GetServiceWorker:
   path: /sw.js
   api: true
   api_description: "Service worker."
-  api_info: "Returns (JavaScript): SW code."
+  api_info: "Returns (JavaScript): Service Worker JavaScript code."
   cached: true
   presenter: core
 
@@ -82,6 +82,7 @@ GetError:
   method: GET|POST
   presenter: error
   api_example: [
+    "err/403"
     "err/404"
     "err/420"
     "err/500"

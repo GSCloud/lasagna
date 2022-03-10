@@ -44,6 +44,7 @@ update:
 unit:
 	@bash ./cli.sh unit
 clear:
+	@bash ./cli.sh clearall
 clearall:
 	@bash ./cli.sh clearall
 clearcache:

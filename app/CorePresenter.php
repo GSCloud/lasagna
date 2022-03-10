@@ -259,43 +259,6 @@ class CorePresenter extends APresenter
                 return $this->setData("output", $this->setData("sitemap", $map)->renderHTML("sw.js"));
                 break;
 
-            case "API":
-            case "API1":
-            case "API2":
-                $this->checkRateLimit();
-                $this->setHeaderHTML();
-                $map = [];
-                foreach ($presenter as $p) {
-                    if (isset($p["api"]) && $p["api"]) {
-                        $info = $p["api_info"] ?? "";
-                        StringFilters::convert_eol_to_br($info);
-                        $info = \htmlspecialchars($info);
-                        $info = \preg_replace(
-                            array('#href=&quot;(.*)&quot;#', '#&lt;(/?(?:pre|a|b|br|em|u|ul|li|ol)(\shref=".*")?/?)&gt;#'),
-                            array('href="\1"', '<\1>'),
-                            $info
-                        );
-                        $map[] = [
-                            "count" => \count($p["api_example"]),
-                            "deprecated" => $p["deprecated"] ?? false,
-                            "desc" => \htmlspecialchars($p["api_description"] ?? ""),
-                            "exam" => $p["api_example"] ?? [],
-                            "finished" => $p["finished"] ?? false,
-                            "info" => $info ? "<br><blockquote>${info}</blockquote>" : "",
-                            "key" => $p["use_key"] ?? false,
-                            "linkit" => !(\strpos($p["path"], "[") ?? false), // do not link to path with parameters!
-                            "method" => \strtoupper($p["method"]),
-                            "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
-                            "private" => $p["private"] ?? false,
-                        ];
-                    }
-                }
-                \usort($map, function ($a, $b) {
-                    return \strcmp($a["desc"], $b["desc"]);
-                });
-                return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
-                break;
-
             case "GetAndroidJs":
                 $this->checkRateLimit();
                 $f = WWW . "/js/android-app.js";
@@ -396,9 +359,46 @@ class CorePresenter extends APresenter
                 break;
 
             default:
-                ErrorPresenter::getInstance()->process(404);
         }
-        return $this;
+
+        // check $view starting with API
+        if (substr(strtoupper($view), 0, 3) === "API") {
+            $this->checkRateLimit();
+            $this->setHeaderHTML();
+            $map = [];
+            foreach ($presenter as $p) {
+                if (isset($p["api"]) && $p["api"]) {
+                    $info = $p["api_info"] ?? "";
+                    StringFilters::convert_eol_to_br($info);
+                    $info = \htmlspecialchars($info);
+                    $info = \preg_replace(
+                        array('#href=&quot;(.*)&quot;#', '#&lt;(/?(?:pre|a|b|br|em|u|ul|li|ol)(\shref=".*")?/?)&gt;#'),
+                        array('href="\1"', '<\1>'),
+                        $info
+                    );
+                    $map[] = [
+                        "count" => \count($p["api_example"]),
+                        "deprecated" => (bool) $p["deprecated"] ?? false,
+                        "desc" => \htmlspecialchars($p["api_description"] ?? ""),
+                        "exam" => $p["api_example"] ?? [],
+                        "finished" => (bool) $p["finished"] ?? false,
+                        "info" => $info ? "<br><blockquote>${info}</blockquote>" : "",
+                        "key" => (bool) $p["use_key"] ?? false,
+                        "linkit" => !(\strpos($p["path"], "[") ?? false), // do not link to path with parameters!
+                        "method" => \strtoupper($p["method"]),
+                        "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
+                        "private" => (bool) $p["private"] ?? false,
+                    ];
+                }
+            }
+            \usort($map, function ($a, $b) {
+                return \strcmp($a["desc"], $b["desc"]);
+            });
+            return $this->setData("output", $this->setData("apis", $map)->setData("l", $this->getLocale("en"))->renderHTML("apis"));
+        }
+
+        // no luck...
+        ErrorPresenter::getInstance()->process(404);
     }
 
     /**
