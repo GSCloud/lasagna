@@ -281,7 +281,7 @@ TBD
 
 ### QR Images
 
-The route goes as **qr/[s|m|l|x:size]/[******:trailing]**. The Hello World example is as follows: [https://lasagna.gscloud.cz/qr/s/Hello%20World]
+The route goes as **qr/[s|m|l|x:size]/[******:trailing]**. The Hello World example is as follows: <https://lasagna.gscloud.cz/qr/s/Hello%20World>
 
 ### EPUB Ebook Reader
 
@@ -289,14 +289,15 @@ TBD
 
 ### Pingback Monitoring
 
-Pingback service posts some detailed information about the state of the server.
+Pingback service posts some detailed information about the state of the server.  
 See the live demo at this URL: <https://lasagna.gscloud.cz/pingback>
 
 ### Data Exports
 
-Article data can be exported based on the article language (CS), profile (default) and page ID (use '!' for the homepage).
+Article data can be exported based on the article language (CS), profile (default) and page ID (use '!' or '&excl!' for the homepage).
 
-<https://lasagna.gscloud.cz/cs/exportHTML/default/!>
+<https://lasagna.gscloud.cz/cs/exportHTML/default/&excl;>
+
 <https://lasagna.gscloud.cz/cs/exportHTML/default/id/demo>
 
 ### Android App Extras

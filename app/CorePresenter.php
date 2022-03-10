@@ -140,15 +140,17 @@ class CorePresenter extends APresenter
                 if ($x !== 3) {
                     return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                if ($path == "!") { // homepage alias
+                if ($path == "!" || $path == "&excl!") { // = homepage
                     $path = $language;
                 } else {
                     $path = $language . "/" . $path;
                 }
                 $html = "";
                 $hash = \hash("sha256", $path);
+
+                // get article data
                 $f = DATA . "/summernote_${profile}_${hash}.json";
-                if (\file_exists($f)) {
+                if (\file_exists($f) && \is_readable($f)) {
                     $html = \json_decode(@\file_get_contents($f), true);
                     if (\is_array($html)) {
                         $html = \join("\n", $html);

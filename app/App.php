@@ -384,7 +384,7 @@ $data["running_time"] = $time1 = round((float) \Tracy\Debugger::timer("RUN") * 1
 $data["processing_time"] = $time2 = round((float) \Tracy\Debugger::timer("PROCESS") * 1000, 2);
 
 // SET X-HEADERS
-header("X-Engine: Tesseract 2.0 beta {$data['VERSION_SHORT']}");
+header("X-Engine: Tesseract 2.0 beta");
 header("X-Country: $country");
 header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");
