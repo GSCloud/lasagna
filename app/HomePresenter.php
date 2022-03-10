@@ -26,7 +26,13 @@ class HomePresenter extends APresenter
     {
         // get current Presenter and View
         $presenter = $this->getPresenter();
+        if (!$presenter) {
+            return $this;
+        }
         $view = $this->getView();
+        if (!$view) {
+            return $this;
+        }
 
         // process rate limiting + set HTML header + expand current data model
         $data = $this->getData();
@@ -41,7 +47,7 @@ class HomePresenter extends APresenter
         }
 
         // fix current locale
-        foreach ($data["l"] ??= [] as $k => $v) {
+        foreach ($data["l"]??=[] as $k => $v) {
             StringFilters::convert_eolhyphen_to_brdot($data["l"][$k]);
             StringFilters::convert_eol_to_br($data["l"][$k]);
             StringFilters::correct_text_spacing($data["l"][$k], $data["lang"] ?? "en");

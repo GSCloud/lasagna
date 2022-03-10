@@ -28,10 +28,28 @@ class CliPresenter extends APresenter
         $climate = new CLImate;
         if ($argc != 3) {
             $climate->out("\n<bold><green>Tesseract CLI</green></bold>\tapp: "
-            . $this->getData("VERSION_SHORT")
-            . " (" . str_replace(" ", "", $this->getData("VERSION_DATE")) . ")\n");
+                . $this->getData("VERSION_SHORT")
+                . " (" . str_replace(" ", "", $this->getData("VERSION_DATE")) . ")\n");
         }
         return $this;
+    }
+
+    /**
+     * Show presenter
+     *
+     */
+    public function show($p = "home")
+    {
+        if (empty($p)) {
+            return $this;
+        }
+        $data = $this->getData();
+        $router = $this->getRouter();
+        $presenter = $this->getPresenter();
+        $data["view"] = $view = $router[$p]["view"] ?? "home";
+        $data["controller"] = $c = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
+        $controller = "\\GSC\\${c}";
+        echo $controller::getInstance()->setData($data)->process()->getData()["output"] ?? "";
     }
 
     /**

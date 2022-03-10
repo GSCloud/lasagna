@@ -1,16 +1,16 @@
 # Tesseract LASAGNA: MVP PWA Framework
 
-version: 2.0 beta (2022-03-09)
+version: 2.0 beta (2022-03-10)
 
 ## Concept
 
-**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV exports* as a data input, builds the Model from CSV layers (hence the LASAGNA codename).
+**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV export* as a data input and builds the **Model** from CSV layers (hence the LASAGNA codename).
 
-There are **Presenters** used to process the **Model** and to export resulting data in TEXT, JSON, XML or HTML5 formats (or any other custom format). **View** is built as a set of Mustache templates and *partials*.
+There are **Presenters** used to process the **Model** and to export the result in TEXT, JSON, XML or HTML5 format (or any other custom format). **View** is built as a set of *Mustache templates* and *partials*.
 
-Tesseract is based on *Composer components*, the Model defines a complex **RESTful API**, has a *command line interface* (CLI) and incorporates *continuous integration* (CI) testing.
+Tesseract is based on **Composer components**, complex **RESTful API**, incorporates a **command line interface** and **Continuous Integration** testing.
 
-Tesseract uses no database models and structures, so it is quite easy to implement all types of scaling and integration. Acccess is based on the Halite **encrypted master key cookie**.
+Tesseract uses no database structures, so it is quite easy to implement all types of scaling and integrations. Acccess is based on **OAuth 2.0** and the Halite **encrypted master key**.
 
 ## Installation
 
@@ -20,7 +20,13 @@ Clone the repository <https://github.com/GSCloud/lasagna>
 
 and run:
 
-`cd lasagna;make install`
+`cd lasagna; make install`
+
+## Update
+
+Go to the Lasagna directory and run:
+
+`make update`
 
 ## Basic Functionality
 
@@ -30,16 +36,18 @@ Tesseract starts parsing the **www/index.php** file, that's targeted at the Apac
 
 ### Bootstrap
 
-**Bootstrap** sets the constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap loads the **App.php** core file from the **app/** folder (the location can be overriden via a constant).
+**Bootstrap** sets the constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap loads the **App.php** core file from the app folder.
 
 ### App
 
-**App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis database support), configures URL routing, emmits CSP headers and sets the **Model** (multidimensional array). **App** then loads the corresponding *presenter* based on the actual URI and the route. It can also run a *CLI presenter*, if the CLI is detected.  
+**App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis database support), configures URL routing, emmits CSP headers and sets the **Model** (multi-dimensional array).
+
+**App** loads the corresponding *presenter* based on the actual URI route. It can also run a *CLI presenter*, if the CLI is detected.
 When the *presenter* returns an updated Model, the output is echoed and final headers are set (including some optional debugging information). Runtime ends here.
 
 ### Router
 
-**Router** is a part of the **App** script and is defined by joining several routing tables (NE-ON format) in the **/app** folder.
+**Router** is a part of the **App** script and is defined by joining (*array replace recursive*) several routing tables (in NE-ON format) in the **/app** folder.
 
 - **router_defaults.neon** - default values (global)
 - **router_core.neon** - core Tesseract funcionality (global)
@@ -51,6 +59,18 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 ### Presenter
 
 **Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process()* method, that is called from the **App**. The *process()* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
+
+The instance is created and data processed like this:
+
+`$app = $controller::getInstance()->setData($data)->process();`
+
+Getting the output for enduser:
+
+`echo $app->getData()["output"] ?? "";`
+
+Demo of how to show web pages in Lynx terminal using a CLI helper:
+
+`./cli.sh app '$app->show("home");' | lynx -dump -stdin`
 
 ### API
 
@@ -183,11 +203,12 @@ Constants can be overriden in **www/index.php**, otherwise they are defined in t
 
 ### Authentication
 
-Tesseract login is based solely on the **Google OAuth 2.0** client right now.  
-When the user logs in, a master key - Halite encrypted cookie - is created and set via HTTPS protocol. This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
+Tesseract login is based solely on the **Google OAuth 2.0** client right now.
+
+When the user logs in, a master key - Halite encrypted cookie is created and set via HTTPS protocol (strict). This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.  
 There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.
 
-*Halite* is a high-level cryptography interface that relies on libsodium for all of its underlying cryptography operations. Halite was created by Paragon Initiative Enterprises as a result of our continued efforts to improve the ecosystem and make cryptography in PHP safer and easier to implement.
+> *Halite* is a high-level cryptography interface that relies on libsodium for all of its underlying cryptography operations. Halite was created by Paragon Initiative Enterprises as a result of our continued efforts to improve the ecosystem and make cryptography in PHP safer and easier to implement.
 
 To display the structure of the unencrypted master key, run the following command:
 
@@ -221,9 +242,10 @@ Remote calls are handled by the *AdminPresenter*, administrator can generate the
 - **RebuildNonceRemote** - recreate random nonce (identity nonce)
 - **RebuildSecureKeyRemote** - recreate random secure key (cookie encryption)
 
-*Automation on localhost* is possible via the **admin key** ($domain = domain name, deployed in /www/$domain/ folder), this key is readable only for root/www-data:
+*Automation on localhost* is possible by using the **admin key** as a **`?key=`** parameter in a curl call.  
+The key is readable for root or www-data group:
 
-`curl https://${domain}/admin/CoreUpdateRemote?key=$(cat /www/${domain}/data/admin.key)`
+`cat data/admin.key`
 
 ## Core Features
 
@@ -265,9 +287,11 @@ TBD
 
 ### Sitemaps
 
-Tesseract generates TXT and XML sitemaps based on the routing tables.  
-[https://lasagna.gscloud.cz/sitemap.txt]
-[https://lasagna.gscloud.cz/sitemap.xml]
+Tesseract generates TXT and XML sitemaps based on the routing tables.
+
+<https://lasagna.gscloud.cz/sitemap.txt>
+
+<https://lasagna.gscloud.cz/sitemap.xml>
 
 ### CSP Headers
 
@@ -281,9 +305,10 @@ TBD
 
 ### QR Images
 
-The route goes as **qr/[s|m|l|x:size]/[******:trailing]**. The Hello World example is as follows: <https://lasagna.gscloud.cz/qr/s/Hello%20World>
+The route goes as **qr/[s|m|l|x:size]/[******:trailing]**.  
+Hello World example: <https://lasagna.gscloud.cz/qr/s/Hello%20World>
 
-### EPUB Ebook Reader
+### EPUB Reader
 
 TBD
 

@@ -1699,8 +1699,13 @@ abstract class APresenter implements IPresenter
         // set language
         $presenter = $this->getPresenter();
         $view = $this->getView();
-        $data["lang"] = $language = \strtolower($presenter[$view]["language"]) ?? "cs";
-        $data["lang{$language}"] = true;
+        if ($presenter && $view) {
+            $data["lang"] = $language = \strtolower($presenter[$view]["language"]) ?? "cs";
+            $data["lang{$language}"] = true;
+        } else {
+            // something is terribly wrong!
+            return $this;
+        }
 
         // get locale
         $l = $this->getLocale($language);
