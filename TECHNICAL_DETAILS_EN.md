@@ -294,9 +294,9 @@ See the live demo at this URL: <https://lasagna.gscloud.cz/pingback>
 
 ### Data Exports
 
-Article data can be exported based on the article language (CS), profile (default) and page ID (use '!' or '&excl!' for the homepage).
+Article data can be exported based on the article language (CS), profile (default) and page ID (use 'home' for the homepage).
 
-<https://lasagna.gscloud.cz/cs/exportHTML/default/&excl;>
+<https://lasagna.gscloud.cz/cs/exportHTML/default/home>
 
 <https://lasagna.gscloud.cz/cs/exportHTML/default/id/demo>
 

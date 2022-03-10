@@ -140,7 +140,7 @@ class CorePresenter extends APresenter
                 if ($x !== 3) {
                     return $this->setHeaderHTML()->setData("output", ""); // ERROR
                 }
-                if ($path == "!" || $path == "&excl!") { // = homepage
+                if ($path == "home") { // = homepage
                     $path = $language;
                 } else {
                     $path = $language . "/" . $path;

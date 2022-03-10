@@ -44,7 +44,7 @@ GetArticleHTMLExport:
   api_description: "Get articles as HTML"
   api_info: "Parameters:\n<b><a:lang></b> - language code,\n<a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
   api_example: [
-    "cs/exportHTML/default/!"
+    "cs/exportHTML/default/home"
     "cs/exportHTML/default/id/demo"
   ]
   assert_json: false
