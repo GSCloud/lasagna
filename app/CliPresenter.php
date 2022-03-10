@@ -35,19 +35,37 @@ class CliPresenter extends APresenter
     }
 
     /**
-     * Show presenter
-     *
+     * Show custom presenter output
      */
     public function show($p = "home")
     {
-        if (empty($p)) {
-            return $this;
+        if (empty($p)) { // no presenter
+            exit;
         }
         $data = $this->getData();
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
         $data["view"] = $view = $router[$p]["view"] ?? "home";
-        $data["controller"] = $c = ucfirst(strtolower($presenter[$view]["presenter"])) . "Presenter";
+        $data["controller"] = $c = ucfirst(strtolower($presenter[$view]["presenter"]) ?? "home") . "Presenter";
+        $controller = "\\GSC\\${c}";
+        echo $controller::getInstance()->setData($data)->process()->getData()["output"] ?? "";
+    }
+
+    /**
+     * Show core presenter output
+     */
+    public function core($v = "PingBack", $m = null)
+    {
+        if (empty($v)) { // no view
+            exit;
+        }
+        $data = $this->getData();
+        $router = $this->getRouter();
+        $presenter = $this->getPresenter();
+        $data["base"] = $m["base"] ?? "https://example.com/";
+        $data["controller"] = $c = "CorePresenter";
+        $data["match"] = $m["match"] ?? null;
+        $data["view"] = $v;
         $controller = "\\GSC\\${c}";
         echo $controller::getInstance()->setData($data)->process()->getData()["output"] ?? "";
     }

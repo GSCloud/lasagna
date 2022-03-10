@@ -68,9 +68,21 @@ Getting the output for enduser:
 
 `echo $app->getData()["output"] ?? "";`
 
-Demo of how to show web pages in Lynx terminal using a CLI helper:
+How to display custom presenter in Lynx terminal using a CLI helper (default = home):
+
+`./cli.sh app '$app->show();' | lynx -dump -stdin`
 
 `./cli.sh app '$app->show("home");' | lynx -dump -stdin`
+
+How to display core module output using a CLI helper (default = PingBack):
+
+`./cli.sh app '$app->core();'`
+
+`./cli.sh app '$app->core("PingBack");'`
+
+`./cli.sh app '$app->core("GetTXTSitemap", ["base"=>"https://google.com/"]);'`
+
+`./cli.sh app '$app->core("GetXMLSitemap", ["base"=>"https://google.com/"]);'`
 
 ### API
 

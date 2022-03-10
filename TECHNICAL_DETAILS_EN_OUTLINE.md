@@ -4,6 +4,8 @@
 
 ## Installation
 
+## Update
+
 ## Basic Functionality
 
 ### Index
@@ -68,7 +70,7 @@
 
 ### QR Images
 
-### EPUB Ebook Reader
+### EPUB Reader
 
 ### Pingback Monitoring
 

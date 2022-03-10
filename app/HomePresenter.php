@@ -26,11 +26,8 @@ class HomePresenter extends APresenter
     {
         // get current Presenter and View
         $presenter = $this->getPresenter();
-        if (!$presenter) {
-            return $this;
-        }
         $view = $this->getView();
-        if (!$view) {
+        if ((!$presenter) || (!$view)) {
             return $this;
         }
 

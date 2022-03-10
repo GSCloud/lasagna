@@ -77,7 +77,7 @@ class AdminPresenter extends APresenter
             "fn" => $view,
             "ip" => $this->getIP(),
             "name" => "LASAGNA Admin Module",
-            "override" => (bool) $this->isLocalAdmin(),
+            "override" => (bool) $this->isLocalAdmin(), // override by ?key= parameter
         ];
 
         /**
@@ -609,9 +609,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Check if we are a local administrator
+     * Check if call is made by a local administrator
      *
-     * @return boolean are we?
+     * @return boolean Is there a local administrator?
      */
     private function isLocalAdmin()
     {
@@ -624,7 +624,7 @@ class AdminPresenter extends APresenter
         $key = $this->readAdminKey();
         $gkey = $_GET["key"] ?? null;
         if ($key && $key == $gkey) {
-            return true;
+            return true; // GET ?key is same as the admin key
         }
         return false;
     }

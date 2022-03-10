@@ -22,12 +22,12 @@ class CorePresenter extends APresenter
      *
      * @return void
      */
-    public function process()
+    public function process($view = null, $match = null)
     {
         $data = $this->getData();
-        $match = $this->getMatch();
         $presenter = $this->getPresenter();
-        $view = $this->getView();
+        $match = $match ?? $this->getMatch(); // can be passed as an optional parameter
+        $view = $view ?? $this->getView(); // can be passed as an optional parameter
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
@@ -122,7 +122,7 @@ class CorePresenter extends APresenter
                 break;
 
             case "GetArticleHTMLExport":
-                $this->checkRateLimit(100); // special rate limit value!
+                $this->checkRateLimit(100); // special rate limiting factor
                 $nofetch = $_COOKIE["NOFETCH"] ?? false; // extra check
                 $x = 0;
                 if (isset($match["params"]["lang"])) {
@@ -382,7 +382,7 @@ class CorePresenter extends APresenter
         }
 
         // get language and locale
-        $language = \strtolower($presenter[$view]["language"]) ?? "cs";
+        $language = \strtolower($presenter[$view]["language"]) ?? "en";
         $locale = $this->getLocale($language);
         $hash = \hash("sha256", (string) \json_encode($locale));
 

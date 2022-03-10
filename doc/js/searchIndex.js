@@ -18,7 +18,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AisLocalAdmin\u0028\u0029",
             "name": "isLocalAdmin",
-            "summary": "Check\u0020if\u0020we\u0020are\u0020a\u0020local\u0020administrator",
+            "summary": "Check\u0020if\u0020call\u0020is\u0020made\u0020by\u0020a\u0020local\u0020administrator",
             "url": "classes/GSC-AdminPresenter.html#method_isLocalAdmin"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildAdminKey\u0028\u0029",
@@ -910,6 +910,16 @@ Search.appendIndex(
             "name": "process",
             "summary": "Main\u0020controller",
             "url": "classes/GSC-CliPresenter.html#method_process"
+        },                {
+            "fqsen": "\\GSC\\CliPresenter\u003A\u003Ashow\u0028\u0029",
+            "name": "show",
+            "summary": "Show\u0020custom\u0020presenter\u0020output",
+            "url": "classes/GSC-CliPresenter.html#method_show"
+        },                {
+            "fqsen": "\\GSC\\CliPresenter\u003A\u003Acore\u0028\u0029",
+            "name": "core",
+            "summary": "Show\u0020core\u0020presenter\u0020output",
+            "url": "classes/GSC-CliPresenter.html#method_core"
         },                {
             "fqsen": "\\GSC\\CliPresenter\u003A\u003AshowConst\u0028\u0029",
             "name": "showConst",
