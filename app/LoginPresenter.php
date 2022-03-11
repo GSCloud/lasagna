@@ -27,6 +27,11 @@ class LoginPresenter extends APresenter
         $this->checkRateLimit()->setHeaderHtml();
 
         $cfg = $this->getCfg();
+
+        // check OAuth parameters
+        if (($cfg["goauth_client_id"] ?? null) === null) $this->setLocation("/err/403");
+        if (($cfg["goauth_secret"] ?? null) === null) $this->setLocation("/err/403");
+
         $nonce = "?nonce=" . substr(hash("sha256", random_bytes(8) . (string) time()), 0, 8);
 
         // set return URI
@@ -40,7 +45,7 @@ class LoginPresenter extends APresenter
         \setcookie("return_uri", $uri, 0, "/", DOMAIN);
         try {
             $provider = new \League\OAuth2\Client\Provider\Google([
-                // set OAuth 2.0 credentials
+                // OAuth 2.0 credentials
                 "clientId" => $cfg["goauth_client_id"] ?? null,
                 "clientSecret" => $cfg["goauth_secret"] ?? null,
                 "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"] ?? null : $cfg["goauth_redirect"] ?? null,

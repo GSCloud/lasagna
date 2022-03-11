@@ -14,13 +14,7 @@ source .env
 
 info "Updating CSV data from Google"
 
-# connect to container and run CSV updater
-docker exec ${NAME} ./docker_updater.sh
-
-# connect to container and run bash
-docker exec ${NAME} make
-
-# connect to container and run bash
-docker exec -ti ${NAME} bash
+# connect to the container and run updater
+docker exec ${NAME} make du
 
 exit 0

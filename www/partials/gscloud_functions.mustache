@@ -366,7 +366,7 @@ async function sha256(message) {
       }
 
       // create LOGIN buttons
-      {{#LOCALHOST}}
+      {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
       if (!GSC.islogged) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="{{ local_goauth_redirect }}">🔓 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a title="{{ l.a_login_ttip }}" href="{{ local_goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
@@ -374,8 +374,9 @@ async function sha256(message) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="/logout">🔐 LOGOUT</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
       }
-      {{/LOCALHOST}}
-      {{^LOCALHOST}}
+      {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+
+      {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
       if (!GSC.islogged) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="{{ goauth_redirect }}">🔓 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a title="{{ l.a_login_ttip }}" href="{{ goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
@@ -383,7 +384,7 @@ async function sha256(message) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="/logout">🔐 LOGOUT</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
       }
-      {{/LOCALHOST}}
+      {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
     });
 
   }
