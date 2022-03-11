@@ -27,8 +27,7 @@
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
 
-                <br>
-                <br>
+                <br><br>
 
                 {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
                 <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"

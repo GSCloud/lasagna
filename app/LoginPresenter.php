@@ -22,7 +22,7 @@ class LoginPresenter extends APresenter
     public function process()
     {
         if (ob_get_level()) {
-            ob_end_clean();
+            @ob_end_clean();
         }
         $this->checkRateLimit()->setHeaderHtml();
 

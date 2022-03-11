@@ -10,11 +10,11 @@ command -v docker >/dev/null 2>&1 || fail "Docker is NOT installed!"
 source .env
 
 [ -z "${NAME}" ] && fail "Missing NAME definition!"
-[ "$(docker container inspect -f '{{.State.Status}}' ${NAME} 2>&1)" == "running" ] || fail "Container ${NAME} is not running!"
+[ "$(docker container inspect -f '{{.State.Status}}' ${NAME} 2>&1)" == "running" ] || fail "Container '${NAME}' is not running!"
 
 info "Updating CSV data from Google"
 
-# connect to the container and run updater
+# run updater inside the container
 docker exec ${NAME} make du
 
 exit 0
