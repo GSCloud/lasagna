@@ -9,7 +9,10 @@ info:
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
 	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
 	@echo "🆘 \e[0;1mmake run\e[0m - run Docker image"
-	@echo "🆘 \e[0;1mmake du\e[0m - update running Docker container"
+	@echo "🆘 \e[0;1mmake stop\e[0m - stop container"
+	@echo "🆘 \e[0;1mmake kill\e[0m - kill container"
+	@echo "🆘 \e[0;1mmake execbash\e[0m - exec bash in the container"
+	@echo "🆘 \e[0;1mmake du\e[0m - update container"
 	@echo ""
 	@echo "🆘 \e[0;1mmake install\e[0m - install"
 	@echo ""
@@ -77,8 +80,15 @@ push:
 	@echo "🔨 \e[1;32m Pushing image\e[0m\n"
 	@bash ./bin/push.sh
 run:
-	@echo "🔨 \e[1;32m Starting image\e[0m\n"
 	@bash ./bin/run.sh
+start:
+	@bash ./bin/start.sh
+stop:
+	@bash ./bin/stop.sh
+kill:
+	@bash ./bin/kill.sh
+execbash:
+	@bash ./bin/execbash.sh
 du:
 	@echo "🔨 \e[1;32m Updating\e[0m\n"
 	@bash ./bin/update_docker.sh
