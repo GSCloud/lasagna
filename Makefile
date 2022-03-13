@@ -7,8 +7,8 @@ info:
 	@echo "\e[1;32m👾 Welcome to ${APP_NAME}"
 	@echo ""
 	@echo "🆘 \e[0;1mmake build\e[0m - build Docker image"
-	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
 	@echo "🆘 \e[0;1mmake run\e[0m - run Docker image"
+	@echo "🆘 \e[0;1mmake push\e[0m - push Docker image into the registry"
 	@echo "🆘 \e[0;1mmake stop\e[0m - stop container"
 	@echo "🆘 \e[0;1mmake kill\e[0m - kill container"
 	@echo "🆘 \e[0;1mmake execbash\e[0m - exec bash in the container"
@@ -81,8 +81,6 @@ push:
 	@bash ./bin/push.sh
 run:
 	@bash ./bin/run.sh
-start:
-	@bash ./bin/start.sh
 stop:
 	@bash ./bin/stop.sh
 kill:
