@@ -1,6 +1,6 @@
 #@author Filip Oščádal <git@gscloud.cz>
 
-ARG CODE_VERSION=8.0-apache
+ARG CODE_VERSION=8.1-apache
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LC_ALL=en_US.UTF-8
 ARG TERM=linux
@@ -17,11 +17,12 @@ RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && ln -s /var/www/html /var/www/www
 
 COPY php.ini /usr/local/etc/php/
+COPY docker/composer /usr/local/bin/
 COPY app/*.php app/router* app/csp.neon /var/www/app/
-COPY Bootstrap.php composer.json composer.lock LICENSE README.md REVISIONS VERSION /var/www/
-COPY docker/ /var/www/
+COPY Bootstrap.php composer.json composer.lock LICENSE *.md REVISIONS VERSION vendor docker/* /var/www/
 COPY www /var/www/html
-COPY vendor /var/www/vendor
+#COPY docker/ /var/www/
+#COPY vendor /var/www/vendor
 
 WORKDIR /var/www/
 EXPOSE 80

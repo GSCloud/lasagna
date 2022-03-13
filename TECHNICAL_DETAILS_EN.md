@@ -235,7 +235,7 @@ Tesseract login is based solely on the **Google OAuth 2.0** client right now.
 
 When the user logs in, a master key - Halite encrypted cookie is created and set via HTTPS protocol (strict). This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.
 
-The logging is available if OAuth parameters are set!
+\* *the authentication is available only if OAuth parameters are set*
 
 There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.
 
