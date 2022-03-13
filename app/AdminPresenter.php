@@ -3,7 +3,7 @@
  * GSC Tesseract
  *
  * @category Framework
- * @author   Fred Brooker <oscadal@gscloud.cz>
+ * @author   Fred Brooker <git@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
  */
 
@@ -76,7 +76,7 @@ class AdminPresenter extends APresenter
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "LASAGNA Admin Module",
+            "name" => "Tesseract Admin",
             "override" => (bool) $this->isLocalAdmin(), // override by ?key= parameter
         ];
 
