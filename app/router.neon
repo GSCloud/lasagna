@@ -1,10 +1,12 @@
+defaults:
+  language: cs
+
 home:
   path: /
   sitemap: true
   sethl: true
 
 cs:
-  language: cs
   path: /cs
   sitemap: true
 
