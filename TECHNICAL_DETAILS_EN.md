@@ -26,15 +26,15 @@ and run:
 
 ### Docker Container
 
-Run:
+Run container:
 
 `docker run --rm -d --name lasagna -p 9000:80 gscloudcz/tesseract-lasagna:latest`
 
-Run updater:
+Run updater (downloads CSV from Google):
 
 `docker exec lasagna make du`
 
-and visit:
+Visit web app:
 
 `http://localhost:9000/`
 
