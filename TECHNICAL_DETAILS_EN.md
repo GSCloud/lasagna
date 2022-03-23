@@ -1,8 +1,8 @@
 # Tesseract LASAGNA: MVP PWA Framework
 
-version: 2.0 beta (2022-03-10)
+version: 2.0 beta (2022-03-23)
 
-## Concept
+## 1. Concept
 
 **Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV export* as a data input and builds the **Model** from CSV layers (hence the LASAGNA codename).
 
@@ -12,9 +12,9 @@ Tesseract is based on **Composer components**, complex **RESTful API**, incorpor
 
 Tesseract uses no database structures, so it is quite easy to implement all types of scaling and integrations. Acccess is based on **OAuth 2.0** and the Halite **encrypted master key**.
 
-## Installation
+## 2. Installation
 
-### PHP Source
+### 2.1 PHP Source
 
 Clone the repository <https://github.com/GSCloud/lasagna>
 
@@ -24,7 +24,7 @@ and run:
 
 `cd lasagna; make install`
 
-### Docker Container
+### 2.2 Docker Container
 
 Run container:
 
@@ -38,30 +38,30 @@ Visit web app:
 
 `http://localhost:9000/`
 
-## Update
+## 3. Update
 
 Go to the Lasagna directory and run:
 
 `make update`
 
-## Basic Functionality
+## 4. Basic Functionality
 
-### Index
+### 4.1 Index
 
 Tesseract starts parsing the **www/index.php** file, that's targeted at the Apache level via **.htaccess** configuration file using *mod_rewrite*. **Index** can contain various constant overrides. **Index** then loads the **Boostrap.php** core file from the root folder.
 
-### Bootstrap
+### 4.2 Bootstrap
 
 **Bootstrap** sets the constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap loads the **App.php** core file from the app folder.
 
-### App
+### 4.3 App
 
 **App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis database support), configures URL routing, emmits CSP headers and sets the **Model** (multi-dimensional array).
 
 **App** loads the corresponding *presenter* based on the actual URI route. It can also run a *CLI presenter*, if the CLI is detected.
 When the *presenter* returns an updated Model, the output is echoed and final headers are set (including some optional debugging information). Runtime ends here.
 
-### Router
+### 4.4 Router
 
 **Router** is a part of the **App** script and is defined by joining (*array replace recursive*) several routing tables (in NE-ON format) in the **/app** folder.
 
@@ -72,7 +72,7 @@ When the *presenter* returns an updated Model, the output is echoed and final he
 - **router_api.neon** - API calls go here
 - **router.neon** - all the web app pages
 
-### Presenter
+### 4.5 Presenter
 
 **Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process()* method, that is called from the **App**. The *process()* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
 
@@ -100,18 +100,18 @@ How to display core module output using a CLI helper (default = PingBack):
 
 `./cli.sh app '$app->core("GetXMLSitemap", ["base"=>"https://google.com/"]);'`
 
-### API
+### 4.6 API
 
 **API** is generated from the routing tables on the fly.  
 See the live demo at this URL: <https://lasagna.gscloud.cz/api>
 
-### Command Line Interface
+### 4.7 Command Line Interface
 
-#### Makefile
+#### 4.7.1 Makefile
 
 Run `make` to see the inline documentation.
 
-#### Bootstrap CLI
+#### 4.7.2 Bootstrap CLI
 
 `./cli.sh <command> [<parameter> ...]`  
 or  
@@ -135,7 +135,7 @@ Examples:
 
 `./cli.sh app`
 
-## Filesystem Hierarchy
+## 5. Filesystem Hierarchy
 
 - **apache/** - Apache configuration example
 - **app/** - Presenters and NE-ON configurations
@@ -162,7 +162,7 @@ Examples:
   - **www/upload/** - uploads via administration panel
   - **www/webfonts** - fonts
 
-## Model
+## 6. Model
 
 **Tesseract Model** is a multi-dimensional array.
 You can list the model keys easily like this:
@@ -181,7 +181,7 @@ home
 `./cli.sh app 'echo $app->getData("cfg.project")'`  
 LASAGNA
 
-## Constants
+## 7. Constants
 
 Tesseract specific constants can be listed by a command:
 
@@ -189,7 +189,7 @@ Tesseract specific constants can be listed by a command:
 
 Constants can be overriden in **www/index.php**, otherwise they are defined in the Boostrap and the App.
 
-### Bootstrap.php
+### 7.1 Bootstrap.php
 
 - **APP** - *application* folder
 - **AUTO_DETECT_LINE_ENDINGS** - Tesseract detects line endings by default
@@ -216,7 +216,7 @@ Constants can be overriden in **www/index.php**, otherwise they are defined in t
 - **UPLOAD** - *upload* folder
 - **WWW** - *static assets* folder, also the *Apache root*
 
-### App.php
+### 7.2 App.php
 
 - **CACHEPREFIX** - cache name prefix
 - **DOMAIN** - domain name
@@ -227,9 +227,9 @@ Constants can be overriden in **www/index.php**, otherwise they are defined in t
 - **GCP_PROJECTID** - Google Cloud Platform (GCP) project ID
 - **GCP_KEYS** - GCP auth keys JSON base filename (in **app/**)
 
-## Administration
+## 8. Administration
 
-### Authentication
+### 8.1 Authentication
 
 Tesseract login is based solely on the **Google OAuth 2.0** client right now.
 
@@ -251,7 +251,7 @@ More detailed information can be obtained this way:
 
 *Note: These commands always return the string "XX" for the country code, because this information is obtained from the Cloudflare header itself.*
 
-### Permissions
+### 8.2 Permissions
 
 Tesseract has built-in three basic permission levels, that can be easily extended.
 
@@ -263,7 +263,7 @@ Core levels are:
 4) **authenticated user** - rights the same as level 3, and
 5) **unauthenticated user** - unknown identity.
 
-### Remote Calls
+### 8.3 Remote Calls
 
 Remote calls are handled by the *AdminPresenter*, administrator can generate the corresponding URIs in the administration panel.
 
@@ -278,9 +278,9 @@ The key is readable for root or www-data group:
 
 `cat data/admin.key`
 
-## Core Features
+## 9. Core Features
 
-### Versioning
+### 9.1 Versioning
 
 All static assets are automatically versioned by using a git version hash. This hash is used to generate a symbolic link in the **www/cdn-assets** folder.
 
@@ -292,31 +292,31 @@ The symbolic link looks like this:
 and can be used to version the assets in Mustache template like this:  
 `<image src="{{cdn}}/img/logo.png">`
 
-### Web Pages
+### 9.2 Web Pages
 
 TBD
 
-### Translations
+### 9.3 Translations
 
 TBD
 
-### PWA Manifest
+### 9.4 PWA Manifest
 
 TBD
 
-### Service Worker
+### 9.5 Service Worker
 
 TBD
 
-### Icons
+### 9.6 Icons
 
 TBD
 
-### Fonts
+### 9.7 Fonts
 
 TBD
 
-### Sitemaps
+### 9.8 Sitemaps
 
 Tesseract generates TXT and XML sitemaps based on the routing tables.
 
@@ -324,31 +324,31 @@ Tesseract generates TXT and XML sitemaps based on the routing tables.
 
 <https://lasagna.gscloud.cz/sitemap.xml>
 
-### CSP Headers
+### 9.9 CSP Headers
 
 You can define headers for *Content Security Policy* in **app/csp.neon** file.
 
-## Extra Features
+## 10. Extra Features
 
-### Articles
+### 10.1 Articles
 
 TBD
 
-### QR Images
+### 10.2 QR Images
 
 The route goes as **qr/[s|m|l|x:size]/[******:trailing]**.  
 Hello World example: <https://lasagna.gscloud.cz/qr/s/Hello%20World>
 
-### EPUB Reader
+### 10.3 EPUB Reader
 
 TBD
 
-### Pingback Monitoring
+### 10.4 Pingback Monitoring
 
 Pingback service posts some detailed information about the state of the server.  
 See the live demo at this URL: <https://lasagna.gscloud.cz/pingback>
 
-### Data Exports
+### 10.5 Data Exports
 
 Article data can be exported based on the article language (CS), profile (default) and page ID (use 'home' for the homepage).
 
@@ -356,17 +356,17 @@ Article data can be exported based on the article language (CS), profile (defaul
 
 <https://lasagna.gscloud.cz/cs/exportHTML/default/id/demo>
 
-### Android App Extras
+### 10.6 Android App Extras
 
 TBD
 
-## What's next?
+## 11. What's next?
 
-## CURRENT: Known Bugs
+### 11.1 CURRENT: Known Bugs
 
 - **adbario/php-dot-notation** package contains PHP 8.1 deprecation bugs that can be fixed by overwriting the **vendor/adbario/php-dot-notation/src/Dot.php** file with **app/Dot.php** temporary fix
 
-## FUTURE: TODO Implementations
+### 11.2 FUTURE: TODO Implementations
 
 - **Multi-site** - multiple sites support (partially ready)
 - **Dark Mode** - set UI in the dark
