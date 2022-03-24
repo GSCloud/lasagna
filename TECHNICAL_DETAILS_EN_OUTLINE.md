@@ -1,90 +1,90 @@
 # Tesseract LASAGNA: MVP PWA Framework
 
-## Concept
+## 1. Concept
 
-## Installation
+## 2. Installation
 
-### PHP Source
+### 2.1 PHP Source
 
-### Docker Container
+### 2.2 Docker Container
 
-## Update
+## 3. Update
 
-## Basic Functionality
+## 4. Basic Functionality
 
-### Index
+### 4.1 Index
 
-### Bootstrap
+### 4.2 Bootstrap
 
-### App
+### 4.3 App
 
-### Router
+### 4.4 Router
 
-### Presenter
+### 4.5 Presenter
 
-### API
+### 4.6 API
 
-### Command Line Interface
+### 4.7 Command Line Interface
 
-#### Makefile
+#### 4.7.1 Makefile
 
-#### Bootstrap CLI
+#### 4.7.2 Bootstrap CLI
 
-## Filesystem Hierarchy
+## 5. Filesystem Hierarchy
 
-## Model
+## 6. Model
 
-## Constants
+## 7. Constants
 
-### Bootstrap.php
+### 7.1 Bootstrap.php
 
-### App.php
+### 7.2 App.php
 
-## Administration
+## 8. Administration
 
-### Authentication
+### 8.1 Authentication
 
-### Permissions
+### 8.2 Permissions
 
-### Remote Calls
+### 8.3 Remote Calls
 
-## Core Features
+## 9. Core Features
 
-### Versioning
+### 9.1 Versioning
 
-### Web Pages
+### 9.2 Web Pages
 
-### Translations
+### 9.3 Translations
 
-### PWA Manifest
+### 9.4 PWA Manifest
 
-### Service Worker
+### 9.5 Service Worker
 
-### Icons
+### 9.6 Icons
 
-### Fonts
+### 9.7 Fonts
 
-### Sitemaps
+### 9.8 Sitemaps
 
-### CSP Headers
+### 9.9 CSP Headers
 
-## Extra Features
+## 10. Extra Features
 
-### Articles
+### 10.1 Articles
 
-### QR Images
+### 10.2 QR Images
 
-### EPUB Reader
+### 10.3 EPUB Reader
 
-### Pingback Monitoring
+### 10.4 Pingback Monitoring
 
-### Data Exports
+### 10.5 Data Exports
 
-### Android App Extras
+### 10.6 Android App Extras
 
-## What's next?
+## 11. What's next?
 
-## CURRENT: Known Bugs
+### 11.1 CURRENT: Known Bugs
 
-## FUTURE: TODO Implementations
+### 11.2 FUTURE: TODO Implementations
 
