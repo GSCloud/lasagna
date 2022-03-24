@@ -22,6 +22,7 @@ async function sha256(message) {
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
     "beforeend", '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
   );
+
   // scroll progress bar
   w.onscroll = function() {
     var winScroll = d.body.scrollTop || d.documentElement.scrollTop;
@@ -88,6 +89,8 @@ async function sha256(message) {
     document.cookie = key + "=;path=/" + ";expires=" + date.toGMTString();
   }
 
+  // #########################################################################
+
   if (w.GSC) { // GSC namespace
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
@@ -135,6 +138,7 @@ async function sha256(message) {
         "{{l.month_2p_5}}", "{{l.month_2p_6}}", "{{l.month_2p_7}}", "{{l.month_2p_8}}", "{{l.month_2p_9}}",
         "{{l.month_2p_10}}", "{{l.month_2p_11}}", "{{l.month_2p_12}}"
       ];
+
       if (dateString === undefined) {
         var z = new Date();
       } else {
@@ -164,7 +168,7 @@ async function sha256(message) {
       return x;
     }
 
-    // GSC.CopyClipboard()
+    // GSC.CopyClipboard() - copy data to clipboard
     if (typeof GSC.CopyClipboard !== "function") GSC.CopyClipboard = function(data) {
       var el = d.createElement("textarea");
       el.value = data;
@@ -183,7 +187,7 @@ async function sha256(message) {
       }
     }
 
-    // GSC.GetFileExtension() - parse filename and get a file extension
+    // GSC.GetFileExtension() - parse filename, return the file extension
     if (typeof GSC.GetFileExtension !== "function") GSC.GetFileExtension = function(filename) {
       if (filename) {
           return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
@@ -191,7 +195,7 @@ async function sha256(message) {
       return "";
     }
 
-    // GSC.CopyThisText() - copy text from an element to clipboard / or copy data element
+    // GSC.CopyThisText() - copy text from an element to clipboard / or copy data element; show a tooltip
     if (typeof GSC.CopyThisText !== "function") GSC.CopyThisText = function(that) {
       if (that) {
         var t = $(that).data("copy").trim();
@@ -201,7 +205,7 @@ async function sha256(message) {
       }
     }
 
-    // GSC.CopyThisHtml() - copy HTML from an element to clipboard
+    // GSC.CopyThisHtml() - copy HTML from an element to clipboard; show a tooltip
     if (typeof GSC.CopyThisHtml !== "function") GSC.CopyThisHtml = function(that) {
       if (that) {
         var t = $(that).text().trim();
@@ -221,7 +225,6 @@ async function sha256(message) {
               if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
                 $("#update-message").show();
                 GSC.VersionCheck = function () {};
-                //console.log("UPDATE: core version check failed!");
                 return;
               }
             }
@@ -231,22 +234,22 @@ async function sha256(message) {
               if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
                 $("#update-message").show();
                 GSC.VersionCheck = function () {};
-                //console.log("UPDATE: {{ lang }} data version check failed!");
                 return;
               }
             }
           });
-          //  do repeat checks
+          // do repeat checks
           setTimeout("GSC.VersionCheck();", 20000);
         }
       }
-      //  do repeat checks
+      // do repeat checks
       setTimeout("GSC.VersionCheck()", 5000);
     });
 
-    // GSC.SetProfile()
+    // GSC.SetProfile() - set administration profile
     GSC.init.push(function() {
       GSC.names.push("GSC.SetProfile()");
+
       if (typeof GSC.SetProfile !== "function") GSC.SetProfile = function() {
         var profiles = [];
         var params = new window.URLSearchParams(window.location.search);
@@ -266,12 +269,10 @@ async function sha256(message) {
     // GSC.ReadArticles() - read remote articles / insert HTML
     GSC.init.push(function() {
       GSC.names.push("GSC.ReadArticles()");
+      GSC.articles_rendered = false;
+
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
-        if (GSC.summernote_on || GSC.offline) {
-          //  do repeat checks
-          setTimeout("GSC.ReadArticles();", 10000);
-          return;
-        }
+
         // check for a local copy of the article
         var html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
         if (html != "") {
@@ -285,8 +286,18 @@ async function sha256(message) {
           // fix classnames for Summernote
           $(".summernote ul").addClass("browser-default");
           $(".summernote img").addClass("responsive-img");
+          GSC.articles_rendered = true;
         }
-        // get remote artice
+
+        if (GSC.summernote_on || GSC.offline) { //  check later if offline
+          setTimeout("GSC.ReadArticles();", 10000);
+          if (!GSC.articles_rendered) {
+            $(".summernote").html("📵");
+          }
+          return;
+        }
+
+        // get remote articles data
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function(data) {
           if (data && data.data) {
@@ -304,6 +315,7 @@ async function sha256(message) {
                 // fix classnames for Summernote
                 $(".summernote ul").addClass("browser-default");
                 $(".summernote img").addClass("responsive-img");
+                GSC.articles_rendered = true;
               } else {
                 $(".summernote").html("");
               }
@@ -311,53 +323,45 @@ async function sha256(message) {
           }
           if (typeof callback === "function") callback();
         });
+
         //  do repeat checks
         setTimeout("GSC.ReadArticles()", 10000);
       }
 
       GSC.SetProfile();
-      /*
-      var a = "articles_" + GSC.profile + "_{{ request_path_hash }}";
-      if (localStorage && localStorage[a] && localStorage[a].length) {
-          var obj = jQuery.parseJSON(localStorage[a]);
-          for (var p in obj) if (obj.hasOwnProperty(p)) $("#" + p).html(obj[p]);
-          $(".summernote ul").addClass("browser-default");
-          $(".summernote img").addClass("responsive-img");
-      }
-      */
-      setTimeout("GSC.ReadArticles();", 1);
+      GSC.ReadArticles(); // read articles 1st time
+      //setTimeout("GSC.ReadArticles();", 1); // read articles 1st time
     });
 
     // DELAYED UI bindings
     GSC.init.push(function() {
       GSC.names.push("geneal UI - bindings");
-      // set SK language
-      $(".sethlsk").click(function() {
+
+      $(".sethlsk").click(function() { // set SK language
         setCookie("hl", "sk");
       });
-      // set CS language
-      $(".sethlcs").click(function() {
+
+      $(".sethlcs").click(function() { // set CS language
         setCookie("hl", "cs");
       });
-      // set EN language
-      $(".sethlen").click(function() {
+
+      $(".sethlen").click(function() { // set EN language
         setCookie("hl", "en");
       });
-      // set UPDATE button
-      $("#update-message").click(function() {
-        //window.location.replace("/admin/clearcache"); // too slow!
+
+      $("#update-message").click(function() { // set UPDATE button action
         location.reload();
       });
-      // set default bullets for Summernote data
-      $(".summernote>ul").each(function(i, obj) {
+
+      $(".summernote>ul").each(function(i, obj) { // set default bullets for Summernote data
         $(obj).addClass("browser-default");
       });
-      // create HOME button
-      if (document.documentElement.clientWidth > 1023) {
+
+      if (document.documentElement.clientWidth > 1023) { // prepend the HOME button
         $('div.navbar-fixed>nav>div>ul').prepend('<li><a title="{{ l.home }}" href="/">🏡</a></li>');
       }
-      // create mobile WebShare button for touch devices
-      if (GSC.touch) {
+
+      if (GSC.touch) { // create mobile WebShare button for touch devices
         if (typeof window.WebShareFactory === "function") {
           $("#nav-mobile").append('<li class="right-align">' + WebShareFactory() + '</li>');
           $(".webshareicon").append("{{ l.webshare_button }}");
@@ -365,7 +369,7 @@ async function sha256(message) {
         }
       }
 
-      // create LOGIN buttons
+      // append login buttons if there are Google OAuth parameters set
       {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
       if (!GSC.islogged) {
         $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="{{ local_goauth_redirect }}">🔓 LOGIN</a></li>');
