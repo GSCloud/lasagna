@@ -14,8 +14,14 @@ namespace GSC;
  */
 class CliVersion extends APresenter
 {
+    // nothing to do here
     public function __construct() {}
 
+    /**
+     * Show version information as JSON formatted string
+     *
+     * @return void
+     */
     public function process()
     {
         $data = $this->getData();
@@ -29,5 +35,6 @@ class CliVersion extends APresenter
             "VERSION_TIMESTAMP" => $data["VERSION_TIMESTAMP"],
         ];
         echo \json_encode($out, JSON_PRETTY_PRINT)."\n";
+        exit(0);
     }
 }

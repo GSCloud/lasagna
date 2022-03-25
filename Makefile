@@ -65,7 +65,7 @@ doctor:
 sync:
 	@bash ./bin/sync.sh x
 	@bash ./bin/sync.sh b
-	#@bash ./bin/sync.sh a
+	@bash ./bin/sync.sh a
 test:
 	@bash ./cli.sh local
 prod:
