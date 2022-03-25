@@ -1291,6 +1291,36 @@ Search.appendIndex(
             "summary": "The\u0020stored\u0020items",
             "url": "classes/Adbar-Dot.html#property_items"
         },                {
+            "fqsen": "\\GSC\\CliDemo",
+            "name": "CliDemo",
+            "summary": "CLI\u0020Demo",
+            "url": "classes/GSC-CliDemo.html"
+        },                {
+            "fqsen": "\\GSC\\CliDemo\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Class\u0020constructor",
+            "url": "classes/GSC-CliDemo.html#method___construct"
+        },                {
+            "fqsen": "\\GSC\\CliDemo\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "Abstract\u0020processor",
+            "url": "classes/GSC-CliDemo.html#method_process"
+        },                {
+            "fqsen": "\\GSC\\CliVersion",
+            "name": "CliVersion",
+            "summary": "CLI\u0020Version",
+            "url": "classes/GSC-CliVersion.html"
+        },                {
+            "fqsen": "\\GSC\\CliVersion\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Class\u0020constructor",
+            "url": "classes/GSC-CliVersion.html#method___construct"
+        },                {
+            "fqsen": "\\GSC\\CliVersion\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "Abstract\u0020processor",
+            "url": "classes/GSC-CliVersion.html#method_process"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
