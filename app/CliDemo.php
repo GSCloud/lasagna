@@ -14,10 +14,16 @@ namespace GSC;
  */
 class CliDemo extends APresenter
 {
+    /**
+     * Constructor
+     */
     public function __construct() {
-        echo "contruct: Foo Bar\n";
+        echo "__contruct: foo bar\n";
     }
 
+    /**
+     * Processor
+     */
     public function process()
     {
         echo "process: Hello World!\n";

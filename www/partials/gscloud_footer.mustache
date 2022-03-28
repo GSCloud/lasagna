@@ -16,13 +16,13 @@
 
                 {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
                 <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
-                    class="waves-effect waves-light blue btn-large z-depth-3">
+                    class="oauth waves-effect waves-light blue btn-large z-depth-3">
                     {{ l.a_login }}<i class="material-icons right">cloud</i>
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
                 {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
                 <a rel="nofollow" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
-                    class="waves-effect waves-light blue btn-large z-depth-3">
+                    class="oauth waves-effect waves-light blue btn-large z-depth-3">
                     {{ l.a_login }}<i class="material-icons right">cloud</i>
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
@@ -31,13 +31,13 @@
 
                 {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
                 <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
-                    class="waves-effect waves-light red btn-large z-depth-3">
+                    class="oauth waves-effect waves-light red btn-large z-depth-3">
                     {{ l.a_relogin }}<i class="material-icons right">cloud</i>
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
                 {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
                 <a rel="nofollow" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
-                    class="waves-effect waves-light red btn-large z-depth-3">
+                    class="oauth waves-effect waves-light red btn-large z-depth-3">
                     {{ l.a_relogin }}<i class="material-icons right">cloud</i>
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
@@ -60,15 +60,15 @@
         <div class="container row center">
             <div class="row center">
                 <div class="valign-wrapper">
-                    <img class="responsive-img" src="{{ cdn }}/img/gsc.png" style="margin:1em" alt="{{ l.$gsc }}"
+                    <img class="responsive-img" src="/img/gsc.png" style="margin:1em" alt="{{ l.$gsc }}"
                         title="{{ l.$gsc }}" width=32>
-                    <img class="responsive-img" src="{{ cdn }}/img/pwa.png" style="margin:1em" alt="Progressive Web App"
+                    <img class="responsive-img" src="/img/pwa.png" style="margin:1em" alt="Progressive Web App"
                         title="Progressive Web App" width=64>
-                    <img class="responsive-img" src="{{ cdn }}/img/materialize.svg" style="margin:1em"
+                    <img class="responsive-img" src="/img/materialize.svg" style="margin:1em"
                         alt="Materialize CSS" title="Materialize CSS" width=64>
                     <a class="modal-trigger" href="#gscmodal">
                         <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:15%"
-                            src="{{ cdn }}/img/LASAGNA_logo.png" alt="Tesseract LASAGNA" title="{{ l.$generator }}"
+                            src="/img/LASAGNA_logo.png" alt="Tesseract LASAGNA" title="{{ l.$generator }}"
                             width="64" height="64">
                     </a>
                 </div>

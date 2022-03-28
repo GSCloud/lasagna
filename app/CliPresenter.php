@@ -96,12 +96,13 @@ class CliPresenter extends APresenter
         $climate->out("\t <bold>clearall</bold>\t - clear all temporary files");
         $climate->out("\t <bold>clearcache</bold>\t - clear cache");
         $climate->out("\t <bold>clearci</bold>\t - clear CI logs");
-        $climate->out("\t <bold>clearlogs</bold>\t - clear logs");
+        $climate->out("\t <bold>clearlogs</bold>\t - clear runtime logs");
         $climate->out("\t <bold>cleartemp</bold>\t - clear temporary files");
         $climate->out("\t <bold>doctor</bold>\t\t - check system requirements");
-        $climate->out("\t <bold>local</bold>\t\t - local CI test");
-        $climate->out("\t <bold>prod</bold>\t\t - production CI test");
-        $climate->out("\t <bold>unit</bold>\t\t - run Unit test (TBD)\n");
+        $climate->out("\t <bold>local</bold>\t\t - run local CI test");
+        $climate->out("\t <bold>prod</bold>\t\t - run production CI test");
+        $climate->out("\t <bold>unit</bold>\t\t - run Unit tests");
+        $climate->out("\t <bold>version</bold>\t - display version information in JSON format\n");
         return $this;
     }
 
@@ -123,8 +124,12 @@ class CliPresenter extends APresenter
             $climate->out("\t" . '<bold>app</bold> \'dump($app->getIdentity())\'');
         } else {
             try {
-                eval(trim($argv[2]) . ";");
-            } catch (Exception $e) {}
+                error_reporting(0);
+                eval(trim($argv[2]) . ';');
+            } catch (ParseError $e) {
+                echo 'Caught exception: '.$e->getMessage()."\n";
+            }
+            error_reporting(E_ALL);
         }
         echo "\n";
         return $this;

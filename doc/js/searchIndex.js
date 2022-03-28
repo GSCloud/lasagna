@@ -1298,12 +1298,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\CliDemo\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Class\u0020constructor",
+            "summary": "Constructor",
             "url": "classes/GSC-CliDemo.html#method___construct"
         },                {
             "fqsen": "\\GSC\\CliDemo\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Abstract\u0020processor",
+            "summary": "Processor",
             "url": "classes/GSC-CliDemo.html#method_process"
         },                {
             "fqsen": "\\GSC\\CliVersion",
@@ -1318,7 +1318,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\CliVersion\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Abstract\u0020processor",
+            "summary": "Show\u0020version\u0020information\u0020as\u0020JSON\u0020formatted\u0020string",
             "url": "classes/GSC-CliVersion.html#method_process"
         },                {
             "fqsen": "\\",
