@@ -792,7 +792,7 @@ abstract class APresenter implements IPresenter
             }
             if (isset($_COOKIE[$this->getCfg("app") ?? "app"])) { // COOKIE identity
                 $x = 0;
-                $q = \json_decode($this->getCookie($this->getCfg("app") ?? "app"), true);
+                $q = \json_decode($this->getCookie($this->getCfg("app") ?? "app") ?? "", true);
                 if (!\is_array($q)) {
                     $x++;
                 } else {
@@ -1479,12 +1479,15 @@ abstract class APresenter implements IPresenter
     /**
      * Pre-load application CSV data
      *
-     * @param string $key Configuration array name (optional)
-     * @param boolean $force do force load? (optional)
+     * @param string Configuration array name (optional)
+     * @param boolean force load? (optional)
      * @return object Singleton instance
      */
     public function preloadAppData($key = "app_data", $force = false)
     {
+        if (empty($key) || !strlen($key)) {
+            $key = "app_data";
+        }
         $key = \strtolower(\trim((string) $key));
         $cfg = $this->getCfg();
         if (\array_key_exists($key, $cfg)) {
@@ -1504,6 +1507,9 @@ abstract class APresenter implements IPresenter
     public function readAppData($name)
     {
         $name = \trim((string) $name);
+        if (empty($name) || !strlen($name)) {
+            return "";
+        }
         $file = \strtolower($name);
         if (empty($file)) {
             $this->addCritical("EMPTY readAppData() parameter!");
