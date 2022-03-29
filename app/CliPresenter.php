@@ -20,7 +20,6 @@ class CliPresenter extends APresenter
     /**
      * Main controller
      *
-     * @param argc int count of arguments
      * @return object Singleton instance
      */
     public function process()
@@ -33,39 +32,55 @@ class CliPresenter extends APresenter
     }
 
     /**
-     * Show custom presenter output
+     * Show presenter output
+     * 
+     * @param string presenter name (optional)
      */
     public function show($p = "home")
     {
-        if (empty($p)) { // no presenter
-            exit;
+        $p = trim($p);
+        if (empty($p) || !strlen($p)) { // no presenter
+            die("FATAL ERROR: No presenter is set!\n");
         }
         $data = $this->getData();
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
-        $data["view"] = $view = $router[$p]["view"] ?? "home";
-        $data["controller"] = $c = ucfirst(strtolower($presenter[$view]["presenter"]) ?? "home") . "Presenter";
+
+        $route = $router[$p];
+        $pres = $route["presenter"] ?? "home";
+        $data["view"] = $route["view"] ?? "home";
+        $data["controller"] = $c = ucfirst(strtolower($pres)) . "Presenter";
         $controller = "\\GSC\\${c}";
+
         echo $controller::getInstance()->setData($data)->process()->getData()["output"] ?? "";
+        exit(0);
     }
 
     /**
-     * Show core presenter output
+     * Show CORE presenter output
+     * 
+     * @param string view name inside CORE presenter
+     * @param array arguments (optional)
      */
-    public function core($v = "PingBack", $m = null)
+    public function showCore($v = "PingBack", $arg = null)
     {
-        if (empty($v)) { // no view
-            exit;
+        $v = trim($v);
+        if (empty($v) || !strlen($v)) { // no view
+            die("FATAL ERROR: No view is set!\n");
         }
         $data = $this->getData();
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
-        $data["base"] = $m["base"] ?? "https://example.com/";
+
         $data["controller"] = $c = "CorePresenter";
-        $data["match"] = $m["match"] ?? null;
-        $data["view"] = $v;
         $controller = "\\GSC\\${c}";
+        $data["view"] = $v;
+
+        $data["base"] = $arg["base"] ?? "https://example.com/";
+        $data["match"] = $arg["match"] ?? null;
+
         echo $controller::getInstance()->setData($data)->process()->getData()["output"] ?? "";
+        exit(0);
     }
 
     /**
@@ -109,9 +124,9 @@ class CliPresenter extends APresenter
     /**
      * Evaluate input string
      *
-     * @param object $app this
-     * @param int $argc ARGC
-     * @param array $argv ARGV
+     * @param object this object
+     * @param int ARGC
+     * @param array ARGV
      * @return object Singleton instance
      */
     private function evaler($app, $argc, $argv)
@@ -122,12 +137,16 @@ class CliPresenter extends APresenter
             $climate->out("\t" . '<bold>app</bold> \'$app->showConst()\'');
             $climate->out("\t" . '<bold>app</bold> \'dump($app->getCurrentUser())\'');
             $climate->out("\t" . '<bold>app</bold> \'dump($app->getIdentity())\'');
+            $climate->out("\t" . '<bold>app</bold> \'$app->show()\'');
+            $climate->out("\t" . '<bold>app</bold> \'$app->showCore("GetTXTSitemap")\'');
+            $climate->out("\t" . '<bold>app</bold> \'$app->showCore("GetWebManifest")\'');
         } else {
+            $code = trim($argv[2]) . ';';
             try {
                 error_reporting(0);
-                eval(trim($argv[2]) . ';');
+                eval($code);
             } catch (ParseError $e) {
-                echo 'Caught exception: '.$e->getMessage()."\n";
+                echo 'Caught exception: ' . $e->getMessage() . "\n";
             }
             error_reporting(E_ALL);
         }
@@ -138,14 +157,15 @@ class CliPresenter extends APresenter
     /**
      * Select CLI module
      *
-     * @param string $module CLI parameter
-     * @param int $argc ARGC
-     * @param array $argv ARGV
+     * @param string CLI parameter
+     * @param int ARGC
+     * @param array ARGV
      * @return void
      */
     public function selectModule($module, $argc = null, $argv = null)
     {
         $climate = new CLImate;
+        $module = trim($module);
         switch ($module) {
             case "clear":
             case "clearall":

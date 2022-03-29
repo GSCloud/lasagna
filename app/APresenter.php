@@ -100,7 +100,7 @@ abstract class APresenter implements IPresenter
     /** @var integer Octal file mode for CSV */
     const CSV_FILEMODE = 0664;
 
-    /** @var integer CSV min. file size */
+    /** @var integer CSV min. file size :) */
     const CSV_MIN_SIZE = 42;
 
     /** @var integer Octal file mode for cookie secret */
@@ -126,6 +126,7 @@ abstract class APresenter implements IPresenter
 
     /** @var string Identity nonce filename */
     const IDENTITY_NONCE = "identity_nonce.key";
+
 
     // GOOGLE TEMPLATES
 
@@ -181,7 +182,8 @@ abstract class APresenter implements IPresenter
     const GOOGLE_FILE_EXPORT_VIEW =
         "https://drive.google.com/uc?export=view&id=[FILEID]";
 
-    // PRIVATE VARS
+
+    // PRIVATE VARIABLES
 
     /** @var array Model */
     private $data = [];
@@ -192,22 +194,22 @@ abstract class APresenter implements IPresenter
     /** @var array Errors */
     private $errors = [];
 
-    /** @var array Critical errors */
+    /** @var array Critical Errors */
     private $criticals = [];
 
-    /** @var array User identity */
+    /** @var array User Identity */
     private $identity = [];
 
     /** @var boolean Whether to re-check locales? */
     private $force_csv_check = false;
 
-    /** @var array CSV keys */
+    /** @var array CSV Keys */
     private $csv_postload = [];
 
-    /** @var array Saved cookies */
+    /** @var array Cookies */
     private $cookies = [];
 
-    /** @var array Singleton instances */
+    /** @var array Singleton Instances */
     private static $instances = [];
 
     /**
@@ -280,7 +282,7 @@ abstract class APresenter implements IPresenter
      */
     public function __toString()
     {
-        return (string) json_encode($this->getData(), JSON_PRETTY_PRINT);
+        return (string) \json_encode($this->getData(), JSON_PRETTY_PRINT);
     }
 
     /**
@@ -314,13 +316,13 @@ abstract class APresenter implements IPresenter
         $errors = $this->getErrors();
         $messages = $this->getMessages();
 
-        list($usec, $sec) = explode(" ", microtime());
+        list($usec, $sec) = \explode(" ", \microtime());
         defined("TESSERACT_STOP") || define("TESSERACT_STOP", ((float) $usec + (float) $sec));
-        $add = "; processing: " . round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " ms"
+        $add = "; processing: " . \round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " ms"
             . "; request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
         $google_logger = null;
         try {
-            if (count($criticals) + count($errors) + count($messages)) {
+            if (\count($criticals) + \count($errors) + \count($messages)) {
                 if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
                     if (file_exists(APP . DS . GCP_KEYS)) {
                         $logging = new LoggingClient([
@@ -331,31 +333,29 @@ abstract class APresenter implements IPresenter
                     }
                 }
             }
-            if (count($criticals)) {
-                $monolog->critical(DOMAIN . " FATAL: " . json_encode($criticals) . $add);
+            if (\count($criticals)) {
+                $monolog->critical(DOMAIN . " FATAL: " . \json_encode($criticals) . $add);
                 if ($google_logger) {
-                    $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($criticals) . $add, [
+                    $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . \json_encode($criticals) . $add, [
                         "severity" => Logger::CRITICAL,
                     ]));
                 }
             }
             if (count($errors)) {
-                $monolog->error(DOMAIN . " ERROR: " . json_encode($errors) . $add);
+                $monolog->error(DOMAIN . " ERROR: " . \json_encode($errors) . $add);
                 if ($google_logger) {
-                    $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . json_encode($errors) . $add, [
+                    $google_logger->write($google_logger->entry(DOMAIN . " ERR: " . \json_encode($errors) . $add, [
                         "severity" => Logger::ERROR,
                     ]));
                 }
-
             }
             if (count($messages)) {
-                $monolog->info(DOMAIN . " INFO: " . json_encode($messages) . $add);
+                $monolog->info(DOMAIN . " INFO: " . \json_encode($messages) . $add);
                 if ($google_logger) {
-                    $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . json_encode($messages) . $add, [
+                    $google_logger->write($google_logger->entry(DOMAIN . " MSG: " . \json_encode($messages) . $add, [
                         "severity" => Logger::INFO,
                     ]));
                 }
-
             }
         } finally {
             exit();

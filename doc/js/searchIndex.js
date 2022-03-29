@@ -146,6 +146,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/GSC-ApiPresenter.html#constant_API_CACHE"
         },                {
+            "fqsen": "\\TESSERACT_END",
+            "name": "TESSERACT_END",
+            "summary": "",
+            "url": "namespaces/default.html#constant_TESSERACT_END"
+        },                {
             "fqsen": "\\GSC\\exception_error_handler\u0028\u0029",
             "name": "exception_error_handler",
             "summary": "",

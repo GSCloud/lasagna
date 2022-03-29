@@ -45,7 +45,7 @@ async function sha256(message) {
   };
 
   // check network status
-  function checkNetwork(e) {
+  function checkNetwork() {
     if ("onLine" in navigator) {
       if (navigator.onLine) {
         d.getElementsByTagName("html")[0].setAttribute("offline", false);
@@ -74,8 +74,6 @@ async function sha256(message) {
     w.addEventListener("load", function() {
       w.addEventListener("online", checkNetwork);
       w.addEventListener("offline", checkNetwork);
-      // check online status
-      checkNetwork();
     });
   }
 
@@ -422,7 +420,7 @@ async function sha256(message) {
       {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
 
       // check online status
-      checkNetwork();
+      setInterval(checkNetwork, 1000);
     });
 
   }
