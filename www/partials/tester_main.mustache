@@ -21,7 +21,7 @@
     {{/external_links}}
   </div>
 
-  <!-- ADMIN GRID -->
+  <!-- TESTER GRID -->
   <div class="row grid" style="overflow:hidden" style="padding-top:3px">
 
     <!-- 1st COLUMN -->
@@ -34,6 +34,7 @@
           Tesseract LASAGNA 2.0<br>
           App <b>{{ VERSION_SHORT }}</b> / <b>{{ VERSION_DATE }}</b> / rev. <b>{{ REVISIONS }}</b><br>
         </p>
+
         <div class="col s12 white">
           <label>{{ l.a_profiles }}</label>
           <select id="SiteSelect">
@@ -45,56 +46,6 @@
         </div>
 
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
-
-        <div class="container">
-          {{#request_path_slug}}
-          {{#GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>
-          &nbsp;
-          <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">🌍 exportHTML</a>
-          &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
-          {{/GET.profile}}
-
-          {{^GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>
-          &nbsp;
-          <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">🌍 exportHTML</a>
-          &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
-          {{/GET.profile}}
-          {{/request_path_slug}}
-
-          {{^request_path_slug}}
-          {{#GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>
-          &nbsp;
-          <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">🌍 exportHTML</a>
-          &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
-          {{/GET.profile}}
-
-          {{^GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>
-          &nbsp;
-          <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/default/!">🌍 exportHTML</a>
-          &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
-            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
-          {{/GET.profile}}
-          {{/request_path_slug}}
-        </div>
 
       </div>
     </div>

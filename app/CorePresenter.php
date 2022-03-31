@@ -151,7 +151,7 @@ class CorePresenter extends APresenter
                 // get article data
                 $f = DATA . "/summernote_${profile}_${hash}.json";
                 if (\file_exists($f) && \is_readable($f)) {
-                    $html = \json_decode(@\file_get_contents($f), true);
+                    $html = \json_decode(@\file_get_contents($f) ?? "", true);
                     if (\is_array($html)) {
                         $html = \join("\n", $html);
                     }

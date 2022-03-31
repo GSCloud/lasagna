@@ -1,5 +1,5 @@
 {{#admin_group_admin}}
-<!-- ADMIN PANEL STYLES -->
+<!-- EXTRA STYLES -->
 <link href="{{ cdn }}/css/admin.css" rel="stylesheet">
 
 <!-- WRENCH -->
@@ -38,10 +38,6 @@
         href="{{#google.analytics}}{{ google.analytics }}{{/google.analytics}}{{^google.analytics}}https://analytics.google.com/analytics/web/{{/google.analytics}}">
         <i class="fab fa-google"></i>
         {{ l.a_google_analytics }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect indigo waves-light btn" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_onesignal_ttip }}" href="https://app.onesignal.com/login">
-        <i class="fas fa-bell"></i>
-        {{ l.a_onesignal }}</a>
     </div>
   </div>
 
@@ -59,13 +55,30 @@
     <!-- 1st COLUMN -->
     <div class="col l4 m6 s12">
       <div class="row center extrapadding">
-          <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
+        <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
         <p style="font-size:12px!important">
           PHP <b>{{ PHP_VERSION }}</b><br>
           Tesseract LASAGNA 2.0<br>
           App <b>{{ VERSION_SHORT }}</b> / <b>{{ VERSION_DATE }}</b> / rev. <b>{{ REVISIONS }}</b><br>
         </p>
+
+        <h5>{{ l.a_cache }}</h5>
+        <div class="container">
+          <span class="nowrap">default: <b>{{ cache_profiles.default }}</b></span>&nbsp;
+          <span class="nowrap">CSVs: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
+          <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
+          <span class="nowrap">{{ l.a_webpage }}: <b>{{ cache_profiles.page }}</b></span>
+        </div>
+        <div class="row center">
+          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
+            data-position="top" data-tooltip="{{ l.a_update_ttip }}">
+            <i class="fab fa-google-drive"></i>&nbsp;&nbsp;&nbsp;{{ l.a_update }}</a>
+          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
+            data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
+            <i class="fa-solid fa-rocket"></i>&nbsp;&nbsp;&nbsp;{{ l.a_flush }}</a>
+        </div>
+
         <div class="col s12 white">
           <label>{{ l.a_profiles }}</label>
           <select id="SiteSelect">
@@ -77,7 +90,6 @@
         </div>
 
         <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
-
         <div class="col s12 white">
           <label>{{ l.a_articles }}</label>
           <select id="ArticleURLSelect"></select>
@@ -153,24 +165,8 @@
 
     <!-- 2nd COLUMN -->
     <div class="col l4 m6 s12">
-      <div class="row center extrapadding">
-        <h5>{{ l.a_cache }}</h5>
-        <div class="container">
-          <span class="nowrap">default: <b>{{ cache_profiles.default }}</b></span>&nbsp;
-          <span class="nowrap">CSVs: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
-          <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
-          <span class="nowrap">{{ l.a_webpage }}: <b>{{ cache_profiles.page }}</b></span>
-        </div>
-        <div class="row center">
-          <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
-            data-position="top" data-tooltip="{{ l.a_update_ttip }}">
-            <i class="fab fa-google-drive"></i>&nbsp;&nbsp;&nbsp;{{ l.a_update }}</a>
-          <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
-            data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
-            <i class="fa-solid fa-rocket"></i>&nbsp;&nbsp;&nbsp;{{ l.a_flush }}</a>
-        </div>
-      </div>
-      <div class="row center white hide-on-small-only">
+      <div class="row center extrapadding hide-on-small-only">
+        <h5>fn()</h5>
         <div class="col s12 white">
           <label>{{ l.a_remotefns }}</label>
           <select id="RemoteFnSelect">
@@ -236,13 +232,6 @@
                 <i class="red-text fas fa-times"></i>
                 {{/google.pagespeedinsights_key}}
               </li>
-              {{^l.onesignal_appid}}
-              <div class="row center red-text" style="margin-top:1em">
-                <div class="container">
-                  {{ l.a_onesignal_missing }}
-                </div>
-              </div>
-              {{/l.onesignal_appid}}
             </ul>
           </div>
         </div>
@@ -330,7 +319,6 @@
   <!-- UPLOADS -->
   <div id="a_uploader_progress"></div>
   <div id="a_file_manager"></div>
-
 </div>
 
 <script>
@@ -346,25 +334,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/display/fullscreen.min.js" defer></script>
 
-<link href="{{ cdn }}/summernote/summernote-lite.min.css" rel="stylesheet">
-<script src="{{ cdn }}/summernote/summernote-lite.min.js" defer></script>
-{{#langcs}}<script src="{{ cdn }}/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
+<link href="/summernote/summernote-lite.min.css" rel="stylesheet">
+<script src="/summernote/summernote-lite.min.js" defer></script>
+{{#langcs}}<script src="/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
 
 <!-- MOMENT -->
-<script src="{{ cdn }}/js/moment-with-locales.min.js" defer></script>
+<script src="/js/moment-with-locales.min.js" defer></script>
 
 <!-- ZEROUPLOAD -->
-<script src="{{ cdn }}/js/zeroupload.min.js" defer></script>
+<script src="/js/zeroupload.min.js" defer></script>
 {{/admin_group_admin}}
 
 {{#admin_group_editor}}
-<!-- ADMIN PANEL STYLES -->
+<!-- EDITOR STYLES -->
 <link href="{{ cdn }}/css/admin.css" rel="stylesheet">
 {{>editor_main}}
 {{/admin_group_editor}}
 
 {{#admin_group_tester}}
-<!-- ADMIN PANEL STYLES -->
-<link href="{{ cdn }}/css/admin.css" rel="stylesheet">
+<!-- TESTER STYLES -->
+<link href="{{ cdn }}/css/tester.css" rel="stylesheet">
 {{>tester_main}}
 {{/admin_group_tester}}

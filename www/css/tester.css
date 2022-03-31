@@ -1,0 +1,29 @@
+/* PHP LOGO */
+.php1{position:relative;left:+0.1em;text-transform:lowercase!important}
+.php2{position:relative;left:+0.0em;text-transform:lowercase!important}
+.php3{position:relative;left:-0.1em;text-transform:lowercase!important}
+
+/* ADMIN PANEL */
+label{color:#000;font-weight:bold}
+
+#admin_main{font-family:Arial!important;padding-top:5px;font-size:14px!important}
+#admin_main .row{margin-bottom:5px}
+#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6{font-family:Arial!important}
+
+.a_reset{font-family:Arial!important;font-size:14px!important}
+.a_h2{font-size:5em!important;font-weight:700!important}
+.a_h3{font-size:4em!important;font-weight:700!important}
+.a_h4{font-size:3em!important;font-weight:700!important}
+.a_h5{font-size:2em!important;font-weight:700!important;background-color:#444;color:#fff;border-radius:3px}
+
+.btnmargin{margin:2px;margin-bottom:5px}
+.dragover{border:4px dashed blue!important}
+.extrapadding{padding:5px;border-radius:5px}
+.hover{cursor:pointer}
+.nowrap{white-space:nowrap}
+.protect{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
+.mobilebutt{font-size:1em}
+
+/* ROTATION & TOUCH */
+#a_rotate_device{display:none}
+[touch="true"] #a_rotate_device{display:block}
