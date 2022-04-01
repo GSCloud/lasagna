@@ -26,23 +26,23 @@ use ParagonIE\Halite\KeyFactory;
 interface IPresenter
 {
     /** Message Adders */
-    public function addCritical($message);
-    public function addError($message);
-    public function addMessage($message);
-    public function addAuditMessage($message);
+    public function addCritical($message); # Unit Tested
+    public function addError($message); # UT
+    public function addMessage($message); # UT
+    public function addAuditMessage($message); # UT
 
     /** Message Getters */
-    public function getCriticals();
-    public function getErrors();
-    public function getMessages();
+    public function getCriticals(); # UT
+    public function getErrors(); # UT
+    public function getMessages(); # UT
 
     /** General Getters */
-    public function getCfg($key);
+    public function getCfg($key); # UT
     public function getCookie($name);
-    public function getCurrentUser();
-    public function getData($key);
-    public function getIP();
-    public function getIdentity();
+    public function getCurrentUser(); # UT
+    public function getData($key); # UT
+    public function getIP(); # UT
+    public function getIdentity(); # UT
     public function getLocale($locale);
     public function getMatch();
     public function getPresenter();
@@ -560,7 +560,7 @@ abstract class APresenter implements IPresenter
      */
     public function addAuditMessage($message = null)
     {
-        if (!\is_null($message) || !empty($message)) {
+        if (is_string($message) && !empty($message)) {
             $file = DATA . DS . "AuditLog.txt";
             $date = date("c");
             $message = \trim($message);
@@ -569,6 +569,8 @@ abstract class APresenter implements IPresenter
                 FILE_APPEND | LOCK_EX
             );
         }
+
+        if (CLI) return $this;
 
         // Telegram bot support
         $chid = $this->getData("telegram.bot_ch_id") ?? null;
@@ -584,6 +586,7 @@ abstract class APresenter implements IPresenter
                 curl_close($curl);
             }
         }
+
         return $this;
     }
 
@@ -595,7 +598,7 @@ abstract class APresenter implements IPresenter
      */
     public function addMessage($message = null)
     {
-        if (!\is_null($message) || !empty($message)) {
+        if (is_string($message) && !empty($message)) {
             $this->messages[] = (string) $message;
         }
         return $this;
@@ -609,7 +612,7 @@ abstract class APresenter implements IPresenter
      */
     public function addError($message = null)
     {
-        if (!\is_null($message) || !empty($message)) {
+        if (is_string($message) && !empty($message)) {
             $this->errors[] = (string) $message;
             $this->addAuditMessage($message);
         }
@@ -624,7 +627,7 @@ abstract class APresenter implements IPresenter
      */
     public function addCritical($message = null)
     {
-        if (!\is_null($message) || !empty($message)) {
+        if (is_string($message) && !empty($message)) {
             $this->criticals[] = (string) $message;
         }
         return $this;

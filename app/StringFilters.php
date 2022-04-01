@@ -13,7 +13,7 @@ namespace GSC;
 /**
  * String Filters interface
  * 
- * Modify string content passed by a reference to fix common problems.
+ * Modify a string content passed by a reference to fix common problems.
  * 
  * @package GSC
  */
@@ -29,7 +29,7 @@ interface IStringFilters
 /**
  * String Filters class
  * 
- * Modify string content passed by a reference to fix common problems.
+ * Modify a string content passed by a reference to fix common problems.
  * 
  * @package GSC
  */

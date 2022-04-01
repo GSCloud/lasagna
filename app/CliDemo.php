@@ -12,7 +12,7 @@ namespace GSC;
 
 /**
  * CLI Demo class
- * 
+ *
  * @package GSC
  */
 class CliDemo extends APresenter
@@ -20,13 +20,13 @@ class CliDemo extends APresenter
     /**
      * Controller constructor
      */
-    public function __construct() {
-        echo "__contruct: foo bar\n";
+    public function __construct()
+    {
     }
 
     /**
      * Controller processor
-     * 
+     *
      * @return self
      */
     public function process()
