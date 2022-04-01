@@ -36,11 +36,13 @@ class UnitTester
         // all testable controllers
         $controllers = [
             'AdminPresenter',
+            'AndroidPresenter',
             'ApiPresenter',
             'ArticlePresenter',
             'CliPresenter',
             'CliDemo',
             'CliVersion',
+            'CorePresenter',
             'ErrorPresenter',
             'HomePresenter',
             'LoginPresenter',
@@ -56,15 +58,16 @@ class UnitTester
             // instance of APresenter
             Assert::type('\\GSC\\APresenter', $app);
 
-            // getData(), setData()
+            // getData(), setData(), getCfg()
+            Assert::same(null, $app->getData('just.null.testing'));
             Assert::type('array', $app->getData());
             Assert::truthy(count($app->getData()));
-            Assert::same($app->getData('just.null.testing'), null);
+            Assert::same($app->getData('cfg'), $app->getCfg());
+
             $app->setData("animal.farm", ["dog", "cat", "bird"]);
-            Assert::same($app->getData("animal"), ["farm" => ["dog", "cat", "bird"]]);
+            Assert::same(["farm" => ["dog", "cat", "bird"]], $app->getData("animal"));
 
             // getCfg()
-            Assert::same($app->getData('cfg'), $app->getCfg());
 
             // magic __toString()
             Assert::type('string', $app->__toString());
@@ -94,75 +97,72 @@ class UnitTester
                 'uidstring' => 'CLI__127.0.0.1',
             ], $app->getCurrentUser());
 
-            // addCritical(), getCriticals() - fluent interface
-            Assert::same($app->addCritical(), $app);
-            Assert::same($app->addCritical(false), $app);
-            Assert::same($app->addCritical(null), $app);
-            Assert::same($app->addCritical([]), $app);
-            Assert::same($app->getCriticals(), []);
-            // value test
-            Assert::same($app->addCritical('test message'), $app);
-            Assert::same($app->getCriticals(), ['test message']);
+            // fluent interface
+            Assert::same($app, $app->addCritical());
+            Assert::same($app, $app->addCritical(42));
+            Assert::same($app, $app->addCritical(true));
+            Assert::same($app, $app->addCritical(false));
+            Assert::same($app, $app->addCritical(null));
+            Assert::same($app, $app->addCritical([]));
+            Assert::same([], $app->getCriticals());
+            Assert::same($app, $app->addCritical('test message'));
+            Assert::same(['test message'], $app->getCriticals());
 
-            // addError(), getErrors() - fluent interface
-            Assert::same($app->addError(), $app);
-            Assert::same($app->addError(false), $app);
-            Assert::same($app->addError(null), $app);
-            Assert::same($app->addError([]), $app);
-            Assert::same($app->getErrors(), []);
-            // value test
-            Assert::same($app->addError('test message'), $app);
-            Assert::same($app->getErrors(), ['test message']);
+            // fluent interface
+            Assert::same($app, $app->addError());
+            Assert::same($app, $app->addError(42));
+            Assert::same($app, $app->addError(true));
+            Assert::same($app, $app->addError(false));
+            Assert::same($app, $app->addError(null));
+            Assert::same($app, $app->addError([]));
+            Assert::same([], $app->getErrors());
+            Assert::same($app, $app->addError('test message'));
+            Assert::same(['test message'], $app->getErrors());
 
-            // addMessage(), getMessages() - fluent interface
-            Assert::same($app->addMessage(), $app);
-            Assert::same($app->addMessage(false), $app);
-            Assert::same($app->addMessage(null), $app);
-            Assert::same($app->addMessage([]), $app);
-            Assert::same($app->getMessages(), []);
-            // value test
-            Assert::same($app->addMessage('test message'), $app);
-            Assert::same($app->getMessages(), ['test message']);
+            // fluent interface
+            Assert::same($app, $app->addMessage());
+            Assert::same($app, $app->addMessage(42));
+            Assert::same($app, $app->addMessage(true));
+            Assert::same($app, $app->addMessage(false));
+            Assert::same($app, $app->addMessage(null));
+            Assert::same($app, $app->addMessage([]));
+            Assert::same([], $app->getMessages());
+            Assert::same($app, $app->addMessage('test message'));
+            Assert::same(['test message'], $app->getMessages());
 
-            // addAuditMessage() - fluent interface
-            Assert::same($app->addAuditMessage(), $app);
-            Assert::same($app->addAuditMessage(false), $app);
-            Assert::same($app->addAuditMessage(null), $app);
-            Assert::same($app->addAuditMessage([]), $app);
-            Assert::same($app->addAuditMessage('test message'), $app);
+            // fluent interface
+            Assert::same($app, $app->addAuditMessage());
+            Assert::same($app, $app->addAuditMessage(42));
+            Assert::same($app, $app->addAuditMessage(true));
+            Assert::same($app, $app->addAuditMessage(false));
+            Assert::same($app, $app->addAuditMessage(null));
+            Assert::same($app, $app->addAuditMessage([]));
+            Assert::same($app, $app->addAuditMessage('test message'));
 
-            // getRateLimit()
-            Assert::same($app->getRateLimit(), null);
-
-            // getView()
-            Assert::same($app->getView(), null);
-
-            // getUserGroup()
-            Assert::same($app->getUserGroup(), null);
+            // null
+            Assert::same(null, $app->getRateLimit());
+            Assert::same(null, $app->getUserGroup());
+            Assert::same(null, $app->getView());
 
             // getUID()
-            Assert::same($app->getUID(), '5d93b9f0de6d0b30934db74b6d877154d704f562ad5bb88002409d51db5345c1');
+            Assert::same('5d93b9f0de6d0b30934db74b6d877154d704f562ad5bb88002409d51db5345c1', $app->getUID());
 
             // getUIDstring()
-            Assert::same($app->getUIDstring(), 'CLI__127.0.0.1');
+            Assert::same('CLI__127.0.0.1', $app->getUIDstring());
 
-            // checkLocales() - fluent interface
-            Assert::same($app->checkLocales(), $app);
-
-            // checkPermission() - fluent interface
-            Assert::same($app->checkPermission(), $app);
-
-            // checkRateLimit() - fluent interface
-            Assert::same($app->checkRateLimit(), $app);
+            // fluent interface
+            Assert::same($app, $app->checkLocales());
+            Assert::same($app, $app->checkPermission());
+            Assert::same($app, $app->checkRateLimit());
 
             // renderHTML()
-            Assert::same($app->renderHTML("<title>{{notitle}}</title>"), "<title></title>");
-            Assert::same($app->setData("title", "foo bar")->renderHTML("<title>{{title}}</title>"), "<title>foo bar</title>");
-            Assert::same($app->renderHTML("<b>{{animal.farm.0}}</b>"), "<b>dog</b>");
-            Assert::same($app->renderHTML("<b>{{animal.farm.1}}</b>"), "<b>cat</b>");
-            Assert::same($app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'), "dogcatbird");
+            Assert::same("<title></title>", $app->renderHTML("<title>{{notitle}}</title>"));
+            Assert::same("<title>foo bar</title>", $app->setData("title", "foo bar")->renderHTML("<title>{{title}}</title>"));
+            Assert::same("<b>dog</b>", $app->renderHTML("<b>{{animal.farm.0}}</b>"));
+            Assert::same("<b>cat</b>", $app->renderHTML("<b>{{animal.farm.1}}</b>"));
+            Assert::same("dogcatbird", $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'));
         }
-
         echo "Unit testing finished in: " . round((float) \Tracy\Debugger::timer("UNIT") * 1000, 2) . " ms";
+        exit(0);
     }
 }
