@@ -673,7 +673,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCfg\u0028\u0029",
             "name": "getCfg",
-            "summary": "General\u0020Getters",
+            "summary": "Getters",
             "url": "classes/GSC-IPresenter.html#method_getCfg"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCookie\u0028\u0029",
@@ -706,25 +706,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/GSC-IPresenter.html#method_getLocale"
         },                {
-            "fqsen": "\\GSC\\IPresenter\u003A\u003AgetMatch\u0028\u0029",
-            "name": "getMatch",
-            "summary": "",
-            "url": "classes/GSC-IPresenter.html#method_getMatch"
-        },                {
-            "fqsen": "\\GSC\\IPresenter\u003A\u003AgetPresenter\u0028\u0029",
-            "name": "getPresenter",
-            "summary": "",
-            "url": "classes/GSC-IPresenter.html#method_getPresenter"
-        },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetRateLimit\u0028\u0029",
             "name": "getRateLimit",
             "summary": "",
             "url": "classes/GSC-IPresenter.html#method_getRateLimit"
-        },                {
-            "fqsen": "\\GSC\\IPresenter\u003A\u003AgetRouter\u0028\u0029",
-            "name": "getRouter",
-            "summary": "",
-            "url": "classes/GSC-IPresenter.html#method_getRouter"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetUID\u0028\u0029",
             "name": "getUID",
@@ -740,6 +725,21 @@ Search.appendIndex(
             "name": "getUserGroup",
             "summary": "",
             "url": "classes/GSC-IPresenter.html#method_getUserGroup"
+        },                {
+            "fqsen": "\\GSC\\IPresenter\u003A\u003AgetMatch\u0028\u0029",
+            "name": "getMatch",
+            "summary": "URI\u0020Based\u0020Getters",
+            "url": "classes/GSC-IPresenter.html#method_getMatch"
+        },                {
+            "fqsen": "\\GSC\\IPresenter\u003A\u003AgetPresenter\u0028\u0029",
+            "name": "getPresenter",
+            "summary": "",
+            "url": "classes/GSC-IPresenter.html#method_getPresenter"
+        },                {
+            "fqsen": "\\GSC\\IPresenter\u003A\u003AgetRouter\u0028\u0029",
+            "name": "getRouter",
+            "summary": "",
+            "url": "classes/GSC-IPresenter.html#method_getRouter"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetView\u0028\u0029",
             "name": "getView",
@@ -763,7 +763,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AsetCookie\u0028\u0029",
             "name": "setCookie",
-            "summary": "General\u0020Setters",
+            "summary": "Setters",
             "url": "classes/GSC-IPresenter.html#method_setCookie"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AsetData\u0028\u0029",
@@ -1148,12 +1148,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\UnitTester",
             "name": "UnitTester",
-            "summary": "Unit\u0020Tester",
+            "summary": "Unit\u0020Tester\u0020CLI\u0020class",
             "url": "classes/GSC-UnitTester.html"
         },                {
             "fqsen": "\\GSC\\UnitTester\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Unit\u0020Test\u0020constructor",
             "url": "classes/GSC-UnitTester.html#method___construct"
         },                {
             "fqsen": "\\GSC\\CliDemo",

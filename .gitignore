@@ -14,6 +14,8 @@
 .phpintel/**
 .vscode/**
 
+output/**
+
 REVISIONS
 Thumbs.db
 VERSION

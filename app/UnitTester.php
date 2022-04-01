@@ -56,10 +56,12 @@ class UnitTester
             // instance of APresenter
             Assert::type('\\GSC\\APresenter', $app);
 
-            // getData()
+            // getData(), setData()
             Assert::type('array', $app->getData());
             Assert::truthy(count($app->getData()));
             Assert::same($app->getData('just.null.testing'), null);
+            $app->setData("animal.farm", ["dog", "cat", "bird"]);
+            Assert::same($app->getData("animal"), ["farm" => ["dog", "cat", "bird"]]);
 
             // getCfg()
             Assert::same($app->getData('cfg'), $app->getCfg());
@@ -92,34 +94,37 @@ class UnitTester
                 'uidstring' => 'CLI__127.0.0.1',
             ], $app->getCurrentUser());
 
-            // addCritical() and getCriticals()
+            // addCritical(), getCriticals() - fluent interface
             Assert::same($app->addCritical(), $app);
             Assert::same($app->addCritical(false), $app);
             Assert::same($app->addCritical(null), $app);
             Assert::same($app->addCritical([]), $app);
             Assert::same($app->getCriticals(), []);
+            // value test
             Assert::same($app->addCritical('test message'), $app);
             Assert::same($app->getCriticals(), ['test message']);
 
-            // addError() and getErrors()
+            // addError(), getErrors() - fluent interface
             Assert::same($app->addError(), $app);
             Assert::same($app->addError(false), $app);
             Assert::same($app->addError(null), $app);
             Assert::same($app->addError([]), $app);
             Assert::same($app->getErrors(), []);
+            // value test
             Assert::same($app->addError('test message'), $app);
             Assert::same($app->getErrors(), ['test message']);
 
-            // addMessage() and getMessages()
+            // addMessage(), getMessages() - fluent interface
             Assert::same($app->addMessage(), $app);
             Assert::same($app->addMessage(false), $app);
             Assert::same($app->addMessage(null), $app);
             Assert::same($app->addMessage([]), $app);
             Assert::same($app->getMessages(), []);
+            // value test
             Assert::same($app->addMessage('test message'), $app);
             Assert::same($app->getMessages(), ['test message']);
 
-            // addAuditMessage()
+            // addAuditMessage() - fluent interface
             Assert::same($app->addAuditMessage(), $app);
             Assert::same($app->addAuditMessage(false), $app);
             Assert::same($app->addAuditMessage(null), $app);
@@ -140,6 +145,22 @@ class UnitTester
 
             // getUIDstring()
             Assert::same($app->getUIDstring(), 'CLI__127.0.0.1');
+
+            // checkLocales() - fluent interface
+            Assert::same($app->checkLocales(), $app);
+
+            // checkPermission() - fluent interface
+            Assert::same($app->checkPermission(), $app);
+
+            // checkRateLimit() - fluent interface
+            Assert::same($app->checkRateLimit(), $app);
+
+            // renderHTML()
+            Assert::same($app->renderHTML("<title>{{notitle}}</title>"), "<title></title>");
+            Assert::same($app->setData("title", "foo bar")->renderHTML("<title>{{title}}</title>"), "<title>foo bar</title>");
+            Assert::same($app->renderHTML("<b>{{animal.farm.0}}</b>"), "<b>dog</b>");
+            Assert::same($app->renderHTML("<b>{{animal.farm.1}}</b>"), "<b>cat</b>");
+            Assert::same($app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'), "dogcatbird");
         }
 
         echo "Unit testing finished in: " . round((float) \Tracy\Debugger::timer("UNIT") * 1000, 2) . " ms";

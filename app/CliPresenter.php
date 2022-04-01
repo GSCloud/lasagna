@@ -147,7 +147,7 @@ class CliPresenter extends APresenter
         } else {
             $code = trim($argv[2]) . ';';
             try {
-                error_reporting(0);
+                //error_reporting(0);
                 eval($code);
             } catch (ParseError $e) {
                 echo 'Caught exception: ' . $e->getMessage() . "\n";

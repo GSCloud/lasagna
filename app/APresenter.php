@@ -38,7 +38,7 @@ interface IPresenter
     public function getErrors(); # UT
     public function getMessages(); # UT
 
-    /** General Getters */
+    /** Getters */
     public function getCfg($key); # UT
     public function getCookie($name);
     public function getCurrentUser(); # UT
@@ -46,21 +46,23 @@ interface IPresenter
     public function getIP(); # UT
     public function getIdentity(); # UT
     public function getLocale($locale);
-    public function getMatch();
-    public function getPresenter();
     public function getRateLimit(); # UT
-    public function getRouter();
     public function getUID(); # UT
     public function getUIDstring(); # UT
     public function getUserGroup(); # UT
+    
+    /** URI Based Getters */
+    public function getMatch();
+    public function getPresenter();
+    public function getRouter();
     public function getView(); # UT
-
+    
     /** General Functionality Checks */
-    public function checkLocales($force);
-    public function checkPermission($roleslist);
-    public function checkRateLimit($maximum);
+    public function checkLocales($force); # UT
+    public function checkPermission($roleslist); # UT
+    public function checkRateLimit($maximum); # UT
 
-    /** General Setters */
+    /** Setters */
     public function setCookie($name, $data);
     public function setData($data, $value);
     public function setForceCsvCheck();
@@ -83,14 +85,14 @@ interface IPresenter
     public function postloadAppData($key);
     public function preloadAppData($key, $force);
     public function readAppData($name);
-    public function renderHTML($template);
+    public function renderHTML($template); # UT
     public function writeJsonData($data, $headers = [], $switches = null);
 
     /** Abstract Methods */
     public function process();
 
     /** Singleton Instances */
-    public static function getInstance();
+    public static function getInstance(); # UT
     public static function getTestInstance(); // for testing purposes only
 }
 
