@@ -125,6 +125,21 @@ class UnitTester
             Assert::same($app->addAuditMessage(null), $app);
             Assert::same($app->addAuditMessage([]), $app);
             Assert::same($app->addAuditMessage('test message'), $app);
+
+            // getRateLimit()
+            Assert::same($app->getRateLimit(), null);
+
+            // getView()
+            Assert::same($app->getView(), null);
+
+            // getUserGroup()
+            Assert::same($app->getUserGroup(), null);
+
+            // getUID()
+            Assert::same($app->getUID(), '5d93b9f0de6d0b30934db74b6d877154d704f562ad5bb88002409d51db5345c1');
+
+            // getUIDstring()
+            Assert::same($app->getUIDstring(), 'CLI__127.0.0.1');
         }
 
         echo "Unit testing finished in: " . round((float) \Tracy\Debugger::timer("UNIT") * 1000, 2) . " ms";

@@ -25,8 +25,10 @@ use ParagonIE\Halite\KeyFactory;
 
 interface IPresenter
 {
+    // UT = Unit Tested
+
     /** Message Adders */
-    public function addCritical($message); # Unit Tested
+    public function addCritical($message); # UT
     public function addError($message); # UT
     public function addMessage($message); # UT
     public function addAuditMessage($message); # UT
@@ -46,12 +48,12 @@ interface IPresenter
     public function getLocale($locale);
     public function getMatch();
     public function getPresenter();
-    public function getRateLimit();
+    public function getRateLimit(); # UT
     public function getRouter();
-    public function getUID();
-    public function getUIDstring();
-    public function getUserGroup();
-    public function getView();
+    public function getUID(); # UT
+    public function getUIDstring(); # UT
+    public function getUserGroup(); # UT
+    public function getView(); # UT
 
     /** General Functionality Checks */
     public function checkLocales($force);
