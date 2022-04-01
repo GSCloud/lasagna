@@ -2,9 +2,10 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -13,14 +14,18 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
 
 /**
- * Core Presenter
+ * Core Presenter class
+ * 
+ * @package GSC
  */
 class CorePresenter extends APresenter
 {
     /**
-     * Main controller
-     *
-     * @return void
+     * Controller processor
+     * 
+     * @param mixed $view (optional)
+     * @param mixed $match (optional)
+     * @return self
      */
     public function process($view = null, $match = null)
     {
@@ -28,6 +33,8 @@ class CorePresenter extends APresenter
         $presenter = $this->getPresenter();
         $match = $match ?? $this->getMatch(); // can be passed as an optional parameter
         $view = $view ?? $this->getView(); // can be passed as an optional parameter
+
+        // JSON extras
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
@@ -399,6 +406,7 @@ class CorePresenter extends APresenter
 
         // no luck...
         ErrorPresenter::getInstance()->process(404);
+        exit;
     }
 
     /**
@@ -412,9 +420,9 @@ class CorePresenter extends APresenter
         $lang = \substr(\strtolower((string) $lang), 0, 2);
         if (!\in_array($lang, [
             "cs",
-            //"de",
             "en",
             "sk",
+            //"de",
         ])) {
             $lang = "en";
         }

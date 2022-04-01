@@ -3,17 +3,17 @@ Search.appendIndex(
                 {
             "fqsen": "\\GSC\\AdminPresenter",
             "name": "AdminPresenter",
-            "summary": "Admin\u0020Presenter",
+            "summary": "Admin\u0020Presenter\u0020class",
             "url": "classes/GSC-AdminPresenter.html"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-AdminPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildNonce\u0028\u0029",
             "name": "rebuildNonce",
-            "summary": "Rebuild\u0020identity\u0020nonce",
+            "summary": "Rebuild\u0020the\u0020identity\u0020nonce",
             "url": "classes/GSC-AdminPresenter.html#method_rebuildNonce"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AisLocalAdmin\u0028\u0029",
@@ -23,22 +23,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildAdminKey\u0028\u0029",
             "name": "rebuildAdminKey",
-            "summary": "Rebuild\u0020admin\u0020key",
+            "summary": "Rebuild\u0020the\u0020admin\u0020key",
             "url": "classes/GSC-AdminPresenter.html#method_rebuildAdminKey"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003ArebuildSecureKey\u0028\u0029",
             "name": "rebuildSecureKey",
-            "summary": "Rebuild\u0020secure\u0020key",
+            "summary": "Rebuild\u0020the\u0020secure\u0020key",
             "url": "classes/GSC-AdminPresenter.html#method_rebuildSecureKey"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AflushCache\u0028\u0029",
             "name": "flushCache",
-            "summary": "Flush\u0020cache",
+            "summary": "Flush\u0020the\u0020cache",
             "url": "classes/GSC-AdminPresenter.html#method_flushCache"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AunauthorizedAccess\u0028\u0029",
             "name": "unauthorizedAccess",
-            "summary": "Unauthorized\u0020access",
+            "summary": "End\u0020program\u0020execution\u0020with\u0020HTTP\u0020error\u0020401",
             "url": "classes/GSC-AdminPresenter.html#method_unauthorizedAccess"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AdecorateLogs\u0028\u0029",
@@ -48,17 +48,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AcreateAdminKey\u0028\u0029",
             "name": "createAdminKey",
-            "summary": "Create\u0020admin\u0020key",
+            "summary": "Create\u0020the\u0020admin\u0020key",
             "url": "classes/GSC-AdminPresenter.html#method_createAdminKey"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AreadAdminKey\u0028\u0029",
             "name": "readAdminKey",
-            "summary": "Read\u0020admin\u0020key",
+            "summary": "Read\u0020the\u0020admin\u0020key",
             "url": "classes/GSC-AdminPresenter.html#method_readAdminKey"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AcreateThumbnail\u0028\u0029",
             "name": "createThumbnail",
-            "summary": "Create\u0020thumbnail\u0020from\u0020source\u0020image\u0020if\u0020possible",
+            "summary": "Create\u0020thumbnail\u0020from\u0020the\u0020source\u0020image",
             "url": "classes/GSC-AdminPresenter.html#method_createThumbnail"
         },                {
             "fqsen": "\\GSC\\AdminPresenter\u003A\u003AADMIN_KEY",
@@ -108,12 +108,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\AndroidPresenter",
             "name": "AndroidPresenter",
-            "summary": "Android\u0020Presenter",
+            "summary": "Android\u0020Presenter\u0020class",
             "url": "classes/GSC-AndroidPresenter.html"
         },                {
             "fqsen": "\\GSC\\AndroidPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-AndroidPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\ApiPresenter",
@@ -163,12 +163,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\APresenter",
             "name": "APresenter",
-            "summary": "",
+            "summary": "Abstract\u0020Presenter\u0020class",
             "url": "classes/GSC-APresenter.html"
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Abstract\u0020processor",
+            "summary": "Abstract\u0020Processor",
             "url": "classes/GSC-APresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003A__construct\u0028\u0029",
@@ -463,7 +463,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003AgetNonce\u0028\u0029",
             "name": "getNonce",
-            "summary": "Nonce\u0020generator",
+            "summary": "Nonce\u0020string\u0020generator",
             "url": "classes/GSC-APresenter.html#method_getNonce"
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003ALOG_FILEMODE",
@@ -638,7 +638,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AaddCritical\u0028\u0029",
             "name": "addCritical",
-            "summary": "message\u0020adders",
+            "summary": "Message\u0020Adders",
             "url": "classes/GSC-IPresenter.html#method_addCritical"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AaddError\u0028\u0029",
@@ -658,7 +658,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCriticals\u0028\u0029",
             "name": "getCriticals",
-            "summary": "message\u0020getters",
+            "summary": "Message\u0020Getters",
             "url": "classes/GSC-IPresenter.html#method_getCriticals"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetErrors\u0028\u0029",
@@ -673,7 +673,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCfg\u0028\u0029",
             "name": "getCfg",
-            "summary": "general\u0020getters",
+            "summary": "General\u0020Getters",
             "url": "classes/GSC-IPresenter.html#method_getCfg"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetCookie\u0028\u0029",
@@ -748,7 +748,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AcheckLocales\u0028\u0029",
             "name": "checkLocales",
-            "summary": "general\u0020checks",
+            "summary": "General\u0020Functionality\u0020Checks",
             "url": "classes/GSC-IPresenter.html#method_checkLocales"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AcheckPermission\u0028\u0029",
@@ -763,7 +763,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AsetCookie\u0028\u0029",
             "name": "setCookie",
-            "summary": "general\u0020setters",
+            "summary": "General\u0020Setters",
             "url": "classes/GSC-IPresenter.html#method_setCookie"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AsetData\u0028\u0029",
@@ -828,7 +828,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AclearCookie\u0028\u0029",
             "name": "clearCookie",
-            "summary": "various\u0020tools",
+            "summary": "Various\u0020Tools",
             "url": "classes/GSC-IPresenter.html#method_clearCookie"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AcloudflarePurgeCache\u0028\u0029",
@@ -873,12 +873,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "abstract\u0020method\u0020used\u0020in\u0020controllers",
+            "summary": "Abstract\u0020Methods",
             "url": "classes/GSC-IPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetInstance\u0028\u0029",
             "name": "getInstance",
-            "summary": "singleton\u0020instances",
+            "summary": "Singleton\u0020Instances",
             "url": "classes/GSC-IPresenter.html#method_getInstance"
         },                {
             "fqsen": "\\GSC\\IPresenter\u003A\u003AgetTestInstance\u0028\u0029",
@@ -888,32 +888,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\ArticlePresenter",
             "name": "ArticlePresenter",
-            "summary": "Article\u0020Presenter",
+            "summary": "Article\u0020Presenter\u0020class",
             "url": "classes/GSC-ArticlePresenter.html"
         },                {
             "fqsen": "\\GSC\\ArticlePresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-ArticlePresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\CiTester",
             "name": "CiTester",
-            "summary": "",
+            "summary": "Continuous\u0020Integration\u0020Tester\u0020class",
             "url": "classes/GSC-CiTester.html"
         },                {
             "fqsen": "\\GSC\\CiTester\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-CiTester.html#method___construct"
         },                {
             "fqsen": "\\GSC\\CliPresenter",
             "name": "CliPresenter",
-            "summary": "CLI\u0020Presenter",
+            "summary": "CLI\u0020Presenter\u0020class",
             "url": "classes/GSC-CliPresenter.html"
         },                {
             "fqsen": "\\GSC\\CliPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-CliPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\CliPresenter\u003A\u003Ashow\u0028\u0029",
@@ -948,12 +948,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\CorePresenter",
             "name": "CorePresenter",
-            "summary": "Core\u0020Presenter",
+            "summary": "Core\u0020Presenter\u0020class",
             "url": "classes/GSC-CorePresenter.html"
         },                {
             "fqsen": "\\GSC\\CorePresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-CorePresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\CorePresenter\u003A\u003AvalidateLanguage\u0028\u0029",
@@ -963,12 +963,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\Doctor",
             "name": "Doctor",
-            "summary": "Doctor",
+            "summary": "Doctor\u0020CLI\u0020class",
             "url": "classes/GSC-Doctor.html"
         },                {
             "fqsen": "\\GSC\\Doctor\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Doctor\u0020constructor",
+            "summary": "Doctor\u0020CLI\u0020Constructor",
             "url": "classes/GSC-Doctor.html#method___construct"
         },                {
             "fqsen": "\\GSC\\Doctor\u003A\u003Aisreadable\u0028\u0029",
@@ -988,7 +988,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\Doctor\u003A\u003Avalidate\u0028\u0029",
             "name": "validate",
-            "summary": "Validate",
+            "summary": "Validate\u0020something",
             "url": "classes/GSC-Doctor.html#method_validate"
         },                {
             "fqsen": "\\GSC\\Doctor\u003A\u003A\u0024errors",
@@ -998,12 +998,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\ErrorPresenter",
             "name": "ErrorPresenter",
-            "summary": "Error\u0020Presenter",
+            "summary": "Error\u0020Presenter\u0020class",
             "url": "classes/GSC-ErrorPresenter.html"
         },                {
             "fqsen": "\\GSC\\ErrorPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-ErrorPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\ErrorPresenter\u003A\u003ACODESET",
@@ -1013,12 +1013,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\HomePresenter",
             "name": "HomePresenter",
-            "summary": "Home\u0020Presenter",
+            "summary": "Home\u0020Presenter\u0020class",
             "url": "classes/GSC-HomePresenter.html"
         },                {
             "fqsen": "\\GSC\\HomePresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-HomePresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\HomePresenter\u003A\u003ASendAnalytics\u0028\u0029",
@@ -1028,22 +1028,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\LoginPresenter",
             "name": "LoginPresenter",
-            "summary": "Login\u0020Presenter",
+            "summary": "Login\u0020Presenter\u0020class",
             "url": "classes/GSC-LoginPresenter.html"
         },                {
             "fqsen": "\\GSC\\LoginPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-LoginPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\LogoutPresenter",
             "name": "LogoutPresenter",
-            "summary": "Logout\u0020Presenter",
+            "summary": "Logout\u0020Presenter\u0020class",
             "url": "classes/GSC-LogoutPresenter.html"
         },                {
             "fqsen": "\\GSC\\LogoutPresenter\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Main\u0020controller",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-LogoutPresenter.html#method_process"
         },                {
             "fqsen": "\\GSC\\RSSPresenter",
@@ -1058,7 +1058,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\StringFilters",
             "name": "StringFilters",
-            "summary": "String\u0020filters\u0020\u002D\u0020modify\u0020content\u0020passed\u0020by\u0020a\u0020reference",
+            "summary": "String\u0020Filters\u0020class",
             "url": "classes/GSC-StringFilters.html"
         },                {
             "fqsen": "\\GSC\\StringFilters\u003A\u003Aconvert_eol_to_br\u0028\u0029",
@@ -1118,7 +1118,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IStringFilters",
             "name": "IStringFilters",
-            "summary": "String\u0020filters\u0020interface",
+            "summary": "String\u0020Filters\u0020interface",
             "url": "classes/GSC-IStringFilters.html"
         },                {
             "fqsen": "\\GSC\\IStringFilters\u003A\u003Aconvert_eol_to_br\u0028\u0029",
@@ -1158,32 +1158,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\CliDemo",
             "name": "CliDemo",
-            "summary": "CLI\u0020Demo",
+            "summary": "CLI\u0020Demo\u0020class",
             "url": "classes/GSC-CliDemo.html"
         },                {
             "fqsen": "\\GSC\\CliDemo\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Constructor",
+            "summary": "Controller\u0020constructor",
             "url": "classes/GSC-CliDemo.html#method___construct"
         },                {
             "fqsen": "\\GSC\\CliDemo\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Processor",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-CliDemo.html#method_process"
         },                {
             "fqsen": "\\GSC\\CliVersion",
             "name": "CliVersion",
-            "summary": "CLI\u0020Version",
+            "summary": "CLI\u0020Version\u0020class",
             "url": "classes/GSC-CliVersion.html"
         },                {
             "fqsen": "\\GSC\\CliVersion\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Class\u0020constructor",
+            "summary": "Controller\u0020constructor",
             "url": "classes/GSC-CliVersion.html#method___construct"
         },                {
             "fqsen": "\\GSC\\CliVersion\u003A\u003Aprocess\u0028\u0029",
             "name": "process",
-            "summary": "Show\u0020version\u0020information\u0020as\u0020JSON\u0020formatted\u0020string",
+            "summary": "Controller\u0020processor",
             "url": "classes/GSC-CliVersion.html#method_process"
         },                {
             "fqsen": "\\",

@@ -2,22 +2,25 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
 
 /**
- * Android Presenter
+ * Android Presenter class
+ * 
+ * @package GSC
  */
 class AndroidPresenter extends APresenter
 {
     /**
-     * Main controller
+     * Controller processor
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function process()
     {

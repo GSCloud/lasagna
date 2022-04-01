@@ -2,9 +2,10 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -13,19 +14,21 @@ use Cake\Cache\Cache;
 use League\CLImate\CLImate;
 
 /**
- * CLI Presenter
+ * CLI Presenter class
+ * 
+ * @package GSC
  */
 class CliPresenter extends APresenter
 {
     /**
-     * Main controller
+     * Controller processor
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function process()
     {
         $climate = new CLImate;
-        $climate->out("\n<bold><green>Tesseract CLI</green></bold>\tapp: "
+        $climate->out("<bold><green>Tesseract CLI</green></bold>\tapp: "
             . $this->getData("VERSION_SHORT")
             . " (" . str_replace(" ", "", $this->getData("VERSION_DATE")) . ")\n");
         return $this;
@@ -86,7 +89,7 @@ class CliPresenter extends APresenter
     /**
      * Display user defined constants
      *
-     * @return object Singleton instance
+     * @return self
      */
     private function showConst()
     {
@@ -100,7 +103,7 @@ class CliPresenter extends APresenter
     /**
      * Display CLI help
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function help()
     {
@@ -127,12 +130,13 @@ class CliPresenter extends APresenter
      * @param object this object
      * @param int ARGC
      * @param array ARGV
-     * @return object Singleton instance
+     * @return self
      */
     private function evaler($app, $argc, $argv)
     {
         $climate = new CLImate;
-        if ($argc != 3) { // show examples
+        if ($argc != 3) {
+            // show examples
             $climate->out("Examples:");
             $climate->out("\t" . '<bold>app</bold> \'$app->showConst()\'');
             $climate->out("\t" . '<bold>app</bold> \'dump($app->getCurrentUser())\'');
@@ -143,7 +147,7 @@ class CliPresenter extends APresenter
         } else {
             $code = trim($argv[2]) . ';';
             try {
-                //error_reporting(0);
+                error_reporting(0);
                 eval($code);
             } catch (ParseError $e) {
                 echo 'Caught exception: ' . $e->getMessage() . "\n";
@@ -239,6 +243,7 @@ class CliPresenter extends APresenter
                     exit;
                 }
                 $this->help();
+                return $this;
                 break;
         }
     }

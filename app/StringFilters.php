@@ -2,15 +2,20 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
 
 /**
- * String filters interface
+ * String Filters interface
+ * 
+ * Modify string content passed by a reference to fix common problems.
+ * 
+ * @package GSC
  */
 interface IStringFilters
 {
@@ -22,7 +27,11 @@ interface IStringFilters
 }
 
 /**
- * String filters - modify content passed by a reference
+ * String Filters class
+ * 
+ * Modify string content passed by a reference to fix common problems.
+ * 
+ * @package GSC
  */
 class StringFilters implements IStringFilters
 {
@@ -111,6 +120,7 @@ class StringFilters implements IStringFilters
     ];
 
     public static $array_replace_czech = [
+        " " => "xxx",
         "  " => " ",
         " % " => "&nbsp;%",
         " - " => " – ",
@@ -265,7 +275,7 @@ class StringFilters implements IStringFilters
     /**
      * Convert EOLs to <br>
      *
-     * @param string $content (by reference)
+     * @param string $content content by reference
      * @return void
      */
     public static function convert_eol_to_br(&$content)
@@ -283,7 +293,7 @@ class StringFilters implements IStringFilters
     /**
      * Convert EOL + hyphen/star to HTML
      *
-     * @param string $content (by reference)
+     * @param string $content content by reference
      * @return void
      */
     public static function convert_eolhyphen_to_brdot(&$content)
@@ -308,7 +318,7 @@ class StringFilters implements IStringFilters
     /**
      * Trim various EOL combinations
      *
-     * @param string $content (by reference)
+     * @param string $content content by reference
      * @return void
      */
     public static function trim_eol(&$content)
@@ -327,7 +337,7 @@ class StringFilters implements IStringFilters
     /**
      * Trim THML comments
      *
-     * @param string $content (by reference)
+     * @param string $content content by reference
      * @return void
      */
     public static function trim_html_comment(&$content)
@@ -354,15 +364,17 @@ class StringFilters implements IStringFilters
 
     /**
      * Correct text spacing
+     * 
+     * Correct the text spacing in passed content for various languages.
      *
-     * @param string $content (by reference)
+     * @param string $content content by reference
      * @param string $language (optional: "cs", "en" - for now)
      * @return void
      */
     public static function correct_text_spacing(&$content, $language = "en")
     {
         if (!is_string($content)) {
-            return;
+            return $content;
         }
 
         $language = strtolower(trim((string) $language));
@@ -370,11 +382,9 @@ class StringFilters implements IStringFilters
             case "sk":
                 $content = self::correct_text_spacing_sk($content);
                 break;
-
             case "cs":
                 $content = self::correct_text_spacing_cs($content);
                 break;
-
             default:
                 $content = self::correct_text_spacing_en($content);
         }
@@ -386,10 +396,10 @@ class StringFilters implements IStringFilters
      * @param string $content textual data
      * @return string
      */
-    private static function correct_text_spacing_en($content)
+    private static function correct_text_spacing_en($content = null)
     {
         if (!is_string($content)) {
-            return;
+            return $content;
         }
 
         return str_replace(array_keys(self::$array_replace_english), self::$array_replace_english, $content);
@@ -401,10 +411,10 @@ class StringFilters implements IStringFilters
      * @param string $content textual data
      * @return string
      */
-    private static function correct_text_spacing_cs($content)
+    private static function correct_text_spacing_cs($content = null)
     {
         if (!is_string($content)) {
-            return;
+            return $content;
         }
 
         return str_replace(array_keys(self::$array_replace_czech), self::$array_replace_czech, $content);
@@ -416,10 +426,10 @@ class StringFilters implements IStringFilters
      * @param string $content textual data
      * @return string
      */
-    private static function correct_text_spacing_sk($content)
+    private static function correct_text_spacing_sk($content = null)
     {
         if (!is_string($content)) {
-            return;
+            return $content;
         }
 
         return str_replace(array_keys(self::$array_replace_slovak), self::$array_replace_slovak, $content);

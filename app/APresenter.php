@@ -1,9 +1,9 @@
 <?php
 /**
- * GSC Tesseract LASAGNA
+ * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
@@ -25,18 +25,18 @@ use ParagonIE\Halite\KeyFactory;
 
 interface IPresenter
 {
-    /** message adders */
+    /** Message Adders */
     public function addCritical($message);
     public function addError($message);
     public function addMessage($message);
     public function addAuditMessage($message);
 
-    /** message getters */
+    /** Message Getters */
     public function getCriticals();
     public function getErrors();
     public function getMessages();
 
-    /** general getters */
+    /** General Getters */
     public function getCfg($key);
     public function getCookie($name);
     public function getCurrentUser();
@@ -53,12 +53,12 @@ interface IPresenter
     public function getUserGroup();
     public function getView();
 
-    /** general checks */
+    /** General Functionality Checks */
     public function checkLocales($force);
     public function checkPermission($roleslist);
     public function checkRateLimit($maximum);
 
-    /** general setters */
+    /** General Setters */
     public function setCookie($name, $data);
     public function setData($data, $value);
     public function setForceCsvCheck();
@@ -73,7 +73,7 @@ interface IPresenter
     public function setIdentity($identity);
     public function setLocation($locationm, $code);
 
-    /** various tools */
+    /** Various Tools */
     public function clearCookie($name);
     public function cloudflarePurgeCache($cf);
     public function dataExpander(&$data);
@@ -84,14 +84,19 @@ interface IPresenter
     public function renderHTML($template);
     public function writeJsonData($data, $headers = [], $switches = null);
 
-    /** abstract method used in controllers */
+    /** Abstract Methods */
     public function process();
 
-    /** singleton instances */
+    /** Singleton Instances */
     public static function getInstance();
-    public static function getTestInstance(); // for testing
+    public static function getTestInstance(); // for testing purposes only
 }
 
+/**
+ * Abstract Presenter class
+ * 
+ * @package GSC
+ */
 abstract class APresenter implements IPresenter
 {
     /** @var integer Octal file mode for logs */
@@ -100,13 +105,13 @@ abstract class APresenter implements IPresenter
     /** @var integer Octal file mode for CSV */
     const CSV_FILEMODE = 0664;
 
-    /** @var integer CSV min. file size :) */
+    /** @var integer CSV min. file size - something meaningful :) */
     const CSV_MIN_SIZE = 42;
 
     /** @var integer Octal file mode for cookie secret */
     const COOKIE_KEY_FILEMODE = 0600;
 
-    /** @var integer Cookie time to live */
+    /** @var integer Cookie time to live in seconds */
     const COOKIE_TTL = 86400 * 31;
 
     /** @var string Google CSV URL prefix */
@@ -121,14 +126,14 @@ abstract class APresenter implements IPresenter
     /** @var string Google Sheet URL postfix */
     const GS_SHEET_POSTFIX = "/edit#gid=0";
 
-    /** @var integer Access limiter max.  hits */
+    /** @var integer Access limiter maximum hits */
     const LIMITER_MAXIMUM = 100;
 
     /** @var string Identity nonce filename */
     const IDENTITY_NONCE = "identity_nonce.key";
 
 
-    // GOOGLE TEMPLATES
+    // VARIOUS GOOGLE TEMPLATES - TBD
 
     /** @var string */
     const GOOGLE_DOCUMENT_EXPORT_DOC =
@@ -185,7 +190,7 @@ abstract class APresenter implements IPresenter
 
     // PRIVATE VARIABLES
 
-    /** @var array Model */
+    /** @var array Data Model */
     private $data = [];
 
     /** @var array Messages */
@@ -200,7 +205,7 @@ abstract class APresenter implements IPresenter
     /** @var array User Identity */
     private $identity = [];
 
-    /** @var boolean Whether to re-check locales? */
+    /** @var boolean Re-check locales in destructor? */
     private $force_csv_check = false;
 
     /** @var array CSV Keys */
@@ -213,10 +218,10 @@ abstract class APresenter implements IPresenter
     private static $instances = [];
 
     /**
-     * Abstract processor
+     * Abstract Processor
      *
      * @abstract
-     * @return void
+     * @return self
      */
     abstract public function process();
 
@@ -226,6 +231,7 @@ abstract class APresenter implements IPresenter
     private function __construct()
     {
         $class = get_called_class();
+        // throw an exception if class is already instantiated
         if (array_key_exists($class, self::$instances)) {
             throw new \Exception("INSTANCE OF [" . $class . "] ALREADY EXISTS!");
         }
@@ -278,7 +284,7 @@ abstract class APresenter implements IPresenter
     /**
      * Object to string
      *
-     * @return string Serialized JSON model
+     * @return string Serialized JSON data model
      */
     public function __toString()
     {
@@ -290,10 +296,10 @@ abstract class APresenter implements IPresenter
      */
     public function __destruct()
     {
-        if (ob_get_level()) { // clear outbut buffering
-            @ob_end_flush();
+        if (\ob_get_level()) { // clear outbut buffering
+            @\ob_end_flush();
         }
-        ob_start();
+        \ob_start();
 
         // preload CSV definitions
         foreach ($this->csv_postload as $key) {
@@ -320,6 +326,7 @@ abstract class APresenter implements IPresenter
         defined("TESSERACT_STOP") || define("TESSERACT_STOP", ((float) $usec + (float) $sec));
         $add = "; processing: " . \round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . " ms"
             . "; request_uri: " . ($_SERVER["REQUEST_URI"] ?? "N/A");
+
         $google_logger = null;
         try {
             if (\count($criticals) + \count($errors) + \count($messages)) {
@@ -367,7 +374,7 @@ abstract class APresenter implements IPresenter
      *
      * @static
      * @final
-     * @return object Singleton instance
+     * @return self
      */
     final public static function getInstance()
     {
@@ -498,7 +505,7 @@ abstract class APresenter implements IPresenter
      *
      * @param mixed $data array / key
      * @param mixed $value
-     * @return object Singleton instance
+     * @return self
      */
     public function setData($data = null, $value = null)
     {
@@ -549,7 +556,7 @@ abstract class APresenter implements IPresenter
      * Add audit message
      *
      * @param string $message Message string
-     * @return object Singleton instance
+     * @return self
      */
     public function addAuditMessage($message = null)
     {
@@ -584,7 +591,7 @@ abstract class APresenter implements IPresenter
      * Add info message
      *
      * @param string $message Message string
-     * @return object Singleton instance
+     * @return self
      */
     public function addMessage($message = null)
     {
@@ -598,7 +605,7 @@ abstract class APresenter implements IPresenter
      * Add error message
      *
      * @param string $message Error string
-     * @return object Singleton instance
+     * @return self
      */
     public function addError($message = null)
     {
@@ -613,7 +620,7 @@ abstract class APresenter implements IPresenter
      * Add critical message
      *
      * @param string $message Critical error string
-     * @return object Singleton instance
+     * @return self
      */
     public function addCritical($message = null)
     {
@@ -665,7 +672,7 @@ abstract class APresenter implements IPresenter
      * Set user identity
      *
      * @param array $identity Identity array
-     * @return object Singleton instance
+     * @return self
      */
     public function setIdentity($identity = [])
     {
@@ -903,7 +910,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for CSV content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderCsv()
     {
@@ -914,7 +921,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for binary content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderFile()
     {
@@ -925,7 +932,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for HTML content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderHtml()
     {
@@ -936,7 +943,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for JSON content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderJson()
     {
@@ -947,7 +954,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for JSON content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderJavaScript()
     {
@@ -958,7 +965,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for PDF content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderPdf()
     {
@@ -969,7 +976,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for TEXT content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderText()
     {
@@ -980,7 +987,7 @@ abstract class APresenter implements IPresenter
     /**
      * Set HTTP header for XML content
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function setHeaderXML()
     {
@@ -1020,7 +1027,7 @@ abstract class APresenter implements IPresenter
      *
      * @param string $name Cookie name
      * @param string $data Cookie data
-     * @return object Singleton instance
+     * @return self
      */
     public function setCookie($name, $data)
     {
@@ -1120,7 +1127,7 @@ abstract class APresenter implements IPresenter
      * Check current user rate limits
      *
      * @param integer $max Hits per second (optional)
-     * @return object Singleton instance
+     * @return self
      */
     public function checkRateLimit($max = self::LIMITER_MAXIMUM)
     {
@@ -1160,7 +1167,7 @@ abstract class APresenter implements IPresenter
      * Check if current user has access rights
      *
      * @param mixed $rolelist roles (optional)
-     * @return object Singleton instance
+     * @return self
      */
     public function checkPermission($rolelist = "admin")
     {
@@ -1221,7 +1228,7 @@ abstract class APresenter implements IPresenter
      * Force CSV checking
      *
      * @param boolean $set True to force CSV check (optional)
-     * @return object Singleton instance
+     * @return self
      */
     public function setForceCsvCheck($set = true)
     {
@@ -1233,7 +1240,7 @@ abstract class APresenter implements IPresenter
      * Post-load CSV data
      *
      * @param mixed $key string / array to be merged
-     * @return object Singleton instance
+     * @return self
      */
     public function postloadAppData($key)
     {
@@ -1355,7 +1362,7 @@ abstract class APresenter implements IPresenter
      * Check and preload locales
      *
      * @param boolean $force force loading locales (optional)
-     * @return object Singleton instance
+     * @return self
      */
     public function checkLocales($force = false)
     {
@@ -1372,7 +1379,7 @@ abstract class APresenter implements IPresenter
      * Purge Cloudflare cache
      *
      * @var array $cf Cloudflare authentication array
-     * @return object Singleton instance
+     * @return self
      */
     public function CloudflarePurgeCache($cf)
     {
@@ -1414,7 +1421,7 @@ abstract class APresenter implements IPresenter
      * @param string $name CSV nickname (foobar)
      * @param string $csvkey Google CSV token (partial or full URI to CSV export endpoint)
      * @param boolean $force force the resource refresh? (optional)
-     * @return object Singleton instance
+     * @return self
      */
     private function csv_preloader($name, $csvkey, $force = false)
     {
@@ -1481,7 +1488,7 @@ abstract class APresenter implements IPresenter
      *
      * @param string Configuration array name (optional)
      * @param boolean force load? (optional)
-     * @return object Singleton instance
+     * @return self
      */
     public function preloadAppData($key = "app_data", $force = false)
     {
@@ -1550,7 +1557,7 @@ abstract class APresenter implements IPresenter
      * @param array $data integer error code / array of data
      * @param array $headers array of extra data (optional)
      * @param mixed $switches JSON encoder switches
-     * @return object Singleton instance
+     * @return self
      */
     public function writeJsonData($data, $headers = [], $switches = null)
     {
@@ -1676,7 +1683,7 @@ abstract class APresenter implements IPresenter
      * Data Expander
      *
      * @param array $data Model by reference
-     * @return object Singleton instance
+     * @return self
      */
     public function dataExpander(&$data)
     {
@@ -1736,13 +1743,12 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Nonce generator
+     * Nonce string generator
      *
      * @return string nonce (number used once)
      */
-    private function getNonce()
+    public function getNonce()
     {
         return (string) \substr(\hash("sha256", \random_bytes(16) . (string) \time()), 0, 16);
     }
-
 }

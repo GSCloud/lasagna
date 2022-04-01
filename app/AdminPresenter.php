@@ -2,9 +2,10 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -14,23 +15,37 @@ use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 
 /**
- * Admin Presenter
+ * Admin Presenter class
+ * 
+ * @package GSC
  */
 class AdminPresenter extends APresenter
 {
-    /** @var string administration token key filename, stored in data/ */
+    /** @var string admin key filename */
     const ADMIN_KEY = "admin.key";
 
     /** @var string thumbnail prefix */
     const THUMB_PREFIX32 = ".thumb_32px_";
+
+    /** @var string thumbnail prefix */
     const THUMB_PREFIX50 = ".thumb_50px_";
+
+    /** @var string thumbnail prefix */
     const THUMB_PREFIX64 = ".thumb_64px_";
+
+    /** @var string thumbnail prefix */
     const THUMB_PREFIX128 = ".thumb_128px_";
+
+    /** @var string thumbnail prefix */
     const THUMB_PREFIX150 = ".thumb_150px_";
+
+    /** @var string thumbnail prefix */
     const THUMB_PREFIX320 = ".thumb_320px_";
+
+    /** @var string thumbnail prefix */
     const THUMB_PREFIX512 = ".thumb_512px_";
 
-    /** @var array image constants */
+    /** @var array image constants by image type */
     const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
             "load" => "imagecreatefromjpeg",
@@ -58,9 +73,9 @@ class AdminPresenter extends APresenter
     ];
 
     /**
-     * Main controller
+     * Controller processor
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function process()
     {
@@ -595,9 +610,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Rebuild identity nonce
+     * Rebuild the identity nonce
      *
-     * @return object Singleton instance
+     * @return self
      */
     private function rebuildNonce()
     {
@@ -611,7 +626,7 @@ class AdminPresenter extends APresenter
     /**
      * Check if call is made by a local administrator
      *
-     * @return boolean Is there a local administrator?
+     * @return boolean is there a local administrator?
      */
     private function isLocalAdmin()
     {
@@ -630,9 +645,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Rebuild admin key
+     * Rebuild the admin key
      *
-     * @return object Singleton instance
+     * @return self
      */
     private function rebuildAdminKey()
     {
@@ -643,9 +658,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Rebuild secure key
+     * Rebuild the secure key
      *
-     * @return object Singleton instance
+     * @return self
      */
     private function rebuildSecureKey()
     {
@@ -662,9 +677,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Flush cache
+     * Flush the cache
      *
-     * @return object Singleton instance
+     * @return self
      */
     private function flushCache()
     {
@@ -699,9 +714,7 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Unauthorized access
-     *
-     * @return void
+     * End program execution with HTTP error 401
      */
     private function unauthorizedAccess()
     {
@@ -733,9 +746,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Create admin key
+     * Create the admin key
      *
-     * @return object Singleton instance
+     * @return self
      */
     private function createAdminKey()
     {
@@ -754,7 +767,7 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Read admin key
+     * Read the admin key
      *
      * @return string admin key
      */
@@ -771,12 +784,13 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Create thumbnail from source image if possible
+     * Create thumbnail from the source image
      *
      * @param $src file source
      * @param $dest file target
      * @param $targetWidth output width
      * @param $targetHeight output height or null
+     * @return mixed image conversion call result
      */
     private function createThumbnail($src, $dest, $targetWidth = null, $targetHeight = null)
     {

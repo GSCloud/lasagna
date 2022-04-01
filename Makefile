@@ -67,6 +67,7 @@ sync:
 	@bash ./bin/sync.sh b
 	@bash ./bin/sync.sh a
 test:
+	@bash ./cli.sh unit
 	@bash ./cli.sh local
 prod:
 	@bash ./cli.sh prod

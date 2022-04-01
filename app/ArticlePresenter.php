@@ -2,9 +2,10 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -12,15 +13,16 @@ namespace GSC;
 use Cake\Cache\Cache;
 
 /**
- * Article Presenter
+ * Article Presenter class
+ * 
+ * @package GSC
  */
 class ArticlePresenter extends APresenter
 {
-
     /**
-     * Main controller
+     * Controller processor
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function process()
     {
@@ -60,7 +62,6 @@ class ArticlePresenter extends APresenter
             Cache::write($cache_key, $output, "page");
         }
 
-        // save output to model
         return $this->setData("output", $output);
     }
 }

@@ -2,8 +2,8 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
@@ -15,7 +15,7 @@ use Google\Cloud\Logging\LoggingClient;
 use Monolog\Logger;
 use Nette\Neon\Neon;
 
-// SANITY CHECK - CONSTANTS
+// SANITY CHECK
 foreach (["APP", "CACHE", "DATA", "DS", "LOGS", "ROOT", "TEMP", "ENABLE_CSV_CACHE"] as $x) {
     defined($x) || die("FATAL ERROR: sanity check for constant '$x' failed!");
 }
@@ -421,4 +421,4 @@ if (DEBUG) {
     bdump($data, 'model');
 }
 
-exit;
+exit(0);

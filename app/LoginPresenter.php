@@ -2,33 +2,35 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
 
 /**
- * Login Presenter
+ * Login Presenter class
+ * 
+ * @package GSC
  */
 class LoginPresenter extends APresenter
 {
     /**
-     * Main controller
+     * Controller processor
      *
      * @return void
      */
     public function process()
     {
-        if (ob_get_level()) {
-            @ob_end_clean();
+        if (\ob_get_level()) {
+            @\ob_end_clean();
         }
         $this->checkRateLimit()->setHeaderHtml();
 
-        $cfg = $this->getCfg();
-
         // check OAuth parameters
+        $cfg = $this->getCfg();
         if (($cfg["goauth_client_id"] ?? null) === null) $this->setLocation("/err/403");
         if (($cfg["goauth_secret"] ?? null) === null) $this->setLocation("/err/403");
 
@@ -121,7 +123,8 @@ class LoginPresenter extends APresenter
                 $this->addError("Google OAuth: " . $e->getMessage());
             }
         }
-        // error
+
+        // display error
         $this->setLocation("/err/403");
         exit;
     }

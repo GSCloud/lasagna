@@ -2,9 +2,10 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
  */
 
 namespace GSC;
@@ -13,14 +14,16 @@ use Cake\Cache\Cache;
 use There4\Analytics\AnalyticsEvent;
 
 /**
- * Home Presenter
+ * Home Presenter class
+ * 
+ * @package GSC
  */
 class HomePresenter extends APresenter
 {
     /**
-     * Main controller
+     * Controller processor
      *
-     * @return object Singleton instance
+     * @return self
      */
     public function process()
     {
@@ -61,14 +64,13 @@ class HomePresenter extends APresenter
             Cache::write($cache_key, $output, "page");
         }
 
-        // save output to model
         return $this->setData("output", $output);
     }
 
     /**
      * Send Google Analytics events
      *
-     * @return object Singleton instance.
+     * @return self
      */
     public function SendAnalytics()
     {
@@ -79,6 +81,7 @@ class HomePresenter extends APresenter
             $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "N/A");
             @$events->trackEvent((string) ($this->getCfg("app") ?? "APP"), "country_code", $country);
         }
+
         return $this;
     }
 }
