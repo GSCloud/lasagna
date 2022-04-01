@@ -120,7 +120,6 @@ class StringFilters implements IStringFilters
     ];
 
     public static $array_replace_czech = [
-        " " => "xxx",
         "  " => " ",
         " % " => "&nbsp;%",
         " - " => " – ",
