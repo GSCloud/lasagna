@@ -391,8 +391,9 @@ class AdminPresenter extends APresenter
                 if ($user["id"] ?? null && $key) {
                     $hashid = \hash("sha256", $user["id"]);
                     $code = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . \hash("sha256", $key . $hashid);
-                    $this->addMessage("[$user] got UPDATE TOKEN");
-                    $this->addAuditMessage("[$user] got UPDATE TOKEN");
+                    $name = $user["name"] ?? "Unknown user";
+                    $this->addMessage("[$name] got UPDATE TOKEN");
+                    $this->addAuditMessage("[$name] got UPDATE TOKEN");
                     return $this->writeJsonData($code, $extras);
                 }
                 $this->unauthorizedAccess();
@@ -408,8 +409,8 @@ class AdminPresenter extends APresenter
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildAdminKey();
-                        $this->addMessage("REMOTE -> ADMIN KEY REBUILT by [$user]");
-                        $this->addAuditMessage("REMOTE -> ADMIN KEY REBUILT by [$user]");
+                        $this->addMessage("REMOTE -> ADMIN KEY REBUILT");
+                        $this->addAuditMessage("REMOTE -> ADMIN KEY REBUILT");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
@@ -429,7 +430,7 @@ class AdminPresenter extends APresenter
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->flushCache();
-                        $this->addAuditMessage("REMOTE -> CACHE FLUSHED by [$user]");
+                        $this->addAuditMessage("REMOTE -> CACHE FLUSHED");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
@@ -451,7 +452,7 @@ class AdminPresenter extends APresenter
                         $this->setForceCsvCheck(true);
                         $this->postloadAppData("app_data");
                         $this->flushCache();
-                        $this->addAuditMessage("REMOTE -> CORE UPDATED by [$user]");
+                        $this->addAuditMessage("REMOTE -> CORE UPDATED");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
@@ -471,8 +472,8 @@ class AdminPresenter extends APresenter
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildNonce();
-                        $this->addMessage("REMOTE -> NEW NONCE by [$user]");
-                        $this->addAuditMessage("REMOTE -> NEW NONCE by [$user]");
+                        $this->addMessage("REMOTE -> NEW NONCE");
+                        $this->addAuditMessage("REMOTE -> NEW NONCE");
                         return $this->writeJsonData([
                             "function" => $view,
                             "host" => $_SERVER["HTTP_HOST"],
@@ -493,8 +494,8 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildSecureKey();
-                        $this->addMessage("REMOTE -> NEW SECURE KEY by [$user]");
-                        $this->addAuditMessage("REMOTE -> NEW SECURE KEY by [$user]");
+                        $this->addMessage("REMOTE -> NEW SECURE KEY");
+                        $this->addAuditMessage("REMOTE -> NEW SECURE KEY");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "function" => $view,
