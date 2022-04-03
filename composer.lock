@@ -1367,16 +1367,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.19.4",
+            "version": "v3.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "6f0a54186f133aff98f49d0f36a32d4a4f7d4cbd"
+                "reference": "c2fa02b7b39786ff9f76e3b3c1bb28a022987278"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/6f0a54186f133aff98f49d0f36a32d4a4f7d4cbd",
-                "reference": "6f0a54186f133aff98f49d0f36a32d4a4f7d4cbd",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/c2fa02b7b39786ff9f76e3b3c1bb28a022987278",
+                "reference": "c2fa02b7b39786ff9f76e3b3c1bb28a022987278",
                 "shasum": ""
             },
             "require": {
@@ -1406,9 +1406,9 @@
             ],
             "support": {
                 "issues": "https://github.com/protocolbuffers/protobuf-php/issues",
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.19.4"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.20.0"
             },
-            "time": "2022-01-28T17:23:32+00:00"
+            "time": "2022-04-01T18:03:16+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -3446,16 +3446,16 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.38",
+            "version": "v4.4.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "46c56527b2e98cfdbc5b39a1566029cbe73c9e3f"
+                "reference": "ec23fb51d9b531f7fcd2279afe5b474e624c2445"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/46c56527b2e98cfdbc5b39a1566029cbe73c9e3f",
-                "reference": "46c56527b2e98cfdbc5b39a1566029cbe73c9e3f",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/ec23fb51d9b531f7fcd2279afe5b474e624c2445",
+                "reference": "ec23fb51d9b531f7fcd2279afe5b474e624c2445",
                 "shasum": ""
             },
             "require": {
@@ -3504,7 +3504,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v4.4.38"
+                "source": "https://github.com/symfony/lock/tree/v4.4.40"
             },
             "funding": [
                 {
@@ -3520,7 +3520,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-11T16:01:04+00:00"
+            "time": "2022-03-22T11:09:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

@@ -391,8 +391,8 @@ class AdminPresenter extends APresenter
                 if ($user["id"] ?? null && $key) {
                     $hashid = \hash("sha256", $user["id"]);
                     $code = $data["base"] . "admin/CoreUpdateRemote?user=" . $hashid . "&token=" . \hash("sha256", $key . $hashid);
-                    $this->addMessage("GET UPDATE TOKEN");
-                    $this->addAuditMessage("GET UPDATE TOKEN");
+                    $this->addMessage("[$user] got UPDATE TOKEN");
+                    $this->addAuditMessage("[$user] got UPDATE TOKEN");
                     return $this->writeJsonData($code, $extras);
                 }
                 $this->unauthorizedAccess();
@@ -408,8 +408,8 @@ class AdminPresenter extends APresenter
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildAdminKey();
-                        $this->addMessage("REBUILD ADMIN KEY REMOTE [$user]");
-                        $this->addAuditMessage("REBUILD ADMIN KEY REMOTE [$user]");
+                        $this->addMessage("REMOTE -> ADMIN KEY REBUILT by [$user]");
+                        $this->addAuditMessage("REMOTE -> ADMIN KEY REBUILT by [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
@@ -429,8 +429,7 @@ class AdminPresenter extends APresenter
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->flushCache();
-                        $this->addMessage("FLUSH CACHE REMOTE [$user]");
-                        $this->addAuditMessage("FLUSH CACHE REMOTE [$user]");
+                        $this->addAuditMessage("REMOTE -> CACHE FLUSHED by [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
@@ -452,7 +451,7 @@ class AdminPresenter extends APresenter
                         $this->setForceCsvCheck(true);
                         $this->postloadAppData("app_data");
                         $this->flushCache();
-                        $this->addAuditMessage("CORE UPDATE REMOTE [$user]");
+                        $this->addAuditMessage("REMOTE -> CORE UPDATED by [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "message" => "OK",
@@ -472,8 +471,8 @@ class AdminPresenter extends APresenter
                     $code = \hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildNonce();
-                        $this->addMessage("REBUILD NONCE REMOTE [$user]");
-                        $this->addAuditMessage("REBUILD NONCE REMOTE [$user]");
+                        $this->addMessage("REMOTE -> NEW NONCE by [$user]");
+                        $this->addAuditMessage("REMOTE -> NEW NONCE by [$user]");
                         return $this->writeJsonData([
                             "function" => $view,
                             "host" => $_SERVER["HTTP_HOST"],
@@ -494,8 +493,8 @@ class AdminPresenter extends APresenter
                     $code = hash("sha256", $key . $user);
                     if ($code == $token || $this->isLocalAdmin()) {
                         $this->rebuildSecureKey();
-                        $this->addMessage("REBUILD SECURE KEY REMOTE [$user]");
-                        $this->addAuditMessage("REBUILD SECURE KEY REMOTE [$user]");
+                        $this->addMessage("REMOTE -> NEW SECURE KEY by [$user]");
+                        $this->addAuditMessage("REMOTE -> NEW SECURE KEY by [$user]");
                         return $this->writeJsonData([
                             "host" => $_SERVER["HTTP_HOST"],
                             "function" => $view,
