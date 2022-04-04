@@ -23,22 +23,17 @@ use Monolog\Processor\WebProcessor;
 use ParagonIE\Halite\Cookie;
 use ParagonIE\Halite\KeyFactory;
 
+// UT = Unit Tested
 interface IPresenter
 {
-    // UT = Unit Tested
-
-    /** Message Adders */
     public function addCritical($message); # UT
     public function addError($message); # UT
     public function addMessage($message); # UT
     public function addAuditMessage($message); # UT
 
-    /** Message Getters */
     public function getCriticals(); # UT
     public function getErrors(); # UT
     public function getMessages(); # UT
-
-    /** Getters */
     public function getCfg($key); # UT
     public function getCookie($name);
     public function getCurrentUser(); # UT
@@ -51,18 +46,15 @@ interface IPresenter
     public function getUIDstring(); # UT
     public function getUserGroup(); # UT
     
-    /** URI Based Getters */
     public function getMatch();
     public function getPresenter();
     public function getRouter();
     public function getView(); # UT
     
-    /** General Functionality Checks */
     public function checkLocales($force); # UT
     public function checkPermission($roleslist); # UT
     public function checkRateLimit($maximum); # UT
 
-    /** Setters */
     public function setCookie($name, $data);
     public function setData($data, $value);
     public function setForceCsvCheck();
@@ -77,7 +69,6 @@ interface IPresenter
     public function setIdentity($identity);
     public function setLocation($locationm, $code);
 
-    /** Various Tools */
     public function clearCookie($name);
     public function cloudflarePurgeCache($cf);
     public function dataExpander(&$data);
@@ -88,10 +79,8 @@ interface IPresenter
     public function renderHTML($template); # UT
     public function writeJsonData($data, $headers = [], $switches = null);
 
-    /** Abstract Methods */
-    public function process();
+    public function process(); // abstract method
 
-    /** Singleton Instances */
     public static function getInstance(); # UT
     public static function getTestInstance(); // for testing purposes only
 }
