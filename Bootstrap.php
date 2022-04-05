@@ -2,8 +2,8 @@
 /**
  * GSC Tesseract
  *
- * @category Framework
  * @author   Fred Brooker <git@gscloud.cz>
+ * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
@@ -13,6 +13,14 @@ use Tracy\Debugger;
 
 /** @const global timer - start */
 define("TESSERACT_START", microtime(true));
+
+// require an external include
+if (PHP_SAPI == "cli") {
+    $req = getenv('CLI_REQ') ?? null;
+    if ($req && file_exists($req) && is_readable($req)) {
+        require_once $req;
+    }
+}
 
 // PHP INI - modify default configuration
 @ini_set("auto_detect_line_endings", defined("AUTO_DETECT_LINE_ENDINGS") ? AUTO_DETECT_LINE_ENDINGS : true);
@@ -82,13 +90,23 @@ defined("ENABLE_CSV_CACHE") || define("ENABLE_CSV_CACHE", true);
 require_once ROOT . DS . "vendor" . DS . "autoload.php";
 
 // read CONFIGURATION
+$cfg = null;
 if (file_exists(CONFIG) && is_readable(CONFIG)) {
     $cfg = @Neon::decode(@file_get_contents(CONFIG));
-} else {
-    die("FATAL ERROR: Missing main CONFIGURATION!");
+    try {
+        if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
+            $priv = @Neon::decode(@file_get_contents(CONFIG_PRIVATE));
+            if (!is_array($priv)) {
+                throw new Exception("Private config is not an array!\n");
+            }
+            $cfg = array_replace_recursive($cfg, $priv);
+        }
+    } catch (Exception $e) {
+        die("FATAL ERROR: Invalid PRIVATE CONFIGURATION!\n");
+    }
 }
-if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
-    $cfg = array_replace_recursive($cfg, @Neon::decode(@file_get_contents(CONFIG_PRIVATE)));
+if (!is_array($cfg)) {
+    die("FATAL ERROR: Invalid CONFIGURATION!\n");
 }
 
 // set DEFAULT TIME ZONE
@@ -133,7 +151,7 @@ if (DEBUG === true) { // https://api.nette.org/3.0/Tracy/Debugger.html
 }
 
 // measure runtime performance
-Debugger::timer("RUN"); 
+Debugger::timer("RUN");
 
 // load the app
 require_once APP . DS . "App.php";
