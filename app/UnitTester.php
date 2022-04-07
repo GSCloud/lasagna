@@ -55,6 +55,8 @@ class UnitTester
             $controller = "\\GSC\\${c}";
             $app = $controller::getInstance();
             $app2 = $controller::getInstance();
+
+            // objects
             Assert::same($app, $app2);
 
             // instance of APresenter
@@ -164,7 +166,7 @@ class UnitTester
             Assert::same('<b>cat</b>', $app->renderHTML('<b>{{animal.farm.1}}</b>'));
             Assert::same('dogcatbird', $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'));
         }
-        echo 'Unit testing finished in: ' . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2) . ' ms';
+        echo 'Unit testing finished in ' . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2) . ' ms.';
         exit(0);
     }
 }
