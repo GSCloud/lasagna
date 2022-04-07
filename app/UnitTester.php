@@ -27,11 +27,11 @@ class UnitTester
      */
     public function __construct()
     {
-        \Tracy\Debugger::timer("UNIT");
+        \Tracy\Debugger::timer('UNIT');
         \Tester\Environment::setup();
 
         $climate = new CLImate;
-        $climate->out("<green><bold>Tesseract Unit Tester");
+        $climate->out('<green><bold>Tesseract Unit Tester');
 
         // all testable controllers
         $controllers = [
@@ -54,6 +54,8 @@ class UnitTester
         foreach ($controllers as $c) {
             $controller = "\\GSC\\${c}";
             $app = $controller::getInstance();
+            $app2 = $controller::getInstance();
+            Assert::same($app, $app2);
 
             // instance of APresenter
             Assert::type('\\GSC\\APresenter', $app);
@@ -64,8 +66,8 @@ class UnitTester
             Assert::truthy(count($app->getData()));
             Assert::same($app->getData('cfg'), $app->getCfg());
 
-            $app->setData("animal.farm", ["dog", "cat", "bird"]);
-            Assert::same(["farm" => ["dog", "cat", "bird"]], $app->getData("animal"));
+            $app->setData('animal.farm', ['dog', 'cat', 'bird']);
+            Assert::same(['farm' => ['dog', 'cat', 'bird']], $app->getData('animal'));
 
             // getCfg()
 
@@ -156,13 +158,13 @@ class UnitTester
             Assert::same($app, $app->checkRateLimit());
 
             // renderHTML()
-            Assert::same("<title></title>", $app->renderHTML("<title>{{notitle}}</title>"));
-            Assert::same("<title>foo bar</title>", $app->setData("title", "foo bar")->renderHTML("<title>{{title}}</title>"));
-            Assert::same("<b>dog</b>", $app->renderHTML("<b>{{animal.farm.0}}</b>"));
-            Assert::same("<b>cat</b>", $app->renderHTML("<b>{{animal.farm.1}}</b>"));
-            Assert::same("dogcatbird", $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'));
+            Assert::same('<title></title>', $app->renderHTML('<title>{{notitle}}</title>'));
+            Assert::same('<title>foo bar</title>', $app->setData('title', 'foo bar')->renderHTML('<title>{{title}}</title>'));
+            Assert::same('<b>dog</b>', $app->renderHTML('<b>{{animal.farm.0}}</b>'));
+            Assert::same('<b>cat</b>', $app->renderHTML('<b>{{animal.farm.1}}</b>'));
+            Assert::same('dogcatbird', $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'));
         }
-        echo "Unit testing finished in: " . round((float) \Tracy\Debugger::timer("UNIT") * 1000, 2) . " ms";
+        echo 'Unit testing finished in: ' . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2) . ' ms';
         exit(0);
     }
 }

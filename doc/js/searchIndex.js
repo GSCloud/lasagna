@@ -1156,6 +1156,11 @@ Search.appendIndex(
             "summary": "Unit\u0020Test\u0020constructor",
             "url": "classes/GSC-UnitTester.html#method___construct"
         },                {
+            "fqsen": "\\TESSERACT_START",
+            "name": "TESSERACT_START",
+            "summary": "",
+            "url": "namespaces/default.html#constant_TESSERACT_START"
+        },                {
             "fqsen": "\\GSC\\CliDemo",
             "name": "CliDemo",
             "summary": "CLI\u0020Demo\u0020class",
