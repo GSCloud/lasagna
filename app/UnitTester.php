@@ -53,25 +53,29 @@ class UnitTester
         // check controllers
         foreach ($controllers as $c) {
             $controller = "\\GSC\\${c}";
+
+            // get instances
             $app = $controller::getInstance();
             $app2 = $controller::getInstance();
 
-            // objects
+            // compare objects
             Assert::same($app, $app2);
 
-            // instance of APresenter
+            // check instance type
             Assert::type('\\GSC\\APresenter', $app);
 
             // getData(), setData(), getCfg()
             Assert::same(null, $app->getData('just.null.testing'));
-            Assert::type('array', $app->getData());
             Assert::truthy(count($app->getData()));
+            Assert::type('array', $app->getData());
             Assert::same($app->getData('cfg'), $app->getCfg());
-
+            Assert::same(null, $app->getData('foo'));
+            Assert::same(null, $app->getData('foo.bar'));
+            Assert::same(null, $app->getData('foo.bar.testing'));
+            $app->setData('foo.bar.testing', 'just_a_test');
+            Assert::same(['testing' => 'just_a_test'], $app->getData('foo.bar'));
             $app->setData('animal.farm', ['dog', 'cat', 'bird']);
             Assert::same(['farm' => ['dog', 'cat', 'bird']], $app->getData('animal'));
-
-            // getCfg()
 
             // magic __toString()
             Assert::type('string', $app->__toString());
@@ -143,7 +147,12 @@ class UnitTester
             Assert::same($app, $app->addAuditMessage([]));
             Assert::same($app, $app->addAuditMessage('test message'));
 
-            // null
+            // fluent interface
+            Assert::same($app, $app->checkLocales());
+            Assert::same($app, $app->checkPermission());
+            Assert::same($app, $app->checkRateLimit());
+
+            // these methods should return null when invoked from CLI
             Assert::same(null, $app->getRateLimit());
             Assert::same(null, $app->getUserGroup());
             Assert::same(null, $app->getView());
@@ -154,11 +163,6 @@ class UnitTester
             // getUIDstring()
             Assert::same('CLI__127.0.0.1', $app->getUIDstring());
 
-            // fluent interface
-            Assert::same($app, $app->checkLocales());
-            Assert::same($app, $app->checkPermission());
-            Assert::same($app, $app->checkRateLimit());
-
             // renderHTML()
             Assert::same('<title></title>', $app->renderHTML('<title>{{notitle}}</title>'));
             Assert::same('<title>foo bar</title>', $app->setData('title', 'foo bar')->renderHTML('<title>{{title}}</title>'));
@@ -166,7 +170,7 @@ class UnitTester
             Assert::same('<b>cat</b>', $app->renderHTML('<b>{{animal.farm.1}}</b>'));
             Assert::same('dogcatbird', $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}'));
         }
-        echo 'Unit testing finished in ' . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2) . ' ms.';
+        echo 'Unit test finished in ' . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2) . ' ms.';
         exit(0);
     }
 }
