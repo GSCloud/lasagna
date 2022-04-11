@@ -45,13 +45,13 @@ interface IPresenter
     public function getUID(); # UT
     public function getUIDstring(); # UT
     public function getUserGroup(); # UT
-    
+
     public function getMatch();
     public function getPresenter();
     public function getRouter();
     public function getView(); # UT
-    
-    public function checkLocales($force); # UT
+
+    public function checkLocales(bool $force); # UT
     public function checkPermission($roleslist); # UT
     public function checkRateLimit($maximum); # UT
 
@@ -87,7 +87,7 @@ interface IPresenter
 
 /**
  * Abstract Presenter class
- * 
+ *
  * @package GSC
  */
 abstract class APresenter implements IPresenter
@@ -124,7 +124,6 @@ abstract class APresenter implements IPresenter
 
     /** @var string Identity nonce filename */
     const IDENTITY_NONCE = 'identity_nonce.key';
-
 
     // VARIOUS GOOGLE TEMPLATES - TBD
 
@@ -180,7 +179,6 @@ abstract class APresenter implements IPresenter
     const GOOGLE_FILE_EXPORT_VIEW =
         'https://drive.google.com/uc?export=view&id=[FILEID]';
 
-
     // PRIVATE VARIABLES
 
     /** @var array Data Model */
@@ -198,7 +196,7 @@ abstract class APresenter implements IPresenter
     /** @var array User Identity */
     private $identity = [];
 
-    /** @var boolean Re-check locales in destructor? */
+    /** @var boolean force check locales in desctructor */
     private $force_csv_check = false;
 
     /** @var array CSV Keys */
@@ -224,9 +222,9 @@ abstract class APresenter implements IPresenter
     private function __construct()
     {
         $class = get_called_class();
-        // throw an exception if class is already instantiated
         if (array_key_exists($class, self::$instances)) {
-            throw new \Exception("INSTANCE OF [${class}] ALREADY EXISTS");
+            // throw an exception if class is already instantiated
+            throw new \Exception("FATAL ERROR: instance of class [${class}] already exists");
         }
     }
 
@@ -289,10 +287,15 @@ abstract class APresenter implements IPresenter
      */
     public function __destruct()
     {
-        if (\ob_get_level()) { // clear outbut buffering
+        // clear outbut buffering
+        if (\ob_get_level()) {
             @\ob_end_flush();
         }
-        \ob_start();
+
+        // finish request
+        if (\function_exists('fastcgi_finish_request')) {
+            \fastcgi_finish_request();
+        }
 
         // preload CSV definitions
         foreach ($this->csv_postload as $key) {
@@ -322,7 +325,7 @@ abstract class APresenter implements IPresenter
 
         $google_logger = null;
         try {
-            if (\count($criticals) + \count($errors) + \count($messages)) {
+            if (\count($criticals)+\count($errors)+\count($messages)) {
                 if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
                     if (file_exists(APP . DS . GCP_KEYS)) {
                         $logging = new LoggingClient([
@@ -358,8 +361,9 @@ abstract class APresenter implements IPresenter
                 }
             }
         } finally {
-            exit();
+            exit(0);
         }
+        exit(0);
     }
 
     /**
@@ -563,7 +567,9 @@ abstract class APresenter implements IPresenter
             );
         }
 
-        if (CLI) return $this;
+        if (CLI) {
+            return $this;
+        }
 
         // Telegram bot support
         $chid = $this->getData('telegram.bot_ch_id') ?? null;
@@ -705,7 +711,7 @@ abstract class APresenter implements IPresenter
             $this->setLocation('/err/500');
             exit;
         }
-        $i['nonce'] = \substr(\trim($nonce), 0, 16); // trim nonce to 16 chars only
+        $i['nonce'] = \substr(\trim($nonce), 0, 16); // trim nonce to 16 chars
         // check all keys
         if (\array_key_exists('avatar', $identity)) {
             $i['avatar'] = (string) $identity['avatar'];
@@ -860,7 +866,7 @@ abstract class APresenter implements IPresenter
         if (is_string($key)) {
             return $this->getData("cfg.${key}");
         }
-        throw new \Exception('FATAL ERROR: Invalid get parameter!');
+        throw new \Exception('FATAL ERROR: invalid get parameter');
     }
 
     /**
@@ -1127,11 +1133,11 @@ abstract class APresenter implements IPresenter
     public function checkRateLimit($max = self::LIMITER_MAXIMUM)
     {
 //        if (CLI) {
-//            return $this;
-//        }
-//        if (LOCALHOST) {
-//            return $this;
-//        }
+        //            return $this;
+        //        }
+        //        if (LOCALHOST) {
+        //            return $this;
+        //        }
         $f = "user_rate_limit_{$this->getUID()}";
         $rate = (int) (Cache::read($f, 'limiter') ?? 0);
         Cache::write($f, ++$rate, 'limiter');
@@ -1222,7 +1228,7 @@ abstract class APresenter implements IPresenter
     /**
      * Force CSV checking
      *
-     * @param boolean $set True to force CSV check (optional)
+     * @param boolean $set Set true to force CSV check (optional)
      * @return self
      */
     public function setForceCsvCheck($set = true)
@@ -1344,8 +1350,7 @@ abstract class APresenter implements IPresenter
                 echo '<body><h1>HTTP Error 500</h1><h2>LOCALES CORRUPTED!</h2></body>';
                 exit;
             } else {
-                // second try!
-                $this->setForceCsvCheck()->checkLocales(true);
+                $this->checkLocales(true); // second try!
                 return $this->getLocale($language, $key);
             }
         }
@@ -1359,9 +1364,9 @@ abstract class APresenter implements IPresenter
      * @param boolean $force force loading locales (optional)
      * @return self
      */
-    public function checkLocales($force = false)
+    public function checkLocales(bool $force = false)
     {
-        $locales = $this->getCfg('locales');
+        $locales = $this->getCfg('locales') ?? null;
         if (\is_array($locales)) {
             foreach ($locales as $name => $csvkey) {
                 $this->csv_preloader($name, $csvkey, (bool) $force);
@@ -1399,13 +1404,13 @@ abstract class APresenter implements IPresenter
                     foreach ($myzones as $myzone) {
                         if ($zone->id == $myzone) {
                             $zones->cachePurgeEverything($zone->id);
-                            $this->addMessage("CLOUDFLARE: zone ${myzone} purged");
+                            $this->addMessage("Cloudflare: zone ${myzone} purged");
                         }
                     }
                 }
             }
         } catch (\Exception $e) {
-            $this->addError('CLOUDFLARE: ' . (string) $e->getMessage());
+            $this->addError('Cloudflare exception: ' . (string) $e->getMessage());
         }
         return $this;
     }
