@@ -20,7 +20,7 @@ command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 composer update --no-plugins --no-scripts
 
 # gulp
-gulp
+command -v gulp >/dev/null 2>&1 && gulp
 
 # favicons recalculation
 cd www/img && . ./create_favicons.sh
