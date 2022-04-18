@@ -1,5 +1,5 @@
 #!/bin/bash
-#@author Filip Oščádal <git@gscloud.cz>
+#@author Fred Brooker <git@gscloud.cz>
 
 dir="$(dirname "$0")"
 . "$dir/_includes.sh"
