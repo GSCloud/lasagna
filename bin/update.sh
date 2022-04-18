@@ -28,7 +28,7 @@ command -v gulp >/dev/null 2>&1 && gulp
 git add --renormalize .
 
 # resize favicons
-cd www/img && . ./create_favicons.sh
+#cd www/img && . ./create_favicons.sh
 
 # adding new files
 git add -A
