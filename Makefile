@@ -91,7 +91,6 @@ build:
 	@bash ./bin/build.sh
 
 push:
-	@make stop
 	@echo "🔨 \e[1;32m Pushing image to Docker.io\e[0m\n"
 	@bash ./bin/push.sh
 
