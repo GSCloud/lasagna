@@ -8,6 +8,8 @@
  * @link     https://lasagna.gscloud.cz
  */
 
+declare(strict_types=1);
+
 use Nette\Neon\Neon;
 use Tracy\Debugger;
 
