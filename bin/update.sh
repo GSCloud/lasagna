@@ -25,7 +25,7 @@ composer update --no-plugins --no-scripts
 command -v gulp >/dev/null 2>&1 && gulp
 
 # CRLF normalization
-git add --renormalize .
+#git add --renormalize .
 
 # resize favicons
 #cd www/img && . ./create_favicons.sh
