@@ -398,6 +398,9 @@ async function sha256(message) {
         }
       }
 
+      // append mobile API button
+      $('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="/api">API</a></li>');
+
       // append login buttons if there are Google OAuth parameters set
       {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
       if (!GSC.islogged) {
