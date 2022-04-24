@@ -87,6 +87,7 @@
       }
       var t = "#a_ps_insights_info";
       GSC.ShowLoader(t);
+
       // API: GetPSInsights
       $.get("/admin/GetPSInsights?" + Date.now(), function (data) {
           GSC.PingDot("#psi_ping");
@@ -99,7 +100,7 @@
           } else {
             $(t).html("GetPSInsights ERROR 🤯").slideDown();
           }
-          $("#a_ps_insights").removeAttr("disabled");
+          //$("#a_ps_insights").removeAttr("disabled");
         })
         .fail(function () {
           GSC.PingDot("#psi_ping", false);
@@ -927,13 +928,6 @@
         $("#a_file_manager").hide();
         GSC.RenderUploadInfo();
       }
-    });
-
-    // load PSI (caching)
-    w.GSC.init.push(function () {
-      w.GSC.names.push("Update PSI cache");
-      // API: GetPSInsights
-      $.get("/admin/GetPSInsights?" + Date.now());
     });
 
     // set uploader

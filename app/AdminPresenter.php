@@ -371,9 +371,10 @@ class AdminPresenter extends APresenter
                 $hash = \hash("sha256", $base);
                 $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
                 $f = "PageSpeed_Insights_${hash}";
-                if (!$data = Cache::read($f, "minute")) { // read data from Google
+                $data = \file_get_contents($uri);
+                if (!$data = Cache::read($f, "fiveminutes")) { // read data from Google
                     if ($data = @\file_get_contents($uri)) {
-                        Cache::write($f, $data, "minute");
+                        Cache::write($f, $data, "fiveminutes");
                     } else {
                         return $this->writeJsonData(500, $extras); // error
                     }
