@@ -21,8 +21,6 @@ find . -maxdepth 1 -iname "*.adoc" -delete
 rm temp/* >/dev/null 2>&1
 
 # phpdocumentor
-info "Removing old phpDoc files"
-sudo rm -rf doc/
 docker run --rm -v $(pwd):/data phpdoc/phpdoc:3.1.0 \
     run -d . -t ./doc --ignore "vendor/"
 
