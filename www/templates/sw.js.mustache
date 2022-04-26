@@ -89,7 +89,7 @@ self.addEventListener("fetch", function (event) {
       }
 
       function unableToResolve() {
-        return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0"><h2 style="text-align:center">📵 No connectivity!</h2><h4><a href="javascript:location.reload();">click to reload ↻</a></h4>', {
+        return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0"><h2 style="text-align:center">📵 No connectivity!</h2><h4 style="text-align:center"><a href="javascript:location.reload();">click to reload ↻</a></h4>', {
           status: 503,
           statusText: "Service Unavailable",
           headers: new Headers({
