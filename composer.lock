@@ -2484,16 +2484,16 @@
         },
         {
             "name": "paragonie/constant_time_encoding",
-            "version": "v2.5.0",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/constant_time_encoding.git",
-                "reference": "9229e15f2e6ba772f0c55dd6986c563b937170a8"
+                "reference": "d6e1d5d0fb2458dfdd7018ec2f74be120353a3b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/9229e15f2e6ba772f0c55dd6986c563b937170a8",
-                "reference": "9229e15f2e6ba772f0c55dd6986c563b937170a8",
+                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/d6e1d5d0fb2458dfdd7018ec2f74be120353a3b9",
+                "reference": "d6e1d5d0fb2458dfdd7018ec2f74be120353a3b9",
                 "shasum": ""
             },
             "require": {
@@ -2547,7 +2547,7 @@
                 "issues": "https://github.com/paragonie/constant_time_encoding/issues",
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
-            "time": "2022-01-17T05:32:27+00:00"
+            "time": "2022-06-11T00:43:46+00:00"
         },
         {
             "name": "paragonie/corner",
