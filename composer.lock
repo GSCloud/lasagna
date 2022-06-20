@@ -1289,16 +1289,16 @@
         },
         {
             "name": "google/gax",
-            "version": "v1.12.2",
+            "version": "v1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "38ea1c12e7d24caeb3abbcac44a6a3536a8ef2a7"
+                "reference": "1403cdf2406ef9af113d8563a43ccb0f7d7c7544"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/38ea1c12e7d24caeb3abbcac44a6a3536a8ef2a7",
-                "reference": "38ea1c12e7d24caeb3abbcac44a6a3536a8ef2a7",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/1403cdf2406ef9af113d8563a43ccb0f7d7c7544",
+                "reference": "1403cdf2406ef9af113d8563a43ccb0f7d7c7544",
                 "shasum": ""
             },
             "require": {
@@ -1309,7 +1309,7 @@
                 "grpc/grpc": "^1.13",
                 "guzzlehttp/promises": "^1.3",
                 "guzzlehttp/psr7": "^1.7.0||^2",
-                "php": ">=5.5"
+                "php": ">=5.6"
             },
             "conflict": {
                 "ext-protobuf": "<3.7.0"
@@ -1336,9 +1336,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.12.2"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.13.0"
             },
-            "time": "2022-05-17T03:48:18+00:00"
+            "time": "2022-06-19T23:40:58+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -1799,27 +1799,27 @@
         },
         {
             "name": "league/climate",
-            "version": "3.8.1",
+            "version": "3.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/climate.git",
-                "reference": "22243322c6f049240e0fa6ad6c3873343b6f6055"
+                "reference": "a785a3ac8f584eed4abd45e4e16fe64c46659a28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/climate/zipball/22243322c6f049240e0fa6ad6c3873343b6f6055",
-                "reference": "22243322c6f049240e0fa6ad6c3873343b6f6055",
+                "url": "https://api.github.com/repos/thephpleague/climate/zipball/a785a3ac8f584eed4abd45e4e16fe64c46659a28",
+                "reference": "a785a3ac8f584eed4abd45e4e16fe64c46659a28",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.3 || ^8.0",
-                "psr/log": "^1.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "seld/cli-prompt": "^1.0"
             },
             "require-dev": {
-                "mikey179/vfsstream": "^1.4",
+                "mikey179/vfsstream": "^1.6.10",
                 "mockery/mockery": "^1.4.2",
-                "phpunit/phpunit": "^9.5.0"
+                "phpunit/phpunit": "^9.5.10"
             },
             "suggest": {
                 "ext-mbstring": "If ext-mbstring is not available you MUST install symfony/polyfill-mbstring"
@@ -1858,9 +1858,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/climate/issues",
-                "source": "https://github.com/thephpleague/climate/tree/3.8.1"
+                "source": "https://github.com/thephpleague/climate/tree/3.8.2"
             },
-            "time": "2022-01-23T14:38:49+00:00"
+            "time": "2022-06-18T14:42:08+00:00"
         },
         {
             "name": "league/csv",
