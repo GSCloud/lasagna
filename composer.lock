@@ -181,16 +181,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.4.2",
+            "version": "4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "cd8af4a5f214413607e2eca2188a25bc2f7e3f61"
+                "reference": "2e57d69b2478ab880c4ca833344c55526e81273c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/cd8af4a5f214413607e2eca2188a25bc2f7e3f61",
-                "reference": "cd8af4a5f214413607e2eca2188a25bc2f7e3f61",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/2e57d69b2478ab880c4ca833344c55526e81273c",
+                "reference": "2e57d69b2478ab880c4ca833344c55526e81273c",
                 "shasum": ""
             },
             "require": {
@@ -230,11 +230,11 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cache"
             },
-            "time": "2022-06-13T11:51:02+00:00"
+            "time": "2022-07-11T10:51:09+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "4.4.2",
+            "version": "4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -291,16 +291,16 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "4.4.2",
+            "version": "4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "564cf3bea3bb31e0cb53fa199c39f17105af01ec"
+                "reference": "32866aac3d4fef7649fb524da6c59e14e7d18a0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/564cf3bea3bb31e0cb53fa199c39f17105af01ec",
-                "reference": "564cf3bea3bb31e0cb53fa199c39f17105af01ec",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/32866aac3d4fef7649fb524da6c59e14e7d18a0d",
+                "reference": "32866aac3d4fef7649fb524da6c59e14e7d18a0d",
                 "shasum": ""
             },
             "require": {
@@ -346,7 +346,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2022-07-05T07:59:19+00:00"
+            "time": "2022-07-16T21:24:52+00:00"
         },
         {
             "name": "cheprasov/php-redis-client",
@@ -395,20 +395,20 @@
         },
         {
             "name": "chillerlan/php-qrcode",
-            "version": "4.3.3",
+            "version": "4.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
-                "reference": "6356b246948ac1025882b3f55e7c68ebd4515ae3"
+                "reference": "2ca4bf5ae048af1981d1023ee42a0a2a9d51e51d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/6356b246948ac1025882b3f55e7c68ebd4515ae3",
-                "reference": "6356b246948ac1025882b3f55e7c68ebd4515ae3",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/2ca4bf5ae048af1981d1023ee42a0a2a9d51e51d",
+                "reference": "2ca4bf5ae048af1981d1023ee42a0a2a9d51e51d",
                 "shasum": ""
             },
             "require": {
-                "chillerlan/php-settings-container": "^2.1",
+                "chillerlan/php-settings-container": "^2.1.4",
                 "ext-mbstring": "*",
                 "php": "^7.4 || ^8.0"
             },
@@ -457,7 +457,7 @@
             ],
             "support": {
                 "issues": "https://github.com/chillerlan/php-qrcode/issues",
-                "source": "https://github.com/chillerlan/php-qrcode/tree/4.3.3"
+                "source": "https://github.com/chillerlan/php-qrcode/tree/4.3.4"
             },
             "funding": [
                 {
@@ -469,7 +469,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2021-11-25T22:38:09+00:00"
+            "time": "2022-07-25T09:12:45+00:00"
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -1292,16 +1292,16 @@
         },
         {
             "name": "google/gax",
-            "version": "v1.13.0",
+            "version": "v1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "1403cdf2406ef9af113d8563a43ccb0f7d7c7544"
+                "reference": "87bdb94f71af72eab6c7096c22e5b4e7cc8e5533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/1403cdf2406ef9af113d8563a43ccb0f7d7c7544",
-                "reference": "1403cdf2406ef9af113d8563a43ccb0f7d7c7544",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/87bdb94f71af72eab6c7096c22e5b4e7cc8e5533",
+                "reference": "87bdb94f71af72eab6c7096c22e5b4e7cc8e5533",
                 "shasum": ""
             },
             "require": {
@@ -1318,8 +1318,9 @@
                 "ext-protobuf": "<3.7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.36",
-                "squizlabs/php_codesniffer": "3.*"
+                "phpunit/phpunit": "^5.5||^8.5",
+                "squizlabs/php_codesniffer": "3.*",
+                "yoast/phpunit-polyfills": "^1.0"
             },
             "type": "library",
             "autoload": {
@@ -1339,9 +1340,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.13.0"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.14.0"
             },
-            "time": "2022-06-19T23:40:58+00:00"
+            "time": "2022-07-26T20:12:16+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -1390,16 +1391,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.21.3",
+            "version": "v3.21.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "e2497c2576556469963852216d886050e0606d8b"
+                "reference": "f92a08364fbad1bb2ae7e4a52acf0c79c40ec0d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/e2497c2576556469963852216d886050e0606d8b",
-                "reference": "e2497c2576556469963852216d886050e0606d8b",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/f92a08364fbad1bb2ae7e4a52acf0c79c40ec0d5",
+                "reference": "f92a08364fbad1bb2ae7e4a52acf0c79c40ec0d5",
                 "shasum": ""
             },
             "require": {
@@ -1429,9 +1430,9 @@
             ],
             "support": {
                 "issues": "https://github.com/protocolbuffers/protobuf-php/issues",
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.3"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.4"
             },
-            "time": "2022-07-21T19:11:32+00:00"
+            "time": "2022-07-25T23:10:27+00:00"
         },
         {
             "name": "grpc/grpc",

@@ -5,7 +5,7 @@
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
-// set UUID
+// create uuid
 var uuid = null;
 try {
   uuid = crypto.randomUUID();
@@ -14,8 +14,10 @@ try {
       c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
-if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
-  localStorage['uuid'] = uuid;
+if (localStorage) {
+  if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
+    localStorage['uuid'] = uuid;
+  }
 }
 
 // compute SHA-256 hash of a string
