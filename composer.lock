@@ -1302,16 +1302,16 @@
         },
         {
             "name": "google/gax",
-            "version": "v1.16.1",
+            "version": "v1.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "e879d2b0d9b42397c67e47880d40549e993d06ab"
+                "reference": "42dc3a688e358c610b41c5d0495c5db35249f0bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/e879d2b0d9b42397c67e47880d40549e993d06ab",
-                "reference": "e879d2b0d9b42397c67e47880d40549e993d06ab",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/42dc3a688e358c610b41c5d0495c5db35249f0bf",
+                "reference": "42dc3a688e358c610b41c5d0495c5db35249f0bf",
                 "shasum": ""
             },
             "require": {
@@ -1351,9 +1351,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.16.1"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.16.2"
             },
-            "time": "2022-08-11T17:26:22+00:00"
+            "time": "2022-08-17T15:09:42+00:00"
         },
         {
             "name": "google/grpc-gcp",
