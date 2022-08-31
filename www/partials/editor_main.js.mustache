@@ -873,7 +873,8 @@
         $("#a_flush").attr("disabled", "disabled");
         // API: FlushCache
         $.post("/admin/FlushCache");
-        window.location.reload(); // reload window
+        //window.location.reload(); // reload window
+        location.replace("?nonce={{ nonce }}"); // reload window
       });
 
       // get auth code
