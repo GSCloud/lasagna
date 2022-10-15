@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "adbario/php-dot-notation",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adbario/php-dot-notation.git",
-                "reference": "aca06bf775809808232b8c21ce1ca3a4fca70ace"
+                "reference": "6cab20b7eb090c64275cb3ee8f68862ff419b8ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adbario/php-dot-notation/zipball/aca06bf775809808232b8c21ce1ca3a4fca70ace",
-                "reference": "aca06bf775809808232b8c21ce1ca3a4fca70ace",
+                "url": "https://api.github.com/repos/adbario/php-dot-notation/zipball/6cab20b7eb090c64275cb3ee8f68862ff419b8ab",
+                "reference": "6cab20b7eb090c64275cb3ee8f68862ff419b8ab",
                 "shasum": ""
             },
             "require": {
@@ -25,9 +25,9 @@
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.5",
+                "phpstan/phpstan": "^1.8",
                 "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.6"
+                "squizlabs/php_codesniffer": "^3.7"
             },
             "type": "library",
             "autoload": {
@@ -56,9 +56,9 @@
             ],
             "support": {
                 "issues": "https://github.com/adbario/php-dot-notation/issues",
-                "source": "https://github.com/adbario/php-dot-notation/tree/3.1.1"
+                "source": "https://github.com/adbario/php-dot-notation/tree/3.2.0"
             },
-            "time": "2022-03-28T01:09:30+00:00"
+            "time": "2022-10-15T01:24:00+00:00"
         },
         {
             "name": "altorouter/altorouter",
