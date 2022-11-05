@@ -705,16 +705,16 @@
         },
         {
             "name": "google/cloud",
-            "version": "v0.192.0",
+            "version": "v0.193.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php.git",
-                "reference": "ce68ddb876acfa1b4a7941a51a4af66836271dc7"
+                "reference": "aac228f80e65e4da2329ced624f5e6e0e57c0afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php/zipball/ce68ddb876acfa1b4a7941a51a4af66836271dc7",
-                "reference": "ce68ddb876acfa1b4a7941a51a4af66836271dc7",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php/zipball/aac228f80e65e4da2329ced624f5e6e0e57c0afc",
+                "reference": "aac228f80e65e4da2329ced624f5e6e0e57c0afc",
                 "shasum": ""
             },
             "require": {
@@ -852,7 +852,7 @@
                 "google/cloud-spanner": "1.54.0",
                 "google/cloud-speech": "1.6.5",
                 "google/cloud-sql-admin": "0.2.5",
-                "google/cloud-storage": "1.28.2",
+                "google/cloud-storage": "1.29.0",
                 "google/cloud-storage-transfer": "0.3.0",
                 "google/cloud-talent": "0.19.1",
                 "google/cloud-tasks": "1.11.5",
@@ -1253,9 +1253,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-cloud-php/issues",
-                "source": "https://github.com/googleapis/google-cloud-php/tree/v0.192.0"
+                "source": "https://github.com/googleapis/google-cloud-php/tree/v0.193.0"
             },
-            "time": "2022-11-01T20:21:07+00:00"
+            "time": "2022-11-03T21:58:06+00:00"
         },
         {
             "name": "google/common-protos",
