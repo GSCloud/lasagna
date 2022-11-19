@@ -37,32 +37,30 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
-  // ignore non-http requests
   if (!(event.request.url.indexOf('http') === 0)) return;
-  // ignore non-GET requests
   if (event.request.method !== "GET") return;
   if (event.request.url.indexOf("/logout") !== -1) {
-    console.log("No caching for %s", event.request.url);
+    console.log("Skip cache for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/login") !== -1) {
-    console.log("No caching for %s", event.request.url);
+    console.log("Skip cache for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("?nonce") !== -1) {
-    console.log("No caching for %s", event.request.url);
+    console.log("Skip cache for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/exportHTML/") !== -1) {
-    console.log("No caching for  %s", event.request.url);
+    console.log("Skip cache for  %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/embed/") !== -1) {
-    console.log("No caching for  %s", event.request.url);
+    console.log("Skip cache for  %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/print/") !== -1) {
-    console.log("No caching for  %s", event.request.url);
+    console.log("Skip cache for  %s", event.request.url);
     return;
   }
 
