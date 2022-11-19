@@ -14,6 +14,7 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 !function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={i:n,l:!1,exports:{}};return e[n].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var o={};t.m=e,t.c=o,t.d=function(e,o,n){t.o(e,o)||Object.defineProperty(e,o,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var o=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(o,"a",o),o},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,o){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},r=o(1),u={passive:!0,capture:!1},i=["scroll","wheel","touchstart","touchmove","touchenter","touchend","touchleave","mouseout","mouseleave","mouseup","mousedown","mousemove","mouseenter","mousewheel","mouseover"],s=function(e,t){return void 0!==e?e:-1!==i.indexOf(t)&&u.passive},c=function(e){var t=Object.getOwnPropertyDescriptor(e,"passive");return t&&!0!==t.writable&&void 0===t.set?Object.assign({},e):e};if((0,r.eventListenerOptionsSupported)()){var p=EventTarget.prototype.addEventListener;!function(e){EventTarget.prototype.addEventListener=function(t,o,r){var i="object"===(void 0===r?"undefined":n(r))&&null!==r,p=i?r.capture:r;r=i?c(r):{},r.passive=s(r.passive,t),r.capture=void 0===p?u.capture:p,e.call(this,t,o,r)},EventTarget.prototype.addEventListener._original=e}(p)}},function(e,t,o){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.eventListenerOptionsSupported=function(){var e=!1;try{var t=Object.defineProperty({},"passive",{get:function(){e=!0}});window.addEventListener("test",null,t),window.removeEventListener("test",null,t)}catch(e){}return e}}]);
 {{/admin_group_admin}}
 </script>
+
 {{>head_pre}}
 
 <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -35,11 +36,13 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
 <link rel="manifest" href="/manifest.json?lang={{ lang }}">
+
 {{>head_meta}}
 {{>head_favicons}}
 {{>head_googleanalytics}}
 {{>head_html5shim}}
 {{>head_custom}}
+
 <style>
 /* Material icons */
 @font-face {
@@ -83,13 +86,17 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 /* summernote */
 .summernote:empty{display:none}.footer-copyright a{font-weight:bold}
 </style>
+
 {{>head_post}}
+
 <link rel="stylesheet" href="/css/materialize.min.css">
 <script src="/js/jquery.min.js"></script>
 </head>
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
 <noscript style="text-align:center">{{>noscript}}</noscript>
+
 {{>body_pre}}
+
 <!-- update -->
 <div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
   <br><a href="javascript:location.replace('?nonce={{ nonce }}');" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn"><i class="fas fa-sync"></i>&nbsp;{{ l.page_outdated_button }}</a>
@@ -99,16 +106,20 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 <script>
 // GSC init
 !(function(c,e){a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+(b+1)+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version="{{ DATA_VERSION }}";a.LASAGNA.data.timestamp=a.LASAGNA.core.timestamp;c.GSC=a;})(window);
-// old legacy fn
-window.GSC.loaderOff = function() {}
 </script>
+
 {{>gscloud_functions}}
+
 <div>
+
   {{>body_cookieconsent}}
   {{>container_switcher}}
+
 </div>
+
 {{>body_resources}}
 {{>body_custom}}
 {{>body_post}}
+
 </body>
 </html>
