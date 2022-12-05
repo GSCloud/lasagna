@@ -181,7 +181,7 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.4.7",
+            "version": "4.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
@@ -234,7 +234,7 @@
         },
         {
             "name": "cakephp/core",
-            "version": "4.4.7",
+            "version": "4.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -291,16 +291,16 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "4.4.7",
+            "version": "4.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "a3fb57b8da981bb549ce02c0438ab5743053dd45"
+                "reference": "aa7bba6c39b56751f5c917464f113c924d4ba10f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/a3fb57b8da981bb549ce02c0438ab5743053dd45",
-                "reference": "a3fb57b8da981bb549ce02c0438ab5743053dd45",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/aa7bba6c39b56751f5c917464f113c924d4ba10f",
+                "reference": "aa7bba6c39b56751f5c917464f113c924d4ba10f",
                 "shasum": ""
             },
             "require": {
@@ -346,7 +346,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2022-10-10T18:01:10+00:00"
+            "time": "2022-11-06T06:40:44+00:00"
         },
         {
             "name": "cheprasov/php-redis-client",
@@ -1458,16 +1458,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.21.9",
+            "version": "v3.21.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "1bf02c57f260c5eea5e75a35c1a943fe943a188a"
+                "reference": "118cb171ecd7dcac38055a954717a3b5ed4a4e5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/1bf02c57f260c5eea5e75a35c1a943fe943a188a",
-                "reference": "1bf02c57f260c5eea5e75a35c1a943fe943a188a",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/118cb171ecd7dcac38055a954717a3b5ed4a4e5a",
+                "reference": "118cb171ecd7dcac38055a954717a3b5ed4a4e5a",
                 "shasum": ""
             },
             "require": {
@@ -1496,9 +1496,9 @@
                 "proto"
             ],
             "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.9"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.10"
             },
-            "time": "2022-10-26T20:30:45+00:00"
+            "time": "2022-11-30T19:56:32+00:00"
         },
         {
             "name": "grpc/grpc",
