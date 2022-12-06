@@ -1,5 +1,5 @@
 #!/bin/bash
-#@author Filip Oščádal <git@gscloud.cz>
+#@author Fred Brooker <git@gscloud.cz>
 
 git checkout --orphan latest_branch
 git add -A
