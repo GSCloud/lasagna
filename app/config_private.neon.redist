@@ -1,5 +1,5 @@
-#@author Filip Oščádal <git@gscloud.cz>
 ### TESSERACT LASAGNA PRIVATE CONFIGURATION
+#@author Fred Brooker <git@gscloud.cz>
 
 #force debug
 #dbg: TRUE

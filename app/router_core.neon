@@ -1,4 +1,4 @@
-#@author Filip Oščádal <git@gscloud.cz>
+# @author Fred Brooker <git@gscloud.cz>
 # core routes, mandatory - see CorePresenter.php
 
 GetWebManifest:

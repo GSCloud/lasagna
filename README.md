@@ -50,5 +50,5 @@ Tesseract LASAGNA is a Model View Presenter CMS that uses Google Sheets for basi
 * documentation
 * remote function calls
 
-Author: Fred Brooker / Filip Oščádal 💌 <git@gscloud.cz>  
-GS Cloud Ltd. [https://gscloud.cz]
+Author: Fred Brooker 💌 <git@gscloud.cz>  
+GS Cloud Ltd. [https://gscloud.cz] ⛅️

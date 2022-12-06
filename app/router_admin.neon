@@ -1,4 +1,4 @@
-#@author Filip Oščádal <git@gscloud.cz>
+# @author Fred Brooker <git@gscloud.cz>
 # admin routes, mandatory for login and administration - see AdminPresenter.php
 
 admin:

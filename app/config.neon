@@ -1,5 +1,5 @@
-#@author Fred Brooker <git@gscloud.cz>
 ### TESSERACT LASAGNA main config
+# @author Fred Brooker <git@gscloud.cz>
 
 #dbg: TRUE
 dbg: FALSE
