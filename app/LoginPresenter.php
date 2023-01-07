@@ -1,6 +1,7 @@
 <?php
 /**
  * GSC Tesseract
+ * php version 8.2
  *
  * @author   Fred Brooker <git@gscloud.cz>
  * @category Framework
@@ -38,7 +39,7 @@ class LoginPresenter extends APresenter
 
         // set return URI
         $refhost = parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
-        $uri = "/${nonce}";
+        $uri = "/{$nonce}";
         if ($refhost ?? null) {
             if (in_array($refhost, $this->getData("multisite_profiles.default"))) {
                 $uri = $_SERVER["HTTP_REFERER"];
@@ -60,7 +61,7 @@ class LoginPresenter extends APresenter
             $errors[] = \htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
-            $hint = $email ? \strtolower("&login_hint=${email}") : "";
+            $hint = $email ? \strtolower("&login_hint={$email}") : "";
 
             // check URL for relogin parameter
             if (isset($_GET["relogin"])) {
