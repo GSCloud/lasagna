@@ -52,7 +52,7 @@ class UnitTester
 
         // check controllers
         foreach ($controllers as $c) {
-            $controller = "\\GSC\\${c}";
+            $controller = "\\GSC\\$c";
 
             // get instances
             $app = $controller::getInstance();

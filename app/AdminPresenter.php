@@ -86,7 +86,7 @@ class AdminPresenter extends APresenter
         $data["user"] = $this->getCurrentUser();
         $data["admin"] = $g = $this->getUserGroup();
         if ($g) {
-            $data["admin_group_${g}"] = true; // for templating
+            $data["admin_group_{$g}"] = true; // for templating
         }
         $extras = [
             "fn" => $view,
@@ -252,12 +252,12 @@ class AdminPresenter extends APresenter
                     if (!$k || !$v) {
                         continue;
                     }
-                    if (\file_exists(DATA . "/${k}.csv") && \is_readable(DATA . "/${k}.csv")) {
+                    if (\file_exists(DATA . "/{$k}.csv") && \is_readable(DATA . "/{$k}.csv")) {
                         $arr[$k] = [
                             "csv" => $v,
-                            "lines" => getFileLines(DATA . "/${k}.csv"),
+                            "lines" => getFileLines(DATA . "/{$k}.csv"),
                             "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
-                            "timestamp" => \filemtime(DATA . "/${k}.csv"),
+                            "timestamp" => \filemtime(DATA . "/{$k}.csv"),
                         ];
                         if ($arr[$k]["lines"] === -1) {
                             unset($arr[$k]);
@@ -276,7 +276,7 @@ class AdminPresenter extends APresenter
                 }
                 $profile = \preg_replace('/[^a-z0-9_-]+/', '', \strtolower($profile)); // fix profile ID
                 if ($profile) {
-                    $f = DATA . "/summernote_articles_${profile}.txt";
+                    $f = DATA . "/summernote_articles_{$profile}.txt";
                     if (\file_exists($f) && \is_readable($f)) {
                         $data = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                         $data = \array_unique($data, SORT_LOCALE_STRING);
@@ -369,8 +369,8 @@ class AdminPresenter extends APresenter
                     return $this->writeJsonData(401, $extras); // unauthorized
                 }
                 $hash = \hash("sha256", $base);
-                $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${base}&key=${key}";
-                $f = "PageSpeed_Insights_${hash}";
+                $uri = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={$base}&key={$key}";
+                $f = "PageSpeed_Insights_{$hash}";
                 if (!$data = Cache::read($f, "fiveminutes")) { // read data from Google
                     if ($data = @\file_get_contents($uri)) {
                         Cache::write($f, $data, "fiveminutes");
@@ -550,8 +550,8 @@ class AdminPresenter extends APresenter
                 if ($x != 4) {
                     return $this->writeJsonData(500, $extras); // error 500
                 }
-                if (\file_exists(DATA . "/summernote_${profile}_${hash}.json") && \is_readable(DATA . "/summernote_${profile}_${hash}.json")) {
-                    if (@\copy(DATA . "/summernote_${profile}_${hash}.json", DATA . "/summernote_${profile}_${hash}.bak") === false) {
+                if (\file_exists(DATA . "/summernote_{$profile}_{$hash}.json") && \is_readable(DATA . "/summernote_{$profile}_{$hash}.json")) {
+                    if (@\copy(DATA . "/summernote_{$profile}_{$hash}.json", DATA . "/summernote_{$profile}_{$hash}.bak") === false) {
                         $this->addError("Article $path copy to backup file failed.");
                         $this->addAuditMessage("Article $path copy to backup file failed.");
                         return $this->writeJsonData([ // error
@@ -562,7 +562,7 @@ class AdminPresenter extends APresenter
                         ], $extras);
                     };
                 }
-                if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
+                if (@\file_put_contents(DATA . "/summernote_{$profile}_{$hash}.db", $data_nows . "\n", LOCK_EX | FILE_APPEND) === false) {
                     $this->addError("Article $path write to history file failed.");
                     $this->addAuditMessage("Article $path write to history file failed.");
                     return $this->writeJsonData([ // error
@@ -572,7 +572,7 @@ class AdminPresenter extends APresenter
                         "hash" => $hash,
                     ], $extras);
                 };
-                if (@\file_put_contents(DATA . "/summernote_${profile}_${hash}.json", $data, LOCK_EX) === false) {
+                if (@\file_put_contents(DATA . "/summernote_{$profile}_{$hash}.json", $data, LOCK_EX) === false) {
                     $this->addError("Article $path write to file failed.");
                     $this->addAuditMessage("Article $path write to file failed.");
                     return $this->writeJsonData([ // error
@@ -584,7 +584,7 @@ class AdminPresenter extends APresenter
                 }
                 // save article meta data
                 $p = [];
-                $f = DATA . "/summernote_articles_${profile}.txt";
+                $f = DATA . "/summernote_articles_{$profile}.txt";
                 if (\file_exists($f) && \is_readable($f)) {
                     $p = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                 }
@@ -669,8 +669,8 @@ class AdminPresenter extends APresenter
         if (!$key) {
             return $this->writeJsonData(500, $extras); // error
         }
-        if (\file_exists(DATA . "/${key}")) {
-            @\unlink(DATA . "/${key}");
+        if (\file_exists(DATA . "/{$key}")) {
+            @\unlink(DATA . "/{$key}");
         }
         \clearstatcache();
         return $this->setIdentity();
@@ -691,7 +691,7 @@ class AdminPresenter extends APresenter
                 @\ob_flush();
                 foreach ($this->getData("cache_profiles") as $k => $v) { // clear all cache profiles
                     Cache::clear($k);
-                    Cache::clear("${k}_file");
+                    Cache::clear("{$k}_file");
                 }
                 \clearstatcache();
                 \array_map("unlink", \glob(CACHE . "/*.php"));
@@ -740,7 +740,7 @@ class AdminPresenter extends APresenter
         $y = \implode("</td><td>", $x);
         $z = "<td>$y</td>";
         for ($i = 1; $i <= 5; $i++) { // add 5 column classes
-            $z = \preg_replace("/<td>/", "<td class='alogcol${i}'>", $z, 1);
+            $z = \preg_replace("/<td>/", "<td class='alogcol{$i}'>", $z, 1);
         }
         $val = $z;
     }

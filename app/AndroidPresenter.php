@@ -34,11 +34,11 @@ class AndroidPresenter extends APresenter
             "cs",
         ] as $language) {
             $data["cdn"] = "";
-            $data["home_url"] = "android_${language}.html";
+            $data["home_url"] = "android_{$language}.html";
             $data["lang"] = $language;
             unset($data["langcs"]);
             unset($data["langen"]);
-            $data["lang${language}"] = true;
+            $data["lang{$language}"] = true;
             $data["l"] = $l = $this->getLocale($language);
             $data["l"] = $data["l"] ?? [];
             foreach ($data["l"] as $k => $v) {
@@ -46,7 +46,7 @@ class AndroidPresenter extends APresenter
             }
             $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
             StringFilters::trim_html_comment($output);
-            $f = WWW . "/android_${language}.html";
+            $f = WWW . "/android_{$language}.html";
             if (file_exists($f) && is_writable($f)) {
                 @\file_put_contents($f, $output);
             } else if (is_writable(WWW)) {
