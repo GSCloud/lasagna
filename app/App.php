@@ -192,7 +192,7 @@ foreach ($cache_profiles as $k => $v) {
     if ($cfg["redis"]["port"] ?? null) {
         // use REDIS
         Cache::setConfig(
-            "$k_file", [
+            "{$k}_file", [
                 // fallback File engine
                 "className" => "Cake\Cache\Engine\FileEngine",
                 "duration" => $v,
