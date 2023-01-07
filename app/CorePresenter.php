@@ -80,11 +80,11 @@ class CorePresenter extends APresenter
                     $epub = \str_replace("..", "", $epub);
                     $epub = \str_replace("\\", "", $epub);
                     $epub = \str_ireplace(".epub", "", $epub);
-                    $file = WWW . "/${epub}.epub";
+                    $file = WWW . "/{$epub}.epub";
                 }
                 if ($epub && \file_exists($file) && \is_readable($file)) {
                     $this->setHeaderHTML();
-                    $data["epub"] = "/${epub}.epub";
+                    $data["epub"] = "/{$epub}.epub";
                     $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
                     return $this->setData("output", $output);
                 }
@@ -156,7 +156,7 @@ class CorePresenter extends APresenter
                 $hash = \hash("sha256", $path);
 
                 // get article data
-                $f = DATA . "/summernote_${profile}_${hash}.json";
+                $f = DATA . "/summernote_{$profile}_{$hash}.json";
                 if (\file_exists($f) && \is_readable($f)) {
                     $html = \json_decode(@\file_get_contents($f) ?? "", true);
                     if (\is_array($html)) {
@@ -328,7 +328,7 @@ class CorePresenter extends APresenter
                 if ($x !== 2) { // ERROR
                     return $this->writeJsonData(400, $extras);
                 }
-                $f = DATA . "/summernote_${profile}_${hash}.json";
+                $f = DATA . "/summernote_{$profile}_{$hash}.json";
                 $data = "";
                 $time = null;
                 if (\file_exists($f)) {
@@ -389,7 +389,7 @@ class CorePresenter extends APresenter
                         "desc" => \htmlspecialchars($p["api_description"] ?? ""),
                         "exam" => $p["api_example"] ?? [],
                         "finished" => (bool) $p["finished"] ?? false,
-                        "info" => $info ? "<br><blockquote>${info}</blockquote>" : "",
+                        "info" => $info ? "<br><blockquote>{$info}</blockquote>" : "",
                         "key" => (bool) $p["use_key"] ?? false,
                         "linkit" => !(\strpos($p["path"], "[") ?? false), // do not link to path with parameters!
                         "method" => \strtoupper($p["method"]),

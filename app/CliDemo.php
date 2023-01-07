@@ -5,7 +5,7 @@
  * @author   Fred Brooker <git@gscloud.cz>
  * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @link     https://app.gscloud.cz
  */
 
 namespace GSC;
@@ -26,10 +26,12 @@ class CliDemo extends APresenter
 
     /**
      * Controller processor
+     * 
+     * @param mixed $param optional parameter
      *
      * @return self
      */
-    public function process()
+    public function process($param = null)
     {
         echo "process: Hello World!\n";
         return $this;

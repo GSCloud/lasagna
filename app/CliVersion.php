@@ -5,7 +5,7 @@
  * @author   Fred Brooker <git@gscloud.cz>
  * @category Framework
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @link     https://app.gscloud.cz
  */
 
 namespace GSC;
@@ -30,7 +30,7 @@ class CliVersion extends APresenter
      *
      * @return void
      */
-    public function process()
+    public function process($param = null)
     {
         $data = $this->getData();
         $out = [

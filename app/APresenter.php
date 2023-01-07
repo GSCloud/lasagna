@@ -224,7 +224,7 @@ abstract class APresenter implements IPresenter
         $class = get_called_class();
         if (array_key_exists($class, self::$instances)) {
             // throw an exception if class is already instantiated
-            throw new \Exception("FATAL ERROR: instance of class [${class}] already exists");
+            throw new \Exception("FATAL ERROR: instance of class [{$class}] already exists");
         }
     }
 
@@ -407,7 +407,7 @@ abstract class APresenter implements IPresenter
             $template = 'index';
         }
         // $type: string = 0, template = 1
-        $type = (file_exists(TEMPLATES . DS . "${template}.mustache")) ? 1 : 0;
+        $type = (file_exists(TEMPLATES . DS . "{$template}.mustache")) ? 1 : 0;
         $renderer = new \Mustache_Engine(array(
             'template_class_prefix' => '__' . SERVER . '_' . PROJECT . '_',
             'cache' => TEMP,
@@ -578,7 +578,7 @@ abstract class APresenter implements IPresenter
             $curl = curl_init();
             $message = htmlspecialchars('🤖 ' . APPNAME . ' (' . DOMAIN . ')' . ': ' . $message . ' [' . $this->getCurrentUser()['name'] . ']');
             if ($curl && $message && $chid && $apikey) {
-                $query = '?chat_id=' . $chid . "&text=${message}";
+                $query = '?chat_id=' . $chid . "&text={$message}";
                 curl_setopt($curl, CURLOPT_URL, 'https://api.telegram.org/bot' . $apikey . '/sendMessage' . $query);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 curl_exec($curl);
@@ -864,7 +864,7 @@ abstract class APresenter implements IPresenter
             return $this->getData('cfg');
         }
         if (is_string($key)) {
-            return $this->getData("cfg.${key}");
+            return $this->getData("cfg.{$key}");
         }
         throw new \Exception('FATAL ERROR: invalid get parameter');
     }
@@ -1103,7 +1103,7 @@ abstract class APresenter implements IPresenter
         // audit certain messages
         if (!LOCALHOST && !CLI && $code > 303) {
             $ref = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-            $this->addAuditMessage("ERROR: ${code}; ref. ${ref}");
+            $this->addAuditMessage("ERROR: {$code}; ref. {$ref}");
         }
         \header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
@@ -1274,7 +1274,7 @@ abstract class APresenter implements IPresenter
         $language = \trim(\strtoupper((string) $language));
         $key = \trim(\strtoupper((string) $key));
         $cfg = $this->getCfg();
-        $file = \strtolower("${language}_locale");
+        $file = \strtolower("{$language}_locale");
         $locale = Cache::read($file, 'default');
         if ($locale === false || empty($locale)) {
             if (\array_key_exists('locales', $cfg)) {
@@ -1284,21 +1284,21 @@ abstract class APresenter implements IPresenter
                     // 1. read from CSV file
                     $csv = false;
                     $subfile = \strtolower($k);
-                    if ($csv === false && \file_exists((DATA . DS . "${subfile}.csv"))) {
-                        $csv = @\file_get_contents(DATA . DS . "${subfile}.csv");
+                    if ($csv === false && \file_exists((DATA . DS . "{$subfile}.csv"))) {
+                        $csv = @\file_get_contents(DATA . DS . "{$subfile}.csv");
                         if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                         }
                     }
 
                     // 2. read from CSV file backup
-                    if ($csv === false && \file_exists(DATA . DS . "${subfile}.bak")) {
-                        $csv = @\file_get_contents(DATA . DS . "${subfile}.bak");
+                    if ($csv === false && \file_exists(DATA . DS . "{$subfile}.bak")) {
+                        $csv = @\file_get_contents(DATA . DS . "{$subfile}.bak");
                         if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                             continue; // skip this CSV
                         } else {
-                            \copy(DATA . DS . "${subfile}.bak", DATA . DS . "${subfile}.csv");
+                            \copy(DATA . DS . "{$subfile}.bak", DATA . DS . "{$subfile}.csv");
                         }
                     }
 
@@ -1330,12 +1330,12 @@ abstract class APresenter implements IPresenter
                 $dolar = ['$' => '$'];
                 foreach ((array) $locale as $a => $b) {
                     if (\substr($a, 0, 1) === '$') {
-                        $a = \trim($a, '${}' . "\x20\t\n\r\0\x0B");
+                        $a = \trim($a, '{}$' . "\x20\t\n\r\0\x0B");
                         if (!\strlen($a)) {
                             continue;
                         }
                         $dolar['$' . $a] = $b;
-                        $dolar['${' . $a . '}'] = $b;
+                        $dolar['{$' . $a . '}'] = $b;
                     }
                 }
                 // replace $ and $$
@@ -1404,7 +1404,7 @@ abstract class APresenter implements IPresenter
                     foreach ($myzones as $myzone) {
                         if ($zone->id == $myzone) {
                             $zones->cachePurgeEverything($zone->id);
-                            $this->addMessage("Cloudflare: zone ${myzone} purged");
+                            $this->addMessage("Cloudflare: zone {$myzone} purged");
                         }
                     }
                 }
@@ -1432,7 +1432,7 @@ abstract class APresenter implements IPresenter
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
                 $data = false;
-                if (!\file_exists(DATA . DS . "${file}.csv")) {
+                if (!\file_exists(DATA . DS . "{$file}.csv")) {
                     $force = true;
                 }
                 if ($force) {
@@ -1445,11 +1445,11 @@ abstract class APresenter implements IPresenter
                             $remote = self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX;
                         }
                     }
-                    $this->addMessage("FILE: fetching ${remote}");
+                    $this->addMessage("FILE: fetching {$remote}");
                     try {
                         $data = @\file_get_contents($remote);
                     } catch (\Exception $e) {
-                        $this->addError("ERROR: fetching ${remote}");
+                        $this->addError("ERROR: fetching {$remote}");
                         $data = '';
                     }
                 }
@@ -1460,22 +1460,22 @@ abstract class APresenter implements IPresenter
                     Cache::write($file, $data, 'csv');
 
                     // remove old backup
-                    if (\file_exists(DATA . DS . "${file}.bak")) {
-                        if (@\unlink(DATA . DS . "${file}.bak") === false) {
-                            $this->addError("FILE: remove ${file}.bak failed!");
+                    if (\file_exists(DATA . DS . "{$file}.bak")) {
+                        if (@\unlink(DATA . DS . "{$file}.bak") === false) {
+                            $this->addError("FILE: remove {$file}.bak failed!");
                         }
                     }
 
                     // move CSV to backup
-                    if (\file_exists(DATA . DS . "${file}.csv")) {
-                        if (@\rename(DATA . DS . "${file}.csv", DATA . DS . "${file}.bak") === false) {
-                            $this->addError("FILE: backup ${file}.csv failed!");
+                    if (\file_exists(DATA . DS . "{$file}.csv")) {
+                        if (@\rename(DATA . DS . "{$file}.csv", DATA . DS . "{$file}.bak") === false) {
+                            $this->addError("FILE: backup {$file}.csv failed!");
                         }
                     }
 
                     // write new CSV
-                    if (\file_put_contents(DATA . DS . "${file}.csv", $data, LOCK_EX) === false) {
-                        $this->addError("FILE: save ${file}.csv failed!");
+                    if (\file_put_contents(DATA . DS . "{$file}.csv", $data, LOCK_EX) === false) {
+                        $this->addError("FILE: save {$file}.csv failed!");
                     }
                 }
             }
@@ -1523,8 +1523,8 @@ abstract class APresenter implements IPresenter
         }
         if (!$csv = Cache::read($file, 'csv')) { // read CSV from cache
             $csv = false;
-            if (\file_exists(DATA . DS . "${file}.csv")) {
-                $csv = \file_get_contents(DATA . DS . "${file}.csv");
+            if (\file_exists(DATA . DS . "{$file}.csv")) {
+                $csv = \file_get_contents(DATA . DS . "{$file}.csv");
             }
             if (\strpos($csv, '!DOCTYPE html') > 0) {
                 $csv = false; // we got HTML document, try backup
@@ -1534,14 +1534,14 @@ abstract class APresenter implements IPresenter
                 return $csv; // CSV is OK
             }
             $csv = false;
-            if (\file_exists(DATA . DS . "${file}.bak")) {
-                $csv = \file_get_contents(DATA . DS . "${file}.bak"); // read CSV backup
+            if (\file_exists(DATA . DS . "{$file}.bak")) {
+                $csv = \file_get_contents(DATA . DS . "{$file}.bak"); // read CSV backup
             }
             if (\strpos($csv, '!DOCTYPE html') > 0) {
                 return null; // we got HTML document = failure
             }
             if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
-                \copy(DATA . DS . "${file}.bak", DATA . DS . "${file}.csv"); // copy BAK to CSV
+                \copy(DATA . DS . "{$file}.bak", DATA . DS . "{$file}.csv"); // copy BAK to CSV
                 Cache::write($file, $csv, 'csv'); // store into cache
                 return $csv; // OK
             }
@@ -1703,7 +1703,7 @@ abstract class APresenter implements IPresenter
             $use_cache = false;
         }
         if ($group) {
-            $data["admin_group_${group}"] = true;
+            $data["admin_group_{$group}"] = true;
         }
         if ($user['id']) { // do not cache anything for logged users
             $use_cache = false;
