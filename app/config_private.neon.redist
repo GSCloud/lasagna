@@ -1,0 +1,57 @@
+### TESSERACT LASAGNA PRIVATE CONFIGURATION
+#@author Fred Brooker <git@gscloud.cz>
+
+#force debug
+#dbg: TRUE
+
+# cookie: tracy-debug
+#DEBUG_COOKIE: "cookievalue"
+
+# Google OAuth 2.0
+#goauth_client_id: "someid.apps.googleusercontent.com"
+#goauth_secret: ""
+
+# Google Cloud Platform keys (in app/)
+#gcp_keys: "key-hash.json"
+
+# Google Drive backup
+#google_drive_backup: ""
+
+# external links
+external_links: [
+#  [
+#    name: "Google Docs - DevOps"
+#    title: "some title"
+#    link: "https://..."
+#  ]
+]
+
+# Google services
+google: [
+#  mapsapi_key: "some_key"
+#  pagespeedinsights_key: "some_key"
+]
+
+# Cloudflare services
+cf: [
+  email: "joe@foo.bar"
+  apikey: "some_key"
+  zoneid: [
+    "some_key"
+    "some_key"
+  ]
+]
+
+# admin groups
+admin_groups: [
+  admin: [
+    joe@foo.bar
+    mike@foo.bar
+  ]
+  editor: [
+    editor@foo.bar
+  ]
+  default: [
+    *
+  ]
+]

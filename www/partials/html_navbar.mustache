@@ -1,0 +1,24 @@
+<div class="navbar-fixed">
+  <nav class="navbar">
+    <div class="nav-wrapper {{ design.nav_color }}" role="navigation">
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">menu</span>
+      </a>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <a id="logo-container" class="brand-logo truncate center"
+        href="/{{#langcs}}cs{{/langcs}}{{#langen}}en{{/langen}}">{{ l.title }}</a>
+      <ul class="right hide-on-med-and-down">
+        <li>
+          <a class="sethlcs {{#langcs}}{{ design.nav_color }} darken-4{{/langcs}} text-lighten-4"
+          {{^langcs}}href="/cs"{{/langcs}}
+          ><b>{{ l.nav_czech }}</b></a>
+        </li>
+        <li>
+          <a class="sethlen {{#langen}}{{ design.nav_color }} darken-4{{/langen}} text-lighten-4" 
+          {{^langen}}href="/en"{{/langen}}
+          ><b>{{ l.nav_english }}</b></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>

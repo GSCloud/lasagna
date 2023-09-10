@@ -1,0 +1,56 @@
+{{>html_header}}
+
+<div class="container">
+  <div class="row center">
+    {{>title}}
+    <div class="container">
+      <div class="row left-align">
+        <div id="user1" class="summernote"><div class="progress"><div class="indeterminate"></div></div></div>
+      </div>
+    </div>
+    <h4>Emoji & Specials</h4>
+    <div id="emojisdemo" class="hover">
+      🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀
+    </div>
+    <div class="container">
+      <div class="row left-align">
+        <div id="user2" class="summernote"><div class="progress"><div class="indeterminate"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.gscloud.cz/js/grapheme.min.js" defer></script>
+<script>
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("demo - WebShare API");
+        if (typeof window.WebShareFactory === "function") $("#emojisdemo").append(WebShareFactory(
+          'WebShare API works!', '', 'DEMO'));
+      });
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("demo - Grapheme Splitter");
+        var splitter = new GraphemeSplitter();
+        var graphemes = splitter.splitGraphemes($("#emojisdemo").text());
+        var arr = graphemes.map(function (x) {
+          return '<span class="ccemojisdemo">' + x + '</span>';
+        });
+        $("#emojisdemo").html(arr.join(''));
+        $(".ccemojisdemo").click(function () {
+          var x = $(this).text();
+          GSC.CopyClipboard(x);
+          M.toast({text: x, classes: "bigemoji"});
+        });
+      });
+
+    }
+  })(window, document);
+
+</script>
+
+<style>.bigemoji{font-size:5em}</style>
+
+{{>html_footer}}

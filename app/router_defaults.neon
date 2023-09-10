@@ -1,0 +1,42 @@
+# @author Fred Brooker <git@gscloud.cz>
+# router defaults
+
+defaults:
+  # RESTful API
+  api: false
+  api_description: ""
+  api_example: []
+  api_info: ""
+  api_key: null
+
+  # testing
+  assert_httpcode: 200
+  assert_json: false
+  assert_values: []
+
+  # switches
+  cached: false
+  deprecated: false
+  finished: false
+  private: false
+  sitemap: false
+  use_key: false
+
+  # web interface
+  access_key: null
+  encryption_key: null
+  language: en
+  sethl: false
+
+  # HTTP methods - separated by |
+  method: GET
+
+  # MVP
+  presenter: home
+  template: index
+  view: home
+
+  # extras
+  alias: null
+  clone: null
+  redirect: null
