@@ -21,17 +21,12 @@ find www/cdn-assets/ -type l -mtime +30 -delete
 command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 composer update --no-plugins --no-scripts
 
-# run gulp
-command -v gulp >/dev/null 2>&1 && gulp
-
 # CRLF normalization
-#git add --renormalize .
+git add --renormalize .
 
 # resize favicons
+#echo "Resizing favicons"
 #cd www/img && . ./create_favicons.sh
-
-# adding new files
-git add -A
 
 # commit changes
 git commit -am "automatic update"

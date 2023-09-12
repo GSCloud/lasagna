@@ -637,7 +637,7 @@
 
     // admin UI bindings and GSC functions
     w.GSC.init.push(function () {
-      w.GSC.names.push("admin UI - bindings");
+      w.GSC.names.push("admin UI - bind");
       if (!getCookie("motyle") || getCookie("motyle") == "false") {
         $("#admin_main").show(100);
       }
@@ -896,7 +896,7 @@
 
     // show admin UI
     w.GSC.init.push(function () {
-      w.GSC.names.push("Admin UI");
+      w.GSC.names.push("show admin UI");
       GSC.AdminUI();
       // filemanager state
       if (getCookie("open_filemanager") == 1) {
