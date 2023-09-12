@@ -432,8 +432,7 @@ if ($router[$view]["redirect"] ?? false) {
 
 // CSP HEADERS
 switch ($presenter[$view]["template"]) {
-default: // set CSP HEADER
-    
+default:
     if (file_exists(CSP) && is_readable(CSP)) {
         $csp = @Neon::decode(@file_get_contents(CSP));
         header(implode(" ", (array) $csp["csp"]));
@@ -449,7 +448,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
     exit;
 }
 
-// CORE SINGLETON CLASS
+// SINGLETON CONTROLLER
 $data["controller"] = $p = ucfirst(
     strtolower($presenter[$view]["presenter"])
 ) . "Presenter";
@@ -469,7 +468,7 @@ $data["processing_time"] = $time2 = round(
 );
 
 // SET X-HEADERS
-header("X-Engine: Tesseract 2.0 beta");
+header("X-Engine: Tesseract 2.0");
 header("X-Country: $country");
 header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");
@@ -480,11 +479,9 @@ echo $data["output"] ?? "";
 // PROCESS DEBUGGING
 if (DEBUG) {
     define("TESSERACT_END", microtime(true));
-
     // remove private information
     unset($data["cf"]);
     unset($data["goauth_secret"]);
-
     // dumps
     bdump($app->getIdentity(), "identity");
     bdump($data, 'model');

@@ -5,7 +5,7 @@
 Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
 String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
-// create uuid
+// create local storage uuid
 var uuid = null;
 try {
   uuid = crypto.randomUUID();
@@ -271,11 +271,11 @@ async function sha256(message) {
               }
             }
           });
-          // do repeat checks
+          // repeat checks
           setTimeout("GSC.VersionCheck();", 20000);
         }
       }
-      // do repeat checks
+      // repeat checks
       setTimeout("GSC.VersionCheck()", 5000);
     });
 
@@ -299,14 +299,14 @@ async function sha256(message) {
 
     });
 
-    // GSC.ReadArticles() - read remote articles / insert HTML
+    // GSC.ReadArticles() - read articles & insert HTML
     GSC.init.push(function() {
       GSC.names.push("GSC.ReadArticles()");
       GSC.articles_rendered = false;
 
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
 
-        // check for a local copy of the article
+        // check for local copy of the article
         var html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
         if (html != "") {
           var obj = jQuery.parseJSON(html);
@@ -322,7 +322,8 @@ async function sha256(message) {
           GSC.articles_rendered = true;
         }
 
-        if (GSC.summernote_on || GSC.offline) { //  check later if offline
+        //  check later if offline
+        if (GSC.summernote_on || GSC.offline) {
           setTimeout("GSC.ReadArticles();", 10000);
           if (!GSC.articles_rendered) {
             $(".summernote").html("📵");
@@ -330,7 +331,7 @@ async function sha256(message) {
           return;
         }
 
-        // get remote articles data
+        // get articles data
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function(data) {
           if (data && data.data) {
@@ -362,13 +363,12 @@ async function sha256(message) {
       }
 
       GSC.SetProfile();
-      GSC.ReadArticles(); // read articles 1st time
-      //setTimeout("GSC.ReadArticles();", 1); // read articles 1st time
+      GSC.ReadArticles();
     });
 
-    // DELAYED UI bindings
+    // UI
     GSC.init.push(function() {
-      GSC.names.push("UI - bindings");
+      GSC.names.push("UI");
 
       $(".sethlsk").click(function() {
         // set SK language
