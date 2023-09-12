@@ -307,24 +307,6 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Magic sleep
-     *
-     * @return void
-     */
-    public final function __sleep()
-    {
-    }
-
-    /**
-     * Magic wakeup
-     *
-     * @return void
-     */
-    public final function __wakeup()
-    {
-    }
-
-    /**
      * Magic call
      *
      * @param string $name
@@ -1274,7 +1256,8 @@ abstract class APresenter implements IPresenter
         $f = "user_rate_limit_{$this->getUID()}";
         $rate = (int) (Cache::read($f, 'limiter') ?? 0);
         Cache::write($f, ++$rate, 'limiter');
-        if ($rate > (int) $max) { // over limits
+        if ($rate > (int) $max) {
+            // over!
             $this->setLocation('/err/420');
             exit;
         }
@@ -1742,7 +1725,7 @@ abstract class APresenter implements IPresenter
         }
         if (is_null($data)) {
             $code = 500;
-            $msg = 'Data is NULL! Internal Server Error 🦄';
+            $msg = 'No DATA! Internal Server Error';
             \header('HTTP/1.1 500 Internal Server Error');
         }
         if (is_string($data)) {

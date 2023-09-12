@@ -129,14 +129,14 @@
       // show translation source pins
       $(".trans_pin").click(function () {
         if ($(this).data('on') == '1') {
-            M.toast({text: "📍 🚫"});
+            M.toast({text: "⛔️"});
             $(this).data('on', 0);    
             $('.sheetpin').remove();
         } else {
           $(this).data('on', 1);
-          M.toast({text: "📍 🆗"});
+          M.toast({text: "📍"});
           $('*[data-admin-tooltip]').each(function() {
-            $(this).prepend('<b onclick="M.toast({text:\'' + $(this).data('admin-tooltip') + '\'});" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📍&nbsp;</b>')
+            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" onclick="GSC.CopyThisText(this);" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📍&nbsp;</b>')
           });
         }
       });

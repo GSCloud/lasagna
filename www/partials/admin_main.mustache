@@ -15,20 +15,20 @@
   <!-- EXTERNAL SERVICES -->
   <div class="row center black">
     <div class="extrapadding" style="padding-top:2px">
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
         {{ l.a_google_account }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
         {{ l.a_google_password }}</a>
       {{#google.google-site-verification}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
         href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
         {{ l.a_google_search }}</a>
       {{/google.google-site-verification}}
       {{#umami.id}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn" target="_blank" rel="noopener"
+      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
         href="https://umami.gscloud.cz/websites/{{ umami.id }}">Umami</a>
       {{/umami.id}}
@@ -111,48 +111,48 @@
         <div class="container">
           {{#request_path_slug}}
           {{#GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">📋</span>
           &nbsp;
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}">🌍 exportHTML</a>
           &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 Remote Content for WordPress" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}{{ request_path_slug }}"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
           {{/GET.profile}}
 
           {{^GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>
           &nbsp;
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">🌍 exportHTML</a>
           &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 Remote Content for WordPress" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}
 
           {{^request_path_slug}}
           {{#GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">📋</span>
           &nbsp;
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!">🌍 exportHTML</a>
           &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 Remote Content for WordPress" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/{{ GET.profile }}/!"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
           {{/GET.profile}}
 
           {{^GET.profile}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 {{ l.a_copy_tit }}" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>
           &nbsp;
           <a target=_blank
             href="{{ BASE }}{{ lang }}/exportHTML/default/!">🌍 exportHTML</a>
           &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="javascript:GSC.CopyThisText(this)" class="hover"
+          <span title="📋 Remote Content for WordPress" onclick="GSC.CopyThisText(this);" class="hover"
             data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
           {{/GET.profile}}
           {{/request_path_slug}}

@@ -230,9 +230,11 @@ async function sha256(message) {
     if (typeof GSC.CopyThisText !== "function") GSC.CopyThisText = function(that) {
       if (that) {
         var t = $(that).data("copy").trim();
-        if (!t) t = $(that).text().trim();
+        if (!t) {
+          t = $(that).text().trim();
+        }
         GSC.CopyClipboard(t);
-        M.toast({html: "📋 " + t});
+        M.toast({text: "📋 " + t});
       }
     }
 
@@ -242,7 +244,7 @@ async function sha256(message) {
         var t = $(that).text().trim();
         var h = $(that).html().trim();
         GSC.CopyClipboard(h);
-        M.toast({html: "📋 " + t});
+        M.toast({text: "📋 " + t});
       }
     }
 

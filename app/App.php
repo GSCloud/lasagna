@@ -46,7 +46,12 @@ function exceptionErrorHandler($severity, $message, $file, $line)
         // this error code is not included in error_reporting
         return;
     }
-    throw new \Exception("ERROR: $message FILE: $file LINE: $line");
+    // error 503
+    header('HTTP/1.1 503 Service Unavailable');
+    if (DEBUG) {
+        echo "ERROR: $message FILE: $file LINE: $line";
+    }
+    exit;
 }
 set_error_handler("\\GSC\\exceptionErrorHandler");
 
@@ -167,7 +172,7 @@ function logger($message, $severity = Logger::INFO)
     return true;
 }
 
-// CACHING PROFILES
+// CACHE PROFILES
 $cache_profiles = array_replace(
     [
         "default" => "+2 minutes",
@@ -186,10 +191,9 @@ $cache_profiles = array_replace(
     ], (array) ($cfg["cache_profiles"] ?? [])
 );
 
-// init caching profiles
+// init cache profiles
 foreach ($cache_profiles as $k => $v) {
     if ($cfg["redis"]["port"] ?? null) {
-        // use REDIS
         Cache::setConfig(
             "{$k}_file", [
                 // fallback File engine
@@ -219,7 +223,6 @@ foreach ($cache_profiles as $k => $v) {
             ]
         );
     } else {
-        // no REDIS !!!
         Cache::setConfig(
             "{$k}_file", [
                 "className" => "Cake\Cache\Engine\FileEngine", // File engine
