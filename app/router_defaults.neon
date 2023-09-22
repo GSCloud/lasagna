@@ -20,11 +20,13 @@ defaults:
   finished: false
   private: false
   sitemap: false
-  use_key: false
 
-  # web interface
+  # interface
   access_key: null
   encryption_key: null
+  use_key: false
+
+  # language
   language: en
   sethl: false
 

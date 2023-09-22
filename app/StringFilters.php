@@ -167,6 +167,7 @@ class StringFilters implements IStringFilters
         " ‰ " => "&nbsp;‰",
         "<<" => "«",
         ">>" => "»",
+        " / " => " /&nbsp;",
     ];
 
     public static $array_replace_czech = [
@@ -258,6 +259,7 @@ class StringFilters implements IStringFilters
         " ‰ " => "&nbsp;‰",
         "<<" => "«",
         ">>" => "»",
+        " / " => " /&nbsp;",
     ];
 
     public static $array_replace_english = [
@@ -319,6 +321,7 @@ class StringFilters implements IStringFilters
         " ‰ " => "&nbsp;‰",
         "<<" => "«",
         ">>" => "»",
+        " / " => " /&nbsp;",
     ];
 
     /**
