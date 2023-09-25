@@ -35,7 +35,7 @@ class LoginPresenter extends APresenter
         }
         $this->checkRateLimit()->setHeaderHtml();
 
-        // check OAuth parameters
+        // check OAuth parameters for validity
         $cfg = $this->getCfg();
         if (($cfg["goauth_client_id"] ?? null) === null) {
             $this->setLocation("/err/403");
@@ -44,19 +44,19 @@ class LoginPresenter extends APresenter
             $this->setLocation("/err/403");
         }
 
-        $nonce = "?nonce=" . substr(
-            hash("sha256", random_bytes(8) . (string) time()), 0, 8
-        );
-
+        // generate nonce
+        $nonce = '/?nonce=' . $this->getNonce();
+        
         // set return URI
-        $refhost = parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
         $uri = "/{$nonce}";
+        $refhost = parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
         if ($refhost ?? null) {
             if (in_array($refhost, $this->getData("multisite_profiles.default"))) {
                 $uri = $_SERVER["HTTP_REFERER"];
             }
         }
         \setcookie("return_uri", $uri, 0, "/", DOMAIN);
+
         try {
             $provider = new \League\OAuth2\Client\Provider\Google(
                 [
@@ -125,25 +125,16 @@ class LoginPresenter extends APresenter
                     . " "
                     . $ownerDetails->getEmail()
                 );
-                // disabled for now!
-                //$this->addAuditMessage("GOOGLE OAUTH LOGIN");
-
-                /*
-                dump("NEW IDENTITY:");
-                dump($this->getIdentity());
-                dump("OAuth IDENTITY:");
-                dump($ownerDetails);
-                exit;
-                */
 
                 if ($this->getUserGroup() == "admin") {
-                    if ($this->getCfg("DEBUG_COOKIE")) { // set Tracy debug cookie
+                    if ($this->getCfg("DEBUG_COOKIE")) {
+                        // set Tracy debug cookie
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
                 }
                 $this->clearCookie("oauth2state");
                 if (\strlen($ownerDetails->getEmail())) {
-                    // store email for the next run
+                    // save email
                     \setcookie(
                         "login_hint",
                         $ownerDetails->getEmail() ?? "",

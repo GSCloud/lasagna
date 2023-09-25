@@ -32,19 +32,14 @@ class RSSPresenter extends APresenter
     {
         $items = [
             [
-                "title" => "foo #1",
-                "link" => "bar #1",
-                "description" => "foo bar #1",
+                "title" => "title #1",
+                "link" => "link #1",
+                "description" => "description #1",
             ],
             [
-                "title" => "foo #2",
-                "link" => "bar #2",
-                "description" => "foo bar #2",
-            ],
-            [
-                "title" => "foo #3",
-                "link" => "bar #3",
-                "description" => "foo bar #3",
+                "title" => "title #2",
+                "link" => "link #2",
+                "description" => "description #2",
             ],
         ];
         return $items;
