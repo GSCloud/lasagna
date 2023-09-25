@@ -11,9 +11,9 @@ cs:
   sitemap: true
 
 en:
-  language: en
   path: /en
   sitemap: true
+  language: en
 
 APIDemo:
   language: en

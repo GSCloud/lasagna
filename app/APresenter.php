@@ -1230,11 +1230,11 @@ abstract class APresenter implements IPresenter
         }
         if ($this->getCfg('canonical_url')) {
             $this->setLocation(
-                $this->getCfg('canonical_url') . "/?logout&nonce=$nonce"
+                $this->getCfg('canonical_url') . "?logout&nonce=$nonce"
             );
-        } else {
-            $this->setLocation("/?logout&nonce=$nonce");
+            exit;
         }
+        $this->setLocation("/?logout&nonce=$nonce");
         exit;
     }
 
