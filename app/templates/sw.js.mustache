@@ -6,22 +6,22 @@ var core = [
   {{#sitemap}}"/{{ . }}", {{/sitemap}}
   {{#swpreload}}"{{ . }}", {{/swpreload}}
   {{#swpreload_cdn}}"{{ cdn }}{{ . }}", {{/swpreload_cdn}}
-  "https://cdn.gscloud.cz/css/materialize.min.css",
-  "https://cdn.gscloud.cz/js/jquery.min.js",
-  "https://cdn.gscloud.cz/webfonts/materialicons-regular.woff2",
-  "{{ cdn }}/img/favicon-128.webp",
   "{{ cdn }}/img/favicon-16.webp",
+  "{{ cdn }}/img/favicon-128.webp",
   "{{ cdn }}/img/favicon-180.webp",
   "{{ cdn }}/img/favicon-192.png",
   "{{ cdn }}/img/favicon-192.webp",
   "{{ cdn }}/img/favicon-512.png",
   "{{ cdn }}/img/favicon-512.webp",
   "{{ cdn }}/img/logo.webp",
-  "/img/LASAGNA_logo.png",
-  "/img/gsc.png",
-  "/img/logo.png",
-  "/img/materialize.svg",
-  "/img/pwa.png",
+  "https://cdn.gscloud.cz/css/materialize.min.css",
+  "https://cdn.gscloud.cz/img/LASAGNA_logo.webp",
+  "https://cdn.gscloud.cz/img/g.png",
+  "https://cdn.gscloud.cz/img/gsc.png",
+  "https://cdn.gscloud.cz/img/materialize.svg",
+  "https://cdn.gscloud.cz/img/pwa.png",
+  "https://cdn.gscloud.cz/js/jquery.min.js",
+  "https://cdn.gscloud.cz/webfonts/materialicons-regular.woff2",
 ];
 
 self.addEventListener("install", function (event) {

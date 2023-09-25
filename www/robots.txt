@@ -8,8 +8,4 @@ Disallow: /img
 Disallow: /js
 Disallow: /login
 Disallow: /logout
-Disallow: /partials
-Disallow: /summernote
-Disallow: /templates
 Disallow: /upload
-Disallow: /webfonts
