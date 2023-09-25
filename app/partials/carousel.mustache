@@ -1,0 +1,53 @@
+<div class="carousel carousel-slider">
+  {{#imgrotator}}
+  <a class="carousel-item">
+    <img
+      class="lazyload"
+      alt=""
+      data-src="{{ cdn }}/img/rotator/{{ . }}-320.jpg"
+      data-sizes="auto"
+      data-srcset="
+        {{ cdn }}/img/rotator/{{ . }}-320.jpg 320w,
+        {{ cdn }}/img/rotator/{{ . }}-480.jpg 480w,
+        {{ cdn }}/img/rotator/{{ . }}-600.jpg 600w,
+        {{ cdn }}/img/rotator/{{ . }}-640.jpg 640w,
+        {{ cdn }}/img/rotator/{{ . }}-720.jpg 720w,
+        {{ cdn }}/img/rotator/{{ . }}-768.jpg 768w,
+        {{ cdn }}/img/rotator/{{ . }}-800.jpg 800w,
+        {{ cdn }}/img/rotator/{{ . }}-960.jpg 960w,
+        {{ cdn }}/img/rotator/{{ . }}.jpg 1024w,
+        {{ cdn }}/img/rotator/{{ . }}.jpg 1280w,
+        {{ cdn }}/img/rotator/{{ . }}.jpg 1440w,
+        {{ cdn }}/img/rotator/{{ . }}.jpg 1920w
+      "></a>
+  {{/imgrotator}}
+</div>
+
+<script>
+  (function (w, undefined) {
+    if (w.GSC.init) {
+
+      if (!w.GSC.FixCarousel) w.GSC.FixCarousel = function (t) {
+        var h = $(".carousel-item.active>img").height();
+        console.log("carousel height: " + h);
+        if (h < 100) return;
+        $(".carousel.carousel-slider").css("height", h + "px");
+      }
+
+      // Materialize carousel
+      w.GSC.init.push(function () {
+        w.GSC.names.push("Materialize carousel");
+        $(".carousel.carousel-slider").carousel({
+          fullWidth: true,
+          indicators: true
+        });
+        setTimeout('window.GSC.FixCarousel();', 1000);
+        setTimeout('window.GSC.FixCarousel();', 5000);
+        setTimeout('window.GSC.FixCarousel();', 10000);
+        setTimeout('window.GSC.FixCarousel();', 20000);
+      });
+
+    }
+  })(window);
+
+</script>
