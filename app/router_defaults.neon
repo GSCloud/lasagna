@@ -15,6 +15,7 @@ defaults:
   assert_values: []
 
   # switches
+  allow_key: false
   cached: false
   deprecated: false
   finished: false
