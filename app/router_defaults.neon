@@ -18,17 +18,18 @@ defaults:
   cached: false
   deprecated: false
   finished: false
+  norobots: false
   private: false
   sitemap: false
+  use_key: false
 
   # interface
   access_key: null
   encryption_key: null
-  use_key: false
 
   # language
   language: en
-  sethl: false
+  sethl: false # deprecated, remove!
 
   # HTTP methods - separated by |
   method: GET
