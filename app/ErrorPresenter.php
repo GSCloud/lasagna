@@ -74,7 +74,7 @@ class ErrorPresenter extends APresenter
 
         // find error image
         $img = "error.png";
-        if (\file_exists("/img/{$code}.png")) {
+        if (\file_exists(WWW . "/img/{$code}.png")) {
             $img = "{$code}.png";
         } elseif (\file_exists(WWW . "/img/{$code}.jpg")) {
             $img = "{$code}.jpg";
