@@ -29,9 +29,11 @@ class CliPresenter extends APresenter
     /**
      * Controller processor
      * 
+     * @param mixed $param optional parameter
+     * 
      * @return self
      */
-    public function process()
+    public function process($param = null)
     {
         $climate = new CLImate;
         $climate->out(
@@ -52,9 +54,11 @@ class CliPresenter extends APresenter
     public function show($p = "home")
     {
         $p = trim($p);
-        if (empty($p) || !strlen($p)) { // no presenter
+        if (empty($p) || !strlen($p)) {
+            // no presenter
             die("FATAL ERROR: No presenter is set!\n");
         }
+
         $data = $this->getData();
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
@@ -64,7 +68,6 @@ class CliPresenter extends APresenter
         $data["view"] = $route["view"] ?? "home";
         $data["controller"] = $c = ucfirst(strtolower($pres)) . "Presenter";
         $controller = "\\GSC\\{$c}";
-
         echo $controller::getInstance()
             ->setData($data)->process()->getData()["output"] ?? "";
         exit(0);
@@ -161,22 +164,10 @@ class CliPresenter extends APresenter
         $climate = new CLImate;
         if ($argc != 3) {
             // show examples
-            $climate->out("Examples:");
-            $climate->out("\t" . '<bold>app</bold> \'$app->showConst()\'');
-            $climate->out(
-                "\t" . '<bold>app</bold>"
-                . " \'dump($app->getCurrentUser())\''
-            );
-            $climate->out("\t" . '<bold>app</bold> \'dump($app->getIdentity())\'');
-            $climate->out("\t" . '<bold>app</bold> \'$app->show()\'');
-            $climate->out(
-                "\t" . '<bold>app</bold>"
-                . " \'$app->showCore("GetTXTSitemap")\''
-            );
-            $climate->out(
-                "\t" . '<bold>app</bold>"
-                . " \'$app->showCore("GetWebManifest")\''
-            );
+            $climate->out("Tesseract app examples:\n");
+            $climate->out('<bold>app</bold> \'$app->showConst()\'');
+            $climate->out('<bold>app</bold> \'dump($app->getIdentity())\'');
+            $climate->out('<bold>app</bold> \'dump($app->show("home"))\'');
         } else {
             $code = trim($argv[2]) . ';';
             try {

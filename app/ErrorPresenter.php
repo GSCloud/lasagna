@@ -74,7 +74,7 @@ class ErrorPresenter extends APresenter
 
         // find error image
         $img = "error.png";
-        if (\file_exists(WWW . "/img/{$code}.png")) {
+        if (\file_exists("/img/{$code}.png")) {
             $img = "{$code}.png";
         } elseif (\file_exists(WWW . "/img/{$code}.jpg")) {
             $img = "{$code}.jpg";
@@ -93,7 +93,7 @@ class ErrorPresenter extends APresenter
             . '">Click here to reload the main page ↻</a></center></h2>';
         $template .= '<img style="border:10px solid #000;" height="100%" alt="'
             . $error
-            . '" src="/img/'
+            . '" src="https://cdn.gscloud.cz/img/'
             . $img
             . '"></center></body></html>';
 
