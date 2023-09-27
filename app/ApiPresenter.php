@@ -27,7 +27,6 @@ use RedisClient\RedisClient;
 class ApiPresenter extends APresenter
 {
     const API_CACHE = "minute";
-    const API_CACHE2 = "fiveminutes";
     const ACCESS_TIME_LIMIT = 3599;
     const MAX_API_HITS = 1000;
     const USE_CACHE = false;
@@ -35,9 +34,11 @@ class ApiPresenter extends APresenter
     /**
      * Main controller
      * 
+     * @param mixed $param optional parameter
+     * 
      * @return object Controller
      */
-    public function process()
+    public function process($param = null)
     {
 
         \setlocale(LC_ALL, "cs_CZ.utf8");
@@ -51,7 +52,9 @@ class ApiPresenter extends APresenter
         if (!\is_array($cfg)) {
             return $this;
         }
+
         $match = $this->getMatch();
+
         $view = $this->getView();
         if (!\is_string($view)) {
             return $this;
