@@ -42,36 +42,62 @@ ini_set(
 ob_start();
 error_reporting(E_ALL);
 
+// directory separator
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
+// root directory
 defined('ROOT') || define('ROOT', __DIR__);
 
+// application directory
 defined('APP') || define('APP', ROOT . DS . 'app');
+
+// cache directory
 defined('CACHE') || define('CACHE', ROOT . DS . 'temp');
+
+// data directory
 defined('DATA') || define('DATA', ROOT . DS . 'data');
+
+// Apache 2 root directory
 defined('WWW') || define('WWW', ROOT . DS . 'www');
 
+// configuration file
 defined('CONFIG') || define('CONFIG', APP . DS . 'config.neon');
+
+// private configuration file
 defined('CONFIG_PRIVATE') || define(
     'CONFIG_PRIVATE', APP . DS . 'config_private.neon'
 );
 
+// CSP definition file
 defined('CSP') || define('CSP', APP . DS . 'csp.neon');
 
+// Mustache templates directory
 defined('TEMPLATES') || define('TEMPLATES', APP . DS . 'templates');
+
+// Mustache partials directory
 defined('PARTIALS') || define('PARTIALS', APP . DS . 'partials');
 
+// downloads directory
 defined('DOWNLOAD') || define('DOWNLOAD', WWW . DS . 'download');
+
+// uploads directory
 defined('UPLOAD') || define('UPLOAD', WWW . DS . 'upload');
 
+// logs directory
 defined('LOGS') || define('LOGS', ROOT . DS . 'logs');
+
+// temporary directory
 defined('TEMP') || define('TEMP', ROOT . DS . 'temp');
 
+// are we running from CLI?
 defined('CLI') || define('CLI', (bool) (PHP_SAPI == 'cli'));
+
+// are we running from localhost?
 defined('LOCALHOST') || define(
     'LOCALHOST', (bool) (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') || CLI
 );
 
+// Composer autoloader
 require_once ROOT . DS . 'vendor' . DS . 'autoload.php';
 
 // read CONFIGURATION
@@ -161,4 +187,5 @@ if (DEBUG === true) {
 
 Debugger::timer('RUN');
 
+// import Application
 require_once APP . DS . 'App.php';

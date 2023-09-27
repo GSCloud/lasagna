@@ -46,22 +46,23 @@ class ErrorPresenter extends APresenter
      *
      * @param int $err error code (optional)
      * 
-     * @return self
+     * @return object Controller
      */
     public function process($err = null)
     {
         $this->setHeaderHtml();
 
-        // get the error code: either as a method parameter or URL parameter
-        if (is_int($err)) {
+        // get the error code: either as a parameter or from URL
+        $code = 404;
+        if (\is_int($err)) {
             $code = $err;
         } else {
             $match = $this->getMatch();
-            $params = (array) ($match["params"] ?? []);
-            if (array_key_exists("code", $params)) {
-                $code = (int) $params["code"];
-            } else {
-                $code = 404;
+            if (\is_array($match)) {
+                $params = (array) ($match["params"] ?? []);
+                if (\array_key_exists("code", $params)) {
+                    $code = (int) $params["code"];
+                }
             }
         }
         if (!isset(self::CODESET[$code])) {

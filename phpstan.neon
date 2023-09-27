@@ -1,0 +1,7 @@
+parameters:
+    level: 9
+    ignoreErrors:
+        - '#If condition is always false\.#'
+        - '#If condition is always true\.#'
+    bootstrapFiles:
+        - phpstan_constants.php

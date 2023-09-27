@@ -31,15 +31,18 @@ class CliVersion extends APresenter
     }
 
     /**
-     * Controller processor
+     * Controller processor - Show version information as a JSON formatted string.
      * 
-     * Show version information as a JSON formatted string.
+     * @param mixed $param optional parameter
      *
-     * @return void
+     * @return mixed nothing
      */
-    public function process()
+    public function process($param = null)
     {
         $data = $this->getData();
+        if (!\is_array($data)) {
+            return null;
+        }
         $out = [
             "TESSERACT" => "Tesseract 2.0 beta",
             "ARGUMENTS" => $data["ARGV"],
@@ -50,6 +53,6 @@ class CliVersion extends APresenter
             "VERSION_TIMESTAMP" => $data["VERSION_TIMESTAMP"],
         ];
         echo \json_encode($out, JSON_PRETTY_PRINT) . "\n";
-        exit(0);
+        exit;
     }
 }

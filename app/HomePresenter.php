@@ -29,14 +29,17 @@ class HomePresenter extends APresenter
     /**
      * Controller processor
      *
-     * @return self
+     * @return object Controller
      */
     public function process()
     {
         // get current Presenter and View
         $presenter = $this->getPresenter();
+        if (!\is_array($presenter)) {
+            return $this;
+        }
         $view = $this->getView();
-        if ((!$presenter) || (!$view)) {
+        if (!$view) {
             return $this;
         }
 
@@ -45,7 +48,10 @@ class HomePresenter extends APresenter
         $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
 
         // process advanced caching
-        $use_cache = (bool) (DEBUG ? false : $data["use_cache"] ?? false);
+        $use_cache = true;
+        if (array_key_exists("use_cache", $data)) {
+            $use_cache = (bool) $data["use_cache"];
+        }
         $cache_key = hash(
             "sha256", join("_", [$data["host"], $data["request_path"], "htmlpage"])
         );
@@ -64,7 +70,14 @@ class HomePresenter extends APresenter
         }
 
         // output rendering
-        $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
+        $output = '';
+        if ($data) {
+            $output = $this->setData(
+                $data
+            )->renderHTML(
+                $presenter[$view]["template"]
+            );
+        }
 
         // strip comments
         StringFilters::trim_html_comment($output);
