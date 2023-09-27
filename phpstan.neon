@@ -5,3 +5,5 @@ parameters:
         - '#If condition is always true\.#'
     bootstrapFiles:
         - phpstan_constants.php
+    dynamicConstantNames:
+        - DEBUG

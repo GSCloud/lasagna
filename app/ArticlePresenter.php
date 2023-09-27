@@ -28,9 +28,11 @@ class ArticlePresenter extends APresenter
     /**
      * Controller processor
      *
-     * @return self
+     * @param mixed $param optional parameter
+     * 
+     * @return object Controller
      */
-    public function process()
+    public function process($param = null)
     {
         // get current Presenter and View
         $presenter = $this->getPresenter();

@@ -33,11 +33,14 @@ class CliDemo extends APresenter
     /**
      * Controller processor
      * 
-     * @return self
+     * @param mixed $param optional parameter
+     * 
+     * @return object Controller
      */
-    public function process()
+    public function process($param = null)
     {
         echo "process: Hello World!\n";
+
         return $this;
     }
 }

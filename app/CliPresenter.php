@@ -53,8 +53,8 @@ class CliPresenter extends APresenter
      */
     public function show($p = "home")
     {
-        $p = trim($p);
-        if (empty($p) || !strlen($p)) {
+        $p = \trim($p);
+        if (\empty($p) || !\strlen($p)) {
             // no presenter
             die("FATAL ERROR: No presenter is set!\n");
         }
@@ -66,7 +66,7 @@ class CliPresenter extends APresenter
         $route = $router[$p];
         $pres = $route["presenter"] ?? "home";
         $data["view"] = $route["view"] ?? "home";
-        $data["controller"] = $c = ucfirst(strtolower($pres)) . "Presenter";
+        $data["controller"] = $c = \ucfirst(\strtolower($pres)) . "Presenter";
         $controller = "\\GSC\\{$c}";
         echo $controller::getInstance()
             ->setData($data)->process()->getData()["output"] ?? "";
@@ -83,8 +83,8 @@ class CliPresenter extends APresenter
      */
     public function showCore($v = "PingBack", $arg = null)
     {
-        $v = trim($v);
-        if (empty($v) || !strlen($v)) { // no view
+        $v = \trim($v);
+        if (\empty($v) || !\strlen($v)) { // no view
             die("FATAL ERROR: No view is set!\n");
         }
         $data = $this->getData();
@@ -110,13 +110,13 @@ class CliPresenter extends APresenter
      */
     public function showConst()
     {
-        $arr = array_filter(
-            get_defined_constants(true)["user"], function ($key) {
+        $arr = \array_filter(
+            \get_defined_constants(true)["user"], function ($key) {
                 // filter out Sodium constants
-                return !(stripos($key, "sodium") === 0);
+                return !(\stripos($key, "sodium") === 0);
             }, ARRAY_FILTER_USE_KEY
         );
-        dump($arr);
+        \dump($arr);
         return $this;
     }
 
@@ -169,14 +169,13 @@ class CliPresenter extends APresenter
             $climate->out('<bold>app</bold> \'dump($app->getIdentity())\'');
             $climate->out('<bold>app</bold> \'dump($app->show("home"))\'');
         } else {
-            $code = trim($argv[2]) . ';';
+            $code = \trim($argv[2]) . ';';
             try {
-                //error_reporting(0);
                 eval($code);
             } catch (ParseError $e) {
                 echo 'Caught exception: ' . $e->getMessage() . "\n";
             }
-            error_reporting(E_ALL);
+            \error_reporting(E_ALL);
         }
         echo "\n";
         return $this;
@@ -194,7 +193,7 @@ class CliPresenter extends APresenter
     public function selectModule($module, $argc = null, $argv = null)
     {
         $climate = new CLImate;
-        $module = trim($module);
+        $module = \trim($module);
         switch ($module) {
         case "clear":
         case "clearall":
@@ -219,31 +218,31 @@ class CliPresenter extends APresenter
                 Cache::clear($k);
                 Cache::clear("{$k}_file");
             }
-            array_map("unlink", glob(CACHE . DS . "*.php"));
-            array_map("unlink", glob(CACHE . DS . "*.tmp"));
-            array_map("unlink", glob(CACHE . DS . CACHEPREFIX . "*"));
-            clearstatcache();
+            \array_map("unlink", glob(CACHE . DS . "*.php"));
+            \array_map("unlink", glob(CACHE . DS . "*.tmp"));
+            \array_map("unlink", glob(CACHE . DS . CACHEPREFIX . "*"));
+            \clearstatcache();
             $climate->out("<bold>Cache 🧹</bold>");
             break;
 
         case "clearci":
-            $files = glob(ROOT . DS . "ci" . DS . "*");
-            $c = count($files);
-            array_map("unlink", $files);
+            $files = \glob(ROOT . DS . "ci" . DS . "*");
+            $c = \count($files);
+            \array_map("unlink", $files);
             $climate->out("CI logs <bold>$c file(s) 🧹</bold>");
             break;
 
         case "clearlogs":
-            $files = glob(LOGS . DS . "*");
-            $c = count($files);
-            array_map("unlink", $files);
+            $files = \glob(LOGS . DS . "*");
+            $c = \count($files);
+            \array_map("unlink", $files);
             $climate->out("Other logs <bold>$c file(s) 🧹</bold>");
             break;
 
         case "cleartemp":
-            $files = glob(TEMP . DS . "*");
-            $c = count($files);
-            array_map("unlink", $files);
+            $files = \glob(TEMP . DS . "*");
+            $c = \count($files);
+            \array_map("unlink", $files);
             $climate->out("Temporary <bold>$c file(s) 🧹</bold>");
             break;
 
@@ -262,7 +261,7 @@ class CliPresenter extends APresenter
             break;
 
         default:
-            $module = ucfirst(strtolower($module));
+            $module = \ucfirst(\strtolower($module));
             $presenter = "\\GSC\\Cli{$module}";
             if (\class_exists($presenter)) {
                 $presenter::getInstance()->setData($this->getData())->process();

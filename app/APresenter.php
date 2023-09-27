@@ -28,35 +28,31 @@ use ParagonIE\Halite\KeyFactory;
 // UT = Unit Tested
 interface IPresenter
 {
-    public function addCritical($message); // UT
-    public function addError($message); // UT
-    public function addMessage($message); // UT
-    public function addAuditMessage($message); // UT
-
-    public function getCriticals(); // UT
-    public function getErrors(); // UT
-    public function getMessages(); // UT
-    public function getCfg($key); // UT
+    public function addCritical($message);
+    public function addError($message);
+    public function addMessage($message);
+    public function addAuditMessage($message);
+    public function getCriticals();
+    public function getErrors();
+    public function getMessages();
+    public function getCfg($key);
     public function getCookie($name);
-    public function getCurrentUser(); // UT
-    public function getData($key); // UT
-    public function getIP(); // UT
-    public function getIdentity(); // UT
+    public function getCurrentUser();
+    public function getData($key);
+    public function getIP();
+    public function getIdentity();
     public function getLocale($locale);
-    public function getRateLimit(); // UT
-    public function getUID(); // UT
-    public function getUIDstring(); // UT
-    public function getUserGroup(); // UT
-
+    public function getRateLimit();
+    public function getUID();
+    public function getUIDstring();
+    public function getUserGroup();
     public function getMatch();
     public function getPresenter();
     public function getRouter();
-    public function getView(); // UT
-
-    public function checkLocales(bool $force); // UT
-    public function checkPermission($roleslist); // UT
-    public function checkRateLimit($maximum); // UT
-
+    public function getView();
+    public function checkLocales(bool $force);
+    public function checkPermission($roleslist);
+    public function checkRateLimit($maximum);
     public function setCookie($name, $data);
     public function setData($data, $value);
     public function setForceCsvCheck();
@@ -70,7 +66,6 @@ interface IPresenter
     public function setHeaderXML();
     public function setIdentity($identity);
     public function setLocation($locationm, $code);
-
     public function clearCookie($name);
     public function cloudflarePurgeCache($cf);
     public function dataExpander(&$data);
@@ -78,13 +73,11 @@ interface IPresenter
     public function postloadAppData($key);
     public function preloadAppData($key, $force);
     public function readAppData($name);
-    public function renderHTML($template); // UT
+    public function renderHTML($template);
     public function writeJsonData($data, $headers = [], $switches = null);
-
-    public function process(); // abstract method
-
-    public static function getInstance(); // UT
-    public static function getTestInstance(); // for testing purposes only
+    public function process($param = null);
+    public static function getInstance();
+    public static function getTestInstance();
 }
 
 /**
@@ -281,9 +274,11 @@ abstract class APresenter implements IPresenter
      *
      * @abstract
      * 
-     * @return self
+     * @param mixed $param optional parameter
+     * 
+     * @return object Instance
      */
-    abstract public function process();
+    abstract public function process($param = null);
 
     /**
      * Class constructor

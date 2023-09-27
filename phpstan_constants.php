@@ -10,7 +10,6 @@
  * @link     https://mini.gscloud.cz
  */
 
-define('TESSERACT_START', microtime(true));
 define('ROOT', __DIR__);
 define('APP', ROOT . DS . 'app');
 define('CACHE', ROOT . DS . 'temp');

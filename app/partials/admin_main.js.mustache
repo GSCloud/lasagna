@@ -10,8 +10,6 @@
   // GSC.init
   if (w.GSC.init) {
     w.GSC.data = {};
-    w.GSC.profile = "default";
-    w.GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}');
 
     // ShowLoader() - show rotating image loader inside element
     if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
@@ -205,7 +203,6 @@
         $.post("/admin/UpdateArticles", {
           hash: "{{ request_path_hash }}",
           path: window.location.pathname,
-          profile: GSC.profile,
           data: JSON.stringify(data)
         }, function (data) {
           console.log("UpdateArticles result", {data});
@@ -649,29 +646,6 @@
         })
       });
 
-      // setup profiles
-      var profiles = [];
-      var params = new window.URLSearchParams(window.location.search);
-      var profile = params.get("profile");
-      for (var i in GSC.data.multisite_profiles) profiles.push(i);
-      if (!profiles.includes(profile)) {
-        profile = getCookie("profile");
-        if (!profiles.includes(profile)) {
-          profile = "default";
-        }
-      }
-      GSC.profile = profile;
-      setCookie("profile", profile);
-      $("#SiteSelect option[value=" + profile + "]").prop("selected", true);
-      $("#SiteSelect").formSelect(); // populate form data
-      $("#domains").html(GSC.data.multisite_profiles[profile].join(" "));
-      // web profile selector
-      $("#SiteSelect").change(function () {
-        if (!$("#SiteSelect").val()) return;
-        var profile = $("#SiteSelect").val().trim();
-        setCookie("profile", profile);
-        window.location.href = window.location.pathname + "?profile=" + profile;
-      });
       // articles URL selector
       $("#ArticleURLSelect").change(function () {
         window.location.pathname = $('#ArticleURLSelect').val();

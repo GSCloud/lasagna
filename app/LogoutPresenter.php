@@ -26,9 +26,11 @@ class LogoutPresenter extends APresenter
     /**
      * Controller processor
      *
-     * @return void
+     * @param mixed $param optional parameter
+     * 
+     * @return object Controller
      */
-    public function process()
+    public function process($param = null)
     {
         if (\ob_get_level()) {
             @\ob_end_clean();

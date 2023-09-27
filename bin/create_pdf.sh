@@ -20,16 +20,4 @@ find . -type d \( -path ./node_modules -o -path ./vendor \) -prune -false -o -mt
 find . -maxdepth 1 -iname "*.adoc" -delete
 rm temp/* >/dev/null 2>&1
 
-# phpdocumentor
-docker run --rm -v $(pwd):/data phpdoc/phpdoc:3.1.0 \
-    run -d . -t ./doc --ignore "vendor/"
-
-# make link to documentation
-if [ -d "doc" ]; then
-    cd www
-    if [ ! -h "docs" ]; then
-        ln -s ../doc docs
-    fi
-fi
-
 exit 0

@@ -81,9 +81,11 @@ class AdminPresenter extends APresenter
     /**
      * Controller processor
      *
-     * @return self
+     * @param mixed $param optional parameter
+     * 
+     * @return object Controller
      */
-    public function process()
+    public function process($param = null)
     {
         $cfg = $this->getCfg();
         $data = $this->getData();
@@ -312,19 +314,12 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             $data = [];
             $profile = "default";
-            if (isset($_GET["profile"])) { // profile ID
-                $profile = \trim((string) $_GET["profile"]);
-            }
-            // fix profile ID
-            $profile = \preg_replace('/[^a-z0-9_-]+/', '', \strtolower($profile));
-            if ($profile) {
-                $f = DATA . "/summernote_articles_{$profile}.txt";
-                if (\file_exists($f) && \is_readable($f)) {
-                    $data = @\file(
-                        $f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
-                    );
-                    $data = \array_unique($data, SORT_LOCALE_STRING);
-                }
+            $f = DATA . "/summernote_articles_{$profile}.txt";
+            if (\file_exists($f) && \is_readable($f)) {
+                $data = @\file(
+                    $f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+                );
+                $data = \array_unique($data, SORT_LOCALE_STRING);
             }
 
             return $this->writeJsonData($data, $extras);
@@ -628,22 +623,12 @@ class AdminPresenter extends APresenter
         case "UpdateArticles":
             $this->checkPermission("admin");
             $x = 0;
+            $profile = "default";
             if (isset($_POST["data"])) {
                 $data = (string) \trim((string) $_POST["data"]);
                 // remove all extra whitespace
                 $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST["data"]);
                 $x++;
-            }
-            if (isset($_POST["profile"])) {
-                $profile = \trim((string) $_POST["profile"]);
-                // fix profile ID
-                $profile = \preg_replace(
-                    '/[^a-z0-9_-]+/', '', \strtolower($profile)
-                );
-                // profile ID
-                if (\strlen($profile)) {
-                    $x++;
-                }
             }
             if (isset($_POST["path"])) {
                 $path = \trim((string) $_POST["path"]);
@@ -659,8 +644,7 @@ class AdminPresenter extends APresenter
                     $x++;
                 }
             }
-            if ($x != 4) {
-
+            if ($x != 3) {
                 return $this->writeJsonData(500, $extras);
             }
             if (\file_exists(DATA . "/summernote_{$profile}_{$hash}.json")

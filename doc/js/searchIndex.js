@@ -106,16 +106,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/GSC-AdminPresenter.html#constant_IMAGE_HANDLERS"
         },                {
-            "fqsen": "\\GSC\\AndroidPresenter",
-            "name": "AndroidPresenter",
-            "summary": "Android\u0020Presenter\u0020class",
-            "url": "classes/GSC-AndroidPresenter.html"
-        },                {
-            "fqsen": "\\GSC\\AndroidPresenter\u003A\u003Aprocess\u0028\u0029",
-            "name": "process",
-            "summary": "Controller\u0020processor",
-            "url": "classes/GSC-AndroidPresenter.html#method_process"
-        },                {
             "fqsen": "\\GSC\\ApiPresenter",
             "name": "ApiPresenter",
             "summary": "API\u0020Presenter",
@@ -128,33 +118,38 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\ApiPresenter\u003A\u003AaccessLimiter\u0028\u0029",
             "name": "accessLimiter",
-            "summary": "Access\u0020limiter",
+            "summary": "Redis\u0020access\u0020limiter",
             "url": "classes/GSC-ApiPresenter.html#method_accessLimiter"
-        },                {
-            "fqsen": "\\GSC\\ApiPresenter\u003A\u003AMAX_API_HITS",
-            "name": "MAX_API_HITS",
-            "summary": "",
-            "url": "classes/GSC-ApiPresenter.html#constant_MAX_API_HITS"
-        },                {
-            "fqsen": "\\GSC\\ApiPresenter\u003A\u003AACCESS_TIME_LIMIT",
-            "name": "ACCESS_TIME_LIMIT",
-            "summary": "",
-            "url": "classes/GSC-ApiPresenter.html#constant_ACCESS_TIME_LIMIT"
         },                {
             "fqsen": "\\GSC\\ApiPresenter\u003A\u003AAPI_CACHE",
             "name": "API_CACHE",
             "summary": "",
             "url": "classes/GSC-ApiPresenter.html#constant_API_CACHE"
         },                {
+            "fqsen": "\\GSC\\ApiPresenter\u003A\u003AAPI_CACHE2",
+            "name": "API_CACHE2",
+            "summary": "",
+            "url": "classes/GSC-ApiPresenter.html#constant_API_CACHE2"
+        },                {
+            "fqsen": "\\GSC\\ApiPresenter\u003A\u003AACCESS_TIME_LIMIT",
+            "name": "ACCESS_TIME_LIMIT",
+            "summary": "",
+            "url": "classes/GSC-ApiPresenter.html#constant_ACCESS_TIME_LIMIT"
+        },                {
+            "fqsen": "\\GSC\\ApiPresenter\u003A\u003AMAX_API_HITS",
+            "name": "MAX_API_HITS",
+            "summary": "",
+            "url": "classes/GSC-ApiPresenter.html#constant_MAX_API_HITS"
+        },                {
+            "fqsen": "\\GSC\\ApiPresenter\u003A\u003AUSE_CACHE",
+            "name": "USE_CACHE",
+            "summary": "",
+            "url": "classes/GSC-ApiPresenter.html#constant_USE_CACHE"
+        },                {
             "fqsen": "\\TESSERACT_END",
             "name": "TESSERACT_END",
             "summary": "",
             "url": "namespaces/default.html#constant_TESSERACT_END"
-        },                {
-            "fqsen": "\\GSC\\exception_error_handler\u0028\u0029",
-            "name": "exception_error_handler",
-            "summary": "",
-            "url": "namespaces/gsc.html#function_exception_error_handler"
         },                {
             "fqsen": "\\GSC\\logger\u0028\u0029",
             "name": "logger",
@@ -180,16 +175,6 @@ Search.appendIndex(
             "name": "__clone",
             "summary": "Magic\u0020clone",
             "url": "classes/GSC-APresenter.html#method___clone"
-        },                {
-            "fqsen": "\\GSC\\APresenter\u003A\u003A__sleep\u0028\u0029",
-            "name": "__sleep",
-            "summary": "Magic\u0020sleep",
-            "url": "classes/GSC-APresenter.html#method___sleep"
-        },                {
-            "fqsen": "\\GSC\\APresenter\u003A\u003A__wakeup\u0028\u0029",
-            "name": "__wakeup",
-            "summary": "Magic\u0020wakeup",
-            "url": "classes/GSC-APresenter.html#method___wakeup"
         },                {
             "fqsen": "\\GSC\\APresenter\u003A\u003A__call\u0028\u0029",
             "name": "__call",
@@ -906,6 +891,21 @@ Search.appendIndex(
             "summary": "Controller\u0020processor",
             "url": "classes/GSC-CiTester.html#method___construct"
         },                {
+            "fqsen": "\\GSC\\CliDemo",
+            "name": "CliDemo",
+            "summary": "CLI\u0020Demo\u0020class",
+            "url": "classes/GSC-CliDemo.html"
+        },                {
+            "fqsen": "\\GSC\\CliDemo\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Controller\u0020constructor",
+            "url": "classes/GSC-CliDemo.html#method___construct"
+        },                {
+            "fqsen": "\\GSC\\CliDemo\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "Controller\u0020processor",
+            "url": "classes/GSC-CliDemo.html#method_process"
+        },                {
             "fqsen": "\\GSC\\CliPresenter",
             "name": "CliPresenter",
             "summary": "CLI\u0020Presenter\u0020class",
@@ -946,6 +946,36 @@ Search.appendIndex(
             "summary": "Select\u0020CLI\u0020module",
             "url": "classes/GSC-CliPresenter.html#method_selectModule"
         },                {
+            "fqsen": "\\GSC\\CliVersion",
+            "name": "CliVersion",
+            "summary": "CLI\u0020Version\u0020class",
+            "url": "classes/GSC-CliVersion.html"
+        },                {
+            "fqsen": "\\GSC\\CliVersion\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Controller\u0020constructor",
+            "url": "classes/GSC-CliVersion.html#method___construct"
+        },                {
+            "fqsen": "\\GSC\\CliVersion\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "Controller\u0020processor\u0020\u002D\u0020Show\u0020version\u0020information\u0020as\u0020a\u0020JSON\u0020formatted\u0020string.",
+            "url": "classes/GSC-CliVersion.html#method_process"
+        },                {
+            "fqsen": "\\GSC\\CliVersionjson",
+            "name": "CliVersionjson",
+            "summary": "CLI\u0020Version\u0020class",
+            "url": "classes/GSC-CliVersionjson.html"
+        },                {
+            "fqsen": "\\GSC\\CliVersionjson\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Controller\u0020constructor",
+            "url": "classes/GSC-CliVersionjson.html#method___construct"
+        },                {
+            "fqsen": "\\GSC\\CliVersionjson\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "Controller\u0020processor\u0020\u002D\u0020Show\u0020version\u0020information\u0020as\u0020a\u0020JSON\u0020formatted\u0020string.",
+            "url": "classes/GSC-CliVersionjson.html#method_process"
+        },                {
             "fqsen": "\\GSC\\CorePresenter",
             "name": "CorePresenter",
             "summary": "Core\u0020Presenter\u0020class",
@@ -963,7 +993,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\Doctor",
             "name": "Doctor",
-            "summary": "Doctor\u0020CLI\u0020class",
+            "summary": "Doctor",
             "url": "classes/GSC-Doctor.html"
         },                {
             "fqsen": "\\GSC\\Doctor\u003A\u003A__construct\u0028\u0029",
@@ -1020,11 +1050,6 @@ Search.appendIndex(
             "name": "process",
             "summary": "Controller\u0020processor",
             "url": "classes/GSC-HomePresenter.html#method_process"
-        },                {
-            "fqsen": "\\GSC\\HomePresenter\u003A\u003ASendAnalytics\u0028\u0029",
-            "name": "SendAnalytics",
-            "summary": "Send\u0020Google\u0020Analytics\u0020events",
-            "url": "classes/GSC-HomePresenter.html#method_SendAnalytics"
         },                {
             "fqsen": "\\GSC\\LoginPresenter",
             "name": "LoginPresenter",
@@ -1123,27 +1148,27 @@ Search.appendIndex(
         },                {
             "fqsen": "\\GSC\\IStringFilters\u003A\u003Aconvert_eol_to_br\u0028\u0029",
             "name": "convert_eol_to_br",
-            "summary": "",
+            "summary": "Convert\u0020EOLs\u0020to\u0020\u003Cbr\u003E",
             "url": "classes/GSC-IStringFilters.html#method_convert_eol_to_br"
         },                {
             "fqsen": "\\GSC\\IStringFilters\u003A\u003Aconvert_eolhyphen_to_brdot\u0028\u0029",
             "name": "convert_eolhyphen_to_brdot",
-            "summary": "",
+            "summary": "Convert\u0020EOL\u0020\u002B\u0020hyphen\/star\u0020to\u0020HTML",
             "url": "classes/GSC-IStringFilters.html#method_convert_eolhyphen_to_brdot"
         },                {
             "fqsen": "\\GSC\\IStringFilters\u003A\u003Acorrect_text_spacing\u0028\u0029",
             "name": "correct_text_spacing",
-            "summary": "",
+            "summary": "Correct\u0020text\u0020spacing",
             "url": "classes/GSC-IStringFilters.html#method_correct_text_spacing"
         },                {
             "fqsen": "\\GSC\\IStringFilters\u003A\u003Atrim_eol\u0028\u0029",
             "name": "trim_eol",
-            "summary": "",
+            "summary": "Trim\u0020various\u0020EOL\u0020combinations",
             "url": "classes/GSC-IStringFilters.html#method_trim_eol"
         },                {
             "fqsen": "\\GSC\\IStringFilters\u003A\u003Atrim_html_comment\u0028\u0029",
             "name": "trim_html_comment",
-            "summary": "",
+            "summary": "Trim\u0020THML\u0020comments",
             "url": "classes/GSC-IStringFilters.html#method_trim_html_comment"
         },                {
             "fqsen": "\\GSC\\UnitTester",
@@ -1161,35 +1186,125 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/default.html#constant_TESSERACT_START"
         },                {
-            "fqsen": "\\GSC\\CliDemo",
-            "name": "CliDemo",
-            "summary": "CLI\u0020Demo\u0020class",
-            "url": "classes/GSC-CliDemo.html"
+            "fqsen": "\\ROOT",
+            "name": "ROOT",
+            "summary": "GSC\u0020Tesseract\nphp\u0020version\u00208.2",
+            "url": "namespaces/default.html#constant_ROOT"
         },                {
-            "fqsen": "\\GSC\\CliDemo\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Controller\u0020constructor",
-            "url": "classes/GSC-CliDemo.html#method___construct"
+            "fqsen": "\\APP",
+            "name": "APP",
+            "summary": "",
+            "url": "namespaces/default.html#constant_APP"
         },                {
-            "fqsen": "\\GSC\\CliDemo\u003A\u003Aprocess\u0028\u0029",
-            "name": "process",
-            "summary": "Controller\u0020processor",
-            "url": "classes/GSC-CliDemo.html#method_process"
+            "fqsen": "\\CACHE",
+            "name": "CACHE",
+            "summary": "",
+            "url": "namespaces/default.html#constant_CACHE"
         },                {
-            "fqsen": "\\GSC\\CliVersion",
-            "name": "CliVersion",
-            "summary": "CLI\u0020Version\u0020class",
-            "url": "classes/GSC-CliVersion.html"
+            "fqsen": "\\DATA",
+            "name": "DATA",
+            "summary": "",
+            "url": "namespaces/default.html#constant_DATA"
         },                {
-            "fqsen": "\\GSC\\CliVersion\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Controller\u0020constructor",
-            "url": "classes/GSC-CliVersion.html#method___construct"
+            "fqsen": "\\WWW",
+            "name": "WWW",
+            "summary": "",
+            "url": "namespaces/default.html#constant_WWW"
         },                {
-            "fqsen": "\\GSC\\CliVersion\u003A\u003Aprocess\u0028\u0029",
-            "name": "process",
-            "summary": "Controller\u0020processor",
-            "url": "classes/GSC-CliVersion.html#method_process"
+            "fqsen": "\\CONFIG",
+            "name": "CONFIG",
+            "summary": "",
+            "url": "namespaces/default.html#constant_CONFIG"
+        },                {
+            "fqsen": "\\CONFIG_PRIVATE",
+            "name": "CONFIG_PRIVATE",
+            "summary": "",
+            "url": "namespaces/default.html#constant_CONFIG_PRIVATE"
+        },                {
+            "fqsen": "\\CSP",
+            "name": "CSP",
+            "summary": "",
+            "url": "namespaces/default.html#constant_CSP"
+        },                {
+            "fqsen": "\\TEMPLATES",
+            "name": "TEMPLATES",
+            "summary": "",
+            "url": "namespaces/default.html#constant_TEMPLATES"
+        },                {
+            "fqsen": "\\PARTIALS",
+            "name": "PARTIALS",
+            "summary": "",
+            "url": "namespaces/default.html#constant_PARTIALS"
+        },                {
+            "fqsen": "\\DOWNLOAD",
+            "name": "DOWNLOAD",
+            "summary": "",
+            "url": "namespaces/default.html#constant_DOWNLOAD"
+        },                {
+            "fqsen": "\\UPLOAD",
+            "name": "UPLOAD",
+            "summary": "",
+            "url": "namespaces/default.html#constant_UPLOAD"
+        },                {
+            "fqsen": "\\LOGS",
+            "name": "LOGS",
+            "summary": "",
+            "url": "namespaces/default.html#constant_LOGS"
+        },                {
+            "fqsen": "\\TEMP",
+            "name": "TEMP",
+            "summary": "",
+            "url": "namespaces/default.html#constant_TEMP"
+        },                {
+            "fqsen": "\\CLI",
+            "name": "CLI",
+            "summary": "",
+            "url": "namespaces/default.html#constant_CLI"
+        },                {
+            "fqsen": "\\LOCALHOST",
+            "name": "LOCALHOST",
+            "summary": "",
+            "url": "namespaces/default.html#constant_LOCALHOST"
+        },                {
+            "fqsen": "\\DEBUG",
+            "name": "DEBUG",
+            "summary": "",
+            "url": "namespaces/default.html#constant_DEBUG"
+        },                {
+            "fqsen": "\\CACHEPREFIX",
+            "name": "CACHEPREFIX",
+            "summary": "",
+            "url": "namespaces/default.html#constant_CACHEPREFIX"
+        },                {
+            "fqsen": "\\APPNAME",
+            "name": "APPNAME",
+            "summary": "",
+            "url": "namespaces/default.html#constant_APPNAME"
+        },                {
+            "fqsen": "\\DOMAIN",
+            "name": "DOMAIN",
+            "summary": "",
+            "url": "namespaces/default.html#constant_DOMAIN"
+        },                {
+            "fqsen": "\\GCP_KEYS",
+            "name": "GCP_KEYS",
+            "summary": "",
+            "url": "namespaces/default.html#constant_GCP_KEYS"
+        },                {
+            "fqsen": "\\GCP_PROJECTID",
+            "name": "GCP_PROJECTID",
+            "summary": "",
+            "url": "namespaces/default.html#constant_GCP_PROJECTID"
+        },                {
+            "fqsen": "\\PROJECT",
+            "name": "PROJECT",
+            "summary": "",
+            "url": "namespaces/default.html#constant_PROJECT"
+        },                {
+            "fqsen": "\\SERVER",
+            "name": "SERVER",
+            "summary": "",
+            "url": "namespaces/default.html#constant_SERVER"
         },                {
             "fqsen": "\\",
             "name": "\\",

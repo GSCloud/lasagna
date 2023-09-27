@@ -63,8 +63,9 @@
 
         <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Application.html"><abbr title="\Application">Application</abbr></a></h3>
+                    <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Framework.html"><abbr title="\Framework">Framework</abbr></a></h3>
                                 <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/GSC.html"><abbr title="\GSC">GSC</abbr></a></h3>
+                                <h3 class="phpdocumentor-sidebar__root-package"><a href="packages/Application.html"><abbr title="\Application">Application</abbr></a></h3>
                         </section>
     
     <section class="phpdocumentor-sidebar__category">
@@ -102,8 +103,6 @@
     
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-AdminPresenter.html"><abbr title="\GSC\AdminPresenter">AdminPresenter</abbr></a></dt>
         <dd>Admin Presenter class</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-AndroidPresenter.html"><abbr title="\GSC\AndroidPresenter">AndroidPresenter</abbr></a></dt>
-        <dd>Android Presenter class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-ApiPresenter.html"><abbr title="\GSC\ApiPresenter">ApiPresenter</abbr></a></dt>
         <dd>API Presenter</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-APresenter.html"><abbr title="\GSC\APresenter">APresenter</abbr></a></dt>
@@ -112,12 +111,18 @@
         <dd>Article Presenter class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CiTester.html"><abbr title="\GSC\CiTester">CiTester</abbr></a></dt>
         <dd>Continuous Integration Tester class</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CliDemo.html"><abbr title="\GSC\CliDemo">CliDemo</abbr></a></dt>
+        <dd>CLI Demo class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CliPresenter.html"><abbr title="\GSC\CliPresenter">CliPresenter</abbr></a></dt>
         <dd>CLI Presenter class</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CliVersion.html"><abbr title="\GSC\CliVersion">CliVersion</abbr></a></dt>
+        <dd>CLI Version class</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CliVersionjson.html"><abbr title="\GSC\CliVersionjson">CliVersionjson</abbr></a></dt>
+        <dd>CLI Version class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CorePresenter.html"><abbr title="\GSC\CorePresenter">CorePresenter</abbr></a></dt>
         <dd>Core Presenter class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-Doctor.html"><abbr title="\GSC\Doctor">Doctor</abbr></a></dt>
-        <dd>Doctor CLI class</dd>
+        <dd>Doctor</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-ErrorPresenter.html"><abbr title="\GSC\ErrorPresenter">ErrorPresenter</abbr></a></dt>
         <dd>Error Presenter class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-HomePresenter.html"><abbr title="\GSC\HomePresenter">HomePresenter</abbr></a></dt>
@@ -132,10 +137,8 @@
         <dd>String Filters class</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-UnitTester.html"><abbr title="\GSC\UnitTester">UnitTester</abbr></a></dt>
         <dd>Unit Tester CLI class</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CliDemo.html"><abbr title="\GSC\CliDemo">CliDemo</abbr></a></dt>
-        <dd>CLI Demo class</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-CliVersion.html"><abbr title="\GSC\CliVersion">CliVersion</abbr></a></dt>
-        <dd>CLI Version class</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/GSC-Doctor.html"><abbr title="\GSC\Doctor">Doctor</abbr></a></dt>
+        <dd>Doctor</dd>
     
     </dl>
 
@@ -147,16 +150,9 @@
 
 <dl class="phpdocumentor-table-of-contents">
                         <dt class="phpdocumentor-table-of-contents__entry -function -">
-    <a href="namespaces/gsc.html#function_exception_error_handler">exception_error_handler()</a>
-    <span>
-                        &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -function -">
     <a href="namespaces/gsc.html#function_logger">logger()</a>
     <span>
-                        &nbsp;: void    </span>
+                        &nbsp;: mixed    </span>
 </dt>
 <dd>Google Stackdriver logger</dd>
 
@@ -170,69 +166,6 @@
             <a href="namespaces/gsc.html#functions" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article class="phpdocumentor-element -function - ">
-    <h4 class="phpdocumentor-element__name" id="function_exception_error_handler">
-        exception_error_handler()
-        <a href="namespaces/gsc.html#function_exception_error_handler" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/App.php"><a href="files/app-app.html"><abbr title="app/App.php">App.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">24</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility"></span>
-                <span class="phpdocumentor-signature__name">exception_error_handler</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$severity</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$file</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$line</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$severity</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$message</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$file</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$line</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article class="phpdocumentor-element -function - ">
     <h4 class="phpdocumentor-element__name" id="function_logger">
         logger()
         <a href="namespaces/gsc.html#function_logger" class="headerlink"><i class="fas fa-link"></i></a>
@@ -240,7 +173,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="app/App.php"><a href="files/app-app.html"><abbr title="app/App.php">App.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">105</span>
+    <span class="phpdocumentor-element-found-in__line">133</span>
 
     </aside>
 
@@ -248,7 +181,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility"></span>
-                <span class="phpdocumentor-signature__name">logger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$severity</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">Logger::INFO</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                <span class="phpdocumentor-signature__name">logger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$severity</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">Logger::INFO</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -258,14 +191,16 @@
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>message</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$severity</span>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                  = <span class="phpdocumentor-signature__argument__default-value">Logger::INFO</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>(optional)</p>
+                    <section class="phpdocumentor-description"><p>severity</p>
 </section>
 
             </dd>
@@ -274,7 +209,7 @@
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
         
     

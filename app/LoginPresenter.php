@@ -26,9 +26,11 @@ class LoginPresenter extends APresenter
     /**
      * Controller processor
      *
-     * @return void
+     * @param mixed $param optional parameter
+     * 
+     * @return object Controller
      */
-    public function process()
+    public function process($param = null)
     {
         if (\ob_get_level()) {
             @\ob_end_clean();
@@ -38,10 +40,10 @@ class LoginPresenter extends APresenter
         // check OAuth parameters for validity
         $cfg = $this->getCfg();
         if (($cfg["goauth_client_id"] ?? null) === null) {
-            $this->setLocation("/err/403");
+            ErrorPresenter::getInstance()->process(403); // error 403
         }
         if (($cfg["goauth_secret"] ?? null) === null) {
-            $this->setLocation("/err/403");
+            ErrorPresenter::getInstance()->process(403); // error 403
         }
 
         // generate nonce
@@ -49,11 +51,9 @@ class LoginPresenter extends APresenter
         
         // set return URI
         $uri = "/{$nonce}";
-        $refhost = parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
+        $refhost = \parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
         if ($refhost ?? null) {
-            if (in_array($refhost, $this->getData("multisite_profiles.default"))) {
                 $uri = $_SERVER["HTTP_REFERER"];
-            }
         }
         \setcookie("return_uri", $uri, 0, "/", DOMAIN);
 
@@ -134,11 +134,11 @@ class LoginPresenter extends APresenter
                 }
                 $this->clearCookie("oauth2state");
                 if (\strlen($ownerDetails->getEmail())) {
-                    // save email
+                    // save email for next request
                     \setcookie(
                         "login_hint",
                         $ownerDetails->getEmail() ?? "",
-                        time() + 86400 * 31,
+                        \time() + 86400 * 31,
                         "/",
                         DOMAIN,
                     );
@@ -146,13 +146,12 @@ class LoginPresenter extends APresenter
                 $this->clearCookie("oauth2state");
                 $this->setLocation();
                 exit;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->addError("Google OAuth: " . $e->getMessage());
             }
         }
 
-        // display error
-        $this->setLocation("/err/403");
+        ErrorPresenter::getInstance()->process(403); // error 403
         exit;
     }
 }

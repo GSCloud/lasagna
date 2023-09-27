@@ -21,7 +21,7 @@ namespace GSC;
  * @license  MIT https://gscloud.cz/LICENSE
  * @link     https://lasagna.gscloud.cz
  */
-class CliVersion extends APresenter
+class CliVersionjson extends APresenter
 {
     /**
      * Controller constructor
@@ -45,18 +45,14 @@ class CliVersion extends APresenter
         }
         $out = [
             "ENGINE" => "Tesseract 2.0 beta",
+            "ARGUMENTS" => $data["ARGV"],
             "REVISIONS" => $data["REVISIONS"],
             "VERSION" => $data["VERSION"],
             "VERSION_SHORT" => $data["VERSION_SHORT"],
             "VERSION_DATE" => $data["VERSION_DATE"],
             "VERSION_TIMESTAMP" => $data["VERSION_TIMESTAMP"],
         ];
-        foreach ($out as $x => $y) {
-            if (is_string($x)) {
-                echo "\e[0;1m$x\e[0m: $y\n";
-            }
-        }
-        echo "\n";
+        echo \json_encode($out, JSON_PRETTY_PRINT) . "\n";
         exit;
     }
 }

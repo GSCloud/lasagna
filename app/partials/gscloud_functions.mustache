@@ -115,11 +115,8 @@ async function sha256(message) {
   if (w.GSC) {
     GSC.data = {};
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
-    GSC.iseditor = {{#admin_group_editor}}true{{/admin_group_editor}}{{^admin_group_editor}}false{{/admin_group_editor}};
     GSC.islogged = {{#admin}}true{{/admin}}{{^admin}}false{{/admin}};
-    GSC.istester = {{#admin_group_tester}}true{{/admin_group_tester}}{{^admin_group_tester}}false{{/admin_group_tester}};
-    GSC.profile = null;
-    GSC.data.multisite_profiles = JSON.parse('{{ multisite_profiles_json }}'); 
+    GSC.profile = 'default';
 
     // feature detection: "touch"
     GSC.touch = ("ontouchstart" in w || w.DocumentTouch && d instanceof DocumentTouch) ? true : false;
@@ -279,26 +276,6 @@ async function sha256(message) {
       setTimeout("GSC.VersionCheck()", 5000);
     });
 
-    // GSC.SetProfile() - set administration profile
-    GSC.init.push(function() {
-      GSC.names.push("GSC.SetProfile()");
-
-      if (typeof GSC.SetProfile !== "function") GSC.SetProfile = function() {
-        var profiles = [];
-        var params = new window.URLSearchParams(window.location.search);
-        var profile = params.get("profile");
-        for (var i in GSC.data.multisite_profiles) profiles.push(i);
-        if (!profiles.includes(profile) && (GSC.isadmin === true)) {
-            profile = getCookie("profile");
-        }
-        if (!profiles.includes(profile)) {
-          profile = "default";
-        }
-        GSC.profile = profile;
-      }
-
-    });
-
     // GSC.ReadArticles() - read articles & insert HTML
     GSC.init.push(function() {
       GSC.names.push("GSC.ReadArticles()");
@@ -357,23 +334,15 @@ async function sha256(message) {
           }
           if (typeof callback === "function") callback();
         });
-
-        //  do repeat checks
+        //  repeat checks
         setTimeout("GSC.ReadArticles()", 10000);
       }
-
-      GSC.SetProfile();
       GSC.ReadArticles();
     });
 
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
-
-      $(".sethlsk").click(function() {
-        // set SK language
-        setCookie("hl", "sk");
-      });
 
       $(".sethlcs").click(function() {
         // set CS language
@@ -383,6 +352,11 @@ async function sha256(message) {
       $(".sethlen").click(function() {
         // set EN language
         setCookie("hl", "en");
+      });
+
+      $(".sethlsk").click(function() {
+        // set SK language
+        setCookie("hl", "sk");
       });
 
       $("#update-message").click(function() {

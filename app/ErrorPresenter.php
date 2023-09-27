@@ -52,7 +52,7 @@ class ErrorPresenter extends APresenter
     {
         $this->setHeaderHtml();
 
-        // get the error code: either as a parameter or from URL
+        // get the error code as a parameter or from URL
         $code = 404;
         if (\is_int($err)) {
             $code = $err;
@@ -65,15 +65,18 @@ class ErrorPresenter extends APresenter
                 }
             }
         }
+
+        // check validity of the code
         if (!isset(self::CODESET[$code])) {
             $code = 404;
         }
+        // error message
         $error = self::CODESET[$code];
 
         // set HTTP error code
         header("HTTP/1.1 {$code} {$error}");
 
-        // find error image
+        // find error image by extension
         $img = "error.png";
         if (\file_exists(WWW . "/img/{$code}.png")) {
             $img = "{$code}.png";
@@ -86,18 +89,16 @@ class ErrorPresenter extends APresenter
         // HTML5 template
         $template = '<!DOCTYPE html><html><head><meta charset="utf-8">';
         $template .= '<meta http-equiv="x-ua-compatible" content="IE=edge"><body>';
-        $template .= "<center><h1><br>🤔 Error #{$code}</h1>";
-        $template .= '<h2>Message: ' . self::CODESET[$code] . '</h2>';
+        $template .= "<center><h1><br>🤔 Error {$code}</h1>";
+        $template .= '<h2>' . self::CODESET[$code] . '</h2>';
         $template .= '<h2><center><a rel=nofollow '
             . 'style="color:red;text-decoration:none" href="/?nonce='
             . $this->getNonce()
-            . '">Click here to reload the main page ↻</a></center></h2>';
-        $template .= '<img style="border:10px solid #000;" height="100%" alt="'
-            . $error
-            . '" src="https://cdn.gscloud.cz/img/'
-            . $img
-            . '"></center></body></html>';
+            . '">click here to go the main page ↻</a></center></h2>';
+        $template .= "<img style='border:10px solid #000;' height='100%'"
+            . " alt='$error' src=/img/$img></center></body></html>";
 
+        // export
         return $this->setData("output", $this->renderHTML($template));
     }
 }

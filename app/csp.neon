@@ -1,5 +1,5 @@
 # @author Fred Brooker <git@gscloud.cz>
-# CSP Security Headers
+# Content Security Policy
 
 csp: [
     "Content-Security-Policy: "
@@ -41,6 +41,7 @@ csp: [
     "*"
     "'self'"
     "'unsafe-inline'"
+    "cdn.gscloud.cz"
     "data:;"
     
     "form-action"

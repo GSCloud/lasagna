@@ -30,34 +30,14 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check for constant '$x' failed!");
 }
 
-/**
- * Exception handler
- *
- * @param int    $severity severity level
- * @param string $message  message
- * @param int    $file     file
- * @param int    $line     line
- *
- * @return void
- */
-function exceptionErrorHandler($severity, $message, $file, $line)
-{
-    if (!(error_reporting() & $severity)) {
-        // this error code is not included in error_reporting
-        return;
-    }
-    // error 503
-    header('HTTP/1.1 503 Service Unavailable');
-    if (DEBUG) {
-        echo "ERROR: $message FILE: $file LINE: $line";
-    }
-    exit;
-}
-set_error_handler("\\GSC\\exceptionErrorHandler");
-
 // POPULATE DATA ARRAY
 $base58 = new \Tuupola\Base58;
 $cfg = $data = $cfg ?? [];
+
+$requestUri = $_SERVER["REQUEST_URI"] ?? "";
+if (!$requestUri) {
+    $requestUri = '';
+}
 
 $data["cfg"] = $cfg; // cfg backup array
 $data["ARGC"] = $argc ?? 0; // arguments count
@@ -69,28 +49,32 @@ $data["POST"] = array_map("htmlspecialchars", $_POST);
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION_ID;
 $data["VERSION"] = $version = trim(
-    @file_get_contents(ROOT . DS . "VERSION") ?? "", "\r\n"
+    @file_get_contents(ROOT . DS . "VERSION") ?: '', "\r\n"
 );
 $data["VERSION_SHORT"] = $base58->encode(
     base_convert(substr(hash("sha256", $version), 0, 4), 16, 10)
 );
 $data["VERSION_DATE"]
-    = date("j. n. Y G:i", @filemtime(ROOT . DS . "VERSION") ?? time());
+    = date("j. n. Y G:i", @filemtime(ROOT . DS . "VERSION") ?: time());
 $data["VERSION_TIMESTAMP"]
-    = @filemtime(ROOT . DS . "VERSION") ?? time();
+    = @filemtime(ROOT . DS . "VERSION") ?: time();
 $data["REVISIONS"] = (int) trim(
-    @file_get_contents(ROOT . DS . "REVISIONS") ?? "0", "\r\n"
+    @file_get_contents(ROOT . DS . "REVISIONS") ?: "0", "\r\n"
 );
 $data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (
     ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://{$host}/" : "http://{$host}/"
     ) : "";
-$data["request_uri"] = $_SERVER["REQUEST_URI"] ?? "";
-$data["request_path"] = $rqp = trim(
-    trim(strtok($_SERVER["REQUEST_URI"] ?? "", "?&"), "/")
-);
-$data["request_path_hash"] = ($rqp == "") ? "" : hash("sha256", $rqp);
+$data["request_uri"] = $requestUri;
+
+$rqp = strtok($requestUri, "?&");
+if (!$rqp) {
+    $rqp = '';
+}
+$rqp = trim($rqp, "/");
+$data["request_path"] = $rqp;
+$data["request_path_hash"] = ($rqp === '') ? '' : hash("sha256", $rqp);
 
 $data["nonce"] = $data["NONCE"] = $nonce = substr(
     hash(
@@ -162,11 +146,7 @@ function logger($message, $severity = Logger::INFO)
             ]
         );
         $stack = $logging->logger(PROJECT);
-        $stack->write(
-            DOMAIN . " " . $stack->entry($message), [
-                "severity" => $severity,
-            ]
-        );
+        $stack->write($stack->entry($message), ["severity" => $severity,]);
     } finally {
     }
     return true;
@@ -201,7 +181,12 @@ foreach ($cache_profiles as $k => $v) {
                 "duration" => $v,
                 "lock" => true,
                 "path" => CACHE,
-                "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_"
+                "prefix" => SERVER
+                    . "_"
+                    . PROJECT
+                    . "_"
+                    . APPNAME
+                    . "_"
                     . CACHEPREFIX,
             ]
         );
@@ -216,7 +201,12 @@ foreach ($cache_profiles as $k => $v) {
                 "path" => CACHE,
                 "persistent" => true,
                 "port" => $cfg["redis"]["port"] ?? 6377,
-                "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_"
+                "prefix" => SERVER
+                    . "_"
+                    . PROJECT
+                    . "_"
+                    . APPNAME
+                    . "_"
                     . CACHEPREFIX,
                 "timeout" => $cfg["redis"]["timeout"] ?? 1,
                 "unix_socket" => $cfg["redis"]["unix_socket"] ?? "",
@@ -230,7 +220,12 @@ foreach ($cache_profiles as $k => $v) {
                 "fallback" => false,
                 "lock" => true,
                 "path" => CACHE,
-                "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_"
+                "prefix" => SERVER
+                    . "_"
+                    . PROJECT
+                    . "_"
+                    . APPNAME
+                    . "_"
                     . CACHEPREFIX,
             ]
         );
@@ -241,49 +236,20 @@ foreach ($cache_profiles as $k => $v) {
                 "fallback" => false,
                 "lock" => true,
                 "path" => CACHE,
-                "prefix" => SERVER . "_" . PROJECT . "_" . APPNAME . "_"
+                "prefix" => SERVER
+                    . "_"
+                    . PROJECT
+                    . "_"
+                    . APPNAME
+                    . "_"
                     . CACHEPREFIX,
             ]
         );
     }
 }
 
-// MULTI-SITE PROFILES
-$multisite_names = [];
-$multisite_profiles = array_replace(
-    [
-        "default" => [
-            strtolower(
-                trim(
-                    str_replace(
-                        "https://", "", (string) (
-                        $cfg["canonical_url"] ?? ""
-                        )
-                    ), "/"
-                ) ?? DOMAIN
-            )
-        ],
-    ], (array) ($cfg["multisite_profiles"] ?? [])
-);
-foreach ($multisite_profiles as $k => $v) {
-    $multisite_names[] = strtolower($k);
-}
-$profile_index = (string) trim(strtolower($_GET["profile"] ?? "default"));
-if (!in_array($profile_index, $multisite_names)) {
-    $profile_index = "default";
-}
-$auth_domain = strtolower(
-    str_replace("https://", "", (string) ($cfg["goauth_origin"] ?? ""))
-);
-if (!in_array($auth_domain, $multisite_profiles["default"])) {
-    $multisite_profiles["default"][] = $auth_domain;
-}
-
 // POPULATE DATA ARRAY
 $data["cache_profiles"] = $cache_profiles;
-$data["multisite_profiles"] = $multisite_profiles;
-$data["multisite_names"] = $multisite_names;
-$data["multisite_profiles_json"] = json_encode($multisite_profiles);
 
 // ROUTING CONFIGURATION
 $router = [];
@@ -308,13 +274,16 @@ foreach ($routes as $r) {
         echo "<h1>Server Error</h1><h2>Routing table</h2><h3>$r</h3>";
         exit;
     }
-    $router = array_replace_recursive($router, @Neon::decode($content));
+    $next = @Neon::decode($content);
+    if (is_array($next)) {
+        $router = array_replace_recursive($router, $next);
+    }
 }
 
 // SET ROUTING DEFAULTS AND PROPERTIES
 $presenter = [];
 $defaults = $router["defaults"] ?? [];
-foreach ($router ?? [] as $k => $v) {
+foreach ($router as $k => $v) {
     if ($k == "defaults") {
         continue;
     }
@@ -382,18 +351,26 @@ if (CLI) {
         @ob_end_clean();
     }
     if (isset($argv[1])) {
+        // phpcs:ignore
+        /** @phpstan-ignore-next-line */
         CliPresenter::getInstance()->setData($data)->selectModule(
             $argv[1], $argc, $argv
         );
         exit;
     }
+    // phpcs:ignore
+    /** @phpstan-ignore-next-line */
     CliPresenter::getInstance()->setData($data)->process()->help();
     exit;
 }
 
 // PROCESS ROUTING
 $match = $alto->match();
-$view = $match ? $match["target"] : ($router["defaults"]["view"] ?? "home");
+if (is_array($match)) {
+    $view = $match["target"];
+} else {
+    $view = $router["defaults"]["view"] ?? "home";
+}
 
 // POPULATE DATA ARRAY
 $data["match"] = $match;
@@ -434,8 +411,10 @@ if ($router[$view]["redirect"] ?? false) {
 switch ($presenter[$view]["template"]) {
 default:
     if (file_exists(CSP) && is_readable(CSP)) {
-        $csp = @Neon::decode(@file_get_contents(CSP));
-        header(implode(" ", (array) $csp["csp"]));
+        $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
+        if (is_array($csp)) {
+            header(implode(" ", (array) $csp["csp"]));
+        }
     }
 }
 
@@ -482,8 +461,13 @@ if (DEBUG) {
     // remove private information
     unset($data["cf"]);
     unset($data["goauth_secret"]);
-    // dumps
+    
+    // phpcs:ignore
+    /** @phpstan-ignore-next-line */
     bdump($app->getIdentity(), "identity");
+
+    // phpcs:ignore
+    /** @phpstan-ignore-next-line */
     bdump($data, 'model');
 }
 
