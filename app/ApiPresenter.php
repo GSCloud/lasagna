@@ -51,9 +51,7 @@ class ApiPresenter extends APresenter
         if (!\is_array($cfg)) {
             return $this;
         }
-
         $match = $this->getMatch();
-
         $view = $this->getView();
         if (!\is_string($view)) {
             return $this;
