@@ -70,11 +70,11 @@ class ApiPresenter extends APresenter
         $extras = [
             "name" => "DEMO REST API",
             "fn" => $view,
-            "endpoint" => \explode("?", $_SERVER['REQUEST_URI'])[0],
+            "endpoint" => \explode('?', $_SERVER['REQUEST_URI'])[0],
             "api_usage" => $api_usage,
             "api_quota" => (int) self::MAX_API_HITS,
-            "access_time_limit" => self::ACCESS_TIME_LIMIT,
-            "cached" => self::USE_CACHE,
+            "access_time_limit" => (int) self::ACCESS_TIME_LIMIT,
+            "cached" => (bool) self::USE_CACHE,
             "cache_time_limit" => $data["cache_profiles"][self::API_CACHE],
             "uuid" => $this->getUID(),
         ];
@@ -96,21 +96,19 @@ class ApiPresenter extends APresenter
             $data[] = "Hello Europe!";
             $data[] = "Hello World!";
 
-            // save model to cache
-            if (self::USE_CACHE) {
-                Cache::write($view, $data, self::API_CACHE);
-            }
+            // always save model to cache
+            Cache::write($view, $data, self::API_CACHE);
             return $this->writeJsonData($data, $extras);
 
         default:
-            return ErrorPresenter::getInstance()->process();
+            return ErrorPresenter::getInstance()->process(404);
         }
     }
 
     /**
      * Redis access limiter
      *
-     * @return mixed access count or null
+     * @return mixed access count or 0
      */
     public function accessLimiter()
     {
@@ -127,16 +125,24 @@ class ApiPresenter extends APresenter
         defined('PROJECT') || define('PROJECT', 'LASAGNA');
         $key = 'access_limiter_' . SERVER . '_' . PROJECT . "_{$hour}_{$uid}";
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+        $host = $this->getData('redis.host');
+        if (!\is_string($host)) {
+            $host = 'localhost';
+        }
+        $port = $this->getData('redis.port');
+        if (!\is_string($port) || !\is_numeric($port)) {
+            $port = 6377;
+        }
         $redis = new RedisClient(
             [
-            'server' => 'localhost:6377',
+            'server' => "$host:$port",
             'timeout' => 1,
             ]
         );
         try {
             $val = (int) @$redis->get($key);
         } catch (\Exception $e) {
-            return null;
+            return 0;
         }
         if ($val > self::MAX_API_HITS) {
             // over!
@@ -148,7 +154,7 @@ class ApiPresenter extends APresenter
             @$redis->expire($key, self::ACCESS_TIME_LIMIT);
             @$redis->exec();
         } catch (\Exception $e) {
-            return null;
+            return 0;
         }
         $val++;
         return $val;

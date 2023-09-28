@@ -79,6 +79,9 @@ test: unit
 ifneq ($(strip $(has_phpstan)),)
 	phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php app/CliDemo.php app/CliVersion.php app/Doctor.php app/ErrorPresenter.php app/HomePresenter.php app/UnitTester.php
 endif
+ifneq ($(strip $(PHPSTAN_EXTRA)),)
+	@bash ./phpstan_extra.sh
+endif
 	@bash ./cli.sh local
 
 prod:
