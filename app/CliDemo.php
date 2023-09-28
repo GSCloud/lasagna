@@ -39,8 +39,7 @@ class CliDemo extends APresenter
      */
     public function process($param = null)
     {
-        echo "process: Hello World!\n";
-
+        echo "Hello World! 🌎️\n";
         return $this;
     }
 }
