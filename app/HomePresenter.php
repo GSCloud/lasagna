@@ -13,7 +13,6 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
-use There4\Analytics\AnalyticsEvent;
 
 /**
  * Home Presenter class
@@ -63,7 +62,7 @@ class HomePresenter extends APresenter
         }
 
         // fix current locale
-        foreach ($data["l"]??=[] as $k => $v) {
+        foreach ($data["l"] ??=[] as $k => $v) {
             StringFilters::convert_eolhyphen_to_brdot($data["l"][$k]);
             StringFilters::convert_eol_to_br($data["l"][$k]);
             StringFilters::correct_text_spacing(
@@ -85,10 +84,7 @@ class HomePresenter extends APresenter
         StringFilters::trim_html_comment($output);
 
         // save to page cache
-        if ($use_cache) {
-            Cache::write($cache_key, $output, "page");
-        }
-
+        Cache::write($cache_key, $output, "page");
         return $this->setData("output", $output);
     }
 }

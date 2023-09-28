@@ -12,12 +12,10 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 </script>
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
-
 {{>head_meta}}
 {{>head_favicons}}
 {{>head_umami}}
 {{>head_html5shim}}
-
 <style>
 /* Material icons */
 @font-face {
@@ -58,19 +56,24 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 [offline="true"] #offline-message{visibility:visible;opacity:1;z-index:9999999}
 /* progress */
 .progress-container{width:100%;height:8px;background:#ccc;position:fixed;bottom:0;z-index:9999999}.progress-bar{height:8px;background: #4caf50;width:0%}
+/* noscript */
+.noscript{font-size:1.5rem!important;padding:1rem!important}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.gscloud.cz/css/materialize.min.css">
 <script src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
 </head>
-<body>
-<noscript>{{>noscript}}</noscript>
-
+<body style="font-family: 'Roboto', sans-serif;">
+<noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
+<!-- update -->
+<div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
+  <br><a href="javascript:location.replace(location.pathname + '?nonce={{ nonce }}');" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
+</div>
 {{>gscloud_functions}}
-
-<div class="container">
+  <div class="container">
   <h1><a href="/">{{ l.title }}</a> API</h1>
   <ol>
-{{#apis}}
+  {{#apis}}
   <li>
     <p>
       <b>{{ desc }}</b>
@@ -93,9 +96,8 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
       <i>{{ info }}</i>
     </p>
   </li>
-{{/apis}}
+  {{/apis}}
   </ol>
-</div>
-
+  </div>
 </body>
 </html>

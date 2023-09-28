@@ -29,7 +29,7 @@ class RSSPresenter extends APresenter
      *
      * @param mixed $param optional parameter
      * 
-     * @return array data
+     * @return array|mixed array of data
      */
     public function process($param = null)
     {

@@ -44,7 +44,7 @@ class CliVersionjson extends APresenter
             return null;
         }
         $out = [
-            "ENGINE" => "Tesseract 2.0 beta",
+            "ENGINE" => $data["ENGINE"],
             "ARGUMENTS" => $data["ARGV"],
             "REVISIONS" => $data["REVISIONS"],
             "VERSION" => $data["VERSION"],

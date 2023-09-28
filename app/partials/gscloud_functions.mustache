@@ -269,7 +269,7 @@ async function sha256(message) {
             }
           });
           // repeat checks
-          setTimeout("GSC.VersionCheck();", 20000);
+          setTimeout("GSC.VersionCheck();", 30000);
         }
       }
       // repeat checks
@@ -360,8 +360,8 @@ async function sha256(message) {
       });
 
       $("#update-message").click(function() {
-        // set UPDATE button action
-        location.reload();
+        // set UPDATE action
+        location.replace(location.pathname + '?nonce={{ nonce }}');
       });
 
       $(".summernote>ul").each(function(i, obj) {

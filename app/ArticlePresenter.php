@@ -36,31 +36,33 @@ class ArticlePresenter extends APresenter
     {
         // get current Presenter and View
         $presenter = $this->getPresenter();
+        if (!\is_array($presenter)) {
+            return $this;
+        }
         $view = $this->getView();
+        if (!$view) {
+            return $this;
+        }
 
         // process rate limiting + set HTML header + expand current data model
         $data = $this->getData();
         $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
 
         // process advanced caching
-        $use_cache = (bool) (DEBUG ? false : $data["use_cache"] ?? false);
+        $use_cache = true;
+        if (array_key_exists("use_cache", $data)) {
+            $use_cache = (bool) $data["use_cache"];
+        }
         $cache_key = hash(
-            "sha256",
-            join(
-                "_", [$data["host"], $data["request_path"],
-                "htmlpage"]
-            )
+            "sha256", join("_", [$data["host"], $data["request_path"], "htmlpage"])
         );
         if ($use_cache && $output = Cache::read($cache_key, "page")) {
-            return $this->setData(
-                "output",
-                $output .= "\n<script>console.log("
-                . "'*** page content cached');</script>"
-            );
+            header("X-Cache: HIT");
+            return $this->setData("output", $output);
         }
 
         // fix current locale
-        foreach ($data["l"]??=[] as $k => $v) {
+        foreach ($data["l"] ??=[] as $k => $v) {
             StringFilters::convert_eolhyphen_to_brdot($data["l"][$k]);
             StringFilters::convert_eol_to_br($data["l"][$k]);
             StringFilters::correct_text_spacing(
@@ -68,20 +70,24 @@ class ArticlePresenter extends APresenter
             );
         }
 
-        // turn ON article view in content switcher
+        // turn ON article view in the content switcher
         $data["container_switch_article"] = true;
 
         // output rendering
-        $output = $this->setData($data)->renderHTML($presenter[$view]["template"]);
+        $output = '';
+        if ($data) {
+            $output = $this->setData(
+                $data
+            )->renderHTML(
+                $presenter[$view]["template"]
+            );
+        }
 
         // strip comments
         StringFilters::trim_html_comment($output);
 
         // save to page cache
-        if ($use_cache) {
-            Cache::write($cache_key, $output, "page");
-        }
-
+        Cache::write($cache_key, $output, "page");
         return $this->setData("output", $output);
     }
 }

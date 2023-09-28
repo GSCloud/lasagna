@@ -44,7 +44,7 @@ class CliVersion extends APresenter
             return null;
         }
         $out = [
-            "ENGINE" => "Tesseract 2.0 beta",
+            "ENGINE" => $data["ENGINE"],
             "REVISIONS" => $data["REVISIONS"],
             "VERSION" => $data["VERSION"],
             "VERSION_SHORT" => $data["VERSION_SHORT"],
@@ -52,7 +52,7 @@ class CliVersion extends APresenter
             "VERSION_TIMESTAMP" => $data["VERSION_TIMESTAMP"],
         ];
         foreach ($out as $x => $y) {
-            if (is_string($x)) {
+            if (\is_string($x)) {
                 echo "\e[0;1m$x\e[0m: $y\n";
             }
         }
