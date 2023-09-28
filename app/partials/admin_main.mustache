@@ -97,31 +97,6 @@
           data-position="top" data-tooltip="{{ l.a_article_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
           <i class="fas fa-plus-square"></i>&nbsp;URL</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
-
-        <div class="container">
-          {{#request_path_slug}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="GSC.CopyThisText(this);" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">📋</span>
-          &nbsp;
-          <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}">🌍 exportHTML</a>
-          &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="GSC.CopyThisText(this);" class="hover"
-            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default{{ request_path_slug }}"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
-          {{/request_path_slug}}
-
-          {{^request_path_slug}}
-          <span title="📋 {{ l.a_copy_tit }}" onclick="GSC.CopyThisText(this);" class="hover"
-            data-copy="{{ BASE }}{{ lang }}/exportHTML/default/!">📋</span>
-          &nbsp;
-          <a target=_blank
-            href="{{ BASE }}{{ lang }}/exportHTML/default/!">🌍 exportHTML</a>
-          &nbsp;
-          <span title="📋 Remote Content for WordPress" onclick="GSC.CopyThisText(this);" class="hover"
-            data-copy='[remote_content url="{{ BASE }}{{ lang }}/exportHTML/default/!"]'>📋&nbsp;RCWP</span>&nbsp;&nbsp;
-          {{/request_path_slug}}
-        </div>
-
       </div>
     </div>
 
