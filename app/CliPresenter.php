@@ -54,7 +54,7 @@ class CliPresenter extends APresenter
     public function show($p = "home")
     {
         $p = \trim($p);
-        if (\empty($p) || !\strlen($p)) {
+        if (empty($p) || !\strlen($p)) {
             // no presenter
             die("FATAL ERROR: No presenter is set!\n");
         }
@@ -84,7 +84,7 @@ class CliPresenter extends APresenter
     public function showCore($v = "PingBack", $arg = null)
     {
         $v = \trim($v);
-        if (\empty($v) || !\strlen($v)) { // no view
+        if (empty($v) || !\strlen($v)) { // no view
             die("FATAL ERROR: No view is set!\n");
         }
         $data = $this->getData();
