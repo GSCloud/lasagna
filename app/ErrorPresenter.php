@@ -25,6 +25,7 @@ namespace GSC;
  */
 class ErrorPresenter extends APresenter
 {
+    // known HTTP status codes
     const CODESET = [
         400 => "Bad Request",
         401 => "Unauthorized",
@@ -44,7 +45,7 @@ class ErrorPresenter extends APresenter
     /**
      * Controller processor
      *
-     * @param int $err error code (optional)
+     * @param int $err HTTP status code (optional)
      * 
      * @return object Controller
      */
@@ -70,15 +71,13 @@ class ErrorPresenter extends APresenter
         if (!isset(self::CODESET[$code])) {
             $code = 404;
         }
-        // error message
         $error = self::CODESET[$code];
 
         // set HTTP error code
         header("HTTP/1.1 {$code} {$error}");
 
-        // find error image by extension
+        // find error image extension
         $img = "error.png";
-        echo $code;
         if (\file_exists(WWW . "/img/{$code}.png")) {
             $img = "{$code}.png";
         } elseif (\file_exists(WWW . "/img/{$code}.jpg")) {
@@ -100,7 +99,7 @@ class ErrorPresenter extends APresenter
             . " alt='$error' "
             . "src='https://cdn.gscloud.cz/img/$img'></center></body></html>";
 
-        // export
+            // export
         return $this->setData("output", $this->renderHTML($template));
     }
 }
