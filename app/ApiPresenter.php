@@ -114,15 +114,6 @@ class ApiPresenter extends APresenter
     {
         $hour = \date('H');
         $uid = $this->getUID();
-        defined('SERVER') || define(
-            'SERVER',
-            \strtolower(
-                \preg_replace(
-                    "/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'
-                )
-            )
-        );
-        defined('PROJECT') || define('PROJECT', 'LASAGNA');
         $key = 'access_limiter_' . SERVER . '_' . PROJECT . "_{$hour}_{$uid}";
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         $host = $this->getData('redis.host');
