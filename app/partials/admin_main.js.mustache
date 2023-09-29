@@ -147,14 +147,14 @@
         $("#news").hide(200);
       });
 
-      // editor block click
+      // editor block
       $(".summernote").unbind();
       $(".summernote").click(function () {
         $(".summernote").unbind("dblclick");
         GSC.DeploySummernote();
       });
 
-      // click + button
+      // add article
       $("#a_article").click(function () {
         var name = prompt('{{ l.a_article_add_prompt }}:').trim();
         name = name.replace(/['"/\\]/g, '');
@@ -182,10 +182,11 @@
       $("#a_summernote").text("{{ l.a_save_all }}");
       $("#a_summernote").unbind("click");
 
-      // SAVE ALL button
+      // Summernote: SAVE ALL
       $("#a_summernote").unbind();
       $("#a_summernote").click(function () {
-        if (GSC.offline) { // offline
+        if (GSC.offline) {
+          // offline
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#summer_ping", false);
         }
@@ -635,9 +636,12 @@
     // admin UI bindings and GSC functions
     w.GSC.init.push(function () {
       w.GSC.names.push("admin UI - bind");
+
+      // admin show
       if (!getCookie("motyle") || getCookie("motyle") == "false") {
         $("#admin_main").show(100);
       }
+
       // wrench
       $(".motyle").click(function () {
         $("#admin_main").toggle(200, function () {
@@ -650,6 +654,7 @@
       $("#ArticleURLSelect").change(function () {
         window.location.pathname = $('#ArticleURLSelect').val();
       });
+
       // remote function selector
       $("#RemoteFnSelect").change(function () {
         if (w.GSC.offline) { // offline
@@ -657,6 +662,7 @@
           return GSC.PingDot("#sectok_ping", false);
         }
         if (!$("#RemoteFnSelect").val()) return;
+
         // API: GetUpdateToken
         $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
           var s = $("#RemoteFnSelect").val();
@@ -672,6 +678,7 @@
           M.toast({text: "{{ l.a_error_general }}"});
         });
       });
+
       // update CSV data
       $("#a_update").click(function () {
         if (w.GSC.offline) { // offline
@@ -682,6 +689,7 @@
         setTimeout(function () {
           $("#a_update").removeAttr("disabled");
         }, 30E3);
+
         // API: CoreUpdate
         $.post("/admin/CoreUpdate");
         M.toast({text: "{{ l.a_processing_data }}"});
@@ -722,11 +730,17 @@
       if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
         $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
           if (data && data.data) {
-            setCookie("open_filemanager", 1); // remember state
+
+            // remember state
+            setCookie("open_filemanager", 1);
             GSC.PingDot("#summer_ping");
-            var s = '<h5>{{ l.a_files_ttip }} ';
+
+            var s = '<h5>';
             s += '<span title="reload" onclick="javascript:GSC.RenderUploadInfo()" class="hover"><i class="blue-text fas fa-sync-alt"></i></span>&nbsp;';
-            s += '<span title="close" onclick="javascript:GSC.CloseFileManager()" class="hover">❌</span></h5>';
+            s += '{{ l.a_files_ttip }} ';
+            s += '<span title="close" onclick="javascript:GSC.CloseFileManager()" class="hover">❌</span>';
+            s += '</h5>';
+
             var now = ~~(Date.now() / 1000);
             moment.locale("{{ lang }}");
 
@@ -743,7 +757,7 @@
               if (data.data[i]["thumbnail"] === null) continue;
               t++;
               if (t == 1) {
-                s += '<hr><div class="row">';
+                s += '<div class="row">';
               }
               if (t > 6) { // MAX columns
                 t = 1;
@@ -751,10 +765,14 @@
               }
               var ext = GSC.GetFileExtension(i); // extension
               var newfile = "";
-              if (last[i]) { // set new status
-                newfile = '<b style="font-size:2em">🆕</b>&nbsp;';
+
+              if (last[i]) {
+                // set new status
+                newfile = '<b style="font-size:1.5rem">🆕</b>&nbsp;';
               }
-              s += '<div class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';"><a title="{{ l.a_open_tit }}" class="hover" ';
+
+              s += '<div style="border:1px solid #888;margin:0.1rem;padding:1rem" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                + '<a title="{{ l.a_open_tit }}" class="hover" ';
               s += 'onclick="javascript:window.open(\'/upload/' + i + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
               if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img hide-on-med-and-up" height=50px src="{{ cdn }}' + data.data[i]["thumbnail"] + '"><br>';
               if (data.data[i]["thumbnail150"]) s += '<img alt="thumbnail" class="responsive-img hide-on-small-only" height=150px src="{{ cdn }}' + data.data[i]["thumbnail150"] + '"><br>';
@@ -764,12 +782,14 @@
               s += ',&nbsp;';
               s += GSC.FormatBytes(data.data[i]["size"]);
               s += '</span><br><br>';
+
               s += '<span title="🗑 {{ l.a_delete_tit }}" class="mobilebutt left hover delete" data-id="' + i + '">❌</span>&nbsp; ';
               s += '<span title="📋 {{ l.a_copy_tit }}" class="mobilebutt right hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+
               // button separator
               s += '<span class="mobilebutt right">&nbsp;&nbsp;&nbsp;</span>';
               if (ext == "epub") s += '<a target=_blank title="EPUB" class="mobilebutt right hover" href="{{ BASE }}epub/upload/' + i + '">📚</a>&nbsp; ';
-              s += '<hr></div>';
+              s += '</div>';
             }
             if (t) {
               s += "</div>";
@@ -777,9 +797,11 @@
               s += "&mdash;&mdash;&mdash;";
             }
             
-            // show content
-            document.getElementById("a_uploader_progress").scrollIntoView();
-            window.scrollBy(0, -100);
+            // show uploads
+
+            //document.getElementById("a_uploader_progress").scrollIntoView();
+            //window.scrollBy(0, -100);
+
             if ($("#a_file_manager").html() != "") {
               $("#a_file_manager").html(s).show();
             } else {
@@ -798,6 +820,7 @@
               if (GSC.deleteconfirm || confirm("{{ l.a_delete_tit }}?")) {
                 GSC.deleteconfirm = true;
                 var x = $(this).data("id");
+
                 // API: UploadedFileDelete
                 $.post("/admin/UploadedFileDelete", {
                   name: x
@@ -872,6 +895,7 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("show admin UI");
       GSC.AdminUI();
+
       // filemanager state
       if (getCookie("open_filemanager") == 1) {
         $("#a_file_manager").hide();
@@ -922,6 +946,7 @@
         }
         M.toast({text: s});
       });
+
       ZeroUpload.on("progress", function (progress, userData) {
         $("#a_uploader_progress").show(200).html(
           '<h5>{{ l.a_upload_ttip }}</h5><div style="padding:1em"><div class="row">' +
@@ -932,9 +957,11 @@
           '<div><strong>Remaining:</strong> ' + progress.remainingTimeHuman + '</div></div>'
         );
       });
+
       // init uploader
       ZeroUpload.init();
       ZeroUpload.addDropTarget("#admin_main");
+
       // UI: upload button
       $("#a_upload").click(function () {
         if (w.GSC.offline) { // offline

@@ -1,4 +1,4 @@
 # humanstxt.org/
 # The humans responsible & technology colophon
 
-Fred Brooker <git@gscloud.cz>
+Fred Brooker <git@gscloud.cz> creator, programmer
