@@ -78,6 +78,7 @@ class ErrorPresenter extends APresenter
 
         // find error image by extension
         $img = "error.png";
+        echo $code;
         if (\file_exists(WWW . "/img/{$code}.png")) {
             $img = "{$code}.png";
         } elseif (\file_exists(WWW . "/img/{$code}.jpg")) {
@@ -96,7 +97,8 @@ class ErrorPresenter extends APresenter
             . $this->getNonce()
             . '">click here to go the main page ↻</a></center></h2>';
         $template .= "<img style='border:10px solid #000;' height='100%'"
-            . " alt='$error' src=/img/$img></center></body></html>";
+            . " alt='$error' "
+            . "src='https://cdn.gscloud.cz/img/$img'></center></body></html>";
 
         // export
         return $this->setData("output", $this->renderHTML($template));
