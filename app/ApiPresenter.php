@@ -145,7 +145,6 @@ class ApiPresenter extends APresenter
             return 0;
         }
         if ($val > self::MAX_API_HITS) {
-            // over!
             $this->setLocation('/err/420');
         }
         try {

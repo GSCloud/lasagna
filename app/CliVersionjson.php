@@ -45,12 +45,12 @@ class CliVersionjson extends APresenter
         }
         $out = [
             "ENGINE" => $data["ENGINE"],
-            "ARGUMENTS" => $data["ARGV"],
             "REVISIONS" => $data["REVISIONS"],
             "VERSION" => $data["VERSION"],
             "VERSION_SHORT" => $data["VERSION_SHORT"],
             "VERSION_DATE" => $data["VERSION_DATE"],
             "VERSION_TIMESTAMP" => $data["VERSION_TIMESTAMP"],
+            "ARGUMENTS" => $data["ARGV"],
         ];
         echo \json_encode($out, JSON_PRETTY_PRINT) . "\n";
         exit;

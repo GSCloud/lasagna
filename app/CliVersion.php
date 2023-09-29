@@ -50,9 +50,17 @@ class CliVersion extends APresenter
             "VERSION_SHORT" => $data["VERSION_SHORT"],
             "VERSION_DATE" => $data["VERSION_DATE"],
             "VERSION_TIMESTAMP" => $data["VERSION_TIMESTAMP"],
+            "ARGUMENTS" => $data["ARGV"],
         ];
         foreach ($out as $x => $y) {
-            if (\is_string($x)) {
+            if (\is_numeric($y)) {
+                echo "\e[0;1m$x\e[0m: $y\n";
+            }
+            if (\is_string($y)) {
+                echo "\e[0;1m$x\e[0m: $y\n";
+            }
+            if (\is_array($y)) {
+                $y = join(" ", $y);
                 echo "\e[0;1m$x\e[0m: $y\n";
             }
         }
