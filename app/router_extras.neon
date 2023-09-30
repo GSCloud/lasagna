@@ -1,14 +1,24 @@
 # @author Fred Brooker <git@gscloud.cz>
-# extra routes, not mandatory for the project
+# extra routes, mostly content based
+
+GetEnArticle:
+  path: '/en/id/[**:trailing]'
+  language: en
+  presenter: article
 
 GetCsArticle:
   path: '/cs/id/[**:trailing]'
   language: cs
   presenter: article
 
-GetEnArticle:
-  path: '/en/id/[**:trailing]'
-  language: en
+GetSkArticle:
+  path: '/sk/id/[**:trailing]'
+  language: sk
+  presenter: article
+
+GetDeArticle:
+  path: '/de/id/[**:trailing]'
+  language: de
   presenter: article
 
 ReadArticles:
@@ -23,20 +33,6 @@ ReadArticles:
   method: GET
   presenter: core
 
-GetArticleHTMLExport:
-  path: '/[a:lang]/exportHTML/[a:profile]/[**:trailing]'
-  language: cs
-  api: true
-  api_description: "Get articles as HTML"
-  api_info: "Parameters:\n<b><a:lang></b> - language code,\n<a:profile></b> - profile name (default),\n<b><trailing></b> - URL stub.\n\nReturns (HTML): data."
-  api_example: [
-    "cs/exportHTML/default/home"
-    "cs/exportHTML/default/id/demo"
-  ]
-  assert_json: false
-  method: GET
-  presenter: core
-
 GetQR:
   path: "/qr/[s|m|l|x:size]/[**:trailing]"
   api: true
@@ -46,5 +42,5 @@ GetQR:
   presenter: core
   api_example: [
     "qr/s/Hello World!"
-    "qr/m/https://example.com"
+    "qr/m/https://gscloud.cz"
   ]
