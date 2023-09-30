@@ -31,19 +31,28 @@ async function sha256(message) {
 }
 
 (function(w, d, undefined) {
+    w.GSC.scroll = 0;
+    w.GSC.scrolled = 0;
 
-  // dynamic bottom scroll progress bar element
+  // dynamic bottom scroll progress bar
   var pbar = "_" + Date.now();
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
-    "beforeend", '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
+    "beforeend",
+    '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
   );
 
   // bottom progress bar
-  w.onscroll = function() {
+  window.ontouchmove = onscroll;
+  window.onscroll = onscroll;
+  function onscroll() {
     var scroll = d.body.scrollTop || d.documentElement.scrollTop;
     var height = d.documentElement.scrollHeight - d.documentElement.clientHeight;
     var scrolled = (scroll / height) * 100;
-    if (d.getElementById(pbar)) d.getElementById(pbar).style.width = scrolled + "%";
+    if (d.getElementById(pbar)) {
+      d.getElementById(pbar).style.width = scrolled + '%';
+    }
+    w.GSC.scroll = scroll;
+    w.GSC.scrolled = scrolled;
   };
 
   // check network status

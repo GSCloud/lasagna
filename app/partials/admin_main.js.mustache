@@ -35,7 +35,7 @@
 
     // GetCsvInfo()
     if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
-      if (w.GSC.offline) { // offline
+      if (w.GSC.offline) {
         return GSC.PingDot("#csv_ping", false);
       }
 
@@ -127,7 +127,6 @@
       // show translation source pins
       $(".trans_pin").click(function () {
         if ($(this).data('on') == '1') {
-            M.toast({text: "⛔️"});
             $(this).data('on', 0);    
             $('.sheetpin').remove();
         } else {
@@ -186,7 +185,6 @@
       $("#a_summernote").unbind();
       $("#a_summernote").click(function () {
         if (GSC.offline) {
-          // offline
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#summer_ping", false);
         }
@@ -657,7 +655,7 @@
 
       // remote function selector
       $("#RemoteFnSelect").change(function () {
-        if (w.GSC.offline) { // offline
+        if (w.GSC.offline) {
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#sectok_ping", false);
         }
@@ -681,7 +679,7 @@
 
       // update CSV data
       $("#a_update").click(function () {
-        if (w.GSC.offline) { // offline
+        if (w.GSC.offline) {
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
@@ -697,7 +695,7 @@
 
       // invoke Summernote editor
       $("#a_summernote").click(function () {
-        if (w.GSC.offline) { // offline
+        if (w.GSC.offline) {
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#psi_ping", false); // ???
         }
@@ -708,7 +706,7 @@
 
       // file manager
       $("#a_files").click(function () {
-        if (w.GSC.offline) { // offline
+        if (w.GSC.offline) {
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
@@ -836,47 +834,21 @@
 
       // flush cache
       $("#a_flush").click(function () {
-        if (w.GSC.offline) { // offline
+        if (w.GSC.offline) {
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
         GSC.GetCsvInfo = function () {};
         $("#a_flush").attr("disabled", "disabled");
+
         // API: FlushCache
         $.post("/admin/FlushCache");
-        //window.location.reload(); // reload window
-        location.replace("?nonce={{ nonce }}"); // reload window
-      });
-
-      // get auth code
-      $("#a_getcode").click(function () {
-        if (w.GSC.offline) { // offline
-          M.toast({text: "offline 📶"});
-          return GSC.PingDot("#csv_ping", false);
-        }
-        // API: CreateAuthCode
-        $.post("/admin/CreateAuthCode", function (data) {
-          GSC.CopyClipboard(data.data.hash);
-          M.toast({text: "CreateAuthCode 🆗 {{ l.a_clipboardcopy }} [" + data.data.hash + "]"});
-        });
-      });
-
-      // delete auth code
-      $("#a_delcode").click(function () {
-        if (w.GSC.offline) { // offline
-          M.toast({text: "offline 📶"});
-          return GSC.PingDot("#csv_ping", false);
-        }
-        // API: DeleteAuthCode
-        $.post("/admin/DeleteAuthCode", function (data) {
-          M.toast({text: "DeleteAuthCode 🆗 {{ l.a_codedeleted }}"});
-          GSC.CopyClipboard("");
-        });
+        location.replace("/?nonce={{ nonce }}"); // reload window
       });
 
       $("#a_logout").click(function () {
         setCookie("logout", "logout");
-        GSC.offline ? window.location.replace("/?nonce=".Date.now()) : window.location.replace("/logout");
+        GSC.offline ? window.location.replace("/?nonce={{ nonce }}") : window.location.replace("/logout");
       });
 
     });
@@ -964,7 +936,7 @@
 
       // UI: upload button
       $("#a_upload").click(function () {
-        if (w.GSC.offline) { // offline
+        if (w.GSC.offline) {
           M.toast({text: "offline 📶"});
           return GSC.PingDot("#csv_ping", false);
         }
