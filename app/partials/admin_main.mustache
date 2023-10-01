@@ -55,10 +55,10 @@
           <a class="waves-effect green waves-light btn trans_pin hover" style="font-size:15px!important">{{ l.a_show_translations }}</a>
           <br>
           <br>
-          PHP <b>{{ PHP_VERSION }}</b>
+          PHP <b>{{ PHP_VERSION }}</b> [<b>{{ app }} @ {{ CONST.DOMAIN }}</b>]
           <br>
           <b>{{ ENGINE }} rev. {{ REVISIONS }}</b><br>
-          App Code <b>{{ VERSION_SHORT }}</b> Deployed <b>{{ VERSION_DATE }}</b><br>
+          app&nbsp;code <b>{{ VERSION_SHORT }}</b> Deployed <b>{{ VERSION_DATE }}</b><br>
         </p>
 
         <h5>{{ l.a_cache }}</h5>
@@ -102,7 +102,7 @@
 
     <!-- 2nd COLUMN -->
     <div class="col l4 m6 s12">
-      <div class="row center extrapadding hide-on-small-only">
+      <div class="row center extrapadding">
         <h5>fn()</h5>
         <div class="col s12 white">
           <label>{{ l.a_remotefns }}</label>
@@ -198,7 +198,7 @@
       </div>
       <div class="row center extrapadding">
         <div class="white-text">
-          <div class="row center hide-on-small-only">
+          <div class="row center">
             <strong>ADMIN</strong>
             <div class="container">
               <p class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}

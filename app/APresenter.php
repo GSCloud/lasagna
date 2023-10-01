@@ -651,21 +651,6 @@ abstract class APresenter implements IPresenter
             return $this;
         }
 
-        // Telegram bot support
-        $chid = $this->getData('telegram.bot_ch_id') ?? null;
-        $apikey = $this->getData('telegram.bot_apikey') ?? null;
-        if ($this->getCurrentUser()['name'] !== '') {
-            $curl = curl_init();
-            $message = htmlspecialchars('🤖 ' . APPNAME . ' (' . DOMAIN . ')' . ': ' . $message . ' [' . $this->getCurrentUser()['name'] . ']');
-            if ($curl && $message && $chid && $apikey) {
-                $query = '?chat_id=' . $chid . "&text={$message}";
-                curl_setopt($curl, CURLOPT_URL, 'https://api.telegram.org/bot' . $apikey . '/sendMessage' . $query);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_exec($curl);
-                curl_close($curl);
-            }
-        }
-
         return $this;
     }
 

@@ -12,12 +12,10 @@ if(window.location!=window.top.location)window.top.location.replace(window.locat
 </script>
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
-
 {{>head_meta}}
 {{>head_favicons}}
 {{>head_umami}}
 {{>head_html5shim}}
-
 <style>
 /* Material icons */
 @font-face {
@@ -56,7 +54,6 @@ td,th {padding:2px!important}
 <script src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
 </head>
 <body>
-
 <table class="highlight">
 <thead style="border-bottom:4px solid black!important">
 <tr>
@@ -68,11 +65,9 @@ td,th {padding:2px!important}
 </tr>
 </thead>
 <tbody>
-
 {{#content}}
 <tr>{{.}}</tr>
 {{/content}}
-
 </tbody>
 </table>
 
@@ -87,12 +82,14 @@ $(".alogcol1").each(function() {
 
 // modify timestamp
 var width = document.documentElement.clientWidth;
+
 if (width < 800) $(".alogcol2").each(function() {
   var x = $(this).html();
   if (width < 800) x= x.substring(x, 50);
   if (width < 400) x= x.substring(x, 30);
   $(this).html(x);
 });
+
 if (width < 800) $(".alogcol3").each(function() {
   var x = $(this).html();
   if (width < 800) x= x.substring(x, 50);
@@ -101,6 +98,5 @@ if (width < 800) $(".alogcol3").each(function() {
 });
 
 </script>
-
 </body>
 </html>
