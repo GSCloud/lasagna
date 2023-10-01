@@ -736,7 +736,7 @@
             var s = '<h5>';
             s += '<span title="reload" onclick="javascript:GSC.RenderUploadInfo()" class="hover"><i class="blue-text fas fa-sync-alt"></i></span>&nbsp;';
             s += '{{ l.a_files_ttip }} ';
-            s += '<span title="close" onclick="javascript:GSC.CloseFileManager()" class="hover">❌</span>';
+            s += '<span title="close" onclick="javascript:GSC.CloseFileManager()" class="hover">🚪</span>';
             s += '</h5>';
 
             var now = ~~(Date.now() / 1000);
@@ -757,10 +757,12 @@
               if (t == 1) {
                 s += '<div class="row">';
               }
+/*
               if (t > 6) { // MAX columns
                 t = 1;
                 s += '</div><div class="row">';
               }
+*/
               var ext = GSC.GetFileExtension(i); // extension
               var newfile = "";
 
@@ -769,11 +771,11 @@
                 newfile = '<b style="font-size:1.5rem">🆕</b>&nbsp;';
               }
 
-              s += '<div style="border:1px solid #888;margin:0.1rem;padding:1rem" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+              s += '<div style="border:1px solid #888;margin:0.1rem;padding:1rem;height:300px" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
                 + '<a title="{{ l.a_open_tit }}" class="hover" ';
               s += 'onclick="javascript:window.open(\'/upload/' + i + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
-              if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img hide-on-med-and-up" height=50px src="{{ cdn }}' + data.data[i]["thumbnail"] + '"><br>';
-              if (data.data[i]["thumbnail150"]) s += '<img alt="thumbnail" class="responsive-img hide-on-small-only" height=150px src="{{ cdn }}' + data.data[i]["thumbnail150"] + '"><br>';
+              if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img hide-on-med-and-up" height=50 src="{{ cdn }}' + data.data[i]["thumbnail"] + '"><br>';
+              if (data.data[i]["thumbnail150"]) s += '<img alt="thumbnail" class="responsive-img hide-on-small-only" height=150 src="{{ cdn }}' + data.data[i]["thumbnail150"] + '"><br>';
               s += '<span title="' + i + '" class="truncate">' + newfile + i + '</span></a>';
               s += '<span>{{ l.a_age }}&nbsp;';
               s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
@@ -786,7 +788,6 @@
 
               // button separator
               s += '<span class="mobilebutt right">&nbsp;&nbsp;&nbsp;</span>';
-              if (ext == "epub") s += '<a target=_blank title="EPUB" class="mobilebutt right hover" href="{{ BASE }}epub/upload/' + i + '">📚</a>&nbsp; ';
               s += '</div>';
             }
             if (t) {
@@ -795,10 +796,9 @@
               s += "&mdash;&mdash;&mdash;";
             }
             
-            // show uploads
-
-            //document.getElementById("a_uploader_progress").scrollIntoView();
-            //window.scrollBy(0, -100);
+            // scroll into view
+            $("#a_uploader_progress").get(0).scrollIntoView();
+            window.scrollBy(0, -50);
 
             if ($("#a_file_manager").html() != "") {
               $("#a_file_manager").html(s).show();
@@ -816,6 +816,7 @@
             // UPLOAD: file delete
             $("#a_file_manager .delete").click(function () {
               if (GSC.deleteconfirm || confirm("{{ l.a_delete_tit }}?")) {
+                M.toast({text: "🧨 ..."});
                 GSC.deleteconfirm = true;
                 var x = $(this).data("id");
 
@@ -879,8 +880,8 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
       ZeroUpload.setURL("/admin/upload");
-      ZeroUpload.setMaxFiles(100);
-      ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
+      ZeroUpload.setMaxFiles(10);
+      ZeroUpload.setMaxBytes(30 * 1024 * 1024); // 30 MB
       ZeroUpload.on("complete", function (response) {
         M.toast({text: "{{ l.a_uploading_finished }}"});
         var data = JSON.parse(response.data);
