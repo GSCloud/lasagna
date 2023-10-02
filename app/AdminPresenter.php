@@ -223,14 +223,15 @@ class AdminPresenter extends APresenter
         case "UploadedFileDelete":
             $this->checkPermission("admin");
             if (isset($_POST["name"])) {
-                $f1 = UPLOAD . DS . \trim($_POST["name"]); // original file
-                $f2 = UPLOAD . DS . self::THUMB_PREFIX32 . \trim($_POST["name"]);
-                $f3 = UPLOAD . DS . self::THUMB_PREFIX50 . \trim($_POST["name"]);
-                $f4 = UPLOAD . DS . self::THUMB_PREFIX64 . \trim($_POST["name"]);
-                $f5 = UPLOAD . DS . self::THUMB_PREFIX128 . \trim($_POST["name"]);
-                $f6 = UPLOAD . DS . self::THUMB_PREFIX150 . \trim($_POST["name"]);
-                $f7 = UPLOAD . DS . self::THUMB_PREFIX320 . \trim($_POST["name"]);
-                $f8 = UPLOAD . DS . self::THUMB_PREFIX512 . \trim($_POST["name"]);
+                $name = \trim($_POST["name"], "\\/.");
+                $f1 = UPLOAD . DS . $name;
+                $f2 = UPLOAD . DS . self::THUMB_PREFIX32 . $name;
+                $f3 = UPLOAD . DS . self::THUMB_PREFIX50 . $name;
+                $f4 = UPLOAD . DS . self::THUMB_PREFIX64 . $name;
+                $f5 = UPLOAD . DS . self::THUMB_PREFIX128 . $name;
+                $f6 = UPLOAD . DS . self::THUMB_PREFIX150 . $name;
+                $f7 = UPLOAD . DS . self::THUMB_PREFIX320 . $name;
+                $f8 = UPLOAD . DS . self::THUMB_PREFIX512 . $name;
                 if (\file_exists($f1)) {
                     @\unlink($f1);
                     @\unlink($f2);

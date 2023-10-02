@@ -11,15 +11,7 @@
   if (w.GSC.init) {
     w.GSC.data = {};
 
-    // ShowLoader() - show rotating image loader inside element
-    if (!w.GSC.ShowLoader) w.GSC.ShowLoader = function (el) {
-      if (!el) return;
-      $(el).html(
-        '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class=circle></div></div><div class=gap-patch><div class=circle></div></div><div class="circle-clipper right"><div class=circle></div></div></div></div>'
-      );
-    }
-
-    // PingDot() - render red or green dot inside element
+    // fn PingDot()
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
       if (!el) return;
       if (status) {
@@ -33,7 +25,7 @@
       }).fadeTo("slow", 0);
     }
 
-    // GetCsvInfo()
+    // fn GetCsvInfo()
     if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
       if (w.GSC.offline) {
         return GSC.PingDot("#csv_ping", false);
@@ -77,7 +69,7 @@
         });
     }
 
-    // admin UI
+    // fn AdminUI
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
@@ -174,7 +166,7 @@
       });
     }
 
-    // DeploySummernote()
+    // fn DeploySummernote()
     if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
       GSC.summernote_on = true;
       $("#a_summernote").attr("disabled", "disabled");
@@ -631,7 +623,7 @@
       $("#a_summernote").removeAttr("disabled");
     }
 
-    // admin UI bindings and GSC functions
+    // setup admin UI
     w.GSC.init.push(function () {
       w.GSC.names.push("admin UI - bind");
 
@@ -715,6 +707,9 @@
           return GSC.CloseFileManager();
         }
         GSC.RenderUploadInfo();
+        // scroll into view
+        $("#a_uploader_progress").get(0).scrollIntoView();
+        window.scrollBy(0, -50);
       });
 
       // GSC.CloseFileManager
@@ -783,6 +778,7 @@
               s += ',&nbsp;';
               s += GSC.FormatBytes(data.data[i]["size"]);
               s += '</span><br><br>';
+
               s += '<div class="row extrapadding">';
               s += '<span title="🗑 {{ l.a_delete_tit }}" class="mobilebutt left hover delete" data-id="' + i + '">❌</span>&nbsp; ';
               s += '<span title="📋 {{ l.a_copy_tit }} ' + i + '" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
@@ -800,10 +796,6 @@
               s += "&mdash;&mdash;&mdash;";
             }
             
-            // scroll into view
-            $("#a_uploader_progress").get(0).scrollIntoView();
-            window.scrollBy(0, -50);
-
             // show file manager content
             if ($("#a_file_manager").html() != "") {
               $("#a_file_manager").html(s).show();
@@ -859,10 +851,9 @@
 
     });
 
-    // CSV info timer
+    // setup CSV info timer
     w.GSC.init.push(function () {
       w.GSC.names.push("CSV timer");
-      if (!w.GSC.offline) GSC.ShowLoader("#a_update_info");
       setInterval(function () {
         window.GSC.GetCsvInfo();
       }, 2500);
@@ -881,7 +872,7 @@
       }
     });
 
-    // set uploader
+    // setup ZeroUpload
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
       ZeroUpload.setURL("/admin/upload");
@@ -951,6 +942,6 @@
       });
     });
 
-    // end GSC.init
-  }
+    
+  } // end GSC.init
 })(window, document);
