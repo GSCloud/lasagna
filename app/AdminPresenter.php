@@ -119,7 +119,6 @@ class AdminPresenter extends APresenter
                 }
                 $file = new \SplFileObject($f, "r");
                 $file->seek(PHP_INT_MAX);
-
                 return $file->key() + 1;
             } catch (\Exception $e) {
 
@@ -134,7 +133,6 @@ class AdminPresenter extends APresenter
             $x = [];
             foreach ($_FILES as $key => &$file) {
                 $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
-
                 // don't allow thumbnail filenames
                 if (\strpos($b, self::THUMB_PREFIX32) === 0) {
                     continue;
@@ -157,7 +155,6 @@ class AdminPresenter extends APresenter
                 if (\strpos($b, self::THUMB_PREFIX512) === 0) {
                     continue;
                 }
-
                 if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                     $x[$b] = \urlencode($b);
                     if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX32 . $b)) {
@@ -180,9 +177,6 @@ class AdminPresenter extends APresenter
                     }
                     if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX512 . $b)) {
                         \unlink(UPLOAD . DS . self::THUMB_PREFIX512 . $b);
-                    }
-                    if (stripos($b, ".epub")) {
-                        continue;
                     }
                     $this->createThumbnail(
                         UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX32 . $b,
@@ -223,7 +217,6 @@ class AdminPresenter extends APresenter
                 }
             }
             $this->addMessage("FILES UPLOADED: " . \count($x));
-
             return $this->writeJsonData($x, $extras);
                 break;
 
@@ -248,7 +241,6 @@ class AdminPresenter extends APresenter
                     @\unlink($f7);
                     @\unlink($f8);
                     $this->addMessage("FILE DELETED: $f1 + thumbnails");
-
                     return $this->writeJsonData($f1, $extras);
                 }
             }

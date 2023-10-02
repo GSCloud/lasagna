@@ -767,24 +767,28 @@
               var newfile = "";
 
               if (last[i]) {
-                // set new status
+                // set NEW status
                 newfile = '<b style="font-size:1.5rem">🆕</b>&nbsp;';
               }
 
               s += '<div style="border:1px solid #888;margin:0.1rem;padding:1rem;height:300px" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
                 + '<a title="{{ l.a_open_tit }}" class="hover" ';
               s += 'onclick="javascript:window.open(\'/upload/' + i + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
-              if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img hide-on-med-and-up" height=50 src="{{ cdn }}' + data.data[i]["thumbnail"] + '"><br>';
-              if (data.data[i]["thumbnail150"]) s += '<img alt="thumbnail" class="responsive-img hide-on-small-only" height=150 src="{{ cdn }}' + data.data[i]["thumbnail150"] + '"><br>';
-              s += '<span title="' + i + '" class="truncate">' + newfile + i + '</span></a>';
+              if (data.data[i]["thumbnail150"]) s += '<img alt="thumbnail" class="responsive-img" height=150 src="{{ cdn }}' + data.data[i]["thumbnail150"] + '"><br>';
+              s += '</a>';
+              //if (data.data[i]["thumbnail"]) s += '<img alt="thumbnail" class="responsive-img hide-on-med-and-up" height=50 src="{{ cdn }}' + data.data[i]["thumbnail"] + '"><br>';
+              //s += '<span title="' + i + '" class="truncate">' + newfile + i + '</span></a>';
               s += '<span>{{ l.a_age }}&nbsp;';
               s += moment.duration(Math.abs(~~((now - data.data[i]["timestamp"]))), "seconds").humanize();
               s += ',&nbsp;';
               s += GSC.FormatBytes(data.data[i]["size"]);
               s += '</span><br><br>';
-
+              s += '<div class="row extrapadding">';
               s += '<span title="🗑 {{ l.a_delete_tit }}" class="mobilebutt left hover delete" data-id="' + i + '">❌</span>&nbsp; ';
-              s += '<span title="📋 {{ l.a_copy_tit }}" class="mobilebutt right hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+              s += '<span title="📋 {{ l.a_copy_tit }} ' + i + '" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+              i = i.replace(/\.[^.]+$/, '.webp');
+              s += '<span title="📋 {{ l.a_copy_tit }} ' + i + '" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + i + '">📋</span>';
+              s += '</div>';
 
               // button separator
               s += '<span class="mobilebutt right">&nbsp;&nbsp;&nbsp;</span>';
@@ -800,6 +804,7 @@
             $("#a_uploader_progress").get(0).scrollIntoView();
             window.scrollBy(0, -50);
 
+            // show file manager content
             if ($("#a_file_manager").html() != "") {
               $("#a_file_manager").html(s).show();
             } else {
@@ -816,7 +821,7 @@
             // UPLOAD: file delete
             $("#a_file_manager .delete").click(function () {
               if (GSC.deleteconfirm || confirm("{{ l.a_delete_tit }}?")) {
-                M.toast({text: "🧨 ..."});
+                $(this).remove();
                 GSC.deleteconfirm = true;
                 var x = $(this).data("id");
 
