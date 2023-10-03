@@ -393,6 +393,7 @@ if ($router[$view]["sethl"] ?? false) {
     if ($r) {
         // no need to sanitize this cookie
         setcookie("hl", $r, time() + 86400 * 31, "/");
+        header("X-Set-HL: " . $r);
         $presenter[$view]["language"] = $r;
         $data["presenter"] = $presenter;
     }
