@@ -87,8 +87,9 @@ class StringFilters implements IStringFilters
 {
     public static $array_replace_slovak = [
         "  " => " ",
-        " % " => "&nbsp;%",
         " - " => " – ",
+        " — " => " —&nbsp;",
+        " % " => "&nbsp;%",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
         " :-(" => "&nbsp;😟",
@@ -172,8 +173,9 @@ class StringFilters implements IStringFilters
 
     public static $array_replace_czech = [
         "  " => " ",
-        " % " => "&nbsp;%",
         " - " => " – ",
+        " — " => " —&nbsp;",
+        " % " => "&nbsp;%",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
         " :-(" => "&nbsp;😟",
@@ -264,8 +266,9 @@ class StringFilters implements IStringFilters
 
     public static $array_replace_english = [
         "  " => " ",
-        " % " => "&nbsp;% ",
         " - " => " – ",
+        " — " => " —&nbsp;",
+        " % " => "&nbsp;%",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
         " :-(" => "&nbsp;😟",
@@ -325,7 +328,7 @@ class StringFilters implements IStringFilters
     ];
 
     /**
-     * Convert EOLs to <br>
+     * Convert EOLs to HTML breakline
      *
      * @param string $content content by reference
      * 
@@ -336,7 +339,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return;
         }
-
         $content = str_replace(
             array(
             "\n",
@@ -357,7 +359,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return;
         }
-
         $content = str_replace(
             array(
             "\n* ",
@@ -366,7 +367,6 @@ class StringFilters implements IStringFilters
             "\r\n- ",
             ), "<br>•&nbsp;", (string) $content
         );
-
         // fix for the beginning of the string
         if ((substr($content, 0, 2) == "- ") || (substr($content, 0, 2) == "* ")) {
             $content = "•&nbsp;" . substr($content, 2);
@@ -385,7 +385,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return;
         }
-
         $content = str_replace(
             array(
             "\r\n",
@@ -407,17 +406,14 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return;
         }
-
         $body = "<body";
         $c = explode($body, (string) $content, 2);
         $regex = '/<!--(.|\s)*?-->/';
-
         // fix only comments inside body
         if (count($c) == 2) {
             $c[1] = preg_replace($regex, "<!-- comment removed -->", $c[1]);
             $content = $c[0] . $body . $c[1];
         }
-
         // fix the whole string (there is no <body)
         if (count($c) == 1) {
             $content = preg_replace($regex, "<!-- comment removed -->", $content);
@@ -439,7 +435,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return $content;
         }
-
         $language = strtolower(trim((string) $language));
         switch ($language) {
         case "sk":
@@ -454,7 +449,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Correct text spacing for English language
+     * Correct text spacing - English
      *
      * @param string $content textual data
      * 
@@ -465,7 +460,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return $content;
         }
-
         return str_replace(
             array_keys(self::$array_replace_english),
             self::$array_replace_english, $content
@@ -473,7 +467,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Correct text spacing for Czech language
+     * Correct text spacing - Czech
      *
      * @param string $content textual data
      * 
@@ -484,7 +478,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return $content;
         }
-
         return str_replace(
             array_keys(self::$array_replace_czech),
             self::$array_replace_czech,
@@ -493,7 +486,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Correct text spacing for Slovak language
+     * Correct text spacing - Slovak
      *
      * @param string $content textual data
      * 
@@ -504,7 +497,6 @@ class StringFilters implements IStringFilters
         if (!is_string($content)) {
             return $content;
         }
-
         return str_replace(
             array_keys(self::$array_replace_slovak),
             self::$array_replace_slovak,
