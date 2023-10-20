@@ -47,7 +47,7 @@ $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
 $data["DATA_VERSION"] = null;
-$data["PHP_VERSION"] = PHP_VERSION_ID;
+$data["PHP_VERSION"] = PHP_VERSION;
 $data["ENGINE"] = "Tesseract LASAGNA v2.1.0";
 $data["VERSION"] = $version = trim(
     @file_get_contents(ROOT . DS . "VERSION") ?: '', "\r\n"
