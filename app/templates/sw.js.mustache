@@ -29,28 +29,20 @@ self.addEventListener("install", function (event) {
 self.addEventListener("fetch", function (event) {
   if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== "GET") return;
-  if (event.request.url.indexOf("/logout") !== -1) {
+  if (event.request.url.indexOf(".webm") !== -1) {
     console.log("Skip cache for %s", event.request.url);
+    return;
+  }
+  if (event.request.url.indexOf("/logout") !== -1) {
     return;
   }
   if (event.request.url.indexOf("/login") !== -1) {
-    console.log("Skip cache for %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("?nonce") !== -1) {
-    console.log("Skip cache for %s", event.request.url);
-    return;
-  }
-  if (event.request.url.indexOf("/exportHTML/") !== -1) {
-    console.log("Skip cache for  %s", event.request.url);
-    return;
-  }
-  if (event.request.url.indexOf("/embed/") !== -1) {
-    console.log("Skip cache for  %s", event.request.url);
     return;
   }
   if (event.request.url.indexOf("/print/") !== -1) {
-    console.log("Skip cache for  %s", event.request.url);
     return;
   }
 

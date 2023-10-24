@@ -25,11 +25,13 @@ csp: [
     "data:"
     "'unsafe-inline'"
     "cdn.gscloud.cz"
+    "gspace.gscloud.cz"
     "*.gstatic.com;"
 
     "script-src"
     "*.googleapis.com"
     "cdn.gscloud.cz"
+    "gspace.gscloud.cz"
     "cdnjs.cloudflare.com"
     "static.cloudflareinsights.com"
     "umami.gscloud.cz"
@@ -42,6 +44,7 @@ csp: [
     "'self'"
     "'unsafe-inline'"
     "cdn.gscloud.cz"
+    "gspace.gscloud.cz"
     "data:;"
     
     "form-action"

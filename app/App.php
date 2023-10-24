@@ -22,6 +22,7 @@ foreach ([
     "APP",
     "CACHE",
     "DATA",
+    "DS",
     "LOGS",
     "ROOT",
     "TEMP",
@@ -47,7 +48,7 @@ $data["POST"] = array_map("htmlspecialchars", $_POST);
 
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
-$data["ENGINE"] = "Tesseract 2.1.0";
+$data["ENGINE"] = "Tesseract v2.1.0";
 $data["VERSION"] = $version = trim(
     @file_get_contents(ROOT . DS . "VERSION") ?: '', "\r\n"
 );
@@ -392,7 +393,7 @@ if ($router[$view]["sethl"] ?? false) {
     if ($r) {
         // no need to sanitize this cookie
         setcookie("hl", $r, time() + 86400 * 31, "/");
-        header("X-Set-Language: " . $r);
+        header("X-Set-HL: " . $r);
         $presenter[$view]["language"] = $r;
         $data["presenter"] = $presenter;
     }
@@ -448,7 +449,7 @@ $data["processing_time"] = $time2 = round(
 );
 
 // SET X-HEADERS
-header("X-Engine: " . $data["ENGINE"]);
+header("X-Engine: Tesseract 2.0");
 header("X-Country: $country");
 header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");
