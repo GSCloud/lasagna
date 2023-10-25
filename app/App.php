@@ -449,6 +449,7 @@ $data["processing_time"] = $time2 = round(
 );
 
 // SET X-HEADERS
+header("X-Frame-Options", "SAMEORIGIN");
 header("X-Engine: Tesseract 2.0");
 header("X-Country: $country");
 header("X-Running: $time1 ms");
