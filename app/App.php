@@ -48,7 +48,7 @@ $data["POST"] = array_map("htmlspecialchars", $_POST);
 
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
-$data["ENGINE"] = "Tesseract v2.1.0";
+$data["ENGINE"] = "Tesseract 2.1.1";
 $data["VERSION"] = $version = trim(
     @file_get_contents(ROOT . DS . "VERSION") ?: '', "\r\n"
 );
@@ -449,7 +449,6 @@ $data["processing_time"] = $time2 = round(
 );
 
 // SET X-HEADERS
-header("X-Frame-Options", "SAMEORIGIN");
 header("X-Engine: Tesseract 2.0");
 header("X-Country: $country");
 header("X-Running: $time1 ms");

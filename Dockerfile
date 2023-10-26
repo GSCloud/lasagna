@@ -1,4 +1,4 @@
-#@author Fred Brooker git@gscloud.cz>
+#@author Fred Brooker <git@gscloud.cz>
 
 ARG CODE_VERSION=8.1-apache
 ARG DEBIAN_FRONTEND=noninteractive
