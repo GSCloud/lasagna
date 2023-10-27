@@ -1,6 +1,6 @@
 {
-    "name": "{{ l.title }}",
-    "short_name": "{{ l.title_short }}",
+    "name": "{{ l.title }}{{^l.title}}App{{/l.title}}",
+    "short_name": "{{ l.title_short }}{{^l.title}}App{{/l.title}}",
     "description": "{{ l.meta_description }}",
     "icons": [{
             "src": "{{cdn}}/img/favicon-64.webp",
@@ -54,12 +54,12 @@
         }
     ],
     "appleStatusBarStyle": "default",
-    "background_color": "{{#design.background_color}}{{ design.background_color }}{{/design.background_color}}{{^design.background_color}}#fff{{/design.background_color}}",
-    "display": "{{#design.display}}{{ design.display }}{{/design.display}}{{^design.display}}standalone{{/design.display}}",
+    "background_color": "{{ design.background_color }}{{^design.background_color}}#fff{{/design.background_color}}",
+    "display": "{{ design.display }}{{^design.display}}standalone{{/design.display}}",
     "id": "/",
     "lang": "{{ router.defaults.language }}",
     "mobileAppIOS": "true",
     "scope": "/",
     "start_url": "/",
-    "theme_color": "{{#design.theme_color}}{{ design.theme_color }}{{/design.theme_color}}{{^design.theme_color}}#000{{/design.theme_color}}"
+    "theme_color": "{{ design.theme_color }}{{^design.theme_color}}#000{{/design.theme_color}}"
 }

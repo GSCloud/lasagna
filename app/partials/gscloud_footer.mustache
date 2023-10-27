@@ -15,14 +15,14 @@
             <div class="col l4 m6 s12">
 
                 {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-                <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
+                <a rel="nofollow" href="{{ local_goauth_redirect }}"
                     class="oauth waves-effect waves-light blue btn-large z-depth-3">
                     {{ l.a_login }}<i class="material-icons right">cloud</i>
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
 
                 {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-                <a id="google-login-footer1" data-umami-event="google-login-footer1" rel="nofollow" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}"
+                <a id="google-login-footer1" data-umami-event="google-login-footer1" rel="nofollow" href="{{ goauth_redirect }}"
                     class="oauth waves-effect waves-light blue btn-large z-depth-3">
                     {{ l.a_login }}<i class="material-icons right">cloud</i>
                 </a>
@@ -31,14 +31,14 @@
                 <br><br>
 
                 {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-                <a rel="nofollow" href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
+                <a rel="nofollow" href="{{ local_goauth_redirect }}?relogin"
                     class="oauth waves-effect waves-light red btn-large z-depth-3">
                     {{ l.a_relogin }}<i class="material-icons right">cloud</i>
                 </a>
                 {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
 
                 {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-                <a id="google-login-footer2" data-umami-event="google-login-footer2" rel="nofollow" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}123{{/sha256_nonce}}&relogin"
+                <a id="google-login-footer2" data-umami-event="google-login-footer2" rel="nofollow" href="{{ goauth_redirect }}?relogin"
                     class="oauth waves-effect waves-light red btn-large z-depth-3">
                     {{ l.a_relogin }}<i class="material-icons right">cloud</i>
                 </a>
