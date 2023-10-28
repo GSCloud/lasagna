@@ -128,6 +128,7 @@ class AdminPresenter extends APresenter
 
         // API calls
         switch ($view) {
+
         case "upload":
             $this->checkPermission("admin");
             $x = [];
@@ -206,17 +207,16 @@ class AdminPresenter extends APresenter
                         UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX512 . $b,
                         512
                     );
-                    if (stripos($b, ".webp")) {
+                    if (\str_ends_with($b, '.webp')) {
                         continue;
                     }
                     $info = pathinfo($b);
-                    $c = $info['filename'];
+                    $fn = $info['filename'];
                     $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . $c . '.webp'
+                        UPLOAD . DS . $b, UPLOAD . DS . $fn . '.webp'
                     );
                 }
             }
-            $this->addMessage("FILES UPLOADED: " . \count($x));
             return $this->writeJsonData($x, $extras);
                 break;
 
@@ -224,6 +224,9 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             if (isset($_POST["name"])) {
                 $name = \trim($_POST["name"], "\\/.");
+                $info = \pathinfo($name);
+                $fn = $info['filename'];
+                $f0 = UPLOAD . DS . $fn . '.webp';
                 $f1 = UPLOAD . DS . $name;
                 $f2 = UPLOAD . DS . self::THUMB_PREFIX32 . $name;
                 $f3 = UPLOAD . DS . self::THUMB_PREFIX50 . $name;
@@ -233,6 +236,7 @@ class AdminPresenter extends APresenter
                 $f7 = UPLOAD . DS . self::THUMB_PREFIX320 . $name;
                 $f8 = UPLOAD . DS . self::THUMB_PREFIX512 . $name;
                 if (\file_exists($f1)) {
+                    @\unlink($f0);
                     @\unlink($f1);
                     @\unlink($f2);
                     @\unlink($f3);
@@ -241,7 +245,6 @@ class AdminPresenter extends APresenter
                     @\unlink($f6);
                     @\unlink($f7);
                     @\unlink($f8);
-                    $this->addMessage("FILE DELETED: $f1 + thumbnails");
                     return $this->writeJsonData($f1, $extras);
                 }
             }
