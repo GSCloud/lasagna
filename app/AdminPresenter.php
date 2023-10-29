@@ -137,7 +137,9 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
-                $f = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
+                // sanitize filename
+                $f = $file["name"];
+                $f = \strtr(\trim(\basename(\strtolower($f))), " '\"\\", "____");
                 // skip possible thumbnails
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
                     continue;
@@ -204,6 +206,11 @@ class AdminPresenter extends APresenter
                         }
                     }
                 }
+                // delete origin
+                $file = UPLOAD . DS . $name;
+                if (\file_exists($file)) {
+                    \unlink($file);
+                }
                 return $this->writeJsonData($name, $extras);
             }
             break;
@@ -224,7 +231,7 @@ class AdminPresenter extends APresenter
                         $info = \pathinfo($f);
                         if (\is_array($info)) {
                             $fn = $info['filename'];
-                            $ext = $info['extension'];
+                            $ext = $info['extension'] ?? '';
                             // check for the thumbnails
                             foreach (self::THUMBS_CREATE as $w) {
                                 $file = UPLOAD . DS
@@ -239,10 +246,14 @@ class AdminPresenter extends APresenter
                             if (\in_array($fn, $uniques) && ($ext == 'webp')) {
                                 continue;
                             }
+                            // remove WebP from output, we have other format ready
                             if (\in_array($fn, $uniques) && ($ext != 'webp')) {
                                 unset($files["{$fn}.webp"]);
                             }
                             \array_push($uniques, $fn);
+                            if (empty($thumbnails)) {
+                                $thumbnails = null;
+                            }
                             $files[$f] = [
                                 "name" => $f,
                                 "size" => \filesize(UPLOAD . DS . $f),

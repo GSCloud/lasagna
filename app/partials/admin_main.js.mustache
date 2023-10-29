@@ -731,7 +731,6 @@
             // UPLOAD: render HTML
             var t = 0;
             for (var i in data.data.files) {
-              if (data.data.files[i]["thumbnails"] == null) continue;
               t++;
               if (t == 1) {
                 s += '<div class="row">';
@@ -743,14 +742,22 @@
               var name1 = name;
               var name2 = name.replace(/\.[^.]+$/, '.webp');
 
-              s += '<div style="margin:0.1rem;padding:1rem;height:300px" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
-                + '<a title="{{ l.a_open_tit }}" class="hover" ';
+              if (data.data.files[i]["thumbnails"] == null) {
+                // clickable icon
+                s += '<div style="margin:0.1rem;padding:0.5rem;height:300px;background-color:#000!important" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                  + '<a title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" ';
+                s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
+                s += '📄<br><span style="font-size:1rem!important">' + name + '<br></span></a>';
+              } else {
+                // clickable thumbnail
+                s += '<div style="margin:0.1rem;padding:0.5rem;height:300px" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                  + '<a title="{{ l.a_open_tit }}" class="hover" ';
+                s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
+                if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
+                s += '</a>';
+              }
 
-              // clickable thumbnail
-              s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
-              if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=200 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
-              s += '</a>';
-
+              // file age and size
               s += '<span>⏳️&nbsp;';
               s += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
               s += '&nbsp;🫙&nbsp;';
@@ -769,14 +776,22 @@
                 s += '</div>';
               }
 
-              // delete + basic copy buttons
-              s += '<div class="row extrapadding">';
-              s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
-              s += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
-              if (ext != 'webp') {
-                s += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
+              if (data.data.files[i]["thumbnails"] == null) {
+                // delete
+                s += '<div class="row extrapadding">';
+                s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                s += '</div>';
               }
-              s += '</div>';
+              else {
+                // delete + thumbnails copy buttons
+                s += '<div class="row extrapadding">';
+                s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                s += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                if (ext != 'webp') {
+                  s += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
+                }
+                s += '</div>';
+              }
 
               s += '</div>';
             }
@@ -865,8 +880,9 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
       ZeroUpload.setURL("/admin/upload");
-      ZeroUpload.setMaxFiles(10);
-      ZeroUpload.setMaxBytes(30 * 1024 * 1024); // 30 MB
+      ZeroUpload.setMaxFiles(100);
+      ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
+
       ZeroUpload.on("complete", function (response) {
         M.toast({text: "{{ l.a_uploading_finished }}"});
         var data = JSON.parse(response.data);
@@ -876,9 +892,11 @@
           return;
         }
       });
+
       ZeroUpload.on("start", function (files, userData) {
         M.toast({text: "{{ l.a_uploading }}"});
       });
+
       ZeroUpload.on("error", function (type, message, userData) {
         var s;
         switch (type) {
