@@ -744,13 +744,13 @@
 
               if (data.data.files[i]["thumbnails"] == null) {
                 // clickable icon
-                s += '<div style="margin:0.1rem;padding:0.5rem;height:300px;background-color:#000!important" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#000!important" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
                   + '<a title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" ';
                 s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
                 s += '📄<br><span style="font-size:1rem!important">' + name + '<br></span></a>';
               } else {
                 // clickable thumbnail
-                s += '<div style="margin:0.1rem;padding:0.5rem;height:300px" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                s += '<div style="margin:0;padding:1rem;height:300px" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
                   + '<a title="{{ l.a_open_tit }}" class="hover" ';
                 s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
                 if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
