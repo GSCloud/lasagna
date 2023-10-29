@@ -717,7 +717,7 @@
 
       // GSC.RenderUploadInfo()
       if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
-        $.get("/admin/GetUploadFileInfo?" + Date.now(), function (data) {
+        $.get("/admin/getUploads?" + Date.now(), function (data) {
           if (data && data.data && data.data.files) {
 
             // remember state
@@ -751,9 +751,9 @@
               if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=200 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
               s += '</a>';
 
-              s += '<span>{{ l.a_age }}&nbsp;';
+              s += '<span>⏳️&nbsp;';
               s += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
-              s += ',&nbsp;';
+              s += '&nbsp;🫙&nbsp;';
               s += GSC.FormatBytes(data.data.files[i]["size"]);
               s += '</span>';
 
@@ -807,7 +807,7 @@
                 $('#fig' + fig).hide(250);
 
                 // API: UploadedFileDelete
-                $.post("/admin/UploadedFileDelete", {
+                $.post("/admin/uploadDelete", {
                   name: x
                 }).done(function (data) {
                   M.toast({text: "🚮 " + x});

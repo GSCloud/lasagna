@@ -137,17 +137,17 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
-                $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
+                $f = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
                 // skip possible thumbnails
-                if (\str_starts_with($b, self::THUMB_PREFIX)) {
+                if (\str_starts_with($f, self::THUMB_PREFIX)) {
                     continue;
                 }
-                if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
-                    $info = \pathinfo($b);
+                if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $f)) {
+                    $info = \pathinfo($f);
                     if (\is_array($info)) {
                         $fn = $info['filename'];
-                        $in = UPLOAD . DS . $b;
-                        $uploads[$b] = \urlencode($b);
+                        $in = UPLOAD . DS . $f;
+                        $uploads[$f] = \urlencode($f);
                         // delete old thumbnails
                         foreach (self::THUMBS_EXTENSIONS as $x) {
                             foreach (self::THUMBS_DELETE as $w) {
@@ -163,7 +163,7 @@ class AdminPresenter extends APresenter
                         foreach (self::THUMBS_CREATE as $w) {
                             $out = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                . $b;
+                                . $f;
                             $this->createThumbnail($in, $out, $w);
                             $out = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
@@ -171,7 +171,7 @@ class AdminPresenter extends APresenter
                             $this->createThumbnail($in, $out, $w);
                         }
                         // skip conversion if the original is already in WebP
-                        if (\str_ends_with($b, '.webp')) {
+                        if (\str_ends_with($f, '.webp')) {
                             continue;
                         }
                         $this->createThumbnail($in, UPLOAD . DS . $fn . '.webp');
@@ -180,7 +180,7 @@ class AdminPresenter extends APresenter
             }
             return $this->writeJsonData($uploads, $extras);
 
-        case "UploadedFileDelete":
+        case "uploadDelete":
             $this->checkPermission("admin");
             if (isset($_POST["name"])) {
                 $name = \trim($_POST["name"], "\\/.");
@@ -208,6 +208,62 @@ class AdminPresenter extends APresenter
             }
             break;
 
+        case "getUploads":
+            $this->checkPermission("admin");
+            $count = 0;
+            $files = [];
+            $uniques = [];
+            if ($handle = \opendir(UPLOAD)) {
+                while (false !== ($f = \readdir($handle))) {
+                    if ($f != "." && $f != "..") {
+                        $thumbnails = [];
+                        // exclude thumbnails
+                        if (\str_starts_with($f, self::THUMB_PREFIX)) {
+                            continue;
+                        }
+                        $info = \pathinfo($f);
+                        if (\is_array($info)) {
+                            $fn = $info['filename'];
+                            $ext = $info['extension'];
+                            // check for the thumbnails
+                            foreach (self::THUMBS_CREATE as $w) {
+                                $file = UPLOAD . DS
+                                    . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                    . $f;
+                                if (\file_exists($file) && \is_readable($file)) {
+                                    $thumbnails[$w] = self::THUMB_PREFIX . $w
+                                        . self::THUMB_POSTFIX . $f;
+                                }
+                            }
+                            // output only unique WebP
+                            if (\in_array($fn, $uniques) && ($ext == 'webp')) {
+                                continue;
+                            }
+                            if (\in_array($fn, $uniques) && ($ext != 'webp')) {
+                                unset($files["{$fn}.webp"]);
+                            }
+                            \array_push($uniques, $fn);
+                            $files[$f] = [
+                                "name" => $f,
+                                "size" => \filesize(UPLOAD . DS . $f),
+                                "timestamp" => \filemtime(UPLOAD . DS . $f),
+                                "thumbnails" => $thumbnails,
+                            ];
+                            $count++;
+                        }
+                    }
+                }
+                \closedir($handle);
+            }
+            \ksort($files);
+            return $this->writeJsonData(
+                [
+                    "count" => $count,
+                    "files" => array_values($files),
+                ],
+                $extras
+            );
+    
         case "clearcache":
             \header('Clear-Site-Data: "cache"');
             $this->addMessage("Browser cache cleared");
@@ -269,48 +325,6 @@ class AdminPresenter extends APresenter
                 $data = \array_unique($data, SORT_LOCALE_STRING);
             }
             return $this->writeJsonData($data, $extras);
-
-        case "GetUploadFileInfo":
-            $this->checkPermission("admin");
-            $count = 0;
-            $files = [];
-            if ($handle = \opendir(UPLOAD)) {
-                while (false !== ($f = \readdir($handle))) {
-                    if ($f != "." && $f != "..") {
-                        $thumbnails = [];
-                        // exclude thumbnails
-                        if (\str_starts_with($f, self::THUMB_PREFIX)) {
-                            continue;
-                        }
-                        // check for the thumbnails
-                        foreach (self::THUMBS_CREATE as $w) {
-                            $file = UPLOAD . DS
-                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                . $f;
-                            if (\file_exists($file) && \is_readable($file)) {
-                                $thumbnails[$w] = self::THUMB_PREFIX . $w
-                                    . self::THUMB_POSTFIX . $f;
-                            }
-                        }
-                        $files[$f] = [
-                            "name" => $f,
-                            "size" => \filesize(UPLOAD . DS . $f),
-                            "timestamp" => \filemtime(UPLOAD . DS . $f),
-                            "thumbnails" => $thumbnails,
-                        ];
-                        $count++;
-                    }
-                }
-                \closedir($handle);
-            }
-            \ksort($files);
-            return $this->writeJsonData(
-                [
-                    "count" => $count,
-                    "files" => array_values($files)
-                ],
-                $extras
-            );
 
         case "GetUpdateToken":
             $this->checkPermission("admin");
