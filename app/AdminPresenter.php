@@ -135,22 +135,19 @@ class AdminPresenter extends APresenter
 
         case "upload":
             $this->checkPermission("admin");
-            $x = [];
+            $uploads = [];
             foreach ($_FILES as $key => &$file) {
                 $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
-
                 // skip possible thumbnails
                 if (\str_starts_with($b, self::THUMB_PREFIX)) {
                     continue;
                 }
-
                 if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
                     $info = \pathinfo($b);
                     if (\is_array($info)) {
                         $fn = $info['filename'];
                         $in = UPLOAD . DS . $b;
-                        $x[$b] = \urlencode($b);
-
+                        $uploads[$b] = \urlencode($b);
                         // delete old thumbnails
                         foreach (self::THUMBS_EXTENSIONS as $x) {
                             foreach (self::THUMBS_DELETE as $w) {
@@ -162,7 +159,6 @@ class AdminPresenter extends APresenter
                                 }
                             }
                         }
-
                         // create new thumbnails
                         foreach (self::THUMBS_CREATE as $w) {
                             $out = UPLOAD . DS
@@ -174,7 +170,6 @@ class AdminPresenter extends APresenter
                                 . $fn . ".webp";
                             $this->createThumbnail($in, $out, $w);
                         }
-    
                         // skip conversion if the original is already in WebP
                         if (\str_ends_with($b, '.webp')) {
                             continue;
@@ -183,7 +178,7 @@ class AdminPresenter extends APresenter
                     }
                 }
             }
-            return $this->writeJsonData($x, $extras);
+            return $this->writeJsonData($uploads, $extras);
 
         case "UploadedFileDelete":
             $this->checkPermission("admin");

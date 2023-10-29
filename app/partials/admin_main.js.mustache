@@ -196,7 +196,6 @@
           path: window.location.pathname,
           data: JSON.stringify(data)
         }, function (data) {
-          console.log("UpdateArticles result", {data});
           M.toast({text: "💾 {{ l.a_saved_ok }}"});
         }).done(function () {
           GSC.PingDot("#summer_ping");
@@ -740,14 +739,14 @@
 
               // extension
               var ext = GSC.GetFileExtension(data.data.files[i]["name"]);
-
-              s += '<div style="margin:0.1rem;padding:1rem;height:300px" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
-                + '<a title="{{ l.a_open_tit }}" class="hover" ';
-
-              // clickable thumbnail
               var name = data.data.files[i]["name"];
               var name1 = name;
               var name2 = name.replace(/\.[^.]+$/, '.webp');
+
+              s += '<div style="margin:0.1rem;padding:1rem;height:300px" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                + '<a title="{{ l.a_open_tit }}" class="hover" ';
+
+              // clickable thumbnail
               s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
               if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=200 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
               s += '</a>';
@@ -772,15 +771,13 @@
 
               // delete + basic copy buttons
               s += '<div class="row extrapadding">';
-              s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-id="' + name1 + '">❌</span>&nbsp;';
+              s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
               s += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
               if (ext != 'webp') {
                 s += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
               }
               s += '</div>';
 
-              // button separator
-              s += '<span class="mobilebutt right">&nbsp;&nbsp;&nbsp;</span>';
               s += '</div>';
             }
             if (t) {
@@ -803,16 +800,17 @@
             
             // UPLOAD: file delete
             $("#a_file_manager .delete").click(function () {
-              if (GSC.deleteconfirm || confirm("{{ l.a_delete_tit }}?")) {
-                $(this).remove();
-                GSC.deleteconfirm = true;
+              if (GSC.deleteconfirmed || confirm("{{ l.a_delete_tit }}?")) {
+                GSC.deleteconfirmed = true;
                 var x = $(this).data("id");
+                var fig = $(this).data("fig");
+                $('#fig' + fig).hide(250);
 
                 // API: UploadedFileDelete
                 $.post("/admin/UploadedFileDelete", {
                   name: x
                 }).done(function (data) {
-                  M.toast({text: "❌ " + x});
+                  M.toast({text: "🚮 " + x});
                   GSC.RenderUploadInfo();
                 });
               }
@@ -874,7 +872,6 @@
         var data = JSON.parse(response.data);
         if (data && data.data) {
           setCookie("open_filemanager", 1);
-          localStorage["last_upload"] = JSON.stringify(data.data);
           GSC.RenderUploadInfo();
           return;
         }
@@ -884,7 +881,6 @@
       });
       ZeroUpload.on("error", function (type, message, userData) {
         var s;
-        console.log(message);
         switch (type) {
           case "maxbytes":
             s = "{{ l.a_upload_maxbytes }}";
