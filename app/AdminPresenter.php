@@ -31,37 +31,42 @@ class AdminPresenter extends APresenter
     const ADMIN_KEY = "admin.key";
 
     /* @var string thumbnail prefix */
-    const THUMB_PREFIX32 = ".thumb_32px_";
+    const THUMB_PREFIX = ".thumb_";
 
-    /* @var string thumbnail prefix */
-    const THUMB_PREFIX50 = ".thumb_50px_";
+    /* @var string thumbnail postfix */
+    const THUMB_POSTFIX = "px_";
 
-    /* @var string thumbnail prefix */
-    const THUMB_PREFIX64 = ".thumb_64px_";
+    /* @var array thumbnails to create */
+    const THUMBS_CREATE = [
+        160, 320, 640
+    ];
 
-    /* @var string thumbnail prefix */
-    const THUMB_PREFIX128 = ".thumb_128px_";
+    /* @var array thumbnails to delete */
+    const THUMBS_DELETE = [
+        50, 64, 128, 150, 160, 320, 512, 640
+    ];
+    
+    /* @var array thumbnail extensions */
+    const THUMBS_EXTENSIONS = [
+        '.bmp',
+        '.gif',
+        '.jpeg',
+        '.jpg',
+        '.png',
+        '.webp',
+    ];
 
-    /* @var string thumbnail prefix */
-    const THUMB_PREFIX150 = ".thumb_150px_";
-
-    /* @var string thumbnail prefix */
-    const THUMB_PREFIX320 = ".thumb_320px_";
-
-    /* @var string thumbnail prefix */
-    const THUMB_PREFIX512 = ".thumb_512px_";
-
-    /* @var array image constants by image type */
+    /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
             "load" => "imagecreatefromjpeg",
             "save" => "imagejpeg",
-            "quality" => 50,
+            "quality" => 75,
         ],
         IMAGETYPE_PNG => [
             "load" => "imagecreatefrompng",
             "save" => "imagepng",
-            "quality" => 6,
+            "quality" => 8,
         ],
         IMAGETYPE_GIF => [
             "load" => "imagecreatefromgif",
@@ -70,7 +75,7 @@ class AdminPresenter extends APresenter
         IMAGETYPE_WEBP => [
             "load" => "imagecreatefromwebp",
             "save" => "imagewebp",
-            "quality" => 50,
+            "quality" => 75,
         ],
         IMAGETYPE_BMP => [
             "load" => "imagecreatefrombmp",
@@ -121,7 +126,6 @@ class AdminPresenter extends APresenter
                 $file->seek(PHP_INT_MAX);
                 return $file->key() + 1;
             } catch (\Exception $e) {
-
                 return -1;
             }
         }
@@ -134,119 +138,78 @@ class AdminPresenter extends APresenter
             $x = [];
             foreach ($_FILES as $key => &$file) {
                 $b = \strtr(\trim(\basename($file["name"])), " '\"\\", "____");
-                // don't allow thumbnail filenames
-                if (\strpos($b, self::THUMB_PREFIX32) === 0) {
+
+                // skip possible thumbnails
+                if (\str_starts_with($b, self::THUMB_PREFIX)) {
                     continue;
                 }
-                if (\strpos($b, self::THUMB_PREFIX50) === 0) {
-                    continue;
-                }
-                if (\strpos($b, self::THUMB_PREFIX64) === 0) {
-                    continue;
-                }
-                if (\strpos($b, self::THUMB_PREFIX128) === 0) {
-                    continue;
-                }
-                if (\strpos($b, self::THUMB_PREFIX150) === 0) {
-                    continue;
-                }
-                if (\strpos($b, self::THUMB_PREFIX320) === 0) {
-                    continue;
-                }
-                if (\strpos($b, self::THUMB_PREFIX512) === 0) {
-                    continue;
-                }
+
                 if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $b)) {
-                    $x[$b] = \urlencode($b);
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX32 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX32 . $b);
+                    $info = \pathinfo($b);
+                    if (\is_array($info)) {
+                        $fn = $info['filename'];
+                        $in = UPLOAD . DS . $b;
+                        $x[$b] = \urlencode($b);
+
+                        // delete old thumbnails
+                        foreach (self::THUMBS_EXTENSIONS as $x) {
+                            foreach (self::THUMBS_DELETE as $w) {
+                                $file = UPLOAD . DS
+                                    . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                    . $fn . $x;
+                                if (\file_exists($file)) {
+                                    \unlink($file);
+                                }
+                            }
+                        }
+
+                        // create new thumbnails
+                        foreach (self::THUMBS_CREATE as $w) {
+                            $out = UPLOAD . DS
+                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                . $b;
+                            $this->createThumbnail($in, $out, $w);
+                            $out = UPLOAD . DS
+                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                . $fn . ".webp";
+                            $this->createThumbnail($in, $out, $w);
+                        }
+    
+                        // skip conversion if the original is already in WebP
+                        if (\str_ends_with($b, '.webp')) {
+                            continue;
+                        }
+                        $this->createThumbnail($in, UPLOAD . DS . $fn . '.webp');
                     }
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX50 . $b);
-                    }
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX64 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX64 . $b);
-                    }
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX128 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX128 . $b);
-                    }
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX150 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX150 . $b);
-                    }
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX320 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX320 . $b);
-                    }
-                    if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX512 . $b)) {
-                        \unlink(UPLOAD . DS . self::THUMB_PREFIX512 . $b);
-                    }
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX32 . $b,
-                        32
-                    );
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX50 . $b,
-                        50
-                    );
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX64 . $b,
-                        64
-                    );
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX128 . $b,
-                        128
-                    );
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX150 . $b,
-                        150
-                    );
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX320 . $b,
-                        320
-                    );
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . self::THUMB_PREFIX512 . $b,
-                        512
-                    );
-                    if (\str_ends_with($b, '.webp')) {
-                        continue;
-                    }
-                    $info = pathinfo($b);
-                    $fn = $info['filename'];
-                    $this->createThumbnail(
-                        UPLOAD . DS . $b, UPLOAD . DS . $fn . '.webp'
-                    );
                 }
             }
             return $this->writeJsonData($x, $extras);
-                break;
 
         case "UploadedFileDelete":
             $this->checkPermission("admin");
             if (isset($_POST["name"])) {
                 $name = \trim($_POST["name"], "\\/.");
                 $info = \pathinfo($name);
-                $fn = $info['filename'];
-                $f0 = UPLOAD . DS . $fn . '.webp';
-                $f1 = UPLOAD . DS . $name;
-                $f2 = UPLOAD . DS . self::THUMB_PREFIX32 . $name;
-                $f3 = UPLOAD . DS . self::THUMB_PREFIX50 . $name;
-                $f4 = UPLOAD . DS . self::THUMB_PREFIX64 . $name;
-                $f5 = UPLOAD . DS . self::THUMB_PREFIX128 . $name;
-                $f6 = UPLOAD . DS . self::THUMB_PREFIX150 . $name;
-                $f7 = UPLOAD . DS . self::THUMB_PREFIX320 . $name;
-                $f8 = UPLOAD . DS . self::THUMB_PREFIX512 . $name;
-                if (\file_exists($f1)) {
-                    @\unlink($f0);
-                    @\unlink($f1);
-                    @\unlink($f2);
-                    @\unlink($f3);
-                    @\unlink($f4);
-                    @\unlink($f5);
-                    @\unlink($f6);
-                    @\unlink($f7);
-                    @\unlink($f8);
-                    return $this->writeJsonData($f1, $extras);
+                if (\is_array($info)) {
+                    $fn = $info['filename'];
+                    foreach (self::THUMBS_EXTENSIONS as $x) {
+                        // delete old thumbnails
+                        foreach (self::THUMBS_DELETE as $w) {
+                            $file = UPLOAD . DS
+                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                . $fn . $x;
+                            if (\file_exists($file)) {
+                                \unlink($file);
+                            }
+                        }
+                        // delete main file(s)
+                        $file = UPLOAD . DS . $fn . $x;
+                        if (\file_exists($file)) {
+                            \unlink($file);
+                        }
+                    }
                 }
+                return $this->writeJsonData($name, $extras);
             }
             break;
 
@@ -254,19 +217,16 @@ class AdminPresenter extends APresenter
             \header('Clear-Site-Data: "cache"');
             $this->addMessage("Browser cache cleared");
             $this->setLocation();
-            break;
 
         case "clearcookies":
             \header('Clear-Site-Data: "cookies"');
             $this->addMessage("Browser cookies cleared");
             $this->setLocation();
-            break;
 
         case "clearbrowser":
             \header('Clear-Site-Data: "cache", "cookies", "storage"');
             $this->addMessage("Browser storage cleared");
             $this->setLocation();
-            break;
 
         case "AuditLog":
             $this->checkPermission("admin");
@@ -275,11 +235,9 @@ class AdminPresenter extends APresenter
             $logs = \file($f); // TBD - fix large logs
             \array_walk($logs, array($this, "decorateLogs"));
             $data["content"] = \array_reverse($logs);
-
             return $this->setData(
                 "output", $this->setData($data)->renderHTML("auditlog")
             );
-            break;
 
         case "GetCsvInfo":
             $this->checkPermission("admin");
@@ -302,9 +260,7 @@ class AdminPresenter extends APresenter
                     }
                 }
             }
-
             return $this->writeJsonData($arr, $extras);
-                break;
 
         case "GetArticlesInfo":
             $this->checkPermission("admin");
@@ -317,142 +273,53 @@ class AdminPresenter extends APresenter
                 );
                 $data = \array_unique($data, SORT_LOCALE_STRING);
             }
-
             return $this->writeJsonData($data, $extras);
-                break;
 
         case "GetUploadFileInfo":
             $this->checkPermission("admin");
+            $count = 0;
             $files = [];
             if ($handle = \opendir(UPLOAD)) {
-                while (false !== ($entry = \readdir($handle))) {
-                    if ($entry != "." && $entry != "..") {
-                        if (\strpos($entry, self::THUMB_PREFIX32) === 0) {
+                while (false !== ($f = \readdir($handle))) {
+                    if ($f != "." && $f != "..") {
+                        $thumbnails = [];
+                        // exclude thumbnails
+                        if (\str_starts_with($f, self::THUMB_PREFIX)) {
                             continue;
                         }
-                        if (\strpos($entry, self::THUMB_PREFIX50) === 0) {
-                            continue;
+                        // check for the thumbnails
+                        foreach (self::THUMBS_CREATE as $w) {
+                            $file = UPLOAD . DS
+                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                . $f;
+                            if (\file_exists($file) && \is_readable($file)) {
+                                $thumbnails[$w] = self::THUMB_PREFIX . $w
+                                    . self::THUMB_POSTFIX . $f;
+                            }
                         }
-                        if (\strpos($entry, self::THUMB_PREFIX64) === 0) {
-                            continue;
-                        }
-                        if (\strpos($entry, self::THUMB_PREFIX128) === 0) {
-                            continue;
-                        }
-                        if (\strpos($entry, self::THUMB_PREFIX150) === 0) {
-                            continue;
-                        }
-                        if (\strpos($entry, self::THUMB_PREFIX320) === 0) {
-                            continue;
-                        }
-                        if (\strpos($entry, self::THUMB_PREFIX512) === 0) {
-                            continue;
-                        }
-                        $thumbnail32 = null;
-                        $thumbnail50 = null;
-                        $thumbnail64 = null;
-                        $thumbnail128 = null;
-                        $thumbnail150 = null;
-                        $thumbnail320 = null;
-                        $thumbnail512 = null;
-                        if (\file_exists(
-                            UPLOAD . DS . self::THUMB_PREFIX32 . $entry
-                        ) && \is_readable(
-                            UPLOAD . DS . self::THUMB_PREFIX32 . $entry
-                        )
-                        ) {
-                            $thumbnail32 = "/upload/"
-                            . self::THUMB_PREFIX32
-                            . $entry;
-                        }
-                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX50 . $entry)
-                            && \is_readable(
-                                UPLOAD . DS . self::THUMB_PREFIX50 . $entry
-                            )
-                        ) {
-                            $thumbnail50 = "/upload/"
-                            . self::THUMB_PREFIX50
-                            . $entry;
-                        }
-                        if (\file_exists(UPLOAD . DS . self::THUMB_PREFIX64 . $entry)
-                            && \is_readable(
-                                UPLOAD . DS . self::THUMB_PREFIX64 . $entry
-                            )
-                        ) {
-                            $thumbnail64 = "/upload/"
-                            . self::THUMB_PREFIX64
-                            . $entry;
-                        }
-                        if (\file_exists(
-                            UPLOAD . DS . self::THUMB_PREFIX128 . $entry
-                        )
-                            && \is_readable(
-                                UPLOAD . DS . self::THUMB_PREFIX128 . $entry
-                            )
-                        ) {
-                            $thumbnail128 = "/upload/"
-                            . self::THUMB_PREFIX128
-                            . $entry;
-                        }
-                        if (\file_exists(
-                            UPLOAD . DS . self::THUMB_PREFIX150 . $entry
-                        )
-                            && \is_readable(
-                                UPLOAD . DS . self::THUMB_PREFIX150 . $entry
-                            )
-                        ) {
-                            $thumbnail150 = "/upload/"
-                            . self::THUMB_PREFIX150
-                            . $entry;
-                        }
-                        if (\file_exists(
-                            UPLOAD . DS . self::THUMB_PREFIX320 . $entry
-                        )
-                            && \is_readable(
-                                UPLOAD . DS . self::THUMB_PREFIX320 . $entry
-                            )
-                        ) {
-                            $thumbnail320 = "/upload/"
-                            . self::THUMB_PREFIX320 .
-                            $entry;
-                        }
-                        if (\file_exists(
-                            UPLOAD . DS . self::THUMB_PREFIX512 . $entry
-                        )
-                            && \is_readable(
-                                UPLOAD . DS . self::THUMB_PREFIX512 . $entry
-                            )
-                        ) {
-                            $thumbnail512 = "/upload/"
-                            . self::THUMB_PREFIX512
-                            . $entry;
-                        }
-                        $files[$entry] = [
-                            "name" => $entry,
-                            "size" => \filesize(UPLOAD . DS . $entry),
-                            "thumbnail" => $thumbnail50,
-                            "thumbnail32" => $thumbnail32,
-                            "thumbnail50" => $thumbnail50,
-                            "thumbnail64" => $thumbnail64,
-                            "thumbnail128" => $thumbnail128,
-                            "thumbnail150" => $thumbnail150,
-                            "thumbnail320" => $thumbnail320,
-                            "thumbnail512" => $thumbnail512,
-                            "timestamp" => \filemtime(UPLOAD . DS . $entry),
+                        $files[$f] = [
+                            "name" => $f,
+                            "size" => \filesize(UPLOAD . DS . $f),
+                            "timestamp" => \filemtime(UPLOAD . DS . $f),
+                            "thumbnails" => $thumbnails,
                         ];
+                        $count++;
                     }
                 }
                 \closedir($handle);
             }
             \ksort($files);
-
-            return $this->writeJsonData($files, $extras);
-                break;
+            return $this->writeJsonData(
+                [
+                    "count" => $count,
+                    "files" => array_values($files)
+                ],
+                $extras
+            );
 
         case "GetUpdateToken":
             $this->checkPermission("admin");
             if (!$key = $this->readAdminKey()) {
-
                 return $this->writeJsonData(500, $extras);
             }
             $code = "";
@@ -467,15 +334,12 @@ class AdminPresenter extends APresenter
                 $name = $user["name"] ?? "Unknown user";
                 $this->addMessage("Get UPDATE TOKEN");
                 $this->addAuditMessage("Get UPDATE TOKEN");
-
                 return $this->writeJsonData($code, $extras);
             }
             $this->unauthorizedAccess();
-            break;
 
         case "RebuildAdminKeyRemote":
             if (!$key = $this->readAdminKey()) {
-
                 return $this->writeJsonData(500, $extras);
             }
             $token = $_GET["token"] ?? null;
@@ -486,7 +350,6 @@ class AdminPresenter extends APresenter
                     $this->rebuildAdminKey();
                     $this->addMessage("REMOTE FN: ADMIN KEY REBUILT");
                     $this->addAuditMessage("REMOTE FN: ADMIN KEY REBUILT");
-
                     return $this->writeJsonData(
                         [
                             "host" => $_SERVER["HTTP_HOST"],
@@ -496,11 +359,9 @@ class AdminPresenter extends APresenter
                 }
             }
             $this->unauthorizedAccess();
-            break;
 
         case "FlushCacheRemote":
             if (!$key = $this->readAdminKey()) {
-
                 return $this->writeJsonData(500, $extras);
             }
             $token = $_GET["token"] ?? null;
@@ -510,7 +371,6 @@ class AdminPresenter extends APresenter
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->flushCache();
                     $this->addAuditMessage("REMOTE FN: CACHE FLUSHED");
-
                     return $this->writeJsonData(
                         [
                             "host" => $_SERVER["HTTP_HOST"],
@@ -520,11 +380,9 @@ class AdminPresenter extends APresenter
                 }
             }
             $this->unauthorizedAccess();
-            break;
 
         case "CoreUpdateRemote":
             if (!$key = $this->readAdminKey()) {
-
                 return $this->writeJsonData(500, $extras);
             }
             $token = $_GET["token"] ?? null;
@@ -536,7 +394,6 @@ class AdminPresenter extends APresenter
                     $this->postloadAppData("app_data");
                     $this->flushCache();
                     $this->addAuditMessage("REMOTE FN: CORE UPDATED");
-
                     return $this->writeJsonData(
                         [
                             "host" => $_SERVER["HTTP_HOST"],
@@ -546,11 +403,9 @@ class AdminPresenter extends APresenter
                 }
             }
             $this->unauthorizedAccess();
-            break;
 
         case "RebuildNonceRemote":
             if (!$key = $this->readAdminKey()) {
-
                 return $this->writeJsonData(500, $extras);
             }
             $token = $_GET["token"] ?? null;
@@ -561,7 +416,6 @@ class AdminPresenter extends APresenter
                     $this->rebuildNonce();
                     $this->addMessage("REMOTE FN: NEW NONCE");
                     $this->addAuditMessage("REMOTE FN: NEW NONCE");
-
                     return $this->writeJsonData(
                         [
                             "function" => $view,
@@ -572,11 +426,9 @@ class AdminPresenter extends APresenter
                 }
             }
             $this->unauthorizedAccess();
-            break;
 
         case "RebuildSecureKeyRemote":
             if (!$key = $this->readAdminKey()) {
-
                 return $this->writeJsonData(500, $extras);
             }
             $token = $_GET["token"] ?? null;
@@ -587,7 +439,6 @@ class AdminPresenter extends APresenter
                     $this->rebuildSecureKey();
                     $this->addMessage("REMOTE FN: NEW SECURE KEY");
                     $this->addAuditMessage("REMOTE FN: NEW SECURE KEY");
-
                     return $this->writeJsonData(
                         [
                             "host" => $_SERVER["HTTP_HOST"],
@@ -598,23 +449,18 @@ class AdminPresenter extends APresenter
                 }
             }
             $this->unauthorizedAccess();
-            break;
 
         case "FlushCache":
             $this->checkPermission("admin");
             $this->flushCache();
-
             return $this->writeJsonData(["status" => "OK"], $extras);
-                break;
 
         case "CoreUpdate":
             $this->checkPermission("admin");
             $this->setForceCsvCheck(true);
             $this->postloadAppData("app_data");
             $this->flushCache();
-
             return $this->writeJsonData(["status" => "OK"], $extras);
-                break;
 
         case "UpdateArticles":
             $this->checkPermission("admin");
@@ -653,7 +499,6 @@ class AdminPresenter extends APresenter
                 ) {
                     $this->addError("Article $path backup failed.");
                     $this->addAuditMessage("Article $path backup failed.");
-
                     return $this->writeJsonData(
                         [
                             "code" => 401,
@@ -671,7 +516,6 @@ class AdminPresenter extends APresenter
             ) {
                 $this->addError("Article $path history write failed.");
                 $this->addAuditMessage("Article $path history write failed.");
-
                 return $this->writeJsonData(
                     [
                         "code" => 401,
@@ -687,7 +531,6 @@ class AdminPresenter extends APresenter
             ) {
                 $this->addError("Article $path write to file failed.");
                 $this->addAuditMessage("Article $path write to file failed.");
-                
                 return $this->writeJsonData(
                     [
                         "code" => 500,
@@ -707,9 +550,7 @@ class AdminPresenter extends APresenter
             \sort($p, SORT_LOCALE_STRING);
             $p = \array_unique($p, SORT_LOCALE_STRING);
             \file_put_contents($f, \implode("\n", $p), LOCK_EX);
-            // OK
             $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
-
             return $this->writeJsonData(
                 [
                     "status" => "OK",
@@ -717,13 +558,10 @@ class AdminPresenter extends APresenter
                     "hash" => $hash,
                 ], $extras
             );
-                break;
 
         default:
             $this->unauthorizedAccess();
-            break;
         }
-
         return $this;
     }
 
@@ -738,7 +576,6 @@ class AdminPresenter extends APresenter
             @\unlink(DATA . "/" . self::IDENTITY_NONCE);
         }
         \clearstatcache();
-
         return $this->setIdentity();
     }
 
@@ -752,19 +589,15 @@ class AdminPresenter extends APresenter
         $ip = $_SERVER["REMOTE_ADDR"];
         switch ($ip) {
         case "127.0.0.1":
-
-            // localhost
             return true;
         break;
         }
         $key = $this->readAdminKey();
         $gkey = $_GET["key"] ?? null;
         if ($key && $key == $gkey) {
-
             // GET ?key is same as the admin key
             return true;
         }
-
         return false;
     }
 
@@ -778,7 +611,6 @@ class AdminPresenter extends APresenter
         if (\file_exists(DATA . "/" . self::ADMIN_KEY)) {
             @\unlink(DATA . "/" . self::ADMIN_KEY);
         }
-
         return $this->createAdminKey();
     }
 
@@ -792,14 +624,12 @@ class AdminPresenter extends APresenter
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
         $key = \trim($key, "/.");
         if (!$key) {
-
             return $this->writeJsonData(500, $extras);
         }
         if (\file_exists(DATA . "/{$key}")) {
             @\unlink(DATA . "/{$key}");
         }
         \clearstatcache();
-
         return $this->setIdentity();
     }
 
@@ -827,7 +657,7 @@ class AdminPresenter extends APresenter
                 \array_map("unlink", \glob(CACHE . "/" . CACHEPREFIX . "*"));
                 \clearstatcache();
                 if (!LOCALHOST) {
-                    // purge cache if run on server only
+                    // purge cache
                     $this->CloudflarePurgeCache($this->getCfg("cf"));
                 }
                 $this->checkLocales();
@@ -839,7 +669,6 @@ class AdminPresenter extends APresenter
             $this->setLocation("/err/429");
             exit;
         }
-
         return $this;
     }
 
@@ -903,7 +732,6 @@ class AdminPresenter extends APresenter
             $this->addMessage("ADMIN: keyfile created");
             $this->addAuditMessage("ADMIN: keyfile created");
         }
-
         return $this;
     }
 
@@ -921,7 +749,6 @@ class AdminPresenter extends APresenter
             $this->createAdminKey();
             $key = \trim(@\file_get_contents($f));
         }
-
         return $key ?? null;
     }
 
@@ -940,12 +767,10 @@ class AdminPresenter extends APresenter
     ) {
         $type = \exif_imagetype($src);
         if (!$type || !self::IMAGE_HANDLERS[$type]) {
-
             return null;
         }
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]["load"], $src);
         if (!$image) {
-
             return null;
         }
         $width = \imagesx($image);
@@ -985,7 +810,6 @@ class AdminPresenter extends APresenter
             $width,
             $height
         );
-
         return \call_user_func(
             self::IMAGE_HANDLERS[$type]["save"],
             $thumbnail,
