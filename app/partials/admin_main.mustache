@@ -140,7 +140,7 @@
     <!-- 2nd COLUMN -->
     <div class="col l4 m6 s12">
       <!-- GOOGLE -->
-      <div class="row center extrapadding hide-on-small-only">
+      <div class="row center extrapadding">
         <div class="white-text">
           <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i>
             <i class="hover close_google fas fa-arrow-up blue-text hide"></i></h5>
@@ -182,14 +182,12 @@
       </div>
 
       <!-- CHANGELOG -->
-      <div class="hide-on-small-only">
-        <div class="row center extrapadding">
-          <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i>
-            <i class="hover close_news fas fa-arrow-up blue-text hide"></i>&nbsp;<span class="yellow-text right hide" id="newsdot">!&nbsp;&nbsp;</span></h5>
-          <div id="news" class="row grey-text hide" style="margin-top:1em">
-            <div id="newscontent" class="grey-text left-align container">
-              {{ l.a_changelog }}
-            </div>
+      <div class="row center extrapadding">
+        <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i>
+          <i class="hover close_news fas fa-arrow-up blue-text hide"></i>&nbsp;<span class="yellow-text right hide" id="newsdot">!&nbsp;&nbsp;</span></h5>
+        <div id="news" class="row grey-text hide" style="margin-top:1em">
+          <div id="newscontent" class="grey-text left-align container">
+            {{ l.a_changelog }}
           </div>
         </div>
       </div>
