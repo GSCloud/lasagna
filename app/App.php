@@ -13,8 +13,6 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
-use Google\Cloud\Logging\LoggingClient;
-use Monolog\Logger;
 use Nette\Neon\Neon;
 
 // SANITY CHECK
@@ -40,15 +38,15 @@ if (!$requestUri) {
 }
 
 $data["cfg"] = $cfg; // cfg backup array
+
 $data["ARGC"] = $argc ?? 0; // arguments count
 $data["ARGV"] = $argv ?? []; // arguments array
-
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
+$data["ENGINE"] = "Tesseract 2.1.2";
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
-$data["ENGINE"] = "Tesseract 2.1.1";
 $data["VERSION"] = $version = trim(
     @file_get_contents(ROOT . DS . "VERSION") ?: '', "\r\n"
 );
@@ -62,6 +60,7 @@ $data["VERSION_TIMESTAMP"]
 $data["REVISIONS"] = (int) trim(
     @file_get_contents(ROOT . DS . "REVISIONS") ?: "0", "\r\n"
 );
+
 $data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (
@@ -76,7 +75,6 @@ if (!$rqp) {
 $rqp = trim($rqp, "/");
 $data["request_path"] = $rqp;
 $data["request_path_hash"] = ($rqp === '') ? '' : hash("sha256", $rqp);
-
 $data["nonce"] = $data["NONCE"] = $nonce = substr(
     hash(
         "sha256", random_bytes(16) . (string) time()
@@ -112,46 +110,6 @@ defined("SERVER") || define(
 );
 defined("PROJECT") || define("PROJECT", (string) ($cfg["project"] ?? "LASAGNA"));
 defined("APPNAME") || define("APPNAME", (string) ($cfg["app"] ?? "app"));
-defined("MONOLOG") || define(
-    "MONOLOG", LOGS . DS . "MONOLOG_" . SERVER . "_" . PROJECT . ".log"
-);
-defined("GCP_PROJECTID") || define("GCP_PROJECTID", $cfg["gcp_project_id"] ?? null);
-defined("GCP_KEYS") || define("GCP_KEYS", $cfg["gcp_keys"] ?? null);
-
-// set GCP_KEYS ENV variable
-if (GCP_KEYS && file_exists(APP . DS . GCP_KEYS)) {
-    putenv("GOOGLE_APPLICATION_CREDENTIALS=" . APP . DS . GCP_KEYS);
-}
-
-/**
- * Google Stackdriver logger
- *
- * @param string $message  message
- * @param mixed  $severity severity
- *
- * @return mixed
- */
-function logger($message, $severity = Logger::INFO)
-{
-    if (empty($message) || is_null(GCP_PROJECTID) || is_null(GCP_KEYS)) {
-        return false;
-    }
-    if (ob_get_level()) {
-        ob_end_clean();
-    }
-    try {
-        $logging = new LoggingClient(
-            [
-                "projectId" => GCP_PROJECTID,
-                "keyFilePath" => APP . DS . GCP_KEYS,
-            ]
-        );
-        $stack = $logging->logger(PROJECT);
-        $stack->write($stack->entry($message), ["severity" => $severity,]);
-    } finally {
-    }
-    return true;
-}
 
 // CACHE PROFILES
 $cache_profiles = array_replace(
@@ -267,12 +225,11 @@ $routes = $cfg["routes"] ?? [ // can be overriden in config.neon
 foreach ($routes as $r) {
     $r = APP . DS . $r;
     if (($content = @file_get_contents($r)) === false) {
-        logger("ERROR in routing table: $r", Logger::EMERGENCY);
         if (ob_get_level()) {
             ob_end_clean();
         }
         header("HTTP/1.1 500 Internal Server Error");
-        echo "<h1>Server Error</h1><h2>Routing table</h2><h3>$r</h3>";
+        echo "<h1>Server Error</h1><h2>Routing table:</h2><h3>$r</h3>";
         exit;
     }
     $next = @Neon::decode($content);

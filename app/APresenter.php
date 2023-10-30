@@ -13,46 +13,219 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
-use Google\Cloud\Logging\LoggingClient;
 use League\Csv\Reader;
 use League\Csv\Statement;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\BrowserConsoleHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Monolog\Processor\MemoryUsageProcessor;
-use Monolog\Processor\WebProcessor;
 use ParagonIE\Halite\Cookie;
 use ParagonIE\Halite\KeyFactory;
 
-// UT = Unit Tested
+/**
+ * APresenter interface
+ * 
+ * @category CMS
+ * @package  Framework
+ * @author   Fred Brooker <git@gscloud.cz>
+ * @license  MIT https://gscloud.cz/LICENSE
+ * @link     https://lasagna.gscloud.cz
+ */
 interface IPresenter
 {
+    /**
+     * Add critical message
+     *
+     * @param string $message Critical error string
+     * 
+     * @return self
+     */
     public function addCritical($message);
+
+    /**
+     * Add error message
+     *
+     * @param string $message Error string
+     * 
+     * @return self
+     */
     public function addError($message);
+
+    /**
+     * Add info message
+     *
+     * @param string $message Message string
+     * 
+     * @return self
+     */
     public function addMessage($message);
+
+    /**
+     * Add audit message
+     *
+     * @param string $message Message string
+     * 
+     * @return self
+     */
     public function addAuditMessage($message);
+
+    /**
+     * Criticals getter
+     *
+     * @return array Array of critical messages
+     */
     public function getCriticals();
+
+    /**
+     * Errors getter
+     *
+     * @return array Array of errors
+     */
     public function getErrors();
+
+    /**
+     * Messages getter
+     *
+     * @return array Array of messages
+     */
     public function getMessages();
+
+    /**
+     * Cfg getter
+     *
+     * @param string $key Index to configuration data / void
+     * 
+     * @return mixed Configuration data by index / whole array
+     */
     public function getCfg($key);
+
+    /**
+     * Get encrypted cookie
+     *
+     * @param string $name Cookie name
+     * 
+     * @return mixed Cookie value
+     */
     public function getCookie($name);
+
+    /**
+     * Get current user
+     *
+     * @return array current user data
+     */
     public function getCurrentUser();
+    /**
+     * Data getter
+     *
+     * @param string $key array key, dot notation (optional)
+     * 
+     * @return mixed value / whole array
+     */
     public function getData($key);
+
+    /**
+     * Get IP address
+     *
+     * @return string IP address
+     */
     public function getIP();
+
+    /**
+     * Get user identity
+     *
+     * @return array Identity array
+     */
     public function getIdentity();
-    public function getLocale($locale);
+
+    /**
+     * Get locales from GS Sheets
+     *
+     * @param string $language language code
+     * @param string $key      index column code (optional)
+     * 
+     * @return array locales
+     */
+    public function getLocale($language, $key = 'KEY');
+    
+    /**
+     * Get current user rate limits
+     *
+     * @return integer current rate limit
+     */
     public function getRateLimit();
+
+    /**
+     * Get universal ID hash
+     *
+     * @return string SHA-256 hash
+     */
     public function getUID();
+
+    /**
+     * Get universal ID string
+     *
+     * @return string Universal ID string
+     */
     public function getUIDstring();
+
+    /**
+     * Get current user group
+     *
+     * @return string User group name
+     */
     public function getUserGroup();
+
+    /**
+     * Match getter (alias)
+     *
+     * @return mixed Match data array
+     */
     public function getMatch();
+
+    /**
+     * Presenter getter (alias)
+     *
+     * @return mixed Rresenter data array
+     */
     public function getPresenter();
+
+    /**
+     * Router getter (alias)
+     *
+     * @return mixed Router data array
+     */
     public function getRouter();
+
+    /**
+     * View getter (alias)
+     *
+     * @return mixed Router view
+     */
     public function getView();
+
+    /**
+     * Check and preload locales
+     *
+     * @param boolean $force force loading locales (optional)
+     * 
+     * @return self
+     */
     public function checkLocales(bool $force);
-    public function checkPermission($roleslist);
-    public function checkRateLimit($maximum);
+
+    /**
+     * Check if current user has access rights
+     *
+     * @param mixed $rolelist roles (optional)
+     * 
+     * @return self
+     */
+    public function checkPermission($rolelist = 'admin');
+
+    /**
+     * Check and enforce current user rate limits
+     *
+     * @param integer $max Hits per second (optional)
+     * 
+     * @return self
+     */
+    public function checkRateLimit($max = self::LIMITER_MAXIMUM);
+
     public function setCookie($name, $data);
     public function setData($data, $value);
     public function setForceCsvCheck();
@@ -87,187 +260,47 @@ interface IPresenter
  */
 abstract class APresenter implements IPresenter
 {
-    /**
- * @var integer Octal file mode for logs 
-*/
+    /* @var integer octal file mode for logs */
     const LOG_FILEMODE = 0664;
-
-    /**
- * @var integer Octal file mode for CSV 
-*/
+    /* @var integer octal file mode for CSV */
     const CSV_FILEMODE = 0664;
-
-    /**
- * @var integer CSV min. file size - something meaningful :) 
-*/
+    /* @var integer CSV min. file size - something meaningful :) */
     const CSV_MIN_SIZE = 42;
-
-    /**
- * @var integer Octal file mode for cookie secret 
-*/
+    /* @var integer octal file mode for cookie secret */
     const COOKIE_KEY_FILEMODE = 0600;
-
-    /**
- * @var integer Cookie time to live in seconds 
-*/
+    /* @var integer cookie TTL in seconds */
     const COOKIE_TTL = 86400 * 31;
-
-    /**
- * @var string Google CSV URL prefix 
-*/
+    /* @var string Google CSV URL prefix */
     const GS_CSV_PREFIX = 'https://docs.google.com/spreadsheets/d/e/';
-
-    /**
- * @var string Google CSV URL postfix 
-*/
+    /* @var string Google CSV URL postfix */
     const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
-
-    /**
- * @var string Google Sheet URL prefix 
-*/
+    /* @var string Google Sheet URL prefix */
     const GS_SHEET_PREFIX = 'https://docs.google.com/spreadsheets/d/';
-
-    /**
- * @var string Google Sheet URL postfix 
-*/
+    /* @var string Google Sheet URL postfix */
     const GS_SHEET_POSTFIX = '/edit#gid=0';
-
-    /**
- * @var integer Access limiter maximum hits 
-*/
-    const LIMITER_MAXIMUM = 100;
-
-    /**
- * @var string Identity nonce filename 
-*/
+    /* @var integer access limiter max. hits in 5 secs. */
+    const LIMITER_MAXIMUM = 25;
+    /* @var string identity nonce filename */
     const IDENTITY_NONCE = 'identity_nonce.key';
 
-    // VARIOUS GOOGLE TEMPLATES - TBD
-
-    /**
- * @var string 
-*/
-    const GOOGLE_DOCUMENT_EXPORT_DOC =
-        'https://docs.google.com/document/d/[FILEID]/export?format=doc';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_DOCUMENT_EXPORT_PDF =
-        'https://docs.google.com/document/d/[FILEID]/export?format=pdf';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_EDIT =
-        'https://docs.google.com/spreadsheets/d/[FILEID]/edit#gid=0';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_VIEW =
-        'https://docs.google.com/spreadsheets/d/[FILEID]/view#gid=0';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_EXPORT_DOCX =
-        'https://docs.google.com/spreadsheets/d/[FILEID]/export?format=docx';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_EXPORT_PDF =
-        'https://docs.google.com/spreadsheets/d/[FILEID]/export?format=pdf';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_EXPORT_XLSX =
-        'https://docs.google.com/spreadsheets/d/[FILEID]/export?format=xlsx';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_PUBLIC_EXPORT_CSV =
-        'https://docs.google.com/spreadsheets/d/e/[FILEID]/pub?output=csv';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_SHEET_PUBLIC_EXPORT_HTML =
-        'https://docs.google.com/spreadsheets/d/e/[FILEID]/pubhtml';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_WORKSPACE_IMAGE_THUMBNAIL =
-        'https://drive.google.com/a/[DOMAIN]/thumbnail?id=[IMAGEID]';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_IMAGE_THUMBNAIL =
-        'https://drive.google.com/thumbnail?id=[IMAGEID]';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_FILE_EXPORT_DOWNLOAD =
-        'https://drive.google.com/uc?export=download&id=[FILEID]';
-
-    /**
- * @var string 
-*/
-    const GOOGLE_FILE_EXPORT_VIEW =
-        'https://drive.google.com/uc?export=view&id=[FILEID]';
-
-    // PRIVATE VARIABLES
-
-    /**
-     * @var array Data Model 
-     */
-    private $data = [];
-
-    /**
-     * @var array Messages 
-     */
-    private $messages = [];
-
-    /**
-     * @var array Errors 
-     */
-    private $errors = [];
-
-    /**
-     * @var array Critical Errors 
-     */
-    private $criticals = [];
-
-    /**
-     * @var array User Identity 
-     */
-    private $identity = [];
-
-    /**
-     * @var boolean force check locales in desctructor 
-     */
-    private $force_csv_check = false;
-
-    /**
-     * @var array CSV Keys 
-     */
-    private $csv_postload = [];
-
-    /**
-     * @var array Cookies 
-     */
-    private $cookies = [];
-
-    /**
-     * @var array Singleton Instances 
-     */
-    private static $instances = [];
+    /* @var array data model */
+    public $data = [];
+    /* @var array messages */
+    public $messages = [];
+    /* @var array errors */
+    public $errors = [];
+    /* @var array critical Errors */
+    public $criticals = [];
+    /* @var array identity */
+    public $identity = [];
+    /* @var boolean force check locales in desctructor */
+    public $force_csv_check = false;
+    /* @var array CSV Keys */
+    public $csv_postload = [];
+    /* @var array cookies */
+    public $cookies = [];
+    /* @var array singleton instances */
+    public static $instances = [];
 
     /**
      * Abstract Processor
@@ -276,7 +309,7 @@ abstract class APresenter implements IPresenter
      * 
      * @param mixed $param optional parameter
      * 
-     * @return object Instance
+     * @return object instance
      */
     abstract public function process($param = null);
 
@@ -288,7 +321,9 @@ abstract class APresenter implements IPresenter
         $class = get_called_class();
         if (array_key_exists($class, self::$instances)) {
             // throw an exception if class is already instantiated
-            throw new \Exception("FATAL ERROR: instance of class [{$class}] already exists");
+            throw new \Exception(
+                "FATAL ERROR: instance of class [{$class}] already exists"
+            );
         }
     }
 
@@ -344,92 +379,20 @@ abstract class APresenter implements IPresenter
         if (\ob_get_level()) {
             @\ob_end_flush();
         }
-
         // finish request
         if (\function_exists('fastcgi_finish_request')) {
             \fastcgi_finish_request();
         }
-
         // preload CSV definitions
         foreach ($this->csv_postload as $key) {
             $this->preloadAppData((string) $key, true);
         }
         // load actual CSV data
         $this->checkLocales((bool) $this->force_csv_check);
-
-        // setup Monolog logger
-        $monolog = new Logger('Tesseract log');
-        $streamhandler = new StreamHandler(MONOLOG, Logger::INFO, true, self::LOG_FILEMODE);
-        $streamhandler->setFormatter(new LineFormatter);
-        $consolehandler = new BrowserConsoleHandler(Logger::INFO);
-        $monolog->pushHandler($consolehandler);
-        $monolog->pushHandler($streamhandler);
-        $monolog->pushProcessor(new MemoryUsageProcessor);
-        $monolog->pushProcessor(new WebProcessor);
-
-        $criticals = $this->getCriticals();
-        $errors = $this->getErrors();
-        $messages = $this->getMessages();
-
         list($usec, $sec) = \explode(' ', \microtime());
         defined('TESSERACT_STOP') || define('TESSERACT_STOP', ((float) $usec + (float) $sec));
         $add = '; processing: ' . \round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2) . ' ms'
             . '; request_uri: ' . ($_SERVER['REQUEST_URI'] ?? 'N/A');
-
-        $google_logger = null;
-        try {
-            if (\count($criticals)+\count($errors)+\count($messages)) {
-                if (GCP_PROJECTID && GCP_KEYS && !LOCALHOST) {
-                    if (file_exists(APP . DS . GCP_KEYS)) {
-                        $logging = new LoggingClient(
-                            [
-                            'projectId' => GCP_PROJECTID,
-                            'keyFilePath' => APP . DS . GCP_KEYS,
-                            ]
-                        );
-                        $google_logger = $logging->logger(PROJECT);
-                    }
-                }
-            }
-            if (\count($criticals)) {
-                $monolog->critical(DOMAIN . ' FATAL: ' . \json_encode($criticals) . $add);
-                if ($google_logger) {
-                    $google_logger->write(
-                        $google_logger->entry(
-                            DOMAIN . ' ERR: ' . \json_encode($criticals) . $add, [
-                            'severity' => Logger::CRITICAL,
-                            ]
-                        )
-                    );
-                }
-            }
-            if (count($errors)) {
-                $monolog->error(DOMAIN . ' ERROR: ' . \json_encode($errors) . $add);
-                if ($google_logger) {
-                    $google_logger->write(
-                        $google_logger->entry(
-                            DOMAIN . ' ERR: ' . \json_encode($errors) . $add, [
-                            'severity' => Logger::ERROR,
-                            ]
-                        )
-                    );
-                }
-            }
-            if (count($messages)) {
-                $monolog->info(DOMAIN . ' INFO: ' . \json_encode($messages) . $add);
-                if ($google_logger) {
-                    $google_logger->write(
-                        $google_logger->entry(
-                            DOMAIN . ' MSG: ' . \json_encode($messages) . $add, [
-                            'severity' => Logger::INFO,
-                            ]
-                        )
-                    );
-                }
-            }
-        } finally {
-            exit(0);
-        }
         exit(0);
     }
 
@@ -542,7 +505,6 @@ abstract class APresenter implements IPresenter
             'CONST.DOWNLOAD' => DOWNLOAD,
             'CONST.DS' => DS,
             'CONST.LOGS' => LOGS,
-            'CONST.MONOLOG' => MONOLOG,
             'CONST.PARTIALS' => PARTIALS,
             'CONST.PROJECT' => PROJECT,
             'CONST.ROOT' => ROOT,
@@ -1219,7 +1181,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Check current user rate limits
+     * Check and enforce current user rate limits
      *
      * @param integer $max Hits per second (optional)
      * 
@@ -1470,7 +1432,7 @@ abstract class APresenter implements IPresenter
         $locales = $this->getCfg('locales') ?? null;
         if (\is_array($locales)) {
             foreach ($locales as $name => $csvkey) {
-                $this->csv_preloader($name, $csvkey, (bool) $force);
+                $this->csvPreloader($name, $csvkey, (bool) $force);
             }
         }
         return $this;
@@ -1483,7 +1445,7 @@ abstract class APresenter implements IPresenter
      * 
      * @return self
      */
-    public function CloudflarePurgeCache($cf)
+    public function cloudflarePurgeCache($cf)
     {
         if (!\is_array($cf)) {
             return $this;
@@ -1526,7 +1488,7 @@ abstract class APresenter implements IPresenter
      * 
      * @return self
      */
-    private function csv_preloader($name, $csvkey, $force = false)
+    public function csvPreloader($name, $csvkey, $force = false)
     {
         $name = \trim((string) $name);
         $csvkey = \trim((string) $csvkey);
@@ -1603,7 +1565,7 @@ abstract class APresenter implements IPresenter
         $cfg = $this->getCfg();
         if (\array_key_exists($key, $cfg)) {
             foreach ((array) $cfg[$key] as $name => $csvkey) {
-                $this->csv_preloader($name, $csvkey, (bool) $force);
+                $this->csvPreloader($name, $csvkey, (bool) $force);
             }
         }
         return $this;

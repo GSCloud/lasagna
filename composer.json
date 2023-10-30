@@ -8,7 +8,6 @@
         "cheprasov/php-redis-client": "^1",
         "chillerlan/php-qrcode": "^4",
         "cloudflare/sdk": "^1",
-        "google/cloud": "^0",
         "guzzlehttp/guzzle": "^7",
         "league/climate": "^3",
         "league/csv": "^9",

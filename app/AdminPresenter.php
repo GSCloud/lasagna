@@ -29,23 +29,18 @@ class AdminPresenter extends APresenter
 {
     /* @var string admin key filename */
     const ADMIN_KEY = "admin.key";
-
     /* @var string thumbnail prefix */
     const THUMB_PREFIX = ".thumb_";
-
     /* @var string thumbnail postfix */
     const THUMB_POSTFIX = "px_";
-
     /* @var array thumbnails to create */
     const THUMBS_CREATE = [
         160, 320, 640
     ];
-
     /* @var array thumbnails to delete */
     const THUMBS_DELETE = [
         50, 64, 128, 150, 160, 320, 512, 640
     ];
-    
     /* @var array thumbnail extensions */
     const THUMBS_EXTENSIONS = [
         '.bmp',
@@ -55,7 +50,6 @@ class AdminPresenter extends APresenter
         '.png',
         '.webp',
     ];
-
     /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
@@ -295,7 +289,7 @@ class AdminPresenter extends APresenter
             $this->setHeaderHTML();
             $f = DATA . "/AuditLog.txt";
             $logs = \file($f); // TBD - fix large logs
-            \array_walk($logs, array($this, "decorateLogs"));
+            \array_walk($logs, array($this, 'decorateLogs'));
             $data["content"] = \array_reverse($logs);
             return $this->setData(
                 "output", $this->setData($data)->renderHTML("auditlog")
@@ -678,7 +672,7 @@ class AdminPresenter extends APresenter
                 \clearstatcache();
                 if (!LOCALHOST) {
                     // purge cache
-                    $this->CloudflarePurgeCache($this->getCfg("cf"));
+                    $this->cloudflarePurgeCache($this->getCfg("cf"));
                 }
                 $this->checkLocales();
             } finally {
@@ -714,10 +708,10 @@ class AdminPresenter extends APresenter
     public function decorateLogs(&$val, $key)
     {
         $x = \explode(";", $val);
-        unset($x[5]); // remove column 6
+        // remove column 6
+        unset($x[5]);
         \array_walk(
             $x, function (&$value, $key) {
-                // remove some strings
                 $value = \str_replace("IP:", "", $value);
                 $value = \str_replace("EMAIL:", "", $value);
                 $value = \str_replace("NAME:", "", $value);
@@ -725,7 +719,8 @@ class AdminPresenter extends APresenter
         );
         $y = \implode("</td><td>", $x);
         $z = "<td>$y</td>";
-        for ($i = 1; $i <= 5; $i++) { // add 5 column classes
+        for ($i = 1; $i <= 5; $i++) {
+            // add 5 column classes
             $z = \preg_replace("/<td>/", "<td class='alogcol{$i}'>", $z, 1);
         }
         $val = $z;
