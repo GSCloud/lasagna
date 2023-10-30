@@ -15,20 +15,20 @@
   <!-- EXTERNAL SERVICES -->
   <div class="row center black">
     <div class="extrapadding" style="padding-top:2px">
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
         <i class="fa-solid fa-key"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_account }}</a>
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
         <i class="fa-solid fa-unlock"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_password }}</a>
       {{#google.google-site-verification}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
         href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
         <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
       {{/google.google-site-verification}}
       {{#umami.id}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
         href="https://umami.gscloud.cz/websites/{{ umami.id }}">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
@@ -41,7 +41,7 @@
         </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
       </a>
       {{#umami.share}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
         href="{{ umami.share }}">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
@@ -56,12 +56,12 @@
       {{/umami.share}}
       {{/umami.id}}
       {{#langcs}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
         <i class="fa-solid fa-file-invoice"></i>&nbsp;FAKTURACE</a>
       {{/langcs}}
       {{#langen}}
-      <a style="margin:2px;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
         <i class="fa-solid fa-file-invoice"></i>&nbsp;ACCOUNTING</a>
       {{/langen}}
@@ -123,9 +123,6 @@
         <a id="a_upload"
           data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;UPLOAD</a>
-        <a id="a_files"
-          data-position="top" data-tooltip="{{ l.a_files_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-archive"></i>&nbsp;UPLOADS</a>
         <a id="a_summernote"
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
@@ -134,6 +131,9 @@
           data-position="top" data-tooltip="{{ l.a_article_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
           <i class="fas fa-plus-square"></i>&nbsp;URL</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
+        <a id="a_files"
+          data-position="top" data-tooltip="{{ l.a_files_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect brown waves btn"><i class="fas fa-archive"></i>&nbsp;...</a>
       </div>
     </div>
 
@@ -195,17 +195,17 @@
       </div>
 
       <!-- ICON BUTTONS -->
-      <h4 class="center" style="font-size:2rem !important">
-        <a title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+      <h4 class="center" style="font-size:2rem!important;">
+        <a style="margin:2px!important;" title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz"><i class="fas fa-server"></i>&nbsp;SYSINFO</a>
-        <a title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+        <a style="margin:2px!important;" title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz"><i class="fas fa-server"></i>&nbsp;PHPINFO</a>
-        <a title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+        <a style="margin:2px!important;" title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i>&nbsp;TPL</a>
-        <a title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+        <a style="margin:2px!important;" title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
         {{#google_drive_backup}}
-        <a title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+        <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
         {{/google_drive_backup}}
       </h4>
@@ -251,7 +251,7 @@
       </div>
       <!-- CURRENT USER -->
       <div class="row center extrapadding">
-        <div style="display:block;width:50%;border:2px solid red;border-radius:5px;margin:auto;padding:1rem">
+        <div style="display:inline-block;border:2px solid red;border-radius:5px;margin:auto;padding:2rem">
           <strong>{{user.name}}</strong><br>
           <b>{{user.email}}</b>
           <br>
