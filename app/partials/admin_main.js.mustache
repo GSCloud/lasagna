@@ -729,6 +729,11 @@
             moment.locale("{{ lang }}");
 
             // UPLOAD: render HTML
+            var wt = [];
+            wt[160] = 'S';
+            wt[320] = 'M';
+            wt[640] = 'L';
+
             var t = 0;
             for (var i in data.data.files) {
               t++;
@@ -744,13 +749,13 @@
 
               if (data.data.files[i]["thumbnails"] == null) {
                 // clickable icon
-                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#000!important" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#444\';" onmouseout="this.style.backgroundColor=\'#222\';">'
                   + '<a title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" ';
                 s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
                 s += '📄<br><span style="font-size:1rem!important">' + name + '<br></span></a>';
               } else {
                 // clickable thumbnail
-                s += '<div style="margin:0;padding:1rem;height:300px" id="fig' + t + '" class="left-align col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#222\';" onmouseout="this.style.backgroundColor=\'\';">'
+                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#444\';" onmouseout="this.style.backgroundColor=\'#222\';">'
                   + '<a title="{{ l.a_open_tit }}" class="hover" ';
                 s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
                 if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
@@ -768,7 +773,7 @@
               var sml = '';
               for (var j in data.data.files[i]["thumbnails"]) {
                 name = data.data.files[i]["thumbnails"][j];
-                sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name + '">' + j + '📋</span>';
+                sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
               }
               if (sml.length) {
                 s += '<div class="row extrapadding">';
@@ -779,7 +784,7 @@
               if (data.data.files[i]["thumbnails"] == null) {
                 // delete
                 s += '<div class="row extrapadding">';
-                s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                s += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
                 s += '</div>';
               }
               else {
