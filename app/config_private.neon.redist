@@ -1,8 +1,5 @@
-### TESSERACT LASAGNA PRIVATE CONFIGURATION
 #@author Fred Brooker <git@gscloud.cz>
-
-#force debug
-#dbg: TRUE
+### TESSERACT LASAGNA PRIVATE CONFIGURATION
 
 # cookie: tracy-debug
 #DEBUG_COOKIE: "cookievalue"
@@ -10,9 +7,6 @@
 # Google OAuth 2.0
 #goauth_client_id: "someid.apps.googleusercontent.com"
 #goauth_secret: ""
-
-# Google Cloud Platform keys (in app/)
-#gcp_keys: "key-hash.json"
 
 # Google Drive backup
 #google_drive_backup: ""
@@ -29,7 +23,6 @@ external_links: [
 # Google services
 google: [
 #  mapsapi_key: "some_key"
-#  pagespeedinsights_key: "some_key"
 ]
 
 # Cloudflare services

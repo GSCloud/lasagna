@@ -12,9 +12,6 @@ project: LASAGNA
 secret_cookie_key: secure.key
 version: v1
 
-# GCP
-gcp_project_id: "gscloudcz-163314"
-
 # Google OAuth 2.0
 goauth_origin: "https://lasagna.gscloud.cz"
 goauth_redirect: "https://lasagna.gscloud.cz/login"
@@ -30,21 +27,18 @@ google: [
 # Umami analytics service
 umami: [
   id: "d64aa098-b60c-4c6b-90b1-dc5b6e83c255"
+  share: "https://umami.gscloud.cz/share/Zj4HVPMYhRV69yz6/TESSERACT%20LASAGNA"
 ]
 
 alpha_hosts: [
-  lasagna
   alasagna.gscloud.cz
 ]
 
 beta_hosts: [
-  lasagna
   blasagna.gscloud.cz
 ]
 
-cache_profiles: [
-]
-
+# Redis
 redis: [
   #database: 0
   #host: "127.0.0.1"
@@ -55,12 +49,6 @@ redis: [
   # to disable REDIS, set port to 0
   port: 6377
   timeout: 1
-]
-
-multisite_profiles: [
-  default: [
-    lasagna
-  ]
 ]
 
 css_sources: [
