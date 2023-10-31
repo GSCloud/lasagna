@@ -119,13 +119,24 @@
       // show translation source pins
       $(".trans_pin").click(function () {
         if ($(this).data('on') == '1') {
+            {{#langcs}}
+            M.toast({text: '📌 VYPNUTO'});
+            {{/langcs}}
+            {{#langen}}
+            M.toast({text: '📌 OFF'});
+            {{/langen}}
             $(this).data('on', 0);    
             $('.sheetpin').remove();
-        } else {
+          } else {
+            {{#langcs}}
+            M.toast({text: '📌 ZAPNUTO'});
+            {{/langcs}}
+            {{#langen}}
+            M.toast({text: '📌 ON'});
+            {{/langen}}
           $(this).data('on', 1);
-          M.toast({text: "📍"});
           $('*[data-admin-tooltip]').each(function() {
-            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" onclick="GSC.CopyThisText(this);" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📍&nbsp;</b>')
+            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" onclick="GSC.CopyThisText(this);" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
           });
         }
       });
@@ -703,8 +714,20 @@
         }
         // clear file & upload content if present
         if (getCookie("open_filemanager") == 1) {
+          {{#langcs}}
+          M.toast({text: '🫙 VYPNUTO'});
+          {{/langcs}}
+          {{#langen}}
+          M.toast({text: '🫙 OFF'});
+          {{/langen}}
           return GSC.CloseFileManager();
         }
+        {{#langcs}}
+        M.toast({text: '🫙 ZAPNUTO'});
+        {{/langcs}}
+        {{#langen}}
+        M.toast({text: '🫙 ON'});
+        {{/langen}}
         GSC.RenderUploadInfo();
       });
 

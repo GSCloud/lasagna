@@ -133,7 +133,7 @@
           <i class="fas fa-plus-square"></i>&nbsp;URL</a>&nbsp;<span id="summer_ping" class="mono">&nbsp;</span>
         <a id="a_files"
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect brown waves btn"><i class="fas fa-archive"></i>&nbsp;...</a>
+          style="margin:5px" class="tooltipped waves-effect brown waves btn">🫙</a>
       </div>
     </div>
 
@@ -145,24 +145,19 @@
           <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i>
             <i class="hover close_google fas fa-arrow-up blue-text hide"></i></h5>
           <ul id="variables" class="mono hide">
-            <li>GCP ID: {{ gcp_project_id }}
-              {{^gcp_project_id}}
+
+            {{^google.map_query}}
+            <li>Maps 🔎 {{ google.map_query }}
               <i class="red-text fas fa-times"></i>
-              {{/gcp_project_id}}
             </li>
-            <li>Maps 🔎: {{ google.map_query }}
-              {{^google.map_query}}
-              <i class="red-text fas fa-times"></i>
-              {{/google.map_query}}
-            </li>
+            {{/google.map_query}}
+
+            {{#google.mapsapi_key}}
             <li>Maps API key
-              {{#google.mapsapi_key}}
               <span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
-              {{/google.mapsapi_key}}
-              {{^google.mapsapi_key}}
-              <i class="red-text fas fa-times"></i>
-              {{/google.mapsapi_key}}
             </li>
+            {{/google.mapsapi_key}}
+
           </ul>
         </div>
       </div>
