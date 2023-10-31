@@ -212,14 +212,22 @@ $data["cache_profiles"] = $cache_profiles;
 
 // ROUTING CONFIGURATION
 $router = [];
-$routes = $cfg["routes"] ?? [ // can be overriden in config.neon
-    "router_defaults.neon",
-    "router_admin.neon",
-    "router_core.neon",
-    "router_extras.neon",
-    "router_api.neon",
-    "router.neon",
-];
+$routes = $cfg["routers"] ?? [];
+chdir(APP);
+// defaults
+array_unshift($routes, "router_defaults.neon");
+if ($routers = glob("router_*.neon")) {
+    foreach ($routers as $r) {
+        if (is_file($r) && is_readable($r) && ($r != 'router_defaults.neon')) {
+            array_push($routes, $r);
+        }
+    }
+}
+// main router
+array_push($routes, "router.neon");
+
+// POPULATE DATA ARRAY
+$data['router_files'] = $routes;
 
 // LOAD ROUTING TABLES
 foreach ($routes as $r) {
