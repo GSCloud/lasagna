@@ -82,14 +82,6 @@
         if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
       }
 
-      // show variables
-      $(".open_google").unbind();
-      $(".open_google").click(function () {
-        $(this).hide();
-        $(".close_google").removeClass('hide').show();
-        $("#variables").removeClass('hide').hide().show(200);
-      });
-
       // show news
       $(".open_news").unbind();
       $(".open_news").click(function () {
@@ -106,14 +98,6 @@
             $("#newsdot").removeClass("hide");
             $(".open_news").click();
         }
-      });
-
-      // hide variables
-      $(".close_google").unbind();
-      $(".close_google").click(function () {
-        $(this).hide();
-        $(".open_google").removeClass('hide').show();
-        $("#variables").hide(200);
       });
 
       // show translation source pins

@@ -166,28 +166,6 @@
         </div>
       </div>
 
-      <!-- GOOGLE -->
-      <div class="row center extrapadding">
-        <div class="white-text">
-          <h5>{{ l.a_google }} <i class="hover open_google fas fa-arrow-down blue-text"></i>
-            <i class="hover close_google fas fa-arrow-up blue-text hide"></i></h5>
-          <ul id="variables" class="mono hide">
-
-            {{#google.map_query}}
-            <li>Maps 🔎 {{ google.map_query }}
-              <i class="red-text fas fa-times"></i>
-            </li>
-            {{#google.mapsapi_key}}
-            <li>Maps API key
-              <span title="{{ google.mapsapi_key }}" class="protect">{{ google.mapsapi_key }}</span>
-            </li>
-            {{/google.mapsapi_key}}
-            {{/google.map_query}}
-
-          </ul>
-        </div>
-      </div>
-
       <!-- ICON BUTTONS -->
       <h4 class="center" style="font-size:2rem!important;">
         <a style="margin:2px!important;" title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
