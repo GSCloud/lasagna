@@ -44,7 +44,7 @@ $data["ARGV"] = $argv ?? []; // arguments array
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
-$data["ENGINE"] = "Tesseract 2.1.3";
+$data["ENGINE"] = "Tesseract 2.1.4";
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
 $data["VERSION"] = $version = trim(

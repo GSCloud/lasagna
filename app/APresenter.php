@@ -1620,11 +1620,11 @@ abstract class APresenter implements IPresenter
     /**
      * Write JSON data to output
      *
-     * @param array $data     integer error code / array of data
+     * @param mixed $data     error code / data array
      * @param array $headers  array of extra data (optional)
      * @param mixed $switches JSON encoder switches
      * 
-     * @return self
+     * @return object instance
      */
     public function writeJsonData($data, $headers = [], $switches = null)
     {

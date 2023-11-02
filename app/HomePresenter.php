@@ -34,11 +34,13 @@ class HomePresenter extends APresenter
      */
     public function process($param = null)
     {
-        // get current Presenter and View
+        // get current Presenter
         $presenter = $this->getPresenter();
         if (!\is_array($presenter)) {
             return $this;
         }
+
+        // get current View
         $view = $this->getView();
         if (!$view) {
             return $this;

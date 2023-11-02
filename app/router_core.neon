@@ -4,8 +4,9 @@
 GetWebManifest:
   path: /manifest.json
   api: true
-  api_description: "Progressive Web App (PWA) manifest."
+  api_description: "Progressive Web App manifest."
   api_info: "Returns (JSON): configuration file."
+  assert_json: true
   cached: true
   presenter: core
 
@@ -13,7 +14,7 @@ GetTXTSitemap:
   path: /sitemap.txt
   api: true
   api_description: "Crawler sitemap in TEXT format."
-  api_info: "Returns (TEXT): simple text file."
+  api_info: "Returns (TEXT): text file."
   cached: true
   presenter: core
 
@@ -36,8 +37,8 @@ GetRSSXML:
 GetServiceWorker:
   path: /sw.js
   api: true
-  api_description: "Service worker."
-  api_info: "Returns (JavaScript): SW code."
+  api_description: "Service worker JavaScript code."
+  api_info: "Returns (JavaScript): JavaScript code."
   cached: true
   presenter: core
 
@@ -50,16 +51,6 @@ GetCoreVersion:
   method: GET|POST
   presenter: core
 
-GetCsDataVersion:
-  path: /cs/version/data
-  api: true
-  api_description: "Get Czech locale version"
-  api_info: "Returns (JSON): SHA256 hash (string)."
-  assert_json: true
-  language: cs
-  method: GET|POST
-  presenter: core
-
 GetEnDataVersion:
   path: /en/version/data
   api: true
@@ -67,6 +58,16 @@ GetEnDataVersion:
   api_info: "Returns (JSON): SHA256 hash (string)."
   assert_json: true
   language: en
+  method: GET|POST
+  presenter: core
+
+GetCsDataVersion:
+  path: /cs/version/data
+  api: true
+  api_description: "Get Czech locale version"
+  api_info: "Returns (JSON): SHA256 hash (string)."
+  assert_json: true
+  language: cs
   method: GET|POST
   presenter: core
 

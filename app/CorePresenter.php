@@ -29,29 +29,44 @@ class CorePresenter extends APresenter
     /**
      * Controller processor
      * 
-     * @param mixed $view  (optional)
-     * @param mixed $match (optional)
+     * @param mixed $param optional parameter
      * 
-     * @return self
+     * @return object Controller
      */
-    public function process($view = null, $match = null)
+    public function process($param = null)
     {
-        $data = $this->getData();
+        \setlocale(LC_ALL, "cs_CZ.utf8");
+        \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
+        // get current Presenter
         $presenter = $this->getPresenter();
-        // can be passed as an optional parameter
-        $match = $match ?? $this->getMatch();
-        // can be passed as an optional parameter
-        $view = $view ?? $this->getView(); 
+        if (!\is_array($presenter)) {
+            return $this;
+        }
+        
+        // get current View
+        $view = $this->getView();
+        if (!$view) {
+            return $this;
+        }
+        
+        $match = $this->getMatch();
+        $data = $this->getData();
 
         // JSON extras
         $extras = [
+            "name" => "Tesseract Core REST API",
             "fn" => $view,
+            "endpoint" => \explode('?', $_SERVER['REQUEST_URI'])[0],
+            "api_quota" => "unlimited",
+            "cached" => false,
+            "uuid" => $this->getUID(),
             "ip" => $this->getIP(),
-            "name" => "Tesseract Core",
         ];
 
         // API calls
         switch ($view) {
+
         case "GetWebManifest":
             $this->setHeaderJson();
             // language set by GET parameter
@@ -60,7 +75,6 @@ class CorePresenter extends APresenter
                 "output",
                 $this->setData("l", $this->getLocale($lang))->renderHTML("manifest")
             );
-            break;
 
         case "GetTXTSitemap":
             $this->setHeaderText();
@@ -74,7 +88,6 @@ class CorePresenter extends APresenter
                 "output",
                 $this->setData("sitemap", $map)->renderHTML("sitemap.txt")
             );
-            break;
 
         case "GetXMLSitemap":
             $this->setHeaderXML();
@@ -88,15 +101,13 @@ class CorePresenter extends APresenter
                 "output",
                 $this->setData("sitemap", $map)->renderHTML("sitemap.xml")
             );
-            break;
 
         case "GetRSSXML":
             $this->setHeaderXML();
             $language = "en"; // set to English
             $l = $this->getLocale($language);
-            if (class_exists("\\GSC\\RSSPresenter")) {
-                // get items map from RSSPresenter
-                $map = RSSPresenter::getInstance()->process() ?? [];
+            if (\class_exists("\\GSC\\RSSPresenter")) {
+                $map = RSSPresenter::getInstance()->process();
             } else {
                 $map = [];
             }
@@ -107,11 +118,15 @@ class CorePresenter extends APresenter
                 "output",
                 $this->setData("rss_items", (array) $map)->renderHTML("rss.xml")
             );
-            break;
 
         case "GetQR":
             $this->checkRateLimit();
             $x = 0;
+            if (!\is_array($match)) {
+                ErrorPresenter::getInstance()->process(404);
+                exit;
+            }
+            $scale = 5;
             if (isset($match["params"]["size"])) {
                 $size = \trim($match["params"]["size"]);
                 switch ($size) {
@@ -130,31 +145,34 @@ class CorePresenter extends APresenter
                 }
                 $x++;
             }
+            $text = 'Hello World!';
             if (isset($match["params"]["trailing"])) {
                 $text = \trim($match["params"]["trailing"]);
                 $x++;
             }
             if ($x !== 2) {
-                // error
                 return $this->writeJsonData(400, $extras);
             }
             $options = new QROptions(
                 [
-                "version" => 7,
-                "outputType" => QRCode::OUTPUT_IMAGE_PNG,
-                "eccLevel" => QRCode::ECC_L,
-                "scale" => $scale,
-                "imageBase64" => false,
-                "imageTransparent" => false,
-                    ]
+                    "version" => 7,
+                    "outputType" => QRCode::OUTPUT_IMAGE_PNG,
+                    "eccLevel" => QRCode::ECC_L,
+                    "scale" => $scale,
+                    "imageBase64" => false,
+                    "imageTransparent" => false,
+                ]
             );
             \header("Content-type: image/png");
-            echo (new QRCode($options))->render(
-                $text ?? "",
-                CACHE . "/" . \hash("sha256", $text) . ".png"
+            $hash = \hash("sha256", $text);
+            $out = (new QRCode($options))->render(
+                $text,
+                CACHE . "/" . $hash . ".png"
             );
+            if (\is_string($out)) {
+                echo $out;
+            }
             exit;
-            break;
 
         case "GetServiceWorker":
             $this->setHeaderJavaScript();
@@ -168,44 +186,60 @@ class CorePresenter extends APresenter
                 "output",
                 $this->setData("sitemap", $map)->renderHTML("sw.js")
             );
-            break;
 
         case "GetCoreVersion":
             $this->checkRateLimit();
+            if (!\is_array($data)) {
+                ErrorPresenter::getInstance()->process(404);
+                exit;
+            }
             $d = [];
             $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
             $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
             $d["LASAGNA"]["core"]["timestamp"] = (int) $data["VERSION_TIMESTAMP"];
             $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
             return $this->writeJsonData($d, $extras);
-                break;
 
         case "ReadArticles":
             $this->checkRateLimit();
             $x = 0;
+            $hash = null;
+            $profile = "default";
+            if (!\is_array($match)) {
+                ErrorPresenter::getInstance()->process(404);
+                exit;
+            }
             if (isset($match["params"]["profile"])) {
-                $profile = trim($match["params"]["profile"]);
+                $profile = \trim($match["params"]["profile"]);
                 $x++;
             }
             if (isset($match["params"]["hash"])) {
-                $hash = trim($match["params"]["hash"]);
+                $hash = \trim($match["params"]["hash"]);
                 $x++;
             }
             if ($x !== 2) {
-                // error
                 return $this->writeJsonData(400, $extras);
             }
-            $f = DATA . "/summernote_{$profile}_{$hash}.json";
+            if (!$hash) {
+                return $this->writeJsonData(400, $extras);
+            }
+            if (!$profile) {
+                return $this->writeJsonData(400, $extras);
+            }
             $data = "";
             $time = null;
+            $f = DATA . "/summernote_{$profile}_{$hash}.json";
             if (\file_exists($f)) {
                 $data = @\file_get_contents($f);
                 $time = \filemtime($f);
             }
-            $crc = hash("sha256", $data);
+            if (!$data) {
+                $data = '';
+                $time = \time();
+            }
+            $crc = \hash("sha256", $data);
             if (isset($_GET["crc"])) {
                 if ($_GET["crc"] == $crc) {
-                    // NOT MODIFIED
                     return $this->writeJsonData(304, $extras);
                 }
             }
@@ -218,28 +252,27 @@ class CorePresenter extends APresenter
                     "timestamp" => $time,
                     ], $extras
             );
-                break;
         }
 
         // get language and locale
-        $language = \strtolower($presenter[$view]["language"]) ?? "en";
+        $language = $this->validateLanguage($presenter[$view]["language"]);
         $locale = $this->getLocale($language);
         $hash = \hash("sha256", (string) \json_encode($locale));
 
         switch ($view) {
+
         case "GetCsDataVersion":
         case "GetEnDataVersion":
             $d = [];
             $d["LASAGNA"]["data"]["language"] = $language;
             $d["LASAGNA"]["data"]["version"] = $hash;
             return $this->writeJsonData($d, $extras);
-                break;
 
         default:
         }
 
-        // check $view starting with API
-        if (substr(strtoupper($view), 0, 3) === "API") {
+        // check $view starting exactly with API
+        if (is_string($view) && substr(strtoupper($view), 0, 3) === "API") {
             $this->checkRateLimit();
             $this->setHeaderHTML();
             $map = [];
@@ -259,26 +292,28 @@ class CorePresenter extends APresenter
                     );
                     $map[] = [
                         "count" => \count($p["api_example"]),
-                        "deprecated" => (bool) $p["deprecated"] ?? false,
+                        "deprecated" => (bool) $p["deprecated"],
                         "desc" => \htmlspecialchars($p["api_description"] ?? ""),
-                        "exam" => $p["api_example"] ?? [],
-                        "finished" => (bool) $p["finished"] ?? false,
+                        "exam" => $p["api_example"] ?: [],
+                        "finished" => (bool) $p["finished"] ?: false,
                         "info" => $info
                             ? "<br><blockquote>{$info}</blockquote>" : "",
-                        "key" => (bool) $p["use_key"] ?? false,
+                        "key" => (bool) $p["use_key"] ?: false,
                         // do not link to path with parameters!
-                        "linkit" => !(\strpos($p["path"], "[") ?? false),
+                        "linkit" => !(\strpos($p["path"], "[") ?: false),
                         "method" => \strtoupper($p["method"]),
                         "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
-                        "private" => (bool) $p["private"] ?? false,
+                        "private" => (bool) $p["private"] ?: false,
                     ];
                 }
             }
+            /*
             \usort(
                 $map, function ($a, $b) {
                     return \strcmp($a["desc"], $b["desc"]);
                 }
             );
+            */
             return $this->setData(
                 "output",
                 $this->setData("apis", $map)
@@ -286,8 +321,6 @@ class CorePresenter extends APresenter
                     ->renderHTML("apis")
             );
         }
-
-        // no luck...
         ErrorPresenter::getInstance()->process(404);
         exit;
     }
@@ -301,12 +334,16 @@ class CorePresenter extends APresenter
      */
     public function validateLanguage($lang = "en")
     {
+        if (!$lang) {
+            return "en";
+        }
         $lang = \substr(\strtolower((string) $lang), 0, 2);
         if (!\in_array(
-            $lang, [
-            "cs",
-            "en",
-            "sk",
+            $lang,
+            [
+                "cs",
+                "en",
+                "sk",
             ]
         )
         ) {

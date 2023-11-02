@@ -528,7 +528,8 @@
           }),
           ui.dropdown({
             className: "dropdown-style",
-            contents: '<ol><li data-copy=\' [remote_content url=""] \'>remote_content</li></ol>',
+            contents: "",
+            <!-- contents: '<ol><li data-copy=\' [remote_content url=""] \'>remote_content</li></ol>', -->
             callback: function ($dropdown) {
               $dropdown.find("li").each(function () {
                 $(this).click(function () {

@@ -189,12 +189,16 @@ class CiTester
                     $climate->out($content);
                 } else {
                     $jsformat = "JSON";
-                    if ($arr["code"] == 200) {
-                        $jscode = 'OK';
+                    if (array_key_exists("code", $arr)) {
+                        if ($arr["code"] == 200) {
+                            $jscode = 'OK';
+                        } else {
+                            $jscode = "BAD_CODE: " . $arr["code"];
+                            $bad++;
+                            $climate->out('!!! JSON ERRROR !!!');
+                        }
                     } else {
-                        $jscode = "BAD_CODE: " . $arr["code"];
-                        $bad++;
-                        $climate->out('!!! JSON ERRROR !!!');
+                        $jscode = 'OK';
                     }
                 }
             }
