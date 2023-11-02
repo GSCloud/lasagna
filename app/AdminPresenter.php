@@ -33,11 +33,11 @@ class AdminPresenter extends APresenter
     const THUMB_PREFIX = ".thumb_";
     /* @var string thumbnail postfix */
     const THUMB_POSTFIX = "px_";
-    /* @var array thumbnails to create */
+    /* @var array thumbnails width to create */
     const THUMBS_CREATE = [
         160, 320, 640
     ];
-    /* @var array thumbnails to delete */
+    /* @var array thumbnails width to delete, incl. legacy */
     const THUMBS_DELETE = [
         50, 64, 128, 150, 160, 320, 512, 640
     ];
