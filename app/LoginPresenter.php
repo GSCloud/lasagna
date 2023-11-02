@@ -37,66 +37,48 @@ class LoginPresenter extends APresenter
         }
         $this->checkRateLimit()->setHeaderHtml();
 
-        // check OAuth parameters for validity
         $cfg = $this->getCfg();
         if (($cfg["goauth_client_id"] ?? null) === null) {
-            ErrorPresenter::getInstance()->process(403); // error 403
+            ErrorPresenter::getInstance()->process(403);
+            exit;
         }
         if (($cfg["goauth_secret"] ?? null) === null) {
-            ErrorPresenter::getInstance()->process(403); // error 403
+            ErrorPresenter::getInstance()->process(403);
+            exit;
         }
-
-        // generate nonce
-        $nonce = '/?nonce=' . $this->getNonce();
-        
-        // set return URI
-        $uri = "/{$nonce}";
-        $refhost = \parse_url($_SERVER["HTTP_REFERER"] ?? "", PHP_URL_HOST);
-        if ($refhost ?? null) {
-                $uri = $_SERVER["HTTP_REFERER"];
-        }
-        \setcookie("return_uri", $uri, 0, "/", DOMAIN);
 
         try {
             $provider = new \League\OAuth2\Client\Provider\Google(
                 [
-                // OAuth 2.0 credentials
-                "clientId" => $cfg["goauth_client_id"] ?? null,
-                "clientSecret" => $cfg["goauth_secret"] ?? null,
-                "redirectUri" => (LOCALHOST === true) ? $cfg["local_goauth_redirect"]
-                    ?? null : $cfg["goauth_redirect"] ?? null,
+                "clientId" => $cfg["goauth_client_id"],
+                "clientSecret" => $cfg["goauth_secret"],
+                "redirectUri" => (LOCALHOST === true)
+                    ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"],
                 ]
             );
         } finally {
         }
 
-        // check for errors
         $errors = [];
         if (!empty($_GET["error"])) {
             $errors[] = \htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : "";
+            $hint = "";
 
-            // check URL for relogin parameter
-            if (isset($_GET["relogin"])) {
-                $hint = "";
-                $authUrl = $provider->getAuthorizationUrl(
-                    [
-                    "prompt" => "select_account consent",
-                    "response_type" => "code",
-                    ]
-                );
-            } else {
-                $authUrl = $provider->getAuthorizationUrl(
-                    ["response_type" => "code",]
-                );
-            }
+            $authUrl = $provider->getAuthorizationUrl(
+                [
+                "prompt" => "select_account consent",
+                "response_type" => "code",
+                ]
+            );
+
             \setcookie("oauth2state", $provider->getState());
             \header("Location: " . $authUrl . $hint, true, 303);
             exit;
         } elseif (empty($_GET["state"])
-            || ($_GET["state"] && !isset($_COOKIE["oauth2state"]))
+            || (!isset($_COOKIE["oauth2state"]))
         ) {
             $errors[] = "Invalid OAuth state";
         } else {
@@ -127,8 +109,7 @@ class LoginPresenter extends APresenter
                 );
 
                 if ($this->getUserGroup() == "admin") {
-                    if ($this->getCfg("DEBUG_COOKIE")) {
-                        // set Tracy debug cookie
+                    if (\is_string($this->getCfg("DEBUG_COOKIE"))) {
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
                 }
@@ -150,8 +131,7 @@ class LoginPresenter extends APresenter
                 $this->addError("Google OAuth: " . $e->getMessage());
             }
         }
-
-        ErrorPresenter::getInstance()->process(403); // error 403
+        ErrorPresenter::getInstance()->process(403);
         exit;
     }
 }
