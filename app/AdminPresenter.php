@@ -43,7 +43,6 @@ class AdminPresenter extends APresenter
     ];
     /* @var array thumbnail extensions */
     const THUMBS_EXTENSIONS = [
-        '.bmp',
         '.gif',
         '.jpeg',
         '.jpg',
@@ -70,10 +69,6 @@ class AdminPresenter extends APresenter
             "load" => "imagecreatefromwebp",
             "save" => "imagewebp",
             "quality" => 75,
-        ],
-        IMAGETYPE_BMP => [
-            "load" => "imagecreatefrombmp",
-            "save" => "imagebmp",
         ],
     ];
 
@@ -131,19 +126,24 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
+
                 // sanitize filename
                 $f = $file["name"];
                 $f = \strtr(\trim(\basename(\strtolower($f))), " '\"\\", "____");
+
                 // skip possible thumbnails
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
                     continue;
                 }
+
+                // process uploaded file
                 if (@\move_uploaded_file($file["tmp_name"], UPLOAD . DS . $f)) {
                     $info = \pathinfo($f);
                     if (\is_array($info)) {
                         $fn = $info['filename'];
                         $in = UPLOAD . DS . $f;
                         $uploads[$f] = \urlencode($f);
+
                         // delete old thumbnails
                         foreach (self::THUMBS_EXTENSIONS as $x) {
                             foreach (self::THUMBS_DELETE as $w) {
@@ -155,6 +155,7 @@ class AdminPresenter extends APresenter
                                 }
                             }
                         }
+
                         // create new thumbnails
                         foreach (self::THUMBS_CREATE as $w) {
                             $out = UPLOAD . DS
@@ -166,6 +167,7 @@ class AdminPresenter extends APresenter
                                 . $fn . ".webp";
                             $this->createThumbnail($in, $out, $w);
                         }
+
                         // skip conversion if the original is already in WebP
                         if (\str_ends_with($f, '.webp')) {
                             continue;
@@ -183,7 +185,10 @@ class AdminPresenter extends APresenter
                 $info = \pathinfo($name);
                 if (\is_array($info)) {
                     $fn = $info['filename'];
+
+                    // delete all files by the extension
                     foreach (self::THUMBS_EXTENSIONS as $x) {
+
                         // delete old thumbnails
                         foreach (self::THUMBS_DELETE as $w) {
                             $file = UPLOAD . DS
@@ -193,6 +198,7 @@ class AdminPresenter extends APresenter
                                 \unlink($file);
                             }
                         }
+
                         // delete main file(s)
                         $file = UPLOAD . DS . $fn . $x;
                         if (\file_exists($file)) {
@@ -200,7 +206,8 @@ class AdminPresenter extends APresenter
                         }
                     }
                 }
-                // delete origin
+
+                // delete the origin
                 $file = UPLOAD . DS . $name;
                 if (\file_exists($file)) {
                     \unlink($file);
@@ -217,15 +224,18 @@ class AdminPresenter extends APresenter
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
                     if ($f != "." && $f != "..") {
-                        $thumbnails = [];
+                        
                         // exclude thumbnails
                         if (\str_starts_with($f, self::THUMB_PREFIX)) {
                             continue;
                         }
+                        
+                        $thumbnails = [];
                         $info = \pathinfo($f);
                         if (\is_array($info)) {
                             $fn = $info['filename'];
                             $ext = $info['extension'] ?? '';
+
                             // check for the thumbnails
                             foreach (self::THUMBS_CREATE as $w) {
                                 $file = UPLOAD . DS
@@ -236,11 +246,13 @@ class AdminPresenter extends APresenter
                                         . self::THUMB_POSTFIX . $f;
                                 }
                             }
+
                             // output only unique WebP
                             if (\in_array($fn, $uniques) && ($ext == 'webp')) {
                                 continue;
                             }
-                            // remove WebP from output, we have other format ready
+
+                            // remove WebP if we already have other format
                             if (\in_array($fn, $uniques) && ($ext != 'webp')) {
                                 unset($files["{$fn}.webp"]);
                             }
