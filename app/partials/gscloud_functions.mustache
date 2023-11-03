@@ -22,6 +22,7 @@ try {
   }
 } catch (e) {
   var nolocalstorage = true;
+  console.log('ERR: local storage is blocked');
 }
 
 // compute SHA-256 hash of a string
@@ -301,7 +302,6 @@ async function sha256(message) {
         var html = '';
         if (nolocalstorage) {
           html = GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
-          console.log('ERR: local storage is blocked!');
         } else {
           html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
         }
@@ -334,7 +334,6 @@ async function sha256(message) {
           if (data && data.data) {
             if (nolocalstorage) {
               GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
-              console.log('ERR: local storage is blocked!');
             } else {
               localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
             }
