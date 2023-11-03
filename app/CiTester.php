@@ -28,18 +28,25 @@ class CiTester
     /**
      * Controller processor
      *
-     * @param array  $cfg       configuration array
-     * @param array  $presenter presenter array
-     * @param string $type      test type: 'local', 'prod'
+     * @param array<mixed> $cfg       configuration array
+     * @param array<mixed> $presenter presenter array
+     * @param string       $type      test type: 'local', 'prod'
      */
     public function __construct($cfg, $presenter, $type)
     {
+        // TODO: Implement https://requests.ryanmccue.info/api-2.x/classes/WpOrg-Requests-Requests.html#method_request_multiple
         \Tracy\Debugger::timer("CITEST");
         $climate = new CLImate;
         $cfg = (array) $cfg;
-        $key = $cfg["ci_tester"]["api_key"] ?? "";
         $presenter = (array) $presenter;
         $type = (string) $type;
+
+        $key = "";
+        if (\is_array($cfg) && \array_key_exists("ci_tester", $cfg)
+            && \is_string($cfg["ci_tester"]["api_key"])
+        ) {
+            $key = $cfg["ci_tester"]["api_key"];
+        }
 
         switch ($type) {
         case "local":
@@ -76,44 +83,47 @@ class CiTester
         $i = 0;
         $pages = [];
         $redirects = [];
-        foreach ($presenter as $p) {
-            if (strpos($p["path"], "[") !== false) {
-                $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
-                //$climate->out("{$u};skipped");
-                continue;
-            }
-            if (strpos($p["path"], "*") !== false) {
-                $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
-                //$climate->out("{$u};skipped");
-                continue;
-            }
-            if ($p["redirect"] ?? false) {
-                $redirects[$i]["path"] = $p["path"];
-                $redirects[$i]["site"] = $target;
-                $redirects[$i]["assert_httpcode"] = 303;
-                if (stripos($p["redirect"], "http") === false) {
-                    $redirects[$i]["url"] = $target . $p["path"];
-                } else {
-                    $redirects[$i]["url"] = $p["redirect"];
+        if (\is_array($presenter)) {
+            foreach ($presenter as $p) {
+                if (strpos($p["path"], "[") !== false) {
+                    $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
+                    continue;
                 }
-            } else {
-                $pages[$i]["path"] = $p["path"];
-                $pages[$i]["site"] = $target;
-                $pages[$i]["assert_httpcode"] = $p["assert_httpcode"];
-                $pages[$i]["assert_json"] = $p["assert_json"];
-                $pages[$i]["assert_values"] = $p["assert_values"];
-                $pages[$i]["url"] = $target . $p["path"];
+                if (strpos($p["path"], "*") !== false) {
+                    $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
+                    continue;
+                }
+                if ($p["redirect"] ?? false) {
+                    $redirects[$i]["path"] = $p["path"];
+                    $redirects[$i]["site"] = $target;
+                    $redirects[$i]["assert_httpcode"] = 303;
+                    if (stripos($p["redirect"], "http") === false) {
+                        $redirects[$i]["url"] = $target . $p["path"];
+                    } else {
+                        $redirects[$i]["url"] = $p["redirect"];
+                    }
+                } else {
+                    $pages[$i]["path"] = $p["path"];
+                    $pages[$i]["site"] = $target;
+                    $pages[$i]["assert_httpcode"] = $p["assert_httpcode"];
+                    $pages[$i]["assert_json"] = $p["assert_json"];
+                    $pages[$i]["assert_values"] = $p["assert_values"];
+                    $pages[$i]["url"] = $target . $p["path"];
+                }
+                $i++;
             }
-            $i++;
         }
         ksort($pages);
         ksort($redirects);
         $pages_reworked = array_merge($redirects, $pages);
 
-        // setup curl multi
         $i = 0;
         $ch = [];
         $multi = curl_multi_init();
+        if (!$multi) {
+            $climate->out("ERROR: Failed to initialize curl multi-threaded!");
+            exit;
+        }
         foreach ($pages_reworked as $x) {
             $ch[$i] = curl_init();
             curl_setopt($ch[$i], CURLOPT_URL, $x["url"] . "?api={$key}");
@@ -135,6 +145,7 @@ class CiTester
         do {
             $mrc = curl_multi_exec($multi, $active);
         } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+
         while ($active && $mrc == CURLM_OK) {
             if (curl_multi_select($multi) != -1) {
                 do {
@@ -179,9 +190,9 @@ class CiTester
             $json = true;
             $jsformat = "HTML";
             $jscode = "-";
-            if ($x["assert_json"] ?? null) {
-                $arr = @json_decode($content ?? '', true);
-                if (is_null($content) || is_null($arr)) {
+            if ($x["assert_json"] ?? false) {
+                $arr = @json_decode($content ?: '', true);
+                if (empty($content) || is_null($arr)) {
                     $bad++;
                     $json = false;
                     $jsformat = "JSON_ERROR";
@@ -189,7 +200,7 @@ class CiTester
                     $climate->out($content);
                 } else {
                     $jsformat = "JSON";
-                    if (array_key_exists("code", $arr)) {
+                    if (is_array($arr) && array_key_exists("code", $arr)) {
                         if ($arr["code"] == 200) {
                             $jscode = 'OK';
                         } else {
