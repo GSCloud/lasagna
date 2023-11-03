@@ -127,6 +127,7 @@ async function sha256(message) {
 
   if (w.GSC) {
     GSC.data = {};
+    GSC.localStorage = [];
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.islogged = {{#admin}}true{{/admin}}{{^admin}}false{{/admin}};
     GSC.profile = 'default';
@@ -299,7 +300,8 @@ async function sha256(message) {
         // check for local copy of the article
         var html = '';
         if (nolocalstorage) {
-          $(".summernote").html("");
+          html = GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
+          console.log('ERR: local storage is blocked!');
         } else {
           html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
         }
@@ -331,6 +333,7 @@ async function sha256(message) {
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function(data) {
           if (data && data.data) {
             if (nolocalstorage) {
+              GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
               console.log('ERR: local storage is blocked!');
             } else {
               localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
