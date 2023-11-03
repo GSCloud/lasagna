@@ -267,8 +267,6 @@ class CorePresenter extends APresenter
             $d["LASAGNA"]["data"]["language"] = $language;
             $d["LASAGNA"]["data"]["version"] = $hash;
             return $this->writeJsonData($d, $extras);
-
-        default:
         }
 
         // check $view starting exactly with API
