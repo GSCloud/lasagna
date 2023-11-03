@@ -14,10 +14,14 @@ try {
       c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
-if (localStorage) {
-  if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
-    localStorage['uuid'] = uuid;
+try {
+  if (localStorage) {
+    if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
+      localStorage['uuid'] = uuid;
+    }
   }
+} catch (e) {
+  var nolocalstorage = true;
 }
 
 // compute SHA-256 hash of a string
@@ -293,7 +297,12 @@ async function sha256(message) {
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
 
         // check for local copy of the article
-        var html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
+        var html = '';
+        if (nolocalstorage) {
+          $(".summernote").html("");
+        } else {
+          html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
+        }
         if (html != "") {
           var obj = jQuery.parseJSON(html);
           for (var p in obj) if (obj.hasOwnProperty(p)) {
@@ -314,14 +323,18 @@ async function sha256(message) {
           if (!GSC.articles_rendered) {
             $(".summernote").html("📵");
           }
-          return;
+          return false;
         }
 
         // get articles data
         $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
             Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function(data) {
           if (data && data.data) {
-            localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
+            if (nolocalstorage) {
+              console.log('ERR: local storage is blocked!');
+            } else {
+              localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
+            }
             if (data.data.crc) {
               GSC.data.articlescrc = data.data.crc;
               if (data.data.html != "") {
