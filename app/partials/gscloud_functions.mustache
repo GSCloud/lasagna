@@ -22,7 +22,7 @@ try {
   }
 } catch (e) {
   var nolocalstorage = true;
-  console.log('ERR: local storage is blocked');
+  console.log('WARNING: localStorage is blocked');
 }
 
 // compute SHA-256 hash of a string
@@ -70,7 +70,7 @@ async function sha256(message) {
         if (w.GSC) {
           w.GSC.offline = false;
           w.GSC.online = true;
-          w.GSC.oauthUnhide();
+          w.GSC.OauthUnhide();
         }
       } else {
         d.getElementsByTagName("html")[0].setAttribute("offline", true);
@@ -79,7 +79,7 @@ async function sha256(message) {
         if (w.GSC) {
           w.GSC.offline = true;
           w.GSC.online = false;
-          w.GSC.oauthHide();
+          w.GSC.OauthHide();
         }
       }
     }
@@ -128,7 +128,10 @@ async function sha256(message) {
 
   if (w.GSC) {
     GSC.data = {};
-    GSC.localStorage = [];
+    if (nolocalstorage) {
+      GSC.localStorage = []; // mockup
+      GSC.nolocalstorage = true;
+    }
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.islogged = {{#admin}}true{{/admin}}{{^admin}}false{{/admin}};
     GSC.profile = 'default';
@@ -138,12 +141,12 @@ async function sha256(message) {
     if (GSC.touch) d.getElementsByTagName("html")[0].setAttribute("touch", true);
 
     // hide OAuth anchors when offline
-    if (typeof GSC.oauthHide !== "function") GSC.oauthHide = function() {
+    if (typeof GSC.OauthHide !== "function") GSC.OauthHide = function() {
       $('.oauth').addClass('hide');
     }
 
     // show OAuth anchors when online
-    if (typeof GSC.oauthUnhide !== "function") GSC.oauthUnhide = function() {
+    if (typeof GSC.OauthUnhide !== "function") GSC.OauthUnhide = function() {
       $('.oauth').removeClass('hide');
     }
 
@@ -298,7 +301,7 @@ async function sha256(message) {
 
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
 
-        // check for local copy of the article
+        // check for local copy
         var html = '';
         if (nolocalstorage) {
           html = GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
