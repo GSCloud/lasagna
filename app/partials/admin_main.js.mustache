@@ -45,12 +45,12 @@
             if (!data.data[x]["sheet"]) continue;
             if (sheet) {
               link =
-                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="border-radius:2px" ' +
+                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.5rem;border-radius:2px" ' +
                 'class="orange mono white-text bold" href="' +
                 'https://docs.google.com/spreadsheets/d/' +
                 sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
                 x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
-                ' style="border-radius:2px" class="bold blue white-text mono" ' +
+                ' style="font-size:1.5rem;border-radius:2px" class="bold blue white-text mono" ' +
                 'href="https://docs.google.com/spreadsheets/d/e/' +
                 csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                 lines + '&nbsp;</a>&nbsp;';
@@ -754,10 +754,10 @@
                 }
   
                 // extension
-                var ext = GSC.GetFileExtension(data.data.files[i]["name"]);
                 var name = data.data.files[i]["name"];
                 var name1 = name;
                 var name2 = name.replace(/\.[^.]+$/, '.webp');
+                var ext = GSC.GetFileExtension(name);
   
                 if (data.data.files[i]["thumbnails"] == null) {
                   // clickable icon
@@ -786,6 +786,9 @@
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
                   sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
+                }
+                if (!sml.length) {
+                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
                 }
                 if (sml.length) {
                   s += '<div class="row extrapadding">';
