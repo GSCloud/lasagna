@@ -787,19 +787,17 @@
                   name = data.data.files[i]["thumbnails"][j];
                   sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
                 }
-                if (!sml.length) {
-                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
-                }
                 if (sml.length) {
                   s += '<div class="row extrapadding">';
                   s += sml;
                   s += '</div>';
                 }
   
-                if (data.data.files[i]["thumbnails"] == null) {
+                if (data.data.files[i]["thumbnails"] === null) {
                   // delete
                   s += '<div class="row extrapadding">';
                   s += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  s += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
                   s += '</div>';
                 }
                 else {
