@@ -21,8 +21,8 @@ csp: [
     "https://*;"
 
     "font-src"
-    "'self'"
     "data:"
+    "'self'"
     "'unsafe-inline'"
     "cdn.gscloud.cz"
     "gspace.gscloud.cz"
@@ -36,8 +36,10 @@ csp: [
     "static.cloudflareinsights.com"
     "umami.gscloud.cz"
     "'self'"
-    "'unsafe-inline'"
-    "'unsafe-eval';"
+    "'strict-dynamic'"
+#    "'unsafe-eval'"
+#    "'unsafe-inline'"
+    "'nonce-random';"
 
     "img-src"
     "*"

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="IE=edge">
 <title>Audit LOG</title>
-<script>
+<script nonce="{{ csp_nonce }}">
 'use strict';
 // tweaks
 (function() {
@@ -62,7 +62,7 @@
 td,th {padding:2px!important}
 </style>
 <link rel="stylesheet" href="https://cdn.gscloud.cz/css/materialize.min.css">
-<script src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
 </head>
 <body>
 <table class="highlight">
@@ -82,7 +82,7 @@ td,th {padding:2px!important}
 </tbody>
 </table>
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 // modify timestamp
 $(".alogcol1").each(function() {

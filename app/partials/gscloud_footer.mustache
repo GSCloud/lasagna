@@ -2,6 +2,7 @@
     <div class="modal-content center">
         <p style="color:#000!important;font-family:Arial!important;font-size:1.3em">{{ ENGINE }} build&nbsp;{{ REVISIONS }}</p>
         <div class="container row center">
+
             <div class="col l4 m6 s12">
                 <p>{{ l.a_footer_app }}
                     <br>
@@ -12,6 +13,7 @@
                     <br>
                     {{ VERSION_DATE }}</p>
             </div>
+
             <div class="col l4 m6 s12">
 
                 {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
@@ -47,9 +49,15 @@
         <div class="container row center">
             <div class="row center">
                 <div class="center">
-                    <img class="responsive-img" src="/img/gsc.png" style="margin:1em" alt="{{ l.$gsc }}" width=32>
-                    <img class="responsive-img" src="/img/pwa.png" style="margin:1em" alt="PWA" width=64>
-                    <img class="responsive-img" src="https://cdn.gscloud.cz/img/materialize.svg" style="margin:1em" alt="MaterializeCSS" width=64>
+                    <a rel="noopener" target="_blank" href="https://web.dev/explore/progressive-web-apps">
+                        <img class="responsive-img" src="/img/pwa.png" style="margin:1em" alt="PWA" width=64>
+                    </a>
+                    <a rel="noopener" target="_blank" href="https://materializecss.com/">
+                        <img class="responsive-img" src="https://cdn.gscloud.cz/img/materialize.svg" style="margin:1em" alt="Materialize CSS" width=64>
+                    </a>
+                    <a rel="noopener" target="_blank" href="https://gscloud.cz">
+                        <img class="responsive-img" src="/img/gsc.png" style="margin:1em" alt="{{ l.$gsc }}" width=48>
+                    </a>
                     <a class="modal-trigger" href="#gscmodal">
                         <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:15%"
                             src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp" alt="{{ l.$generator }}" width="64" height="64">

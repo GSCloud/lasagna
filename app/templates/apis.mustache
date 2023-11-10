@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="IE=edge">
 <title>{{#LOCALHOST}}LOCAL: {{/LOCALHOST}}{{ l.title }} API</title>
-<script>
+<script nonce="{{ csp_nonce }}">
 'use strict';
 // tweaks
 (function() {
@@ -72,13 +72,13 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.gscloud.cz/css/materialize.min.css">
-<script src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
 </head>
 <body style="font-family: 'Roboto', sans-serif;">
 <noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
 <!-- update -->
 <div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
-  <br><a href="javascript:location.replace(location.pathname + '?nonce={{ nonce }}');" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
+  <br><a id="update-button" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
 </div>
 {{>gscloud_functions}}
   <div class="container">

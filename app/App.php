@@ -44,7 +44,7 @@ $data["ARGV"] = $argv ?? []; // arguments array
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
-$data["ENGINE"] = "Tesseract 2.1.4";
+$data["ENGINE"] = "Tesseract 2.1.5";
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
 $data["VERSION"] = $version = trim(
@@ -375,12 +375,20 @@ if ($router[$view]["redirect"] ?? false) {
 }
 
 // CSP HEADERS
+$data["csp_nonce"] = '';
 switch ($presenter[$view]["template"]) {
 default:
     if (file_exists(CSP) && is_readable(CSP)) {
         $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
         if (is_array($csp)) {
-            header(implode(" ", (array) $csp["csp"]));
+            $data["csp_nonce"] = sha1(random_bytes(32));
+            header(
+                str_replace(
+                    "nonce-random",
+                    "nonce-" . $data["csp_nonce"],
+                    implode(" ", (array) $csp["csp"])
+                )
+            );
         }
     }
 }
@@ -401,9 +409,10 @@ $data["controller"] = $p = ucfirst(
 $controller = "\\GSC\\$p";
 \Tracy\Debugger::timer("PROCESS");
 
-// set Model and start processing
+// set Model + process
 $app = $controller::getInstance()->setData($data)->process();
-$data = $app->getData(); // get Model
+// get Model back
+$data = $app->getData();
 
 // PREPARE ANALYTICS DATA
 $data["running_time"] = $time1 = round(
@@ -414,7 +423,7 @@ $data["processing_time"] = $time2 = round(
 );
 
 // SET X-HEADERS
-header("X-Engine: Tesseract 2.0");
+header("X-Engine: " . $data["ENGINE"]);
 header("X-Country: $country");
 header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");

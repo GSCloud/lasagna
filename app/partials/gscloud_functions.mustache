@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 'use strict';
 
 // polyfills
@@ -282,16 +282,19 @@ async function sha256(message) {
               if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
                 $("#update-message").show();
                 GSC.VersionCheck = function () {};
+                $('#update-button').click(function() {
+                  location.replace(location.pathname + '?nonce={{ nonce }}');
+                });
                 return;
               }
             }
           });
           // repeat checks
-          setTimeout("GSC.VersionCheck();", 30000);
+          setTimeout(function() {GSC.VersionCheck()}, 30000);
         }
       }
       // repeat checks
-      setTimeout("GSC.VersionCheck()", 5000);
+      setTimeout(function() {GSC.VersionCheck()}, 5000);
     });
 
     // GSC.ReadArticles() - read articles & insert HTML
@@ -324,7 +327,7 @@ async function sha256(message) {
 
         //  check later if offline
         if (GSC.summernote_on || GSC.offline) {
-          setTimeout("GSC.ReadArticles();", 10000);
+          setTimeout(function() {GSC.ReadArticles()}, 10000);
           if (!GSC.articles_rendered) {
             $(".summernote").html("📵");
           }
@@ -362,7 +365,7 @@ async function sha256(message) {
           if (typeof callback === "function") callback();
         });
         //  repeat checks
-        setTimeout("GSC.ReadArticles()", 10000);
+        setTimeout(function() {GSC.ReadArticles()}, 10000);
       }
       GSC.ReadArticles();
     });

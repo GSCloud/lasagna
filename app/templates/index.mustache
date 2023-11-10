@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>{{#LOCALHOST}}LOCAL: {{/LOCALHOST}}{{ l.title }}</title>
-<script>
+<script nonce="{{ csp_nonce }}">
 'use strict';
 (function() {
   var externallyFramed = false;
@@ -94,18 +94,18 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 </style>
 {{>head_post}}
 <link rel="stylesheet" href="https://cdn.gscloud.cz/css/materialize.min.css">
-<script src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/js/jquery.min.js"></script>
 </head>
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
 <noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
 {{>body_pre}}
 <!-- update -->
 <div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
-  <br><a href="javascript:location.replace(location.pathname + '?nonce={{ nonce }}');" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
+  <br><a id="update-button" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
 </div>
 <!-- offline -->
 <div aria-hidden="true" tabindex="-1" id="offline-message">📵</div>
-<script>
+<script nonce="{{ csp_nonce }}">
 // GSC init
 !(function(c,e){a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+(b+1)+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version="{{ DATA_VERSION }}";a.LASAGNA.data.timestamp=a.LASAGNA.core.timestamp;c.GSC=a;})(window);
 </script>
