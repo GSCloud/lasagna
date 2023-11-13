@@ -421,9 +421,10 @@ $data["running_time"] = $time1 = round(
 $data["processing_time"] = $time2 = round(
     (float) \Tracy\Debugger::timer("PROCESS") * 1000, 2
 );
+$engine = $data["ENGINE"] ?? '';
 
 // SET X-HEADERS
-header("X-Engine: " . $data["ENGINE"]);
+header("X-Engine: $engine");
 header("X-Country: $country");
 header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");
