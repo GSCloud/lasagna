@@ -299,10 +299,16 @@ class AdminPresenter extends APresenter
         case "AuditLog":
             $this->checkPermission("admin");
             $this->setHeaderHTML();
-            $f = DATA . "/AuditLog.txt";
-            $logs = \file($f); // TBD - fix large logs
+            $filename = DATA . DS . "AuditLog.txt";
+            $file = \popen("tac $filename", 'r');
+            $c = 0;
+            $logs = [];
+            while (($s = \fgets($file)) && ($c < 100)) {
+                $logs[] = $s;
+                $c++;
+            }
             \array_walk($logs, array($this, 'decorateLogs'));
-            $data["content"] = \array_reverse($logs);
+            $data["content"] = $logs;
             return $this->setData(
                 "output", $this->setData($data)->renderHTML("auditlog")
             );

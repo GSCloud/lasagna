@@ -50,19 +50,6 @@ class HomePresenter extends APresenter
         $data = $this->getData();
         $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
 
-        // process advanced caching
-        $use_cache = true;
-        if (array_key_exists("use_cache", $data)) {
-            $use_cache = (bool) $data["use_cache"];
-        }
-        $cache_key = hash(
-            "sha256", join("_", [$data["host"], $data["request_path"], "htmlpage"])
-        );
-        if ($use_cache && $output = Cache::read($cache_key, "page")) {
-            header("X-Cache: HIT");
-            return $this->setData("output", $output);
-        }
-
         // fix current locale
         foreach ($data["l"] ??=[] as $k => $v) {
             StringFilters::convert_eolhyphen_to_brdot($data["l"][$k]);
@@ -84,9 +71,6 @@ class HomePresenter extends APresenter
 
         // strip comments
         StringFilters::trim_html_comment($output);
-
-        // save to page cache
-        Cache::write($cache_key, $output, "page");
         return $this->setData("output", $output);
     }
 }
