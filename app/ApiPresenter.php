@@ -40,7 +40,6 @@ class ApiPresenter extends APresenter
      */
     public function process($param = null)
     {
-
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
@@ -48,6 +47,7 @@ class ApiPresenter extends APresenter
         if (!\is_array($data)) {
             return $this;
         }
+
         $cfg = $this->getCfg();
         if (!\is_array($cfg)) {
             return $this;
@@ -86,14 +86,13 @@ class ApiPresenter extends APresenter
             if (self::USE_CACHE) {
                 $data = Cache::read($view, self::API_CACHE);
                 if (\is_array($data)) {
+                    $data['cache-hit'] = true;
                     return $this->writeJsonData($data, $extras);
                 }
             }
 
             // populate model
             $data = [];
-            $data[] = "Hello!";
-            $data[] = "Hello Europe!";
             $data[] = "Hello World!";
 
             // always save model to cache

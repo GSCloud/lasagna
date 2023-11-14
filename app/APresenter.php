@@ -503,7 +503,7 @@ abstract class APresenter implements IPresenter
             'CONST.DATA' => DATA,
             'CONST.DOMAIN' => DOMAIN,
             'CONST.DOWNLOAD' => DOWNLOAD,
-            'CONST.DS' => DS,
+            'CONST.ENGINE' => ENGINE,
             'CONST.LOGS' => LOGS,
             'CONST.PARTIALS' => PARTIALS,
             'CONST.PROJECT' => PROJECT,
@@ -1722,7 +1722,7 @@ abstract class APresenter implements IPresenter
                 $m = 'Expectation Failed';
                 break;
             default:
-                $msg = 'Unknown Error 🦄';
+                $msg = 'Unknown Error';
             }
             if ($m) {
                 $msg = "$m.";
@@ -1733,7 +1733,9 @@ abstract class APresenter implements IPresenter
         $this->setHeaderJson();
         $out['code'] = (int) $code;
         $out['message'] = $msg;
-        $out['processing_time'] = \round((\microtime(true) - TESSERACT_START) * 1000, 2) . ' ms';
+        $out['processing_time'] = \round(
+            (\microtime(true) - TESSERACT_START) * 1000, 2
+        ) . ' ms';
 
         // merge headers
         $out = \array_merge_recursive($out, $headers);
@@ -1760,21 +1762,24 @@ abstract class APresenter implements IPresenter
         if (empty($data)) {
             return $this;
         }
-        $data['user'] = $user = $this->getCurrentUser(); // logged user
-        $data['admin'] = $group = $this->getUserGroup(); // logged user group
+        $data['user'] = $user = $this->getCurrentUser();
+        $data['admin'] = $group = $this->getUserGroup();
 
-        // solve caching
+        // set caching
         $use_cache = true;
-        if (\array_key_exists('nonce', $_GET)) { // do not cache pages with nonce
+        if (\array_key_exists('nonce', $_GET)) {
+            // do not cache pages with nonce
             $use_cache = false;
         }
-        if (\array_key_exists('logout', $_GET)) { // do not cache pages with logout
+        if (\array_key_exists('logout', $_GET)) {
+            // do not cache pages with logout
             $use_cache = false;
         }
         if ($group) {
             $data["admin_group_{$group}"] = true;
         }
-        if ($user['id']) { // do not cache anything for logged users
+        if ($user['id']) {
+            // no cache for logged users
             $use_cache = false;
         }
         $data['use_cache'] = $use_cache;
@@ -1786,7 +1791,8 @@ abstract class APresenter implements IPresenter
             $data['lang'] = $language = \strtolower($presenter[$view]['language']) ?? 'cs';
             $data["lang{$language}"] = true;
         } else {
-            // something is terribly wrong!
+            // TBD: something is terribly wrong!
+            ErrorPresenter::getInstance()->process(500);
             return $this;
         }
 

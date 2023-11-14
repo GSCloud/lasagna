@@ -4,48 +4,50 @@
 GetWebManifest:
   path: /manifest.json
   api: true
-  api_description: "Progressive Web App manifest."
+  api_description: "PWA manifest."
   api_info: "Returns (JSON): configuration file."
   assert_json: true
-  cached: true
+  presenter: core
+
+GetRobotsTxt:
+  path: /robots.txt
+  api: true
+  api_description: "Robots file."
+  api_info: "Returns (TEXT): text file."
   presenter: core
 
 GetTXTSitemap:
   path: /sitemap.txt
   api: true
-  api_description: "Crawler sitemap in TEXT format."
+  api_description: "Crawler TEXT sitemap."
   api_info: "Returns (TEXT): text file."
-  cached: true
   presenter: core
 
 GetXMLSitemap:
   path: /sitemap.xml
   api: true
-  api_description: "Crawler sitemap in XML format."
-  api_info: "Returns (XML): XML markup."
-  cached: true
+  api_description: "Crawler XML sitemap."
+  api_info: "Returns (XML): markup."
   presenter: core
 
 GetRSSXML:
   path: /rss.xml
   api: true
-  api_description: "RSS export demonstration for future applications."
-  api_info: "Returns (XML): XML markup."
-  cached: true
+  api_description: "RSS demo for future applications."
+  api_info: "Returns (XML): markup."
   presenter: core
 
 GetServiceWorker:
   path: /sw.js
   api: true
-  api_description: "Service worker JavaScript code."
-  api_info: "Returns (JavaScript): JavaScript code."
-  cached: true
+  api_description: "Service Worker code."
+  api_info: "Returns (JavaScript): code."
   presenter: core
 
 GetCoreVersion:
   path: /version/core
   api: true
-  api_description: "Get core version"
+  api_description: "Core version"
   api_info: "Returns (JSON): SHA256 hash (string), number of git revisions (integer), modification timestamp (integer), modification date (D. M. YYYY)."
   assert_json: true
   method: GET|POST
@@ -54,7 +56,7 @@ GetCoreVersion:
 GetEnDataVersion:
   path: /en/version/data
   api: true
-  api_description: "Get English locale version"
+  api_description: "English locale version"
   api_info: "Returns (JSON): SHA256 hash (string)."
   assert_json: true
   language: en
@@ -64,7 +66,7 @@ GetEnDataVersion:
 GetCsDataVersion:
   path: /cs/version/data
   api: true
-  api_description: "Get Czech locale version"
+  api_description: "Czech locale version"
   api_info: "Returns (JSON): SHA256 hash (string)."
   assert_json: true
   language: cs
@@ -74,7 +76,7 @@ GetCsDataVersion:
 GetError:
   path: '/err/[i:code]'
   api: true
-  api_description: "Get error page"
+  api_description: "Error page"
   api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
   cached: true
   method: GET|POST

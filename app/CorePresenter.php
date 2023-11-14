@@ -67,9 +67,24 @@ class CorePresenter extends APresenter
         // API calls
         switch ($view) {
 
+        case "GetRobotsTxt":
+            $this->setHeaderText();
+            // list of disabled bots
+            $list = [
+                'CCBot',
+                'ChatGPT-User',
+                'FacebookBot',
+                'GPTBot',
+                'Google-Extended',
+                'Omgilibot',
+            ];
+            return $this->setData(
+                "output",
+                $this->setData("robots_disabled", $list)->renderHTML("robots")
+            );
+
         case "GetWebManifest":
             $this->setHeaderJson();
-            // language set by GET parameter
             $lang = $this->validateLanguage($_GET["lang"] ?? "en");
             return $this->setData(
                 "output",

@@ -20,7 +20,6 @@ foreach ([
     "APP",
     "CACHE",
     "DATA",
-    "DS",
     "LOGS",
     "ROOT",
     "TEMP",
@@ -44,7 +43,8 @@ $data["ARGV"] = $argv ?? []; // arguments array
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
-$data["ENGINE"] = "Tesseract 2.1.5";
+define("ENGINE", "Tesseract 2.1.6");
+$data["ENGINE"] = ENGINE;
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
 $data["VERSION"] = $version = trim(
@@ -135,7 +135,6 @@ foreach ($cache_profiles as $k => $v) {
     if ($cfg["redis"]["port"] ?? null) {
         Cache::setConfig(
             "{$k}_file", [
-                // fallback File engine
                 "className" => "Cake\Cache\Engine\FileEngine",
                 "duration" => $v,
                 "lock" => true,
@@ -154,7 +153,7 @@ foreach ($cache_profiles as $k => $v) {
                 "className" => "Cake\Cache\Engine\RedisEngine",
                 "database" => $cfg["redis"]["database"] ?? 0,
                 "duration" => $v,
-                "fallback" => "{$k}_file", // use fallback
+                "fallback" => "{$k}_file",
                 "host" => $cfg["redis"]["host"] ?? "127.0.0.1",
                 "password" => $cfg["redis"]["password"] ?? "",
                 "path" => CACHE,
@@ -172,9 +171,11 @@ foreach ($cache_profiles as $k => $v) {
             ]
         );
     } else {
+
+        /*
         Cache::setConfig(
             "{$k}_file", [
-                "className" => "Cake\Cache\Engine\FileEngine", // File engine
+                "className" => "Cake\Cache\Engine\FileEngine",
                 "duration" => $v,
                 "fallback" => false,
                 "lock" => true,
@@ -188,9 +189,11 @@ foreach ($cache_profiles as $k => $v) {
                     . CACHEPREFIX,
             ]
         );
+        */
+
         Cache::setConfig(
             $k, [
-                "className" => "Cake\Cache\Engine\FileEngine", // File engine
+                "className" => "Cake\Cache\Engine\FileEngine",
                 "duration" => $v,
                 "fallback" => false,
                 "lock" => true,
@@ -214,8 +217,7 @@ $data["cache_profiles"] = $cache_profiles;
 $router = [];
 $routes = $cfg["routers"] ?? [];
 chdir(APP);
-// defaults
-array_unshift($routes, "router_defaults.neon");
+array_unshift($routes, "router_defaults.neon"); // defaults
 if ($routers = glob("router_*.neon")) {
     foreach ($routers as $r) {
         if (is_file($r) && is_readable($r) && ($r != 'router_defaults.neon')) {
@@ -223,8 +225,7 @@ if ($routers = glob("router_*.neon")) {
         }
     }
 }
-// main router
-array_push($routes, "router.neon");
+array_push($routes, "router.neon"); // main router
 
 // POPULATE DATA ARRAY
 $data['router_files'] = $routes;
@@ -311,8 +312,6 @@ $data["router"] = $router;
 
 // CLI HANDLER
 if (CLI) {
-    define("TESSERACT_END", microtime(true));
-
     if (ob_get_level()) {
         @ob_end_clean();
     }
@@ -358,7 +357,7 @@ if ($router[$view]["sethl"] ?? false) {
     if ($r) {
         // no need to sanitize this cookie
         setcookie("hl", $r, time() + 86400 * 31, "/");
-        header("X-Set-HL: " . $r);
+        header("X-SetHomepageLanguage: " . $r);
         $presenter[$view]["language"] = $r;
         $data["presenter"] = $presenter;
     }
@@ -412,32 +411,30 @@ $controller = "\\GSC\\$p";
 // set Model + process
 $app = $controller::getInstance()->setData($data)->process();
 // get Model back
-$data = $app->getData();
+$model = $app->getData();
 
 // PREPARE ANALYTICS DATA
-$data["running_time"] = $time1 = round(
+$model["running_time"] = $time1 = round(
     (float) \Tracy\Debugger::timer("RUN") * 1000, 2
 );
-$data["processing_time"] = $time2 = round(
+$model["processing_time"] = $time2 = round(
     (float) \Tracy\Debugger::timer("PROCESS") * 1000, 2
 );
-$engine = $data["ENGINE"] ?? '';
 
 // SET X-HEADERS
-header("X-Engine: $engine");
+header("X-Engine: " . ENGINE);
 header("X-Country: $country");
 header("X-Running: $time1 ms");
 header("X-Processing: $time2 ms");
 
 // EXPORT OUTPUT
-echo $data["output"] ?? "";
+echo $model["output"] ?? "";
 
 // PROCESS DEBUGGING
 if (DEBUG) {
-    define("TESSERACT_END", microtime(true));
     // remove private information
-    unset($data["cf"]);
-    unset($data["goauth_secret"]);
+    unset($model["cf"]);
+    unset($model["goauth_secret"]);
     
     // phpcs:ignore
     /** @phpstan-ignore-next-line */
@@ -445,7 +442,7 @@ if (DEBUG) {
 
     // phpcs:ignore
     /** @phpstan-ignore-next-line */
-    bdump($data, 'model');
+    bdump($model, 'model');
 }
 
 exit(0);

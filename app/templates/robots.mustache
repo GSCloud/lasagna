@@ -1,0 +1,13 @@
+{{#robots_disabled}}
+User-agent: {{.}}
+Disallow: /
+
+{{/robots_disabled}}
+User-agent: *
+Allow: /
+Disallow: /api
+Disallow: /css
+Disallow: /img
+Disallow: /js
+Disallow: /login
+Disallow: /logout
