@@ -491,42 +491,44 @@ abstract class APresenter implements IPresenter
     public function getData($key = null)
     {
         $dot = new \Adbar\Dot((array) $this->data);
+        // global constants
         $dot->set(
-            [ // global constants
-            'CONST.APP' => APP,
-            'CONST.CACHE' => CACHE,
-            'CONST.CACHEPREFIX' => CACHEPREFIX,
-            'CONST.CLI' => CLI,
-            'CONST.CONFIG' => CONFIG,
-            'CONST.CONFIG_PRIVATE' => CONFIG_PRIVATE,
-            'CONST.CSP' => CSP,
-            'CONST.DATA' => DATA,
-            'CONST.DOMAIN' => DOMAIN,
-            'CONST.DOWNLOAD' => DOWNLOAD,
-            'CONST.ENGINE' => ENGINE,
-            'CONST.LOGS' => LOGS,
-            'CONST.PARTIALS' => PARTIALS,
-            'CONST.PROJECT' => PROJECT,
-            'CONST.ROOT' => ROOT,
-            'CONST.SERVER' => SERVER,
-            'CONST.TEMP' => TEMP,
-            'CONST.TEMPLATES' => TEMPLATES,
-            'CONST.UPLOAD' => UPLOAD,
-            'CONST.WWW' => WWW,
+            [
+                'CONST.APP' => APP,
+                'CONST.CACHE' => CACHE,
+                'CONST.CACHEPREFIX' => CACHEPREFIX,
+                'CONST.CLI' => CLI,
+                'CONST.CONFIG' => CONFIG,
+                'CONST.CONFIG_PRIVATE' => CONFIG_PRIVATE,
+                'CONST.CSP' => CSP,
+                'CONST.DATA' => DATA,
+                'CONST.DOMAIN' => DOMAIN,
+                'CONST.DOWNLOAD' => DOWNLOAD,
+                'CONST.ENGINE' => ENGINE,
+                'CONST.LOGS' => LOGS,
+                'CONST.PARTIALS' => PARTIALS,
+                'CONST.PROJECT' => PROJECT,
+                'CONST.ROOT' => ROOT,
+                'CONST.SERVER' => SERVER,
+                'CONST.TEMP' => TEMP,
+                'CONST.TEMPLATES' => TEMPLATES,
+                'CONST.UPLOAD' => UPLOAD,
+                'CONST.WWW' => WWW,
             ]
         );
+        // class constants
         $dot->set(
-            [ // class constants
-            'CONST.COOKIE_KEY_FILEMODE' => self::COOKIE_KEY_FILEMODE,
-            'CONST.COOKIE_TTL' => self::COOKIE_TTL,
-            'CONST.CSV_FILEMODE' => self::CSV_FILEMODE,
-            'CONST.CSV_MIN_SIZE' => self::CSV_MIN_SIZE,
-            'CONST.GS_CSV_POSTFIX' => self::GS_CSV_POSTFIX,
-            'CONST.GS_CSV_PREFIX' => self::GS_CSV_PREFIX,
-            'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
-            'CONST.GS_SHEET_PREFIX' => self::GS_SHEET_PREFIX,
-            'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
-            'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
+            [
+                'CONST.COOKIE_KEY_FILEMODE' => self::COOKIE_KEY_FILEMODE,
+                'CONST.COOKIE_TTL' => self::COOKIE_TTL,
+                'CONST.CSV_FILEMODE' => self::CSV_FILEMODE,
+                'CONST.CSV_MIN_SIZE' => self::CSV_MIN_SIZE,
+                'CONST.GS_CSV_POSTFIX' => self::GS_CSV_POSTFIX,
+                'CONST.GS_CSV_PREFIX' => self::GS_CSV_PREFIX,
+                'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
+                'CONST.GS_SHEET_PREFIX' => self::GS_SHEET_PREFIX,
+                'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
+                'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
             ]
         );
         if (is_string($key)) {
@@ -540,19 +542,21 @@ abstract class APresenter implements IPresenter
      * Data setter
      *
      * @param mixed $data  array / key
-     * @param mixed $value
+     * @param mixed $value value
      * 
      * @return self
      */
     public function setData($data = null, $value = null)
     {
         if (\is_array($data)) {
-            $this->data = (array) $data; // $data = new model, replace it
+             // $data = new model, replace it
+            $this->data = (array) $data;
         } else {
-            $key = $data; // $data = key index
+            // $data = key index
+            $key = $data;
             if (\is_string($key) && !empty($key)) {
                 $dot = new \Adbar\Dot($this->data);
-                $dot->set($key, $value); // set new value
+                $dot->set($key, $value);
                 $this->data = (array) $dot->all();
             }
         }
@@ -1320,7 +1324,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Get locales from GS Sheets
+     * Get locales from Google Sheets
      *
      * @param string $language language code
      * @param string $key      index column code (optional)
@@ -1417,7 +1421,7 @@ abstract class APresenter implements IPresenter
             }
         }
         Cache::write($file, $locale, 'default');
-        return (array) $locale;
+        return $locale;
     }
 
     /**
@@ -1496,18 +1500,34 @@ abstract class APresenter implements IPresenter
         $file = \strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
+                $f = DATA . DS . "_{$file}_cache_flushed_";
+                switch ($file) {
+                case 'default':
+                case 'admin':
+                    if (\file_exists($f) && ($force === true)) {
+                        @\unlink($f);
+                    } else {
+                        if (Cache::read($file, 'csv') !== false) {
+                            return $this;
+                        }
+                    }
+                    break;
+                }
                 $data = false;
                 if (!\file_exists(DATA . DS . "{$file}.csv")) {
                     $force = true;
                 }
                 if ($force) {
-                    if (\strpos($csvkey, 'https') === 0) { // contains full path
+                    // contains full path
+                    if (\strpos($csvkey, 'https') === 0) {
                         $remote = $csvkey;
                     } else {
-                        if (\strpos($csvkey, '?gid=') > 0) { // contains path incl. parameters
+                        // contains path incl. parameters
+                        if (\strpos($csvkey, '?gid=') > 0) {
                             $remote = self::GS_CSV_PREFIX . $csvkey;
                         } else {
-                            $remote = self::GS_CSV_PREFIX . $csvkey . self::GS_CSV_POSTFIX;
+                            $remote = self::GS_CSV_PREFIX
+                                . $csvkey . self::GS_CSV_POSTFIX;
                         }
                     }
                     $this->addMessage("FILE: fetching {$remote}");
@@ -1519,7 +1539,8 @@ abstract class APresenter implements IPresenter
                     }
                 }
                 if (\strpos($data, '!DOCTYPE html') > 0) {
-                    return $this; // we got HTML document = failure
+                    // this is HTML document = failure!
+                    return $this;
                 }
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, 'csv');

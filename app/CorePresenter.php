@@ -70,17 +70,19 @@ class CorePresenter extends APresenter
         case "GetRobotsTxt":
             $this->setHeaderText();
             // list of bad robots
-            $list = [
+            $bots = [
                 'CCBot',
                 'ChatGPT-User',
                 'FacebookBot',
                 'GPTBot',
                 'Google-Extended',
+                'Omgili',
                 'Omgilibot',
+                'anthropic-ai',
             ];
             return $this->setData(
                 "output",
-                $this->setData("robots_disabled", $list)->renderHTML("robots")
+                $this->setData("robots_disabled", $bots)->renderHTML("robots")
             );
 
         case "GetWebManifest":
@@ -354,9 +356,10 @@ class CorePresenter extends APresenter
         if (!\in_array(
             $lang,
             [
-                "cs",
                 "en",
+                "cs",
                 "sk",
+                "de",
             ]
         )
         ) {

@@ -41,23 +41,22 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check for constant '$x' failed!");
 }
 
-// POPULATE DATA ARRAY
 $base58 = new \Tuupola\Base58;
-$cfg = $data = $cfg ?? [];
-
-$requestUri = $_SERVER["REQUEST_URI"] ?? "";
+$requestUri = $_SERVER["REQUEST_URI"] ?? '';
 if (!$requestUri) {
     $requestUri = '';
 }
 
-$data["cfg"] = $cfg; // cfg backup array
+// POPULATE DATA ARRAY
+$cfg = $data = $cfg ?? [];
+$data["cfg"] = $cfg; // cfg backup
 
-$data["ARGC"] = $argc ?? 0; // arguments count
-$data["ARGV"] = $argv ?? []; // arguments array
+$data["ARGC"] = $argc ?? 0;
+$data["ARGV"] = $argv ?? [];
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
-define("ENGINE", "Tesseract 2.1.6");
+define("ENGINE", "Tesseract 2.1.7");
 $data["ENGINE"] = ENGINE;
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
@@ -140,7 +139,6 @@ $cache_profiles = array_replace(
         "day" => "+24 hours",
         "csv" => "+360 minutes", // CSV cold storage
         "limiter" => "+5 seconds", // access limiter
-        "page" => "+10 seconds", // public web page, user not logged
     ], (array) ($cfg["cache_profiles"] ?? [])
 );
 

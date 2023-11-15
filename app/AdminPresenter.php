@@ -684,11 +684,9 @@ class AdminPresenter extends APresenter
                 if (\is_array($this->getData("cache_profiles"))) {
                     foreach ($this->getData("cache_profiles") as $k => $v) {
                         Cache::clear($k);
-                        if (CLI) {
-                            echo "🔪 $k\n";
-                        }
                         Cache::clear("{$k}_file");
                         if (CLI) {
+                            echo "🔪 $k\n";
                             echo "🔪 {$k}_file\n";
                         }
                     }
@@ -706,6 +704,8 @@ class AdminPresenter extends APresenter
                 }
                 $this->checkLocales();
             } finally {
+                @\touch(DATA . DS . "_default_cache_flushed_");
+                @\touch(DATA . DS . "_admin_cache_flushed_");
                 $lock->release();
             }
         } else {
