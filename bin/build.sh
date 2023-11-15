@@ -12,6 +12,7 @@ fi
 
 [ ! -r ".env" ] && fail "Missing .env file!"
 source ".env"
+
 [ -z "${TAG}" ] && fail "Missing TAG definition!"
 
 docker build --pull -t ${TAG} .

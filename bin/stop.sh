@@ -16,7 +16,6 @@ source .env
 [ -z "$NAME" ] && fail "Missing NAME definition!"
 [ -z "$PORT" ] && fail "Missing PORT definition!"
 [ -z "$TAG" ] && fail "Missing TAG definition!"
-
 [ "$(docker container inspect -f '{{.State.Status}}' ${NAME} 2>&1)" == "running" ] || fail "Container '${NAME}' is not running!"
 
 docker stop $NAME

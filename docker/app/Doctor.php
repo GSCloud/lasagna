@@ -7,7 +7,7 @@
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://mini.gscloud.cz
+ * @link     https://lasagna.gscloud.cz
  */
 
  namespace GSC;
@@ -21,7 +21,7 @@ use League\CLImate\CLImate;
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
  * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://mini.gscloud.cz
+ * @link     https://lasagna.gscloud.cz
  */
 class Doctor
 {
@@ -68,10 +68,6 @@ class Doctor
         );
 
         $climate->out("\n<blue><bold>File System - FILES");
-        $this->validate(
-            "<bold>.env</bold> in ROOT",
-            $this->isreadable(".env")
-        );
         $this->validate(
             "<bold>CONFIG</bold> » "
             . CONFIG, $this->isreadable(CONFIG)

@@ -1,6 +1,6 @@
 #@author Fred Brooker <git@gscloud.cz>
 
-ARG CODE_VERSION=8.1-apache
+ARG CODE_VERSION=8.2-apache
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LC_ALL=en_US.UTF-8
 ARG TERM=linux
@@ -22,9 +22,7 @@ COPY app/*.php app/router* app/csp.neon /var/www/app/
 COPY app/partials/* /var/www/app/partials/
 COPY app/templates/* /var/www/app/templates/
 
-COPY Bootstrap.php composer.json composer.lock LICENSE *.md REVISIONS VERSION /var/www/
-
-COPY docker/ /var/www/
+COPY Bootstrap.php composer.json composer.lock LICENSE *.md REVISIONS VERSION docker/ /var/www/
 COPY vendor /var/www/vendor
 COPY www /var/www/html
 

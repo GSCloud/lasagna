@@ -618,6 +618,9 @@ class AdminPresenter extends APresenter
      */
     public function isLocalAdmin()
     {
+        if (CLI) {
+            return true;
+        }
         $ip = $_SERVER["REMOTE_ADDR"];
         switch ($ip) {
         case "127.0.0.1":
@@ -678,18 +681,27 @@ class AdminPresenter extends APresenter
         if ($lock->acquire()) {
             try {
                 @\ob_flush();
-                foreach ($this->getData("cache_profiles") as $k => $v) {
-                    // clear all cache profiles
-                    Cache::clear($k);
-                    Cache::clear("{$k}_file");
+                if (\is_array($this->getData("cache_profiles"))) {
+                    foreach ($this->getData("cache_profiles") as $k => $v) {
+                        Cache::clear($k);
+                        if (CLI) {
+                            echo "🔪 $k\n";
+                        }
+                        Cache::clear("{$k}_file");
+                        if (CLI) {
+                            echo "🔪 {$k}_file\n";
+                        }
+                    }
                 }
                 \clearstatcache();
+                if (CLI) {
+                    echo "🔪 " . CACHE . " ...\n";
+                }
                 \array_map("unlink", \glob(CACHE . "/*.php"));
                 \array_map("unlink", \glob(CACHE . "/*.tmp"));
                 \array_map("unlink", \glob(CACHE . "/" . CACHEPREFIX . "*"));
                 \clearstatcache();
                 if (!LOCALHOST) {
-                    // purge cache
                     $this->cloudflarePurgeCache($this->getCfg("cf"));
                 }
                 $this->checkLocales();
@@ -697,7 +709,9 @@ class AdminPresenter extends APresenter
                 $lock->release();
             }
         } else {
-            // cannot acquire a lock
+            if (CLI) {
+                echo "ERROR: lock cannot be acquired";
+            }
             $this->setLocation("/err/429");
             exit;
         }
@@ -711,6 +725,10 @@ class AdminPresenter extends APresenter
      */
     public function unauthorizedAccess()
     {
+        if (CLI) {
+            echo "Unauthorized access!\n";
+            exit;
+        }
         $this->setLocation("/err/401");
         exit;
     }
