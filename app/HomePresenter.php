@@ -46,9 +46,12 @@ class HomePresenter extends APresenter
             return $this;
         }
 
-        // process rate limiting + set HTML header + expand current data model
+        // process rate limiting
+        $this->checkRateLimit();
+
+        // set HTML header + expand current data model
         $data = $this->getData();
-        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
+        $this->setHeaderHtml()->dataExpander($data);
 
         // fix current locale
         foreach ($data["l"] ??=[] as $k => $v) {
@@ -59,7 +62,6 @@ class HomePresenter extends APresenter
             );
         }
 
-        // output rendering
         $output = '';
         if ($data) {
             $output = $this->setData(
@@ -68,8 +70,6 @@ class HomePresenter extends APresenter
                 $presenter[$view]["template"]
             );
         }
-
-        // strip comments
         StringFilters::trim_html_comment($output);
         return $this->setData("output", $output);
     }

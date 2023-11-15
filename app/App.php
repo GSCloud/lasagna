@@ -15,6 +15,20 @@ namespace GSC;
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 
+// clear cache on ?logout and reload web
+if (isset($_GET['logout'])) {
+    header('Clear-Site-Data: "cache", "cookies"');
+    header('Location: /', true, 303);
+    exit;
+}
+
+// clear everything on ?clearall and reload web
+if (isset($_GET['clearall'])) {
+    header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+    header('Location: /', true, 303);
+    exit;
+}
+
 // SANITY CHECK
 foreach ([
     "APP",

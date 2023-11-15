@@ -127,8 +127,15 @@
             M.toast({text: '📌 ON'});
             {{/langen}}
           $(this).data('on', 1);
+
+          // pin injector
           $('*[data-admin-tooltip]').each(function() {
-            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" onclick="GSC.CopyThisText(this);" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
+            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
+          });
+
+          // pin event handler
+          $('.sheetpin').click(function() {
+            GSC.CopyThisText(this);
           });
         }
       });

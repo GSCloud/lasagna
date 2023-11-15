@@ -1167,16 +1167,16 @@ abstract class APresenter implements IPresenter
         \header('Clear-Site-Data: "cookies"');
         $nonce = $this->getNonce();
         if (LOCALHOST) {
-            $this->setLocation("/?logout&nonce=$nonce");
+            $this->setLocation("/?logout=1&nonce=$nonce");
             exit;
         }
         if ($this->getCfg('canonical_url')) {
             $this->setLocation(
-                $this->getCfg('canonical_url') . "?logout&nonce=$nonce"
+                $this->getCfg('canonical_url') . "?logout=1&nonce=$nonce"
             );
             exit;
         }
-        $this->setLocation("/?logout&nonce=$nonce");
+        $this->setLocation("/?logout=1&nonce=$nonce");
         exit;
     }
 
@@ -1796,14 +1796,22 @@ abstract class APresenter implements IPresenter
             return $this;
         }
 
-        // get locale
-        $l = $this->getLocale($language);
-        if (is_null($l)) {
-            $l = [];
-            $l['title'] = 'MISSING LOCALES!';
-        }
+        // get locale if not already present
         if (!\array_key_exists('l', $data)) {
+            $l = $this->getLocale($language);
+            if (is_null($l)) {
+                $l = $this->getLocale('en');
+                if (is_null($l)) {
+                    $l = [];
+                    $l['title'] = 'MISSING ENGLISH LOCALE!';
+                }
+            }
             $data['l'] = $l;
+        }
+
+        // locale override
+        foreach ($data["locale_override"] ??=[] as $k => $v) {
+            $data["l"][$k] = $v;
         }
 
         // compute data hash
