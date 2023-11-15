@@ -12,7 +12,6 @@ fi
 
 if [ ! -r ".env" ]; then fail "Missing .env file!"; fi
 source .env
-
 [ -z "$NAME" ] && fail "Missing NAME definition!"
 [ -z "$PORT" ] && fail "Missing PORT definition!"
 [ -z "$TAG" ] && fail "Missing TAG definition!"

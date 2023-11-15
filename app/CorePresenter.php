@@ -69,7 +69,7 @@ class CorePresenter extends APresenter
 
         case "GetRobotsTxt":
             $this->setHeaderText();
-            // list of disabled bots
+            // list of bad robots
             $list = [
                 'CCBot',
                 'ChatGPT-User',
