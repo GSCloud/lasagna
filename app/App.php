@@ -445,8 +445,8 @@ echo $model["output"] ?? "";
 // PROCESS DEBUGGING
 if (DEBUG) {
     // remove private information
-    unset($model["cf"]);
-    unset($model["goauth_secret"]);
+    $model["cf"] = '[protected]';
+    $model["goauth_secret"] = '[protected]';
     
     // phpcs:ignore
     /** @phpstan-ignore-next-line */

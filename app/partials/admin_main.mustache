@@ -100,7 +100,7 @@
         <b style="display:block" class="blue white-text">{{ l.a_cache }}</b>
         <div class="container">
           <span class="nowrap">default: <b>{{ cache_profiles.default }}</b></span>&nbsp;
-          <span class="nowrap">CSVs: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
+          <span class="nowrap">CSV: <b>{{ cache_profiles.csv }}</b></span>&nbsp;
           <span class="nowrap">{{ l.a_limiter }}: <b>{{ CONST.LIMITER_MAXIMUM }}x</b> / <b>{{ cache_profiles.limiter }}</b></span>&nbsp;
         </div>
         <!-- CACHE CONTROL -->
@@ -175,12 +175,12 @@
           data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i>&nbsp;TPL</a>
         <a style="margin:2px!important;" title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
-        <a style="margin:2px!important;" class="btn waves-light tooltipped white-text grey" data-position="top"
-          data-tooltip="CSS DEBUGGER" href="?debug={{ nonce }}"><i class="fa-solid fa-bug"></i></a>
         {{#google_drive_backup}}
         <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
         {{/google_drive_backup}}
+        <a style="margin:2px!important;" class="btn waves-light tooltipped white-text grey" data-position="top"
+          data-tooltip="CSS DEBUGGER" href="?debug={{ nonce }}"><i class="fa-solid fa-bug"></i></a>
       </h4>
     </div>
 

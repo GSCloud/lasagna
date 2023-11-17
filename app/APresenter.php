@@ -1421,6 +1421,14 @@ abstract class APresenter implements IPresenter
             }
         }
         Cache::write($file, $locale, 'default');
+
+        // locale override
+        $override = $this->getData('locale_override');
+        if (\is_array($override)) {
+            foreach ($override as $k => $v) {
+                $locale[$k] = $v;
+            }
+        }
         return $locale;
     }
 
@@ -1828,11 +1836,6 @@ abstract class APresenter implements IPresenter
                 }
             }
             $data['l'] = $l;
-        }
-
-        // locale override
-        foreach ($data["locale_override"] ??=[] as $k => $v) {
-            $data["l"][$k] = $v;
         }
 
         // compute data hash
