@@ -1,4 +1,5 @@
 #@author Fred Brooker <git@gscloud.cz>
+MAKEFLAGS += --no-print-directory
 include .env
 has_phpstan != command -v phpstan 2>/dev/null
 
@@ -44,25 +45,12 @@ docs:
 update:
 	@bash ./bin/update.sh
 	@make clear
-	@echo ""
 
 unit:
 	@bash ./cli.sh unit
 
 clear:
 	@bash ./cli.sh clearall
-
-clearcache:
-	@bash ./cli.sh clearcache
-
-clearci:
-	@bash ./cli.sh clearci
-
-clearlogs:
-	@bash ./cli.sh clearlogs
-
-cleartemp:
-	@bash ./cli.sh cleartemp
 
 install:
 	@bash ./bin/install.sh
