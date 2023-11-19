@@ -20,16 +20,13 @@ info:
 	@echo "🆘 \e[0;1mmake install\e[0m - install"
 	@echo ""
 	@echo "🆘 \e[0;1mmake clear\e[0m - clear all temporary files"
-	@echo "🆘 \e[0;1mmake clearcache\e[0m - clear cache"
-	@echo "🆘 \e[0;1mmake clearci\e[0m - clear CI logs"
-	@echo "🆘 \e[0;1mmake clearlogs\e[0m - clear logs"
-	@echo "🆘 \e[0;1mmake cleartemp\e[0m - clear temp"
 	@echo ""
 	@echo "🆘 \e[0;1mmake doctor\e[0m - run Tesseract doctor"
 	@echo "🆘 \e[0;1mmake update\e[0m - update dependencies"
+	@echo "🆘 \e[0;1mmake stan\e[0m - run PHPstan tests"
+	@echo "🆘 \e[0;1mmake unit\e[0m - run unit test"
 	@echo "🆘 \e[0;1mmake test\e[0m - run local integration test"
 	@echo "🆘 \e[0;1mmake prod\e[0m - run production integration test"
-	@echo "🆘 \e[0;1mmake unit\e[0m - run unit test"
 	@echo "🆘 \e[0;1mmake sync\e[0m - sync to the remote"
 	@echo ""
 	@echo "🆘 \e[0;1mmake docs\e[0m - build documentation"
@@ -67,12 +64,20 @@ local: test
 
 test:
 ifneq ($(strip $(has_phpstan)),)
-	phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php app/CiTester.php app/CorePresenter.php app/CliDemo.php app/CliVersion.php app/CliVersionjson.php app/Doctor.php app/ErrorPresenter.php app/HomePresenter.php app/UnitTester.php app/ArticlePresenter.php app/LogoutPresenter.php app/RSSPresenter.php
+	phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php app/CiTester.php app/AdminPresenter.php app/CorePresenter.php app/CliDemo.php app/CliVersion.php app/CliVersionjson.php app/Doctor.php app/ErrorPresenter.php app/HomePresenter.php app/UnitTester.php app/ArticlePresenter.php app/LogoutPresenter.php app/RSSPresenter.php
 endif
 ifneq ($(strip $(PHPSTAN_EXTRA)),)
 	@bash ./phpstan_extra.sh
 endif
 	@bash ./cli.sh local
+
+stan:
+ifneq ($(strip $(has_phpstan)),)
+	phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php app/CiTester.php app/AdminPresenter.php app/CorePresenter.php app/CliDemo.php app/CliVersion.php app/CliVersionjson.php app/Doctor.php app/ErrorPresenter.php app/HomePresenter.php app/UnitTester.php app/ArticlePresenter.php app/LogoutPresenter.php app/RSSPresenter.php
+endif
+ifneq ($(strip $(PHPSTAN_EXTRA)),)
+	@bash ./phpstan_extra.sh
+endif
 
 prod:
 	@bash ./cli.sh unit

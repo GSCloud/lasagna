@@ -768,15 +768,13 @@
   
                 if (data.data.files[i]["thumbnails"] == null) {
                   // clickable icon
-                  s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#444\';" onmouseout="this.style.backgroundColor=\'#222\';">'
-                    + '<a title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" ';
-                  s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
+                  s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
+                  s += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" href="/upload/' + name + '">';
                   s += '📄<br><span style="font-size:1rem!important">' + name + '<br></span></a>';
                 } else {
                   // clickable thumbnail
-                  s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12" onmouseover="this.style.backgroundColor=\'#444\';" onmouseout="this.style.backgroundColor=\'#222\';">'
-                    + '<a title="{{ l.a_open_tit }}" class="hover" ';
-                  s += 'onclick="javascript:window.open(\'/upload/' + name + '\', \'preview\', \'location,resizable,scrollbars,status\');">';
+                  s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
+                  s += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" href="/upload/' + name + '">';
                   if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
                   s += '</a>';
                 }

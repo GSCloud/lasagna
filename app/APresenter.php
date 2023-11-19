@@ -1486,7 +1486,7 @@ abstract class APresenter implements IPresenter
                 }
             }
         } catch (\Exception $e) {
-            $this->addError('Cloudflare exception: ' . (string) $e->getMessage());
+            $this->addError('ERROR: Cloudflare exception!');
         }
         return $this;
     }

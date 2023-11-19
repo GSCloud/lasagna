@@ -43,7 +43,6 @@ class AdminPresenter extends APresenter
     ];
     /* @var array thumbnail extensions */
     const THUMBS_EXTENSIONS = [
-        '.gif',
         '.jpeg',
         '.jpg',
         '.png',
@@ -60,10 +59,6 @@ class AdminPresenter extends APresenter
             "load" => "imagecreatefrompng",
             "save" => "imagepng",
             "quality" => 8,
-        ],
-        IMAGETYPE_GIF => [
-            "load" => "imagecreatefromgif",
-            "save" => "imagegif",
         ],
         IMAGETYPE_WEBP => [
             "load" => "imagecreatefromwebp",
@@ -82,13 +77,30 @@ class AdminPresenter extends APresenter
     public function process($param = null)
     {
         $cfg = $this->getCfg();
+        if (!\is_array($cfg)) {
+            return $this;
+        }
+
         $data = $this->getData();
+        if (!\is_array($data)) {
+            return $this;
+        }
+
         $match = $this->getMatch();
-        $view = $match["params"]["p"] ?? null;
-        $data["user"] = $this->getCurrentUser();
-        $data["admin"] = $g = $this->getUserGroup();
-        if ($g) {
-            $data["admin_group_{$g}"] = true; // for templating
+        if (\is_array($match)) {
+            $view = $match["params"]["p"] ?? null;
+        } else {
+            $view = $this->getView();
+        }
+
+        $u = $this->getCurrentUser();
+        if (\is_array($u)) {
+            $data["user"] = $u;
+        }
+        $g = $this->getUserGroup();
+        if (\is_string($g)) {
+            $data["admin"] = $g;
+            $data["admin_group_{$g}"] = true;
         }
         $extras = [
             "fn" => $view,
@@ -97,27 +109,6 @@ class AdminPresenter extends APresenter
             // override by ?key= parameter
             "override" => (bool) $this->isLocalAdmin(),
         ];
-
-        /**
-         * Get number of lines in a file
-         *
-         * @param string $f filename
-         * 
-         * @return int number of lines / -1 if non-existent
-         */
-        function getFileLines($f)
-        {
-            try {
-                if (!\file_exists($f)) {
-                    return -1;
-                }
-                $file = new \SplFileObject($f, "r");
-                $file->seek(PHP_INT_MAX);
-                return $file->key() + 1;
-            } catch (\Exception $e) {
-                return -1;
-            }
-        }
 
         // API calls
         switch ($view) {
@@ -303,9 +294,11 @@ class AdminPresenter extends APresenter
             $file = \popen("tac $filename", 'r');
             $c = 0;
             $logs = [];
-            while (($s = \fgets($file)) && ($c < 100)) {
-                $logs[] = $s;
-                $c++;
+            if (\is_resource($file)) {
+                while (($s = \fgets($file)) && ($c < 100)) {
+                    $logs[] = $s;
+                    $c++;
+                }
             }
             \array_walk($logs, array($this, 'decorateLogs'));
             $data["content"] = $logs;
@@ -320,14 +313,14 @@ class AdminPresenter extends APresenter
                 if (!$k || !$v) {
                     continue;
                 }
-                if (\file_exists(DATA . "/{$k}.csv")
-                    && \is_readable(DATA . "/{$k}.csv")
+                if (\file_exists(DATA . DS . "{$k}.csv")
+                    && \is_readable(DATA . DS . "{$k}.csv")
                 ) {
                     $arr[$k] = [
                         "csv" => $v,
-                        "lines" => getFileLines(DATA . "/{$k}.csv"),
+                        "lines" => $this->getFileLines(DATA . DS . "{$k}.csv"),
                         "sheet" => $cfg["lasagna_sheets"][$k] ?? null,
-                        "timestamp" => \filemtime(DATA . "/{$k}.csv"),
+                        "timestamp" => \filemtime(DATA . DS . "{$k}.csv"),
                     ];
                     if ($arr[$k]["lines"] === -1) {
                         unset($arr[$k]);
@@ -340,12 +333,16 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             $data = [];
             $profile = "default";
-            $f = DATA . "/summernote_articles_{$profile}.txt";
+            $f = DATA . DS. "summernote_articles_{$profile}.txt";
             if (\file_exists($f) && \is_readable($f)) {
                 $data = @\file(
                     $f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
                 );
-                $data = \array_unique($data, SORT_LOCALE_STRING);
+                if (\is_array($data)) {
+                    $data = \array_unique($data, SORT_LOCALE_STRING);
+                } else {
+                    $data = null;
+                }
             }
             return $this->writeJsonData($data, $extras);
 
@@ -356,7 +353,7 @@ class AdminPresenter extends APresenter
             }
             $code = "";
             $user = $this->getCurrentUser();
-            if ($user["id"] ?? null && $key) {
+            if (($user["id"] ?? null)) {
                 $hashid = \hash("sha256", $user["id"]);
                 $code = $data["base"]
                     . "admin/CoreUpdateRemote?user="
@@ -376,7 +373,7 @@ class AdminPresenter extends APresenter
             }
             $token = $_GET["token"] ?? null;
             $user = $_GET["user"] ?? null;
-            if ($user && $token && $key || $this->isLocalAdmin()) {
+            if ($user && $token || $this->isLocalAdmin()) {
                 $code = \hash("sha256", $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildAdminKey();
@@ -398,7 +395,7 @@ class AdminPresenter extends APresenter
             }
             $token = $_GET["token"] ?? null;
             $user = $_GET["user"] ?? null;
-            if ($user && $token && $key || $this->isLocalAdmin()) {
+            if ($user && $token || $this->isLocalAdmin()) {
                 $code = \hash("sha256", $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->flushCache();
@@ -419,7 +416,7 @@ class AdminPresenter extends APresenter
             }
             $token = $_GET["token"] ?? null;
             $user = $_GET["user"] ?? null;
-            if ($user && $token && $key || $this->isLocalAdmin()) {
+            if ($user && $token || $this->isLocalAdmin()) {
                 $code = \hash("sha256", $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->setForceCsvCheck(true);
@@ -442,7 +439,7 @@ class AdminPresenter extends APresenter
             }
             $token = $_GET["token"] ?? null;
             $user = $_GET["user"] ?? null;
-            if ($user && $token && $key || $this->isLocalAdmin()) {
+            if ($user && $token || $this->isLocalAdmin()) {
                 $code = \hash("sha256", $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildNonce();
@@ -465,7 +462,7 @@ class AdminPresenter extends APresenter
             }
             $token = $_GET["token"] ?? null;
             $user = $_GET["user"] ?? null;
-            if ($user && $token && $key || $this->isLocalAdmin()) {
+            if ($user && $token || $this->isLocalAdmin()) {
                 $code = hash("sha256", $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildSecureKey();
@@ -519,14 +516,27 @@ class AdminPresenter extends APresenter
                 }
             }
             if ($x != 3) {
+                $extras['error_descriptions'] = 'incorrect number of parameters';
                 return $this->writeJsonData(500, $extras);
             }
-            if (\file_exists(DATA . "/summernote_{$profile}_{$hash}.json")
-                && \is_readable(DATA . "/summernote_{$profile}_{$hash}.json")
+            if (!isset($hash)) {
+                $extras['error_descriptions'] = 'incorrect hash';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (!isset($path)) {
+                $extras['error_descriptions'] = 'incorrect path';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (!isset($data_nows)) {
+                $extras['error_descriptions'] = 'incorrect data_nows';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (\file_exists(DATA . DS. "summernote_{$profile}_{$hash}.json")
+                && \is_readable(DATA . DS. "summernote_{$profile}_{$hash}.json")
             ) {
                 if (@\copy(
-                    DATA . "/summernote_{$profile}_{$hash}.json",
-                    DATA . "/summernote_{$profile}_{$hash}.bak"
+                    DATA . DS . "summernote_{$profile}_{$hash}.json",
+                    DATA . DS . "summernote_{$profile}_{$hash}.bak"
                 ) === false
                 ) {
                     $this->addError("Article $path backup failed.");
@@ -542,7 +552,7 @@ class AdminPresenter extends APresenter
                 };
             }
             if (@\file_put_contents(
-                DATA . "/summernote_{$profile}_{$hash}.db",
+                DATA . DS . "summernote_{$profile}_{$hash}.db",
                 $data_nows . "\n", LOCK_EX | FILE_APPEND
             ) === false
             ) {
@@ -558,7 +568,7 @@ class AdminPresenter extends APresenter
                 );
             };
             if (@\file_put_contents(
-                DATA . "/summernote_{$profile}_{$hash}.json", $data, LOCK_EX
+                DATA . DS . "summernote_{$profile}_{$hash}.json", $data, LOCK_EX
             ) === false
             ) {
                 $this->addError("Article $path write to file failed.");
@@ -574,11 +584,18 @@ class AdminPresenter extends APresenter
             }
             // save article meta data
             $p = [];
-            $f = DATA . "/summernote_articles_{$profile}.txt";
+            $f = DATA . DS . "summernote_articles_{$profile}.txt";
             if (\file_exists($f) && \is_readable($f)) {
                 $p = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            } else {
+                $p = [];
             }
-            $p[] = $path;
+            if (\is_array($p)) {
+                $p[] = $path;
+            } else {
+                $extras['error_descriptions'] = 'incorrect metadata';
+                return $this->writeJsonData(500, $extras);
+            }
             \sort($p, SORT_LOCALE_STRING);
             $p = \array_unique($p, SORT_LOCALE_STRING);
             \file_put_contents($f, \implode("\n", $p), LOCK_EX);
@@ -600,12 +617,12 @@ class AdminPresenter extends APresenter
     /**
      * Rebuild the identity nonce
      *
-     * @return self
+     * @return object
      */
     public function rebuildNonce()
     {
-        if (\file_exists(DATA . "/" . self::IDENTITY_NONCE)) {
-            @\unlink(DATA . "/" . self::IDENTITY_NONCE);
+        if (\file_exists(DATA . DS . self::IDENTITY_NONCE)) {
+            @\unlink(DATA . DS . self::IDENTITY_NONCE);
         }
         \clearstatcache();
         return $this->setIdentity();
@@ -643,8 +660,8 @@ class AdminPresenter extends APresenter
      */
     public function rebuildAdminKey()
     {
-        if (\file_exists(DATA . "/" . self::ADMIN_KEY)) {
-            @\unlink(DATA . "/" . self::ADMIN_KEY);
+        if (\file_exists(DATA . DS . self::ADMIN_KEY)) {
+            @\unlink(DATA . DS . self::ADMIN_KEY);
         }
         return $this->createAdminKey();
     }
@@ -652,17 +669,19 @@ class AdminPresenter extends APresenter
     /**
      * Rebuild the secure key
      *
-     * @return self
+     * @return object
      */
     public function rebuildSecureKey()
     {
         $key = $this->getCfg("secret_cookie_key") ?? "secure.key";
-        $key = \trim($key, "/.");
-        if (!$key) {
-            return $this->writeJsonData(500, $extras);
+        if (!\is_string($key)) {
+            ErrorPresenter::getInstance()->process(500);
         }
-        if (\file_exists(DATA . "/{$key}")) {
-            @\unlink(DATA . "/{$key}");
+        if (\is_string($key)) {
+            $key = \trim($key, '/.');
+            if (\file_exists(DATA . DS . $key)) {
+                @\unlink(DATA . DS . $key);
+            }
         }
         \clearstatcache();
         return $this->setIdentity();
@@ -695,9 +714,15 @@ class AdminPresenter extends APresenter
                 if (CLI) {
                     echo "🔪 " . CACHE . " ...\n";
                 }
-                \array_map("unlink", \glob(CACHE . "/*.php"));
-                \array_map("unlink", \glob(CACHE . "/*.tmp"));
-                \array_map("unlink", \glob(CACHE . "/" . CACHEPREFIX . "*"));
+                // phpcs:ignore
+                /** @phpstan-ignore-next-line */
+                \array_map("unlink", \glob(CACHE . DS . "*.php"));
+                // phpcs:ignore
+                /** @phpstan-ignore-next-line */
+                \array_map("unlink", \glob(CACHE . DS . "*.tmp"));
+                // phpcs:ignore
+                /** @phpstan-ignore-next-line */
+                \array_map("unlink", \glob(CACHE . DS . CACHEPREFIX . "*"));
                 \clearstatcache();
                 if (!LOCALHOST) {
                     $this->cloudflarePurgeCache($this->getCfg("cf"));
@@ -757,7 +782,9 @@ class AdminPresenter extends APresenter
         $z = "<td>$y</td>";
         for ($i = 1; $i <= 5; $i++) {
             // add 5 column classes
-            $z = \preg_replace("/<td>/", "<td class='alogcol{$i}'>", $z, 1);
+            if (\is_string($z)) {
+                $z = \preg_replace("/<td>/", "<td class='alogcol{$i}'>", $z, 1);
+            }
         }
         $val = $z;
     }
@@ -769,7 +796,7 @@ class AdminPresenter extends APresenter
      */
     public function createAdminKey()
     {
-        $f = DATA . "/" . self::ADMIN_KEY;
+        $f = DATA . DS . self::ADMIN_KEY;
         if (!\file_exists($f)) {
             if (!\file_put_contents(
                 $f, \hash("sha256", \random_bytes(256) . \time())
@@ -789,83 +816,110 @@ class AdminPresenter extends APresenter
     /**
      * Read the admin key
      *
-     * @return string admin key
+     * @return mixed admin key or null if not found
      */
     public function readAdminKey()
     {
-        $f = DATA . "/" . self::ADMIN_KEY;
+        $f = DATA . DS . self::ADMIN_KEY;
         if (\file_exists($f) && \is_readable($f)) {
-            $key = \trim(@\file_get_contents($f));
+            $key = \trim(@\file_get_contents($f) ?: '');
         } else {
             $this->createAdminKey();
-            $key = \trim(@\file_get_contents($f));
+            $key = \trim(@\file_get_contents($f) ?: '');
         }
-        return $key ?? null;
+        if (strlen($key) > 0) {
+            return $key;
+        }
+        return null;
     }
 
     /**
      * Create thumbnail from the source image
      *
-     * @param $src          file source
-     * @param $dest         file target
-     * @param $targetWidth  output width
-     * @param $targetHeight output height or null
+     * @param string $src  file source
+     * @param string $dest file target
+     * @param mixed  $tw   output width
+     * @param mixed  $th   output height or null
      * 
      * @return mixed image conversion call result
      */
     public function createThumbnail($src, $dest,
-        $targetWidth = null, $targetHeight = null
+        $tw = null, $th = null
     ) {
         $type = \exif_imagetype($src);
-        if (!$type || !self::IMAGE_HANDLERS[$type]) {
+        if (!$type) {
+            return null;
+        }
+        if (!\array_key_exists($type, self::IMAGE_HANDLERS)) {
             return null;
         }
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]["load"], $src);
         if (!$image) {
             return null;
         }
+        // phpcs:ignore
+        /** @phpstan-ignore-next-line */
         $width = \imagesx($image);
+        // phpcs:ignore
+        /** @phpstan-ignore-next-line */
         $height = \imagesy($image);
-        if ($targetWidth == null) {
-            $targetWidth = $width;
+        if ($tw == null) {
+            $tw = $width;
         }
-        if ($targetHeight == null) {
+        if ($th == null) {
             $ratio = $width / $height;
             if ($width > $height) {
-                $targetHeight = \floor($targetWidth / $ratio);
+                $th = \floor($tw / $ratio);
             } else {
-                $targetHeight = $targetWidth;
-                $targetWidth = \floor($targetWidth * $ratio);
+                $th = $tw;
+                $tw = \floor($tw * $ratio);
             }
         }
-        $thumbnail = \imagecreatetruecolor($targetWidth, $targetHeight);
+        // phpcs:ignore
+        /** @phpstan-ignore-next-line */
+        $thmb = \imagecreatetruecolor($tw, $th);
         if ($type == IMAGETYPE_GIF || $type == IMAGETYPE_PNG) {
-            \imagecolortransparent(
-                $thumbnail,
-                \imagecolorallocate($thumbnail, 0, 0, 0)
-            );
+            // phpcs:ignore
+            /** @phpstan-ignore-next-line */
+            \imagecolortransparent($thmb, \imagecolorallocate($thmb, 0, 0, 0));
             if ($type == IMAGETYPE_PNG) {
-                \imagealphablending($thumbnail, false);
-                \imagesavealpha($thumbnail, true);
+                // phpcs:ignore
+                /** @phpstan-ignore-next-line */
+                \imagealphablending($thmb, false);
+                // phpcs:ignore
+                /** @phpstan-ignore-next-line */
+                \imagesavealpha($thmb, true);
             }
         }
-        \imagecopyresampled(
-            $thumbnail,
-            $image,
-            0,
-            0,
-            0,
-            0,
-            $targetWidth,
-            $targetHeight,
-            $width,
-            $height
-        );
+        // phpcs:ignore
+        /** @phpstan-ignore-next-line */
+        \imagecopyresampled($thmb, $image, 0, 0, 0, 0, $tw, $th, $width, $height);
         return \call_user_func(
             self::IMAGE_HANDLERS[$type]["save"],
-            $thumbnail,
+            $thmb,
             $dest,
             self::IMAGE_HANDLERS[$type]["quality"]
         );
+    }
+
+    /**
+     * Get number of lines in a file
+     *
+     * @param string $f filename
+     * 
+     * @return int number of lines / -1 if non-existent
+     */
+    public function getFileLines($f)
+    {
+        try {
+            if (!\file_exists($f)) {
+                return -1;
+            }
+            $file = new \SplFileObject($f, "r");
+            $file->seek(PHP_INT_MAX);
+            return $file->key() + 1;
+        } catch (\Exception $e) {
+            return -1;
+        }
     }
 }
