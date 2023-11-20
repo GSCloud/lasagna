@@ -41,6 +41,8 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check for constant '$x' failed!");
 }
 
+\Tracy\Debugger::timer("DATA");
+
 $base58 = new \Tuupola\Base58;
 $requestUri = $_SERVER["REQUEST_URI"] ?? '';
 if (!$requestUri) {
@@ -51,6 +53,9 @@ if (!$requestUri) {
 $cfg = $data = $cfg ?? [];
 $data["cfg"] = $cfg; // cfg backup
 
+define("ENGINE", "Tesseract 2.1.8");
+$data["ENGINE"] = ENGINE;
+
 $data["ARGC"] = $argc ?? 0;
 $data["ARGV"] = $argv ?? [];
 
@@ -58,8 +63,6 @@ $data["COOKIE"] = array_map("htmlspecialchars", $_COOKIE);
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 
-define("ENGINE", "Tesseract 2.1.7");
-$data["ENGINE"] = ENGINE;
 $data["DATA_VERSION"] = null;
 $data["PHP_VERSION"] = PHP_VERSION;
 $data["VERSION"] = $version = trim(
@@ -185,26 +188,6 @@ foreach ($cache_profiles as $k => $v) {
             ]
         );
     } else {
-
-        /*
-        Cache::setConfig(
-            "{$k}_file", [
-                "className" => "Cake\Cache\Engine\FileEngine",
-                "duration" => $v,
-                "fallback" => false,
-                "lock" => true,
-                "path" => CACHE,
-                "prefix" => SERVER
-                    . "_"
-                    . PROJECT
-                    . "_"
-                    . APPNAME
-                    . "_"
-                    . CACHEPREFIX,
-            ]
-        );
-        */
-
         Cache::setConfig(
             $k, [
                 "className" => "Cake\Cache\Engine\FileEngine",
@@ -415,6 +398,11 @@ if (!LOCALHOST && in_array($country, $blocked)) {
     exit;
 }
 
+// PROFILER DATA
+$data["time_data"] = round(
+    (float) \Tracy\Debugger::timer("DATA") * 1000, 2
+);
+
 // SINGLETON CONTROLLER
 $data["controller"] = $p = ucfirst(
     strtolower($presenter[$view]["presenter"])
@@ -427,19 +415,21 @@ $app = $controller::getInstance()->setData($data)->process();
 // get Model back
 $model = $app->getData();
 
-// PREPARE ANALYTICS DATA
-$model["running_time"] = $time1 = round(
-    (float) \Tracy\Debugger::timer("RUN") * 1000, 2
-);
-$model["processing_time"] = $time2 = round(
+// PROFILER DATA
+$time1 = $model["time_data"];
+$time2 = $model["time_process"] = round(
     (float) \Tracy\Debugger::timer("PROCESS") * 1000, 2
 );
+$time3 = $model["time_run"] = round(
+    (float) \Tracy\Debugger::timer("RUN") * 1000, 2
+);
 
-// SET X-HEADERS
+// X-HEADERS
 header("X-Engine: " . ENGINE);
 header("X-Country: $country");
-header("X-Running: $time1 ms");
-header("X-Processing: $time2 ms");
+header("X-Time-Data: $time1 ms");
+header("X-Time-Process: $time2 ms");
+header("X-Time-Run: $time3 ms");
 
 // EXPORT OUTPUT
 echo $model["output"] ?? "";

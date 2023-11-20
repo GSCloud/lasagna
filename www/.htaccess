@@ -14,7 +14,6 @@ AddDefaultCharset utf-8
 
 <IfModule mod_headers.c>
   Header set Access-Control-Allow-Origin "*"
-  Header set P3P "policyref=\"/w3c/p3p.xml\", CP=\"IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT\""
   Header set Timing-Allow-Origin: "*"
   Header set X-Content-Type-Options "nosniff"
   Header unset ETag
