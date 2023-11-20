@@ -53,6 +53,8 @@ $data["cfg"] = $cfg; // cfg backup
 
 $data["ARGC"] = $argc ?? 0;
 $data["ARGV"] = $argv ?? [];
+
+$data["COOKIE"] = array_map("htmlspecialchars", $_COOKIE);
 $data["GET"] = array_map("htmlspecialchars", $_GET);
 $data["POST"] = array_map("htmlspecialchars", $_POST);
 

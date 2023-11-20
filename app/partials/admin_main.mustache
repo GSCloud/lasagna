@@ -85,7 +85,7 @@
         <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
         <p id="a_update_info"></p>
         <p style="font-size:12px!important">
-          <a class="waves-effect green waves-light btn trans_pin hover" style="font-size:15px!important">{{ l.a_show_translations }}</a>
+          <a id="showpins" class="waves-effect grey waves-light btn trans_pin hover" style="font-size:15px!important">{{ l.a_show_translations }}</a>
           <br>
           <br>
           <b style="display:block" class="blue white-text">APP</b>
@@ -179,8 +179,8 @@
         <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
           data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
         {{/google_drive_backup}}
-        <a style="margin:2px!important;" class="btn waves-light tooltipped white-text grey" data-position="top"
-          data-tooltip="CSS DEBUGGER" href="?debug={{ nonce }}"><i class="fa-solid fa-bug"></i></a>
+        <a id="debugger" style="margin:2px!important;" class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}" data-position="top"
+          data-tooltip="CSS DEBUGGER"><i class="fa-solid fa-bug"></i></a>
       </h4>
     </div>
 

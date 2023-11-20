@@ -714,15 +714,9 @@ class AdminPresenter extends APresenter
                 if (CLI) {
                     echo "🔪 " . CACHE . " ...\n";
                 }
-                // phpcs:ignore
-                /** @phpstan-ignore-next-line */
-                \array_map("unlink", \glob(CACHE . DS . "*.php"));
-                // phpcs:ignore
-                /** @phpstan-ignore-next-line */
-                \array_map("unlink", \glob(CACHE . DS . "*.tmp"));
-                // phpcs:ignore
-                /** @phpstan-ignore-next-line */
-                \array_map("unlink", \glob(CACHE . DS . CACHEPREFIX . "*"));
+                \array_map("unlink", \glob(CACHE . DS . "*.php") ?: []);
+                \array_map("unlink", \glob(CACHE . DS . "*.tmp") ?: []);
+                \array_map("unlink", \glob(CACHE . DS . CACHEPREFIX . "*") ?: []);
                 \clearstatcache();
                 if (!LOCALHOST) {
                     $this->cloudflarePurgeCache($this->getCfg("cf"));
@@ -843,8 +837,7 @@ class AdminPresenter extends APresenter
      * 
      * @return mixed image conversion call result
      */
-    public function createThumbnail($src, $dest,
-        $tw = null, $th = null
+    public function createThumbnail($src, $dest, $tw = null, $th = null
     ) {
         $type = \exif_imagetype($src);
         if (!$type) {
@@ -859,47 +852,47 @@ class AdminPresenter extends APresenter
         }
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
-        $width = \imagesx($image);
+        $w = \imagesx($image);
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
-        $height = \imagesy($image);
+        $h = \imagesy($image);
         if ($tw == null) {
-            $tw = $width;
+            $tw = $w;
         }
+        $tw = \intval($tw);
         if ($th == null) {
-            $ratio = $width / $height;
-            if ($width > $height) {
+            $ratio = $w / $h;
+            if ($w > $h) {
                 $th = \floor($tw / $ratio);
             } else {
                 $th = $tw;
                 $tw = \floor($tw * $ratio);
             }
         }
-        // phpcs:ignore
-        /** @phpstan-ignore-next-line */
+        $tw = \intval($tw);
+        $th = \intval($th);
         $thmb = \imagecreatetruecolor($tw, $th);
-        if ($type == IMAGETYPE_GIF || $type == IMAGETYPE_PNG) {
+        if ($thmb) {
+            if ($type == IMAGETYPE_PNG) {
+                \imagecolortransparent(
+                    $thmb,
+                    \imagecolorallocate($thmb, 0, 0, 0) ?: 0
+                );
+                if ($type == IMAGETYPE_PNG) {
+                    \imagealphablending($thmb, false);
+                    \imagesavealpha($thmb, true);
+                }
+            }
             // phpcs:ignore
             /** @phpstan-ignore-next-line */
-            \imagecolortransparent($thmb, \imagecolorallocate($thmb, 0, 0, 0));
-            if ($type == IMAGETYPE_PNG) {
-                // phpcs:ignore
-                /** @phpstan-ignore-next-line */
-                \imagealphablending($thmb, false);
-                // phpcs:ignore
-                /** @phpstan-ignore-next-line */
-                \imagesavealpha($thmb, true);
-            }
+            \imagecopyresampled($thmb, $image, 0, 0, 0, 0, $tw, $th, $w, $h);
+            return \call_user_func(
+                self::IMAGE_HANDLERS[$type]["save"],
+                $thmb,
+                $dest,
+                self::IMAGE_HANDLERS[$type]["quality"]
+            );
         }
-        // phpcs:ignore
-        /** @phpstan-ignore-next-line */
-        \imagecopyresampled($thmb, $image, 0, 0, 0, 0, $tw, $th, $width, $height);
-        return \call_user_func(
-            self::IMAGE_HANDLERS[$type]["save"],
-            $thmb,
-            $dest,
-            self::IMAGE_HANDLERS[$type]["quality"]
-        );
     }
 
     /**

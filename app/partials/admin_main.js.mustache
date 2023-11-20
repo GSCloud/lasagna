@@ -108,27 +108,30 @@
         }
       });
 
+      // switch CSS debugger ON/OFF
+      $('#debugger').click(function () {
+        if (getCookie('debug')) {
+          $('#debugger').removeClass('red').addClass('grey');
+          delCookie('debug');
+          location.replace("/?nonce={{ nonce }}");
+        } else {
+          $('#debugger').removeClass('grey').addClass('red');
+          setCookie('debug', 1);
+          location.replace("/?nonce={{ nonce }}");
+        }
+      });
+
       // show translation pins
       $(".trans_pin").click(function () {
         if ($(this).data('on') == '1') {
-            {{#langcs}}
-            M.toast({text: '📌 VYPNUTO'});
-            {{/langcs}}
-            {{#langen}}
-            M.toast({text: '📌 OFF'});
-            {{/langen}}
-            $(this).data('on', 0);    
-            $('.sheetpin').remove();
-          } else {
-            {{#langcs}}
-            M.toast({text: '📌 ZAPNUTO'});
-            {{/langcs}}
-            {{#langen}}
-            M.toast({text: '📌 ON'});
-            {{/langen}}
+          $(this).data('on', 0);    
+          $('#showpins').removeClass('red').addClass('grey');
+          $('.sheetpin').remove();
+        } else {
           $(this).data('on', 1);
+          $('#showpins').removeClass('grey').addClass('red');
 
-          // pin injector
+          // inject pins
           $('*[data-admin-tooltip]').each(function() {
             $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
           });
@@ -735,11 +738,10 @@
       if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
         $.get("/admin/getUploads?" + Date.now(), function (data) {
           if (data && data.data && data.data.files) {
-
             // remember state
             setCookie("open_filemanager", 1);
-
             var s = '';
+            var t = 0;
             var now = ~~(Date.now() / 1000);
             moment.locale("{{ lang }}");
 
@@ -753,8 +755,8 @@
             if (data.data.count == 0) {
               s = '<div style="font-size:3rem;">🐱 💤</div>';
             } else {
-              var t = 0;
               for (var i in data.data.files) {
+                // new table row
                 t++;
                 if (t == 1) {
                   s += '<div class="row">';
@@ -766,57 +768,63 @@
                 var name2 = name.replace(/\.[^.]+$/, '.webp');
                 var ext = GSC.GetFileExtension(name);
   
+                // ICON
+                var si = '';
                 if (data.data.files[i]["thumbnails"] == null) {
                   // clickable icon
-                  s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
-                  s += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" href="/upload/' + name + '">';
-                  s += '📄<br><span style="font-size:1rem!important">' + name + '<br></span></a>';
+                  si += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
+                  si += '📄</a><br><br><a target=_blank title="{{ l.a_open_tit }}" class="truncate" style="font-size:1rem;line-height:1rem" href="/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
                   // clickable thumbnail
-                  s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
-                  s += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;" href="/upload/' + name + '">';
-                  if (data.data.files[i]["thumbnails"][160]) s += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
-                  s += '</a>';
+                  si += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
+                  si += '</a>';
                 }
   
-                // file age and size
-                s += '<span>⏳️&nbsp;';
-                s += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
-                s += '&nbsp;🫙&nbsp;';
-                s += GSC.FormatBytes(data.data.files[i]["size"]);
-                s += '</span>';
+                // AGE + SIZE
+                var saz = '';
+                saz += '<span>⏳️&nbsp;';
+                saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
+                saz += '&nbsp;🫙&nbsp;';
+                saz += GSC.FormatBytes(data.data.files[i]["size"]);
+                saz += '</span>';
   
-                // SML copy buttons
+                // SML
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
-                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
+                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
                 }
                 if (sml.length) {
-                  s += '<div class="row extrapadding">';
-                  s += sml;
-                  s += '</div>';
+                  sml = '<div class="row extrapadding">' + sml + '</div>';
                 }
   
+                // DELETE + RCB
+                var sd = '';
                 if (data.data.files[i]["thumbnails"] === null) {
-                  // delete
-                  s += '<div class="row extrapadding">';
-                  s += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
-                  s += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
-                  s += '</div>';
+                  // delete only
+                  sd += '<div class="row extrapadding">';
+                  sd += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '</div>';
                 }
                 else {
                   // delete + thumbnails copy buttons
-                  s += '<div class="row extrapadding">';
-                  s += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt left hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
-                  s += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '<div class="row extrapadding">';
+                  sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
                   if (ext != 'webp') {
-                    s += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1.2rem" class="mobilebutt extrapadding right hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
+                    sd += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
                   }
-                  s += '</div>';
+                  sd += '</div>';
                 }
+
+                // COMPOSITION
+                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
+                s += sd + si + saz + sml;
                 s += '</div>';
               }
+
               if (t) {
                 s += "</div>";
               }
@@ -868,11 +876,11 @@
 
         // API: FlushCache
         $.post("/admin/FlushCache");
-        location.replace("/?nonce={{ nonce }}"); // reload window
+        location.replace("/?nonce={{ nonce }}");
       });
 
       $("#a_logout").click(function () {
-        setCookie("logout", "logout");
+        setCookie("logout", 1);
         GSC.offline ? window.location.replace("/?nonce={{ nonce }}") : window.location.replace("/logout");
       });
 
@@ -903,7 +911,7 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
       ZeroUpload.setURL("/admin/upload");
-      ZeroUpload.setMaxFiles(100);
+      ZeroUpload.setMaxFiles(20);
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
       ZeroUpload.on("complete", function (response) {
