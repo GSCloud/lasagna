@@ -847,15 +847,14 @@ class AdminPresenter extends APresenter
             return null;
         }
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]["load"], $src);
-        if (!$image) {
-            return null;
-        }
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
         $w = \imagesx($image);
+        $w = \intval($w);
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
         $h = \imagesy($image);
+        $h = \intval($h);
         if ($tw == null) {
             $tw = $w;
         }
