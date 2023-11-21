@@ -113,4 +113,4 @@ du:
 everything: clear update local test sync prod
 
 # build docker image
-image: clear update test build run
+image: clear update test local build run
