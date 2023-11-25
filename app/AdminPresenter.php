@@ -97,16 +97,18 @@ class AdminPresenter extends APresenter
         if (\is_array($u)) {
             $data["user"] = $u;
         }
+
         $g = $this->getUserGroup();
         if (\is_string($g)) {
             $data["admin"] = $g;
             $data["admin_group_{$g}"] = true;
         }
+
         $extras = [
             "fn" => $view,
             "ip" => $this->getIP(),
-            "name" => "Tesseract Admin",
-            // override by ?key= parameter
+            "name" => "Tesseract",
+            // override: ?key= parameter
             "override" => (bool) $this->isLocalAdmin(),
         ];
 
@@ -117,13 +119,17 @@ class AdminPresenter extends APresenter
             $this->checkPermission("admin");
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
-
-                // sanitize filename
+                // sanitize
                 $f = $file["name"];
                 $f = \strtr(\trim(\basename(\strtolower($f))), " '\"\\", "____");
 
-                // skip possible thumbnails
+                // skip thumbnails
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
+                    continue;
+                }
+
+                // skip size file
+                if ($f === 'size') {
                     continue;
                 }
 
@@ -132,9 +138,6 @@ class AdminPresenter extends APresenter
                     $info = \pathinfo($f);
                     if (\is_array($info)) {
                         $fn = $info['filename'];
-                        if ($fn === 'size') {
-                            continue;
-                        }
                         $in = UPLOAD . DS . $f;
                         $uploads[$f] = \urlencode($f);
 
@@ -177,11 +180,14 @@ class AdminPresenter extends APresenter
             if (isset($_POST["name"])) {
                 $name = \trim($_POST["name"], "\\/.");
                 $info = \pathinfo($name);
+
+                // error for 'size' file
+                if ($name === 'size') {
+                    ErrorPresenter::getInstance()->process(500);
+                }
+
                 if (\is_array($info)) {
                     $fn = $info['filename'];
-                    if ($fn === 'size') {
-                        ErrorPresenter::getInstance()->process(500);
-                    }
 
                     // delete all files by the extension
                     foreach (self::THUMBS_EXTENSIONS as $x) {
@@ -227,7 +233,7 @@ class AdminPresenter extends APresenter
                             continue;
                         }
 
-                        // exclude size file
+                        // exclude 'size' file
                         if ($f === 'size') {
                             continue;
                         }
