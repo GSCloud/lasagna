@@ -41,6 +41,19 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check for constant '$x' failed!");
 }
 
+// POPULATE DATA ARRAY
+$cfg = $data = $cfg ?? [];
+$data["cfg"] = $cfg; // cfg backup
+
+// CLOUDFLARE GEO BLOCKING
+// XX = unknown location
+$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD", "XX"]);
+$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
+if (!LOCALHOST && in_array($country, $blocked)) {
+    header("HTTP/1.1 403 Not Found");
+    exit;
+}
+
 \Tracy\Debugger::timer("DATA");
 
 $base58 = new \Tuupola\Base58;
@@ -50,9 +63,6 @@ if (!$requestUri) {
 }
 
 // POPULATE DATA ARRAY
-$cfg = $data = $cfg ?? [];
-$data["cfg"] = $cfg; // cfg backup
-
 define("ENGINE", "Tesseract 2.1.8");
 $data["ENGINE"] = ENGINE;
 
@@ -342,10 +352,10 @@ $data["view"] = $view;
 if ($router[$view]["sethl"] ?? false) {
     $r = trim(strtolower($_GET["hl"] ?? $_COOKIE["hl"] ?? ""));
     switch ($r) {
-    case "cs":
-    case "de":
     case "en":
+    case "cs":
     case "sk":
+    case "de":
         break;
 
     default:
@@ -354,7 +364,7 @@ if ($router[$view]["sethl"] ?? false) {
     if ($r) {
         // no need to sanitize this cookie
         setcookie("hl", $r, time() + 86400 * 31, "/");
-        header("X-SetHomepageLanguage: " . $r);
+        header("X-SetHL: " . $r);
         $presenter[$view]["language"] = $r;
         $data["presenter"] = $presenter;
     }
@@ -389,15 +399,6 @@ default:
     }
 }
 
-// GEO BLOCKING
-// use XX to block unknown locations
-$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD", "XX"]);
-$data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
-if (!LOCALHOST && in_array($country, $blocked)) {
-    header("HTTP/1.1 403 Not Found");
-    exit;
-}
-
 // PROFILER DATA
 $data["time_data"] = round(
     (float) \Tracy\Debugger::timer("DATA") * 1000, 2
@@ -412,7 +413,7 @@ $controller = "\\GSC\\$p";
 
 // set Model + process
 $app = $controller::getInstance()->setData($data)->process();
-// get Model back
+// get Model
 $model = $app->getData();
 
 // PROFILER DATA
@@ -434,7 +435,7 @@ header("X-Time-Run: $time3 ms");
 // EXPORT OUTPUT
 echo $model["output"] ?? "";
 
-// PROCESS DEBUGGING
+// DEBUGGING
 if (DEBUG) {
     // remove private information
     $model["cf"] = '[protected]';

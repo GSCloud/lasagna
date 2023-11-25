@@ -1229,7 +1229,7 @@ abstract class APresenter implements IPresenter
     /**
      * Check if current user has access rights
      *
-     * @param mixed $rolelist roles (optional)
+     * @param mixed $rolelist roles separated by comma (optional)
      * 
      * @return self
      */
@@ -1238,20 +1238,26 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this;
         }
+
         if (empty($rolelist)) {
             return $this;
         }
+
         $roles = \explode(',', \trim((string) $rolelist));
-        foreach ($roles as $role) {
-            $role = \strtolower(\trim($role));
-            $email = $this->getIdentity()['email'] ?? '';
-            $groups = $this->getCfg('admin_groups') ?? [];
-            if (\strlen($role) && \strlen($email)) {
-                if (\in_array($email, $groups[$role] ?? [], true)) { // email allowed
-                    return $this;
-                }
-                if (\in_array('*', $groups[$role] ?? [], true)) { // any Google users allowed
-                    return $this;
+        if (\is_array($roles)) {
+            foreach ($roles as $role) {
+                $role = \strtolower(\trim($role));
+                $email = $this->getIdentity()['email'] ?? '';
+                $groups = $this->getCfg('admin_groups') ?? [];
+                if (\strlen($role) && \strlen($email)) {
+                    // check if email is allowed
+                    if (\in_array($email, $groups[$role] ?? [], true)) {
+                        return $this;
+                    }
+                    // check if any users is allowed
+                    if (\in_array('*', $groups[$role] ?? [], true)) {
+                        return $this;
+                    }
                 }
             }
         }

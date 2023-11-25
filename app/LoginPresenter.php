@@ -42,6 +42,7 @@ class LoginPresenter extends APresenter
             ErrorPresenter::getInstance()->process(403);
             exit;
         }
+
         if (($cfg["goauth_secret"] ?? null) === null) {
             ErrorPresenter::getInstance()->process(403);
             exit;
