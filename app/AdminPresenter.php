@@ -132,6 +132,9 @@ class AdminPresenter extends APresenter
                     $info = \pathinfo($f);
                     if (\is_array($info)) {
                         $fn = $info['filename'];
+                        if ($fn === 'size') {
+                            continue;
+                        }
                         $in = UPLOAD . DS . $f;
                         $uploads[$f] = \urlencode($f);
 
@@ -176,6 +179,9 @@ class AdminPresenter extends APresenter
                 $info = \pathinfo($name);
                 if (\is_array($info)) {
                     $fn = $info['filename'];
+                    if ($fn === 'size') {
+                        ErrorPresenter::getInstance()->process(500);
+                    }
 
                     // delete all files by the extension
                     foreach (self::THUMBS_EXTENSIONS as $x) {
@@ -214,10 +220,15 @@ class AdminPresenter extends APresenter
             $uniques = [];
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
-                    if ($f != "." && $f != "..") {
+                    if (($f != '.') && ($f != '..')) {
                         
                         // exclude thumbnails
                         if (\str_starts_with($f, self::THUMB_PREFIX)) {
+                            continue;
+                        }
+
+                        // exclude size file
+                        if ($f === 'size') {
                             continue;
                         }
                         
