@@ -4,7 +4,7 @@
 #dbg: TRUE
 dbg: FALSE
 
-# CORE
+# core
 app: lasagna
 canonical_url: "https://lasagna.gscloud.cz/"
 date_default_timezone: "Europe/Prague"
@@ -18,7 +18,7 @@ goauth_redirect: "https://lasagna.gscloud.cz/login"
 local_goauth_origin: "http://localhost:8009"
 local_goauth_redirect: "http://localhost:8009/login"
 
-# Google services
+# Google
 google: [
 #  map_query: "Prague,Czechia"
   google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
@@ -89,4 +89,20 @@ design: [
   footer_color: "black"
   nav_color: "orange"
   theme_color: "orange"
+]
+
+# locale overrides
+locale_override: []
+
+# Service Worker preload
+swpreload: [
+  "https://cdn.gscloud.cz/js/jquery.min.js"
+  "https://cdn.gscloud.cz/css/materialize.min.css"
+  "https://cdn.gscloud.cz/js/materialize.min.js"
+  "https://cdn.gscloud.cz/js/main.js"
+]
+
+# Service Worker preload with CDN hash
+swpreload_cdn: [
+  "/css/style.css"
 ]
