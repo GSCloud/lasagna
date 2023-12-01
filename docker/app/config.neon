@@ -1,4 +1,4 @@
-### DOCKER TESSERACT LASAGNA
+### DOCKER LASAGNA
 
 dbg: FALSE
 
@@ -48,28 +48,26 @@ redis: [
 
 # CSS sources
 css_sources: [
-  "https://cdn.gscloud.cz/css/fontawesome.min.css",
-  "https://cdn.gscloud.cz/css/brands.min.css",
-  "https://cdn.gscloud.cz/css/solid.min.css",
+  "https://cdn.gscloud.cz/tesseract/css/fontawesome.min.css",
+  "https://cdn.gscloud.cz/tesseract/css/brands.min.css",
+  "https://cdn.gscloud.cz/tesseract/css/solid.min.css",
 ]
 
-# CSS extra sources
+# extra CSS sources
 css_sources_extra: [
   "/css/style.css",
 ]
 
 # script sources
 script_sources: [
-  "https://cdn.gscloud.cz/js/materialize.min.js",
-  "https://cdn.gscloud.cz/js/lazysizes.min.js",
-  "https://cdn.gscloud.cz/js/main.js",
+  "https://cdn.gscloud.cz/tesseract/js/materialize.min.js",
 ]
 
-# script extra sources
+# extra script sources
 script_sources_extra: [
 ]
 
-# locales
+# locales CSV
 locales: [
   default: "2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay"
   admin: "2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk"
@@ -98,13 +96,10 @@ locale_override: []
 
 # Service Worker preload
 swpreload: [
-  "https://cdn.gscloud.cz/js/jquery.min.js"
-  "https://cdn.gscloud.cz/css/materialize.min.css"
-  "https://cdn.gscloud.cz/js/materialize.min.js"
-  "https://cdn.gscloud.cz/js/main.js"
+  "https://cdn.gscloud.cz/tesseract/js/jquery.min.js"
+  "https://cdn.gscloud.cz/tesseract/css/materialize.min.css"
 ]
 
 # Service Worker preload with CDN hash
 swpreload_cdn: [
-  "/css/style.css"
 ]

@@ -52,8 +52,8 @@ redis: [
 ]
 
 css_sources: [
-  "https://cdn.gscloud.cz/css/fontawesome.min.css",
-  "https://cdn.gscloud.cz/css/brands.min.css",
+  "https://cdn.gscloud.cz/tesseract/css/fontawesome.min.css",
+  "https://cdn.gscloud.cz/tesseract/css/brands.min.css",
   "https://cdn.gscloud.cz//css/solid.min.css",
 ]
 
@@ -62,7 +62,7 @@ css_sources_extra: [
 ]
 
 script_sources: [
-  "https://cdn.gscloud.cz/js/materialize.min.js",
+  "https://cdn.gscloud.cz/tesseract/js/materialize.min.js",
 ]
 
 script_sources_extra: [
@@ -94,8 +94,8 @@ locale_override: []
 
 # Service Worker preload
 swpreload: [
-  "https://cdn.gscloud.cz/js/jquery.min.js"
-  "https://cdn.gscloud.cz/css/materialize.min.css"
+  "https://cdn.gscloud.cz/tesseract/js/jquery.min.js"
+  "https://cdn.gscloud.cz/tesseract/css/materialize.min.css"
 ]
 
 # Service Worker preload with CDN hash
