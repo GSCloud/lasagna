@@ -1,4 +1,4 @@
-### TESSERACT LASAGNA main config
+### LASAGNA
 # @author Fred Brooker <git@gscloud.cz>
 
 #dbg: TRUE
@@ -63,8 +63,6 @@ css_sources_extra: [
 
 script_sources: [
   "https://cdn.gscloud.cz/js/materialize.min.js",
-  "https://cdn.gscloud.cz/js/lazysizes.min.js",
-  "https://cdn.gscloud.cz/js/main.js",
 ]
 
 script_sources_extra: [
@@ -98,11 +96,8 @@ locale_override: []
 swpreload: [
   "https://cdn.gscloud.cz/js/jquery.min.js"
   "https://cdn.gscloud.cz/css/materialize.min.css"
-  "https://cdn.gscloud.cz/js/materialize.min.js"
-  "https://cdn.gscloud.cz/js/main.js"
 ]
 
 # Service Worker preload with CDN hash
 swpreload_cdn: [
-  "/css/style.css"
 ]

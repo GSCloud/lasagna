@@ -1,25 +1,29 @@
 //@author Fred Brooker <git@gscloud.cz>
-"use strict";
+'use strict';
 
-var version = "{{ VERSION }}";
+var version = '{{ VERSION }}';
 var core = [
-  {{#sitemap}}"/{{ . }}", {{/sitemap}}
-  {{#swpreload}}"{{ . }}", {{/swpreload}}
-  {{#swpreload_cdn}}"{{ cdn }}{{ . }}", {{/swpreload_cdn}}
-  "{{ cdn }}/img/favicon-16.webp",
-  "{{ cdn }}/img/favicon-128.webp",
-  "{{ cdn }}/img/favicon-180.webp",
-  "{{ cdn }}/img/favicon-192.png",
-  "{{ cdn }}/img/favicon-192.webp",
-  "{{ cdn }}/img/favicon-512.png",
-  "{{ cdn }}/img/favicon-512.webp",
-  "{{ cdn }}/img/logo.webp",
   'manifest.json',
+  {{#sitemap}}'/{{ . }}', {{/sitemap}}
+  {{#script_sources}}'{{ . }}', {{/script_sources}}
+  {{#css_sources}}'{{ . }}', {{/css_sources}}
+  {{#swpreload}}'{{ . }}', {{/swpreload}}
+  {{#swpreload_cdn}}'{{ cdn }}{{ . }}', {{/swpreload_cdn}}
+  {{#script_sources_extra}}'{{ . }}', {{/script_sources_extra}}
+  {{#css_sources_extra}}'{{ cdn }}{{ . }}', {{/css_sources_extra}}
+  '{{ cdn }}/img/favicon-16.webp',
+  '{{ cdn }}/img/favicon-128.webp',
+  '{{ cdn }}/img/favicon-180.webp',
+  '{{ cdn }}/img/favicon-192.png',
+  '{{ cdn }}/img/favicon-192.webp',
+  '{{ cdn }}/img/favicon-512.png',
+  '{{ cdn }}/img/favicon-512.webp',
+  '{{ cdn }}/img/logo.webp',
 ];
 
-self.addEventListener("install", function (event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(
-    caches.open(version + "_core")
+    caches.open(version + '_core')
     .then(function (cache) {
       return cache.addAll(core);
     })
@@ -27,17 +31,19 @@ self.addEventListener("install", function (event) {
   );
 });
 
-self.addEventListener("fetch", function (event) {
+self.addEventListener('fetch', function (event) {
   if (!(event.request.url.indexOf('http') === 0)) return;
-  if (event.request.method !== "GET") return;
-  if (event.request.url.startsWith("https://accounts.google.com") == true) return;
-  if (event.request.url.endsWith(".avi") == true) return;
-  if (event.request.url.endsWith(".mp4") == true) return;
-  if (event.request.url.endsWith(".webm") == true) return;
-  if (event.request.url.indexOf("/login") !== -1) return;
-  if (event.request.url.indexOf("/logout") !== -1) return;
-  if (event.request.url.indexOf("/print/") !== -1) return;
-  if (event.request.url.indexOf("?nonce") !== -1) return;
+  if (event.request.method !== 'GET') return;
+  if (event.request.url.startsWith('https://accounts.google.com') == true) return;
+  if (event.request.url.endsWith('.avi') == true) return;
+  if (event.request.url.endsWith('.mkv') == true) return;
+  if (event.request.url.endsWith('.mp4') == true) return;
+  if (event.request.url.endsWith('.mpg') == true) return;
+  if (event.request.url.endsWith('.webm') == true) return;
+  if (event.request.url.indexOf('/login') !== -1) return;
+  if (event.request.url.indexOf('/logout') !== -1) return;
+  if (event.request.url.indexOf('/print/') !== -1) return;
+  if (event.request.url.indexOf('?nonce=') !== -1) return;
 
   event.respondWith(
     caches.match(event.request)
@@ -49,7 +55,7 @@ self.addEventListener("fetch", function (event) {
 
       function fetchedFromNetwork (response) {
         var cacheCopy = response.clone();
-        caches.open(version + "_pages")
+        caches.open(version + '_pages')
           .then(function add(cache) {
             return cache.put(event.request, cacheCopy);
           })
@@ -61,9 +67,9 @@ self.addEventListener("fetch", function (event) {
       function unableToResolve() {
         return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0"><h2 style="text-align:center">📵 No connectivity!</h2><h4 style="text-align:center"><a href="javascript:location.reload();">click to reload ↻</a></h4>', {
           status: 503,
-          statusText: "Service Unavailable",
+          statusText: 'Service Unavailable',
           headers: new Headers({
-            "Content-Type": "text/html"
+            'Content-Type': 'text/html'
           })
         });
       }
@@ -73,7 +79,7 @@ self.addEventListener("fetch", function (event) {
 
 });
 
-self.addEventListener("activate", function (event) {
+self.addEventListener('activate', function (event) {
   event.waitUntil(
     caches
     .keys()
@@ -89,7 +95,7 @@ self.addEventListener("activate", function (event) {
       );
     })
     .then(function () {
-      console.log("Service Worker active");
+      console.log('Service Worker active');
     })
   );
 });
