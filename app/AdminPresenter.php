@@ -128,7 +128,15 @@ class AdminPresenter extends APresenter
                     continue;
                 }
 
-                // skip size file
+                // skip PHP extensions
+                if (\str_ends_with($f, '.php')) {
+                    continue;
+                }
+                if (\str_ends_with($f, '.inc')) {
+                    continue;
+                }
+
+                // skip the 'size' file
                 if ($f === 'size') {
                     continue;
                 }
