@@ -53,6 +53,10 @@ class HomePresenter extends APresenter
         $data = $this->getData();
         $this->setHeaderHtml()->dataExpander($data);
 
+        // menu content switcher
+        $data['view'] = $view;
+        $data[$view . '_menu'] = true;
+
         // fix current locale
         foreach ($data["l"] ??=[] as $k => $v) {
             StringFilters::convert_eolhyphen_to_brdot($data["l"][$k]);
