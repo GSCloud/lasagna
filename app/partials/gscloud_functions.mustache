@@ -399,40 +399,27 @@ async function sha256(message) {
         $(obj).addClass("browser-default");
       });
 
-      if (document.documentElement.clientWidth > 1023) {
-        // prepend HOME button
-        $('div.navbar-fixed>nav>div>ul').prepend('<li><a title="{{ l.home }}" href="/">🏡</a></li>');
-      }
-
       if (GSC.touch) {
-        // create mobile WebShare button for touch devices
         if (typeof window.WebShareFactory === "function") {
-          $("#nav-mobile").append('<li class="right-align">' + WebShareFactory() + '</li>');
+          // create mobile WebShare button for touch devices
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
       }
 
-      // append mobile API button
-      //$('#nav-mobile').append('<li class="right-align"><a rel=nofollow href="/api">API</a></li>');
-
       // append login buttons if there are Google OAuth parameters set
       {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
       if (!GSC.islogged) {
-        $('#nav-mobile').append('<li class="right-align"><a class="oauth" rel=nofollow href="{{ local_goauth_redirect }}">🔓 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a class="oauth" title="{{ l.a_login_ttip }}" href="{{ local_goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
       } else {
-        $('#nav-mobile').append('<li class="right-align"><a class="oauth" rel=nofollow href="/logout">🔐 LOGOUT</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a class="oauth" rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
       }
       {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
 
       {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
       if (!GSC.islogged) {
-        $('#nav-mobile').append('<li class="right-align"><a id="google-login-mobile" data-umami-event="google-login-mobile" class="oauth" rel=nofollow href="{{ goauth_redirect }}">🔓 LOGIN</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a id="google-login-desktop" data-umami-event="google-login-desktop" class="oauth" title="{{ l.a_login_ttip }}" href="{{ goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
       } else {
-        $('#nav-mobile').append('<li class="right-align"><a id="google-logout-mobile" data-umami-event="google-logout-mobile" class="oauth" rel=nofollow href="/logout">🔐 LOGOUT</a></li>');
         $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a id="google-logout-desktop" data-umami-event="google-logout-desktop" class="oauth" rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
       }
       {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
