@@ -66,7 +66,7 @@ class LoginPresenter extends APresenter
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : "";
-            //$hint = "";
+            $hint = "";
 
             $authUrl = $provider->getAuthorizationUrl(
                 [
@@ -114,20 +114,20 @@ class LoginPresenter extends APresenter
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
                 }
+                $this->clearCookie("oauth2state");
                 if (\strlen($ownerDetails->getEmail())) {
                     // save email for next request
                     \setcookie(
                         "login_hint",
                         $ownerDetails->getEmail() ?? "",
-                        \time() + 86400 * 1,
+                        \time() + 86400 * 31,
                         "/",
                         DOMAIN,
                     );
                 }
                 $this->clearCookie("oauth2state");
-                $uri = (LOCALHOST === true)
-                    ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"];
-                $this->setLocation($uri);
+                $this->setLocation();
+                exit;
             } catch (\Exception $e) {
                 $this->addError("Google OAuth: " . $e->getMessage());
             }
