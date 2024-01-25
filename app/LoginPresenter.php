@@ -114,20 +114,20 @@ class LoginPresenter extends APresenter
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
                 }
-                $this->clearCookie("oauth2state");
                 if (\strlen($ownerDetails->getEmail())) {
                     // save email for next request
                     \setcookie(
                         "login_hint",
                         $ownerDetails->getEmail() ?? "",
-                        \time() + 86400 * 31,
+                        \time() + 86400 * 1,
                         "/",
                         DOMAIN,
                     );
                 }
                 $this->clearCookie("oauth2state");
-                $this->setLocation();
-                exit;
+                $uri = (LOCALHOST === true)
+                    ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"];
+                $this->setLocation($uri);
             } catch (\Exception $e) {
                 $this->addError("Google OAuth: " . $e->getMessage());
             }
