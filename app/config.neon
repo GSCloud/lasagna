@@ -24,19 +24,14 @@ google: [
   google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
 ]
 
-# Umami analytics service
+# Umami analytics
 umami: [
   id: "d64aa098-b60c-4c6b-90b1-dc5b6e83c255"
   share: "https://umami.gscloud.cz/share/Zj4HVPMYhRV69yz6/TESSERACT%20LASAGNA"
 ]
 
-alpha_hosts: [
-  alasagna.gscloud.cz
-]
-
-beta_hosts: [
-  blasagna.gscloud.cz
-]
+# extra cache profiles
+cache_profiles: []
 
 # Redis
 redis: [
@@ -54,7 +49,7 @@ redis: [
 css_sources: [
   "https://cdn.gscloud.cz/tesseract/css/fontawesome.min.css",
   "https://cdn.gscloud.cz/tesseract/css/brands.min.css",
-  "https://cdn.gscloud.cz//css/solid.min.css",
+  "https://cdn.gscloud.cz/tesseract/css/solid.min.css",
 ]
 
 css_sources_extra: [
@@ -65,8 +60,7 @@ script_sources: [
   "https://cdn.gscloud.cz/tesseract/js/materialize.min.js",
 ]
 
-script_sources_extra: [
-]
+script_sources_extra: []
 
 locales: [
   default: "2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay"

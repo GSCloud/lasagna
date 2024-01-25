@@ -2,14 +2,11 @@
 ### TESSERACT LASAGNA PRIVATE CONFIGURATION
 
 # cookie: tracy-debug
-#DEBUG_COOKIE: "cookievalue"
+DEBUG_COOKIE: "secretcookie"
 
 # Google OAuth 2.0
 #goauth_client_id: "someid.apps.googleusercontent.com"
 #goauth_secret: ""
-
-# Google Drive backup
-#google_drive_backup: ""
 
 # external links
 external_links: [

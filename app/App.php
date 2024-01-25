@@ -43,14 +43,21 @@ foreach ([
 
 // POPULATE DATA ARRAY
 $cfg = $data = $cfg ?? [];
-$data["cfg"] = $cfg; // cfg backup
+$data["cfg"] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING
 // XX = unknown location
-$blocked = (array) ($data["geoblock"] ?? ["RU", "BY", "KZ", "MD", "XX"]);
+$blocked = (array) ($data["geoblock"] ?? [
+    "BY",
+    "KZ",
+    "MD",
+    "RO",
+    "RU",
+    "XX",
+]);
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
 if (!LOCALHOST && in_array($country, $blocked)) {
-    header("HTTP/1.1 403 Not Found");
+    header("HTTP/1.1 403 Not Found", true, 301);
     exit;
 }
 
