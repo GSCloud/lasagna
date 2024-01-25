@@ -117,6 +117,8 @@ class AdminPresenter extends APresenter
 
         case 'upload':
             $this->checkPermission('admin,editor');
+
+            // process all uploads
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
                 // sanitize
@@ -128,10 +130,12 @@ class AdminPresenter extends APresenter
                     continue;
                 }
 
-                // skip PHP extensions
+                // skip PHP extension
                 if (\str_ends_with($f, '.php')) {
                     continue;
                 }
+                
+                // skip PHP extension
                 if (\str_ends_with($f, '.inc')) {
                     continue;
                 }

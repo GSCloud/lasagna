@@ -59,7 +59,7 @@ class HomePresenter extends APresenter
 
         // fix current locale
         foreach ($data["l"] ??=[] as $k => $v) {
-            StringFilters::convertEolHyphenToBrdot($data["l"][$k]);
+            StringFilters::convertEolHyphenToBrDot($data["l"][$k]);
             StringFilters::convertEolToBr($data["l"][$k]);
             StringFilters::correctTextSpacing(
                 $data["l"][$k], $data["lang"] ?? "en"
