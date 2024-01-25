@@ -66,7 +66,7 @@ class LoginPresenter extends APresenter
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : "";
-            $hint = "";
+            //$hint = "";
 
             $authUrl = $provider->getAuthorizationUrl(
                 [
