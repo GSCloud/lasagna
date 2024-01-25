@@ -24,7 +24,7 @@ google: [
   google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
 ]
 
-# Umami analytics
+# Umami Analytics
 umami: [
   id: "d64aa098-b60c-4c6b-90b1-dc5b6e83c255"
   share: "https://umami.gscloud.cz/share/Zj4HVPMYhRV69yz6/TESSERACT%20LASAGNA"
@@ -93,5 +93,4 @@ swpreload: [
 ]
 
 # Service Worker preload with CDN hash
-swpreload_cdn: [
-]
+swpreload_cdn: []

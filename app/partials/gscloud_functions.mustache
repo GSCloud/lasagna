@@ -289,11 +289,11 @@ async function sha256(message) {
               }
             }
           });
-          // repeat checks
+          // repeat
           setTimeout(function() {GSC.VersionCheck()}, 30000);
         }
       }
-      // repeat checks
+      // repeat
       setTimeout(function() {GSC.VersionCheck()}, 5000);
     });
 
@@ -303,7 +303,6 @@ async function sha256(message) {
       GSC.articles_rendered = false;
 
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
-
         // check for local copy
         var html = '';
         if (nolocalstorage) {
@@ -319,7 +318,7 @@ async function sha256(message) {
             }
             $("#" + p).html(obj[p]);
           }
-          // fix classnames for Summernote
+          // fix Summernote
           $(".summernote ul").addClass("browser-default");
           $(".summernote img").addClass("responsive-img");
           GSC.articles_rendered = true;
@@ -353,7 +352,7 @@ async function sha256(message) {
                   }
                   $("#" + p).html(obj[p]);
                 }
-                // fix classnames for Summernote
+                // fix Summernote
                 $(".summernote ul").addClass("browser-default");
                 $(".summernote img").addClass("responsive-img");
                 GSC.articles_rendered = true;
@@ -364,7 +363,7 @@ async function sha256(message) {
           }
           if (typeof callback === "function") callback();
         });
-        //  repeat checks
+        //  repeat
         setTimeout(function() {GSC.ReadArticles()}, 10000);
       }
       GSC.ReadArticles();
@@ -373,56 +372,34 @@ async function sha256(message) {
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
-
+      // set CS language
       $(".sethlcs").click(function() {
-        // set CS language
         setCookie("hl", "cs");
       });
-
+      // set EN language
       $(".sethlen").click(function() {
-        // set EN language
         setCookie("hl", "en");
       });
-
+      // set SK language
       $(".sethlsk").click(function() {
-        // set SK language
         setCookie("hl", "sk");
       });
-
+      // set UPDATE action
       $("#update-message").click(function() {
-        // set UPDATE action
         location.replace(location.pathname + '?nonce={{ nonce }}');
       });
-
+      // set default bullets for Summernote data
       $(".summernote>ul").each(function(i, obj) {
-        // set default bullets for Summernote data
         $(obj).addClass("browser-default");
       });
 
+      // create mobile WebShare button for touch devices
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
-          // create mobile WebShare button for touch devices
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
       }
-
-      // append login buttons if there are Google OAuth parameters set
-      {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-      if (!GSC.islogged) {
-        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a class="oauth" title="{{ l.a_login_ttip }}" href="{{ local_goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
-      } else {
-        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a class="oauth" rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
-      }
-      {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
-
-      {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-      if (!GSC.islogged) {
-        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right"><a id="google-login-desktop" data-umami-event="google-login-desktop" class="oauth" title="{{ l.a_login_ttip }}" href="{{ goauth_redirect }}">&nbsp;🔓&nbsp;</a></div>');
-      } else {
-        $('.main-header').append('<div style="padding:1em;z-index:99999999" class="right hide-on-med-and-down"><a id="google-logout-desktop" data-umami-event="google-logout-desktop" class="oauth" rel=nofollow title="{{ l.a_logout_ttip }}" href="/logout">&nbsp;🔐&nbsp;</a></div>');
-      }
-      {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
 
       // check network status
       setInterval(checkNetwork, 1000);
