@@ -30,7 +30,7 @@ interface IStringFilters
      * 
      * @return void
      */
-    public static function convert_eol_to_br(&$content);
+    public static function convertEolToBr(&$content);
 
     /**
      * Convert EOL + hyphen/star to HTML
@@ -39,7 +39,7 @@ interface IStringFilters
      * 
      * @return void
      */
-    public static function convert_eolhyphen_to_brdot(&$content);
+    public static function convertEolHyphenToBrDot(&$content);
 
     /**
      * Correct text spacing
@@ -51,7 +51,7 @@ interface IStringFilters
      * 
      * @return void
      */
-    public static function correct_text_spacing(&$content, $language);
+    public static function correctTextSpacing(&$content, $language);
 
     /**
      * Trim various EOL combinations
@@ -60,7 +60,7 @@ interface IStringFilters
      * 
      * @return void
      */
-    public static function trim_eol(&$content);
+    public static function trimEol(&$content);
 
     /**
      * Trim THML comments
@@ -69,7 +69,7 @@ interface IStringFilters
      * 
      * @return void
      */
-    public static function trim_html_comment(&$content);
+    public static function trimHtmlComment(&$content);
 }
 
 /**
@@ -85,7 +85,11 @@ interface IStringFilters
  */
 class StringFilters implements IStringFilters
 {
-    public static $array_replace_slovak = [
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
+    public static $slovak = [
         "  " => " ",
         " - " => " – ",
         " — " => " —&nbsp;",
@@ -172,7 +176,11 @@ class StringFilters implements IStringFilters
         ">>" => "»",
     ];
 
-    public static $array_replace_czech = [
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
+    public static $czech = [
         "  " => " ",
         " - " => " – ",
         " — " => " —&nbsp;",
@@ -266,7 +274,11 @@ class StringFilters implements IStringFilters
         ">>" => "»",
     ];
 
-    public static $array_replace_english = [
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
+    public static $english = [
         "  " => " ",
         " - " => " – ",
         " — " => " —&nbsp;",
@@ -338,7 +350,7 @@ class StringFilters implements IStringFilters
      * 
      * @return void
      */
-    public static function convert_eol_to_br(&$content)
+    public static function convertEolToBr(&$content)
     {
         if (!is_string($content)) {
             return;
@@ -358,7 +370,7 @@ class StringFilters implements IStringFilters
      * 
      * @return void
      */
-    public static function convert_eolhyphen_to_brdot(&$content)
+    public static function convertEolHyphenToBrDot(&$content)
     {
         if (!is_string($content)) {
             return;
@@ -384,7 +396,7 @@ class StringFilters implements IStringFilters
      * 
      * @return void
      */
-    public static function trim_eol(&$content)
+    public static function trimEol(&$content)
     {
         if (!is_string($content)) {
             return;
@@ -405,7 +417,7 @@ class StringFilters implements IStringFilters
      * 
      * @return void
      */
-    public static function trim_html_comment(&$content)
+    public static function trimHtmlComment(&$content)
     {
         if (!is_string($content)) {
             return;
@@ -432,59 +444,60 @@ class StringFilters implements IStringFilters
      * @param string $content  content by reference
      * @param string $language (optional: "cs", "sk", "en" - for now)
      * 
-     * @return void
+     * @return null
      */
-    public static function correct_text_spacing(&$content, $language = "en")
+    public static function correctTextSpacing(&$content, $language = "en")
     {
         if (!is_string($content)) {
-            return $content;
+            return null;
         }
         $language = strtolower(trim((string) $language));
         switch ($language) {
         case "sk":
-            $content = self::correct_text_spacing_sk($content);
+            $content = self::correctTextSpacingSk($content);
             break;
         case "cs":
-            $content = self::correct_text_spacing_cs($content);
+            $content = self::correctTextSpacingCs($content);
             break;
         default:
-            $content = self::correct_text_spacing_en($content);
+            $content = self::correctTextSpacingEn($content);
         }
+        return null;
     }
 
     /**
      * Correct text spacing - English
      *
-     * @param string $content textual data
+     * @param string $content text data
      * 
      * @return string
      */
-    public static function correct_text_spacing_en($content = null)
+    public static function correctTextSpacingEn($content)
     {
         if (!is_string($content)) {
-            return $content;
+            return '';
         }
         return str_replace(
-            array_keys(self::$array_replace_english),
-            self::$array_replace_english, $content
+            array_keys(self::$english),
+            self::$english, $content
         );
     }
 
     /**
      * Correct text spacing - Czech
      *
-     * @param string $content textual data
+     * @param string $content text data
      * 
      * @return string
      */
-    public static function correct_text_spacing_cs($content = null)
+    public static function correctTextSpacingCs($content)
     {
         if (!is_string($content)) {
-            return $content;
+            return '';
         }
         return str_replace(
-            array_keys(self::$array_replace_czech),
-            self::$array_replace_czech,
+            array_keys(self::$czech),
+            self::$czech,
             $content
         );
     }
@@ -492,18 +505,18 @@ class StringFilters implements IStringFilters
     /**
      * Correct text spacing - Slovak
      *
-     * @param string $content textual data
+     * @param string $content text data
      * 
      * @return string
      */
-    public static function correct_text_spacing_sk($content = null)
+    public static function correctTextSpacingSk($content)
     {
         if (!is_string($content)) {
-            return $content;
+            return '';
         }
         return str_replace(
-            array_keys(self::$array_replace_slovak),
-            self::$array_replace_slovak,
+            array_keys(self::$slovak),
+            self::$slovak,
             $content
         );
     }

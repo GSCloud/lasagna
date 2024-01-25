@@ -59,9 +59,9 @@ class HomePresenter extends APresenter
 
         // fix current locale
         foreach ($data["l"] ??=[] as $k => $v) {
-            StringFilters::convert_eolhyphen_to_brdot($data["l"][$k]);
-            StringFilters::convert_eol_to_br($data["l"][$k]);
-            StringFilters::correct_text_spacing(
+            StringFilters::convertEolHyphenToBrdot($data["l"][$k]);
+            StringFilters::convertEolToBr($data["l"][$k]);
+            StringFilters::correctTextSpacing(
                 $data["l"][$k], $data["lang"] ?? "en"
             );
         }
@@ -74,7 +74,7 @@ class HomePresenter extends APresenter
                 $presenter[$view]["template"]
             );
         }
-        StringFilters::trim_html_comment($output);
+        StringFilters::trimHtmlComment($output);
         return $this->setData("output", $output);
     }
 }

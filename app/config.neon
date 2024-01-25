@@ -33,6 +33,9 @@ umami: [
 # extra cache profiles
 cache_profiles: []
 
+# blocked countries
+geoblock: []
+
 # Redis
 redis: [
   #database: 0

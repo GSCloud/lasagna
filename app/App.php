@@ -55,6 +55,7 @@ $blocked = (array) ($data["geoblock"] ?? [
     "RU",
     "XX",
 ]);
+
 $data["country"] = $country = (string) ($_SERVER["HTTP_CF_IPCOUNTRY"] ?? "XX");
 if (!LOCALHOST && in_array($country, $blocked)) {
     header("HTTP/1.1 403 Not Found", true, 301);

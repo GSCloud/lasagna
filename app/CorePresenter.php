@@ -294,7 +294,7 @@ class CorePresenter extends APresenter
             foreach ($presenter as $p) {
                 if (isset($p["api"]) && $p["api"]) {
                     $info = $p["api_info"] ?? "";
-                    StringFilters::convert_eol_to_br($info);
+                    StringFilters::convertEolToBr($info);
                     $info = \htmlspecialchars($info);
                     $info = \preg_replace(
                         array(
