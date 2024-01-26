@@ -356,28 +356,6 @@ if (is_array($match)) {
 $data["match"] = $match;
 $data["view"] = $view;
 
-// "sethl" property = set HOME LANGUAGE
-if ($router[$view]["sethl"] ?? false) {
-    $r = trim(strtolower($_GET["hl"] ?? $_COOKIE["hl"] ?? ""));
-    switch ($r) {
-    case "en":
-    case "cs":
-    case "sk":
-    case "de":
-        break;
-
-    default:
-        $r = null;
-    }
-    if ($r) {
-        // no need to sanitize this cookie
-        setcookie("hl", $r, time() + 86400 * 31, "/");
-        header("X-SetHL: " . $r);
-        $presenter[$view]["language"] = $r;
-        $data["presenter"] = $presenter;
-    }
-}
-
 // PROCESS REDIRECTS
 if ($router[$view]["redirect"] ?? false) {
     $r = $router[$view]["redirect"];

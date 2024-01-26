@@ -372,22 +372,6 @@ async function sha256(message) {
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
-      // set EN language
-      $(".sethlen").click(function() {
-        setCookie("hl", "en");
-      });
-      // set CS language
-      $(".sethlcs").click(function() {
-        setCookie("hl", "cs");
-      });
-      // set SK language
-      $(".sethlsk").click(function() {
-        setCookie("hl", "sk");
-      });
-      // set DE language
-      $(".sethlde").click(function() {
-        setCookie("hl", "de");
-      });
       // set UPDATE action
       $("#update-message").click(function() {
         location.replace(location.pathname + '?nonce={{ nonce }}');
