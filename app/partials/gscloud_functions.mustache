@@ -372,17 +372,21 @@ async function sha256(message) {
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
-      // set CS language
-      $(".sethlcs").click(function() {
-        setCookie("hl", "cs");
-      });
       // set EN language
       $(".sethlen").click(function() {
         setCookie("hl", "en");
       });
+      // set CS language
+      $(".sethlcs").click(function() {
+        setCookie("hl", "cs");
+      });
       // set SK language
       $(".sethlsk").click(function() {
         setCookie("hl", "sk");
+      });
+      // set DE language
+      $(".sethlde").click(function() {
+        setCookie("hl", "de");
       });
       // set UPDATE action
       $("#update-message").click(function() {
@@ -400,7 +404,6 @@ async function sha256(message) {
           $(".webshare-container").removeClass("hide").show();
         }
       }
-
       // check network status
       setInterval(checkNetwork, 1000);
     });
