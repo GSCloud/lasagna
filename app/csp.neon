@@ -49,6 +49,10 @@ csp: [
     "cdn.gscloud.cz"
     "gspace.gscloud.cz"
     "data:;"
+
+    "frame-src"
+    "youtube.com"
+    "www.youtube.com;"
     
     "form-action"
     "https://*"

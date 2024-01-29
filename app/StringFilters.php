@@ -33,6 +33,15 @@ interface IStringFilters
     public static function convertEolToBr(&$content);
 
     /**
+     * Convert EOLs to HTML breakline + NBSP indentation
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function convertEolToBrNbsp(&$content);
+
+    /**
      * Convert EOL + hyphen/star to HTML
      *
      * @param string $content content by reference
@@ -91,6 +100,16 @@ class StringFilters implements IStringFilters
      */
     public static $slovak = [
         "  " => " ",
+        " 1 " => " 1&nbsp;",
+        " 2 " => " 2&nbsp;",
+        " 3 " => " 3&nbsp;",
+        " 4 " => " 4&nbsp;",
+        " 5 " => " 5&nbsp;",
+        " 6 " => " 6&nbsp;",
+        " 7 " => " 7&nbsp;",
+        " 8 " => " 8&nbsp;",
+        " 9 " => " 9&nbsp;",
+        " 0 " => " 0&nbsp;",
         " - " => " – ",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
@@ -183,6 +202,16 @@ class StringFilters implements IStringFilters
      */
     public static $czech = [
         "  " => " ",
+        " 1 " => " 1&nbsp;",
+        " 2 " => " 2&nbsp;",
+        " 3 " => " 3&nbsp;",
+        " 4 " => " 4&nbsp;",
+        " 5 " => " 5&nbsp;",
+        " 6 " => " 6&nbsp;",
+        " 7 " => " 7&nbsp;",
+        " 8 " => " 8&nbsp;",
+        " 9 " => " 9&nbsp;",
+        " 0 " => " 0&nbsp;",
         " - " => " – ",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
@@ -282,6 +311,16 @@ class StringFilters implements IStringFilters
      */
     public static $english = [
         "  " => " ",
+        " 1 " => " 1&nbsp;",
+        " 2 " => " 2&nbsp;",
+        " 3 " => " 3&nbsp;",
+        " 4 " => " 4&nbsp;",
+        " 5 " => " 5&nbsp;",
+        " 6 " => " 6&nbsp;",
+        " 7 " => " 7&nbsp;",
+        " 8 " => " 8&nbsp;",
+        " 9 " => " 9&nbsp;",
+        " 0 " => " 0&nbsp;",
         " - " => " – ",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
@@ -363,6 +402,26 @@ class StringFilters implements IStringFilters
             "\n",
             "\r\n",
             ), "<br>", (string) $content
+        );
+    }
+
+    /**
+     * Convert EOLs to HTML breakline + NBSP indentation
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function convertEolToBrNbsp(&$content)
+    {
+        if (!is_string($content)) {
+            return;
+        }
+        $content = str_replace(
+            array(
+            "\n",
+            "\r\n",
+            ), "<br><span class=indentation>&nbsp;</span>", (string) $content
         );
     }
 
