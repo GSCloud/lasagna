@@ -79,7 +79,7 @@ lasagna_sheets: [
 
 design: [
   css_font: []
-  footer_color: "black"
+  footer_color: "grey darken-4"
   nav_color: "orange"
   theme_color: "orange"
 ]

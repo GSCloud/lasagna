@@ -30,8 +30,8 @@
     </div>
 </div>
 
-<div class="footer-copyright grey darken-4" style="padding-bottom:2em!important">
-    <div class="row center" style="padding-top:1rem">
+<div class="footer-copyright grey darken-4">
+    <div class="row center">
         <span style="font-size:1.2rem">{{ l.poweredby }}</span><br>
         <a rel="noopener" target="_blank" class="white-text" href="https://gscloud.cz/{{ lang }}">⛅️&nbsp;{{ l.$gsc }}</a>
         &nbsp;&nbsp;<a rel="noopener" target="_blank" class="white-text"
@@ -43,17 +43,13 @@
             href="https://github.com/GSCloud/lasagna"><i class="fa-brands fa-github"></i></a>
         &nbsp;&nbsp;<a rel=nofollow href="/api">API</a><br>
         <a rel="me" target="_blank" class="white-text" href="{{ l.copyright_link }}{{^l.copyright_link}}https://witter.cz/@fredbrooker{{/l.copyright_link}}">{{ l.author }}</a>&nbsp;{{ l.copyright }}{{^l.copyright}}2017-2024{{/l.copyright}}<br>
-        <div class="container row center">
-            <div class="row center">
-                <div class="center">
-                    <a class="modal-trigger" href="#gscmodal">
-                        <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:15%"
-                            src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp" alt="{{ l.$generator }}"
-                            width="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}"
-                            height="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}">
-                    </a>
-                </div>
-            </div>
+        <div class="row center">
+            <a class="modal-trigger" href="#gscmodal">
+                <img class="responsive-img" style="margin:1em;background-color:#fff;border-radius:15%"
+                    src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp" alt="{{ l.$generator }}"
+                    width="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}"
+                    height="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}">
+            </a>
         </div>
     </div>
 </div>
