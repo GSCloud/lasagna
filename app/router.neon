@@ -22,4 +22,4 @@ APIDemo:
   api_info: "Returns (JSON): array of object records."
   assert_json: true
   presenter: api
-  sitemap: true
+

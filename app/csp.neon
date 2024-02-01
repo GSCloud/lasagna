@@ -38,8 +38,11 @@ csp: [
     "umami.gscloud.cz"
     "'self'"
     "'strict-dynamic'"
-#    "'unsafe-eval'"
+
+# allowed only to enable Zaraz
+    "'unsafe-eval'"
 #    "'unsafe-inline'"
+
     "'nonce-random';"
 
     "img-src"

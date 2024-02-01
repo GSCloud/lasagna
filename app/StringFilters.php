@@ -12,6 +12,8 @@
 
 namespace GSC;
 
+use Michelf\Markdown;
+
 /**
  * String Filters interface
  * 
@@ -24,6 +26,15 @@ namespace GSC;
 interface IStringFilters
 {
     /**
+     * Render Markdown to HTML
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function renderMarkdown(&$content);
+
+    /**
      * Convert EOLs to <br>
      *
      * @param string $content content by reference
@@ -33,7 +44,7 @@ interface IStringFilters
     public static function convertEolToBr(&$content);
 
     /**
-     * Convert EOLs to HTML breakline + NBSP indentation
+     * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
      *
      * @param string $content content by reference
      * 
@@ -56,7 +67,7 @@ interface IStringFilters
      * Correct the text spacing in passed content for various languages.
      *
      * @param string $content  content by reference
-     * @param string $language (optional: "cs", "sk", "en" - for now)
+     * @param string $language (optional: "cs", "sk", "en")
      * 
      * @return void
      */
@@ -72,7 +83,7 @@ interface IStringFilters
     public static function trimEol(&$content);
 
     /**
-     * Trim THML comments
+     * Trim THML comments inside the <body> tag
      *
      * @param string $content content by reference
      * 
@@ -110,7 +121,7 @@ class StringFilters implements IStringFilters
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
         " 0 " => " 0&nbsp;",
-        " - " => " – ",
+        " - " => " –&nbsp;",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
         " % " => "&nbsp;%",
@@ -123,6 +134,7 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
         " / " => " /&nbsp;",
+        " – " => " <span class=nowrap>–&nbsp;</span>",        
         " CZK" => "&nbsp;CZK",
         " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
@@ -212,7 +224,7 @@ class StringFilters implements IStringFilters
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
         " 0 " => " 0&nbsp;",
-        " - " => " – ",
+        " - " => " –&nbsp;",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
         " % " => "&nbsp;%",
@@ -225,6 +237,7 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
         " / " => " /&nbsp;",
+        " – " => " <span class=nowrap>–&nbsp;</span>",
         " CZK" => "&nbsp;CZK",
         " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
@@ -321,7 +334,7 @@ class StringFilters implements IStringFilters
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
         " 0 " => " 0&nbsp;",
-        " - " => " – ",
+        " - " => " –&nbsp;",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
         " % " => "&nbsp;%",
@@ -334,6 +347,7 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
         " / " => " /&nbsp;",
+        " – " => " <span class=nowrap>–&nbsp;</span>",
         " A " => " A&nbsp;",
         " AM" => "&nbsp;AM",
         " CZK " => " CZK&nbsp;",
@@ -394,9 +408,6 @@ class StringFilters implements IStringFilters
      */
     public static function convertEolToBr(&$content)
     {
-        if (!is_string($content)) {
-            return;
-        }
         $content = str_replace(
             array(
             "\n",
@@ -406,7 +417,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Convert EOLs to HTML breakline + NBSP indentation
+     * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
      *
      * @param string $content content by reference
      * 
@@ -414,14 +425,11 @@ class StringFilters implements IStringFilters
      */
     public static function convertEolToBrNbsp(&$content)
     {
-        if (!is_string($content)) {
-            return;
-        }
         $content = str_replace(
             array(
             "\n",
             "\r\n",
-            ), "<br><span class=indentation>&nbsp;</span>", (string) $content
+            ), "<br><span class=indentation></span>", (string) $content
         );
     }
 
@@ -434,9 +442,6 @@ class StringFilters implements IStringFilters
      */
     public static function convertEolHyphenToBrDot(&$content)
     {
-        if (!is_string($content)) {
-            return;
-        }
         $content = str_replace(
             array(
             "\n* ",
@@ -460,9 +465,6 @@ class StringFilters implements IStringFilters
      */
     public static function trimEol(&$content)
     {
-        if (!is_string($content)) {
-            return;
-        }
         $content = str_replace(
             array(
             "\r\n",
@@ -473,7 +475,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Trim THML comments
+     * Trim THML comments inside the <body> tag
      *
      * @param string $content content by reference
      * 
@@ -481,20 +483,17 @@ class StringFilters implements IStringFilters
      */
     public static function trimHtmlComment(&$content)
     {
-        if (!is_string($content)) {
-            return;
-        }
         $body = "<body";
         $c = explode($body, (string) $content, 2);
         $regex = '/<!--(.|\s)*?-->/';
-        // fix only comments inside body
-        if (count($c) == 2) {
-            $c[1] = preg_replace($regex, "<!-- comment removed -->", $c[1]);
-            $content = $c[0] . $body . $c[1];
-        }
         // fix the whole string (there is no <body)
         if (count($c) == 1) {
-            $content = preg_replace($regex, "<!-- comment removed -->", $content);
+            $content = preg_replace($regex, "<!-- :) -->", $content);
+        }
+        // fix only comments inside body
+        if (count($c) == 2) {
+            $c[1] = preg_replace($regex, "<!-- :) -->", $c[1]);
+            $content = $c[0] . $body . $c[1];
         }
     }
 
@@ -504,27 +503,23 @@ class StringFilters implements IStringFilters
      * Correct the text spacing in passed content for various languages.
      *
      * @param string $content  content by reference
-     * @param string $language (optional: "cs", "sk", "en" - for now)
+     * @param string $language (optional: "cs", "sk", default "en" - for now)
      * 
-     * @return null
+     * @return void
      */
     public static function correctTextSpacing(&$content, $language = "en")
     {
-        if (!is_string($content)) {
-            return null;
-        }
         $language = strtolower(trim((string) $language));
         switch ($language) {
-        case "sk":
-            $content = self::correctTextSpacingSk($content);
-            break;
         case "cs":
             $content = self::correctTextSpacingCs($content);
+            break;
+        case "sk":
+            $content = self::correctTextSpacingSk($content);
             break;
         default:
             $content = self::correctTextSpacingEn($content);
         }
-        return null;
     }
 
     /**
@@ -536,9 +531,6 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingEn($content)
     {
-        if (!is_string($content)) {
-            return '';
-        }
         return str_replace(
             array_keys(self::$english),
             self::$english, $content
@@ -554,9 +546,6 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingCs($content)
     {
-        if (!is_string($content)) {
-            return '';
-        }
         return str_replace(
             array_keys(self::$czech),
             self::$czech,
@@ -573,13 +562,25 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingSk($content)
     {
-        if (!is_string($content)) {
-            return '';
-        }
         return str_replace(
             array_keys(self::$slovak),
             self::$slovak,
             $content
         );
+    }
+
+    /**
+     * Render Markdown to HTML
+     *
+     * @param string $content text data
+     * 
+     * @return void
+     */
+    public static function renderMarkdown(&$content)
+    {
+        $x = \trim($content);
+        if (\str_starts_with($x, '[markdown]')) {
+            $content = Markdown::defaultTransform(substr($x, 10));
+        }
     }
 }

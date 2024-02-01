@@ -78,9 +78,7 @@ lasagna_sheets: [
 ]
 
 design: [
-  css_font: [
-    "https://fonts.googleapis.com/css?family=Aladin&display=swap"
-  ]
+  css_font: []
   footer_color: "black"
   nav_color: "orange"
   theme_color: "orange"

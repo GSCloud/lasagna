@@ -53,28 +53,32 @@ class HomePresenter extends APresenter
         $data = $this->getData();
         $this->setHeaderHtml()->dataExpander($data);
 
-        // menu content switcher
+        // set menu variables for content switching
         $data['view'] = $view;
         $data[$view . '_menu'] = true;
 
-        // fix current locale
-        foreach ($data["l"] ??=[] as $k => $v) {
-            StringFilters::convertEolHyphenToBrDot($data["l"][$k]);
-            StringFilters::convertEolToBr($data["l"][$k]);
-            StringFilters::correctTextSpacing(
-                $data["l"][$k], $data["lang"] ?? "en"
-            );
+        // fix locale
+        $lang = $data['lang'] ?? 'en';
+        foreach ($data['l'] ??=[] as $k => $v) {
+            if (\str_starts_with($data['l'][$k], '[markdown]')) {
+                StringFilters::renderMarkdown($data['l'][$k]);
+            } else {
+                StringFilters::convertEolHyphenToBrDot($data['l'][$k]);
+                //StringFilters::convertEolToBr($data['l'][$k]);
+            }
+            StringFilters::correctTextSpacing($data['l'][$k], $lang);
         }
 
+        // render output
         $output = '';
         if ($data) {
             $output = $this->setData(
                 $data
             )->renderHTML(
-                $presenter[$view]["template"]
+                $presenter[$view]['template']
             );
         }
         StringFilters::trimHtmlComment($output);
-        return $this->setData("output", $output);
+        return $this->setData('output', $output);
     }
 }
