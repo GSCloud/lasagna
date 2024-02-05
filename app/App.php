@@ -160,7 +160,7 @@ $cache_profiles = array_replace(
         "thirtyminutes" => "+30 minutes",
         "hour" => "+60 minutes",
         "day" => "+24 hours",
-        "csv" => "+360 minutes", // CSV cold storage
+        "csv" => "+60 minutes", // CSV cold storage
         "limiter" => "+5 seconds", // access limiter
     ], (array) ($cfg["cache_profiles"] ?? [])
 );
@@ -174,9 +174,7 @@ foreach ($cache_profiles as $k => $v) {
                 "duration" => $v,
                 "lock" => true,
                 "path" => CACHE,
-                "prefix" => SERVER
-                    . "_"
-                    . PROJECT
+                "prefix" => PROJECT
                     . "_"
                     . APPNAME
                     . "_"
@@ -194,9 +192,7 @@ foreach ($cache_profiles as $k => $v) {
                 "path" => CACHE,
                 "persistent" => true,
                 "port" => $cfg["redis"]["port"] ?? 6377,
-                "prefix" => SERVER
-                    . "_"
-                    . PROJECT
+                "prefix" => PROJECT
                     . "_"
                     . APPNAME
                     . "_"
@@ -213,9 +209,7 @@ foreach ($cache_profiles as $k => $v) {
                 "fallback" => false,
                 "lock" => true,
                 "path" => CACHE,
-                "prefix" => SERVER
-                    . "_"
-                    . PROJECT
+                "prefix" => PROJECT
                     . "_"
                     . APPNAME
                     . "_"

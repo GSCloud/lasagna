@@ -444,9 +444,7 @@ class StringFilters implements IStringFilters
     {
         $content = str_replace(
             array(
-            "\n* ",
             "\n- ",
-            "\r\n* ",
             "\r\n- ",
             ), "<br>•&nbsp;", (string) $content
         );

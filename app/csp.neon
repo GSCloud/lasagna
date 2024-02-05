@@ -8,6 +8,9 @@ csp: [
     "report-uri"
     "https://gscloud.cz;"
 
+    "base-uri"
+    "'self';"
+
     "object-src"
     "'none';"
 

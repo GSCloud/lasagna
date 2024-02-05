@@ -54,7 +54,7 @@ class HomePresenter extends APresenter
         $this->setHeaderHtml()->dataExpander($data);
 
         // set menu variables for content switching
-        $data['view'] = $view;
+        //$data['view'] = $view;
         $data[$view . '_menu'] = true;
 
         // fix locale and HTML
@@ -63,8 +63,8 @@ class HomePresenter extends APresenter
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
                 StringFilters::renderMarkdown($data['l'][$k]);
             } else {
-                //StringFilters::convertEolToBr($data['l'][$k]);
                 StringFilters::convertEolHyphenToBrDot($data['l'][$k]);
+                StringFilters::convertEolToBrNbsp($data['l'][$k]);
             }
             StringFilters::correctTextSpacing($data['l'][$k], $lang);
         }

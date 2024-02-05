@@ -5,12 +5,8 @@ var version = '{{ VERSION }}';
 var core = [
   'manifest.json',
   {{#sitemap}}'/{{ . }}', {{/sitemap}}
-  {{#script_sources}}'{{ . }}', {{/script_sources}}
-  {{#css_sources}}'{{ . }}', {{/css_sources}}
   {{#swpreload}}'{{ . }}', {{/swpreload}}
   {{#swpreload_cdn}}'{{ cdn }}{{ . }}', {{/swpreload_cdn}}
-  {{#script_sources_extra}}'{{ . }}', {{/script_sources_extra}}
-  {{#css_sources_extra}}'{{ cdn }}{{ . }}', {{/css_sources_extra}}
   '{{ cdn }}/img/favicon-16.webp',
   '{{ cdn }}/img/favicon-128.webp',
   '{{ cdn }}/img/favicon-180.webp',
