@@ -58,6 +58,7 @@ csp: [
 
     "frame-src"
     "youtube.com"
+    "www.google.com"
     "www.youtube.com;"
     
     "form-action"

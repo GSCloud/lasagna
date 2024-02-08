@@ -13,6 +13,7 @@
 namespace GSC;
 
 use Michelf\Markdown;
+use Michelf\MarkdownExtra;
 
 /**
  * String Filters interface
@@ -134,7 +135,7 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
         " / " => " /&nbsp;",
-        " – " => " <span class=nowrap>–&nbsp;</span>",        
+        " – " => " –&nbsp;",
         " CZK" => "&nbsp;CZK",
         " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
@@ -237,7 +238,7 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
         " / " => " /&nbsp;",
-        " – " => " <span class=nowrap>–&nbsp;</span>",
+        " – " => " –&nbsp;",
         " CZK" => "&nbsp;CZK",
         " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
@@ -347,7 +348,7 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
         " / " => " /&nbsp;",
-        " – " => " <span class=nowrap>–&nbsp;</span>",
+        " – " => " –&nbsp;",
         " A " => " A&nbsp;",
         " AM" => "&nbsp;AM",
         " CZK " => " CZK&nbsp;",
@@ -579,6 +580,21 @@ class StringFilters implements IStringFilters
         $x = \trim($content);
         if (\str_starts_with($x, '[markdown]')) {
             $content = Markdown::defaultTransform(substr($x, 10));
+        }
+    }
+
+    /**
+     * Render Markdown Extra to HTML
+     *
+     * @param string $content text data
+     * 
+     * @return void
+     */
+    public static function renderMarkdownExtra(&$content)
+    {
+        $x = \trim($content);
+        if (\str_starts_with($x, '[markdown]')) {
+            $content = MarkdownExtra::defaultTransform(substr($x, 10));
         }
     }
 }
