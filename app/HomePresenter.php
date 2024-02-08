@@ -57,14 +57,14 @@ class HomePresenter extends APresenter
         //$data['view'] = $view;
         $data[$view . '_menu'] = true;
 
-        // fix locale and HTML
+        // fix locales and HTML
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
                 StringFilters::renderMarkdown($data['l'][$k]);
             } else {
-                StringFilters::convertEolHyphenToBrDot($data['l'][$k]);
                 StringFilters::convertEolToBrNbsp($data['l'][$k]);
+                //StringFilters::convertEolHyphenToBrDot($data['l'][$k]);
             }
             StringFilters::correctTextSpacing($data['l'][$k], $lang);
         }
