@@ -44,6 +44,8 @@ csp: [
 
 # allowed only to enable Zaraz
     "'unsafe-eval'"
+
+# actually not needed anymore
 #    "'unsafe-inline'"
 
     "'nonce-random';"
