@@ -29,11 +29,47 @@ interface IStringFilters
     /**
      * Render Markdown to HTML
      *
-     * @param string $content content by reference
+     * @param string $content text data
      * 
      * @return void
      */
     public static function renderMarkdown(&$content);
+
+    /**
+     * Render Markdown Extra to HTML
+     *
+     * @param string $content text data
+     * 
+     * @return void
+     */
+    public static function renderMarkdownExtra(&$content);
+
+    /**
+     * Render YouTube short code
+     *
+     * @param string $content text data containing [youtube param]
+     * 
+     * @return void
+     */
+    public static function renderYouTubeShortCode(&$content);
+
+    /**
+     * Render gallery short code
+     *
+     * @param string $content text data containing [gallery param]
+     * 
+     * @return void
+     */
+    public static function renderGalleryShortCode(&$content);
+
+    /**
+     * Find uploaded images by a mask
+     *
+     * @param string $mask file mask
+     * 
+     * @return mixed
+     */
+    public static function findImagesByMask($mask);
 
     /**
      * Convert EOLs to <br>
@@ -595,6 +631,105 @@ class StringFilters implements IStringFilters
         $x = \trim($content);
         if (\str_starts_with($x, '[markdown]')) {
             $content = MarkdownExtra::defaultTransform(substr($x, 10));
+        }
+    }
+
+    /**
+     * Render YouTube short code
+     *
+     * @param string $content text data containing [youtube param]
+     * 
+     * @return void
+     */
+    public static function renderYouTubeShortCode(&$content)
+    {
+        $x = \trim($content);
+        if (\str_contains($x, '[youtube ')) {
+            $pattern = '#\[youtube\s.*?(.*?)\]#is';
+            $replace = '<div class="video-container center row">'
+                . '<iframe width="420" height="315" controls '
+                . 'src="https://www.youtube.com/embed/$1"'
+                . '></iframe></div>';
+            $content = \preg_replace($pattern, $replace, $x);
+        }
+    }
+
+    /**
+     * Render gallery short code
+     *
+     * @param string $content text data containing [gallery param]
+     * 
+     * @return void
+     */
+    public static function renderGalleryShortCode(&$content)
+    {
+        $x = \trim($content);
+        if (\str_contains($x, '[gallery ')) {
+            $pattern = '#\[gallery\s.*?(.*?)\]#is';
+            \preg_match($pattern, $x, $m);
+            if (\is_array($m) && isset($m[1])) {
+                $images = '';
+                $files = self::findImagesByMask($m[1]);
+                if (\is_array($files)) {
+                    \shuffle($files);
+                    foreach ($files as $f) {
+                        $images .= '<div><img class="responsive-img" '
+                            . "src='/upload/$f'></div>";
+                    }
+                }
+                $replace = '<div class="center row">' . $images . '</div>';
+                $content = \preg_replace($pattern, $replace, $x);
+            }
+        }
+    }
+
+    /**
+     * Find uploaded images by a mask
+     *
+     * @param string $mask file mask
+     * 
+     * @return mixed
+     */
+    public static function findImagesByMask($mask)
+    {
+        $mask = \trim($mask);
+        $mask = \trim($mask, './\\');
+        if (\is_string($mask)) {
+            \chdir(UPLOAD);
+            $path = $mask . '*.webp';
+            return \glob($path);
+        }
+        return null;
+    }
+
+    /**
+     * Sanitize a string to a lowercase safe variant
+     *
+     * @param string $string string by reference
+     * 
+     * @return void
+     */
+    public static function sanitizeStringLC(&$string)
+    {
+        if ($string && \is_string($string)) {
+            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', $string);
+            if ($string && \is_string($string)) {
+                $string = \strtolower($string);
+            }
+        }
+    }
+
+    /**
+     * Sanitize a string to a safe variant
+     *
+     * @param string $string string by reference
+     * 
+     * @return void
+     */
+    public static function sanitizeString(&$string)
+    {
+        if ($string && \is_string($string)) {
+            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', $string);
         }
     }
 }

@@ -98,6 +98,7 @@ $data["REVISIONS"] = (int) trim(
 );
 
 $data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
+$data["cdn_trimmed"] = "cdn-assets" . DS . $version;
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (
     ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://{$host}/" : "http://{$host}/"

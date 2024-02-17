@@ -279,7 +279,7 @@ abstract class APresenter implements IPresenter
     /* @var string Google Sheet URL postfix */
     const GS_SHEET_POSTFIX = '/edit#gid=0';
     /* @var integer access limiter max. hits in 5 secs. */
-    const LIMITER_MAXIMUM = 25;
+    const LIMITER_MAXIMUM = 200;
     /* @var string identity nonce filename */
     const IDENTITY_NONCE = 'identity_nonce.key';
 
