@@ -4,7 +4,6 @@
 var version = '{{ VERSION }}';
 var core = [
   'manifest.json',
-  {{#sitemap}}'/{{ . }}', {{/sitemap}}
   {{#swpreload}}'{{ . }}', {{/swpreload}}
   {{#swpreload_cdn}}'{{ cdn }}{{ . }}', {{/swpreload_cdn}}
   '{{ cdn }}/img/favicon-16.webp',

@@ -712,7 +712,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeStringLC(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', $string);
+            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', \trim($string));
             if ($string && \is_string($string)) {
                 $string = \strtolower($string);
             }
@@ -729,7 +729,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeString(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', $string);
+            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', \trim($string));
         }
     }
 }
