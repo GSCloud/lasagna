@@ -113,11 +113,12 @@
             <i class="fa-solid fa-rocket"></i>&nbsp;&nbsp;&nbsp;{{ l.a_flush }}</a>
         </div>
 
-        <div id="domains" style="font-size:12px!important;color:#888!important" class="container"></div>
+        {{^disable_articles}}
         <div class="col s12 white">
           <label for="ArticleURLSelect">{{ l.a_articles }}</label>
           <select id="ArticleURLSelect"></select>
         </div>
+        {{/disable_articles}}
 
         <a id="a_upload"
           data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
