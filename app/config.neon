@@ -36,6 +36,12 @@ cache_profiles: []
 # blocked countries
 geoblock: []
 
+# disable articles feature
+#disable_articles: true
+
+# disable version check feature
+#disable_version_check: true
+
 # Redis
 redis: [
   #database: 0

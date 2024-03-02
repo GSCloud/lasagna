@@ -86,7 +86,7 @@ async function sha256(message) {
     }
   }
 
-  // feature detection and binding: "online"
+  // feature detection: "online"
   if ("onLine" in navigator) {
     w.addEventListener("load", function() {
       w.addEventListener("online", checkNetwork);
@@ -94,7 +94,7 @@ async function sha256(message) {
     });
   }
 
-  // setCookie() general function
+  // setCookie()
   if (typeof window.setCookie !== "function") window.setCookie = function(key, value, days) {
     if (key === undefined) return false;
     if (value === undefined) return false;
@@ -108,14 +108,14 @@ async function sha256(message) {
     }
   }
 
-  // getCookie() general function
+  // getCookie()
   if (typeof window.getCookie !== "function") window.getCookie = function(key) {
     if (key === undefined) return false;
     var v = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
     return v ? v[2] : null;
   }
 
-  // delCookie() general function
+  // delCookie()
   if (typeof window.delCookie !== "function") window.delCookie = function(key) {
     if (key === undefined) return false;
     var date = new Date();
@@ -234,7 +234,7 @@ async function sha256(message) {
       }
     }
 
-    // GSC.GetFileExtension() - parse filename, return the file extension
+    // GSC.GetFileExtension() - parse filename, return the extension
     if (typeof GSC.GetFileExtension !== "function") GSC.GetFileExtension = function(filename) {
       if (filename) {
           return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
@@ -242,7 +242,7 @@ async function sha256(message) {
       return '';
     }
 
-    // GSC.CopyThisText() - copy text from an element to clipboard / or copy data element; show a tooltip
+    // GSC.CopyThisText() - copy text from element to clipboard; show a tooltip
     if (typeof GSC.CopyThisText !== "function") GSC.CopyThisText = function(that) {
       if (that) {
         var t = $(that).data("copy").trim();
@@ -254,7 +254,7 @@ async function sha256(message) {
       }
     }
 
-    // GSC.CopyThisHtml() - copy HTML from an element to clipboard; show a tooltip
+    // GSC.CopyThisHtml() - copy HTML from element to clipboard; show a tooltip
     if (typeof GSC.CopyThisHtml !== "function") GSC.CopyThisHtml = function(that) {
       if (that) {
         var t = $(that).text().trim();
@@ -267,6 +267,7 @@ async function sha256(message) {
     // GSC.VersionCheck()
     GSC.init.push(function() {
       GSC.names.push("GSC.VersionCheck()");
+      {{#disable_version_check}}GSC.VersionCheck = function(){};{{/disable_version_check}}
       if (typeof GSC.VersionCheck !== "function") GSC.VersionCheck = function() {
         if (!GSC.offline) {
           $.post("/version/core", function(post) {
@@ -298,11 +299,11 @@ async function sha256(message) {
       setTimeout(function() {GSC.VersionCheck()}, 5000);
     });
 
-    // GSC.ReadArticles() - read articles & insert HTML
+    // GSC.ReadArticles()
     GSC.init.push(function() {
       GSC.names.push("GSC.ReadArticles()");
       GSC.articles_rendered = false;
-
+      {{#disable_articles}}GSC.ReadArticles = function(){};{{/disable_articles}}
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
         // check for local copy
         var html = '';
@@ -373,23 +374,25 @@ async function sha256(message) {
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
-      // set UPDATE action
+
       $("#update-message").click(function() {
+        // set UPDATE action
         location.replace(location.pathname + '?nonce={{ nonce }}');
       });
-      // set default bullets for Summernote data
+      
       $(".summernote>ul").each(function(i, obj) {
+        // set default bullets for Summernote data
         $(obj).addClass("browser-default");
       });
 
-      // create mobile WebShare button for touch devices
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
+          // create mobile WebShare button for touch devices
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
       }
-      // check network status
+
       setInterval(checkNetwork, 1000);
     });
 
