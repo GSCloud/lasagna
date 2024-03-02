@@ -266,8 +266,9 @@ async function sha256(message) {
 
     // GSC.VersionCheck()
     GSC.init.push(function() {
-      GSC.names.push("GSC.VersionCheck()");
       {{#disable_version_check}}GSC.VersionCheck = function(){};{{/disable_version_check}}
+      {{#disable_version_check}}GSC.names.push("VersionCheck disabled");{{/disable_version_check}}
+      {{^disable_version_check}}GSC.names.push("VersionCheck");{{/disable_version_check}}
       if (typeof GSC.VersionCheck !== "function") GSC.VersionCheck = function() {
         if (!GSC.offline) {
           $.post("/version/core", function(post) {
@@ -301,9 +302,10 @@ async function sha256(message) {
 
     // GSC.ReadArticles()
     GSC.init.push(function() {
-      GSC.names.push("GSC.ReadArticles()");
-      GSC.articles_rendered = false;
       {{#disable_articles}}GSC.ReadArticles = function(){};{{/disable_articles}}
+      {{#disable_articles}}GSC.names.push("ReadArticles disabled");{{/disable_articles}}
+      {{^disable_articles}}GSC.names.push("ReadArticles");{{/disable_articles}}
+      GSC.articles_rendered = false;
       if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
         // check for local copy
         var html = '';
