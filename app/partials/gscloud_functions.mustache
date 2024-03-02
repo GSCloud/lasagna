@@ -302,7 +302,7 @@ async function sha256(message) {
 
     // GSC.ReadArticles()
     GSC.init.push(function() {
-      {{#disable_articles}}GSC.ReadArticles = function(){};{{/disable_articles}}
+      {{#disable_articles}}GSC.ReadArticles = function(){$(".summernote").html("");};{{/disable_articles}}
       {{#disable_articles}}GSC.names.push("ReadArticles disabled");{{/disable_articles}}
       {{^disable_articles}}GSC.names.push("ReadArticles");{{/disable_articles}}
       GSC.articles_rendered = false;
