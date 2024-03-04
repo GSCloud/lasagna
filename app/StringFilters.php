@@ -65,11 +65,12 @@ interface IStringFilters
     /**
      * Find uploaded images by a mask
      *
-     * @param string $mask file mask
+     * @param string $mask   file mask
+     * @param string $format image format
      * 
      * @return mixed
      */
-    public static function findImagesByMask($mask);
+    public static function findImagesByMask($mask, $format = 'webp');
 
     /**
      * Convert EOLs to <br>
@@ -643,11 +644,12 @@ class StringFilters implements IStringFilters
      */
     public static function renderYouTubeShortCode(&$content)
     {
+        // TODO: convert all videos using while loop
         $x = \trim($content);
         if (\str_contains($x, '[youtube ')) {
             $pattern = '#\[youtube\s.*?(.*?)\]#is';
-            $replace = '<div class="video-container center row">'
-                . '<iframe width="420" height="315" controls '
+            $replace = '<div class="video-container center row youtube-container">'
+                . '<iframe width="426" height="240" controls '
                 . 'src="https://www.youtube.com/embed/$1"'
                 . '></iframe></div>';
             $content = \preg_replace($pattern, $replace, $x);
@@ -663,6 +665,7 @@ class StringFilters implements IStringFilters
      */
     public static function renderGalleryShortCode(&$content)
     {
+        // TODO: convert all galleries using while loop
         $x = \trim($content);
         if (\str_contains($x, '[gallery ')) {
             $pattern = '#\[gallery\s.*?(.*?)\]#is';
@@ -672,12 +675,20 @@ class StringFilters implements IStringFilters
                 $files = self::findImagesByMask($m[1]);
                 if (\is_array($files)) {
                     \shuffle($files);
+                    $c = 0;
                     foreach ($files as $f) {
-                        $images .= '<div><img class="responsive-img" '
-                            . "src='/upload/$f'></div>";
+                        $c++;
+                        $images .= '<span class="gallery-img" '
+                            . 'data-counter="' . $c . '">'
+                            . '<img class="responsive-img gallery-img" '
+                            . 'src="/upload/' . $f . '" alt="' . $f . '">'
+                            . '</span>';
                     }
                 }
-                $replace = '<div class="center row">' . $images . '</div>';
+                $replace = '<div class="row center gallery-container" '
+                    . 'data-mask="' . $m[1] . '">'
+                    . $images
+                    . '</div>';
                 $content = \preg_replace($pattern, $replace, $x);
             }
         }
@@ -686,20 +697,41 @@ class StringFilters implements IStringFilters
     /**
      * Find uploaded images by a mask
      *
-     * @param string $mask file mask
+     * @param string $mask   file mask
+     * @param string $format image format
      * 
      * @return mixed
      */
-    public static function findImagesByMask($mask)
+    public static function findImagesByMask($mask, $format = 'webp')
     {
         $mask = \trim($mask);
         $mask = \trim($mask, './\\');
+        $format = \trim($format);
+        $format = \trim($format, './\\');
+        $format = \strtolower($format);
+        if (!\is_string($format) || \strlen($format)) {
+            $format = 'webp';
+        }
         if (\is_string($mask)) {
             \chdir(UPLOAD);
-            $path = $mask . '*.webp';
+            $path = $mask . '*.' . $format;
             return \glob($path);
         }
         return null;
+    }
+
+    /**
+     * Sanitize a string to a safe variant
+     *
+     * @param string $string string by reference
+     * 
+     * @return void
+     */
+    public static function sanitizeString(&$string)
+    {
+        if ($string && \is_string($string)) {
+            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', \trim($string));
+        }
     }
 
     /**
@@ -716,20 +748,6 @@ class StringFilters implements IStringFilters
             if ($string && \is_string($string)) {
                 $string = \strtolower($string);
             }
-        }
-    }
-
-    /**
-     * Sanitize a string to a safe variant
-     *
-     * @param string $string string by reference
-     * 
-     * @return void
-     */
-    public static function sanitizeString(&$string)
-    {
-        if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', \trim($string));
         }
     }
 }
