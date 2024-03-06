@@ -4,6 +4,7 @@ defaults:
 home:
   path: /
   sitemap: true
+  assert_httpcode: 203
 
 cs:
   path: /cs

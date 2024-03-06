@@ -37,77 +37,77 @@ info:
 
 docs:
 	@echo "🔨 \e[1;32m Creating documentation\e[0m\n"
-	@bash ./bin/create_pdf.sh
+	@./bin/create_pdf.sh
 
 update:
-	@bash ./bin/update.sh
+	@./bin/update.sh
 	@make clear
 
 unit:
-	@bash ./cli.sh unit
+	@./cli.sh unit
 
 clear:
-	@bash ./cli.sh clearall
+	@./cli.sh clearall
 
 install:
-	@bash ./bin/install.sh
+	@./bin/install.sh
 
 doctor:
-	@bash ./cli.sh doctor
+	@./cli.sh doctor
 
 sync:
-	@bash ./bin/sync.sh x
-	@bash ./bin/sync.sh b
-	@bash ./bin/sync.sh a
+	@./bin/sync.sh x
+	@./bin/sync.sh b
+	@./bin/sync.sh a
 
 local: test
 
 test:
-	@bash ./cli.sh unit
-	@bash ./cli.sh local
+	@./cli.sh unit
+	@./cli.sh local
 
 stan:
 ifneq ($(strip $(has_phpstan)),)
 	phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php app/CiTester.php app/AdminPresenter.php app/CorePresenter.php app/CliDemo.php app/CliVersion.php app/CliVersionjson.php app/Doctor.php app/ErrorPresenter.php app/HomePresenter.php app/UnitTester.php app/ArticlePresenter.php app/LogoutPresenter.php app/RSSPresenter.php app/StringFilters.php
 endif
 ifneq ($(strip $(PHPSTAN_EXTRA)),)
-	@bash ./phpstan_extra.sh
+	@./phpstan_extra.sh
 endif
 
 prod:
-	@bash ./cli.sh unit
-	@bash ./cli.sh prod
+	@./cli.sh unit
+	@./cli.sh prod
 
 build:
 	@echo "🔨 \e[1;32m Building image\e[0m\n"
-	@bash ./bin/build.sh
+	@./bin/build.sh
 
 push:
 	@echo "🔨 \e[1;32m Pushing image to Docker.io\e[0m\n"
-	@bash ./bin/push.sh
+	@./bin/push.sh
 
 run:
 	@echo "🔨 \e[1;32m Running container\e[0m\n"
-	@bash ./bin/run.sh
+	@./bin/run.sh
 
 start:
 	@echo "🔨 \e[1;32m Starting container\e[0m\n"
-	@bash ./bin/start.sh
+	@./bin/start.sh
 
 stop:
 	@echo "🔨 \e[1;32m Stopping container\e[0m\n"
-	@bash ./bin/stop.sh
+	@./bin/stop.sh
 
 kill:
 	@echo "🔨 \e[1;32m Killing container\e[0m\n"
-	@bash ./bin/kill.sh
+	@./bin/kill.sh
 
 execbash:
-	@bash ./bin/execbash.sh
+	@./bin/execbash.sh
 
 du:
 	@echo "🔨 \e[1;32m Updating\e[0m\n"
-	@bash ./bin/update_docker.sh
+	@./bin/update_docker.sh
 
 # update and test local + sync to remote and test
 everything: clear update local test sync prod

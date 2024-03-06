@@ -45,7 +45,7 @@ interface IStringFilters
     public static function renderMarkdownExtra(&$content);
 
     /**
-     * Render YouTube short code
+     * Render YouTube short code(s) - max. 10
      *
      * @param string $content text data containing [youtube param]
      * 
@@ -54,7 +54,7 @@ interface IStringFilters
     public static function renderYouTubeShortCode(&$content);
 
     /**
-     * Render gallery short code
+     * Render gallery short code(s) - max. 10
      *
      * @param string $content text data containing [gallery param]
      * 
@@ -545,7 +545,10 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacing(&$content, $language = "en")
     {
-        $language = strtolower(trim((string) $language));
+        if (!\is_string($language)) {
+            $language = "en";
+        }
+        $language = \strtolower(\trim((string) $language));
         switch ($language) {
         case "cs":
             $content = self::correctTextSpacingCs($content);
@@ -636,7 +639,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Render YouTube short code
+     * Render YouTube short code(s) - max. 10
      *
      * @param string $content text data containing [youtube param]
      * 
@@ -644,20 +647,26 @@ class StringFilters implements IStringFilters
      */
     public static function renderYouTubeShortCode(&$content)
     {
-        // TODO: convert all videos using while loop
+        $counter = 0;
         $x = \trim($content);
-        if (\str_contains($x, '[youtube ')) {
+        while (\str_contains($x, '[youtube ') && $counter < 10) {
+            if (!\is_string($x)) {
+                break;
+            }
+            $counter++;
             $pattern = '#\[youtube\s.*?(.*?)\]#is';
             $replace = '<div class="video-container center row youtube-container">'
                 . '<iframe width="426" height="240" controls '
                 . 'src="https://www.youtube.com/embed/$1"'
                 . '></iframe></div>';
-            $content = \preg_replace($pattern, $replace, $x);
+            if (\is_string($x)) {
+                $x = $content = \preg_replace($pattern, $replace, $x);
+            }
         }
     }
 
     /**
-     * Render gallery short code
+     * Render gallery short code(s) - max. 10
      *
      * @param string $content text data containing [gallery param]
      * 
@@ -665,10 +674,14 @@ class StringFilters implements IStringFilters
      */
     public static function renderGalleryShortCode(&$content)
     {
-        // TODO: convert all galleries using while loop
+        $counter = 0;
         $x = \trim($content);
-        if (\str_contains($x, '[gallery ')) {
+        while (\str_contains($x, '[gallery ') && $counter < 10) {
             $pattern = '#\[gallery\s.*?(.*?)\]#is';
+            if (!\is_string($x)) {
+                break;
+            }
+            $counter++;
             \preg_match($pattern, $x, $m);
             if (\is_array($m) && isset($m[1])) {
                 $images = '';
@@ -689,7 +702,9 @@ class StringFilters implements IStringFilters
                     . 'data-mask="' . $m[1] . '">'
                     . $images
                     . '</div>';
-                $content = \preg_replace($pattern, $replace, $x);
+                if (\is_string($x)) {
+                    $x = $content = \preg_replace($pattern, $replace, $x);
+                }
             }
         }
     }
