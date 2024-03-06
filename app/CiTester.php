@@ -263,7 +263,8 @@ class CiTester
 
         if ($errors) {
             $climate->out("\nErrors: <bold>" . $errors . "\n");
-            exit((int) $errors);
+            sleep(5);
+            exit($errors);
         }
     }
 }

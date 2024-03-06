@@ -201,5 +201,6 @@ class UnitTester
         echo 'Unit test finished in '
         . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2)
         . ' ms';
+        exit(0);
     }
 }
