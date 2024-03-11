@@ -23,24 +23,11 @@ GetDeArticle:
 
 ReadArticles:
   path: '/ReadArticles/[a:profile]/[a:hash]'
-  api: true
-  api_description: "Get articles as JSON"
-  api_info: "Parameters:\n<b><a:profile></b> - profile name,\n<b><a:hash></b> - hexadecimal URL stub hash.\n\nReturns (JSON): HTML data (JSON) + checksum hash (string)."
-  api_example: [
-    "ReadArticles/default/3b8b91c75627bee566dcb88f4805901b20a3eab2520bcff8d26c87157a035026"
-  ]
   assert_json: true
   method: GET
   presenter: core
 
 GetQR:
   path: "/qr/[s|m|l|x:size]/[**:trailing]"
-  api: true
-  api_description: "Get QR code as image"
-  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size,\n<b><trailing></b> - text to render.\n\nReturns (binary): image."
   method: GET|POST
   presenter: core
-  api_example: [
-    "qr/s/Hello World!"
-    "qr/m/https://gscloud.cz"
-  ]

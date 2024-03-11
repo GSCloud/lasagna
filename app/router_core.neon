@@ -3,61 +3,37 @@
 
 GetWebManifest:
   path: /manifest.json
-  api: true
-  api_description: "PWA manifest."
-  api_info: "Returns (JSON): configuration file."
   assert_json: true
   presenter: core
 
 GetRobotsTxt:
   path: /robots.txt
-  api: true
-  api_description: "Robots file."
-  api_info: "Returns (TEXT): text file."
   presenter: core
 
 GetTXTSitemap:
   path: /sitemap.txt
-  api: true
-  api_description: "Crawler TEXT sitemap."
-  api_info: "Returns (TEXT): text file."
   presenter: core
 
 GetXMLSitemap:
   path: /sitemap.xml
-  api: true
-  api_description: "Crawler XML sitemap."
-  api_info: "Returns (XML): markup."
   presenter: core
 
 GetRSSXML:
   path: /rss.xml
-  api: true
-  api_description: "RSS demo for future applications."
-  api_info: "Returns (XML): markup."
   presenter: core
 
 GetServiceWorker:
   path: /sw.js
-  api: true
-  api_description: "Service Worker code."
-  api_info: "Returns (JavaScript): code."
   presenter: core
 
 GetCoreVersion:
   path: /version/core
-  api: true
-  api_description: "Core version"
-  api_info: "Returns (JSON): SHA256 hash (string), number of git revisions (integer), modification timestamp (integer), modification date (D. M. YYYY)."
   assert_json: true
   method: GET|POST
   presenter: core
 
 GetEnDataVersion:
   path: /en/version/data
-  api: true
-  api_description: "English locale version"
-  api_info: "Returns (JSON): SHA256 hash (string)."
   assert_json: true
   language: en
   method: GET|POST
@@ -65,9 +41,6 @@ GetEnDataVersion:
 
 GetCsDataVersion:
   path: /cs/version/data
-  api: true
-  api_description: "Czech locale version"
-  api_info: "Returns (JSON): SHA256 hash (string)."
   assert_json: true
   language: cs
   method: GET|POST
