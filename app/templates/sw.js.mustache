@@ -30,10 +30,11 @@ self.addEventListener('fetch', function (event) {
   if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== 'GET') return;
   if (event.request.url.startsWith('https://accounts.google.com') == true) return;
-  if (event.request.url.endsWith('.avi') == true) return;
+  if (event.request.url.endsWith('.flac') == true) return;
   if (event.request.url.endsWith('.mkv') == true) return;
+  if (event.request.url.endsWith('.mp3') == true) return;
   if (event.request.url.endsWith('.mp4') == true) return;
-  if (event.request.url.endsWith('.mpg') == true) return;
+  if (event.request.url.endsWith('.torrent') == true) return;
   if (event.request.url.endsWith('.webm') == true) return;
   if (event.request.url.indexOf('/login') !== -1) return;
   if (event.request.url.indexOf('/logout') !== -1) return;
