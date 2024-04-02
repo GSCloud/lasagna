@@ -1,0 +1,6 @@
+.config_private.neon
+app/config_private.neon
+ci/*
+data/*.key
+logs/*
+temp/*

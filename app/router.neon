@@ -1,0 +1,25 @@
+defaults:
+  language: cs
+
+home:
+  path: /
+  sitemap: true
+
+cs:
+  path: /cs
+  sitemap: true
+
+en:
+  path: /en
+  sitemap: true
+  language: en
+
+APIDemo:
+  language: en
+  path: /api/v1/APIDemo
+  api: true
+  api_description: "API demo"
+  api_info: "Returns (JSON): array of object records."
+  assert_json: true
+  presenter: api
+

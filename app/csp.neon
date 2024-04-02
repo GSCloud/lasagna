@@ -1,0 +1,69 @@
+# @author Fred Brooker <git@gscloud.cz>
+# Content Security Policy
+
+csp: [
+    "Content-Security-Policy: "
+    "report-to"
+    "default;"
+    "report-uri"
+    "https://gscloud.cz;"
+
+    "base-uri"
+    "'self';"
+
+    "object-src"
+    "'none';"
+
+    "default-src"
+    "'unsafe-inline'"
+    "'self'"
+    "https://*;"
+
+    "connect-src"
+    "'self'"
+    "https://*;"
+
+    "font-src"
+    "data:"
+    "'self'"
+    "'unsafe-inline'"
+    "cdn.gscloud.cz"
+    "gspace.gscloud.cz"
+    "*.gstatic.com;"
+
+    "script-src"
+    "*.googleapis.com"
+    "cdn.gscloud.cz"
+    "cdnjs.cloudflare.com"
+    "challenges.cloudflare.com"
+    "gspace.gscloud.cz"
+    "static.cloudflareinsights.com"
+    "umami.gscloud.cz"
+    "'self'"
+    "'strict-dynamic'"
+
+# allowed only to enable Zaraz
+    "'unsafe-eval'"
+
+# actually not needed anymore
+#    "'unsafe-inline'"
+
+    "'nonce-random';"
+
+    "img-src"
+    "*"
+    "'self'"
+    "'unsafe-inline'"
+    "cdn.gscloud.cz"
+    "gspace.gscloud.cz"
+    "data:;"
+
+    "frame-src"
+    "youtube.com"
+    "www.google.com"
+    "www.youtube.com;"
+    
+    "form-action"
+    "https://*"
+    "'self';"
+]

@@ -1,0 +1,33 @@
+# @author Fred Brooker <git@gscloud.cz>
+# extra routes, mostly content based
+
+GetEnArticle:
+  path: '/en/id/[**:trailing]'
+  language: en
+  presenter: article
+
+GetCsArticle:
+  path: '/cs/id/[**:trailing]'
+  language: cs
+  presenter: article
+
+GetSkArticle:
+  path: '/sk/id/[**:trailing]'
+  language: sk
+  presenter: article
+
+GetDeArticle:
+  path: '/de/id/[**:trailing]'
+  language: de
+  presenter: article
+
+ReadArticles:
+  path: '/ReadArticles/[a:profile]/[a:hash]'
+  assert_json: true
+  method: GET
+  presenter: core
+
+GetQR:
+  path: "/qr/[s|m|l|x:size]/[**:trailing]"
+  method: GET|POST
+  presenter: core

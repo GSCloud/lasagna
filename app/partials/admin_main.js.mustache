@@ -1,0 +1,977 @@
+(function (w, d, undefined) {
+
+  // check logout cookie
+  if (getCookie("logout")) {
+    d.getElementById("admin_main").style.display = "none";
+    setCookie("motyle", "true");
+  }
+  delCookie("logout");
+
+  // GSC.init
+  if (w.GSC.init) {
+    w.GSC.data = {};
+
+    // fn PingDot()
+    if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
+      if (!el) return;
+      if (status) {
+        status = "green";
+      } else {
+        status = "red";
+      }
+      $(el).html("&#8226;").css({
+        color: status,
+        opacity: 1
+      }).fadeTo("slow", 0);
+    }
+
+    // fn GetCsvInfo()
+    if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
+      if (w.GSC.offline) {
+        return GSC.PingDot("#csv_ping", false);
+      }
+
+      // API: GetCsvInfo
+      $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
+          GSC.PingDot("#csv_ping");
+          var content = "";
+          var now = ~~(Date.now() / 1000);
+          moment.locale("{{ lang }}");
+          for (x in data.data) {
+            var link = x;
+            var csv = data.data[x]["csv"];
+            var lines = data.data[x]["lines"];
+            var sheet = data.data[x]["sheet"];
+            if (!data.data[x]["sheet"]) continue;
+            if (sheet) {
+              link =
+                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.5rem;border-radius:2px" ' +
+                'class="orange mono white-text bold" href="' +
+                'https://docs.google.com/spreadsheets/d/' +
+                sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
+                x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
+                ' style="font-size:1.5rem;border-radius:2px" class="bold blue white-text mono" ' +
+                'href="https://docs.google.com/spreadsheets/d/e/' +
+                csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
+                lines + '&nbsp;</a>&nbsp;';
+            }
+            content += (link + " {{ l.a_age }}&nbsp;" +
+              moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "<br>"
+            );
+          }
+          $("#a_update_info").html(content);
+        })
+        .fail(function (e) {
+          if (e.status == 401) location.reload(); // reload when HTTP 401 - Unauthorized
+          if (e.status == 403) location.reload(); // reload when HTTP 403 - Forbidden
+          GSC.PingDot("#csv_ping", false);
+          $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
+        });
+    }
+
+    // fn AdminUI
+    if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+      $("#admin_main div").addClass("a_reset");
+      $("#admin_main h2").addClass("a_reset a_h2");
+      $("#admin_main h4").addClass("a_reset a_h4");
+      $("#admin_main h5").addClass("a_reset a_h5");
+      $("#admin_main p").addClass("a_reset");
+
+      // remove tooltips for touch display
+      if (w.GSC.touch) {
+        if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
+      }
+
+      // show news
+      $(".open_news").unbind();
+      $(".open_news").click(function () {
+        $(this).hide();
+        $(".close_news").removeClass('hide').show();
+        $("#news").removeClass('hide').hide().show(200);
+      });
+
+      // hide news
+      $(".close_news").unbind();
+      $(".close_news").click(function () {
+        $(this).hide();
+        $(".open_news").removeClass('hide').show();
+        $("#news").hide(200);
+      });
+
+      // show news ❗️ if sha256 is different
+      sha256($("#newscontent").html()).then(
+        hash => {
+          if (hash != localStorage.getItem("newshash")) {
+            localStorage.setItem("newshash", hash);
+            $("#newsdot").removeClass("hide");
+            $(".open_news").click();
+        }
+      });
+
+      // switch CSS debugger ON/OFF
+      $('#debugger').click(function () {
+        if (getCookie('debug')) {
+          $('#debugger').removeClass('red').addClass('grey');
+          delCookie('debug');
+          location.replace("/?nonce={{ nonce }}");
+        } else {
+          $('#debugger').removeClass('grey').addClass('red');
+          setCookie('debug', 1);
+          location.replace("/?nonce={{ nonce }}");
+        }
+      });
+
+      // show translation pins
+      $(".trans_pin").click(function () {
+        if ($(this).data('on') == '1') {
+          $(this).data('on', 0);    
+          $('#showpins').removeClass('red').addClass('grey');
+          $('.sheetpin').remove();
+        } else {
+          $(this).data('on', 1);
+          $('#showpins').removeClass('grey').addClass('red');
+
+          // inject pins
+          $('*[data-admin-tooltip]').each(function() {
+            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
+          });
+
+          // pin event handler
+          $('.sheetpin').click(function() {
+            GSC.CopyThisText(this);
+          });
+        }
+      });
+    
+      // editor block
+      $(".summernote").unbind();
+      $(".summernote").click(function () {
+        $(".summernote").unbind("dblclick");
+        GSC.DeploySummernote();
+      });
+
+      // add article
+      $("#a_article").click(function () {
+        var name = prompt('{{ l.a_article_add_prompt }}:').trim();
+        name = name.replace(/['"/\\]/g, '');
+        if (name.length && name != '!') {
+          location.pathname = '{{ lang }}/id/' + name;
+        }
+      });
+
+      // API: GetArticlesInfo
+      $.get("/admin/GetArticlesInfo?" + Date.now(), function (data) {
+        if (data && data.data) {
+          $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
+          for (var i in data.data) {
+            $('#ArticleURLSelect').append("<option value='" + data.data[i] + "'>" + data.data[i] + "</option>");
+          }
+          // populate form data
+          $('#ArticleURLSelect').formSelect();
+        }
+      });
+    }
+
+    // fn DeploySummernote()
+    if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
+      GSC.summernote_on = true;
+      $("#a_summernote").attr("disabled", "disabled");
+      $("#a_summernote").text("{{ l.a_save_all }}");
+      $("#a_summernote").unbind("click");
+
+      // Summernote: SAVE ALL
+      $("#a_summernote").unbind();
+      $("#a_summernote").click(function () {
+        if (GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return;
+        }
+        $("#a_summernote").attr("disabled", "disabled");
+        var id;
+        var data = {};
+        $(".summernote").each(function (i, obj) {
+          // collect HTML data
+          id = $(obj).attr("id");
+          if (id) {
+            data[id] = $(obj).summernote("code");
+          }
+        });
+
+        // API: UpdateArticles (POST - save all articles data)
+        $.post("/admin/UpdateArticles", {
+          hash: "{{ request_path_hash }}",
+          path: window.location.pathname,
+          data: JSON.stringify(data)
+        }, function (data) {
+          M.toast({text: "💾 {{ l.a_saved_ok }}"});
+        }).done(function () {
+          $("#a_summernote").removeAttr("disabled");
+          GSC.AdminUI();
+        }).fail(function (xhr, status, error) {
+          // error message
+          alert(error);
+          $("#a_summernote").removeAttr("disabled");
+          M.toast({text: "{{ l.a_error_general }}"});
+        });
+      });
+
+      // SaveAllButton() button
+      var SaveAllButton = function (context) {
+        var ui = $.summernote.ui;
+        var button = ui.button({
+          className: "note-btn-bold blue",
+          contents: '<span title="💾 {{ l.a_summer_save_ttip }}"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_summer_save }}</b></span>',
+          codeviewKeepButton: false,
+          click: function (e) {
+            $("#a_summernote").click();
+          }
+        });
+        return button.render();
+      }
+
+      // DestroyButton() button
+      var DestroyButton = function (context) {
+        var ui = $.summernote.ui;
+        var button = ui.button({
+          className: "note-btn-bold",
+          contents: '<span title="{{ l.a_summer_close_ttip }}"><i class="fas fa-window-close"></i>&nbsp;<b>{{ l.a_summer_close }}</b></span>',
+          codeviewKeepButton: true,
+          click: function (e) {
+            $(".summernote").each(function (i, obj) {
+              $(obj).summernote("destroy");
+              GSC.AdminUI();
+              $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
+              $("#a_summernote").unbind("click");
+              $("#a_summernote").click(function () {
+                GSC.ReadArticles(function () {
+                  GSC.DeploySummernote();
+                });
+              });
+              GSC.summernote_on = false;
+            });
+          }
+        });
+        return button.render();
+      }
+
+      // HistorySelector() listbox
+      var HistorySelector = function (context) {
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_history_ttip }}" class="fas fa-history"></span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style",
+            contents: "<ul></ul>",
+            callback: function ($dropdown) {
+              $dropdown.find("li").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.insertText", $(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji1Selector() listbox
+      var Emoji1Selector = function (context) {
+        var list = "";
+        var emoji = "©,®,Ⓜ,™,①,②,③,④,⑤,⑥,⑦,⑧,⑨,⑩,¢,£,¥,§,¬,±,°,²,¶,«,»,×,‘,’,“,”,†,‡,•,‣,…,′,″,‹,›,⁉,‼,€,ℓ,ℵ,ℹ,π,‍,⌘,←,↑,→,↓,↔,↕,↖,↗,↘,↙,↩,↪,↶,↷,↺,↻,⇄,⇒,⇞,⇟,⇤,⇥,∀,∂,∃,∅,∈,∉,∎,∑,√,∞,∡,∧,∨,∫,≈,≔,≠,≡,≤,≥,⊂,⊃,⊄,⊆,⊇,⊕,⊗,⊙,⋂,⋃,⌈,⌉,⌊,⌋,■,▪,▫,▲,△,▶,▷,▼,▽,◀,◁,◆,●,◻,◼,◽,◾,⌦,⌨,⌫,⎈,⏎,✏,✒,✓,✔,✖,✚,✝,✡,✳,✴,❄,❇,❣,❦,⬆,⬇,☀,☁,☂,☃,☄,★,☆,☇,☈,☎,☑,☘,☙,☠,☢,☣,☦,☪,☭,☮,☯,☸,☹,☼,☾,♀,♂,♠,♣,♥,♦,♞,♟,♘,♨,♩,♪,♫,♬,♲,♻,♾,⚒,⚓,⚔,⚕,⚖,⚗,⚙,⚛,⚜,⚠,✂,✈,✉,♈,♉,♊,♋,♌,♍,♎,♏,♐,♑,♒,♓";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji1_ttip }}">©</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji2Selector() listbox
+      var Emoji2Selector = function (context) {
+        var list = "";
+        var emoji = "😀,😃,😄,😁,😆,😅,🤣,😂,🙂,🙃,😉,😊,😇,🥰,😍,🤩,😘,😗,😚,😙,😋,😛,😜,🤪,😝,🤑,🤗,🤭,🤫,🤔,🤐,🤨,😐,😑,😶,😏,😒,🙄,😬,🤥,😌,😔,😪,🤤,😴,😷,🤒,🤕,🤢,🤮,🤧,🥵,🥶,🥴,😵,🤯,🤠,🥳,😎,🤓,🧐,😕,😟,🙁,😮,😯,😲,😳,🥺,😦,😧,😨,😰,😥,😢,😭,😱,😖,😣,😞,😓,😩,😫,😤,😡,😠,🤬,😈,👿,💀,💩,🤡,👹,👺,👻,👽,👾,🤖,😺,😸,😹,😻,😼,😽,🙀,😿,😾,💋,👋,🤚,🖐️,✋,🖖,👌,🤞,🤟,🤘,🤙,👈,👉,👆,🖕,👇,👍,👎,✊,👊,🤛,🤜,👏,🙌,👐,🤲,🤝,🙏,💅,🤳,💪,🦵,🦶,👂,👃,🧠,🦷,🦴,👀,👁️,👅,👄,👶,🧒,👦,👧,🧑,👱,👨,🧔,👨‍🦰,👨‍🦱,👨‍🦳,👨‍🦲,👩,👩‍🦰,👩‍🦱,👩‍🦳,👩‍🦲,👱‍♀️,👱‍♂️,🧓,👴,👵,🙍‍♂️,🙍‍♀️,🙎,🙎‍♂️,🙎‍♀️,🙅‍♂️,🙅‍♀️,🙆‍♂️,🙆‍♀️,💁‍♂️,💁‍♀️,🙋‍♂️,🙋‍♀️,🙇‍♂️,🙇‍♀️,🤦‍♂️,🤦‍♀️,🤷‍♂️,🤷‍♀️,👨‍⚕️,👩‍⚕️,👨‍🎓,👩‍🎓,👨‍🏫,👩‍🏫,👨‍⚖️,👩‍⚖️,👩‍🌾,👩‍🍳,👨‍🔧,👩‍🔧,👨‍🏭,👩‍🏭,👨‍💼,👩‍💼,👨‍🔬,👩‍🔬,👨‍💻,👩‍💻,👨‍🎤,👩‍🎤,👨‍🎨,👩‍🎨,👨‍✈️,👩‍✈️,👨‍🚀,👩‍🚀,👨‍🚒,👩‍🚒,👮‍♂️,👮‍♀️,🕵️‍♂️,🕵️‍♀️,💂‍♂️,💂‍♀️,👷‍♂️,👷‍♀️,🤴,👸,👳‍♂️,👳‍♀️,👲,🧕,🤵,👰,🤰,🤱,👼,🎅,🤶,🦸‍♂️,🦹‍♀️,🧙,🧙‍♂️,🧚‍♂️,🧚‍♀️,🧛‍♂️,🧛‍♀️,🧜,🧜‍♂️,🧜‍♀️,🧝‍♂️,🧝‍♀️,🧞‍♂️,🧞‍♀️,🧟‍♂️,🧟‍♀️,💆‍♂️,💆‍♀️,💇‍♂️,💇‍♀️,🚶‍♂️,🚶‍♀️,🏃‍♂️,🏃‍♀️,💃,🕺,🕴️,👯‍♂️,🧖‍♂️,🧖‍♀️,🧘,👭,👫,👬,👨‍❤️‍💋‍👨,👩‍❤️‍💋‍👩,👨‍❤️‍👨,👩‍❤️‍👩,👨‍👩‍👦,👨‍👩‍👧,👨‍👩‍👧‍👦,👨‍👩‍👦‍👦,👨‍👩‍👧‍👧,👨‍👨‍👦,👨‍👨‍👧,👨‍👨‍👧‍👦,👨‍👨‍👦‍👦,👨‍👨‍👧‍👧,👩‍👩‍👦,👩‍👩‍👧,👩‍👩‍👧‍👦,👩‍👩‍👦‍👦,👩‍👩‍👧‍👧,👨‍👦,👨‍👦‍👦,👨‍👧,👨‍👧‍👦,👨‍👧‍👧,👩‍👦,👩‍👦‍👦,👩‍👧,👩‍👧‍👦,👩‍👧‍👧";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji2_ttip }}">😀</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji3Selector() listbox
+      var Emoji3Selector = function (context) {
+        var list = "";
+        var emoji = "🐵,🙈,🙉,🙊,💥,💫,💦,💨,🐒,🦍,🐶,🐕,🐩,🐺,🦊,🦝,🐱,🐈,🦁,🐯,🐅,🐆,🐴,🐎,🦄,🦓,🦌,🐮,🐂,🐃,🐄,🐷,🐖,🐗,🐽,🐏,🐑,🐐,🐪,🐫,🦙,🦒,🐘,🦏,🦛,🐭,🐁,🐀,🐹,🐰,🐇,🐿️,🦔,🦇,🐻,🐨,🐼,🦘,🦡,🐾,🦃,🐔,🐓,🐣,🐤,🐥,🐦,🐧,🕊️,🦅,🦆,🦢,🦉,🦚,🦜,🐸,🐊,🐢,🦎,🐍,🐲,🐉,🦕,🦖,🐳,🐋,🐬,🐟,🐠,🐡,🦈,🐙,🐚,🐌,🦋,🐛,🐜,🐝,🐞,🦗,🕷️,🕸️,🦂,🦟,🦠,💐,🌸,💮,🏵️,🌹,🥀,🌺,🌻,🌼,🌷,🌱,🌲,🌳,🌴,🌵,🌾,🌿,🍀,🍁,🍂,🍃,🍄,🌰,🦀,🦞,🦐,🦑,🌍,🌎,🌏,🌐,🌑,🌒,🌓,🌔,🌕,🌖,🌗,🌘,🌙,🌚,🌛,🌜,🌝,🌞,⭐,🌟,🌠,⛅,⛈️,🌤️,🌥️,🌦️,🌧️,🌨️,🌩️,🌪️,🌫️,🌬️,🌈,⛄,🔥,💧,🌊,🎄,✨,🎋,🎍";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji3_ttip }}">🐵</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji4Selector() listbox
+      var Emoji4Selector = function (context) {
+        var list = "";
+        var emoji = "🍓,🍇,🍈,🍉,🍊,🍋,🍌,🍍,🥭,🍎,🍏,🍐,🍑,🍒,🥝,🍅,🥥,🥑,🍆,🥔,🥕,🌽,🌶️,🥒,🥬,🥦,🍄,🥜,🌰,🍞,🥐,🥖,🥨,🥯,🥞,🧀,🍖,🍗,🥩,🥓,🍔,🍟,🍕,🌭,🥪,🌮,🌯,🥙,🥚,🍳,🥘,🍲,🥣,🥗,🍿,🧂,🥫,🍱,🍘,🍙,🍚,🍛,🍜,🍝,🍠,🍢,🍣,🍤,🍥,🥮,🍡,🥟,🥠,🥡,🍦,🍧,🍨,🍩,🍪,🎂,🍰,🧁,🥧,🍫,🍬,🍭,🍮,🍯,🍼,🥛,🍵,🍶,🍾,🍷,🍸,🍹,🍺,🍻,🥂,🥃,🥤,🥢,🍽️,🍴,🥄";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji4_ttip }}">🍓</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji5Selector() listbox
+      var Emoji5Selector = function (context) {
+        var list = "";
+        var emoji = "🏆,🎖️,🏅,🥇,🥈,🥉,🧗‍♂️,🧗‍♀️,🕴️,🤺,🏇,⛷️,🏂,🏌️‍♂️,🏌️‍♀️,🏄‍♂️,🏄‍♀️,🚣‍♂️,🚣‍♀️,🏊‍♂️,🏊‍♀️,⛹️‍♂️,⛹️‍♀️,🏋️‍♂️,🏋️‍♀️,🚴‍♂️,🚴‍♀️,🚵‍♂️,🚵‍♀️,🤸‍♂️,🤸‍♀️,🤼‍♂️,🤼‍♀️,🤽‍♂️,🤽‍♀️,🤾‍♂️,🤾‍♀️,🤹‍♂️,🤹‍♀️,🎭,🧘‍♂️,🧘‍♀️,🎪,🛹,🛶,🎗️,🎟️,🎫,⚽,⚾,🥎,🏀,🏐,🏈,🏉,🎾,🥏,🎳,🏏,🏑,🏒,🥍,🏓,🏸,🥊,🥋,🥅,⛳,⛸️,🎣,🎽,🎿,🛷,🥌,🎯,🎱,🎮,🎰,🎲,🧩,🎨,🧵,🧶,🎼,🎤,🎧,🎷,🎸,🎹,🎺,🎻,🥁,🎬,🏹,🗣️,👤,👥,👣,💴,💵,💶,💷,💣,💌,🕳️,🛀,🛌,🔪,🏺,🗺️,🧭,🧱,💈,🛢️,🛎️,🧳,⌛,⏳,⌚,⏰,⏱️,⏲️,🕰️,🌡️,⛱️,🧨,🎈,🎉,🎊,🎎,🎏,🎐,🧧,🎀,🎁,🔮,🧿,🕹️,🧸,🖼️,🧵,🧶,🛍️,📿,💎,📯,🎙️,🎚️,🎛️,📻,📱,📲,📞,📟,📠,🔋,🔌,💻,🖥️,🖨️,🖱️,🖲️,💽,💾,💿,📀,🧮,🎥,🎞️,📽️,📺,📷,📸,📹,📼,🔍,🔎,🕯️,💡,🔦,🏮,📔,📕,📖,📗,📘,📙,📚,📓,📒,📃,📜,📄,📰,🗞️,📑,🔖,🏷️,💰,💸,💳,🧾,📧,📨,📩,📤,📥,📦,📫,📪,📬,📭,📮,🗳️,🖋️,🖊️,🖌️,🖍️,📝,📁,📂,🗂️,📅,📆,🗓️,📇,📈,📉,📊,🗒️,📋,📌,📍,📎,🖇️,📏,📐,🗃️,🗄️,🗑️,🔒,🔓,🔏,🔐,🔑,🗝️,🔨,⛏️,🛠️,🗡️,🔫,🛡️,🔧,🔩,🗜️,🔗,⛓️,🧰,🧲,🧪,🧫,🧬,🔬,🔭,📡,💉,💊,🚪,🛏️,🛋️,🚽,🚿,🛁,🧴,🧷,🧹,🧺,🧻,🧼,🧽,🧯,🛒,🚬,🗿,🧳,🌂,🎃,🧵,🧶,👓,🕶️,🥽,🥼,👔,👕,👖,🧣,🧤,🧥,🧦,👗,👘,👙,👚,👛,👜,👝,🎒,👞,👟,🥾,🥿,👠,👡,👢,👑,👒,🎩,🎓,🧢,⛑️,💄,💍,💼";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji5_ttip }}">🏆</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji6Selector() listbox
+      var Emoji6Selector = function (context) {
+        var list = "";
+        var emoji = "🏡,🏠,🏘️,🚣,🗾,🏔️,⛰️,🌋,🗻,🏕️,🏖️,🏜️,🏝️,🏞️,🏟️,🏛️,🏗️,🏚️,🏢,🏣,🏤,🏥,🏦,🏨,🏩,🏪,🏫,🏬,🏭,🏯,🏰,💒,🗼,🗽,⛪,🕌,🕍,⛩️,🕋,⛲,⛺,🌁,🌃,🏙️,🌄,🌅,🌆,🌇,🌉,🎠,🎡,🎢,🚂,🚃,🚄,🚅,🚆,🚇,🚈,🚉,🚊,🚝,🚞,🚋,🚌,🚍,🚎,🚐,🚑,🚒,🚓,🚔,🚕,🚖,🚗,🚘,🚙,🚚,🚛,🚜,🏎️,🏍️,🛵,🚲,🛴,🚏,🛣️,🛤️,⛽,🚨,🚥,🚦,🚧,⛵,🚤,🛳️,⛴️,🛥️,🚢,🛩️,🛫,🛬,💺,🚁,🚟,🚠,🚡,🛰️,🚀,🛸,🌠,🌌,⛱️,🎆,🎇,🎑,🛂,🛃,🛄,🛅";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji6_ttip }}">🏡</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // Emoji7Selector() listbox
+      var Emoji7Selector = function (context) {
+        var list = "";
+        var emoji = "💘,💝,💖,💗,💓,💞,💕,💟,💔,🧡,💛,💚,💙,💜,🖤,💯,💢,💬,👁️‍🗨️,🗨️,🗯️,💭,💤,💮,🛑,🕛,🕧,🕐,🕜,🕑,🕝,🕒,🕞,🕓,🕟,🕔,🕠,🕕,🕡,🕖,🕢,🕗,🕣,🕘,🕤,🕙,🕥,🕚,🕦,🌀,🃏,🀄,🎴,🔇,🔈,🔉,🔊,📢,📣,📯,🔔,🔕,🎵,🎶,💹,🏧,🚮,🚰,🚹,🚺,🚻,🚼,🚾,🚸,⛔,🚫,🚳,🚭,🚯,🚱,🚷,📵,🔞,⤴️,⤵️,🔃,🔄,🔙,🔚,🔛,🔜,🔝,🛐,🕉️,🕎,🔯,⛎,🔀,🔁,🔂,⏩,⏭️,⏯️,⏪,⏮️,🔼,⏫,🔽,⏬,⏸️,⏹️,⏺️,🎦,🔅,🔆,📶,📳,📴,➕,➖,➗,❓,❔,❕,❗,〰️,💱,💲,🔱,📛,🔰,⭕,❌,❎,➰,➿,〽️,#️⃣,*️⃣,0️⃣,1️⃣,2️⃣,3️⃣,4️⃣,5️⃣,6️⃣,7️⃣,8️⃣,9️⃣,🔟,🔠,🔡,🔢,🔣,🔤,🅰️,🆎,🅱️,🆑,🆒,Ⓜ️,🆓,ℹ️,🆕,🆖,🆗,🆙,🅿️,🅾️,🆘,🆔,🆚,🈁,🈂️,🈷️,🈶,🈯,🉐,🈹,🈚,🈲,🉑,🈸,🈴,🈳,🈺,🈵,🔴,🔵,⚫,⚪,⬛,⬜,🔶,🔷,🔸,🔹,🔺,🔻,💠,🔘,🔳,🔲,🏁,🚩,🎌,🏴,🏳️,🏳️‍🌈,🏴‍☠️";
+        var emojis = emoji.split(",");
+        for (i = 0; i < emojis.length; i++) {
+          list += "<i>" + emojis[i] + "</i>\n";
+        }
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_emoji7_ttip }}">💘</span> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style emoji-list",
+            contents: list,
+            callback: function ($dropdown) {
+              $dropdown.find("i").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).html());
+                  GSC.CopyClipboard($(this).html());
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // PluginSelector() listbox
+      var PluginSelector = function (context) {
+        var ui = $.summernote.ui;
+        var list = ui.buttonGroup([
+          ui.button({
+            className: "dropdown-toggle",
+            contents: '<span title="{{ l.a_summer_plugins_ttip }}" class="fas fa-plug"></> <span class="caret"></span>',
+            data: {
+              toggle: "dropdown"
+            }
+          }),
+          ui.dropdown({
+            className: "dropdown-style",
+            contents: "",
+            <!-- contents: '<ol><li data-copy=\' [remote_content url=""] \'>remote_content</li></ol>', -->
+            callback: function ($dropdown) {
+              $dropdown.find("li").each(function () {
+                $(this).click(function () {
+                  context.invoke("editor.restoreRange");
+                  context.invoke("editor.focus");
+                  context.invoke("editor.insertText", $(this).data("copy"));
+                  GSC.CopyClipboard($(this).data("copy"));
+                });
+              });
+            }
+          })
+        ]);
+        return list.render();
+      }
+
+      // FullScreen() button
+      var FullScreenButton = function (context) {
+        var ui = $.summernote.ui;
+        var button = ui.button({
+          contents: '<span title="{{ l.a_summer_fullscreen_ttip }}"><i class="fas fa-expand"></i></span>',
+          codeviewKeepButton: true,
+          click: function (e) {
+            context.invoke("fullscreen.toggle");
+            context.invoke("codeview.toggle");
+          }
+        });
+        return button.render();
+      }
+
+      // Summernote configuration
+      $(".summernote").summernote({
+        codeviewFilter: true,
+        codeviewIframeFilter: true,
+        dialogsInBody: false,
+        disableDragAndDrop: true,
+        height: 300,
+        codemirror: {
+          theme: "material-darker"
+        },
+        lang: '{{#langcs}}cs-CZ{{/langcs}}{{#langen}}en-US{{/langen}}',
+        maximumImageFileSize: 1024 * 1024 * 4,
+        placeholder: '{{#langcs}}Vítejte v Summernote!{{/langcs}}{{#langen}}Welcome to Summernote!{{/langen}}',
+        callbacks: {
+          onChange: function (contents, $editable) {
+            $("div.note-btn-group.note-custom2>button").removeClass("blue").addClass("red");
+          }
+        },
+        tableClassName: "table table-bordered striped highlight responsive-table",
+        styleTags: [
+          "p", "blockquote", "pre", "h2", "h3", "h4", "h5", "h6",
+        ],
+        lineHeights: [
+          "0.2", "0.3", "0.4", "0.5", "0.6", "0.8", "1.0", "1.2", "1.4", "1.5", "2.0", "3.0"
+        ],
+        fontSizes: [
+          "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "30", "36", "42", "48", "55", "64", "82", "100", "130", "160", "200"
+        ],
+        toolbar: [
+          ["style", ["style"]],
+          ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
+          ["color", ["forecolor", "backcolor", "color"]],
+          ["paragraph", ["ul", "ol", "paragraph", "height"]],
+          ["table", ["table"]],
+          ["insert", ["hr", "link", "picture", "video"]],
+          ["history", ["undo", "redo"]],
+          ["emojis", ["emoji1", "emoji2", "emoji3", "emoji4", "emoji5", "emoji6", "emoji7"]],
+          ["view", ["fs"]],
+          ["custom1", ["plugins", "history"]],
+          ["close", ["destroy"]],
+          ["custom2", ["saveall"]],
+        ],
+        buttons: {
+          destroy: DestroyButton,
+          emoji1: Emoji1Selector,
+          emoji2: Emoji2Selector,
+          emoji3: Emoji3Selector,
+          emoji4: Emoji4Selector,
+          emoji5: Emoji5Selector,
+          emoji6: Emoji6Selector,
+          emoji7: Emoji7Selector,
+          plugins: PluginSelector,
+          fs: FullScreenButton,
+          history: HistorySelector,
+          saveall: SaveAllButton,
+        }
+      });
+      $("#a_summernote").removeAttr("disabled");
+    }
+
+    // setup admin UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("admin UI - bind");
+
+      // admin show
+      if (!getCookie("motyle") || getCookie("motyle") == "false") {
+        $("#admin_main").show(100);
+      }
+
+      // wrench
+      $(".motyle").click(function () {
+        $("#admin_main").toggle(200, function () {
+          window.scrollTo(0, 0);
+          setCookie("motyle", $("#admin_main").is(":hidden"));
+        })
+      });
+
+      // articles URL selector
+      $("#ArticleURLSelect").change(function () {
+        window.location.pathname = $('#ArticleURLSelect').val();
+      });
+
+      // remote function selector
+      $("#RemoteFnSelect").change(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return GSC.PingDot("#sectok_ping", false);
+        }
+        if (!$("#RemoteFnSelect").val()) return;
+
+        // API: GetUpdateToken
+        $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
+          var s = $("#RemoteFnSelect").val();
+          var t = data.data[0];
+          t = t.replace(/[a-zA-Z]*\?/, s + "?");
+          GSC.CopyClipboard(t);
+          GSC.PingDot("#sectok_ping");
+          M.toast({text: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }}"});
+        }).fail(function () {
+          $("#a_security_token").val("N/A");
+          GSC.PingDot("#sectok_ping", false);
+          GSC.CopyClipboard("");
+          M.toast({text: "{{ l.a_error_general }}"});
+        });
+      });
+
+      // update CSV data
+      $("#a_update").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        $("#a_update").attr("disabled", "disabled");
+        setTimeout(function () {
+          $("#a_update").removeAttr("disabled");
+        }, 30E3);
+
+        // API: CoreUpdate
+        $.post("/admin/CoreUpdate");
+        M.toast({text: "{{ l.a_processing_data }}"});
+      });
+
+      // invoke Summernote editor
+      $("#a_summernote").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return GSC.PingDot("#psi_ping", false);
+        }
+        GSC.ReadArticles(function () {
+          GSC.DeploySummernote();
+        });
+      });
+
+      // file manager
+      $("#a_files").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+
+        // clear file & upload content if present
+        if (getCookie("open_filemanager") == 1) {
+          return GSC.CloseFileManager();
+        }
+        GSC.RenderUploadInfo();
+      });
+
+      // GSC.CloseFileManager
+      if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
+          delCookie("open_filemanager");
+          $("#a_file_manager").hide(50);
+          $("#a_uploader_progress").html("");
+      }
+
+      // GSC.RenderUploadInfo()
+      if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
+        $.get("/admin/getUploads?" + Date.now(), function (data) {
+          if (data && data.data && data.data.files) {
+            // remember state
+            setCookie("open_filemanager", 1);
+            var s = '';
+            var t = 0;
+            var now = ~~(Date.now() / 1000);
+            moment.locale("{{ lang }}");
+
+            // UPLOAD: render HTML
+            var wt = [];
+            wt[160] = 'S';
+            wt[320] = 'M';
+            wt[640] = 'L';
+
+            // no files
+            if (data.data.count == 0) {
+              s = '';
+              $('#files_count').html('0');
+            } else {
+              for (var i in data.data.files) {
+                if (typeof data.data.files[i] === 'function') continue;
+                if (typeof data.data.files[i] !== 'object') continue;
+
+                // new table row
+                t++;
+                if (t == 1) {
+                  s += '<div class="row">';
+                }
+  
+                // extension
+                var name = data.data.files[i]["name"];
+                var name1 = name;
+                var name2 = name.replace(/\.[^.]+$/, '.webp');
+                var ext = GSC.GetFileExtension(name);
+  
+                // ICON
+                var si = '';
+                if (data.data.files[i]["thumbnails"] == null) {
+                  // clickable icon
+                  si += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
+                  si += '📄</a><br><br><a target=_blank title="{{ l.a_open_tit }}" class="truncate" style="font-size:1rem;line-height:1rem" href="/upload/' + name + '">' + name + '<br><br></a>';
+                } else {
+                  // clickable thumbnail
+                  si += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
+                  si += '</a>';
+                }
+  
+                // AGE + SIZE
+                var saz = '';
+                saz += '<span>⏳️&nbsp;';
+                saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
+                saz += '&nbsp;🫙&nbsp;';
+                saz += GSC.FormatBytes(data.data.files[i]["size"]);
+                saz += '</span>';
+  
+                // SML
+                var sml = '';
+                for (var j in data.data.files[i]["thumbnails"]) {
+                  name = data.data.files[i]["thumbnails"][j];
+                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
+                }
+                if (sml.length) {
+                  sml = '<div class="row extrapadding">' + sml + '</div>';
+                }
+  
+                // DELETE + RCB
+                var sd = '';
+                if (data.data.files[i]["thumbnails"] === null) {
+                  // delete only
+                  sd += '<div class="row extrapadding">';
+                  sd += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '</div>';
+                }
+                else {
+                  // delete + thumbnails copy buttons
+                  sd += '<div class="row extrapadding">';
+                  sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                  if (ext != 'webp') {
+                    sd += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
+                  }
+                  sd += '</div>';
+                }
+
+                // COMPOSITION
+                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
+                s += sd + si + saz + sml;
+                s += '</div>';
+              }
+
+              if (t) {
+                s += "</div>";
+                $('#files_count').html(t);
+              }
+            }
+            
+            // show file manager
+            if ($("#a_file_manager").html() != "") {
+              $("#a_file_manager").html(s).show();
+            } else {
+              $("#a_file_manager").hide().html(s).show(200);
+            }
+            
+            // UPLOAD: copy path to clipboard
+            $("#a_file_manager .copydata").click(function () {
+              var x = $(this).data("text");
+              GSC.CopyClipboard(x);
+              M.toast({text: "📋 " + x});
+            });
+            
+            // UPLOAD: file delete
+            $("#a_file_manager .delete").click(function () {
+              if (GSC.deleteconfirmed || confirm("{{ l.a_delete_tit }}?")) {
+                GSC.deleteconfirmed = true;
+                var x = $(this).data("id");
+                var fig = $(this).data("fig");
+                $('#fig' + fig).hide(250);
+
+                // API: UploadedFileDelete
+                $.post("/admin/uploadDelete", {
+                  name: x
+                }).done(function (data) {
+                  M.toast({text: "🚮 " + x});
+                  GSC.RenderUploadInfo();
+                });
+              }
+            });
+          }
+        });
+      }
+
+      // flush cache
+      $("#a_flush").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        GSC.GetCsvInfo = function () {};
+        $("#a_flush").attr("disabled", "disabled");
+
+        // API: FlushCache
+        $.post("/admin/FlushCache");
+        location.replace("/?nonce={{ nonce }}");
+      });
+
+      $("#a_logout").click(function () {
+        setCookie("logout", 1);
+        GSC.offline ? window.location.replace("/?nonce={{ nonce }}") : window.location.replace("/logout");
+      });
+
+    });
+
+    // setup CSV info timer
+    w.GSC.init.push(function () {
+      w.GSC.names.push("CSV timer");
+      setInterval(function () {
+        window.GSC.GetCsvInfo();
+      }, 2500);
+      GSC.GetCsvInfo();
+    });
+
+    // show admin UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("show admin UI");
+      GSC.AdminUI();
+
+      // filemanager state
+      if (getCookie("open_filemanager") == 1) {
+        $("#a_file_manager").hide();
+        GSC.RenderUploadInfo();
+      }
+    });
+
+    // setup ZeroUpload
+    w.GSC.init.push(function () {
+      w.GSC.names.push("ZeroUpload");
+      ZeroUpload.setURL("/admin/upload");
+      ZeroUpload.setMaxFiles(20);
+      ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
+
+      ZeroUpload.on("complete", function (response) {
+        M.toast({text: "{{ l.a_uploading_finished }}"});
+        var data = JSON.parse(response.data);
+        if (data && data.data) {
+          setCookie("open_filemanager", 1);
+          GSC.RenderUploadInfo();
+          return;
+        }
+      });
+
+      ZeroUpload.on("start", function (files, userData) {
+        M.toast({text: "{{ l.a_uploading }}"});
+      });
+
+      ZeroUpload.on("error", function (type, message, userData) {
+        var s;
+        switch (type) {
+          case "maxbytes":
+            s = "{{ l.a_upload_maxbytes }}";
+            break;
+          case "unsupported":
+            s = "{{ l.a_upload_unsupported }}";
+            break;
+          case "maxfiles":
+            s = "{{ l.a_upload_maxfiles }}";
+            break;
+          case "filetype":
+            s = "{{ l.a_upload_filetype }}";
+            break;
+          case "http":
+            s = "{{ l.a_upload_http }}";
+            break;
+          default:
+            s = "{{ l.a_upload_ajax }}";
+        }
+        M.toast({text: s});
+      });
+
+      ZeroUpload.on("progress", function (progress, userData) {
+        $("#a_uploader_progress").show(200).html(
+          '<h5>{{ l.a_upload_ttip }}</h5><div style="padding:1em"><div class="row">' +
+          '<strong>Progress:</strong> ' + progress.percent + ', ' +
+          progress.elapsedHuman + ' elapsed</div>' +
+          '<div><strong>Sent:</strong> ' + progress.dataSentHuman + ' of ' +
+          progress.dataTotalHuman + ' (' + progress.dataRateHuman + ')</div>' +
+          '<div><strong>Remaining:</strong> ' + progress.remainingTimeHuman + '</div></div>'
+        );
+      });
+
+      // init uploader
+      ZeroUpload.init();
+      ZeroUpload.addDropTarget("#admin_main");
+
+      // UI: upload button
+      $("#a_upload").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "offline 📶"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        $("#a_uploader_progress").html("");
+        ZeroUpload.chooseFiles();
+      });
+    });
+
+    
+  } // end GSC.init
+})(window, document);

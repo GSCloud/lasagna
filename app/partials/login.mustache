@@ -1,0 +1,17 @@
+{{#user.name}}<h4>{{ user.name }}</h4>{{/user.name}}
+{{#user.avatar}}<img class="responsive-img" src="{{ user.avatar }}" alt="{{ user.name }}" width="64"><br>{{/user.avatar}}
+{{#user.email}}<strong>{{ user.email }}</strong><br>{{/user.email}}
+
+{{#LOCALHOST}}
+{{#local_goauth_redirect}}
+<a href="{{ local_goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
+  l.a_relogin }}<i class="material-icons right">cloud</i></a>
+{{/local_goauth_redirect}}
+{{/LOCALHOST}}
+
+{{^LOCALHOST}}
+{{#goauth_redirect}}
+<a id="google-login-footer" data-umami-event="google-login-footer" href="{{ goauth_redirect }}?nonce={{#sha256_nonce}}1234{{/sha256_nonce}}&relogin=true" class="waves-effect waves-light red btn-large z-depth-3">{{
+  l.a_relogin }}<i class="material-icons right">cloud</i></a>
+{{/goauth_redirect}}
+{{/LOCALHOST}}

@@ -1,0 +1,60 @@
+# @author Fred Brooker <git@gscloud.cz>
+# core routes, mandatory - see CorePresenter.php
+
+GetWebManifest:
+  path: /manifest.json
+  assert_json: true
+  presenter: core
+
+GetRobotsTxt:
+  path: /robots.txt
+  presenter: core
+
+GetTXTSitemap:
+  path: /sitemap.txt
+  presenter: core
+
+GetXMLSitemap:
+  path: /sitemap.xml
+  presenter: core
+
+GetRSSXML:
+  path: /rss.xml
+  presenter: core
+
+GetServiceWorker:
+  path: /sw.js
+  presenter: core
+
+GetCoreVersion:
+  path: /version/core
+  assert_json: true
+  method: GET|POST
+  presenter: core
+
+GetEnDataVersion:
+  path: /en/version/data
+  assert_json: true
+  language: en
+  method: GET|POST
+  presenter: core
+
+GetCsDataVersion:
+  path: /cs/version/data
+  assert_json: true
+  language: cs
+  method: GET|POST
+  presenter: core
+
+GetError:
+  path: '/err/[i:code]'
+  api: true
+  api_description: "Error page"
+  api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
+  cached: true
+  method: GET|POST
+  presenter: error
+  api_example: [
+    "err/404"
+    "err/500"
+  ]

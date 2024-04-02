@@ -1,0 +1,62 @@
+<style>
+#admin_custom a {background-color: #004;padding:2px;border:2px solid #000}
+#admin_custom a:hover {background-color: #fff;color:#000}
+</style>
+<div id="admin_custom" class="row center black white-text">
+  <a target=_blank title="/api" rel=nofollow href="/api">🦄&nbsp;<b>REST API</b></a>&nbsp;
+</div>
+
+<script nonce="{{ csp_nonce }}">
+  (function (w, d, undefined) {
+
+    if (w.GSC.init) {
+      w.GSC.init.push(function () {
+        w.GSC.names.push("admin UI - custom panel");
+
+        // info block
+        var count = 0;
+
+        function addBlock(param, callback) {
+          count++;
+          var el = "custom_info_" + count;
+          $("#admin_custom").append('<div class="valign-wrapper" id="' + el +
+            '" style="display:inline-block;margin-right:1em"><div class="progress" style="width:100px"><div class="indeterminate"></div></div></div> '
+          );
+          $.get(param.url + "?" + Date.now(), function (data) {
+            data.el = '#' + el;
+            data.url = this.url;
+            data.uri = param.url;
+            callback(data);
+          }).fail(function () {
+            $(el).html(
+              "<span class=text-red style='cursor:pointer' onclick='location.reload(1);'><b>API&nbsp;ERROR</b>&nbsp;🔄</span>&nbsp;"
+            );
+          });
+        }
+
+        // show error info
+        function err(data) {
+          $(data.el).html(
+            "<span class=text-red style='cursor:pointer' onclick='location.reload(1);'><b>API&nbsp;ERROR:&nbsp;"
+              + data.code
+              + "</b>&nbsp;🔄</span>&nbsp;");
+        }
+
+        addBlock({
+          url: "/api/v1/APIDemo"
+        }, function (data) {
+          if (data && data.data) {
+            $(data.el).html("<span>API DEMO<b><a target=_blank title='"
+              + data.uri + "' rel=nofollow href='"
+              + data.url + "'>"
+              + data.data.length + "&nbsp;🔗</a></b></span>");
+          } else {
+            err(data);
+          }
+        });
+
+      });
+    }
+  })(window, document);
+
+</script>

@@ -1,0 +1,16 @@
+# @author Fred Brooker <git@gscloud.cz>
+# API routes
+
+API1:
+  path: /api
+  api: true
+  api_description: "Show the REST API dashboard"
+  api_info: "This page 🐱"
+  presenter: core
+
+API2:
+  path: /api/v1
+  api: true
+  api_description: "Show the REST API dashboard"
+  api_info: "Alias to API dashboard"
+  presenter: core
