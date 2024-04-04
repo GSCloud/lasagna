@@ -15,7 +15,6 @@ info:
 	@echo "🆘 \e[0;1mmake stop\e[0m - stop container"
 	@echo "🆘 \e[0;1mmake kill\e[0m - kill container"
 	@echo "🆘 \e[0;1mmake execbash\e[0m - exec bash in the container"
-	@echo "🆘 \e[0;1mmake du\e[0m - update container"
 	@echo ""
 	@echo "🆘 \e[0;1mmake install\e[0m - install"
 	@echo ""
@@ -108,10 +107,6 @@ kill:
 
 execbash:
 	@./bin/execbash.sh
-
-du:
-	@echo "🔨 \e[1;32m Updating\e[0m\n"
-	@./bin/update_docker.sh
 
 # update and test local + sync to remote and test
 everything: clear update local test sync prod
