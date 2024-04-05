@@ -124,11 +124,12 @@ class CiTester
             $ch[$i] = \curl_init();
             \curl_setopt($ch[$i], CURLOPT_URL, $x["url"] . "?api={$key}");
             \curl_setopt($ch[$i], CURLINFO_HEADER_OUT, true);
+            \curl_setopt($ch[$i], CURLOPT_USERAGENT, 'curl');
             \curl_setopt($ch[$i], CURLOPT_BUFFERSIZE, 4096);
             \curl_setopt($ch[$i], CURLOPT_FAILONERROR, true);
             \curl_setopt($ch[$i], CURLOPT_HEADER, true);
             \curl_setopt($ch[$i], CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-            \curl_setopt($ch[$i], CURLOPT_MAXREDIRS, 5);
+            \curl_setopt($ch[$i], CURLOPT_MAXREDIRS, 3);
             \curl_setopt($ch[$i], CURLOPT_NOBODY, false);
             \curl_setopt($ch[$i], CURLOPT_RETURNTRANSFER, 1);
             \curl_setopt($ch[$i], CURLOPT_TIMEOUT, 20);
