@@ -56,11 +56,12 @@ interface IStringFilters
     /**
      * Render gallery short code(s) - max. 10
      *
-     * @param string $content text data containing [gallery param]
+     * @param string $content   text data containing [gallery param]
+     * @param bool   $noshuffle disable shuffling of the gallery
      * 
      * @return void
      */
-    public static function renderGalleryShortCode(&$content);
+    public static function renderGalleryShortCode(&$content, $noshuffle = false);
 
     /**
      * Find uploaded images by a mask
@@ -128,6 +129,33 @@ interface IStringFilters
      * @return void
      */
     public static function trimHtmlComment(&$content);
+
+    /**
+     * Transliterate a string to safe characters without accents
+     *
+     * @param string $string text data
+     * 
+     * @return string
+     */
+    public static function transliterate(&$string);
+
+    /**
+     * Sanitize a string to a safe variant
+     *
+     * @param string $string string by reference
+     * 
+     * @return void
+     */
+    public static function sanitizeString(&$string);
+
+    /**
+     * Sanitize a string to a lowercase safe variant
+     *
+     * @param string $string string by reference
+     * 
+     * @return void
+     */
+    public static function sanitizeStringLC(&$string);
 }
 
 /**
@@ -437,6 +465,74 @@ class StringFilters implements IStringFilters
         ">>" => "»",
     ];
 
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
+    public static $transliteration = [
+        ' ' => '_',
+        'á' => 'a',
+        'č' => 'c',
+        'é' => 'e',
+        'ě' => 'e',
+        'í' => 'i',
+        'ř' => 'r',
+        'š' => 's',
+        'ú' => 'u',
+        'ý' => 'y',
+        'ž' => 'z',
+        'à' => 'a',
+        'á' => 'a',
+        'è' => 'e',
+        'é' => 'e',
+        'ë' => 'e',
+        'í' => 'i',
+        'ó' => 'o',
+        'ö' => 'o',
+        'ø' => 'o',
+        'ú' => 'u',
+        'ý' => 'y',
+        'ć' => 'c',
+        'č' => 'c',
+        'ď' => 'd',
+        'ě' => 'e',
+        'ĺ' => 'l',
+        'ľ' => 'l',
+        'ň' => 'n',
+        'ŕ' => 'r',
+        'ř' => 'r',
+        'š' => 's',
+        'ť' => 't',
+        'ů' => 'u',
+        'ž' => 'z',
+        'Ý' => 'Y',
+        'Ž' => 'Z',
+        'À' => 'A',
+        'Á' => 'A',
+        'È' => 'E',
+        'É' => 'E',
+        'Ë' => 'E',
+        'Í' => 'I',
+        'Ó' => 'O',
+        'Ö' => 'O',
+        'Ø' => 'O',
+        'Ú' => 'U',
+        'Ý' => 'Y',
+        'Ć' => 'C',
+        'Č' => 'C',
+        'Ď' => 'D',
+        'Ě' => 'E',
+        'Ĺ' => 'L',
+        'Ľ' => 'L',
+        'Ň' => 'N',
+        'Ŕ' => 'R',
+        'Ř' => 'R',
+        'Š' => 'S',
+        'Ť' => 'T',
+        'Ů' => 'U',
+        'Ž' => 'Z',
+    ];
+
     /**
      * Convert EOLs to HTML breakline
      *
@@ -446,7 +542,7 @@ class StringFilters implements IStringFilters
      */
     public static function convertEolToBr(&$content)
     {
-        $content = str_replace(
+        $content = \str_replace(
             array(
             "\n",
             "\r\n",
@@ -463,7 +559,7 @@ class StringFilters implements IStringFilters
      */
     public static function convertEolToBrNbsp(&$content)
     {
-        $content = str_replace(
+        $content = \str_replace(
             array(
             "\n",
             "\r\n",
@@ -480,15 +576,14 @@ class StringFilters implements IStringFilters
      */
     public static function convertEolHyphenToBrDot(&$content)
     {
-        $content = str_replace(
+        $content = \str_replace(
             array(
             "\n- ",
             "\r\n- ",
             ), "<br>•&nbsp;", (string) $content
         );
-        // fix for the beginning of the string
-        if ((substr($content, 0, 2) == "- ") || (substr($content, 0, 2) == "* ")) {
-            $content = "•&nbsp;" . substr($content, 2);
+        if ((\substr($content, 0, 2) == "- ") || (\substr($content, 0, 2) == "* ")) {
+            $content = "•&nbsp;" . \substr($content, 2);
         }
     }
 
@@ -501,7 +596,7 @@ class StringFilters implements IStringFilters
      */
     public static function trimEol(&$content)
     {
-        $content = str_replace(
+        $content = \str_replace(
             array(
             "\r\n",
             "\n",
@@ -520,15 +615,15 @@ class StringFilters implements IStringFilters
     public static function trimHtmlComment(&$content)
     {
         $body = "<body";
-        $c = explode($body, (string) $content, 2);
+        $c = \explode($body, (string) $content, 2);
         $regex = '/<!--(.|\s)*?-->/';
         // fix the whole string (there is no <body)
-        if (count($c) == 1) {
-            $content = preg_replace($regex, "<!-- :) -->", $content);
+        if (\count($c) == 1) {
+            $content = \preg_replace($regex, "<!-- :) -->", $content);
         }
         // fix only comments inside body
-        if (count($c) == 2) {
-            $c[1] = preg_replace($regex, "<!-- :) -->", $c[1]);
+        if (\count($c) == 2) {
+            $c[1] = \preg_replace($regex, "<!-- :) -->", $c[1]);
             $content = $c[0] . $body . $c[1];
         }
     }
@@ -570,8 +665,8 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingEn($content)
     {
-        return str_replace(
-            array_keys(self::$english),
+        return \str_replace(
+            \array_keys(self::$english),
             self::$english, $content
         );
     }
@@ -585,8 +680,8 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingCs($content)
     {
-        return str_replace(
-            array_keys(self::$czech),
+        return \str_replace(
+            \array_keys(self::$czech),
             self::$czech,
             $content
         );
@@ -601,8 +696,8 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingSk($content)
     {
-        return str_replace(
-            array_keys(self::$slovak),
+        return \str_replace(
+            \array_keys(self::$slovak),
             self::$slovak,
             $content
         );
@@ -668,11 +763,12 @@ class StringFilters implements IStringFilters
     /**
      * Render gallery short code(s) - max. 10
      *
-     * @param string $content text data containing [gallery param]
+     * @param string $content   text data containing [gallery param]
+     * @param bool   $noshuffle disable shuffling of the gallery
      * 
      * @return void
      */
-    public static function renderGalleryShortCode(&$content)
+    public static function renderGalleryShortCode(&$content, $noshuffle = false)
     {
         $counter = 0;
         $x = \trim($content);
@@ -687,7 +783,9 @@ class StringFilters implements IStringFilters
                 $images = '';
                 $files = self::findImagesByMask($m[1]);
                 if (\is_array($files)) {
-                    \shuffle($files);
+                    if ($noshuffle !== false) {
+                        \shuffle($files);
+                    }
                     $c = 0;
                     foreach ($files as $f) {
                         $c++;
@@ -745,7 +843,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeString(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', \trim($string));
+            $string = \preg_replace("/[^a-zA-Z0-9_-]+/i", '', \trim($string));
         }
     }
 
@@ -759,10 +857,25 @@ class StringFilters implements IStringFilters
     public static function sanitizeStringLC(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9]+/i", '', \trim($string));
+            $string = \preg_replace("/[^a-zA-Z0-9_-]+/i", '', \trim($string));
             if ($string && \is_string($string)) {
                 $string = \strtolower($string);
             }
         }
+    }
+
+    /**
+     * Transliterate a string to safe characters without accents
+     *
+     * @param string $string text data
+     * 
+     * @return void
+     */
+    public static function transliterate(&$string)
+    {
+        $string = \str_replace(
+            \array_keys(self::$transliteration),
+            self::$transliteration, $string
+        );
     }
 }

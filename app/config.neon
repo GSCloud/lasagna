@@ -22,6 +22,7 @@ local_goauth_redirect: "http://localhost:8009/login"
 google: [
 #  map_query: "Prague,Czechia"
   google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
+#  google-site-domain-verification: true
 ]
 
 # Umami Analytics

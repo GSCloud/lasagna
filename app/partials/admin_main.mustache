@@ -27,6 +27,12 @@
         href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
         <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
       {{/google.google-site-verification}}
+      {{#google.google-site-domain-verification}}
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+        data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
+        href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
+        <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
+      {{/google.google-site-domain-verification}}
       {{#umami.id}}
       <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
