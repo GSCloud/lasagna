@@ -29,16 +29,12 @@
 <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 <link rel="dns-prefetch" href="//fonts.googleapis.com">
 <link rel="dns-prefetch" href="//fonts.gstatic.com">
-<link rel="dns-prefetch" href="//gspace.gscloud.cz">
 <link rel="dns-prefetch" href="//umami.gscloud.cz">
-<link rel="dns-prefetch" href="//www.google.com">
 <link rel="preconnect" href="//cdn.gscloud.cz">
 <link rel="preconnect" href="//cdnjs.cloudflare.com">
 <link rel="preconnect" href="//fonts.googleapis.com">
 <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="//gspace.gscloud.cz">
 <link rel="preconnect" href="//umami.gscloud.cz">
-<link rel="preconnect" href="//www.google.com">
 {{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
 <link rel="manifest" href="/manifest.json?lang={{ lang }}">
@@ -100,6 +96,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 <link rel="stylesheet" href="https://cdn.gscloud.cz/tesseract/css/materialize.min.css">
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
 </head>
+
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
 <noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
 {{>body_pre}}

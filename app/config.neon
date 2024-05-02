@@ -1,4 +1,4 @@
-  ### LASAGNA
+### LASAGNA
 # @author Fred Brooker <git@gscloud.cz>
 
 #dbg: TRUE
@@ -83,6 +83,9 @@ lasagna_sheets: [
   admin: "1iwJNAuvHQtNOgxQfQK5TYtROzCwFOBFGeo7Vj-7_48Q"
   lasagna: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
 ]
+
+# application data
+app_data: []
 
 design: [
   css_font: []

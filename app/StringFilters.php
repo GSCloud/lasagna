@@ -45,7 +45,16 @@ interface IStringFilters
     public static function renderMarkdownExtra(&$content);
 
     /**
-     * Render YouTube short code(s) - max. 10
+     * Render Image short code(s)
+     *
+     * @param string $content text data containing [image param]
+     * 
+     * @return void
+     */
+    public static function renderImageShortCode(&$content);
+
+    /**
+     * Render YouTube short code(s) - max. 20
      *
      * @param string $content text data containing [youtube param]
      * 
@@ -54,7 +63,7 @@ interface IStringFilters
     public static function renderYouTubeShortCode(&$content);
 
     /**
-     * Render gallery short code(s) - max. 10
+     * Render gallery short code(s) - max. 20
      *
      * @param string $content   text data containing [gallery param]
      * @param bool   $noshuffle disable shuffling of the gallery
@@ -177,6 +186,12 @@ class StringFilters implements IStringFilters
      */
     public static $slovak = [
         "  " => " ",
+        " % " => "&nbsp;%",
+        " - " => " – ",
+        " ... " => "&nbsp;… ",
+        " ..." => "&nbsp;…",
+        " / " => " /&nbsp;",
+        " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
         " 2 " => " 2&nbsp;",
         " 3 " => " 3&nbsp;",
@@ -186,33 +201,31 @@ class StringFilters implements IStringFilters
         " 7 " => " 7&nbsp;",
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
-        " 0 " => " 0&nbsp;",
-        " - " => " – ",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " % " => "&nbsp;%",
-        " ... " => "&nbsp;… ",
-        " ..." => "&nbsp;…",
         " :-(" => "&nbsp;😟",
         " :-)" => "&nbsp;🙂",
         " :-O" => "&nbsp;😮",
         " :-P" => "&nbsp;😋",
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
-        " / " => " /&nbsp;",
-        " – " => " –&nbsp;",
+        " A " => " A&nbsp;",
         " CZK" => "&nbsp;CZK",
         " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
         " EUR" => "&nbsp;EUR",
         " Eur " => "&nbsp;EUR ",
+        " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
         " Inc." => "&nbsp;Inc.",
         " IČ: " => " IČ:&nbsp;",
+        " K " => " K&nbsp;",
         " Kč" => "&nbsp;Kč",
         " Ltd." => "&nbsp;Ltd.",
+        " S " => " S&nbsp;",
+        " U " => " U&nbsp;",
         " USD" => "&nbsp;USD",
         " Usd" => "&nbsp;USD",
+        " V " => " V&nbsp;",
+        " Z " => " Z&nbsp;",
         " a " => " a&nbsp;",
         " a. s. " => "&nbsp;a.&nbsp;s. ",
         " a.s. " => "&nbsp;a.s. ",
@@ -259,8 +272,8 @@ class StringFilters implements IStringFilters
         " v " => " v&nbsp;",
         " viz " => " viz&nbsp;",
         " z " => " z&nbsp;",
-        " z.s." => "&nbsp;z.s.",
         " z. s." => "&nbsp;z.&nbsp;s.",
+        " z.s." => "&nbsp;z.s.",
         " zvl. " => " zvl.&nbsp;",
         " °C " => "&nbsp;°C ",
         " °F " => "&nbsp;°F ",
@@ -269,9 +282,16 @@ class StringFilters implements IStringFilters
         " čj. " => " čj.&nbsp;",
         " čp. " => " čp.&nbsp;",
         " čís. " => " čís.&nbsp;",
+        " – " => " –&nbsp;",
+        " — " => " —&nbsp;",
+        " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
         "<<" => "«",
         ">>" => "»",
+        " a&nbsp;i " => " a&nbsp;i&nbsp;",
+        " a&nbsp;v " => " a&nbsp;v&nbsp;",
+        " i&nbsp;s " => " i&nbsp;s&nbsp;",
+        " i&nbsp;v " => " i&nbsp;v&nbsp;",
     ];
 
     // phpcs:ignore
@@ -280,6 +300,12 @@ class StringFilters implements IStringFilters
      */
     public static $czech = [
         "  " => " ",
+        " % " => "&nbsp;%",
+        " - " => " – ",
+        " ... " => "&nbsp;… ",
+        " ..." => "&nbsp;…",
+        " / " => " /&nbsp;",
+        " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
         " 2 " => " 2&nbsp;",
         " 3 " => " 3&nbsp;",
@@ -289,33 +315,31 @@ class StringFilters implements IStringFilters
         " 7 " => " 7&nbsp;",
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
-        " 0 " => " 0&nbsp;",
-        " - " => " – ",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " % " => "&nbsp;%",
-        " ... " => "&nbsp;… ",
-        " ..." => "&nbsp;…",
         " :-(" => "&nbsp;😟",
         " :-)" => "&nbsp;🙂",
         " :-O" => "&nbsp;😮",
         " :-P" => "&nbsp;😋",
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
-        " / " => " /&nbsp;",
-        " – " => " –&nbsp;",
+        " A " => " A&nbsp;",
         " CZK" => "&nbsp;CZK",
         " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
         " EUR" => "&nbsp;EUR",
         " Eur " => "&nbsp;EUR ",
+        " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
         " Inc." => "&nbsp;Inc.",
         " IČ: " => " IČ:&nbsp;",
+        " K " => " K&nbsp;",
         " Kč" => "&nbsp;Kč",
         " Ltd." => "&nbsp;Ltd.",
+        " S " => " S&nbsp;",
+        " U " => " U&nbsp;",
         " USD" => "&nbsp;USD",
         " Usd" => "&nbsp;USD",
+        " V " => " V&nbsp;",
+        " Z " => " Z&nbsp;",
         " a " => " a&nbsp;",
         " a. s. " => "&nbsp;a.&nbsp;s. ",
         " a.s. " => "&nbsp;a.s. ",
@@ -379,9 +403,16 @@ class StringFilters implements IStringFilters
         " čj. " => " čj.&nbsp;",
         " čp. " => " čp.&nbsp;",
         " čís. " => " čís.&nbsp;",
+        " – " => " –&nbsp;",
+        " — " => " —&nbsp;",
+        " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
         "<<" => "«",
         ">>" => "»",
+        " a&nbsp;i " => " a&nbsp;i&nbsp;",
+        " a&nbsp;v " => " a&nbsp;v&nbsp;",
+        " i&nbsp;s " => " i&nbsp;s&nbsp;",
+        " i&nbsp;v " => " i&nbsp;v&nbsp;",
     ];
 
     // phpcs:ignore
@@ -734,7 +765,30 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Render YouTube short code(s) - max. 10
+     * Render Image short code(s)
+     *
+     * @param string $content text data containing [image param]
+     * 
+     * @return void
+     */
+    public static function renderImageShortCode(&$content)
+    {
+        $x = \trim($content);
+        while (\str_contains($x, '[image ')) {
+            if (!\is_string($x)) {
+                break;
+            }
+            $pattern = '#\[image\s.*?(.*?)\]#is';
+            $replace = '<img class="responsive-img" src="/upload/'
+                . '$1.webp" alt="{{ l.title }}">';
+            if (\is_string($x)) {
+                $x = $content = \preg_replace($pattern, $replace, $x);
+            }
+        }
+    }
+
+    /**
+     * Render YouTube short code(s) - max. 20
      *
      * @param string $content text data containing [youtube param]
      * 
@@ -744,7 +798,7 @@ class StringFilters implements IStringFilters
     {
         $counter = 0;
         $x = \trim($content);
-        while (\str_contains($x, '[youtube ') && $counter < 10) {
+        while (\str_contains($x, '[youtube ') && $counter < 20) {
             if (!\is_string($x)) {
                 break;
             }
@@ -761,7 +815,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Render gallery short code(s) - max. 10
+     * Render gallery short code(s) - max. 20
      *
      * @param string $content   text data containing [gallery param]
      * @param bool   $noshuffle disable shuffling of the gallery
@@ -772,7 +826,7 @@ class StringFilters implements IStringFilters
     {
         $counter = 0;
         $x = \trim($content);
-        while (\str_contains($x, '[gallery ') && $counter < 10) {
+        while (\str_contains($x, '[gallery ') && $counter < 20) {
             $pattern = '#\[gallery\s.*?(.*?)\]#is';
             if (!\is_string($x)) {
                 break;

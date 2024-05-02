@@ -61,9 +61,11 @@ class HomePresenter extends APresenter
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
                 StringFilters::renderMarkdown($data['l'][$k]);
+                StringFilters::renderImageShortCode($data['l'][$k]);
+                StringFilters::renderGalleryShortCode($data['l'][$k]);
+                StringFilters::renderYouTubeShortCode($data['l'][$k]);
             } else {
                 StringFilters::convertEolToBrNbsp($data['l'][$k]);
-                //StringFilters::convertEolHyphenToBrDot($data['l'][$k]);
             }
             StringFilters::correctTextSpacing($data['l'][$k], $lang);
         }

@@ -833,7 +833,7 @@ abstract class APresenter implements IPresenter
                 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
                     $tls = 's';
                 }
-                $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']); // set cookie
+                $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']);
                 $this->setLocation("http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
             }
             if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) { // COOKIE identity
@@ -1079,7 +1079,7 @@ abstract class APresenter implements IPresenter
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key'; // secure key
         $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-        if (\file_exists($keyfile) && is_readable($keyfile)) {
+        if (\file_exists($keyfile) && \is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $enc = KeyFactory::generateEncryptionKey();
@@ -1092,7 +1092,7 @@ abstract class APresenter implements IPresenter
             }
         }
         $cookie = new Cookie($enc);
-        if (DOMAIN == 'localhost') {
+        if (DOMAIN === 'localhost') {
             $httponly = true;
             $samesite = 'lax';
             $secure = false;

@@ -129,6 +129,7 @@
         <a id="a_upload"
           data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;UPLOAD</a>
+        {{^disable_articles}}
         <a id="a_summernote"
           data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
@@ -137,6 +138,7 @@
           data-position="top" data-tooltip="{{ l.a_article_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves-light btn">
           <i class="fas fa-plus-square"></i>&nbsp;URL</a>
+        {{/disable_articles}}
         <a id="a_files"
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
           style="margin:5px" class="tooltipped waves-effect brown waves btn">🫙 <span id="files_count"></span></a>
