@@ -60,7 +60,7 @@ class HomePresenter extends APresenter
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
-                StringFilters::renderMarkdown($data['l'][$k]);
+                StringFilters::renderMarkdownExtra($data['l'][$k]);
                 StringFilters::renderImageShortCode($data['l'][$k]);
                 StringFilters::renderGalleryShortCode($data['l'][$k]);
                 StringFilters::renderYouTubeShortCode($data['l'][$k]);

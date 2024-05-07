@@ -48,6 +48,8 @@ window.addEventListener("load", function() {
   (function ($) {
     $(function() {
       M.AutoInit();
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, {edge:'right'});
       window.GSC.AutoInit();
     });
   })(jQuery, window);

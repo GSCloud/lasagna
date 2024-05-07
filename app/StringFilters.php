@@ -774,13 +774,18 @@ class StringFilters implements IStringFilters
     public static function renderImageShortCode(&$content)
     {
         $x = \trim($content);
+        $c = 0;
         while (\str_contains($x, '[image ')) {
             if (!\is_string($x)) {
                 break;
             }
+            $c++;
             $pattern = '#\[image\s.*?(.*?)\]#is';
-            $replace = '<img class="responsive-img" src="/upload/'
-                . '$1.webp" alt="{{ l.title }}">';
+            $replace = '<span class="img-container">'
+                . '<img data-counter="'
+                . $c
+                .'" class="responsive-img" src="/upload/'
+                . '$1.webp" alt="{{ l.title }}"></span>';
             if (\is_string($x)) {
                 $x = $content = \preg_replace($pattern, $replace, $x);
             }

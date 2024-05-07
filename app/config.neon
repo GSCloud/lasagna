@@ -87,6 +87,7 @@ lasagna_sheets: [
 # application data
 app_data: []
 
+# design
 design: [
   css_font: []
   footer_color: "grey darken-4"

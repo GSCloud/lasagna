@@ -736,7 +736,6 @@ class AdminPresenter extends APresenter
                         }
                     }
                 }
-                \clearstatcache();
                 if (CLI) {
                     echo "🔪 " . CACHE . " ...\n";
                 }
@@ -745,7 +744,10 @@ class AdminPresenter extends APresenter
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
                 \clearstatcache();
                 if (!LOCALHOST) {
-                    $this->cloudflarePurgeCache($this->getCfg('cf'));
+                    $cf = $this->getCfg('cf');
+                    if (\is_array($cf)) {
+                        $this->cloudflarePurgeCache($cf);
+                    }
                 }
                 $this->checkLocales();
             } finally {

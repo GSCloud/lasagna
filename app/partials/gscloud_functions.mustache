@@ -59,6 +59,14 @@ async function sha256(message) {
     }
     w.GSC.scroll = scroll;
     w.GSC.scrolled = scrolled;
+    if (scroll > 300) {
+      d.getElementById('movetotop').style.opacity = 100;
+      d.getElementById('movetotop').style.visibility = 'visible';
+    }
+    if (scroll < 200) {
+      d.getElementById('movetotop').style.opacity = 0;
+      d.getElementById('movetotop').style.visibility = 'hidden';
+    }
   };
 
   // check network status
@@ -378,18 +386,19 @@ async function sha256(message) {
       GSC.names.push("UI");
 
       $("#update-message").click(function() {
-        // set UPDATE action
         location.replace(location.pathname + '?nonce={{ nonce }}');
+      });
+
+      $('#movetotop').click(function() {
+        $("html,body").animate({scrollTop:0}, "fast");
       });
       
       $(".summernote>ul").each(function(i, obj) {
-        // set default bullets for Summernote data
         $(obj).addClass("browser-default");
       });
 
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
-          // create mobile WebShare button for touch devices
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
