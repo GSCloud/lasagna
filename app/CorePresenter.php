@@ -278,8 +278,9 @@ class CorePresenter extends APresenter
 
         switch ($view) {
 
-        case "GetCsDataVersion":
         case "GetEnDataVersion":
+        case "GetCsDataVersion":
+        case "GetSkDataVersion":
             $d = [];
             $d["LASAGNA"]["data"]["language"] = $language;
             $d["LASAGNA"]["data"]["version"] = $hash;

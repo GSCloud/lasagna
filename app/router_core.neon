@@ -46,6 +46,13 @@ GetCsDataVersion:
   method: GET|POST
   presenter: core
 
+GetSkDataVersion:
+  path: /sk/version/data
+  assert_json: true
+  language: sk
+  method: GET|POST
+  presenter: core
+
 GetError:
   path: '/err/[i:code]'
   api: true
