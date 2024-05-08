@@ -301,10 +301,10 @@ async function sha256(message) {
             }
           });
           // repeat
-          setTimeout(function() {GSC.VersionCheck()}, 30000);
+          setTimeout(function() {GSC.VersionCheck()}, 15000);
         }
       }
-      // repeat
+
       setTimeout(function() {GSC.VersionCheck()}, 5000);
     });
 
@@ -375,7 +375,7 @@ async function sha256(message) {
           }
           if (typeof callback === "function") callback();
         });
-        //  repeat
+
         setTimeout(function() {GSC.ReadArticles()}, 10000);
       }
       GSC.ReadArticles();
@@ -402,6 +402,12 @@ async function sha256(message) {
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
+        {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
+        $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
+        {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+        {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
+        $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
+        {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
       }
 
       setInterval(checkNetwork, 1000);
