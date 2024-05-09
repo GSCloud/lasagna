@@ -848,7 +848,7 @@ class StringFilters implements IStringFilters
                     $c = 0;
                     foreach ($files as $f) {
                         $c++;
-                        $images .= '<span class="gallery-img" '
+                        $images .= '<span class="gallery-span" '
                             . 'data-counter="' . $c . '">'
                             . '<img class="responsive-img gallery-img" '
                             . 'src="/upload/' . $f . '" alt="' . $f . '">'
