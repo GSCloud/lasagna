@@ -1,6 +1,6 @@
 #@author Fred Brooker <git@gscloud.cz>
 
-ARG CODE_VERSION=7.4-apache
+ARG CODE_VERSION=8.2-apache
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LC_ALL=en_US.UTF-8
 ARG TERM=linux
