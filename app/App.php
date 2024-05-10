@@ -45,7 +45,8 @@ foreach ([
 $cfg = $data = $cfg ?? [];
 
 // inject base CSV locales into $cfg (e.g. for Docker images)
-array_unshift($cfg['locales'], 'base.csv');
+//array_unshift($cfg['locales'], 'base.csv');
+//array_unshift($data['locales'], 'base.csv');
 
 $data["cfg"] = $cfg;
 
