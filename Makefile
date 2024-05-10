@@ -109,7 +109,7 @@ execbash:
 	@./bin/execbash.sh
 
 # update and test local + sync to remote and test
-everything: clear update local test sync prod
+everything: clear update stan local test sync prod
 
 # build docker image
-image: clear update test local build run
+image: clear update stan local test build run
