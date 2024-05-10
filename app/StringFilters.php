@@ -65,12 +65,12 @@ interface IStringFilters
     /**
      * Render gallery short code(s) - max. 20
      *
-     * @param string $content   text data containing [gallery param]
-     * @param bool   $noshuffle disable shuffling of the gallery
+     * @param string $content text data containing [gallery param]
+     * @param bool   $shuffle shuffle the gallery
      * 
      * @return void
      */
-    public static function renderGalleryShortCode(&$content, $noshuffle = false);
+    public static function renderGalleryShortCode(&$content, $shuffle = false);
 
     /**
      * Find uploaded images by a mask
@@ -822,12 +822,12 @@ class StringFilters implements IStringFilters
     /**
      * Render gallery short code(s) - max. 20
      *
-     * @param string $content   text data containing [gallery param]
-     * @param bool   $noshuffle disable shuffling of the gallery
+     * @param string $content text data containing [gallery param]
+     * @param bool   $shuffle shuffle the gallery
      * 
      * @return void
      */
-    public static function renderGalleryShortCode(&$content, $noshuffle = false)
+    public static function renderGalleryShortCode(&$content, $shuffle = false)
     {
         $counter = 0;
         $x = \trim($content);
@@ -842,17 +842,30 @@ class StringFilters implements IStringFilters
                 $images = '';
                 $files = self::findImagesByMask($m[1]);
                 if (\is_array($files)) {
-                    if ($noshuffle !== false) {
+                    if ($shuffle !== false) {
                         \shuffle($files);
                     }
                     $c = 0;
+                    $cdn = \GSC\HomePresenter::getInstance()->getData('cdn');
                     foreach ($files as $f) {
                         $c++;
-                        $images .= '<span class="gallery-span" '
-                            . 'data-counter="' . $c . '">'
-                            . '<img class="responsive-img gallery-img" '
-                            . 'src="/upload/' . $f . '" alt="' . $f . '">'
-                            . '</span>';
+                        $n = \pathinfo(
+                            \strtoupper(
+                                \str_ireplace($m[1], '', $f)
+                            ), PATHINFO_FILENAME
+                        );
+                        $n = \strtr($n, '-_', '  ');
+                        $images .= '<span class="gallery-span" data-counter="'
+                            . $c
+                            . '"><img class="responsive-img gallery-img" src="'
+                            . $cdn
+                            . '/upload/'
+                            . $f
+                            . '" alt="'
+                            . $n
+                            . '" title="'
+                            . $n
+                            . '"></span>';
                     }
                 }
                 $replace = '<div class="row center gallery-container" '
