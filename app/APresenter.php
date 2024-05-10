@@ -1587,13 +1587,22 @@ abstract class APresenter implements IPresenter
         if ($locale === false || empty($locale)) {
             if (\array_key_exists('locales', $cfg)) {
                 $locale = [];
-                foreach ((array) $cfg['locales'] as $k => $v) {
 
-                    // 1. read from CSV file
+                foreach ((array) $cfg['locales'] as $k => $v) {
                     $csv = false;
                     $subfile = \strtolower($k);
                     $csvfile = DATA . DS . "{$subfile}.csv";
                     $csvfilebak = DATA . DS . "{$subfile}.bak";
+
+                    // 0. read injected prefabricated base CSV file
+                    if (\str_ends_with($v, ".csv")) {
+                        $csvfile = APP . DS . $v;
+                        if (\file_exists(($csvfile))) {
+                            $csv = @\file_get_contents($csvfile);
+                        }
+                    }
+
+                    // 1. read from CSV file
                     if ($csv === false && \file_exists(($csvfile))) {
                         $csv = @\file_get_contents($csvfile);
                         if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
@@ -1606,13 +1615,13 @@ abstract class APresenter implements IPresenter
                         $csv = @\file_get_contents($csvfilebak);
                         if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
-                            continue; // skip this CSV
+                            continue;
                         } else {
                             \copy($csvfilebak, $csvfile);
                         }
                     }
 
-                    // parse CSV
+                    // parse CSV string
                     $keys = [];
                     $values = [];
                     try {
@@ -2067,9 +2076,9 @@ abstract class APresenter implements IPresenter
         // get locale if not already present
         if (!\array_key_exists('l', $data)) {
             $l = $this->getLocale($language);
-            if (is_null($l)) {
+            if (\is_null($l)) {
                 $l = $this->getLocale('en');
-                if (is_null($l)) {
+                if (\is_null($l)) {
                     $l = [];
                     $l['title'] = 'MISSING ENGLISH LOCALE!';
                 }

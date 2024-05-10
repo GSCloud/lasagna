@@ -43,11 +43,16 @@ foreach ([
 
 // POPULATE DATA ARRAY
 $cfg = $data = $cfg ?? [];
+
+// inject base CSV locales into $cfg (e.g. for Docker images)
+array_unshift($cfg['locales'], 'base.csv');
+
 $data["cfg"] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING
 // XX = unknown location
 $blocked = (array) ($data["geoblock"] ?? [
+    // block default countries
     "BY",
     "KZ",
     "MD",
