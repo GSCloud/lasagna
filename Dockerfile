@@ -1,6 +1,6 @@
 #@author Fred Brooker <git@gscloud.cz>
 
-ARG CODE_VERSION=8.2-apache
+ARG CODE_VERSION=7.4-apache
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LC_ALL=en_US.UTF-8
 ARG TERM=linux
@@ -18,7 +18,7 @@ RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
 
 COPY php.ini /usr/local/etc/php/
 
-COPY app/*.php app/router* app/csp.neon app/base.csv /var/www/app/
+COPY app/*.php app/router* app/csp.neon /var/www/app/
 COPY app/partials/* /var/www/app/partials/
 COPY app/templates/* /var/www/app/templates/
 
