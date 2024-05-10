@@ -19,6 +19,8 @@ source .env
 [ "$(docker container inspect -f '{{.State.Status}}' ${NAME} 2>&1)" == "running" ] && fail "Container '${NAME}' is already running!"
 
 echo -en "🚀 http://localhost:$PORT\n\n"
+echo "docker run -d --rm --name $NAME -p $PORT:80 $TAG"
+
 docker run -d --rm --name $NAME -p $PORT:80 -v $(pwd)/app/config_private.neon:/var/www/app/config_private.neon $TAG
 
 exit 0
