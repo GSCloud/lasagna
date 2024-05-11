@@ -13,6 +13,7 @@
 define('ROOT', __DIR__);
 define('APP', ROOT . DS . 'app');
 define('CACHE', ROOT . DS . 'temp');
+define('CDN', '');
 define('DATA', ROOT . DS . 'data');
 define('WWW', ROOT . DS . 'www');
 define('CONFIG', APP . DS . 'config.neon');

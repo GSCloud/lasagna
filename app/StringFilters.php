@@ -774,18 +774,21 @@ class StringFilters implements IStringFilters
     public static function renderImageShortCode(&$content)
     {
         $x = \trim($content);
-        $c = 0;
+        $counter = 0;
         while (\str_contains($x, '[image ')) {
             if (!\is_string($x)) {
                 break;
             }
-            $c++;
+            $counter++;
             $pattern = '#\[image\s.*?(.*?)\]#is';
             $replace = '<span class="img-container">'
                 . '<img data-counter="'
-                . $c
-                .'" class="responsive-img" src="/upload/'
-                . '$1.webp" alt="{{ l.title }}"></span>';
+                . $counter
+                .'" class="responsive-img" src="'
+                . CDN
+                . '/upload/'
+                . '$1.webp" '
+                . 'alt="$1" ></span>';
             if (\is_string($x)) {
                 $x = $content = \preg_replace($pattern, $replace, $x);
             }
@@ -809,7 +812,9 @@ class StringFilters implements IStringFilters
             }
             $counter++;
             $pattern = '#\[youtube\s.*?(.*?)\]#is';
-            $replace = '<div class="video-container center row youtube-container">'
+            $replace = '<div class="video-container data-counter=""'
+                . $counter
+                . '" center row youtube-container">'
                 . '<iframe width="426" height="240" controls '
                 . 'src="https://www.youtube.com/embed/$1"'
                 . '></iframe></div>';
@@ -846,7 +851,6 @@ class StringFilters implements IStringFilters
                         \shuffle($files);
                     }
                     $c = 0;
-                    $cdn = \GSC\HomePresenter::getInstance()->getData('cdn');
                     foreach ($files as $f) {
                         $c++;
                         $n = \pathinfo(
@@ -858,12 +862,12 @@ class StringFilters implements IStringFilters
                         $images .= '<span class="gallery-span" data-counter="'
                             . $c
                             . '"><img class="responsive-img gallery-img" src="'
-                            . $cdn
+                            . CDN
                             . '/upload/'
                             . $f
                             . '" alt="'
                             . $n
-                            . '" title="'
+                            . '" data-name="'
                             . $n
                             . '"></span>';
                     }

@@ -75,7 +75,7 @@ if (!$requestUri) {
 }
 
 // POPULATE DATA ARRAY
-define("ENGINE", "Tesseract 2.2.0");
+define("ENGINE", "Tesseract 2.2.1");
 $data["ENGINE"] = ENGINE;
 
 $data["ARGC"] = $argc ?? 0;
@@ -102,6 +102,8 @@ $data["REVISIONS"] = (int) trim(
 );
 
 $data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
+defined('CDN') || define('CDN', $data["CDN"]);
+
 $data["cdn_trimmed"] = "cdn-assets" . DS . $version;
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (
