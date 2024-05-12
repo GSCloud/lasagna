@@ -812,10 +812,10 @@ class StringFilters implements IStringFilters
             }
             $counter++;
             $pattern = '#\[youtube\s.*?(.*?)\]#is';
-            $replace = '<div class="video-container data-counter=""'
+            $replace = '<div class="video-container center row youtube-container"'
+                . ' data-counter='
                 . $counter
-                . '" center row youtube-container">'
-                . '<iframe width="426" height="240" controls '
+                . '><iframe width=426 height=240 controls '
                 . 'src="https://www.youtube.com/embed/$1"'
                 . '></iframe></div>';
             if (\is_string($x)) {
@@ -850,18 +850,18 @@ class StringFilters implements IStringFilters
                     if ($shuffle !== false) {
                         \shuffle($files);
                     }
-                    $c = 0;
+                    $counter = 0;
                     foreach ($files as $f) {
-                        $c++;
+                        $counter++;
                         $n = \pathinfo(
                             \strtoupper(
                                 \str_ireplace($m[1], '', $f)
                             ), PATHINFO_FILENAME
                         );
-                        $n = \strtr($n, '-_', '  ');
-                        $images .= '<span class="gallery-span" data-counter="'
-                            . $c
-                            . '"><img class="responsive-img gallery-img" src="'
+                        $n = \trim(\strtr($n, '-_', '  '));
+                        $images .= '<span class="gallery-span" data-counter='
+                            . $counter
+                            . '><img class="responsive-img gallery-img" src="'
                             . CDN
                             . '/upload/'
                             . $f
