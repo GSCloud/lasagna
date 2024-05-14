@@ -812,12 +812,11 @@ class StringFilters implements IStringFilters
             }
             $counter++;
             $pattern = '#\[youtube\s.*?(.*?)\]#is';
-            $replace = '<div class="video-container center row youtube-container"'
-                . ' data-counter='
+            $replace = '<div class="video-container center row youtube-container" '
+                . 'data-counter='
                 . $counter
                 . '><iframe width=426 height=240 controls '
-                . 'src="https://www.youtube.com/embed/$1"'
-                . '></iframe></div>';
+                . 'src="https://www.youtube.com/embed/$1"></iframe></div>';
             if (\is_string($x)) {
                 $x = $content = \preg_replace($pattern, $replace, $x);
             }

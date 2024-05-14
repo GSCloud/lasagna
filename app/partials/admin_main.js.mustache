@@ -200,7 +200,7 @@
         // API: UpdateArticles (POST - save all articles data)
         $.post("/admin/UpdateArticles", {
           hash: "{{ request_path_hash }}",
-          path: window.location.pathname,
+          path: location.pathname,
           data: JSON.stringify(data)
         }, function (data) {
           M.toast({text: "💾 {{ l.a_saved_ok }}"});
@@ -648,7 +648,7 @@
 
       // articles URL selector
       $("#ArticleURLSelect").change(function () {
-        window.location.pathname = $('#ArticleURLSelect').val();
+        location.pathname = $('#ArticleURLSelect').val();
       });
 
       // remote function selector
@@ -765,12 +765,12 @@
                 var si = '';
                 if (data.data.files[i]["thumbnails"] == null) {
                   // clickable icon
-                  si += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
+                  si += '<a target=_blank title="{{ l.a_open_tit }} ' + name + '" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
                   si += '📄</a><br><br><a target=_blank title="{{ l.a_open_tit }}" class="truncate" style="font-size:1rem;line-height:1rem" href="/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
                   // clickable thumbnail
-                  si += '<a target=_blank title="{{ l.a_open_tit }}" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
-                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" height=250 src="{{ cdn }}/upload/' + data.data.files[i]["thumbnails"][160] + '"><br>';
+                  si += '<a target=_blank title="{{ l.a_open_tit }} ' + name + '" class="hover" style="font-size:2rem;line-height:1rem" href="/upload/' + name + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" height=250 src="/upload/' + data.data.files[i]['thumbnails'][160] + '"><br>';
                   si += '</a>';
                 }
   
@@ -870,12 +870,12 @@
 
         // API: FlushCache
         $.post("/admin/FlushCache");
-        location.replace("/?nonce={{ nonce }}");
+        location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}");
       });
 
       $("#a_logout").click(function () {
         setCookie("logout", 1);
-        GSC.offline ? window.location.replace("/?nonce={{ nonce }}") : window.location.replace("/logout");
+        GSC.offline ? location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}") : location.replace("/logout");
       });
 
     });
@@ -884,7 +884,7 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("CSV timer");
       setInterval(function () {
-        window.GSC.GetCsvInfo();
+        GSC.GetCsvInfo();
       }, 2500);
       GSC.GetCsvInfo();
     });
@@ -905,7 +905,7 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
       ZeroUpload.setURL("/admin/upload");
-      ZeroUpload.setMaxFiles(20);
+      ZeroUpload.setMaxFiles(100);
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
       ZeroUpload.on("complete", function (response) {
