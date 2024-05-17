@@ -62,6 +62,7 @@ class HomePresenter extends APresenter
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
                 StringFilters::renderMarkdownExtra($data['l'][$k]);
                 StringFilters::renderImageShortCode($data['l'][$k]);
+                StringFilters::renderImageRespShortCode($data['l'][$k]);
                 StringFilters::renderGalleryShortCode($data['l'][$k], true);
                 StringFilters::renderYouTubeShortCode($data['l'][$k]);
             } else {

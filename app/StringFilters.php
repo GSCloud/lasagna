@@ -54,6 +54,15 @@ interface IStringFilters
     public static function renderImageShortCode(&$content);
 
     /**
+     * Render Image Responsive short code(s)
+     *
+     * @param string $content text data containing [imageresp param]
+     * 
+     * @return void
+     */
+    public static function renderImageRespShortCode(&$content);
+
+    /**
      * Render YouTube short code(s) - max. 20
      *
      * @param string $content text data containing [youtube param]
@@ -289,8 +298,15 @@ class StringFilters implements IStringFilters
         "<<" => "«",
         ">>" => "»",
         " a&nbsp;i " => " a&nbsp;i&nbsp;",
+        " a&nbsp;k " => " a&nbsp;k&nbsp;",
+        " a&nbsp;o " => " a&nbsp;o&nbsp;",
+        " a&nbsp;s " => " a&nbsp;s&nbsp;",
+        " a&nbsp;u " => " a&nbsp;u&nbsp;",
         " a&nbsp;v " => " a&nbsp;v&nbsp;",
+        " i&nbsp;k " => " i&nbsp;k&nbsp;",
+        " i&nbsp;o " => " i&nbsp;o&nbsp;",
         " i&nbsp;s " => " i&nbsp;s&nbsp;",
+        " i&nbsp;u " => " i&nbsp;u&nbsp;",
         " i&nbsp;v " => " i&nbsp;v&nbsp;",
     ];
 
@@ -782,13 +798,42 @@ class StringFilters implements IStringFilters
             $counter++;
             $pattern = '#\[image\s.*?(.*?)\]#is';
             $replace = '<span class="img-container">'
-                . '<img data-counter="'
-                . $counter
-                .'" class="responsive-img" src="'
+                . '<img data-name="$1" data-counter=' . $counter
+                . ' class="responsive-img" src="'
                 . CDN
                 . '/upload/'
                 . '$1.webp" '
-                . 'alt="$1" ></span>';
+                . 'alt="$1"></span>';
+            if (\is_string($x)) {
+                $x = $content = \preg_replace($pattern, $replace, $x);
+            }
+        }
+    }
+
+    /**
+     * Render Image Responsive short code(s)
+     *
+     * @param string $content text data containing [imageresp param]
+     * 
+     * @return void
+     */
+    public static function renderImageRespShortCode(&$content)
+    {
+        $x = \trim($content);
+        $counter = 0;
+        while (\str_contains($x, '[imageresp ')) {
+            if (!\is_string($x)) {
+                break;
+            }
+            $counter++;
+            $pattern = '#\[imageresp\s.*?(.*?)\]#is';
+            $replace = '<span class="img-responsive-container">'
+                . '<img data-name="$1" data-counter=' . $counter
+                . ' class="responsive-img" src="'
+                . CDN
+                . '/upload/'
+                . '$1.webp" '
+                . 'alt="$1"></span>';
             if (\is_string($x)) {
                 $x = $content = \preg_replace($pattern, $replace, $x);
             }

@@ -47,5 +47,43 @@
     }
   })(window, document);
 </script>
+
+<script nonce="{{ csp_nonce }}">
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("zoomer + intro vfx");
+
+        GSC.zoomed = false;
+        // gallery zoomer
+        $('.gallery-img').click(function () {
+          if ($(this).hasClass('zoomin')) {
+            GSC.zoomed = false;
+            $('.gallery-container').css('display', 'grid');
+            $('.gallery-img').removeClass('zoomin h').css('maxHeight', '256px');
+          } else {
+            GSC.zoomed = true;
+            $('.gallery-container').css('display', 'block');
+            $('.gallery-img').removeClass('zoomin').addClass('h');
+            $(this).removeClass('h').fadeOut(0).fadeIn(500).addClass('zoomin').css('maxHeight', '10000px');
+            return false;
+          }
+        });
+
+        $('body').click(function () {
+          if (GSC.zoomed) {
+            $('.gallery-container').css('display', 'grid');
+            $('.gallery-img').removeClass('zoomin h').css('maxHeight', '256px');
+            $('.image-container>img').removeClass('zoomin');
+            GSC.zoomed = false;
+          }
+        });
+      });
+
+    }
+  })(window, document);
+</script>
+
 <style>.bigemoji{font-size:5em}</style>
 {{>html_footer}}

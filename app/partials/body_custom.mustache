@@ -1,13 +1,44 @@
 <style>
 html{min-width:320px!important}
-
 #nav-mobile>li>a{color:#fff!important}
-
 .fa-share-alt-square{font-size:2em}
+.content{line-height: 1.5em}
+.content li{list-style-type: square!important}
+.h{display:none}
+p:has(img){display:block;text-align:center;text-indent:0}
+span:has(img){display:block;text-align:center;text-indent:0}
 
-.content {line-height: 1.5em}
-.content li {list-style-type: square!important}
+/* images */
+.zoomin {max-width:100%!important;z-index:999}
+div .img-container {text-align:center}
+span .img-container {text-align:center}
+.img-container {max-width:25%;display:inline-block;vertical-align:middle}
+.gallery-img {max-height:256px;cursor:pointer;border-radius:5px;z-index:0}
 
-p:has(img) {display:block;text-align:center;text-indent:0}
-span:has(img) {display:block;text-align:center;text-indent:0}
+@media screen and (max-width: 399px) {
+  .gallery-container {
+    display:block;
+    vertical-align:middle;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .gallery-container {
+    display:grid;
+    vertical-align:middle;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1rem;
+    grid-auto-rows:minmax(100px, auto);
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .gallery-container {
+    display:grid;
+    vertical-align:middle;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1rem;
+    grid-auto-rows: minmax(100px, auto);
+  }
+}
 </style>
