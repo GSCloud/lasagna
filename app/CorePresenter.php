@@ -272,9 +272,14 @@ class CorePresenter extends APresenter
         }
 
         // get language and locale
+        $fl = '';
         $language = $this->validateLanguage($presenter[$view]["language"]);
         $locale = $this->getLocale($language);
-        $hash = \hash("sha256", (string) \json_encode($locale));
+        $flushed =(DATA . DS . '_default_cache_flushed_');
+        if (\file_exists($flushed)) {
+            $fl = (string) \filemtime($flushed);
+        }
+        $hash = \hash("sha256", (string) \json_encode($locale) . $fl);
 
         switch ($view) {
 

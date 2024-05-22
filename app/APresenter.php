@@ -2086,8 +2086,13 @@ abstract class APresenter implements IPresenter
             $data['l'] = $l;
         }
 
-        // compute data hash
-        $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l));
+        // compute data hash from language and cache reset modification time
+        $fl = '';
+        $flushed =(DATA . DS . '_default_cache_flushed_');
+        if (\file_exists($flushed)) {
+            $fl = (string) \filemtime($flushed);
+        }
+        $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l) . $fl);
 
         // extract request path slug
         if (($pos = \strpos($data['request_path'], $language)) !== false) {
