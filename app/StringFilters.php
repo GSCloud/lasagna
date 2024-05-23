@@ -817,7 +817,7 @@ class StringFilters implements IStringFilters
             $pattern = '#\[image\s.*?(.*?)\]#is';
             $replace = '<span class="img-container">'
                 . '<img data-name="$1" data-counter=' . $counter
-                . ' class="responsive-img" src="'
+                . ' src="'
                 . CDN
                 . '/upload/'
                 . '$1.webp" '

@@ -75,7 +75,7 @@ if (!$requestUri) {
 }
 
 // POPULATE DATA ARRAY
-define("ENGINE", "Tesseract 2.2.1");
+define("ENGINE", "Tesseract 2.2.2");
 $data["ENGINE"] = ENGINE;
 
 $data["ARGC"] = $argc ?? 0;
@@ -101,10 +101,17 @@ $data["REVISIONS"] = (int) trim(
     @file_get_contents(ROOT . DS . "REVISIONS") ?: "0", "\r\n"
 );
 
+// random hash created by administrator
+$hash = DATA . DS . '_random_cdn_hash';
+if (file_exists($hash)) {
+    $version = @file_get_contents($hash);
+    trim($version);
+}
+
 $data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
+$data["cdn_trimmed"] = "cdn-assets" . DS . $version;
 defined('CDN') || define('CDN', $data["CDN"]);
 
-$data["cdn_trimmed"] = "cdn-assets" . DS . $version;
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (
     ($_SERVER["HTTPS"] ?? "off" == "on") ? "https://{$host}/" : "http://{$host}/"

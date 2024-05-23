@@ -742,7 +742,6 @@ class AdminPresenter extends APresenter
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
-                \clearstatcache();
                 if (!LOCALHOST) {
                     $cf = $this->getCfg('cf');
                     if (\is_array($cf)) {
@@ -753,6 +752,12 @@ class AdminPresenter extends APresenter
             } finally {
                 @\touch(DATA . DS . '_default_cache_flushed_');
                 @\touch(DATA . DS . '_admin_cache_flushed_');
+                @\file_put_contents(
+                    DATA . DS . '_random_cdn_hash',
+                    \hash('sha1', $this->getNonce()),
+                    LOCK_EX
+                );
+                \clearstatcache();
                 $lock->release();
             }
         } else {
@@ -868,12 +873,15 @@ class AdminPresenter extends APresenter
     public function createThumbnail($src, $dest, $tw = null, $th = null
     ) {
         $type = \exif_imagetype($src);
+
         if (!$type) {
             return null;
         }
+
         if (!\array_key_exists($type, self::IMAGE_HANDLERS)) {
             return null;
         }
+
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
         // phpcs:ignore
         /** @phpstan-ignore-next-line */

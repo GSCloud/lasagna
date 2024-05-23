@@ -7,12 +7,12 @@ dir="$(dirname "$0")"
 info "Installing 👶"
 
 find . -name "*.sh" -exec chmod +x {} \;
-mkdir -p ci data logs temp www/cdn-assets www/download www/upload
+mkdir -p ci data logs temp www/download www/upload
 
 echo "We need a root permission to run some tasks 😎"
 sudo chmod 0777 ci data logs temp www/download www/upload
 sudo chown -R www-data:www-data data
-sudo chgrp -R www-data ci data www www/cdn-assets www/download www/upload
+sudo chgrp -R www-data ci data www www/download www/upload
 
 yes_or_no "Run PHP 8.2 and Apache APT installation?" || exit 0
 

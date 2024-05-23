@@ -776,17 +776,23 @@
   
                 // AGE + SIZE
                 var saz = '';
+                var warn = '';
+                if (data.data.files[i]["size"] > 1024*1024) {
+                  warn = 'bold red';
+                }
                 saz += '<div class=center>⏳️&nbsp;';
                 saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
                 saz += '&nbsp;🫙&nbsp;';
+                saz += '<span class="' + warn + '">';
                 saz += GSC.FormatBytes(data.data.files[i]["size"]);
+                saz += '</span>';
                 saz += '</div>';
   
                 // SML
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
-                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '📋</span>';
+                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '📋</span>&nbsp;&nbsp;';
                 }
                 if (sml.length) {
                   sml = '<div class="row center extrapadding">' + sml + '</div>';

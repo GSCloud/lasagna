@@ -1717,9 +1717,11 @@ abstract class APresenter implements IPresenter
         if (!\is_array($cf)) {
             return $this;
         }
+
         $email = $cf['email'] ?? null;
         $apikey = $cf['apikey'] ?? null;
         $zoneid = $cf['zoneid'] ?? null;
+
         try {
             if ($email && $apikey && $zoneid) {
                 $key = new \Cloudflare\API\Auth\APIKey($email, $apikey);
@@ -1728,7 +1730,7 @@ abstract class APresenter implements IPresenter
                 if (\is_array($zoneid)) {
                     $myzones = $zoneid;
                 }
-                if (is_string($zoneid)) {
+                if (\is_string($zoneid)) {
                     $myzones = [$zoneid];
                 }
                 foreach ($zones->listZones()->result as $zone) {

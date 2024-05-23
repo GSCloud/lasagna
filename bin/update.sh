@@ -6,16 +6,14 @@ dir="$(dirname "$0")"
 
 VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
+
 REVISIONS=$(git rev-list --all --count)
 echo $REVISIONS > REVISIONS
+
 info "Version: $VERSION Revisions: $REVISIONS"
 
 # remove logs and temporary files
-rm -rf logs/* temp/*
-ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
-
-# remove links older than 60 days
-find www/cdn-assets/ -type l -mtime +60 -delete
+rm -rf logs/* temp/* www/cdn-assets
 
 command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 composer update --no-plugins --no-scripts

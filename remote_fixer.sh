@@ -4,7 +4,7 @@
 dir="$(dirname "$0")"
 cd $dir
 
-mkdir -p app ci data logs temp www/cdn-assets www/download www/upload
+mkdir -p app ci data logs temp www/download www/upload
 
 [ ! -r ".env" ] && {
     echo -en "Missing .env file!\n"
