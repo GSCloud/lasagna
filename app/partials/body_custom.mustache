@@ -1,22 +1,29 @@
 <style>
-html{min-width:320px!important}
-#nav-mobile>li>a{color:#fff!important}
+html {min-width:320px!important}
+#nav-mobile>li>a {color:#fff!important}
 
-.fa-share-alt-square{font-size:2em}
-.content{line-height: 1.5em}
-.content li{list-style-type: square!important}
+hr {clear:both!important;border:0!important;margin:0!important}
 
-.h{display:none}
+.fa-share-alt-square {font-size:2em}
 
-p:has(img){display:block;text-align:center;text-indent:0}
-span:has(img){display:block;text-align:center;text-indent:0}
+.content {line-height: 1.5em}
+.content li {list-style-type: square!important}
+
+.h {display:none}
+
+p:has(img) {display:block;text-align:center;text-indent:0}
+xspan:has(img) {display:block;text-align:center;text-indent:0}
 
 /* images */
-.zoomin{max-width:100%!important;z-index:999}
-div .img-container{text-align:center}
-span .img-container{text-align:center}
-.img-container{max-width:25%;display:inline-block;vertical-align:middle}
-.gallery-img{max-height:256px;cursor:pointer;border-radius:5px;z-index:0}
+.zoomin {max-width:100%!important;z-index:999}
+div .img-container {text-align:center}
+span .img-container {text-align:center}
+
+.img-container {max-width:25%;display:inline-block;vertical-align:middle}
+.img-left-container img {float:left;overflow:hidden;margin:1rem}
+.img-right-container img {float:right;overflow:hidden;margin:1rem}
+
+.gallery-img {max-height:256px;cursor:pointer;border-radius:5px;z-index:0}
 
 @media screen and (max-width: 399px) {
   .gallery-container {
@@ -42,5 +49,4 @@ span .img-container{text-align:center}
     gap:10px;
   }
 }
-
 </style>

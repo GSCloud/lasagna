@@ -54,6 +54,24 @@ interface IStringFilters
     public static function renderImageShortCode(&$content);
 
     /**
+     * Render Image Left short code(s)
+     *
+     * @param string $content text data containing [imageleft param]
+     * 
+     * @return void
+     */
+    public static function renderImageLeftShortCode(&$content);
+
+    /**
+     * Render Image Right short code(s)
+     *
+     * @param string $content text data containing [imageright param]
+     * 
+     * @return void
+     */
+    public static function renderImageRightShortCode(&$content);
+
+    /**
      * Render Image Responsive short code(s)
      *
      * @param string $content text data containing [imageresp param]
@@ -775,8 +793,8 @@ class StringFilters implements IStringFilters
     public static function renderMarkdownExtra(&$content)
     {
         $x = \trim($content);
-        if (\str_starts_with($x, '[markdown]')) {
-            $content = MarkdownExtra::defaultTransform(substr($x, 10));
+        if (\str_starts_with($x, '[markdownextra]')) {
+            $content = MarkdownExtra::defaultTransform(substr($x, 15));
         }
     }
 
@@ -800,6 +818,66 @@ class StringFilters implements IStringFilters
             $replace = '<span class="img-container">'
                 . '<img data-name="$1" data-counter=' . $counter
                 . ' class="responsive-img" src="'
+                . CDN
+                . '/upload/'
+                . '$1.webp" '
+                . 'alt="$1"></span>';
+            if (\is_string($x)) {
+                $x = $content = \preg_replace($pattern, $replace, $x);
+            }
+        }
+    }
+
+    /**
+     * Render Image Left short code(s)
+     *
+     * @param string $content text data containing [imageleft param]
+     * 
+     * @return void
+     */
+    public static function renderImageLeftShortCode(&$content)
+    {
+        $x = \trim($content);
+        $counter = 0;
+        while (\str_contains($x, '[imageleft ')) {
+            if (!\is_string($x)) {
+                break;
+            }
+            $counter++;
+            $pattern = '#\[imageleft\s.*?(.*?)\]#is';
+            $replace = '<span class="img-left-container">'
+                . '<img data-name="$1" data-counter=' . $counter
+                . ' src="'
+                . CDN
+                . '/upload/'
+                . '$1.webp" '
+                . 'alt="$1"></span>';
+            if (\is_string($x)) {
+                $x = $content = \preg_replace($pattern, $replace, $x);
+            }
+        }
+    }
+
+    /**
+     * Render Image Right short code(s)
+     *
+     * @param string $content text data containing [imageright param]
+     * 
+     * @return void
+     */
+    public static function renderImageRightShortCode(&$content)
+    {
+        $x = \trim($content);
+        $counter = 0;
+        while (\str_contains($x, '[imageright ')) {
+            if (!\is_string($x)) {
+                break;
+            }
+            $counter++;
+            $pattern = '#\[imageright\s.*?(.*?)\]#is';
+            $replace = '<span class="img-right-container">'
+                . '<img data-name="$1" data-counter=' . $counter
+                . ' src="'
                 . CDN
                 . '/upload/'
                 . '$1.webp" '
