@@ -765,13 +765,13 @@
                 var si = '';
                 if (data.data.files[i]["thumbnails"] == null) {
                   // clickable icon
-                  si += '<a target=_blank title="{{ l.a_open_tit }} ' + name + '" class="hover" style="font-size:2rem;line-height:1rem" href="{{ cdn }}/upload/' + name + '">';
-                  si += '📄</a><br><br><a target=_blank title="{{ l.a_open_tit }}" class="truncate" style="font-size:1rem;line-height:1rem" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
+                  si += '<a target=_blank title="{{ l.a_open_tit }} ' + name + '" class="hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  si += '📄</a><br><br><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
                   // clickable thumbnail
                   si += '<a target=_blank title="{{ l.a_open_tit }} ' + name + '" class="hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
-                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" width=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
-                  si += '</a><p class="center bold truncate">' + name + '</p>';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" height=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
+                  si += '</a><div style="margin:3px" class="center bold truncate">' + name + '</div>';
                 }
   
                 // AGE + SIZE
@@ -786,7 +786,7 @@
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
-                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}upload/' + name + '">' + wt[j] + '📋</span>';
+                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '📋</span>';
                 }
                 if (sml.length) {
                   sml = '<div class="row center extrapadding">' + sml + '</div>';
@@ -796,18 +796,18 @@
                 var sd = '';
                 if (data.data.files[i]["thumbnails"] === null) {
                   // delete only
-                  sd += '<div class="row extrapadding">';
+                  sd += '<div class="row">';
                   sd += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
-                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
                   sd += '</div>';
                 }
                 else {
                   // delete + thumbnails copy buttons
-                  sd += '<div class="row extrapadding">';
+                  sd += '<div class="row">';
                   sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
-                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
                   if (ext != 'webp') {
-                    sd += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}upload/' + name2 + '">webp📋</span>';
+                    sd += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">webp📋</span>';
                   }
                   sd += '</div>';
                 }
