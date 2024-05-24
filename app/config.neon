@@ -90,8 +90,11 @@ app_data: []
 # design
 design: [
   css_font: []
+  background_color: "white"
+  content: "white black-text"
   footer_color: "grey darken-4"
   nav_color: "orange"
+  skin: "white"
   theme_color: "orange"
 ]
 
