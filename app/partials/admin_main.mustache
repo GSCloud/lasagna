@@ -3,11 +3,18 @@
 <link href="https://cdn.gscloud.cz/tesseract/css/admin.css" rel="stylesheet">
 
 <!-- WRENCH -->
-<span style="position:fixed;left:10px;top:10px;z-index:999999" class="noselect motyle btn white hide-on-med-and-down">🛠️</span>
-<span style="position:fixed;left:10px;top:10px;z-index:999999" class="noselect motyle btn white hide-on-large-only">🛠️</span>
+<span style="position:fixed;left:10px;top:10px;z-index:999999" class="noselect motyle btn white z-depth-5">🛠️</span>
 
 <!-- ADMIN PANEL -->
 <div id="admin_main" class="row center noselect black white-text" style="display:none;margin:0!important">
+
+  <!-- EXTERNAL LINKS -->
+  <div class="row center black">
+    {{#external_links}}
+      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" style="padding:4px;line-height:2em;border-radius:2px"
+        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
+    {{/external_links}}
+  </div>
 
   <!-- CUSTOM PANEL -->
   {{>admin_custom}}
@@ -72,14 +79,6 @@
         <i class="fa-solid fa-file-invoice"></i>&nbsp;ACCOUNTING</a>
       {{/langen}}
     </div>
-  </div>
-
-  <!-- EXTERNAL LINKS -->
-  <div class="row center black">
-    {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" style="padding:4px;line-height:2em;border-radius:2px"
-        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
-    {{/external_links}}
   </div>
 
   <!-- ADMIN GRID -->
@@ -187,8 +186,9 @@
 
             <strong>🧑‍🤝‍🧑 ADMIN</strong>
             <div class="container">
-              <p class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
-                {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}</p>
+              <div class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
+                {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
+              </div>
             </div>
             {{#admin_groups.editor}}
 
