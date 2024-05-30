@@ -981,7 +981,8 @@ class StringFilters implements IStringFilters
                             ), PATHINFO_FILENAME
                         );
                         $n = \trim(\strtr($n, '-_', '  '));
-                        $images .= '<span class="gallery-span" data-counter='
+                        $images .=
+                            '<span class="gallery-span" data-counter='
                             . $counter
                             . '><img class="responsive-img gallery-img" src="'
                             . CDN
@@ -994,7 +995,7 @@ class StringFilters implements IStringFilters
                             . '"></span>';
                     }
                 }
-                $replace = '<div class="row center gallery-container" '
+                $replace = '<div class="row center gallery-container"'
                     . 'data-mask="' . $m[1] . '">'
                     . $images
                     . '</div>';
@@ -1017,6 +1018,7 @@ class StringFilters implements IStringFilters
     {
         $mask = \trim($mask);
         $mask = \trim($mask, './\\');
+        $mask = \strtolower($mask);
         $format = \trim($format);
         $format = \trim($format, './\\');
         $format = \strtolower($format);

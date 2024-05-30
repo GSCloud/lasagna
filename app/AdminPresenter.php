@@ -121,6 +121,7 @@ class AdminPresenter extends APresenter
             // process all uploads
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
+
                 // sanitize
                 $f = $file['name'];
                 $f = \strtr(\trim(\basename(\strtolower($f))), " '\"\\", '____');

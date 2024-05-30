@@ -50,6 +50,16 @@
   (function (w, d, undefined) {
     if (w.GSC.init) {
 
+{{^admin_group_admin}}
+      // prevent context menu for customers
+      w.oncontextmenu = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      };
+{{/admin_group_admin}}
+
       w.GSC.init.push(function () {
         w.GSC.names.push("zoomer + intro vfx");
 
@@ -84,4 +94,5 @@
 </script>
 
 <style>.bigemoji{font-size:5em}</style>
+
 {{>html_footer}}
