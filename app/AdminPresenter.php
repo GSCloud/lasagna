@@ -122,9 +122,12 @@ class AdminPresenter extends APresenter
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
 
-                // sanitize
+                // sanitize filename
                 $f = $file['name'];
-                $f = \strtr(\trim(\basename(\strtolower($f))), " '\"\\", '____');
+                $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
+                StringFilters::transliterate($f);
+                StringFilters::sanitizeStringLC($f);
+                StringFilters::transliterate($f);
 
                 // skip thumbnails
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
@@ -235,6 +238,7 @@ class AdminPresenter extends APresenter
         case 'getUploads':
             $this->checkPermission('admin,editor');
             $files = [];
+            $stubs = [];
             $uniques = [];
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
@@ -286,16 +290,36 @@ class AdminPresenter extends APresenter
                                 'timestamp' => \filemtime(UPLOAD . DS . $f),
                                 'thumbnails' => $thumbnails,
                             ];
+
+                            // calculate stubs
+                            $fs = \strtr($fn, '-+_.()', '      ');
+                            $fs = \explode(' ', $fs);
+                            foreach ($fs as $st) {
+                                $stubs[$st] = $st;
+                            }
                         }
                     }
                 }
                 \closedir($handle);
             }
+
+            // filter stubs
+            $stubs = \array_filter($stubs);
+            foreach ($stubs as $k => $v) {
+                if (\is_numeric($v) && \strlen($v) < 3) {
+                    unset($stubs[$k]);
+                }
+            }
+
+            \ksort($stubs);
             \ksort($files);
+
             return $this->writeJsonData(
                 [
                     'count' => \count($files),
                     'files' => \array_values($files),
+                    'stubs' => \array_values($stubs),
+                    'stub_string' => \implode(' ', $stubs),
                 ],
                 $extras
             );

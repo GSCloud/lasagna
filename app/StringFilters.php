@@ -536,6 +536,11 @@ class StringFilters implements IStringFilters
      */
     public static $transliteration = [
         ' ' => '_',
+        '--' => '-',
+        '__' => '_',
+        '-.' => '.',
+        '_.' => '.',
+        '..' => '.',
         'á' => 'a',
         'č' => 'c',
         'é' => 'e',
@@ -564,6 +569,7 @@ class StringFilters implements IStringFilters
         'ĺ' => 'l',
         'ľ' => 'l',
         'ň' => 'n',
+        'ń' => 'n',
         'ŕ' => 'r',
         'ř' => 'r',
         'š' => 's',
@@ -590,6 +596,7 @@ class StringFilters implements IStringFilters
         'Ĺ' => 'L',
         'Ľ' => 'L',
         'Ň' => 'N',
+        'Ń' => 'N',
         'Ŕ' => 'R',
         'Ř' => 'R',
         'Š' => 'S',
@@ -816,7 +823,8 @@ class StringFilters implements IStringFilters
             $counter++;
             $pattern = '#\[image\s.*?(.*?)\]#is';
             $replace = '<span class="img-container">'
-                . '<img data-name="$1" data-counter=' . $counter
+                . '<img data-name="$1" '
+                . 'data-counter=' . $counter
                 . ' src="'
                 . CDN
                 . '/upload/'
@@ -846,7 +854,8 @@ class StringFilters implements IStringFilters
             $counter++;
             $pattern = '#\[imageleft\s.*?(.*?)\]#is';
             $replace = '<span class="img-left-container">'
-                . '<img data-name="$1" data-counter=' . $counter
+                . '<img data-name="$1" '
+                . 'data-counter=' . $counter
                 . ' src="'
                 . CDN
                 . '/upload/'
@@ -876,7 +885,8 @@ class StringFilters implements IStringFilters
             $counter++;
             $pattern = '#\[imageright\s.*?(.*?)\]#is';
             $replace = '<span class="img-right-container">'
-                . '<img data-name="$1" data-counter=' . $counter
+                . '<img data-name="$1" '
+                . 'data-counter=' . $counter
                 . ' src="'
                 . CDN
                 . '/upload/'
@@ -938,7 +948,7 @@ class StringFilters implements IStringFilters
             $replace = '<div class="video-container center row youtube-container" '
                 . 'data-counter='
                 . $counter
-                . '><iframe width=426 height=240 controls '
+                . '><iframe loading="lazy" width=426 height=240 controls '
                 . 'src="https://www.youtube.com/embed/$1"></iframe></div>';
             if (\is_string($x)) {
                 $x = $content = \preg_replace($pattern, $replace, $x);
@@ -980,18 +990,19 @@ class StringFilters implements IStringFilters
                                 \str_ireplace($m[1], '', $f)
                             ), PATHINFO_FILENAME
                         );
-                        $n = \trim(\strtr($n, '-_', '  '));
+                        $n = \trim(\strtr($n, '-_()', '    '));
                         $images .=
                             '<span class="gallery-span" data-counter='
                             . $counter
-                            . '><img class="responsive-img gallery-img" src="'
+                            . '><img class="responsive-img gallery-img" '
+                            . 'loading="lazy" src="'
                             . CDN
                             . '/upload/'
                             . $f
                             . '" alt="'
-                            . $n
+                            . $m[1] . ' ' . $n
                             . '" data-name="'
-                            . $n
+                            . $f
                             . '"></span>';
                     }
                 }
@@ -1043,7 +1054,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeString(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9_-]+/i", '', \trim($string));
+            $string = \preg_replace("/[^a-zA-Z0-9_\-\.]+/i", '', \trim($string));
         }
     }
 
@@ -1057,7 +1068,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeStringLC(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9_-]+/i", '', \trim($string));
+            $string = \preg_replace("/[^a-zA-Z0-9_\-\.]+/i", '', \trim($string));
             if ($string && \is_string($string)) {
                 $string = \strtolower($string);
             }
