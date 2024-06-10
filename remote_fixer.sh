@@ -38,4 +38,6 @@ chown www-data:www-data ci data www/download www/upload 2>/dev/null
 
 find www/ -type f -exec chmod 0644 {} 2>/dev/null \;
 
+rm -f data/_random_cdn_hash 2>/dev/null
+
 exit 0
