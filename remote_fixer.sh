@@ -27,8 +27,10 @@ if [ ! -z "$1" ]; then
         echo -en "\nMissing ORIG site configuration!\n\n"
     else
         echo -en "\nBranch: $1 linked to ${ORIG}\n\n"
-        rm -rf data
+        rm -rf data www/download www/upload
         ln -s ${ORIG}/data data
+        ln -s ${ORIG}/www/download www/download
+        ln -s ${ORIG}/www/upload www/upload
     fi
 fi
 
