@@ -976,8 +976,9 @@ class StringFilters implements IStringFilters
             $counter++;
             \preg_match($pattern, $x, $m);
             if (\is_array($m) && isset($m[1])) {
+                $gallery = $m[1];
                 $images = '';
-                $files = self::findImagesByMask($m[1]);
+                $files = self::findImagesByMask($gallery);
                 if (\is_array($files)) {
                     if ($shuffle !== false) {
                         \shuffle($files);
@@ -987,29 +988,19 @@ class StringFilters implements IStringFilters
                         $counter++;
                         $n = \pathinfo(
                             \strtoupper(
-                                \str_ireplace($m[1], '', $f)
+                                \str_ireplace($gallery, '', $f)
                             ), PATHINFO_FILENAME
                         );
                         $n = \trim(\strtr($n, '-_()', '    '));
+                        $t = CDN . '/upload/.thumb_160px_' . $f;
                         $images .=
-                            '<span class="gallery-span" data-counter='
-                            . $counter
-                            . '><img class="responsive-img gallery-img" '
-                            . 'loading="lazy" src="'
-                            . CDN
-                            . '/upload/'
-                            . $f
-                            . '" alt="'
-                            . $m[1] . ' ' . $n
-                            . '" data-name="'
-                            . $f
-                            . '"></span>';
+                            "<a data-lightbox='$gallery' href="
+                            . CDN . '/upload/' . $f
+                            . "><img loading=lazy alt='$n' src=$t></a>";
                     }
                 }
-                $replace = '<div class="row center gallery-container"'
-                    . 'data-mask="' . $m[1] . '">'
-                    . $images
-                    . '</div>';
+                $replace = "<div class='row center gallery-container'"
+                    . " data-gallery='$gallery'>$images</div>";
                 if (\is_string($x)) {
                     $x = $content = \preg_replace($pattern, $replace, $x);
                 }
