@@ -963,26 +963,25 @@ class StringFilters implements IStringFilters
      * Render gallery short code(s) - max. 20
      *
      * @param string $content text data containing [gallery param]
-     * @param bool   $shuffle shuffle the gallery
-     * @param int    $size    size of thumbnails in pixels
+     * @param bool   $shuffle shuffle the gallery?
+     * @param int    $size    selected width of thumbnails in pixels
      * 
      * @return void
      */
     public static function renderGalleryShortCode(
         &$content, $shuffle = false, $size = 160
     ) {
+        $counter = 0;
         $size = \intval($size);
         if (!$size) {
             $size = 160;
         }
-
-        $counter = 0;
         $x = \trim($content);
         while (\str_contains($x, '[gallery ') && $counter < 20) {
-            $pattern = '#\[gallery\s.*?(.*?)\]#is';
             if (!\is_string($x)) {
                 break;
             }
+            $pattern = '#\[gallery\s.*?(.*?)\]#is';
             $counter++;
             \preg_match($pattern, $x, $m);
             if (\is_array($m) && isset($m[1])) {

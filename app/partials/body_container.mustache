@@ -64,29 +64,27 @@
         w.GSC.names.push("zoomer + intro vfx");
 
         GSC.zoomed = false;
-        // gallery zoomer
-        $('.gallery-img').click(function () {
+
+        // easy image zoomer
+        $('.img-container>img').click(function () {
           if ($(this).hasClass('zoomin')) {
+            $('img.zoomin').removeClass('zoomin');
             GSC.zoomed = false;
-            $('.gallery-container').css('display', 'grid');
-            $('.gallery-img').removeClass('zoomin h').css('maxHeight', '256px');
           } else {
+            $('img.zoomin').removeClass('zoomin');
+            $(this).fadeOut(0).fadeIn(500).addClass('zoomin');
             GSC.zoomed = true;
-            $('.gallery-container').css('display', 'block');
-            $('.gallery-img').removeClass('zoomin').addClass('h');
-            $(this).removeClass('h').fadeOut(0).fadeIn(500).addClass('zoomin').css('maxHeight', '10000px');
-            return false;
           }
         });
 
+        // zooom everything out on body click
         $('body').click(function () {
           if (GSC.zoomed) {
-            $('.gallery-container').css('display', 'grid');
-            $('.gallery-img').removeClass('zoomin h').css('maxHeight', '256px');
-            $('.image-container>img').removeClass('zoomin');
+            $('img.zoomin').removeClass('zoomin');
             GSC.zoomed = false;
           }
         });
+
       });
 
     }

@@ -64,13 +64,17 @@ css_sources: [
 
 css_sources_extra: [
   "/css/style.css",
+  "/css/lightbox.min.css",
 ]
 
 script_sources: [
   "https://cdn.gscloud.cz/tesseract/js/materialize.min.js",
 ]
 
-script_sources_extra: []
+script_sources_extra: [
+  "/js/lightbox.min.js",
+  "/js/lightbox.options.js",
+]
 
 locales: [
   default: "2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay"
