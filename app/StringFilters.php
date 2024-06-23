@@ -94,10 +94,13 @@ interface IStringFilters
      *
      * @param string $content text data containing [gallery param]
      * @param bool   $shuffle shuffle the gallery
+     * @param int    $size    size of thumbnails in pixels
      * 
      * @return void
      */
-    public static function renderGalleryShortCode(&$content, $shuffle = false);
+    public static function renderGalleryShortCode(
+        &$content, $shuffle = false, $size = 160
+    );
 
     /**
      * Find uploaded images by a mask
@@ -961,11 +964,18 @@ class StringFilters implements IStringFilters
      *
      * @param string $content text data containing [gallery param]
      * @param bool   $shuffle shuffle the gallery
+     * @param int    $size    size of thumbnails in pixels
      * 
      * @return void
      */
-    public static function renderGalleryShortCode(&$content, $shuffle = false)
-    {
+    public static function renderGalleryShortCode(
+        &$content, $shuffle = false, $size = 160
+    ) {
+        $size = \intval($size);
+        if (!$size) {
+            $size = 160;
+        }
+
         $counter = 0;
         $x = \trim($content);
         while (\str_contains($x, '[gallery ') && $counter < 20) {
@@ -992,11 +1002,12 @@ class StringFilters implements IStringFilters
                             ), PATHINFO_FILENAME
                         );
                         $n = \trim(\strtr($n, '-_()', '    '));
-                        $t = CDN . '/upload/.thumb_160px_' . $f;
+                        $t = CDN . "/upload/.thumb_{$size}px_" . $f;
                         $images .=
                             "<a data-lightbox='$gallery' href="
                             . CDN . '/upload/' . $f
-                            . "><img loading=lazy alt='$n' src=$t></a>";
+                            . "><img loading=lazy class=gallery-img "
+                            . "alt='$n' src=$t></a>";
                     }
                 }
                 $replace = "<div class='row center gallery-container'"
