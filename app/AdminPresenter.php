@@ -29,18 +29,23 @@ class AdminPresenter extends APresenter
 {
     /* @var string admin key filename */
     const ADMIN_KEY = 'admin.key';
+
     /* @var string thumbnail prefix */
     const THUMB_PREFIX = '.thumb_';
+
     /* @var string thumbnail postfix */
     const THUMB_POSTFIX = 'px_';
+
     /* @var array thumbnails width to create */
     const THUMBS_CREATE = [
         160, 320, 640
     ];
+
     /* @var array thumbnails width to delete, incl. legacy */
     const THUMBS_DELETE = [
         50, 64, 128, 150, 160, 320, 512, 640
     ];
+
     /* @var array thumbnail extensions */
     const THUMBS_EXTENSIONS = [
         '.jpeg',
@@ -48,6 +53,7 @@ class AdminPresenter extends APresenter
         '.png',
         '.webp',
     ];
+
     /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
@@ -309,6 +315,9 @@ class AdminPresenter extends APresenter
                 if (\is_numeric($v) && \strlen($v) < 3) {
                     unset($stubs[$k]);
                 }
+                if (\is_string($v) && \strlen($v) < 3) {
+                    unset($stubs[$k]);
+                }
             }
 
             \ksort($stubs);
@@ -316,10 +325,10 @@ class AdminPresenter extends APresenter
 
             return $this->writeJsonData(
                 [
-                    'count' => \count($files),
-                    'files' => \array_values($files),
                     'stubs' => \array_values($stubs),
                     'stub_string' => \implode(' ', $stubs),
+                    'count' => \count($files),
+                    'files' => \array_values($files),
                 ],
                 $extras
             );

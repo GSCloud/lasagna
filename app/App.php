@@ -174,7 +174,7 @@ $cache_profiles = array_replace(
         "thirtyminutes" => "+30 minutes",
         "hour" => "+60 minutes",
         "day" => "+24 hours",
-        "csv" => "+60 minutes", // CSV cold storage
+        "csv" => "+72 hours", // CSV cold storage
         "limiter" => "+5 seconds", // access limiter
     ], (array) ($cfg["cache_profiles"] ?? [])
 );
