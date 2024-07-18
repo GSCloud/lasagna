@@ -735,12 +735,42 @@
       if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
         $.get("/admin/getUploads?" + Date.now(), function (data) {
           if (data && data.data && data.data.files) {
+
             // remember state
             setCookie("open_filemanager", 1);
+
             var s = '';
             var t = 0;
+
+            // get search
+            var search = '';
+            if (localStorage.getItem('search')) {
+              var search = localStorage.getItem('search');
+              search = search.replace(/[^a-z0-9]/gim, '');
+            }
+
+            // set moment time and locale
             var now = ~~(Date.now() / 1000);
-            moment.locale("{{ lang }}");
+            moment.locale('{{ lang }}');
+
+            var imageson = '{{#COOKIE.displayimages}}orange{{/COOKIE.displayimages}}{{^COOKIE.displayimages}}black{{/COOKIE.displayimages}}';
+            var imagesoff = '{{^COOKIE.displayimages}}orange{{/COOKIE.displayimages}}{{#COOKIE.displayimages}}black{{/COOKIE.displayimages}}';
+            var cardsize = '{{#COOKIE.displayimages}}300px{{/COOKIE.displayimages}}{{^COOKIE.displayimages}}150px{{/COOKIE.displayimages}}';
+            var displaystate = '{{^COOKIE.displayimages}}hide-images{{/COOKIE.displayimages}}';
+
+            if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 1) {
+              var imageson = 'orange';
+              var imagesoff = 'black';
+              var cardsize = '300px';
+              var displaystate = '';
+            }
+
+            if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 0) {
+              var imageson = 'black';
+              var imagesoff = 'orange';
+              var cardsize = '150px';
+              var displaystate = 'hide-images';
+            }
 
             // UPLOAD: render HTML
             var wt = [];
@@ -748,14 +778,30 @@
             wt[320] = 'M';
             wt[640] = 'L';
 
-            // no files
+            // check files count
             if (data.data.count == 0) {
               s = '';
               $('#files_count').html('0');
             } else {
+
+              // render stubs
+              var stubs = '';
+              if (data.data.stubs) {
+                for (var i in data.data.stubs) {
+                  if (typeof data.data.stubs[i] === 'function') continue;
+                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="waves-effect waves-light grey text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
+                }
+              }
+              stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
+
+              // visual controls + search
+              s += '<div id="stubs" class="row">' + stubs + '</div>';
+              s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-bars"></i></div>';
+              s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-regular fa-image"></i></div>';
+              s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
+
               for (var i in data.data.files) {
                 if (typeof data.data.files[i] === 'function') continue;
-                if (typeof data.data.files[i] !== 'object') continue;
 
                 // new table row
                 t++;
@@ -768,17 +814,22 @@
                 var name1 = name;
                 var name2 = name.replace(/\.[^.]+$/, '.webp');
                 var ext = GSC.GetFileExtension(name);
+
+                // search
+                if (search && name.indexOf(search) === -1) {
+                  continue;
+                }
   
                 // ICON
                 var si = '';
                 if (data.data.files[i]["thumbnails"] == null) {
                   // clickable icon
                   si += '<a target=_blank title="{{ l.a_open_tit }}: ' + name + '" class="hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
-                  si += '📄</a><br><br><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
+                  si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
                   // clickable thumbnail
                   si += '<a target=_blank title="{{ l.a_open_tit }}: ' + name + '" class="hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
-                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img" height=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" height=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
                   si += '</a><div style="margin:3px" class="center bold truncate">' + name + '</div>';
                 }
   
@@ -786,9 +837,9 @@
                 var saz = '';
                 var warn = '';
                 if (data.data.files[i]["size"] > 1024*1024) {
-                  warn = 'bold red';
+                  warn = 'bold red warning';
                 }
-                saz += '<div class=center>⏳️&nbsp;';
+                saz += '<div class="center">⏳️&nbsp;';
                 saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
                 saz += '&nbsp;🫙&nbsp;';
                 saz += '<span class="' + warn + '">';
@@ -816,7 +867,6 @@
                   sd += '</div>';
                 }
                 else {
-                  // delete + thumbnails copy buttons
                   sd += '<div class="row">';
                   sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
                   sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
@@ -827,7 +877,7 @@
                 }
 
                 // COMPOSITION
-                s += '<div style="margin:0;padding:1rem;height:300px;background-color:#222;border:1px solid #000;" id="fig' + t + '" class="left-align bottom col l2 m4 s12">'
+                s += '<div style="margin:0;padding:1rem;height:' + cardsize + ';background-color:#222;border:1px solid #000" id="fig' + t + '" class="left-align bottom col l2 m4 s12 uploaded-card">'
                 s += sd + si + saz + sml;
                 s += '</div>';
               }
@@ -842,9 +892,50 @@
             if ($("#a_file_manager").html() != "") {
               $("#a_file_manager").html(s).show();
             } else {
-              $("#a_file_manager").hide().html(s).show(200);
+              $("#a_file_manager").hide().html(s).show(100);
             }
-            
+
+            // searchbox focus
+            if (localStorage.getItem('searchset')) {
+              $('#searchbox').focus();
+            }
+            localStorage.removeItem('searchset');
+
+            // UPLOAD: disable images
+            $('#uploadimagesko').click(function () {
+              $('.uploaded-image').hide();
+              $('.uploaded-card').css('height', '150px');
+              $('#uploadimagesok').removeClass('orange').addClass('black');
+              $('#uploadimagesko').removeClass('black').addClass('orange');
+              delCookie("displayimages");
+              localStorage.removeItem("displayimages");
+            });
+
+            // UPLOAD: enable images
+            $('#uploadimagesok').click(function () {
+              $('.uploaded-image').show();
+              $('.uploaded-card').css('height', '300px');
+              $('#uploadimagesok').removeClass('black').addClass('orange');
+              $('#uploadimagesko').removeClass('orange').addClass('black');
+              setCookie("displayimages", 1);
+              localStorage.setItem("displayimages", 1);
+            });
+
+            // UPLOAD: stubs
+            $('.btn-stubs').click(function () {
+              localStorage.setItem('search', $(this).data('stub'));
+              GSC.RenderUploadInfo();
+            });
+
+            // UPLOAD: searchbox
+            $('#searchbox').change(function () {
+              var search = $(this).val();
+              search = search.replace(/[^a-z0-9]/gim, '');
+              localStorage.setItem('search', search);
+              localStorage.setItem('searchset', 1);
+              GSC.RenderUploadInfo();
+            });
+
             // UPLOAD: copy path to clipboard
             $("#a_file_manager .copydata").click(function () {
               var x = $(this).data("text");

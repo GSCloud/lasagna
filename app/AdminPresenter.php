@@ -13,6 +13,7 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
+use League\Csv\Reader;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 
@@ -326,7 +327,6 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(
                 [
                     'stubs' => \array_values($stubs),
-                    'stub_string' => \implode(' ', $stubs),
                     'count' => \count($files),
                     'files' => \array_values($files),
                 ],
@@ -972,7 +972,7 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Get number of lines in a file
+     * Get number of CSV lines in a file
      *
      * @param string $f filename
      * 
@@ -984,9 +984,9 @@ class AdminPresenter extends APresenter
             if (!\file_exists($f)) {
                 return -1;
             }
-            $file = new \SplFileObject($f, 'r');
-            $file->seek(PHP_INT_MAX);
-            return $file->key() + 1;
+            $csv = Reader::createFromPath($f, 'r');
+            $csv->setHeaderOffset(0);
+            return \count($csv) - 1;
         } catch (\Exception $e) {
             return -1;
         }
