@@ -742,14 +742,14 @@
             var s = '';
             var t = 0;
 
-            // get search
+            // search data
             var search = '';
             if (localStorage.getItem('search')) {
               var search = localStorage.getItem('search');
-              search = search.replace(/[^a-z0-9]/gim, '');
+              search = search.replace(/[^a-z0-9]/gim, '').toLowerCase();
             }
 
-            // set moment time and locale
+            // current time and Moment locale
             var now = ~~(Date.now() / 1000);
             moment.locale('{{ lang }}');
 
@@ -772,13 +772,12 @@
               var displaystate = 'hide-images';
             }
 
-            // UPLOAD: render HTML
+            // thumbnails S-M-L sizes
             var wt = [];
             wt[160] = 'S';
             wt[320] = 'M';
             wt[640] = 'L';
 
-            // check files count
             if (data.data.count == 0) {
               s = '';
               $('#files_count').html('0');
@@ -803,19 +802,18 @@
               for (var i in data.data.files) {
                 if (typeof data.data.files[i] === 'function') continue;
 
-                // new table row
                 t++;
                 if (t == 1) {
+                  // new row
                   s += '<div class="row">';
                 }
   
-                // extension
                 var name = data.data.files[i]["name"];
                 var name1 = name;
                 var name2 = name.replace(/\.[^.]+$/, '.webp');
                 var ext = GSC.GetFileExtension(name);
 
-                // search
+                // process search if set
                 if (search && name.indexOf(search) === -1) {
                   continue;
                 }
@@ -930,7 +928,7 @@
             // UPLOAD: searchbox
             $('#searchbox').change(function () {
               var search = $(this).val();
-              search = search.replace(/[^a-z0-9]/gim, '');
+              search = search.replace(/[^a-z0-9]/gim, '').toLowerCase();
               localStorage.setItem('search', search);
               localStorage.setItem('searchset', 1);
               GSC.RenderUploadInfo();
