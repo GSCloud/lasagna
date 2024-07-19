@@ -753,23 +753,16 @@
             var now = ~~(Date.now() / 1000);
             moment.locale('{{ lang }}');
 
-            var imageson = '{{#COOKIE.displayimages}}orange{{/COOKIE.displayimages}}{{^COOKIE.displayimages}}black{{/COOKIE.displayimages}}';
-            var imagesoff = '{{^COOKIE.displayimages}}orange{{/COOKIE.displayimages}}{{#COOKIE.displayimages}}black{{/COOKIE.displayimages}}';
-            var cardsize = '{{#COOKIE.displayimages}}300px{{/COOKIE.displayimages}}{{^COOKIE.displayimages}}150px{{/COOKIE.displayimages}}';
-            var displaystate = '{{^COOKIE.displayimages}}hide-images{{/COOKIE.displayimages}}';
+            var imageson = 'black';
+            var imagesoff = 'orange';
+            var cardsize = '150px';
+            var displaystate = 'hide-images';
 
             if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 1) {
-              var imageson = 'orange';
-              var imagesoff = 'black';
-              var cardsize = '300px';
-              var displaystate = '';
-            }
-
-            if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 0) {
-              var imageson = 'black';
-              var imagesoff = 'orange';
-              var cardsize = '150px';
-              var displaystate = 'hide-images';
+              imageson = 'orange';
+              imagesoff = 'black';
+              cardsize = '300px';
+              displaystate = '';
             }
 
             // thumbnails S-M-L sizes
@@ -778,22 +771,23 @@
             wt[320] = 'M';
             wt[640] = 'L';
 
-            if (data.data.count == 0) {
+            if (!data.data.count) {
               s = '';
               $('#files_count').html('0');
             } else {
 
-              // render stubs
+              // stubs
               var stubs = '';
               if (data.data.stubs) {
+                stubs = '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
                 for (var i in data.data.stubs) {
                   if (typeof data.data.stubs[i] === 'function') continue;
-                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="waves-effect waves-light grey text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
+                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="grey text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
                 }
+                stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
               }
-              stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
 
-              // visual controls + search
+              // controls + search
               s += '<div id="stubs" class="row">' + stubs + '</div>';
               s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-bars"></i></div>';
               s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-regular fa-image"></i></div>';
@@ -804,7 +798,6 @@
 
                 t++;
                 if (t == 1) {
-                  // new row
                   s += '<div class="row">';
                 }
   
@@ -813,7 +806,7 @@
                 var name2 = name.replace(/\.[^.]+$/, '.webp');
                 var ext = GSC.GetFileExtension(name);
 
-                // process search if set
+                // process search if available
                 if (search && name.indexOf(search) === -1) {
                   continue;
                 }
@@ -845,7 +838,7 @@
                 saz += '</span>';
                 saz += '</div>';
   
-                // SML
+                // S-M-L
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
@@ -860,13 +853,13 @@
                 if (data.data.files[i]["thumbnails"] === null) {
                   // delete only
                   sd += '<div class="row">';
-                  sd += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  sd += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
                   sd += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
                   sd += '</div>';
                 }
                 else {
                   sd += '<div class="row">';
-                  sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '">❌</span>&nbsp;';
+                  sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
                   sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
                   if (ext != 'webp') {
                     sd += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">webp📋</span>';
