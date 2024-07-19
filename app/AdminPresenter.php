@@ -246,6 +246,7 @@ class AdminPresenter extends APresenter
             $this->checkPermission('admin,editor');
             $files = [];
             $stubs = [];
+            $stubs_count = [];
             $uniques = [];
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
@@ -302,7 +303,14 @@ class AdminPresenter extends APresenter
                             $fs = \strtr($fn, '-+_.()', '      ');
                             $fs = \explode(' ', $fs);
                             foreach ($fs as $st) {
+                                if ($st === '') {
+                                    continue;
+                                }
                                 $stubs[$st] = $st;
+                                if (!isset($stubs_count[$st])) {
+                                    $stubs_count[$st] = 0;
+                                }
+                                $stubs_count[$st]++;
                             }
                         }
                     }
@@ -315,18 +323,22 @@ class AdminPresenter extends APresenter
             foreach ($stubs as $k => $v) {
                 if (\is_numeric($v) && \strlen($v) < 3) {
                     unset($stubs[$k]);
+                    unset($stubs_count[$k]);
                 }
                 if (\is_string($v) && \strlen($v) < 3) {
                     unset($stubs[$k]);
+                    unset($stubs_count[$k]);
                 }
             }
 
             \ksort($stubs);
             \ksort($files);
+            \arsort($stubs_count);
 
             return $this->writeJsonData(
                 [
                     'stubs' => \array_values($stubs),
+                    'stubs_count' => $stubs_count,
                     'count' => \count($files),
                     'files' => \array_values($files),
                 ],

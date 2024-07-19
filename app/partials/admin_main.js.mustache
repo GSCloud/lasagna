@@ -778,10 +778,11 @@
 
               // stubs
               var stubs = '';
-              if (data.data.stubs) {
+              if (data.data.stubs && data.data.stubs_count) {
                 stubs = '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
                 for (var i in data.data.stubs) {
                   if (typeof data.data.stubs[i] === 'function') continue;
+                  if (data.data.stubs_count[data.data.stubs[i]] < 3) continue;
                   stubs += '<span data-stub="' + data.data.stubs[i] + '" class="grey text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
                 }
                 stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
