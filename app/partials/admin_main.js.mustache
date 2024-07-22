@@ -82,40 +82,6 @@
         if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
       }
 
-      // show news
-      $(".open_news").unbind();
-      $(".open_news").click(function () {
-        $(this).hide();
-        $(".close_news").removeClass('hide').show();
-        $("#news").removeClass('hide').hide().show(200);
-
-        // hide news ❗️ if sha256 is different
-        sha256($("#newscontent").html()).then(
-          hash => {
-            if (hash != localStorage.getItem("newshash")) {
-              localStorage.setItem("newshash", hash);
-              $("#newsdot").addClass("hide");
-          }
-        });
-
-      });
-
-      // hide news
-      $(".close_news").unbind();
-      $(".close_news").click(function () {
-        $(this).hide();
-        $(".open_news").removeClass('hide').show();
-        $("#news").hide(200);
-      });
-
-      // show news ❗️ if sha256 is different
-      sha256($("#newscontent").html()).then(
-        hash => {
-          if (hash != localStorage.getItem("newshash")) {
-            $("#newsdot").removeClass("hide");
-        }
-      });
-
       // switch CSS debugger ON/OFF
       $('#debugger').click(function () {
         if (getCookie('debug')) {
@@ -172,6 +138,7 @@
         if (data && data.data) {
           $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
           for (var i in data.data) {
+            if (typeof data.data[i] === 'function') continue;
             $('#ArticleURLSelect').append("<option value='" + data.data[i] + "'>" + data.data[i] + "</option>");
           }
           // populate form data
@@ -991,6 +958,11 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("show admin UI");
       GSC.AdminUI();
+
+      $('.tabs').tabs();
+      if (GSC.touch) {
+        $('#menutabbed').removeClass('container');
+      }
 
       // filemanager state
       if (getCookie("open_filemanager") == 1) {

@@ -11,99 +11,55 @@
 .hide-images {display:none}
 .upload-controls {margin:10px}
 .warning {padding:5px}
+.tabs {overflow: auto;overflow-x: hidden}
+.tab>a {color:#fff!important}
+.tabs a.active {border-bottom: 4px solid #fff!important}
+.tabs .indicator {background-color: transparent!important}
 </style>
 
 <!-- WRENCH -->
 <span style="position:fixed;left:10px;top:10px;z-index:999999" class="noselect motyle btn white z-depth-5">🛠️</span>
 
 <!-- ADMIN PANEL -->
-<div id="admin_main" class="row center noselect black white-text" style="display:none;margin:0!important">
+<div id="admin_main" class="row center noselect black white-text" style="display:none;margin:0!important;padding-bottom:1rem">
 
   <!-- EXTERNAL LINKS -->
   <div class="row center black">
     {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="tooltipped green white-text" style="padding:4px;line-height:2em;border-radius:2px"
-        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;&nbsp;
+      <a rel="noreferrer noopener" target="_blank" class="tooltipped {{#color}}{{color}}{{/color}}{{^color}}green{{/color}} white-text" style="padding:4px;line-height:2em;border-radius:2px"
+        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;
     {{/external_links}}
   </div>
 
   <!-- CUSTOM PANEL -->
   {{>admin_custom}}
 
-  <!-- EXTERNAL SERVICES -->
-  <div class="row center black">
-    <div class="extrapadding" style="padding-top:2px">
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
-        <i class="fa-solid fa-key"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_account }}</a>
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
-        <i class="fa-solid fa-unlock"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_password }}</a>
-      {{#google.google-site-verification}}
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
-        href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
-        <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
-      {{/google.google-site-verification}}
-      {{#google.google-site-domain-verification}}
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
-        href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
-        <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
-      {{/google.google-site-domain-verification}}
-      {{#umami.id}}
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
-        href="https://umami.gscloud.cz/websites/{{ umami.id }}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
-          <g data-name="Layer 2">
-            <g data-name="Layer 4">
-              <circle cx="214.15" cy="181" r="171" fill="#fff" stroke="#000" stroke-miterlimit="10" stroke-width="20"></circle>
-              <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
-            </g>
-          </g>
-        </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
-      </a>
-      {{#umami.share}}
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
-        href="{{ umami.share }}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
-          <g data-name="Layer 2">
-            <g data-name="Layer 4">
-              <circle cx="214.15" cy="181" r="171" fill="#fff" stroke="#000" stroke-miterlimit="10" stroke-width="20"></circle>
-              <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
-            </g>
-          </g>
-        </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
-      </a>
-      {{/umami.share}}
-      {{/umami.id}}
-      {{#langcs}}
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
-        <i class="fa-solid fa-file-invoice"></i>&nbsp;FAKTURACE</a>
-      {{/langcs}}
-      {{#langen}}
-      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-        data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
-        <i class="fa-solid fa-file-invoice"></i>&nbsp;ACCOUNTING</a>
-      {{/langen}}
+  <!-- TABBED NAVIGATION -->
+  <div id="menutabbed" class="row container">
+    <div class="col s12">
+      <ul class="tabs grey bold">
+        <li class="tab col s2"><a href="#data">{{ l.a_tab_data }}</a></li>
+        <li class="tab col s2"><a href="#fn">{{ l.a_tab_fn }}</a></li>
+        <li class="tab col s2"><a href="#services">{{ l.a_tab_services }}</a></li>
+        <li class="tab col s2"><a href="#users">{{ l.a_tab_users }}</a></li>
+        <li class="tab col s2"><a href="#news">{{ l.a_tab_news }} </a></li>
+      </ul>
     </div>
   </div>
+  <!-- data -->
+  <div id="data" class="container">
+    <div class="row center">
+      <h4>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h4>
 
-  <!-- ADMIN GRID -->
-  <div class="row grid" style="overflow:hidden" style="padding-top:3px">
-
-    <!-- 1st COLUMN -->
-    <div class="col l4 m6 s12">
-      <div class="row center extrapadding">
-        <h5>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h5>
+      <div class="col s12 l4">
         <p id="a_update_info"></p>
+      </div>
+
+      <div class="col s12 l4">
         <p style="font-size:12px!important">
           <a id="showpins" class="waves-effect grey waves-light btn trans_pin hover" style="font-size:15px!important">{{ l.a_show_translations }}</a>
         </p>
-        <!-- CACHE CONTROL -->
+
         <div class="row center">
           <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
             data-position="top" data-tooltip="{{ l.a_update_ttip }}">
@@ -112,14 +68,16 @@
             data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
             <i class="fa-solid fa-rocket"></i>&nbsp;&nbsp;&nbsp;{{ l.a_flush }}</a>
         </div>
+      </div>
 
-        {{^disable_articles}}
-        <div class="col s12 white">
-          <label for="ArticleURLSelect">{{ l.a_articles }}</label>
-          <select id="ArticleURLSelect"></select>
-        </div>
-        {{/disable_articles}}
+      {{^disable_articles}}
+      <div class="col s12 l4 white">
+        <label for="ArticleURLSelect">{{ l.a_articles }}</label>
+        <select id="ArticleURLSelect"></select>
+      </div>
+      {{/disable_articles}}
 
+      <div class="col s12 l4">
         <a id="a_upload"
           data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
           style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;UPLOAD</a>
@@ -137,61 +95,113 @@
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
           style="margin:5px" class="tooltipped waves-effect brown waves btn">🫙 <span id="files_count"></span></a>
       </div>
+
     </div>
 
-    <!-- 2nd COLUMN -->
-    <div class="col l4 m6 s12">
-
-      <!-- CHANGELOG -->
-      <div class="row center extrapadding">
-        <h5>{{ l.a_changes }} <i class="hover open_news fas fa-arrow-down blue-text"></i>
-          <i class="hover close_news fas fa-arrow-up blue-text hide"></i>&nbsp;<span class="yellow-text right hide" id="newsdot">!&nbsp;&nbsp;</span></h5>
-        <div id="news" class="row grey-text hide" style="margin-top:1em">
-          <div id="newscontent" class="grey-text left-align container">
-            {{ l.a_changelog }}
-          </div>
-        </div>
+  </div>
+  <!-- fn -->
+  <div id="fn" class="container">
+    <h4>fn</h4>
+    <div class="row center extrapadding">
+      <div class="white">
+        <label for="RemoteFnSelect">{{ l.a_remotefns }}</label>
+        <select id="RemoteFnSelect">
+          <option value="" disabled selected>&hellip;</option>
+          <option value="CoreUpdateRemote">Core Data Update</option>
+          <option value="FlushCacheRemote">Flush Local Cache</option>
+          <option value="RebuildNonceRemote">Rebuild Auth Nonce</option>
+          <option value="RebuildSecureKeyRemote">Rebuild Cookie Secure Key</option>
+          <option value="RebuildAdminKeyRemote">Rebuild Administration Secure Key</option>
+        </select>
       </div>
-
-      <!-- REMOTE fn -->
-      <div class="row center extrapadding">
-        <div class="col s12 white">
-          <label for="RemoteFnSelect">{{ l.a_remotefns }}</label>
-          <select id="RemoteFnSelect">
-            <option value="" disabled selected>&hellip;</option>
-            <option value="CoreUpdateRemote">Core Data Update</option>
-            <option value="FlushCacheRemote">Flush Local Cache</option>
-            <option value="RebuildNonceRemote">Rebuild Auth Nonce</option>
-            <option value="RebuildSecureKeyRemote">Rebuild Cookie Secure Key</option>
-            <option value="RebuildAdminKeyRemote">Rebuild Administration Secure Key</option>
-          </select>
-        </div>
+    </div>
+  </div>
+  <!-- services -->
+  <div id="services" class="col s12">
+    <div class="row center black">
+      <div class="extrapadding" style="padding-top:2px">
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
+          <i class="fa-solid fa-key"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_account }}</a>
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
+          <i class="fa-solid fa-unlock"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_password }}</a>
+        {{#google.google-site-verification}}
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
+          href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
+          <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
+        {{/google.google-site-verification}}
+        {{#google.google-site-domain-verification}}
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
+          href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
+          <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
+        {{/google.google-site-domain-verification}}
+        {{#umami.id}}
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
+          href="https://umami.gscloud.cz/websites/{{ umami.id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
+            <g data-name="Layer 2">
+              <g data-name="Layer 4">
+                <circle cx="214.15" cy="181" r="171" fill="#fff" stroke="#000" stroke-miterlimit="10" stroke-width="20"></circle>
+                <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
+              </g>
+            </g>
+          </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
+        </a>
+        {{#umami.share}}
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
+          href="{{ umami.share }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
+            <g data-name="Layer 2">
+              <g data-name="Layer 4">
+                <circle cx="214.15" cy="181" r="171" fill="#fff" stroke="#000" stroke-miterlimit="10" stroke-width="20"></circle>
+                <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
+              </g>
+            </g>
+          </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
+        </a>
+        {{/umami.share}}
+        {{/umami.id}}
+        {{#langcs}}
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
+          <i class="fa-solid fa-file-invoice"></i>&nbsp;FAKTURACE</a>
+        {{/langcs}}
+        {{#langen}}
+        <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+          data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
+          <i class="fa-solid fa-file-invoice"></i>&nbsp;ACCOUNTING</a>
+        {{/langen}}
       </div>
-
-      <!-- ICON BUTTONS -->
-      <h4 class="center" style="font-size:2rem!important;">
-        <a style="margin:2px!important;" title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-          data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz"><i class="fas fa-server"></i>&nbsp;SYSINFO</a>
-        <a style="margin:2px!important;" title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-          data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz"><i class="fas fa-server"></i>&nbsp;PHPINFO</a>
-        <a style="margin:2px!important;" title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-          data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i>&nbsp;TPL</a>
-        <a style="margin:2px!important;" title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-          data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
-        {{#google_drive_backup}}
-        <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-          data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
-        {{/google_drive_backup}}
-        <a id="debugger" style="margin:2px!important;" class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}" data-position="top"
-          data-tooltip="CSS DEBUGGER"><i class="fa-solid fa-bug"></i></a>
-      </h4>
     </div>
 
-    <!-- 3rd COLUMN -->
-    <div class="col l4 m6 s12">
-      <!-- GROUPS -->
+    <a style="margin:2px!important;" title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+      data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz"><i class="fas fa-server"></i>&nbsp;SYSINFO</a>
+    <a style="margin:2px!important;" title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+      data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz"><i class="fas fa-server"></i>&nbsp;PHPINFO</a>
+    <a style="margin:2px!important;" title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+      data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i>&nbsp;TPL</a>
+    <a style="margin:2px!important;" title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+      data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
+    {{#google_drive_backup}}
+    <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
+      data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
+    {{/google_drive_backup}}
+    <a id="debugger" style="margin:2px!important;" class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}" data-position="top"
+      data-tooltip="CSS DEBUGGER"><i class="fa-solid fa-bug"></i></a>
+
+  </div>
+  <!-- users -->
+  <div id="users" class="col s12">
+    <div class="">
+
+      <!-- groups -->
       <div class="row center extrapadding">
-        <h5>{{ l.a_groups_permissions }}</h5>
+        <h4>{{ l.a_groups_permissions }}</h4>
         <div class="white-text">
           <div class="row center">
 
@@ -226,7 +236,8 @@
           </div>
         </div>
       </div>
-      <!-- CURRENT USER -->
+
+      <!-- current user -->
       <div class="row center extrapadding">
         <div style="display:inline-block;border:2px solid red;border-radius:5px;margin:auto;padding:2rem">
           <strong>{{user.name}}</strong><br>
@@ -241,10 +252,20 @@
         </div>
       </div>
     </div>
-
+  </div>
+  <!-- news -->
+  <div id="news" class="col s12">
+    <div class="container">
+      <h4>{{ l.a_changes }}</h4>
+      <div class="row grey-text hide" style="margin-top:1em">
+        <div id="newscontent" class="grey-text left-align container">
+          {{ l.a_changelog }}
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- UPLOADS -->
+  <!-- uploads -->
   <div id="a_uploader_progress"></div>
   <div id="a_file_manager"></div>
 
@@ -254,7 +275,7 @@
 {{>admin_main.js.mustache}}
 </script>
 
-<!-- SUMMERNOTE -->
+<!-- summernote -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/material-darker.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/display/fullscreen.min.css" rel="stylesheet">
