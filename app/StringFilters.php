@@ -81,6 +81,15 @@ interface IStringFilters
     public static function renderImageRespShortCode(&$content);
 
     /**
+     * Render Soundcloud short code(s) - max. 20
+     *
+     * @param string $content text data containing [soundcloud param]
+     * 
+     * @return void
+     */
+    public static function renderSoundcloudShortCode(&$content);
+
+    /**
      * Render YouTube short code(s) - max. 20
      *
      * @param string $content text data containing [youtube param]
@@ -930,6 +939,41 @@ class StringFilters implements IStringFilters
             }
         }
     }
+
+    /**
+     * Render Soundcloud short code(s) - max. 20
+     *
+     * @param string $content text data containing [soundcloud param]
+     * 
+     * @return void
+     */
+    public static function renderSoundcloudShortCode(&$content)
+    {
+        $counter = 0;
+        $x = \trim($content);
+        while (\str_contains($x, '[soundcloud ') && $counter < 20) {
+            if (!\is_string($x)) {
+                break;
+            }
+            $counter++;
+            $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
+            $replace = '<div '
+                . 'class="audio-container center row soundcloud-container" '
+                . 'data-counter='
+                . $counter
+                . '><iframe loading="lazy" width="100%" height="300" '
+                . 'scrolling="no" frameborder="no" controls '
+                . 'src="https://w.soundcloud.com/player/'
+                . '?url=https%3A//api.soundcloud.com/tracks/'
+                . '$1&auto_play=false&hide_related=false&show_comments=true'
+                . '&show_user=true&show_reposts=false&show_teaser=true&visual=true">'
+                . '</iframe></div>';
+            if (\is_string($x)) {
+                $x = $content = \preg_replace($pattern, $replace, $x);
+            }
+        }
+    }
+
 
     /**
      * Render YouTube short code(s) - max. 20

@@ -56,7 +56,7 @@ class HomePresenter extends APresenter
         // set menu variables for content switching
         $data[$view . '_menu'] = true;
 
-        // fix locales and HTML
+        // fix locales, HTML and shortcodes
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
@@ -67,6 +67,7 @@ class HomePresenter extends APresenter
                 StringFilters::renderImageRespShortCode($data['l'][$k]);
                 StringFilters::renderGalleryShortCode($data['l'][$k], true);
                 StringFilters::renderYouTubeShortCode($data['l'][$k]);
+                StringFilters::renderSoundcloudShortCode($data['l'][$k]);
             } elseif (\str_starts_with($data['l'][$k], '[markdownextra]')) {
                 StringFilters::renderMarkdownExtra($data['l'][$k]);
                 StringFilters::renderImageShortCode($data['l'][$k]);
@@ -75,6 +76,7 @@ class HomePresenter extends APresenter
                 StringFilters::renderImageRespShortCode($data['l'][$k]);
                 StringFilters::renderGalleryShortCode($data['l'][$k], true);
                 StringFilters::renderYouTubeShortCode($data['l'][$k]);
+                StringFilters::renderSoundcloudShortCode($data['l'][$k]);
             } else {
                 StringFilters::convertEolToBrNbsp($data['l'][$k]);
             }
