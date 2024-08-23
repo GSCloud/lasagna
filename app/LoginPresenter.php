@@ -71,7 +71,6 @@ class LoginPresenter extends APresenter
             }
             $authUrl = $provider->getAuthorizationUrl(
                 [
-                    "login_hint" => $hint,
                     "prompt" => "select_account",
                     "response_type" => "code",
                 ]
