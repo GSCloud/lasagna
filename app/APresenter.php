@@ -1367,9 +1367,28 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         if (($this->cookies[$name] ?? null) || ($_COOKIE[$name] ?? null)) {
-            unset($_COOKIE[$name]);
-            unset($this->cookies[$name]);
-            \setcookie($name, '', time() - 3600, '/');
+            $cookie = new Cookie($enc);
+            if (DOMAIN === 'localhost') {
+                $httponly = true;
+                $samesite = 'lax';
+                $secure = false;
+            } else {
+                $httponly = true;
+                $samesite = 'lax';
+                $secure = true;
+            }
+            if (!CLI) {
+                $cookie->store(
+                    $name,
+                    '',
+                    time() + self::COOKIE_TTL,
+                    '/',
+                    DOMAIN,
+                    $secure,
+                    $httponly,
+                    $samesite
+                );
+            }
         }
         return $this;
     }
