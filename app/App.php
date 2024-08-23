@@ -17,6 +17,7 @@ use Nette\Neon\Neon;
 
 // clear cache on ?logout and reload web
 if (isset($_GET['logout'])) {
+    header('Clear-Site-Data: "cache", "cookies"');
     header('Location: /', true, 303);
     exit;
 }

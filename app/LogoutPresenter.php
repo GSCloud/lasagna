@@ -38,10 +38,6 @@ class LogoutPresenter extends APresenter
         if (!\stristr($_SERVER["HTTP_USER_AGENT"], 'curl')) {
             \sleep(1);
         }
-        $app = $this->getCfg('app') ?? 'app';
-        if (\is_string($app)) {
-            $this->clearCookie($app);
-        }
         $this->logout();
         exit(0);
     }
