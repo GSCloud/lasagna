@@ -1407,10 +1407,9 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             exit;
         }
-        $this->setIdentity();
-        //$this->clearCookie();
-        \setcookie($this->getCfg('app') ?? 'app', '');
+        $app = $this->getCfg('app') ?? 'app';
         $nonce = $this->getNonce();
+        $this->clearCookie($app);
         if (LOCALHOST) {
             $this->setLocation("/?logout=1&nonce=$nonce");
         }
