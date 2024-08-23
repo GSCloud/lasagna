@@ -66,14 +66,13 @@ class LoginPresenter extends APresenter
         } elseif (empty($_GET["code"])) {
             $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : "";
-
             $authUrl = $provider->getAuthorizationUrl(
                 [
-                "prompt" => "select_account consent",
-                "response_type" => "code",
+                    "login_hint" => $hint,
+                    "prompt" => "select_account",
+                    "response_type" => "code",
                 ]
             );
-
             \setcookie("oauth2state", $provider->getState());
             \header("Location: " . $authUrl . $hint, true, 303);
             exit;
