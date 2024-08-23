@@ -39,7 +39,9 @@ class LogoutPresenter extends APresenter
             \sleep(1);
         }
         $app = $this->getCfg('app') ?? 'app';
-        \setcookie($app, '');
+        if ($app) {
+            \setcookie($app, '');
+        }
         $this->logout();
         exit(0);
     }
