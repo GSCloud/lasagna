@@ -1367,7 +1367,6 @@ abstract class APresenter implements IPresenter
             return $this;
         }
         if (($this->cookies[$name] ?? null) || ($_COOKIE[$name] ?? null)) {
-            $cookie = new Cookie($enc);
             if (DOMAIN === 'localhost') {
                 $httponly = true;
                 $samesite = 'lax';
@@ -1378,7 +1377,7 @@ abstract class APresenter implements IPresenter
                 $secure = true;
             }
             if (!CLI) {
-                $cookie->store(
+                \setcookie(
                     $name,
                     '',
                     time() + self::COOKIE_TTL,
