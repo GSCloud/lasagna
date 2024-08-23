@@ -40,7 +40,7 @@ class LogoutPresenter extends APresenter
         }
         $app = $this->getCfg('app') ?? 'app';
         if (\is_string($app)) {
-            \setcookie($app, '');
+            $this->clearCookie($app);
         }
         $this->logout();
         exit(0);
