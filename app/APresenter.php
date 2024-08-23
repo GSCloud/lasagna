@@ -1408,7 +1408,7 @@ abstract class APresenter implements IPresenter
             exit;
         }
         $this->setIdentity();
-        $this->clearCookie();
+        //$this->clearCookie();
         \setcookie($this->getCfg('app') ?? 'app', '');
         $nonce = $this->getNonce();
         if (LOCALHOST) {
