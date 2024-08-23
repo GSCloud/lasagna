@@ -1010,7 +1010,7 @@ abstract class APresenter implements IPresenter
         if ($out['id']) {
             $this->setCookie($app, json_encode($out)); // encrypted cookie
         } else {
-            $this->clearCookie($app); // delete cookie
+            $this->clearCookie($app);
         }
         return $this;
     }
@@ -1408,8 +1408,8 @@ abstract class APresenter implements IPresenter
             exit;
         }
         $app = $this->getCfg('app') ?? 'app';
+        $this->setCookie($app, '');
         $nonce = $this->getNonce();
-        $this->clearCookie($app);
         if (LOCALHOST) {
             $this->setLocation("/?logout=1&nonce=$nonce");
         }
