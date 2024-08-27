@@ -39,6 +39,8 @@ csp: [
     "gspace.gscloud.cz"
     "static.cloudflareinsights.com"
     "umami.gscloud.cz"
+    "api.soundcloud.com"
+    "w.soundcloud.com"
     "'self'"
     "'strict-dynamic'"
 
