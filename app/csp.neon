@@ -39,8 +39,6 @@ csp: [
     "gspace.gscloud.cz"
     "static.cloudflareinsights.com"
     "umami.gscloud.cz"
-    "api.soundcloud.com"
-    "w.soundcloud.com"
     "'self'"
     "'strict-dynamic'"
 
@@ -61,6 +59,8 @@ csp: [
     "data:;"
 
     "frame-src"
+    "api.soundcloud.com"
+    "w.soundcloud.com"
     "youtube.com"
     "www.google.com"
     "www.youtube.com;"
