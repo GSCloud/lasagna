@@ -5,8 +5,7 @@ AddDefaultCharset utf-8
   RewriteEngine On
   RewriteBase /
   Options +FollowSymlinks -Indexes -MultiViews
-  RewriteCond %{HTTP_USER_AGENT} claudebot [NC]
-  RewriteCond %{HTTP_USER_AGENT} ClaudeBot [NC]
+  RewriteCond %{HTTP_USER_AGENT} (claudebot|Claudebot|Applebot) [NC]
   RewriteRule .* - [F,L]
   RewriteRule ^index\.php$ - [L]
   RewriteRule ^cdn-assets/[a-z0-9]{40}/(.*)$ $1 [L]

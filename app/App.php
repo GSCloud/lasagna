@@ -15,14 +15,14 @@ namespace GSC;
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 
-// clear cache on ?logout and reload web
+// clear the cache on ?logout
 if (isset($_GET['logout'])) {
     header('Clear-Site-Data: "cache", "cookies"');
     header('Location: /', true, 303);
     exit;
 }
 
-// clear everything on ?clearall and reload web
+// clear everything on ?clearall
 if (isset($_GET['clearall'])) {
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
     header('Location: /', true, 303);
@@ -75,7 +75,7 @@ if (!$requestUri) {
 }
 
 // POPULATE DATA ARRAY
-define("ENGINE", "Tesseract 2.2.5");
+define("ENGINE", "Tesseract 2.2.6");
 $data["ENGINE"] = ENGINE;
 
 $data["ARGC"] = $argc ?? 0;
