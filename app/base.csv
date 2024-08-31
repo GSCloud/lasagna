@@ -3,8 +3,7 @@ klíč,sekce,anglicky,česky,slovensky,německy,poznámky
 $author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker,
 $gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud s.r.o.,
 $gscloud,$,$gsc,$gsc,$gsc,$gsc,
-$year,$,2024,2024,2024,2024,!
-title,,TESSERACT BASE,TESSERACT BASE,TESSERACT BASE,TESSERACT BASE,
+$year,$,2024,2024,2024,2024,
 gsc_footer_img_size,PARAMETER,48,48,48,48,
 page_outdated_button,BUTTON,UPDATE 👷‍♀️,AKTUALIZOVAT 👷‍♀️,AKTUALIZOVAŤ 👷‍♀️,AKTUALISIEREN 👷‍♀️,
 webshare_button,BUTTON,Share 📲,Sdílet 📲,Zdieľať 📲,Teilen 📲,
@@ -18,12 +17,12 @@ day_of_the_week_4,DAYS,Thursday,čtvrtek,štvrtok,Donnerstag,
 day_of_the_week_5,DAYS,Friday,pátek,piatok,Freitag,
 day_of_the_week_6,DAYS,Saturday,sobota,sobota,Samstag,
 day_of_the_week_7,DAYS,Sunday,neděle,nedeľa,Sonntag,
-server_error_304,ERROR,Not Modified,Not Modified,Not Modified,Nicht modifiziert,
+server_error_304,ERROR,Not Modified,Not Modified,Not Modified,Nicht geändert,
 server_error_400,ERROR,Bad Request,Bad Request,Bad Request,Ungültige Anforderung,
 server_error_401,ERROR,Unauthorized,Unauthorized,Unauthorized,Nicht autorisiert,
 server_error_403,ERROR,Forbidden,Forbidden,Forbidden,Verboten,
 server_error_404,ERROR,Not Found,Not Found,Not Found,Nicht gefunden,
-server_error_406,ERROR,Not Acceptable,Not Acceptable,Not Acceptable,Inakzeptabel,
+server_error_406,ERROR,Not Acceptable,Not Acceptable,Not Acceptable,Nicht akzeptabel,
 server_error_410,ERROR,Gone,Gone,Gone,Gegangen,
 server_error_420,ERROR,Enhance Your Calm,Enhance Your Calm,Enhance Your Calm,Verbessern Sie Ihre Ruhe,
 server_error_429,ERROR,Too Many Requests,Too Many Requests,Too Many Requests,Zu viele Anfragen,
@@ -46,7 +45,7 @@ meta_author,META,$author,$author,$author,$author,
 meta_description,META,$description,$description,$description,$description,
 meta_generator,META,$lasagna,$lasagna,$lasagna,$lasagna,
 meta_keywords,META,$keywords,$keywords,$keywords,$keywords,
-meta_viewport,META,"width=device-width,initial-scale=1,maximum-scale=2","width=device-width,initial-scale=1,maximum-scale=2","width=device-width,initial-scale=1,maximum-scale=2","width=device-width,initial-scale=1,maximum-scale=2",
+meta_viewport,META,"width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3",
 og_description,META,$description,$description,$description,$description,
 og_site_name,META,$title,$title,$title,$title,
 og_title,META,$title,$title,$title,$title,
@@ -83,88 +82,92 @@ nojs_placeholder,NOJS,JavaScript is disabled!,JavaScript je vypnutý!,JavaScript
 nojs_sorry,NOJS,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG,
 nojs_text,NOJS,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können.",
 share_mastodon,BUTTON,Share on Mastodon,Sdílet na Mastodonu,Sdílet na Mastodonu,Share on Mastodon,
-share_facebook,BUTTON,Share on Facebook,Sdílet na Facebooku,Sdílet na Facebooku,Share on Facebook,
-a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN,
-a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,Cache leeren,
-a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN,
-a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO,
-a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG,
-a_google_search,BUTTON,CONSOLE,KONZOLE,KONZOLA,KONSOLE,
-a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,ANMELDUNG,
-a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,AUSLOGGEN,
-a_relogin,BUTTON,NEW LOGIN,NOVÉ PŘIHLÁŠENÍ,NOVÉ PRIHLÁSENIE,NEUES LOGIN,
-a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN,
-a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,RETTE ALLE,
-a_show_translations,BUTTON,📍 translation sources,📍 zdroje překladu,📍 prekladové zdroje,📍 Übersetzungsquellen,
-a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN,
-a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,NETZ ANALYSE,
-a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN,
-a_error_general,ERROR,🤯 ERROR!,🤯 CHYBA!,🤯 CHYBA!,🤯 FEHLER!,
-a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Beim Hochladen von Dateien ist ein Fehler aufgetreten: Interner Fehler.,
-a_upload_filetype,ERROR,😳 This file type is not accepted.,😳 Tento typ souboru není povolen.,😳 Tento typ súboru nie je akceptovaný.,😳 Dieser Dateityp wird nicht akzeptiert.,
-a_upload_http,ERROR,💀 Error uploading files: HTTP 403 Forbidden.,💀 Chyba nahrávání: HTTP 403 Forbidden.,💀 Chyba pri nahrávaní súborov: HTTP 403 Zakázané.,💀 Fehler beim Hochladen von Dateien: HTTP 403 Verboten.,
-a_upload_maxbytes,ERROR,🗃 Total filesize is too big (max. 100 MB).,🗃 Obsah je příliš veliký (max. 100 MB).,🗃 Celková veľkosť súboru je príliš veľká (max. 100 MB).,🗃 Die Gesamtdateigröße ist zu groß (max. 100 MB).,
-a_upload_maxfiles,ERROR,🗃 Too many files were selected (max. 100).,🗃 Vybráno příliš mnoho souborů (max. 100).,🗃 Bolo vybratých príliš veľa súborov (max. 100).,🗃 Es wurden zu viele Dateien ausgewählt (max. 100).,
-a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.,
-a_age,INFO,age,stáří,vek,Alter,
-a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /en/id/),
-a_articles,INFO,ARTICLES,ČLÁNKY,ČLÁNKY,ARTIKEL,
-a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋,
-a_codedeleted,INFO,⛔ CODE DELETED,⛔ KÓD SMAZÁN,⛔ KÓD VYMAZANÝ,⛔ CODE GELÖSCHT,
-a_copy_tit,INFO,copy URL,kopírovat URL,kopírovať URL,URL kopieren,
-a_delete_tit,INFO,delete file,smazat soubor,vymazať súbor,Datei löschen,
-a_footer_app,INFO,app code,app code,app code,App-Code,
-a_footer_date,INFO,updated,aktualizováno,aktualizované,Aktualisiert,
-a_limiter,INFO,access limiter,limiter přístupů,obmedzovač prístupu,Zugangsbegrenzer,
-a_open_tit,INFO,open file,otevřít soubor,otvorený súbor,Datei öffnen,
-a_processing_data,INFO,"The system is processing data, please wait ☕️","Systém zpracovává data, vyčkejte ☕️","Systém spracováva údaje, čakajte prosím ☕️","Das System verarbeitet Daten, bitte warten ☕️",
-a_profiles,INFO,WEB PROFILES,WEBOVÉ PROFILY,WEBOVÉ PROFILY,WEB-PROFILE,
-a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Fernbedienung fn,
-a_remotefns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,REMOTE-FUNKTIONSAUFRUFE,
-a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,OK GESPEICHERT,
-a_sites,INFO,PROFILES,PROFILY,PROFILY,PROFILE,
-a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen,
-a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.,
-a_webpage,INFO,web page,webová stránka,webová stránka,Website,
-a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN,
-a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern),
-a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis,
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis,
-a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen,
-a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter,
-a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken,
-a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität und Objekte,
-a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte,
-a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole,
-a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,celá obrazovka,Vollbild,
-a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte,
-a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins,
-a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN,
-a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern,
-a_cache,TITLE,CACHE / LIMITS,CACHE / LIMITY,CACHE / LIMITY,CACHE / GRENZEN,
-a_changes,TITLE,NEWS,NOVINKY,NOVINKY,NACHRICHT,
-a_google,TITLE,GOOGLE,GOOGLE,GOOGLE,GOOGLE,
-a_groups_permissions,TITLE,USERS,UŽIVATELÉ,POUŽÍVATEĽOV,BENUTZER,
-a_locales,TITLE,DATA,DATA,DATA,DATEN,
-a_optimizations,TITLE,OPTIMIZATIONS,OPTIMALIZACE,OPTIMALIZÁCIE,OPTIMIERUNGEN,
-a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen,
-a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen),
-a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet,
-a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,
-a_files_ttip,TOOLTIP,file manager,správce souborů,Správca súborov,Dateimanager,
-a_flush_ttip,TOOLTIP,clears all cache,vyprázdní veškerou cache,vyprázdni všetku cache,löscht den gesamten Cache,
-a_github_ttip,TOOLTIP,GitHub,GitHub,GitHub,GitHub,
-a_google_account_ttip,TOOLTIP,Google Accounts settings,nastavení Google účtů,Nastavenia účtov Google,Einstellungen für Google-Konten,
-a_google_backup_ttip,TOOLTIP,Google Drive backup,Disk Google zálohování,Záloha na Disk Google,Google Drive-Backup,
-a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter,
-a_google_search_ttip,TOOLTIP,Google Search Console,konzole Google Search,Google Search Console,Google Search Console,
-a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Dokumentácia Tesseract LASAGNA,Tesseract LASAGNA-Dokumentation,
-a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage,
-a_login_ttip,TOOLTIP,login,přihlásit se,Prihlásiť sa,Anmeldung,
-a_logout_ttip,TOOLTIP,logout,odhlásit se,odhlásiť sa,Ausloggen,
-a_php_ttip,TOOLTIP,PHP information,PHP informace,PHP informácie,PHP-Informationen,
-a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor,
-a_sysinfo_ttip,TOOLTIP,SysInfo - system information,SysInfo - systémové informace,SysInfo - systémové informácie,SysInfo – Systeminformationen,
-a_umami_ttip,TOOLTIP,Umami analytics,Umami analytika,Umami analytika,Umami-Analyse,
-a_update_ttip,TOOLTIP,update data from Google Cloud,aktualizovat data z Google Cloudu,aktualizovať údaje zo služby Google Cloud,Aktualisieren Sie Daten aus Google Cloud,
-a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads,
+share_facebook,BUTTON,Share on Facebook,Sdílet na Facebooku,Sdílet na Facebooku,Share on Facebook,KEY,SECTION,EN,CS,SK,DE
+klíč,sekce,anglicky,česky,slovensky,německy
+a_close,BUTTON,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
+a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,Cache leeren
+a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
+a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
+a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG
+a_google_search,BUTTON,CONSOLE,KONZOLE,KONZOLA,KONSOLE
+a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
+a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,Abmelden
+a_relogin,BUTTON,NEW LOGIN,NOVÉ PŘIHLÁŠENÍ,NOVÉ PRIHLÁSENIE,NEUES LOGIN
+a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
+a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
+a_show_translations,BUTTON,📍 translation sources,📍 zdroje překladu,📍 prekladové zdroje,📍 Übersetzungsquellen
+a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
+a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
+a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN
+a_error_general,ERROR,🤯 ERROR!,🤯 CHYBA!,🤯 CHYBA!,🤯 FEHLER!
+a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Beim Hochladen von Dateien ist ein Fehler aufgetreten: Interner Fehler.
+a_upload_filetype,ERROR,😳 This file type is not accepted.,😳 Tento typ souboru není povolen.,😳 Tento typ súboru nie je akceptovaný.,😳 Dieser Dateityp wird nicht akzeptiert.
+a_upload_http,ERROR,💀 Error uploading files: HTTP 403 Forbidden.,💀 Chyba nahrávání: HTTP 403 Forbidden.,💀 Chyba pri nahrávaní súborov: HTTP 403 Zakázané.,💀 Fehler beim Hochladen von Dateien: HTTP 403 Verboten.
+a_upload_maxbytes,ERROR,🗃 Total filesize is too big (max. 100 MB).,🗃 Obsah je příliš veliký (max. 100 MB).,🗃 Celková veľkosť súboru je príliš veľká (max. 100 MB).,🗃 Die Gesamtdateigröße ist zu groß (max. 100 MB).
+a_upload_maxfiles,ERROR,🗃 Too many files were selected (max. 100).,🗃 Vybráno příliš mnoho souborů (max. 100).,🗃 Bolo vybratých príliš veľa súborov (max. 100).,🗃 Es wurden zu viele Dateien ausgewählt (max. 100).
+a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.
+a_age,INFO,age,stáří,vek,Alter
+a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /en/id/)
+a_articles,INFO,ARTICLES,ČLÁNKY,ČLÁNKY,ARTIKEL
+a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋 
+a_codedeleted,INFO,⛔ CODE DELETED,⛔ KÓD SMAZÁN,⛔ KÓD VYMAZANÝ,⛔ CODE GELÖSCHT
+a_copy_tit,INFO,copy URL,kopírovat URL,kopírovať URL,URL kopieren
+a_delete_tit,INFO,delete file,smazat soubor,odstrániť súbor,Datei löschen
+a_footer_app,INFO,app code,app code,app code,App-Code
+a_footer_date,INFO,updated,aktualizováno,aktualizované,aktualisiert
+a_limiter,INFO,access limiter,limiter přístupů,obmedzovač prístupu,Zugangsbegrenzer
+a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
+a_processing_data,INFO,"The system is processing data, please wait ☕️","Systém zpracovává data, vyčkejte ☕️","Systém spracováva údaje, čakajte prosím ☕️","Das System verarbeitet Daten, bitte warten ☕️"
+a_profiles,INFO,WEB PROFILES,WEBOVÉ PROFILY,WEBOVÉ PROFILY,WEB-PROFILE
+a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Fernbedienung fn
+a_remotefns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,REMOTE-FUNKTIONSAUFRUFE
+a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,OK GESPEICHERT
+a_sites,INFO,PROFILES,PROFILY,PROFILY,PROFILE
+a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
+a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.
+a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
+a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
+a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
+a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
+a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
+a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
+a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken
+a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität und Objekte
+a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
+a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
+a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,na celú obrazovku,Vollbild
+a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte
+a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
+a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
+a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern
+a_tab_data,TABS,"<i class=""fa-solid fa-database""></i> DATA","<i class=""fa-solid fa-database""></i> DATA","<i class=""fa-solid fa-database""></i> DATA","<i class=""fa-solid fa-database""></i>"
+a_tab_fn,TABS,"<i class=""fa-solid fa-robot""></i> FN","<i class=""fa-solid fa-robot""></i> FN","<i class=""fa-solid fa-robot""></i> FN","<i class=""fa-solid fa-robot""></i>"
+a_tab_services,TABS,"<i class=""fa-solid fa-screwdriver-wrench""></i> SERVICES","<i class=""fa-solid fa-screwdriver-wrench""></i> SLUŽBY","<i class=""fa-solid fa-screwdriver-wrench""></i> SLUŽBY","<i class=""fa-solid fa-screwdriver-wrench""></i>"
+a_tab_users,TABS,"<i class=""fa-regular fa-user""></i> USERS","<i class=""fa-regular fa-user""></i> UŽIVATELÉ","<i class=""fa-regular fa-user""></i> UŽÍVATEĽA","<i class=""fa-regular fa-user""></i>"
+a_tab_news,TABS,"<i class=""fa-solid fa-circle-info""></i> NEWS","<i class=""fa-solid fa-circle-info""></i> NOVINKY","<i class=""fa-solid fa-circle-info""></i> NOVINKY","<i class=""fa-solid fa-circle-info""></i>"
+a_changes,TITLE,NEWS,NOVINKY,NOVINKY,NACHRICHT
+a_google,TITLE,GOOGLE / SERVICES,GOOGLE / SLUŽBY,GOOGLE / SLUŽBY,GOOGLE / DIENSTLEISTUNGEN
+a_groups_permissions,TITLE,USERS / GROUPS,UŽIVATELÉ / SKUPINY,POUŽÍVATELIA / SKUPINY,BENUTZER / GRUPPEN
+a_locales,TITLE,DATA / UPLOADS,DATA / UPLOADS,DATA / UPLOADS,DATEN / UPLOADS
+a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
+a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
+a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
+a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel
+a_files_ttip,TOOLTIP,file manager,správce souborů,správca súborov,Dateimanager
+a_flush_ttip,TOOLTIP,clears all cache,vyprázdní veškerou cache,vyprázdní všetku cache,löscht den gesamten Cache
+a_github_ttip,TOOLTIP,GitHub,GitHub,GitHub,GitHub
+a_google_account_ttip,TOOLTIP,Google Accounts settings,nastavení Google účtů,Nastavenia účtov Google,Einstellungen für Google-Konten
+a_google_backup_ttip,TOOLTIP,Google Drive backup,Disk Google zálohování,Záloha na Disk Google,Google Drive-Backup
+a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter
+a_google_search_ttip,TOOLTIP,Google Search Console,konzole Google Search,Google Search Console,Google Search Console
+a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Dokumentácia Tesseract LASAGNA,Tesseract LASAGNA-Dokumentation
+a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage
+a_login_ttip,TOOLTIP,login,přihlásit se,prihlásiť sa,Login
+a_logout_ttip,TOOLTIP,logout,odhlásit se,odhlásiť sa,Abmelden
+a_php_ttip,TOOLTIP,PHP information,PHP informace,PHP informácie,PHP-Informationen
+a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
+a_sysinfo_ttip,TOOLTIP,SysInfo - system information,SysInfo - systémové informace,SysInfo - systémové informácie,SysInfo – Systeminformationen
+a_umami_ttip,TOOLTIP,Umami analytics,Umami analytika,Umami analytika,Umami-Analyse
+a_update_ttip,TOOLTIP,update data from Google Cloud,aktualizovat data z Google Cloudu,aktualizovať údaje zo služby Google Cloud,Aktualisieren Sie Daten aus Google Cloud
+a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads

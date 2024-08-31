@@ -1,0 +1,57 @@
+<div id="users" class="col s12">
+  <div class="">
+
+    <!-- groups -->
+    <div class="row center extrapadding">
+      <h4>{{ l.a_groups_permissions }}</h4>
+      <div class="white-text">
+        <div class="row center">
+
+          <strong>🧑‍🤝‍🧑 ADMIN</strong>
+          <div class="container">
+            <div class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
+              {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
+            </div>
+          </div>
+          {{#admin_groups.editor}}
+
+          <strong>🧑‍🤝‍🧑 EDITOR</strong>
+          <div class="container">
+            <p class="orange-text">{{#admin_groups.editor}}{{ . }} {{/admin_groups.editor}}</p>
+          </div>
+          {{/admin_groups.editor}}
+
+          {{#admin_groups.tester}}
+          <strong>🧑‍🤝‍🧑 TESTER</strong>
+          <div class="container">
+            <p class="orange-text">{{#admin_groups.tester}}{{ . }} {{/admin_groups.tester}}</p>
+          </div>
+          {{/admin_groups.tester}}
+
+          {{#admin_groups.default}}
+          <strong>🧑‍🤝‍🧑 DEFAULT</strong>
+          <div class="container">
+            <p class="orange-text">{{#admin_groups.default}}{{ . }} {{/admin_groups.default}}</p>
+          </div>
+          {{/admin_groups.default}}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- current user -->
+    <div class="row center extrapadding">
+      <div style="display:inline-block;border:2px solid red;border-radius:5px;margin:auto;padding:2rem">
+        <strong>{{user.name}}</strong><br>
+        <b>{{user.email}}</b>
+        <br>
+        <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
+          data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
+          <i class="fas fa-sign-out-alt"></i>
+          {{ l.a_logout }}</a>
+        <a title="auditlog" target="_blank" ref="nofollow" href="/admin/AuditLog" class="waves-effect blue waves-light btn">
+          <i class="fas fa-list"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
