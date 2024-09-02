@@ -42,10 +42,10 @@ csp: [
     "'self'"
     "'strict-dynamic'"
 
-# allowed only to enable Zaraz
+# enable Zaraz
     "'unsafe-eval'"
 
-# actually not needed anymore
+# not needed anymore
 #    "'unsafe-inline'"
 
     "'nonce-random';"
