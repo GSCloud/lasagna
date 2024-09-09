@@ -1047,10 +1047,12 @@ class StringFilters implements IStringFilters
                         $n = \trim(\strtr($n, '-_()', '    '));
                         $t = CDN . "/upload/.thumb_{$size}px_" . $f;
                         $images .=
-                            "<a data-lightbox='$gallery' href="
-                            . CDN . '/upload/' . $f
+                            "<a data-lightbox='$gallery' "
+                            . "href=" . CDN . '/upload/' . $f
                             . "><img loading=lazy class=gallery-img "
-                            . "alt='$n' src=$t></a>";
+                            . " data-source=" . CDN . '/upload/' . $f
+                            . " data-thumb=" . $t
+                            . " alt='$n' src=$t></a>";
                     }
                 }
                 $replace = "<div class='row center gallery-container'"
