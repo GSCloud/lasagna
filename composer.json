@@ -4,7 +4,7 @@
     "require": {
         "adbario/php-dot-notation": "^3",
         "altorouter/altorouter": "^2",
-        "cakephp/cache": "^4",
+        "cakephp/cache": "^5",
         "cheprasov/php-redis-client": "^1",
         "chillerlan/php-qrcode": "^5",
         "cloudflare/sdk": "^1",
