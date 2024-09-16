@@ -16,7 +16,7 @@
         "michelf/php-markdown": "^2.0",
         "monolog/monolog": "^1",
         "mustache/mustache": "^2",
-        "nette/neon": "^2",
+        "nette/neon": "^3",
         "nette/tester": "^2",
         "nette/utils": "^3",
         "paragonie/halite": "^4",
