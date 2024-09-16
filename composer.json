@@ -3,7 +3,7 @@
     "description": "Tesseract LASAGNA",
     "require": {
         "adbario/php-dot-notation": "^3",
-        "altorouter/altorouter": "^1",
+        "altorouter/altorouter": "^2",
         "cakephp/cache": "^4",
         "cheprasov/php-redis-client": "^1",
         "chillerlan/php-qrcode": "^4",
