@@ -75,7 +75,7 @@ if (!$requestUri) {
 }
 
 // POPULATE DATA ARRAY
-define("ENGINE", "Tesseract 2.2.6");
+define("ENGINE", "Tesseract 2.3.0");
 $data["ENGINE"] = ENGINE;
 
 $data["ARGC"] = $argc ?? 0;
