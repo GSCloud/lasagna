@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be8353ba6e171ab846a5a23a009f8e1f",
+    "content-hash": "84b7125e3930b1e6f4003d22f3cd19ea",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -2348,29 +2348,30 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v4.4.46",
+            "version": "v5.4.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/lock.git",
-                "reference": "8b060dd4e10f05219698ceb3a4ad735b19c1be4f"
+                "reference": "d96955c9919fa8609b193ba76e9f527776b70176"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lock/zipball/8b060dd4e10f05219698ceb3a4ad735b19c1be4f",
-                "reference": "8b060dd4e10f05219698ceb3a4ad735b19c1be4f",
+                "url": "https://api.github.com/repos/symfony/lock/zipball/d96955c9919fa8609b193ba76e9f527776b70176",
+                "reference": "d96955c9919fa8609b193ba76e9f527776b70176",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.3",
+                "php": ">=7.2.5",
                 "psr/log": "^1|^2|^3",
+                "symfony/deprecation-contracts": "^2.1|^3",
                 "symfony/polyfill-php80": "^1.16"
             },
             "conflict": {
-                "doctrine/dbal": "<2.7"
+                "doctrine/dbal": "<2.13"
             },
             "require-dev": {
-                "doctrine/dbal": "^2.7|^3.0",
-                "predis/predis": "~1.0"
+                "doctrine/dbal": "^2.13|^3|^4",
+                "predis/predis": "^1.0|^2.0"
             },
             "type": "library",
             "autoload": {
@@ -2406,7 +2407,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v4.4.46"
+                "source": "https://github.com/symfony/lock/tree/v5.4.40"
             },
             "funding": [
                 {
@@ -2422,7 +2423,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-19T08:41:12+00:00"
+            "time": "2024-05-31T14:33:22+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2660,16 +2661,16 @@
         },
         {
             "name": "tuupola/base58",
-            "version": "0.4.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tuupola/base58.git",
-                "reference": "39b69ed50fa2fc1a830d29e210ce00bf46696d4a"
+                "reference": "2bf8d47e4ecc3ab8399c5c758a5d1959211c621b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tuupola/base58/zipball/39b69ed50fa2fc1a830d29e210ce00bf46696d4a",
-                "reference": "39b69ed50fa2fc1a830d29e210ce00bf46696d4a",
+                "url": "https://api.github.com/repos/tuupola/base58/zipball/2bf8d47e4ecc3ab8399c5c758a5d1959211c621b",
+                "reference": "2bf8d47e4ecc3ab8399c5c758a5d1959211c621b",
                 "shasum": ""
             },
             "require": {
@@ -2712,7 +2713,7 @@
                 "issues": "https://github.com/tuupola/base58/issues",
                 "source": "https://github.com/tuupola/base58/tree/master"
             },
-            "time": "2019-01-30T16:53:38+00:00"
+            "time": "2019-03-30T16:21:14+00:00"
         }
     ],
     "packages-dev": [
