@@ -76,6 +76,7 @@ if (!$requestUri) {
 
 // POPULATE DATA ARRAY
 define("ENGINE", "Tesseract 2.3.0");
+
 $data["ENGINE"] = ENGINE;
 
 $data["ARGC"] = $argc ?? 0;
@@ -111,6 +112,13 @@ if (file_exists($hash)) {
 $data["cdn"] = $data["CDN"] = DS . "cdn-assets" . DS . $version;
 $data["cdn_trimmed"] = "cdn-assets" . DS . $version;
 defined('CDN') || define('CDN', $data["CDN"]);
+
+$isSafari = false;
+$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
+    $isSafari = true;
+}
+$data["isSafari"] = $isSafari;
 
 $data["host"] = $data["HOST"] = $host = $_SERVER["HTTP_HOST"] ?? "";
 $data["base"] = $data["BASE"] = $host ? (
