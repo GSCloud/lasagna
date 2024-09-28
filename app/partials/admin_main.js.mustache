@@ -708,6 +708,7 @@
 
             var s = '';
             var t = 0;
+            var printed = 0;
 
             // search data
             var search = '';
@@ -759,13 +760,14 @@
               s += '<div id="stubs" class="row">' + stubs + '</div>';
               s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-bars"></i></div>';
               s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-regular fa-image"></i></div>';
+              s += '<div id="uploadimagescount" style="cursor:auto!important" class="btn black text-white bold upload-controls right"></div>';
               s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
 
               for (var i in data.data.files) {
                 if (typeof data.data.files[i] === 'function') continue;
 
                 t++;
-                if (t == 1) {
+                if (t === 1) {
                   s += '<div class="row">';
                 }
   
@@ -778,6 +780,8 @@
                 if (search && name.indexOf(search) === -1) {
                   continue;
                 }
+
+                printed++;
   
                 // ICON
                 var si = '';
@@ -854,6 +858,7 @@
             } else {
               $("#a_file_manager").hide().html(s).show(100);
             }
+            $('#uploadimagescount').html(printed);
 
             // searchbox focus
             if (localStorage.getItem('searchset')) {
