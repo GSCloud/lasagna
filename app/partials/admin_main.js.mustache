@@ -714,7 +714,7 @@
             var search = '';
             if (localStorage.getItem('search')) {
               var search = localStorage.getItem('search');
-              search = search.replace(/[^a-z0-9]/gim, '').toLowerCase();
+              search = search.replace(/[^a-z0-9_\-]/gim, '').toLowerCase();
             }
 
             // current time and Moment locale
@@ -895,7 +895,7 @@
             // UPLOAD: searchbox
             $('#searchbox').change(function () {
               var search = $(this).val();
-              search = search.replace(/[^a-z0-9]/gim, '').toLowerCase();
+              search = search.replace(/[^a-z0-9_\-]/gim, '').toLowerCase();
               localStorage.setItem('search', search);
               localStorage.setItem('searchset', 1);
               GSC.RenderUploadInfo();
