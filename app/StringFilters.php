@@ -81,7 +81,7 @@ interface IStringFilters
     public static function renderImageRespShortCode(&$content);
 
     /**
-     * Render Soundcloud short code(s) - max. 20
+     * Render Soundcloud short code(s)
      *
      * @param string $content text data containing [soundcloud param]
      * 
@@ -90,7 +90,7 @@ interface IStringFilters
     public static function renderSoundcloudShortCode(&$content);
 
     /**
-     * Render YouTube short code(s) - max. 20
+     * Render YouTube short code(s)
      *
      * @param string $content text data containing [youtube param]
      * 
@@ -99,7 +99,7 @@ interface IStringFilters
     public static function renderYouTubeShortCode(&$content);
 
     /**
-     * Render gallery short code(s) - max. 20
+     * Render gallery short code(s)
      *
      * @param string $content text data containing [gallery param]
      * @param bool   $shuffle shuffle the gallery
@@ -219,17 +219,30 @@ interface IStringFilters
  */
 class StringFilters implements IStringFilters
 {
+    // max. shortcode iterations in the loop
+    const ITERATIONS = 10;
+
     // phpcs:ignore
     /**
      * @var array<string,string>
      */
     public static $slovak = [
         "  " => " ",
-        " % " => "&nbsp;%",
-        " - " => " – ",
+
+        " % " => "&nbsp;% ",
+        " '" => " &lsquo;",
+        " - " => " — ",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
         " / " => " /&nbsp;",
+        " <<" => " «",
+        " – " => " —&nbsp;",
+        " — " => " —&nbsp;",
+        " ― " => " ―&nbsp;",
+        " ‰ " => "&nbsp;‰",
+        "' " => " &rsquo;",
+        ">> " => "» ",
+
         " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
         " 2 " => " 2&nbsp;",
@@ -240,18 +253,18 @@ class StringFilters implements IStringFilters
         " 7 " => " 7&nbsp;",
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
+
         " :-(" => "&nbsp;😟",
         " :-)" => "&nbsp;🙂",
         " :-O" => "&nbsp;😮",
         " :-P" => "&nbsp;😋",
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
+
         " A " => " A&nbsp;",
         " CZK" => "&nbsp;CZK",
-        " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
         " EUR" => "&nbsp;EUR",
-        " Eur " => "&nbsp;EUR ",
         " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
         " Inc." => "&nbsp;Inc.",
@@ -262,7 +275,6 @@ class StringFilters implements IStringFilters
         " S " => " S&nbsp;",
         " U " => " U&nbsp;",
         " USD" => "&nbsp;USD",
-        " Usd" => "&nbsp;USD",
         " V " => " V&nbsp;",
         " Z " => " Z&nbsp;",
         " a " => " a&nbsp;",
@@ -270,6 +282,7 @@ class StringFilters implements IStringFilters
         " a.s. " => "&nbsp;a.s. ",
         " cca. " => " cca.&nbsp;",
         " h " => "&nbsp;h ",
+        " h) " => "&nbsp;h) ",
         " h, " => "&nbsp;h, ",
         " h. " => "&nbsp;h. ",
         " hod. " => "&nbsp;hod. ",
@@ -284,26 +297,20 @@ class StringFilters implements IStringFilters
         " ks, " => "&nbsp;ks, ",
         " ks." => "&nbsp;ks.",
         " l " => "&nbsp;l ",
-        " l, " => "&nbsp;l, ",
-        " l. " => "&nbsp;l. ",
         " m " => "&nbsp;m ",
+        " m) " => "&nbsp;m) ",
         " m, " => "&nbsp;m, ",
         " m. " => "&nbsp;m. ",
         " m2 " => "&nbsp;m² ",
         " m3 " => "&nbsp;m³ ",
-        " mj. " => " mj.&nbsp;",
         " m² " => "&nbsp;m² ",
         " m³ " => "&nbsp;m³ ",
         " o " => " o&nbsp;",
         " s " => " s&nbsp;",
-        " s, " => "&nbsp;s, ",
         " s. " => "&nbsp;s. ",
         " s.r.o." => "&nbsp;s.r.o.",
         " sec. " => "&nbsp;sec. ",
-        " sl. " => " sl.&nbsp;",
         " spol. " => "&nbsp;spol.&nbsp;",
-        " str. " => " str.&nbsp;",
-        " sv. " => " sv.&nbsp;",
         " tj. " => "tj.&nbsp;",
         " tzn. " => " tzn.&nbsp;",
         " tzv. " => " tzv.&nbsp;",
@@ -321,12 +328,7 @@ class StringFilters implements IStringFilters
         " čj. " => " čj.&nbsp;",
         " čp. " => " čp.&nbsp;",
         " čís. " => " čís.&nbsp;",
-        " – " => " –&nbsp;",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " ‰ " => "&nbsp;‰",
-        "<<" => "«",
-        ">>" => "»",
+
         " a&nbsp;i " => " a&nbsp;i&nbsp;",
         " a&nbsp;k " => " a&nbsp;k&nbsp;",
         " a&nbsp;o " => " a&nbsp;o&nbsp;",
@@ -346,11 +348,21 @@ class StringFilters implements IStringFilters
      */
     public static $czech = [
         "  " => " ",
-        " % " => "&nbsp;%",
-        " - " => " – ",
+
+        " % " => "&nbsp;% ",
+        " '" => " &lsquo;",
+        " - " => " — ",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
         " / " => " /&nbsp;",
+        " <<" => " «",
+        " – " => " —&nbsp;",
+        " — " => " —&nbsp;",
+        " ― " => " ―&nbsp;",
+        " ‰ " => "&nbsp;‰",
+        "' " => " &rsquo;",
+        ">> " => "» ",
+
         " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
         " 2 " => " 2&nbsp;",
@@ -361,18 +373,18 @@ class StringFilters implements IStringFilters
         " 7 " => " 7&nbsp;",
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
+
         " :-(" => "&nbsp;😟",
         " :-)" => "&nbsp;🙂",
         " :-O" => "&nbsp;😮",
         " :-P" => "&nbsp;😋",
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
+
         " A " => " A&nbsp;",
         " CZK" => "&nbsp;CZK",
-        " Czk" => "&nbsp;CZK",
         " DIČ: " => " DIČ:&nbsp;",
         " EUR" => "&nbsp;EUR",
-        " Eur " => "&nbsp;EUR ",
         " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
         " Inc." => "&nbsp;Inc.",
@@ -383,7 +395,6 @@ class StringFilters implements IStringFilters
         " S " => " S&nbsp;",
         " U " => " U&nbsp;",
         " USD" => "&nbsp;USD",
-        " Usd" => "&nbsp;USD",
         " V " => " V&nbsp;",
         " Z " => " Z&nbsp;",
         " a " => " a&nbsp;",
@@ -406,14 +417,11 @@ class StringFilters implements IStringFilters
         " ks." => "&nbsp;ks.",
         " kupř. " => " kupř.&nbsp;",
         " l " => "&nbsp;l ",
-        " l, " => "&nbsp;l, ",
-        " l. " => "&nbsp;l. ",
         " m " => "&nbsp;m ",
         " m, " => "&nbsp;m, ",
         " m. " => "&nbsp;m. ",
         " m2 " => "&nbsp;m² ",
         " m3 " => "&nbsp;m³ ",
-        " mj. " => " mj.&nbsp;",
         " m² " => "&nbsp;m² ",
         " m³ " => "&nbsp;m³ ",
         " např. " => " např.&nbsp;",
@@ -423,14 +431,10 @@ class StringFilters implements IStringFilters
         " přib. " => " přib.&nbsp;",
         " přibl. " => " přibl.&nbsp;",
         " s " => " s&nbsp;",
-        " s, " => "&nbsp;s, ",
         " s. " => "&nbsp;s. ",
         " s.r.o." => "&nbsp;s.r.o.",
         " sec. " => "&nbsp;sec. ",
-        " sl. " => " sl.&nbsp;",
         " spol. " => "&nbsp;spol.&nbsp;",
-        " str. " => " str.&nbsp;",
-        " sv. " => " sv.&nbsp;",
         " tj. " => "tj.&nbsp;",
         " tzn. " => " tzn.&nbsp;",
         " tzv. " => " tzv.&nbsp;",
@@ -449,12 +453,7 @@ class StringFilters implements IStringFilters
         " čj. " => " čj.&nbsp;",
         " čp. " => " čp.&nbsp;",
         " čís. " => " čís.&nbsp;",
-        " – " => " –&nbsp;",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " ‰ " => "&nbsp;‰",
-        "<<" => "«",
-        ">>" => "»",
+
         " a&nbsp;i " => " a&nbsp;i&nbsp;",
         " a&nbsp;v " => " a&nbsp;v&nbsp;",
         " i&nbsp;s " => " i&nbsp;s&nbsp;",
@@ -467,6 +466,29 @@ class StringFilters implements IStringFilters
      */
     public static $english = [
         "  " => " ",
+
+        " % " => "&nbsp;% ",
+        " '" => " &lsquo;",
+        " - " => " — ",
+        " ... " => "&nbsp;… ",
+        " ..." => "&nbsp;…",
+        " / " => " /&nbsp;",
+        " <<" => " «",
+        " – " => " —&nbsp;",
+        " — " => " —&nbsp;",
+        " ― " => " ―&nbsp;",
+        " ‰ " => "&nbsp;‰",
+        "' " => " &rsquo;",
+        ">> " => "» ",
+
+        " He's " => " He&rsquo;s ",
+        " It's " => " It&rsquo;s ",
+        " She's " => " She&rsquo;s ",
+        " he's " => " he&rsquo;s ",
+        " it's " => " it&rsquo;s ",
+        " she's " => " she&rsquo;s ",
+
+        " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
         " 2 " => " 2&nbsp;",
         " 3 " => " 3&nbsp;",
@@ -476,27 +498,18 @@ class StringFilters implements IStringFilters
         " 7 " => " 7&nbsp;",
         " 8 " => " 8&nbsp;",
         " 9 " => " 9&nbsp;",
-        " 0 " => " 0&nbsp;",
-        " - " => " – ",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " % " => "&nbsp;%",
-        " ... " => "&nbsp;… ",
-        " ..." => "&nbsp;…",
+
         " :-(" => "&nbsp;😟",
         " :-)" => "&nbsp;🙂",
         " :-O" => "&nbsp;😮",
         " :-P" => "&nbsp;😋",
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
-        " / " => " /&nbsp;",
-        " – " => " –&nbsp;",
+
         " A " => " A&nbsp;",
         " AM" => "&nbsp;AM",
         " CZK " => " CZK&nbsp;",
-        " Czk " => " CZK&nbsp;",
         " EUR " => " EUR&nbsp;",
-        " Eur " => " EUR&nbsp;",
         " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
         " INC." => "&nbsp;Inc.",
@@ -512,7 +525,6 @@ class StringFilters implements IStringFilters
         " Ms. " => " Ms.&nbsp;",
         " PM" => "&nbsp;PM",
         " USD " => " USD&nbsp;",
-        " Usd " => " USD&nbsp;",
         " a " => " a&nbsp;",
         " h " => "&nbsp;h ",
         " h, " => "&nbsp;h, ",
@@ -520,9 +532,11 @@ class StringFilters implements IStringFilters
         " id: " => " id:&nbsp;",
         " kg " => "&nbsp;kg ",
         " l " => "&nbsp;l ",
+        " l) " => "&nbsp;l) ",
         " l, " => "&nbsp;l, ",
         " l. " => "&nbsp;l. ",
         " m " => "&nbsp;m ",
+        " m) " => "&nbsp;m) ",
         " m, " => "&nbsp;m, ",
         " m. " => "&nbsp;m. ",
         " m2 " => "&nbsp;m² ",
@@ -532,14 +546,12 @@ class StringFilters implements IStringFilters
         " pcs " => "&nbsp;pcs ",
         " pcs)" => "&nbsp;pcs)",
         " s " => "&nbsp;s ",
+        " s) " => "&nbsp;s) ",
         " s, " => "&nbsp;s, ",
         " s. " => "&nbsp;s. ",
         " sec. " => "&nbsp;sec. ",
         " °C " => "&nbsp;°C ",
         " °F " => "&nbsp;°F ",
-        " ‰ " => "&nbsp;‰",
-        "<<" => "«",
-        ">>" => "»",
     ];
 
     // phpcs:ignore
@@ -553,68 +565,82 @@ class StringFilters implements IStringFilters
         '-.' => '.',
         '_.' => '.',
         '..' => '.',
+        
         'á' => 'a',
-        'č' => 'c',
-        'é' => 'e',
-        'ě' => 'e',
-        'í' => 'i',
-        'ř' => 'r',
-        'š' => 's',
-        'ú' => 'u',
-        'ý' => 'y',
-        'ž' => 'z',
         'à' => 'a',
         'á' => 'a',
-        'è' => 'e',
-        'é' => 'e',
-        'ë' => 'e',
-        'í' => 'i',
-        'ó' => 'o',
-        'ö' => 'o',
-        'ø' => 'o',
-        'ú' => 'u',
-        'ý' => 'y',
+        'ä' => 'a',
+        'č' => 'c',
         'ć' => 'c',
         'č' => 'c',
         'ď' => 'd',
+        'é' => 'e',
+        'ě' => 'e',
+        'è' => 'e',
+        'é' => 'e',
+        'ë' => 'e',
         'ě' => 'e',
+        'í' => 'i',
+        'í' => 'i',
         'ĺ' => 'l',
         'ľ' => 'l',
         'ň' => 'n',
         'ń' => 'n',
+        'ó' => 'o',
+        'ö' => 'o',
+        'ø' => 'o',
+        'ř' => 'r',
         'ŕ' => 'r',
         'ř' => 'r',
+        'š' => 's',
         'š' => 's',
         'ť' => 't',
+        'ú' => 'u',
+        'ú' => 'u',
+        'ü' => 'u',
         'ů' => 'u',
+        'ý' => 'y',
+        'ý' => 'y',
+        'ž' => 'z',
         'ž' => 'z',
-        'Ý' => 'Y',
-        'Ž' => 'Z',
-        'À' => 'A',
-        'Á' => 'A',
-        'È' => 'E',
-        'É' => 'E',
-        'Ë' => 'E',
-        'Í' => 'I',
-        'Ó' => 'O',
-        'Ö' => 'O',
-        'Ø' => 'O',
-        'Ú' => 'U',
-        'Ý' => 'Y',
-        'Ć' => 'C',
-        'Č' => 'C',
-        'Ď' => 'D',
-        'Ě' => 'E',
-        'Ĺ' => 'L',
-        'Ľ' => 'L',
-        'Ň' => 'N',
-        'Ń' => 'N',
-        'Ŕ' => 'R',
-        'Ř' => 'R',
-        'Š' => 'S',
-        'Ť' => 'T',
-        'Ů' => 'U',
-        'Ž' => 'Z',
+
+        'Á' => 'a',
+        'À' => 'a',
+        'Á' => 'a',
+        'Ä' => 'a',
+        'Č' => 'c',
+        'Ć' => 'c',
+        'Č' => 'c',
+        'Ď' => 'd',
+        'É' => 'e',
+        'Ě' => 'e',
+        'È' => 'e',
+        'É' => 'e',
+        'Ë' => 'e',
+        'Ě' => 'e',
+        'Í' => 'i',
+        'Í' => 'i',
+        'Ĺ' => 'l',
+        'Ľ' => 'l',
+        'Ň' => 'n',
+        'Ń' => 'n',
+        'Ó' => 'o',
+        'Ö' => 'o',
+        'Ø' => 'o',
+        'Ř' => 'r',
+        'Ŕ' => 'r',
+        'Ř' => 'r',
+        'Š' => 's',
+        'Š' => 's',
+        'Ť' => 't',
+        'Ú' => 'u',
+        'Ú' => 'u',
+        'Ü' => 'u',
+        'Ů' => 'u',
+        'Ý' => 'y',
+        'Ý' => 'y',
+        'Ž' => 'z',
+        'Ž' => 'z',
     ];
 
     /**
@@ -941,7 +967,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Render Soundcloud short code(s) - max. 20
+     * Render Soundcloud short code(s)
      *
      * @param string $content text data containing [soundcloud param]
      * 
@@ -951,7 +977,7 @@ class StringFilters implements IStringFilters
     {
         $counter = 0;
         $x = \trim($content);
-        while (\str_contains($x, '[soundcloud ') && $counter < 20) {
+        while (\str_contains($x, '[soundcloud ') && $counter < self::ITERATIONS) {
             if (!\is_string($x)) {
                 break;
             }
@@ -976,7 +1002,7 @@ class StringFilters implements IStringFilters
 
 
     /**
-     * Render YouTube short code(s) - max. 20
+     * Render YouTube short code(s)
      *
      * @param string $content text data containing [youtube param]
      * 
@@ -986,7 +1012,7 @@ class StringFilters implements IStringFilters
     {
         $counter = 0;
         $x = \trim($content);
-        while (\str_contains($x, '[youtube ') && $counter < 20) {
+        while (\str_contains($x, '[youtube ') && $counter < self::ITERATIONS) {
             if (!\is_string($x)) {
                 break;
             }
@@ -1004,7 +1030,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Render gallery short code(s) - max. 20
+     * Render gallery short code(s)
      *
      * @param string $content text data containing [gallery param]
      * @param bool   $shuffle shuffle the gallery?
@@ -1021,7 +1047,7 @@ class StringFilters implements IStringFilters
             $size = 160;
         }
         $x = \trim($content);
-        while (\str_contains($x, '[gallery ') && $counter < 20) {
+        while (\str_contains($x, '[gallery ') && $counter < self::ITERATIONS) {
             if (!\is_string($x)) {
                 break;
             }
