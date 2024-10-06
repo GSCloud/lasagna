@@ -230,7 +230,6 @@ class StringFilters implements IStringFilters
         "  " => " ",
 
         " % " => "&nbsp;% ",
-        " '" => " &lsquo;",
         " - " => " — ",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
@@ -240,7 +239,6 @@ class StringFilters implements IStringFilters
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
-        "' " => " &rsquo;",
         ">> " => "» ",
 
         " 0 " => " 0&nbsp;",
@@ -350,7 +348,6 @@ class StringFilters implements IStringFilters
         "  " => " ",
 
         " % " => "&nbsp;% ",
-        " '" => " &lsquo;",
         " - " => " — ",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
@@ -360,7 +357,6 @@ class StringFilters implements IStringFilters
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
-        "' " => " &rsquo;",
         ">> " => "» ",
 
         " 0 " => " 0&nbsp;",
@@ -468,7 +464,6 @@ class StringFilters implements IStringFilters
         "  " => " ",
 
         " % " => "&nbsp;% ",
-        " '" => " &lsquo;",
         " - " => " — ",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
@@ -478,7 +473,6 @@ class StringFilters implements IStringFilters
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
-        "' " => " &rsquo;",
         ">> " => "» ",
 
         " He's " => " He&rsquo;s ",
