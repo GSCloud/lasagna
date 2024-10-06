@@ -163,6 +163,11 @@ class CiTester
 
             // curl data
             $m = \curl_multi_getcontent($ch[$i]);
+
+            // skip if there's no data available
+            if (!$m) {
+                continue;
+            }
             @\file_put_contents(ROOT . "/ci/{$f2}.curl.txt", $m);
             \curl_multi_remove_handle($multi, $ch[$i]);
 
