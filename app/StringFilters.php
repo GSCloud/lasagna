@@ -27,6 +27,63 @@ use Michelf\MarkdownExtra;
 interface IStringFilters
 {
     /**
+     * Convert EOLs to <br>
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function convertEolToBr(&$content);
+
+    /**
+     * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function convertEolToBrNbsp(&$content);
+
+    /**
+     * Convert EOL + hyphen/star to HTML
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function convertEolHyphenToBrDot(&$content);
+
+    /**
+     * Correct text spacing
+     * 
+     * Correct the text spacing in passed content for various languages.
+     *
+     * @param string $content  content by reference
+     * @param string $language (optional: "cs", "sk", "en")
+     * 
+     * @return void
+     */
+    public static function correctTextSpacing(&$content, $language);
+
+    /**
+     * Trim various EOL combinations
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function trimEol(&$content);
+
+    /**
+     * Trim THML comments inside the <body> tag
+     *
+     * @param string $content content by reference
+     * 
+     * @return void
+     */
+    public static function trimHtmlComment(&$content);
+
+    /**
      * Render Markdown to HTML
      *
      * @param string $content text data
@@ -122,72 +179,6 @@ interface IStringFilters
     public static function findImagesByMask($mask, $format = 'webp');
 
     /**
-     * Convert EOLs to <br>
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function convertEolToBr(&$content);
-
-    /**
-     * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function convertEolToBrNbsp(&$content);
-
-    /**
-     * Convert EOL + hyphen/star to HTML
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function convertEolHyphenToBrDot(&$content);
-
-    /**
-     * Correct text spacing
-     * 
-     * Correct the text spacing in passed content for various languages.
-     *
-     * @param string $content  content by reference
-     * @param string $language (optional: "cs", "sk", "en")
-     * 
-     * @return void
-     */
-    public static function correctTextSpacing(&$content, $language);
-
-    /**
-     * Trim various EOL combinations
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function trimEol(&$content);
-
-    /**
-     * Trim THML comments inside the <body> tag
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function trimHtmlComment(&$content);
-
-    /**
-     * Transliterate a string to safe characters without accents
-     *
-     * @param string $string text data
-     * 
-     * @return string
-     */
-    public static function transliterate(&$string);
-
-    /**
      * Sanitize a string to a safe variant
      *
      * @param string $string string by reference
@@ -204,6 +195,15 @@ interface IStringFilters
      * @return void
      */
     public static function sanitizeStringLC(&$string);
+
+    /**
+     * Transliterate a string to safe characters without accents
+     *
+     * @param string $string text data
+     * 
+     * @return string
+     */
+    public static function transliterate(&$string);
 }
 
 /**
@@ -226,7 +226,7 @@ class StringFilters implements IStringFilters
     /**
      * @var array<string,string>
      */
-    public static $slovak = [
+    public static $english = [
         "  " => " ",
 
         " % " => "&nbsp;% ",
@@ -240,6 +240,13 @@ class StringFilters implements IStringFilters
         " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
         ">> " => "» ",
+
+        " He's " => " He&rsquo;s ",
+        " It's " => " It&rsquo;s ",
+        " She's " => " She&rsquo;s ",
+        " he's " => " he&rsquo;s ",
+        " it's " => " it&rsquo;s ",
+        " she's " => " she&rsquo;s ",
 
         " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
@@ -260,41 +267,34 @@ class StringFilters implements IStringFilters
         " :-|" => "&nbsp;😐",
 
         " A " => " A&nbsp;",
-        " CZK" => "&nbsp;CZK",
-        " DIČ: " => " DIČ:&nbsp;",
-        " EUR" => "&nbsp;EUR",
+        " AM" => "&nbsp;AM",
+        " CZK " => " CZK&nbsp;",
+        " EUR " => " EUR&nbsp;",
         " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
+        " INC." => "&nbsp;Inc.",
         " Inc." => "&nbsp;Inc.",
-        " IČ: " => " IČ:&nbsp;",
-        " K " => " K&nbsp;",
-        " Kč" => "&nbsp;Kč",
+        " LTD." => "&nbsp;Ltd.",
         " Ltd." => "&nbsp;Ltd.",
-        " S " => " S&nbsp;",
-        " U " => " U&nbsp;",
-        " USD" => "&nbsp;USD",
-        " V " => " V&nbsp;",
-        " Z " => " Z&nbsp;",
+        " Miss " => " Miss&nbsp;",
+        " Mr " => " Mr&nbsp;",
+        " Mr. " => " Mr.&nbsp;",
+        " Mrs " => " Mrs&nbsp;",
+        " Mrs. " => " Mrs.&nbsp;",
+        " Ms " => " Ms&nbsp;",
+        " Ms. " => " Ms.&nbsp;",
+        " PM" => "&nbsp;PM",
+        " USD " => " USD&nbsp;",
         " a " => " a&nbsp;",
-        " a. s. " => "&nbsp;a.&nbsp;s. ",
-        " a.s. " => "&nbsp;a.s. ",
-        " cca. " => " cca.&nbsp;",
         " h " => "&nbsp;h ",
-        " h) " => "&nbsp;h) ",
         " h, " => "&nbsp;h, ",
         " h. " => "&nbsp;h. ",
-        " hod. " => "&nbsp;hod. ",
-        " hod.)" => "&nbsp;hod.)",
-        " i " => " i&nbsp;",
         " id: " => " id:&nbsp;",
-        " k " => " k&nbsp;",
         " kg " => "&nbsp;kg ",
-        " kg)" => "&nbsp;kg)",
-        " ks " => "&nbsp;ks ",
-        " ks)" => "&nbsp;ks)",
-        " ks, " => "&nbsp;ks, ",
-        " ks." => "&nbsp;ks.",
         " l " => "&nbsp;l ",
+        " l) " => "&nbsp;l) ",
+        " l, " => "&nbsp;l, ",
+        " l. " => "&nbsp;l. ",
         " m " => "&nbsp;m ",
         " m) " => "&nbsp;m) ",
         " m, " => "&nbsp;m, ",
@@ -303,41 +303,15 @@ class StringFilters implements IStringFilters
         " m3 " => "&nbsp;m³ ",
         " m² " => "&nbsp;m² ",
         " m³ " => "&nbsp;m³ ",
-        " o " => " o&nbsp;",
-        " s " => " s&nbsp;",
+        " pcs " => "&nbsp;pcs ",
+        " pcs)" => "&nbsp;pcs)",
+        " s " => "&nbsp;s ",
+        " s) " => "&nbsp;s) ",
+        " s, " => "&nbsp;s, ",
         " s. " => "&nbsp;s. ",
-        " s.r.o." => "&nbsp;s.r.o.",
         " sec. " => "&nbsp;sec. ",
-        " spol. " => "&nbsp;spol.&nbsp;",
-        " tj. " => "tj.&nbsp;",
-        " tzn. " => " tzn.&nbsp;",
-        " tzv. " => " tzv.&nbsp;",
-        " u " => " u&nbsp;",
-        " v " => " v&nbsp;",
-        " viz " => " viz&nbsp;",
-        " z " => " z&nbsp;",
-        " z. s." => "&nbsp;z.&nbsp;s.",
-        " z.s." => "&nbsp;z.s.",
-        " zvl. " => " zvl.&nbsp;",
         " °C " => "&nbsp;°C ",
         " °F " => "&nbsp;°F ",
-        " č. " => " č.&nbsp;",
-        " č. j. " => " č.&nbsp;j.&nbsp;",
-        " čj. " => " čj.&nbsp;",
-        " čp. " => " čp.&nbsp;",
-        " čís. " => " čís.&nbsp;",
-
-        " a&nbsp;i " => " a&nbsp;i&nbsp;",
-        " a&nbsp;k " => " a&nbsp;k&nbsp;",
-        " a&nbsp;o " => " a&nbsp;o&nbsp;",
-        " a&nbsp;s " => " a&nbsp;s&nbsp;",
-        " a&nbsp;u " => " a&nbsp;u&nbsp;",
-        " a&nbsp;v " => " a&nbsp;v&nbsp;",
-        " i&nbsp;k " => " i&nbsp;k&nbsp;",
-        " i&nbsp;o " => " i&nbsp;o&nbsp;",
-        " i&nbsp;s " => " i&nbsp;s&nbsp;",
-        " i&nbsp;u " => " i&nbsp;u&nbsp;",
-        " i&nbsp;v " => " i&nbsp;v&nbsp;",
     ];
 
     // phpcs:ignore
@@ -460,7 +434,7 @@ class StringFilters implements IStringFilters
     /**
      * @var array<string,string>
      */
-    public static $english = [
+    public static $slovak = [
         "  " => " ",
 
         " % " => "&nbsp;% ",
@@ -474,13 +448,6 @@ class StringFilters implements IStringFilters
         " ― " => " ―&nbsp;",
         " ‰ " => "&nbsp;‰",
         ">> " => "» ",
-
-        " He's " => " He&rsquo;s ",
-        " It's " => " It&rsquo;s ",
-        " She's " => " She&rsquo;s ",
-        " he's " => " he&rsquo;s ",
-        " it's " => " it&rsquo;s ",
-        " she's " => " she&rsquo;s ",
 
         " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
@@ -501,34 +468,41 @@ class StringFilters implements IStringFilters
         " :-|" => "&nbsp;😐",
 
         " A " => " A&nbsp;",
-        " AM" => "&nbsp;AM",
-        " CZK " => " CZK&nbsp;",
-        " EUR " => " EUR&nbsp;",
+        " CZK" => "&nbsp;CZK",
+        " DIČ: " => " DIČ:&nbsp;",
+        " EUR" => "&nbsp;EUR",
         " I " => " I&nbsp;",
         " ID: " => " ID:&nbsp;",
-        " INC." => "&nbsp;Inc.",
         " Inc." => "&nbsp;Inc.",
-        " LTD." => "&nbsp;Ltd.",
+        " IČ: " => " IČ:&nbsp;",
+        " K " => " K&nbsp;",
+        " Kč" => "&nbsp;Kč",
         " Ltd." => "&nbsp;Ltd.",
-        " Miss " => " Miss&nbsp;",
-        " Mr " => " Mr&nbsp;",
-        " Mr. " => " Mr.&nbsp;",
-        " Mrs " => " Mrs&nbsp;",
-        " Mrs. " => " Mrs.&nbsp;",
-        " Ms " => " Ms&nbsp;",
-        " Ms. " => " Ms.&nbsp;",
-        " PM" => "&nbsp;PM",
-        " USD " => " USD&nbsp;",
+        " S " => " S&nbsp;",
+        " U " => " U&nbsp;",
+        " USD" => "&nbsp;USD",
+        " V " => " V&nbsp;",
+        " Z " => " Z&nbsp;",
         " a " => " a&nbsp;",
+        " a. s. " => "&nbsp;a.&nbsp;s. ",
+        " a.s. " => "&nbsp;a.s. ",
+        " cca. " => " cca.&nbsp;",
         " h " => "&nbsp;h ",
+        " h) " => "&nbsp;h) ",
         " h, " => "&nbsp;h, ",
         " h. " => "&nbsp;h. ",
+        " hod. " => "&nbsp;hod. ",
+        " hod.)" => "&nbsp;hod.)",
+        " i " => " i&nbsp;",
         " id: " => " id:&nbsp;",
+        " k " => " k&nbsp;",
         " kg " => "&nbsp;kg ",
+        " kg)" => "&nbsp;kg)",
+        " ks " => "&nbsp;ks ",
+        " ks)" => "&nbsp;ks)",
+        " ks, " => "&nbsp;ks, ",
+        " ks." => "&nbsp;ks.",
         " l " => "&nbsp;l ",
-        " l) " => "&nbsp;l) ",
-        " l, " => "&nbsp;l, ",
-        " l. " => "&nbsp;l. ",
         " m " => "&nbsp;m ",
         " m) " => "&nbsp;m) ",
         " m, " => "&nbsp;m, ",
@@ -537,15 +511,41 @@ class StringFilters implements IStringFilters
         " m3 " => "&nbsp;m³ ",
         " m² " => "&nbsp;m² ",
         " m³ " => "&nbsp;m³ ",
-        " pcs " => "&nbsp;pcs ",
-        " pcs)" => "&nbsp;pcs)",
-        " s " => "&nbsp;s ",
-        " s) " => "&nbsp;s) ",
-        " s, " => "&nbsp;s, ",
+        " o " => " o&nbsp;",
+        " s " => " s&nbsp;",
         " s. " => "&nbsp;s. ",
+        " s.r.o." => "&nbsp;s.r.o.",
         " sec. " => "&nbsp;sec. ",
+        " spol. " => "&nbsp;spol.&nbsp;",
+        " tj. " => "tj.&nbsp;",
+        " tzn. " => " tzn.&nbsp;",
+        " tzv. " => " tzv.&nbsp;",
+        " u " => " u&nbsp;",
+        " v " => " v&nbsp;",
+        " viz " => " viz&nbsp;",
+        " z " => " z&nbsp;",
+        " z. s." => "&nbsp;z.&nbsp;s.",
+        " z.s." => "&nbsp;z.s.",
+        " zvl. " => " zvl.&nbsp;",
         " °C " => "&nbsp;°C ",
         " °F " => "&nbsp;°F ",
+        " č. " => " č.&nbsp;",
+        " č. j. " => " č.&nbsp;j.&nbsp;",
+        " čj. " => " čj.&nbsp;",
+        " čp. " => " čp.&nbsp;",
+        " čís. " => " čís.&nbsp;",
+
+        " a&nbsp;i " => " a&nbsp;i&nbsp;",
+        " a&nbsp;k " => " a&nbsp;k&nbsp;",
+        " a&nbsp;o " => " a&nbsp;o&nbsp;",
+        " a&nbsp;s " => " a&nbsp;s&nbsp;",
+        " a&nbsp;u " => " a&nbsp;u&nbsp;",
+        " a&nbsp;v " => " a&nbsp;v&nbsp;",
+        " i&nbsp;k " => " i&nbsp;k&nbsp;",
+        " i&nbsp;o " => " i&nbsp;o&nbsp;",
+        " i&nbsp;s " => " i&nbsp;s&nbsp;",
+        " i&nbsp;u " => " i&nbsp;u&nbsp;",
+        " i&nbsp;v " => " i&nbsp;v&nbsp;",
     ];
 
     // phpcs:ignore
@@ -994,7 +994,6 @@ class StringFilters implements IStringFilters
         }
     }
 
-
     /**
      * Render YouTube short code(s)
      *
@@ -1153,7 +1152,8 @@ class StringFilters implements IStringFilters
     {
         $string = \str_replace(
             \array_keys(self::$transliteration),
-            self::$transliteration, $string
+            self::$transliteration,
+            $string
         );
     }
 }
