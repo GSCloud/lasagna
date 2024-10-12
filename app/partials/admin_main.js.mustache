@@ -751,7 +751,11 @@
                 for (var i in data.data.stubs) {
                   if (typeof data.data.stubs[i] === 'function') continue;
                   if (data.data.stubs_count[data.data.stubs[i]] < 3) continue;
-                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="grey text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
+
+                  var stubcolor = 'grey';
+                  if (data.data.stubs[i] === search) stubcolor = 'red';
+
+                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
                 }
                 stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
               }
@@ -763,6 +767,7 @@
               s += '<div id="uploadimagescount" style="cursor:auto!important" class="btn black text-white bold upload-controls right"></div>';
               s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
 
+              // process all uploads
               for (var i in data.data.files) {
                 if (typeof data.data.files[i] === 'function') continue;
 
@@ -846,6 +851,7 @@
                 s += '</div>';
               }
 
+              // close listing
               if (t) {
                 s += "</div>";
                 $('#files_count').html(t);
@@ -864,6 +870,8 @@
             if (localStorage.getItem('searchset')) {
               $('#searchbox').focus();
             }
+
+            // clear searchbox sign
             localStorage.removeItem('searchset');
 
             // UPLOAD: disable images
@@ -886,13 +894,13 @@
               localStorage.setItem("displayimages", 1);
             });
 
-            // UPLOAD: stubs
+            // UPLOAD: click search stub
             $('.btn-stubs').click(function () {
               localStorage.setItem('search', $(this).data('stub'));
               GSC.RenderUploadInfo();
             });
 
-            // UPLOAD: searchbox
+            // UPLOAD: change searchbox
             $('#searchbox').change(function () {
               var search = $(this).val();
               search = search.replace(/[^a-z0-9_\-]/gim, '').toLowerCase();
@@ -908,7 +916,7 @@
               M.toast({text: "📋 " + x});
             });
             
-            // UPLOAD: file delete
+            // UPLOAD: delete file
             $("#a_file_manager .delete").click(function () {
               if (GSC.deleteconfirmed || confirm("{{ l.a_delete_tit }}?")) {
                 GSC.deleteconfirmed = true;
@@ -943,6 +951,7 @@
         location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}");
       });
 
+      // logout
       $("#a_logout").click(function () {
         setCookie("logout", 1);
         GSC.offline ? location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}") : location.replace("/logout");
@@ -950,7 +959,7 @@
 
     });
 
-    // setup CSV info timer
+    // CSV info timer
     w.GSC.init.push(function () {
       w.GSC.names.push("CSV timer");
       setInterval(function () {
@@ -1046,7 +1055,6 @@
         ZeroUpload.chooseFiles();
       });
     });
-
     
   } // end GSC.init
 })(window, document);
