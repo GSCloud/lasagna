@@ -653,7 +653,7 @@ abstract class APresenter implements IPresenter
      */
     public function renderHTML($template = null)
     {
-        if (is_null($template)) {
+        if (\is_null($template)) {
             $template = 'index';
         }
         // $type: string = 0, template = 1
@@ -713,11 +713,12 @@ abstract class APresenter implements IPresenter
      *
      * @param string $key array key, dot notation (optional)
      * 
-     * @return mixed value / whole array
+     * @return mixed value / array
      */
     public function getData($key = null)
     {
         $dot = new \Adbar\Dot((array) $this->data);
+
         // global constants
         $dot->set(
             [
@@ -741,8 +742,12 @@ abstract class APresenter implements IPresenter
                 'CONST.TEMPLATES' => TEMPLATES,
                 'CONST.UPLOAD' => UPLOAD,
                 'CONST.WWW' => WWW,
+                'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
+                'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
+                'CONST.UPLOAD_MAX_FILESIZE' => ini_get('upload_max_filesize'),
             ]
         );
+
         // class constants
         $dot->set(
             [
@@ -758,7 +763,7 @@ abstract class APresenter implements IPresenter
                 'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
             ]
         );
-        if (is_string($key)) {
+        if (\is_string($key)) {
             return $dot->get($key);
         }
         $this->data = (array) $dot->all();
@@ -829,12 +834,12 @@ abstract class APresenter implements IPresenter
      */
     public function addAuditMessage($message = null)
     {
-        if (is_string($message) && !empty($message)) {
+        if (\is_string($message) && !empty($message)) {
             $file = DATA . DS . 'AuditLog.txt';
-            $date = date('c');
+            $date = \date('c');
             $message = \trim($message);
             $i = $this->getIdentity();
-            @file_put_contents(
+            @\file_put_contents(
                 $file, "$date;$message;IP:{$i['ip']};NAME:{$i['name']};"
                 . "EMAIL:{$i['email']};\n",
                 FILE_APPEND | LOCK_EX
@@ -857,7 +862,7 @@ abstract class APresenter implements IPresenter
      */
     public function addMessage($message = null)
     {
-        if (is_string($message) && !empty($message)) {
+        if (\is_string($message) && !empty($message)) {
             $this->messages[] = (string) $message;
         }
         return $this;
@@ -872,7 +877,7 @@ abstract class APresenter implements IPresenter
      */
     public function addError($message = null)
     {
-        if (is_string($message) && !empty($message)) {
+        if (\is_string($message) && !empty($message)) {
             $this->errors[] = (string) $message;
             $this->addAuditMessage($message);
         }
@@ -888,7 +893,7 @@ abstract class APresenter implements IPresenter
      */
     public function addCritical($message = null)
     {
-        if (is_string($message) && !empty($message)) {
+        if (\is_string($message) && !empty($message)) {
             $this->criticals[] = (string) $message;
         }
         return $this;
@@ -1041,7 +1046,8 @@ abstract class APresenter implements IPresenter
         }
         $file = DATA . DS . self::IDENTITY_NONCE;
         if (!\file_exists($file)) {
-            $this->setIdentity(); // set empty identity
+            // set empty identity
+            $this->setIdentity();
             return $this->identity;
         }
         if (!$nonce = @\file_get_contents($file)) {
@@ -1096,7 +1102,7 @@ abstract class APresenter implements IPresenter
                     break;
                 }
             }
-            $this->setIdentity($i); // set empty / mock identity
+            $this->setIdentity($i); // set empty identity
             break;
         } while (true);
         return $this->identity;
@@ -1133,10 +1139,10 @@ abstract class APresenter implements IPresenter
      */
     public function getCfg($key = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return $this->getData('cfg');
         }
-        if (is_string($key)) {
+        if (\is_string($key)) {
             return $this->getData("cfg.{$key}");
         }
         throw new \Exception('FATAL ERROR: invalid get parameter');
@@ -1952,12 +1958,12 @@ abstract class APresenter implements IPresenter
             $msg = 'Internal server error.';
             break;
         }
-        if (is_null($data)) {
+        if (\is_null($data)) {
             $code = 500;
             $msg = 'No DATA! Internal Server Error';
             \header('HTTP/1.1 500 Internal Server Error');
         }
-        if (is_string($data)) {
+        if (\is_string($data)) {
             $data = [$data];
         }
         if (is_int($data)) {
@@ -2052,6 +2058,7 @@ abstract class APresenter implements IPresenter
             return $this;
         }
 
+        // user and group
         $data['user'] = $user = $this->getCurrentUser();
         $data['admin'] = $group = $this->getUserGroup();
         if ($group) {
@@ -2079,7 +2086,7 @@ abstract class APresenter implements IPresenter
                 $l = $this->getLocale('en');
                 if (\is_null($l)) {
                     $l = [];
-                    $l['title'] = 'MISSING ENGLISH LOCALE!';
+                    $l['title'] = 'ERR: MISSING ENGLISH LOCALE!';
                 }
             }
             $data['l'] = $l;

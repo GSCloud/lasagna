@@ -25,6 +25,9 @@ google: [
 #  google-site-domain-verification: true
 ]
 
+# RSS feed
+#rss_feed: true
+
 # Umami Analytics
 umami: [
   id: "d64aa098-b60c-4c6b-90b1-dc5b6e83c255"

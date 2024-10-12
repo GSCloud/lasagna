@@ -69,7 +69,7 @@ class CorePresenter extends APresenter
 
         case "GetRobotsTxt":
             $this->setHeaderText();
-            // list of bad robots
+            // bad robots
             $bots = [
                 'CCBot',
                 'ChatGPT-User',
@@ -121,7 +121,10 @@ class CorePresenter extends APresenter
 
         case "GetRSSXML":
             $this->setHeaderXML();
-            $language = "en"; // set to English
+            $language = $this->getData('router.defaults.language');
+            if (!\is_string($language)) {
+                $language = 'en';
+            }
             $l = $this->getLocale($language);
             if (\class_exists("\\GSC\\RSSPresenter")) {
                 $map = RSSPresenter::getInstance()->process();
