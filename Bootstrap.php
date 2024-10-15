@@ -110,7 +110,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
         $cfg = null;
     }
     if (!is_array($cfg)) {
-        die("FATAL ERROR: Invalid MAIN CONFIGURATION!\n");
+        die('FATAL ERROR: Invalid MAIN CONFIGURATION!');
     }
     try {
         if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
@@ -121,16 +121,16 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 $priv = null;
             }
             if (!is_array($priv)) {
-                throw new Exception('FATAL ERROR: PRIVATE CONFIG NOT AN ARRAY');
+                throw new Exception('FATAL ERROR: PRIVATE CONFIG NOT AN ARRAY!');
             }
             $cfg = array_replace_recursive($cfg, $priv);
         }
     } catch (Exception $e) {
-        die("FATAL ERROR: Invalid PRIVATE CONFIGURATION!\n");
+        die('FATAL ERROR: Invalid PRIVATE CONFIGURATION!');
     }
 }
 if (!is_array($cfg)) {
-    die("FATAL ERROR: Invalid CONFIGURATION!\n");
+    die('FATAL ERROR: Invalid MAIN CONFIGURATION!');
 }
 
 // DEFAULT TIME ZONE

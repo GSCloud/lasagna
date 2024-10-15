@@ -747,7 +747,7 @@ class StringFilters implements IStringFilters
         if (!\is_string($language)) {
             $language = "en";
         }
-        $language = \strtolower(\trim((string) $language));
+        $language = \strtolower($language);
         switch ($language) {
         case "cs":
             $content = self::correctTextSpacingCs($content);
