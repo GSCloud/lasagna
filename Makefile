@@ -112,4 +112,4 @@ execbash:
 everything: clear update stan local test sync prod
 
 # build docker image
-image: clear update stan local test build run
+image: clear update stan local test build
