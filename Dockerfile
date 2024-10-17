@@ -11,12 +11,13 @@ ENV TERM=xterm LANG=C.UTF-8 LC_ALL=C.UTF-8
 RUN apt-get update -qq && apt-get upgrade -yqq && apt-get install -yqq --no-install-recommends curl openssl redis
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd redis imagick
+
 RUN a2enmod rewrite expires headers && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+COPY php.ini /usr/local/etc/php/
+
 RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && chmod 0777 /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && ln -s /var/www/html /var/www/www
-
-COPY php.ini /usr/local/etc/php/
 
 COPY app/*.php app/router* app/csp.neon app/base.csv /var/www/app/
 COPY app/partials/* /var/www/app/partials/

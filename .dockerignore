@@ -1,6 +1,8 @@
-.config_private.neon
+config_private.neon
 app/config_private.neon
 ci/*
 data/*.key
 logs/*
 temp/*
+**/www/download
+**/www/upload
