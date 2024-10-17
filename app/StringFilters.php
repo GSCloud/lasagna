@@ -1102,7 +1102,7 @@ class StringFilters implements IStringFilters
         if (!\is_string($format) || \strlen($format)) {
             $format = 'webp';
         }
-        if (\is_string($mask)) {
+        if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $path = $mask . '*.' . $format;
             return \glob($path);
