@@ -27,5 +27,7 @@ COPY Bootstrap.php composer.json composer.lock LICENSE *.md REVISIONS VERSION do
 COPY vendor /var/www/vendor
 COPY www /var/www/html
 
+RUN rm /var/www/app/config_private.neon
+
 WORKDIR /var/www/
 EXPOSE 80
