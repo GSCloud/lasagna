@@ -14,7 +14,4 @@ source .env
 
 info "Updating CSV data"
 
-# run updater inside the container
 docker exec ${NAME} make du
-
-exit 0

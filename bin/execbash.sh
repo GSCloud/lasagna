@@ -18,5 +18,3 @@ source .env
 [ -z "$TAG" ] && fail "Missing TAG definition!"
 
 docker exec -it $NAME /bin/bash
-
-exit 0

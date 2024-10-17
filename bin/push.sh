@@ -16,5 +16,3 @@ source ".env"
 [ -z "${TAG}" ] && fail "Missing TAG definition!"
 
 docker push ${TAG}
-
-exit 0

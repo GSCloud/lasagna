@@ -24,5 +24,3 @@ git add --renormalize .
 # commit changes
 git commit -am "automatic update"
 git push origin master
-
-exit 0

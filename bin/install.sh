@@ -24,5 +24,3 @@ command -v composer >/dev/null 2>&1 || fail PHP composer is not installed!
 [ ! -d "vendor" ] &&  make update
 
 echo -en "\nRun \e[1m\e[4mmake doctor\e[0m to check your configuration 👨‍⚕️\n\n"
-
-exit 0

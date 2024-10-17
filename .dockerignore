@@ -1,4 +1,3 @@
-config_private.neon
 **/app/config_private.neon
 **/www/download
 **/www/upload

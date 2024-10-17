@@ -16,5 +16,3 @@ source ".env"
 [ -z "${TAG}" ] && fail "Missing TAG definition!"
 
 docker build --pull -t ${TAG} .
-
-exit 0

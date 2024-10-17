@@ -70,5 +70,3 @@ rsync -ahz --progress --delete-after --delay-updates \
   ${USER}@${HOST}:${DEST}'/' | grep -E -v '/$'
 
 ssh ${USER}@${HOST} ${DEST}/remote_fixer.sh ${BETA}
-
-exit 0
