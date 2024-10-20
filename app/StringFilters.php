@@ -1093,19 +1093,25 @@ class StringFilters implements IStringFilters
      */
     public static function findImagesByMask($mask, $format = 'webp')
     {
-        $mask = \trim($mask);
-        $mask = \trim($mask, './\\');
+        $mask = \trim((string) $mask);
+        $mask = \trim($mask, '.*/\\');
         $mask = \strtolower($mask);
-        $format = \trim($format);
-        $format = \trim($format, './\\');
+        // hack to fix _XXX_ Markdown
+        $mask = \str_replace('<em>', '_', $mask);
+        $mask = \str_replace('</em>', '_', $mask);
+
+        $format = \trim((string) $format);
         $format = \strtolower($format);
         if (!\is_string($format) || \strlen($format)) {
             $format = 'webp';
         }
+        if (!\in_array($format, ['jpg', 'png', 'gif'])) {
+            $format = 'webp';
+        }
+
         if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
-            $path = $mask . '*.' . $format;
-            return \glob($path);
+            return \glob($mask . '*.' . $format);
         }
         return null;
     }
