@@ -61,14 +61,17 @@ class CiTester
             $case = "production";
             $target = $cfg["goauth_origin"] ?? "";
         }
+
         if (!$cfg['project']) {
             $climate->out("<red>FATAL ERROR: missing project definition\n\007");
             exit(99);
         }
+
         if (!$cfg['app']) {
             $climate->out("<red>FATAL ERROR: missing app definition\n\007");
             exit(99);
         }
+
         if (!strlen($target)) {
             $climate->out("<bold><green>{$cfg['project']}: {$cfg['app']} {$case}");
             $climate->out("<red>FATAL ERROR: missing target URI!\n\007");
@@ -137,7 +140,7 @@ class CiTester
             $i++;
         }
 
-        // wait for all curls to finish
+        // wait for curls to finish
         $active = null;
         do {
             $mrc = \curl_multi_exec($multi, $active);
@@ -151,7 +154,7 @@ class CiTester
             }
         }
 
-        // parse results
+        // results
         $i = 0;
         $errors = 0;
         foreach ($pages_reworked as $x) {
@@ -164,7 +167,7 @@ class CiTester
             // curl data
             $m = \curl_multi_getcontent($ch[$i]);
 
-            // skip if there's no data available
+            // skip if there's no data
             if (!$m) {
                 continue;
             }
@@ -221,10 +224,8 @@ class CiTester
             if ($code != $x["assert_httpcode"]) {
                 $bad++;
                 $http_code = false;
-                $climate->out('!!! HTTP CODE ERRROR !!!');
             }
             if ($bad === 0) {
-                // OK
                 $climate->out(
                     "{$u1} length: <green>{$length}</green>"
                     . " code: <green>{$code}</green>"
