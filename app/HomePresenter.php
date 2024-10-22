@@ -14,6 +14,8 @@ namespace GSC;
 
 use Cake\Cache\Cache;
 
+use GSC\StringFilters as SF;
+
 /**
  * Home Presenter class
  * 
@@ -60,27 +62,27 @@ class HomePresenter extends APresenter
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($data['l'][$k], '[markdown]')) {
-                StringFilters::renderMarkdown($data['l'][$k]);
-                StringFilters::renderImageShortCode($data['l'][$k]);
-                StringFilters::renderImageLeftShortCode($data['l'][$k]);
-                StringFilters::renderImageRightShortCode($data['l'][$k]);
-                StringFilters::renderImageRespShortCode($data['l'][$k]);
-                StringFilters::renderGalleryShortCode($data['l'][$k], true);
-                StringFilters::renderYouTubeShortCode($data['l'][$k]);
-                StringFilters::renderSoundcloudShortCode($data['l'][$k]);
+                SF::renderMarkdown($data['l'][$k]);
+                SF::renderImageShortCode($data['l'][$k]);
+                SF::renderImageLeftShortCode($data['l'][$k]);
+                SF::renderImageRightShortCode($data['l'][$k]);
+                SF::renderImageRespShortCode($data['l'][$k]);
+                SF::renderGalleryShortCode($data['l'][$k], true);
+                SF::renderYouTubeShortCode($data['l'][$k]);
+                SF::renderSoundcloudShortCode($data['l'][$k]);
             } elseif (\str_starts_with($data['l'][$k], '[markdownextra]')) {
-                StringFilters::renderMarkdownExtra($data['l'][$k]);
-                StringFilters::renderImageShortCode($data['l'][$k]);
-                StringFilters::renderImageLeftShortCode($data['l'][$k]);
-                StringFilters::renderImageRightShortCode($data['l'][$k]);
-                StringFilters::renderImageRespShortCode($data['l'][$k]);
-                StringFilters::renderGalleryShortCode($data['l'][$k], true);
-                StringFilters::renderYouTubeShortCode($data['l'][$k]);
-                StringFilters::renderSoundcloudShortCode($data['l'][$k]);
+                SF::renderMarkdownExtra($data['l'][$k]);
+                SF::renderImageShortCode($data['l'][$k]);
+                SF::renderImageLeftShortCode($data['l'][$k]);
+                SF::renderImageRightShortCode($data['l'][$k]);
+                SF::renderImageRespShortCode($data['l'][$k]);
+                SF::renderGalleryShortCode($data['l'][$k], true);
+                SF::renderYouTubeShortCode($data['l'][$k]);
+                SF::renderSoundcloudShortCode($data['l'][$k]);
             } else {
-                StringFilters::convertEolToBrNbsp($data['l'][$k]);
+                SF::convertEolToBrNbsp($data['l'][$k]);
             }
-            StringFilters::correctTextSpacing($data['l'][$k], $lang);
+            SF::correctTextSpacing($data['l'][$k], $lang);
         }
 
         // render output
@@ -92,7 +94,7 @@ class HomePresenter extends APresenter
                 $presenter[$view]['template']
             );
         }
-        StringFilters::trimHtmlComment($output);
+        SF::trimHtmlComment($output);
         return $this->setData('output', $output);
     }
 }

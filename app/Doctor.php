@@ -35,7 +35,7 @@ class Doctor
     public function __construct()
     {
         $climate = new CLImate;
-        $climate->out("<bold><green>Tesseract CLI</green></bold>");
+        $climate->out("<bold>Tesseract DOCTOR</bold>");
 
         $climate->out("\n<blue><bold>File System - FOLDERS");
         $this->validate(
@@ -70,7 +70,7 @@ class Doctor
         $climate->out("\n<blue><bold>File System - FILES");
         $this->validate(
             "<bold>.env</bold> in ROOT",
-            $this->isreadable(".env")
+            $this->isreadable(ROOT . DS . ".env")
         );
         $this->validate(
             "<bold>CONFIG</bold> » "

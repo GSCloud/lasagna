@@ -151,7 +151,7 @@ class CorePresenter extends APresenter
                 $size = \trim($match["params"]["size"]);
                 switch ($size) {
                 case "m":
-                    $scale = 8;
+                    $scale = 7;
                     break;
                 case "l":
                     $scale = 10;
@@ -175,21 +175,21 @@ class CorePresenter extends APresenter
             }
             $options = new QROptions(
                 [
-                    "version" => 7,
-                    "outputType" => QRCode::OUTPUT_IMAGE_PNG,
                     "eccLevel" => QRCode::ECC_L,
-                    "scale" => $scale,
                     "imageBase64" => false,
                     "imageTransparent" => false,
+                    "outputType" => QRCode::OUTPUT_IMAGE_PNG,
+                    "scale" => $scale,
+                    "version" => 7,
                 ]
             );
-            \header("Content-type: image/png");
             $hash = \hash("sha256", $text);
             $out = (new QRCode($options))->render(
                 $text,
-                CACHE . "/" . $hash . ".png"
+                CACHE . "/{$hash}.png"
             );
             if (\is_string($out)) {
+                \header("Content-type: image/png");
                 echo $out;
             }
             exit;

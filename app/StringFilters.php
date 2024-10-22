@@ -1096,6 +1096,7 @@ class StringFilters implements IStringFilters
         $mask = \trim((string) $mask);
         $mask = \trim($mask, '.*/\\');
         $mask = \strtolower($mask);
+
         // hack to fix _XXX_ Markdown
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
