@@ -31,6 +31,9 @@ class AdminPresenter extends APresenter
     /* @var string admin key filename */
     const ADMIN_KEY = 'admin.key';
 
+    /* @var minimum string stubs string length */
+    const MIN_STUBS_LENGTH = 3;
+
     /* @var string thumbnail prefix */
     const THUMB_PREFIX = '.thumb_';
 
@@ -300,12 +303,13 @@ class AdminPresenter extends APresenter
                             ];
 
                             // calculate stubs
-                            $fs = \strtr($fn, '-+_.()', '      ');
+                            $fs = \strtr($fn, '_+-.()[]', '        ');
                             $fs = \explode(' ', $fs);
                             foreach ($fs as $st) {
                                 if ($st === '') {
                                     continue;
                                 }
+                                $st = (string) $st;
                                 $stubs[$st] = $st;
                                 if (!isset($stubs_count[$st])) {
                                     $stubs_count[$st] = 0;
@@ -321,11 +325,8 @@ class AdminPresenter extends APresenter
             // filter stubs
             $stubs = \array_filter($stubs);
             foreach ($stubs as $k => $v) {
-                if (\is_numeric($v) && \strlen($v) < 3) {
-                    unset($stubs[$k]);
-                    unset($stubs_count[$k]);
-                }
-                if (\is_string($v) && \strlen($v) < 3) {
+                $v = (string) $v;
+                if (\strlen((string) $v) < self::MIN_STUBS_LENGTH) {
                     unset($stubs[$k]);
                     unset($stubs_count[$k]);
                 }

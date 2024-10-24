@@ -3,10 +3,10 @@
 
 defaults:
   # RESTful API
-  api: false
+  api: false  # show on API page
+  api_info: ""
   api_description: ""
   api_example: []
-  api_info: ""
   api_key: null
 
   # tester
@@ -16,30 +16,31 @@ defaults:
 
   # switches
   allow_key: false
-  cached: false
-  deprecated: false
-  finished: false
-  norobots: false
-  private: false
-  sitemap: false
   use_key: false
+  private: false
+  cached: false
+  norobots: false
+  sitemap: false
+  finished: false
+  deprecated: false
 
-  # interface
+  # API access extras
   access_key: null
   encryption_key: null
 
   # language
   language: en
 
-  # HTTP methods - separated by |
-  method: GET
+  # HTTP methods
+  method: GET  # separated by |
 
   # MVP
-  presenter: home
-  template: index
-  view: home
+  presenter: home # HomePresenter
+  template: index # template/index.mustache
+  view: home # route
 
-  # extras
-  alias: null
-  clone: null
-  redirect: null
+  # routing extras
+  alias: null # route name
+  clone: null # route name
+  country: null # country specific redirects - array: [default, localhost, CZ, XX]
+  redirect: null # full/relative URI

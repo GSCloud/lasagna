@@ -15,14 +15,14 @@ namespace GSC;
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 
-// clear cache on ?logout
+// CLEAR CACHE on ?logout
 if (isset($_GET['logout'])) {
     header('Clear-Site-Data: "cache", "cookies"');
     header('Location: /', true, 303);
     exit;
 }
 
-// clear everything on ?clearall
+// CLEAR EVERYTHING on ?clearall
 if (isset($_GET['clearall'])) {
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
     header('Location: /', true, 303);
@@ -48,7 +48,7 @@ $cfg = $data = $cfg ?? [];
 array_unshift($cfg['locales'], 'base.csv');
 $data['cfg'] = $cfg;
 
-// CLOUDFLARE GEO BLOCKING - XX = unknown location
+// CLOUDFLARE GEO BLOCKING; XX = unknown location
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
     'BY',
@@ -65,7 +65,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // DATA ARRAY
-define('ENGINE', 'Tesseract 2.3.2');
+define('ENGINE', 'Tesseract 2.3.3');
 $data['ENGINE'] = ENGINE;
 
 \Tracy\Debugger::timer('DATA');
@@ -171,6 +171,7 @@ $cache_profiles = array_replace(
     [
         'default' => '+2 minutes',
         'second' => '+1 seconds',
+        'fiveseconds' => '+5 seconds',
         'tenseconds' => '+10 seconds',
         'thirtyseconds' => '+30 seconds',
         'minute' => '+60 seconds',
@@ -258,7 +259,7 @@ array_push($routes, 'router.neon'); // main router
 // POPULATE DATA ARRAY
 $data['router_files'] = $routes;
 
-// LOAD ROUTING TABLES
+// ROUTING TABLES
 foreach ($routes as $r) {
     $r = APP . DS . $r;
     if (($content = @file_get_contents($r)) === false) {
@@ -275,7 +276,7 @@ foreach ($routes as $r) {
     }
 }
 
-// SET ROUTING DEFAULTS AND PROPERTIES
+// ROUTING DEFAULTS AND PROPERTIES
 $presenter = [];
 $defaults = $router['defaults'] ?? [];
 foreach ($router as $k => $v) {
@@ -365,7 +366,7 @@ if (is_array($match)) {
 $data['match'] = $match;
 $data['view'] = $view;
 
-// REDIRECTS
+// FORCED REDIRECT
 if ($router[$view]['redirect'] ?? false) {
     $r = $router[$view]['redirect'];
     if (ob_get_level()) {
@@ -375,9 +376,12 @@ if ($router[$view]['redirect'] ?? false) {
     exit;
 }
 
-// COUNTRY REDIRECTS
+// COUNTRY REDIRECT
 if ($router[$view]['country'] ?? false) {
     if (!LOCALHOST && array_key_exists($country, $router[$view]['country'])) {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
         header(
             'Location: '
             . $router[$view]['country'][$country],
@@ -387,6 +391,9 @@ if ($router[$view]['country'] ?? false) {
         exit;
     }
     if (LOCALHOST && array_key_exists('localhost', $router[$view]['country'])) {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
         header(
             'Location: '
             . $router[$view]['country']['localhost'],
@@ -396,6 +403,9 @@ if ($router[$view]['country'] ?? false) {
         exit;
     }
     if (!LOCALHOST && array_key_exists('default', $router[$view]['country'])) {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
         header(
             'Location: '
             . $router[$view]['country']['default'],
@@ -413,11 +423,11 @@ default:
     if (file_exists(CSP) && is_readable(CSP)) {
         $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
         if (is_array($csp)) {
-            $data['csp_nonce'] = sha1(random_bytes(32));
+            $cspn = $data['csp_nonce'] = sha1(random_bytes(8));
             header(
                 str_replace(
                     'nonce-random',
-                    'nonce-' . $data['csp_nonce'],
+                    'nonce-' . $cspn,
                     implode(' ', (array) $csp['csp'])
                 )
             );
@@ -425,7 +435,7 @@ default:
     }
 }
 
-// SET PROFILER
+// PROFILER
 $data['time_data'] = round(
     (float) \Tracy\Debugger::timer('DATA') * 1000, 2
 );
@@ -438,7 +448,6 @@ $controller = "\\GSC\\{$p}";
 \Tracy\Debugger::timer('PROCESS');
 $app = $controller::getInstance()->setData($data)->process();
 $model = $app->getData();
-$limit = $app->getRateLimit();
 
 // PROFILER DATA
 $time1 = $model['time_data'];
@@ -455,6 +464,7 @@ header("X-Country: $country");
 header("X-Time-Data: $time1 ms");
 header("X-Time-Process: $time2 ms");
 header("X-Time-Run: $time3 ms");
+$limit = $app->getRateLimit();
 if ($limit && is_int($limit)) {
     header("X-Rate-Limit: $limit");
 }
@@ -464,7 +474,7 @@ echo $model['output'] ?? '';
 
 // DEBUGGING
 if (DEBUG) {
-    // remove private information
+    // protect private information
     $model['cf'] = '[protected]';
     $model['goauth_secret'] = '[protected]';
     // phpcs:ignore

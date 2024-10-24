@@ -13,6 +13,8 @@
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 defined('ROOT') || define('ROOT', __DIR__ . DS . '..');
 
+defined('SF_ITERATIONS') || define('SF_ITERATIONS', 10);
+
 //phpinfo();exit;
 
 require_once ROOT . DS . 'Bootstrap.php';

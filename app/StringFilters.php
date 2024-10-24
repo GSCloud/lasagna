@@ -220,7 +220,7 @@ interface IStringFilters
 class StringFilters implements IStringFilters
 {
     // max. shortcode iterations in the loop
-    const ITERATIONS = 10;
+    const ITERATIONS = SF_ITERATIONS;
 
     // phpcs:ignore
     /**
