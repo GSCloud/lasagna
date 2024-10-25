@@ -36,32 +36,34 @@ class HomePresenter extends APresenter
      */
     public function process($param = null)
     {
-        // get current Presenter
+        // rate limiting
+        $this->checkRateLimit();
+
+        // get Presenter
         $presenter = $this->getPresenter();
         if (!\is_array($presenter)) {
             return $this;
         }
 
-        // get current View
+        // get View
         $view = $this->getView();
         if (!$view) {
             return $this;
         }
 
-        // process rate limiting
-        $this->checkRateLimit();
-
-        // set HTML header + expand current data model
+        // get Model
         $data = $this->getData();
+
+        // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);
 
-        // set menu variables for content switching
+        // menu variable for content switching
         $data[$view . '_menu'] = true;
 
         // fix locales, HTML and shortcodes
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
-            if (\str_starts_with($data['l'][$k], '[markdown]')) {
+            if (\str_starts_with($v, '[markdown]')) {
                 SF::renderMarkdown($data['l'][$k]);
                 SF::renderImageShortCode($data['l'][$k]);
                 SF::renderImageLeftShortCode($data['l'][$k]);
@@ -70,7 +72,7 @@ class HomePresenter extends APresenter
                 SF::renderGalleryShortCode($data['l'][$k], true);
                 SF::renderYouTubeShortCode($data['l'][$k]);
                 SF::renderSoundcloudShortCode($data['l'][$k]);
-            } elseif (\str_starts_with($data['l'][$k], '[markdownextra]')) {
+            } elseif (\str_starts_with($v, '[markdownextra]')) {
                 SF::renderMarkdownExtra($data['l'][$k]);
                 SF::renderImageShortCode($data['l'][$k]);
                 SF::renderImageLeftShortCode($data['l'][$k]);
@@ -85,7 +87,7 @@ class HomePresenter extends APresenter
             SF::correctTextSpacing($data['l'][$k], $lang);
         }
 
-        // render output
+        // render
         $output = '';
         if ($data) {
             $output = $this->setData(

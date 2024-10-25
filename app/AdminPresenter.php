@@ -124,7 +124,6 @@ class AdminPresenter extends APresenter
 
         // API calls
         switch ($view) {
-
         case 'upload':
             $this->checkPermission('admin,editor');
 
@@ -247,19 +246,23 @@ class AdminPresenter extends APresenter
 
         case 'getUploads':
             $this->checkPermission('admin,editor');
+
             $files = [];
             $stubs = [];
             $stubs_count = [];
             $uniques = [];
+
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
                     if (($f != '.') && ($f != '..')) {
-                        
                         // exclude thumbnails
                         if (\str_starts_with($f, self::THUMB_PREFIX)) {
                             continue;
                         }
-
+                        // exclude '.size' file
+                        if ($f === '.size') {
+                            continue;
+                        }
                         // exclude 'size' file
                         if ($f === 'size') {
                             continue;
@@ -331,11 +334,9 @@ class AdminPresenter extends APresenter
                     unset($stubs_count[$k]);
                 }
             }
-
             \ksort($stubs);
             \ksort($files);
             \arsort($stubs_count);
-
             return $this->writeJsonData(
                 [
                     'stubs' => \array_values($stubs),

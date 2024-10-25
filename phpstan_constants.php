@@ -33,3 +33,5 @@ define('APPNAME', 'app');
 define('DOMAIN', $_SERVER['SERVER_NAME'] ?? 'localhost');
 define('PROJECT', 'LASAGNA');
 define('SERVER', $_SERVER['SERVER_NAME'] ?? 'localhost');
+
+define('SF_ITERATIONS', 10);

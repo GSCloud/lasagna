@@ -1034,30 +1034,30 @@ class StringFilters implements IStringFilters
     public static function renderGalleryShortCode(
         &$content, $shuffle = false, $size = 160
     ) {
-        $counter = 0;
         $size = \intval($size);
         if (!$size) {
             $size = 160;
         }
-        $x = \trim($content);
-        while (\str_contains($x, '[gallery ') && $counter < self::ITERATIONS) {
-            if (!\is_string($x)) {
-                break;
-            }
-            $pattern = '#\[gallery\s.*?(.*?)\]#is';
-            $counter++;
-            \preg_match($pattern, $x, $m);
+        $content = \trim($content);
+
+        $counter = 0;
+        $pattern = '#\[gallery\s.*?(.*?)\]#is';
+        while (\str_contains($content, '[gallery ') && $counter < self::ITERATIONS) {
+            \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
                 $gallery = $m[1];
+                $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
+
+                // find all images
                 if (\is_array($files)) {
                     if ($shuffle !== false) {
                         \shuffle($files);
                     }
-                    $counter = 0;
+                    $c = 0;
                     foreach ($files as $f) {
-                        $counter++;
+                        $c++;
                         $n = \pathinfo(
                             \strtoupper(
                                 \str_ireplace($gallery, '', $f)
@@ -1065,19 +1065,28 @@ class StringFilters implements IStringFilters
                         );
                         $n = \trim(\strtr($n, '-_()', '    '));
                         $t = CDN . "/upload/.thumb_{$size}px_" . $f;
+
                         $images .=
-                            "<a data-lightbox='$gallery' "
+                            "<a data-lightbox='{$gallery}' "
                             . "href=" . CDN . '/upload/' . $f
                             . "><img loading=lazy class=gallery-img "
                             . " data-source=" . CDN . '/upload/' . $f
-                            . " data-thumb=" . $t
-                            . " alt='$n' src=$t></a>";
+                            . " data-thumb={$t}"
+                            . " data-id={$c}"
+                            . " alt='$c. {$gallery}{$n}' src=$t></a>";
                     }
                 }
+
+                // unique gallery
                 $replace = "<div class='row center gallery-container'"
                     . " data-gallery='$gallery'>$images</div>";
-                if (\is_string($x)) {
-                    $x = $content = \preg_replace($pattern, $replace, $x);
+
+                if (\is_string($content)) {
+                    $content = \str_replace(
+                        "[gallery {$gallery}]",
+                        $replace,
+                        $content
+                    );
                 }
             }
         }
