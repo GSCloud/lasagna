@@ -228,6 +228,7 @@ class StringFilters implements IStringFilters
      */
     public static $english = [
         "  " => " ",
+        " 💗 " => " 💗&nbsp;",
 
         " % " => "&nbsp;% ",
         " - " => " — ",
@@ -320,6 +321,7 @@ class StringFilters implements IStringFilters
      */
     public static $czech = [
         "  " => " ",
+        " 💗 " => " 💗&nbsp;",
 
         " % " => "&nbsp;% ",
         " - " => " — ",
@@ -436,6 +438,7 @@ class StringFilters implements IStringFilters
      */
     public static $slovak = [
         "  " => " ",
+        " 💗 " => " 💗&nbsp;",
 
         " % " => "&nbsp;% ",
         " - " => " — ",
@@ -846,24 +849,19 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageShortCode(&$content)
     {
-        $x = \trim($content);
+        $content = \trim($content);
         $counter = 0;
-        while (\str_contains($x, '[image ')) {
-            if (!\is_string($x)) {
-                break;
-            }
+        $pattern = '#\[image\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[image ')
+            ) {
             $counter++;
-            $pattern = '#\[image\s.*?(.*?)\]#is';
             $replace = '<span class="img-container">'
-                . '<img data-name="$1" '
-                . 'data-counter=' . $counter
-                . ' src="'
-                . CDN
-                . '/upload/'
-                . '$1.webp" '
-                . 'alt="$1"></span>';
-            if (\is_string($x)) {
-                $x = $content = \preg_replace($pattern, $replace, $x);
+                . '<img data-name="$1" data-counter=' . $counter . ' src="'
+                . CDN . '/upload/'
+                . '$1.webp" alt="$1"></span>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
             }
         }
     }
@@ -879,22 +877,17 @@ class StringFilters implements IStringFilters
     {
         $x = \trim($content);
         $counter = 0;
-        while (\str_contains($x, '[imageleft ')) {
-            if (!\is_string($x)) {
-                break;
-            }
+        $pattern = '#\[imageleft\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[imageleft ')
+            ) {
             $counter++;
-            $pattern = '#\[imageleft\s.*?(.*?)\]#is';
             $replace = '<span class="img-left-container">'
-                . '<img data-name="$1" '
-                . 'data-counter=' . $counter
-                . ' src="'
-                . CDN
-                . '/upload/'
-                . '$1.webp" '
-                . 'alt="$1"></span>';
-            if (\is_string($x)) {
-                $x = $content = \preg_replace($pattern, $replace, $x);
+                . '<img data-name="$1" data-counter=' . $counter . ' src="'
+                . CDN . '/upload/'
+                . '$1.webp" alt="$1" class="left"></span>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
             }
         }
     }
@@ -908,24 +901,19 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageRightShortCode(&$content)
     {
-        $x = \trim($content);
+        $content = \trim($content);
         $counter = 0;
-        while (\str_contains($x, '[imageright ')) {
-            if (!\is_string($x)) {
-                break;
-            }
+        $pattern = '#\[imageright\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[imageright ')
+            ) {
             $counter++;
-            $pattern = '#\[imageright\s.*?(.*?)\]#is';
             $replace = '<span class="img-right-container">'
-                . '<img data-name="$1" '
-                . 'data-counter=' . $counter
-                . ' src="'
-                . CDN
-                . '/upload/'
-                . '$1.webp" '
-                . 'alt="$1"></span>';
-            if (\is_string($x)) {
-                $x = $content = \preg_replace($pattern, $replace, $x);
+                . '<img data-name="$1" data-counter=' . $counter . ' src="'
+                . CDN . '/upload/'
+                . '$1.webp" alt="$1" class="right"></span>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
             }
         }
     }
@@ -939,23 +927,19 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageRespShortCode(&$content)
     {
-        $x = \trim($content);
+        $content = \trim($content);
         $counter = 0;
-        while (\str_contains($x, '[imageresp ')) {
-            if (!\is_string($x)) {
-                break;
-            }
+        $pattern = '#\[imageresp\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[imageresp ')
+            ) {
             $counter++;
-            $pattern = '#\[imageresp\s.*?(.*?)\]#is';
             $replace = '<span class="img-responsive-container">'
-                . '<img data-name="$1" data-counter=' . $counter
-                . ' class="responsive-img" src="'
-                . CDN
-                . '/upload/'
-                . '$1.webp" '
-                . 'alt="$1"></span>';
-            if (\is_string($x)) {
-                $x = $content = \preg_replace($pattern, $replace, $x);
+                . '<img data-name="$1" data-counter=' . $counter . ' src="'
+                . CDN . '/upload/'
+                . '$1.webp" alt="$1" class="responsive-img"></span>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
             }
         }
     }
@@ -969,27 +953,25 @@ class StringFilters implements IStringFilters
      */
     public static function renderSoundcloudShortCode(&$content)
     {
+        $content = \trim($content);
         $counter = 0;
-        $x = \trim($content);
-        while (\str_contains($x, '[soundcloud ') && $counter < self::ITERATIONS) {
-            if (!\is_string($x)) {
-                break;
-            }
+        $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[soundcloud ') && $counter < self::ITERATIONS
+            ) {
             $counter++;
-            $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
             $replace = '<div '
                 . 'class="audio-container center row soundcloud-container" '
-                . 'data-counter='
-                . $counter
-                . '><iframe loading="lazy" width="100%" height="300" '
-                . 'scrolling="no" frameborder="no" controls '
+                . 'data-counter=' . $counter
+                . '><iframe loading=lazy width="100%" height=300 '
+                . 'scrolling=no frameborder=no controls '
                 . 'src="https://w.soundcloud.com/player/'
                 . '?url=https%3A//api.soundcloud.com/tracks/'
                 . '$1&auto_play=false&hide_related=false&show_comments=true'
                 . '&show_user=true&show_reposts=false&show_teaser=true&visual=true">'
                 . '</iframe></div>';
-            if (\is_string($x)) {
-                $x = $content = \preg_replace($pattern, $replace, $x);
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
             }
         }
     }
@@ -1003,21 +985,19 @@ class StringFilters implements IStringFilters
      */
     public static function renderYouTubeShortCode(&$content)
     {
+        $content = \trim($content);
         $counter = 0;
-        $x = \trim($content);
-        while (\str_contains($x, '[youtube ') && $counter < self::ITERATIONS) {
-            if (!\is_string($x)) {
-                break;
-            }
+        $pattern = '#\[youtube\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[youtube ') && $counter < self::ITERATIONS
+            ) {
             $counter++;
-            $pattern = '#\[youtube\s.*?(.*?)\]#is';
             $replace = '<div class="video-container center row youtube-container" '
-                . 'data-counter='
-                . $counter
-                . '><iframe loading="lazy" width=426 height=240 controls '
+                . 'data-counter=' . $counter
+                . '><iframe loading=lazy width=426 height=240 controls '
                 . 'src="https://www.youtube.com/embed/$1"></iframe></div>';
-            if (\is_string($x)) {
-                $x = $content = \preg_replace($pattern, $replace, $x);
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
             }
         }
     }
@@ -1039,48 +1019,45 @@ class StringFilters implements IStringFilters
             $size = 160;
         }
         $content = \trim($content);
-
         $counter = 0;
         $pattern = '#\[gallery\s.*?(.*?)\]#is';
-        while (\str_contains($content, '[gallery ') && $counter < self::ITERATIONS) {
+        while (
+            \str_contains($content, '[gallery ') && $counter < self::ITERATIONS
+            ) {
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
                 $gallery = $m[1];
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
-
                 // find all images
                 if (\is_array($files)) {
                     if ($shuffle !== false) {
                         \shuffle($files);
                     }
-                    $c = 0;
+                    $id = 0;
                     foreach ($files as $f) {
-                        $c++;
+                        $id++;
                         $n = \pathinfo(
                             \strtoupper(
                                 \str_ireplace($gallery, '', $f)
                             ), PATHINFO_FILENAME
                         );
                         $n = \trim(\strtr($n, '-_()', '    '));
-                        $t = CDN . "/upload/.thumb_{$size}px_" . $f;
-
+                        $t = CDN . "/upload/.thumb_{$size}px_{$f}";
                         $images .=
-                            "<a data-lightbox='{$gallery}' "
-                            . "href=" . CDN . '/upload/' . $f
-                            . "><img loading=lazy class=gallery-img "
-                            . " data-source=" . CDN . '/upload/' . $f
-                            . " data-thumb={$t}"
-                            . " data-id={$c}"
-                            . " alt='$c. {$gallery}{$n}' src=$t></a>";
+                            "<a data-lightbox='{$gallery}'"
+                            . " href='" . CDN . "/upload/{$f}'>"
+                            . "<img loading=lazy class=gallery-img "
+                            . " data-source='" . CDN . "/upload/{$f}'"
+                            . " data-thumb='{$t}'"
+                            . " data-id={$id}"
+                            . " alt='$id. {$gallery}{$n}' src='{$t}'></a>";
                     }
                 }
-
-                // unique gallery
+                // gallery <DIV>
                 $replace = "<div class='row center gallery-container'"
                     . " data-gallery='$gallery'>$images</div>";
-
                 if (\is_string($content)) {
                     $content = \str_replace(
                         "[gallery {$gallery}]",
@@ -1105,11 +1082,9 @@ class StringFilters implements IStringFilters
         $mask = \trim((string) $mask);
         $mask = \trim($mask, '.*/\\');
         $mask = \strtolower($mask);
-
         // hack to fix _XXX_ Markdown
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
-
         $format = \trim((string) $format);
         $format = \strtolower($format);
         if (!\is_string($format) || \strlen($format)) {
@@ -1118,7 +1093,6 @@ class StringFilters implements IStringFilters
         if (!\in_array($format, ['jpg', 'png', 'gif'])) {
             $format = 'webp';
         }
-
         if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             return \glob($mask . '*.' . $format);

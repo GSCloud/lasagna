@@ -59,32 +59,38 @@ redis: [
   timeout: 1
 ]
 
+# CSS sources
 css_sources: [
   "https://cdn.gscloud.cz/tesseract/css/fontawesome.min.css",
   "https://cdn.gscloud.cz/tesseract/css/brands.min.css",
   "https://cdn.gscloud.cz/tesseract/css/solid.min.css",
 ]
 
+# local CSS sources
 css_sources_extra: [
   "/css/style.css",
   "/css/lightbox.min.css",
 ]
 
+# script sources
 script_sources: [
   "https://cdn.gscloud.cz/tesseract/js/materialize.min.js",
 ]
 
+# local script sources
 script_sources_extra: [
   "/js/lightbox.min.js",
   "/js/lightbox.options.js",
 ]
 
+# locales
 locales: [
   default: "2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay"
   admin: "2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk"
   lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
 ]
 
+# sheets
 lasagna_sheets: [
   default: "1z2a5X7HVR9To7FvxMfRm_6ZxHeTVljUO8BjjMkI3phI"
   admin: "1iwJNAuvHQtNOgxQfQK5TYtROzCwFOBFGeo7Vj-7_48Q"
@@ -106,7 +112,9 @@ design: [
 ]
 
 # locale overrides
-locale_override: []
+locale_override: [
+  copyright: 2024
+]
 
 # Service Worker preload
 swpreload: [

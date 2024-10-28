@@ -57,7 +57,7 @@ class HomePresenter extends APresenter
         // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);
 
-        // menu variable for content switching
+        // content switching
         $data[$view . '_menu'] = true;
 
         // fix locales, HTML and shortcodes
