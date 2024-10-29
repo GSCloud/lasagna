@@ -87,10 +87,12 @@ class CorePresenter extends APresenter
 
         case "GetWebManifest":
             $this->setHeaderJson();
-            $lang = $this->validateLanguage($_GET["lang"] ?? "en");
+            $lang = $this->getData('router.defaults.language');
+            $lang = $this->validateLanguage($lang);
+            $l = $this->getLocale($lang);
             return $this->setData(
                 "output",
-                $this->setData("l", $this->getLocale($lang))->renderHTML("manifest")
+                $this->setData("l", $l)->renderHTML("manifest")
             );
 
         case "GetTXTSitemap":
@@ -121,11 +123,9 @@ class CorePresenter extends APresenter
 
         case "GetRSSXML":
             $this->setHeaderXML();
-            $language = $this->getData('router.defaults.language');
-            if (!\is_string($language)) {
-                $language = 'en';
-            }
-            $l = $this->getLocale($language);
+            $lang = $this->getData('router.defaults.language');
+            $lang = $this->validateLanguage($lang);
+            $l = $this->getLocale($lang);
             if (\class_exists("\\GSC\\RSSPresenter")) {
                 $map = RSSPresenter::getInstance()->process();
             } else {
@@ -196,15 +196,8 @@ class CorePresenter extends APresenter
 
         case "GetServiceWorker":
             $this->setHeaderJavaScript();
-            $map = [];
-            foreach ($presenter as $p) {
-                if (isset($p["sitemap"]) && $p["sitemap"]) {
-                    $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
-                }
-            }
             return $this->setData(
-                "output",
-                $this->setData("sitemap", $map)->renderHTML("sw.js")
+                "output", $this->renderHTML("sw.js")
             );
 
         case "GetCoreVersion":
@@ -345,13 +338,16 @@ class CorePresenter extends APresenter
     /**
      * Validate system language
      *
-     * @param string $lang language 2-char code
+     * @param mixed $lang language 2-char code
      * 
      * @return string correct language code
      */
     public function validateLanguage($lang = "en")
     {
         if (!$lang) {
+            return "en";
+        }
+        if (!\is_string($lang)) {
             return "en";
         }
         $lang = \substr(\strtolower((string) $lang), 0, 2);

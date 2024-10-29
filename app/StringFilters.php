@@ -229,6 +229,19 @@ class StringFilters implements IStringFilters
     public static $english = [
         "  " => " ",
         " 💗 " => " 💗&nbsp;",
+        " ♥️ " => " ♥️&nbsp;",
+        " ❤️ " => " ❤️&nbsp;",
+
+        "0. " => "0.&nbsp;",
+        "1. " => "1.&nbsp;",
+        "2. " => "2.&nbsp;",
+        "3. " => "3.&nbsp;",
+        "4. " => "4.&nbsp;",
+        "5. " => "5.&nbsp;",
+        "6. " => "6.&nbsp;",
+        "7. " => "7.&nbsp;",
+        "8. " => "8.&nbsp;",
+        "9. " => "9.&nbsp;",
 
         " % " => "&nbsp;% ",
         " - " => " — ",
@@ -322,6 +335,19 @@ class StringFilters implements IStringFilters
     public static $czech = [
         "  " => " ",
         " 💗 " => " 💗&nbsp;",
+        " ♥️ " => " ♥️&nbsp;",
+        " ❤️ " => " ❤️&nbsp;",
+
+        "0. " => "0.&nbsp;",
+        "1. " => "1.&nbsp;",
+        "2. " => "2.&nbsp;",
+        "3. " => "3.&nbsp;",
+        "4. " => "4.&nbsp;",
+        "5. " => "5.&nbsp;",
+        "6. " => "6.&nbsp;",
+        "7. " => "7.&nbsp;",
+        "8. " => "8.&nbsp;",
+        "9. " => "9.&nbsp;",
 
         " % " => "&nbsp;% ",
         " - " => " — ",
@@ -439,6 +465,19 @@ class StringFilters implements IStringFilters
     public static $slovak = [
         "  " => " ",
         " 💗 " => " 💗&nbsp;",
+        " ♥️ " => " ♥️&nbsp;",
+        " ❤️ " => " ❤️&nbsp;",
+
+        "0. " => "0.&nbsp;",
+        "1. " => "1.&nbsp;",
+        "2. " => "2.&nbsp;",
+        "3. " => "3.&nbsp;",
+        "4. " => "4.&nbsp;",
+        "5. " => "5.&nbsp;",
+        "6. " => "6.&nbsp;",
+        "7. " => "7.&nbsp;",
+        "8. " => "8.&nbsp;",
+        "9. " => "9.&nbsp;",
 
         " % " => "&nbsp;% ",
         " - " => " — ",
