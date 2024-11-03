@@ -29,14 +29,15 @@
 <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 <link rel="dns-prefetch" href="//fonts.googleapis.com">
 <link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link rel="dns-prefetch" href="//static.cloudflareinsights.com">
 <link rel="dns-prefetch" href="//umami.gscloud.cz">
 <link rel="preconnect" href="//cdn.gscloud.cz">
 <link rel="preconnect" href="//cdnjs.cloudflare.com">
 <link rel="preconnect" href="//fonts.googleapis.com">
 <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="//static.cloudflareinsights.com">
 <link rel="preconnect" href="//umami.gscloud.cz">
-{{#host}}{{#base}}<base href="{{ base }}">{{/base}}{{/host}}
-{{#rss_feed}}<link rel="alternate" type="application/rss+xml" title="{{ l.title }} RSS feed" href="/rss.xml">{{/rss_feed}}
+{{#rss_feed}}<link rel="alternate" type="application/rss+xml" title="{{ l.title }} - RSS feed" href="/rss.xml">{{/rss_feed}}
 {{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
 <link rel="manifest" href="/manifest.json">
 {{>head_meta}}

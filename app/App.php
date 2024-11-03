@@ -88,7 +88,7 @@ $data['VERSION'] = $version = trim(
     @file_get_contents(ROOT . DS . 'VERSION') ?: '', "\r\n"
 );
 $data['VERSION_SHORT'] = $base58->encode(
-    base_convert(substr(hash('sha256', $version), 0, 4), 16, 10)
+    base_convert(substr($version, 0, 6), 16, 10)
 );
 $data['VERSION_DATE']
     = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time());

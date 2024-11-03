@@ -620,14 +620,16 @@ class StringFilters implements IStringFilters
         'í' => 'i',
         'ĺ' => 'l',
         'ľ' => 'l',
-        'ň' => 'n',
+        'ḿ' => 'm',
         'ń' => 'n',
+        'ň' => 'n',
         'ó' => 'o',
         'ö' => 'o',
         'ø' => 'o',
         'ř' => 'r',
         'ŕ' => 'r',
         'ř' => 'r',
+        'ś' => 's',
         'š' => 's',
         'š' => 's',
         'ť' => 't',
@@ -637,6 +639,7 @@ class StringFilters implements IStringFilters
         'ů' => 'u',
         'ý' => 'y',
         'ý' => 'y',
+        'ź' => 'z',
         'ž' => 'z',
         'ž' => 'z',
 
@@ -658,6 +661,7 @@ class StringFilters implements IStringFilters
         'Í' => 'i',
         'Ĺ' => 'l',
         'Ľ' => 'l',
+        'Ḿ' => 'M',
         'Ň' => 'n',
         'Ń' => 'n',
         'Ó' => 'o',
@@ -666,6 +670,7 @@ class StringFilters implements IStringFilters
         'Ř' => 'r',
         'Ŕ' => 'r',
         'Ř' => 'r',
+        'Ś' => 's',
         'Š' => 's',
         'Š' => 's',
         'Ť' => 't',
@@ -675,6 +680,7 @@ class StringFilters implements IStringFilters
         'Ů' => 'u',
         'Ý' => 'y',
         'Ý' => 'y',
+        'Ź' => 'z',
         'Ž' => 'z',
         'Ž' => 'z',
     ];
@@ -898,7 +904,7 @@ class StringFilters implements IStringFilters
             $replace = '<span class="img-container">'
                 . '<img data-name="$1" data-counter=' . $counter . ' src="'
                 . CDN . '/upload/'
-                . '$1.webp" alt="$1"></span>';
+                . '$1.webp" alt="$1" class=imagesc></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -924,7 +930,7 @@ class StringFilters implements IStringFilters
             $replace = '<span class="img-left-container">'
                 . '<img data-name="$1" data-counter=' . $counter . ' src="'
                 . CDN . '/upload/'
-                . '$1.webp" alt="$1" class="left"></span>';
+                . '$1.webp" alt="$1" class="left imageleftsc"></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -950,7 +956,7 @@ class StringFilters implements IStringFilters
             $replace = '<span class="img-right-container">'
                 . '<img data-name="$1" data-counter=' . $counter . ' src="'
                 . CDN . '/upload/'
-                . '$1.webp" alt="$1" class="right"></span>';
+                . '$1.webp" alt="$1" class="right imagerightsc"></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -976,7 +982,7 @@ class StringFilters implements IStringFilters
             $replace = '<span class="img-responsive-container">'
                 . '<img data-name="$1" data-counter=' . $counter . ' src="'
                 . CDN . '/upload/'
-                . '$1.webp" alt="$1" class="responsive-img"></span>';
+                . '$1.webp" alt="$1" class="responsive-img imagerespsc"></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1118,13 +1124,14 @@ class StringFilters implements IStringFilters
      */
     public static function findImagesByMask($mask, $format = 'webp')
     {
-        $mask = \trim((string) $mask);
+        $mask = \trim($mask);
         $mask = \trim($mask, '.*/\\');
         $mask = \strtolower($mask);
+
         // hack to fix _XXX_ Markdown
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
-        $format = \trim((string) $format);
+
         $format = \strtolower($format);
         if (!\is_string($format) || \strlen($format)) {
             $format = 'webp';

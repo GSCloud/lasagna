@@ -11,27 +11,29 @@ csp: [
     "base-uri"
     "'self';"
 
+    "default-src"
+    "'self'"
+    "data:"
+    "blob:"
+    "https:;"
+
     "object-src"
     "'none';"
 
-    "default-src"
-    "'unsafe-inline'"
-    "'self'"
-    "https://*;"
-
     "connect-src"
     "'self'"
-    "https://*;"
+    "https:;"
 
     "font-src"
-    "data:"
     "'self'"
+    "data:"
     "'unsafe-inline'"
     "cdn.gscloud.cz"
-    "gspace.gscloud.cz"
+    "cdn.hmcgames.com"
     "*.gstatic.com;"
 
     "script-src"
+    "'self'"
     "*.googleapis.com"
     "cdn.gscloud.cz"
     "cdnjs.cloudflare.com"
@@ -39,26 +41,30 @@ csp: [
     "gspace.gscloud.cz"
     "static.cloudflareinsights.com"
     "umami.gscloud.cz"
-    "'self'"
     "'strict-dynamic'"
-
-# enable Zaraz
-    "'unsafe-eval'"
-
-# not needed anymore
-#    "'unsafe-inline'"
-
     "'nonce-random';"
 
     "img-src"
-    "*"
+    "'self'"
+    "data:"
+    "https:;"
+
+    "style-src"
     "'self'"
     "'unsafe-inline'"
-    "cdn.gscloud.cz"
-    "gspace.gscloud.cz"
-    "data:;"
+    "data:"
+    "https:;"
+
+    "media-src"
+    "'self'"
+    "data:"
+    "https:;"
+
+    "worker-src"
+    "'self';"
 
     "frame-src"
+    "'self'"
     "api.soundcloud.com"
     "w.soundcloud.com"
     "youtube.com"
@@ -66,6 +72,6 @@ csp: [
     "www.youtube.com;"
     
     "form-action"
-    "https://*"
-    "'self';"
+    "'self'"
+    "https:;"
 ]

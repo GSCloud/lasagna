@@ -55,7 +55,7 @@
                 csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                 lines + '&nbsp;</a>&nbsp;';
             }
-            content += (link + " {{ l.a_age }}&nbsp;" +
+            content += (link + "&nbsp;" +
               moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "<br>"
             );
           }
