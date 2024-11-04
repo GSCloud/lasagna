@@ -152,12 +152,17 @@ class AdminPresenter extends APresenter
                 if (\str_ends_with($f, '.inc')) {
                     continue;
                 }
+                
+                // skip the '.size' file
+                if ($f === '.size') {
+                    continue;
+                }
 
                 // skip the 'size' file
                 if ($f === 'size') {
                     continue;
                 }
-
+                
                 // process uploaded file
                 if (@\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
                     $info = \pathinfo($f);
@@ -205,6 +210,11 @@ class AdminPresenter extends APresenter
             if (isset($_POST['name'])) {
                 $name = \trim($_POST['name'], "\\/.");
                 $info = \pathinfo($name);
+
+                // error for '.size' file
+                if ($name === '.size') {
+                    ErrorPresenter::getInstance()->process(500);
+                }
 
                 // error for 'size' file
                 if ($name === 'size') {

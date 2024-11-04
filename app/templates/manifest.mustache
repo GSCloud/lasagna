@@ -53,13 +53,31 @@
             "sizes": "512x512"
         }
     ],
-    "appleStatusBarStyle": "default",
-    "background_color": "{{ design.background_color }}{{^design.background_color}}#fff{{/design.background_color}}",
+{{#screenshots}}
+    "screenshots": [
+        {
+            "src": "/img/screenshot-narrow.png",
+            "sizes": "320x640",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "{{ l.title }}"
+        },
+        {
+            "src": "/img/screenshot-wide.png",
+            "sizes": "640x320",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "{{ l.title }}"
+        }
+    ],
+{{/screenshots}}
+    "id": "/",
+    "scope": "/",
+    "start_url": "/",
+    "lang": "{{ router.defaults.language }}",
     "theme_color": "{{ design.theme_color }}{{^design.theme_color}}#000{{/design.theme_color}}",
+    "background_color": "{{ design.background_color }}{{^design.background_color}}#fff{{/design.background_color}}",
     "display": "{{ design.display }}{{^design.display}}standalone{{/design.display}}",
     "mobileAppIOS": "true",
-    "id": "/",
-    "lang": "{{ router.defaults.language }}",
-    "scope": "/",
-    "start_url": "/"
+    "appleStatusBarStyle": "default"
 }

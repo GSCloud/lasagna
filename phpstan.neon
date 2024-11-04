@@ -3,6 +3,7 @@ parameters:
     ignoreErrors:
         - '#If condition is always false\.#'
         - '#If condition is always true\.#'
+        - '#Negated boolean expression is always true.#'
         - '#Ternary operator condition is always true\.#'
         - '#Unreachable statement - code above always terminates\.#'
     bootstrapFiles:
