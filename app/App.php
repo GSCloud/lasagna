@@ -51,11 +51,9 @@ $data['cfg'] = $cfg;
 // CLOUDFLARE GEO BLOCKING; XX = unknown location
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
-    'BY',
-    'KZ',
-    'MD',
-    'RO',
     'RU',
+    'BY',
+    'CN',
 ]);
 $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
 $data['country'] = $country;
@@ -65,7 +63,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // DATA ARRAY
-define('ENGINE', 'Tesseract 2.3.3');
+define('ENGINE', 'Tesseract 2.3.4');
 $data['ENGINE'] = ENGINE;
 
 \Tracy\Debugger::timer('DATA');
