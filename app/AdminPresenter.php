@@ -376,7 +376,7 @@ class AdminPresenter extends APresenter
             $this->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . 'AuditLog.txt';
-            $file = \popen("tac $filename", 'r');
+            $file = \popen("tac {$filename}", 'r');
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
@@ -384,8 +384,9 @@ class AdminPresenter extends APresenter
                     $logs[] = $s;
                     $c++;
                 }
+                \pclose($file);
             }
-            \array_walk($logs, array($this, 'decorateLogs'));
+            \array_walk($logs, array($this, '_decorateLogs'));
             $data['content'] = $logs;
             return $this->setData(
                 'output', $this->setData($data)->renderHTML('auditlog')
@@ -851,27 +852,23 @@ class AdminPresenter extends APresenter
      * 
      * @return void
      */
-    public function decorateLogs(&$val, $key)
+    private function _decorateLogs(&$val, $key)
     {
         $x = \explode(';', $val);
-        // remove column 6
-        unset($x[5]);
-        \array_walk(
-            $x, function (&$value, $key) {
-                $value = \str_replace('IP:', '', $value);
-                $value = \str_replace('EMAIL:', '', $value);
-                $value = \str_replace('NAME:', '', $value);
-            }
-        );
-        $y = \implode('</td><td>', $x);
-        $z = "<td>$y</td>";
-        for ($i = 1; $i <= 5; $i++) {
-            // add 5 column classes
-            if (\is_string($z)) {
-                $z = \preg_replace('/<td>/', "<td class='alogcol{$i}'>", $z, 1);
-            }
+        $t = \strtotime($x[0]);
+        if ($t) {
+            $t = \date("d.\tn.\tY\nH:i:s", $t);
+            $t = \str_replace("\t", '&nbsp;', $t);
+            $t = \str_replace("\n", '<br>', $t);
+            $x[0] = $t;
         }
-        $val = $z;
+        $x[2] = \str_replace('IP:', '', $x[2]);
+        $x[3] = \str_replace('NAME:', '', $x[3]);
+        $x[4] = \str_replace('EMAIL:', '', $x[4]);
+        $val = "<td class='center'>{$x[0]}</td>"
+            .  "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
+            .  "<td class=mono>{$x[2]}</td>"
+            .  "<td>{$x[1]}</td>";
     }
 
     /**
