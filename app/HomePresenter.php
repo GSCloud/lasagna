@@ -39,20 +39,20 @@ class HomePresenter extends APresenter
         // rate limiting
         $this->checkRateLimit();
 
-        // get Presenter
-        $presenter = $this->getPresenter();
-        if (!\is_array($presenter)) {
-            return $this;
-        }
+        // Model
+        $data = $this->getData();
 
-        // get View
+        // View
         $view = $this->getView();
         if (!$view) {
             return $this;
         }
 
-        // get Model
-        $data = $this->getData();
+        // Presenter
+        $presenter = $this->getPresenter();
+        if (!\is_array($presenter)) {
+            return $this;
+        }
 
         // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);

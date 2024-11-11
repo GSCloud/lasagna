@@ -19,7 +19,7 @@ RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && chmod 0777 /var/www/ci /var/www/data /var/www/logs /var/www/temp \
     && ln -s /var/www/html /var/www/www
 
-COPY app/*.php app/router* app/csp.neon app/base.csv /var/www/app/
+COPY app/*.txt app/*.redist  app/*.php app/router* app/csp.neon app/base.csv /var/www/app/
 COPY app/partials/* /var/www/app/partials/
 COPY app/templates/* /var/www/app/templates/
 

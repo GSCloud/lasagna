@@ -157,11 +157,6 @@ class AdminPresenter extends APresenter
                 if ($f === '.size') {
                     continue;
                 }
-
-                // skip the 'size' file
-                if ($f === 'size') {
-                    continue;
-                }
                 
                 // process uploaded file
                 if (@\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
@@ -203,6 +198,14 @@ class AdminPresenter extends APresenter
                     }
                 }
             }
+            $count = \count($uploads);
+            $names = \join(' ', $uploads);
+            $this->addAuditMessage(
+                'ADMIN: file(s) uploaded: '
+                . $count
+                . '<br>'
+                . $names
+            );
             return $this->writeJsonData($uploads, $extras);
 
         case 'uploadDelete':
@@ -213,11 +216,6 @@ class AdminPresenter extends APresenter
 
                 // error for '.size' file
                 if ($name === '.size') {
-                    ErrorPresenter::getInstance()->process(500);
-                }
-
-                // error for 'size' file
-                if ($name === 'size') {
                     ErrorPresenter::getInstance()->process(500);
                 }
 
@@ -250,6 +248,7 @@ class AdminPresenter extends APresenter
                 if (\file_exists($file)) {
                     \unlink($file);
                 }
+                $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
                 return $this->writeJsonData($name, $extras);
             }
             break;
@@ -271,10 +270,6 @@ class AdminPresenter extends APresenter
                         }
                         // exclude '.size' file
                         if ($f === '.size') {
-                            continue;
-                        }
-                        // exclude 'size' file
-                        if ($f === 'size') {
                             continue;
                         }
                         
@@ -567,6 +562,7 @@ class AdminPresenter extends APresenter
         case 'FlushCache':
             $this->checkPermission('admin,editor');
             $this->flushCache();
+            $this->addAuditMessage('ADMIN: Flush Cache');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'CoreUpdate':
@@ -574,6 +570,7 @@ class AdminPresenter extends APresenter
             $this->setForceCsvCheck(true);
             $this->postloadAppData('app_data');
             $this->flushCache();
+            $this->addAuditMessage('ADMIN: Core Update');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'UpdateArticles':
@@ -865,7 +862,7 @@ class AdminPresenter extends APresenter
         $x[2] = \str_replace('IP:', '', $x[2]);
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
-        $val = "<td class='center'>{$x[0]}</td>"
+        $val = "<td class=center>{$x[0]}</td>"
             .  "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
             .  "<td class=mono>{$x[2]}</td>"
             .  "<td>{$x[1]}</td>";

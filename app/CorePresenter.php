@@ -38,22 +38,24 @@ class CorePresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
-        // get current Presenter
+        // Model
+        $data = $this->getData();
+
+        // View
+        $view = $this->getView();
+        if (!$view) {
+            return $this;
+        }
+
+        // Presenter
         $presenter = $this->getPresenter();
         if (!\is_array($presenter)) {
             return $this;
         }
         
-        // get current View
-        $view = $this->getView();
-        if (!$view) {
-            return $this;
-        }
-        
+        // API parameters
         $match = $this->getMatch();
-        $data = $this->getData();
 
-        // JSON extras
         $extras = [
             "name" => "Tesseract Core REST API",
             "fn" => $view,
@@ -64,22 +66,21 @@ class CorePresenter extends APresenter
             "ip" => $this->getIP(),
         ];
 
-        // API calls
         switch ($view) {
-
         case "GetRobotsTxt":
             $this->setHeaderText();
-            // bad robots
-            $bots = [
-                'CCBot',
-                'ChatGPT-User',
-                'FacebookBot',
-                'GPTBot',
-                'Google-Extended',
-                'Omgili',
-                'Omgilibot',
-                'anthropic-ai',
-            ];
+            $file = APP . DS . 'badrobots.txt';
+            $bots = [];
+            if (\file_exists($file) && \is_readable($file)) {
+                $bots = \file(
+                    // bad bots
+                    APP . DS . 'badrobots.txt',
+                    FILE_SKIP_EMPTY_LINES
+                );
+                if (\is_array($bots)) {
+                    $bots = \array_map('trim', $bots);
+                }
+            }
             return $this->setData(
                 "output",
                 $this->setData("robots_disabled", $bots)->renderHTML("robots")
@@ -267,7 +268,6 @@ class CorePresenter extends APresenter
             );
         }
 
-        // get language and locale
         $fl = '';
         $language = $this->validateLanguage($presenter[$view]["language"]);
         $locale = $this->getLocale($language);
@@ -278,7 +278,6 @@ class CorePresenter extends APresenter
         $hash = \hash("sha256", (string) \json_encode($locale) . $fl);
 
         switch ($view) {
-
         case "GetEnDataVersion":
         case "GetCsDataVersion":
         case "GetSkDataVersion":
@@ -288,7 +287,7 @@ class CorePresenter extends APresenter
             return $this->writeJsonData($d, $extras);
         }
 
-        // check $view starting exactly with API
+        // check $view starting with 'API'
         if (is_string($view) && substr(strtoupper($view), 0, 3) === "API") {
             $this->checkRateLimit();
             $this->setHeaderHTML();

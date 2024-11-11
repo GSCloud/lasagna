@@ -15,7 +15,7 @@ namespace GSC;
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 
-// CLEAR CACHE on ?logout
+// CLEAR CACHE AND COOKIES on ?logout
 if (isset($_GET['logout'])) {
     header('Clear-Site-Data: "cache", "cookies"');
     header('Location: /', true, 303);
@@ -63,7 +63,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // DATA ARRAY
-define('ENGINE', 'Tesseract 2.3.4');
+define('ENGINE', 'Tesseract 2.3.5');
 $data['ENGINE'] = ENGINE;
 
 \Tracy\Debugger::timer('DATA');

@@ -840,8 +840,7 @@ abstract class APresenter implements IPresenter
             $message = \trim($message);
             $i = $this->getIdentity();
             @\file_put_contents(
-                $file, "$date;$message;IP:{$i['ip']};NAME:{$i['name']};"
-                . "EMAIL:{$i['email']};\n",
+                $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
                 FILE_APPEND | LOCK_EX
             );
         }
