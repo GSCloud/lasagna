@@ -1701,6 +1701,12 @@ abstract class APresenter implements IPresenter
         $locales = $this->getCfg('locales') ?? null;
         if (\is_array($locales)) {
             foreach ($locales as $name => $csvkey) {
+                if ($name == 'default') {
+                    continue;
+                }
+                if ($name == 'admin') {
+                    continue;
+                }
                 $this->csvPreloader($name, $csvkey, (bool) $force);
             }
         }

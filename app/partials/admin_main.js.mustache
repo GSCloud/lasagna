@@ -45,18 +45,18 @@
             if (!data.data[x]["sheet"]) continue;
             if (sheet) {
               link =
-                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.5rem;border-radius:2px" ' +
+                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px" ' +
                 'class="orange mono white-text bold" href="' +
                 'https://docs.google.com/spreadsheets/d/' +
                 sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
                 x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
-                ' style="font-size:1.5rem;border-radius:2px" class="bold blue white-text mono" ' +
+                ' style="font-size:1.2rem;border-radius:2px" class="csv' + x +  ' bold blue white-text mono" ' +
                 'href="https://docs.google.com/spreadsheets/d/e/' +
                 csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
                 lines + '&nbsp;</a>&nbsp;';
             }
-            content += (link + "&nbsp;" +
-              moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "<br>"
+            content += (link + "&nbsp;<span class=csv" + x + ">" +
+              moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "</span><br>"
             );
           }
           $("#a_update_info").html(content);
