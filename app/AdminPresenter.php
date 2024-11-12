@@ -860,8 +860,19 @@ class AdminPresenter extends APresenter
      */
     private function _decorateLogs(&$val, $key)
     {
+        if (\stripos($val, 'exception') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Origin Time-out') !== false) {
+            $val = '';
+            return;
+        }
         $x = \explode(';', $val);
         if (!\is_array($x)) {
+            return;
+        }
+        if (\count($x) < 5) {
             return;
         }
         $this->_logcounter++;
