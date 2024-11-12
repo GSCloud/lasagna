@@ -989,13 +989,13 @@ abstract class APresenter implements IPresenter
         if (\array_key_exists('avatar', $identity)) {
             $i['avatar'] = (string) $identity['avatar'];
         }
-        if (array_key_exists('email', $identity)) {
+        if (\array_key_exists('email', $identity)) {
             $i['email'] = (string) $identity['email'];
         }
-        if (array_key_exists('id', $identity)) {
+        if (\array_key_exists('id', $identity)) {
             $i['id'] = (int) $identity['id'];
         }
-        if (array_key_exists('name', $identity)) {
+        if (\array_key_exists('name', $identity)) {
             $i['name'] = (string) $identity['name'];
         }
         // set other values
@@ -1004,7 +1004,7 @@ abstract class APresenter implements IPresenter
         // shuffle keys
         $out = [];
         $keys = \array_keys($i);
-        shuffle($keys);
+        \shuffle($keys);
         foreach ($keys as $k) {
             $out[$k] = $i[$k];
         }
@@ -1012,7 +1012,8 @@ abstract class APresenter implements IPresenter
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
-            $this->setCookie($app, json_encode($out)); // encrypted cookie
+            // encrypted cookie
+            $this->setCookie($app, \json_encode($out));
         } else {
             $this->clearCookie($app);
         }
@@ -1393,11 +1394,6 @@ abstract class APresenter implements IPresenter
         if (empty($location)) {
             $location = '/?nonce=' . $this->getNonce();
         }
-        // audit certain messages
-        if (!LOCALHOST && !CLI && $code > 303) {
-            $ref = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-            $this->addAuditMessage("ERROR: {$code}; ref. {$ref}");
-        }
         \header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
     }
@@ -1413,15 +1409,7 @@ abstract class APresenter implements IPresenter
             exit;
         }
         $nonce = $this->getNonce();
-        if (LOCALHOST) {
-            $this->setLocation("/?logout=1&nonce=$nonce");
-        }
-        if ($this->getCfg('canonical_url')) {
-            $this->setLocation(
-                $this->getCfg('canonical_url') . "?logout=1&nonce=$nonce"
-            );
-        }
-        $this->setLocation("/?logout=1&nonce=$nonce");
+        $this->setLocation("/?logout&nonce=$nonce");
     }
 
     /**
@@ -2123,6 +2111,6 @@ abstract class APresenter implements IPresenter
      */
     public function getNonce()
     {
-        return \substr(\hash('sha256', \random_bytes(16) . (string) \time()), 0, 16);
+        return \substr(\hash('sha256', \random_bytes(8) . (string) \time()), 0, 16);
     }
 }

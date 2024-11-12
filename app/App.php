@@ -15,9 +15,9 @@ namespace GSC;
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 
-// CLEAR CACHE AND COOKIES on ?logout
+// CLEAR COOKIES on ?logout
 if (isset($_GET['logout'])) {
-    header('Clear-Site-Data: "cache", "cookies"');
+    header('Clear-Site-Data: "cookies"');
     header('Location: /', true, 303);
     exit;
 }
@@ -46,8 +46,6 @@ $cfg = $data = $cfg ?? [];
 
 // inject base CSV locale into $cfg
 array_unshift($cfg['locales'], 'base.csv');
-//unset($cfg['locales']['default']);
-//unset($cfg['locales']['admin']);
 $data['cfg'] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING; XX = unknown location
@@ -246,7 +244,7 @@ $data['cache_profiles'] = $cache_profiles;
 $router = [];
 $routes = $cfg['routers'] ?? [];
 chdir(APP);
-array_unshift($routes, 'router_defaults.neon'); // defaults
+array_unshift($routes, 'router_defaults.neon');
 if ($routers = glob('router_*.neon')) {
     foreach ($routers as $r) {
         if (is_file($r) && is_readable($r) && ($r != 'router_defaults.neon')) {
@@ -378,13 +376,18 @@ if ($router[$view]['redirect'] ?? false) {
 
 // COUNTRY REDIRECT
 if ($router[$view]['country'] ?? false) {
+    $rand = \substr(\hash('sha256', \random_bytes(8) . (string) \time()), 0, 16);
+    $nonce = "?nonce={$rand}";
     if (!LOCALHOST && array_key_exists($country, $router[$view]['country'])) {
         if (ob_get_level()) {
             ob_end_clean();
         }
+        if (strpos($router[$view]['country'][$country], '?') !== false) {
+            $nonce = '';
+        }
         header(
             'Location: '
-            . $router[$view]['country'][$country],
+            . $router[$view]['country'][$country] . $nonce,
             true,
             303
         );
@@ -394,9 +397,12 @@ if ($router[$view]['country'] ?? false) {
         if (ob_get_level()) {
             ob_end_clean();
         }
+        if (strpos($router[$view]['country']['localhost'], '?') !== false) {
+            $nonce = '';
+        }
         header(
             'Location: '
-            . $router[$view]['country']['localhost'],
+            . $router[$view]['country']['localhost'] . $nonce,
             true,
             303
         );
@@ -406,9 +412,12 @@ if ($router[$view]['country'] ?? false) {
         if (ob_get_level()) {
             ob_end_clean();
         }
+        if (strpos($router[$view]['country']['default'], '?') !== false) {
+            $nonce = '';
+        }
         header(
             'Location: '
-            . $router[$view]['country']['default'],
+            . $router[$view]['country']['default'] . $nonce,
             true,
             303
         );

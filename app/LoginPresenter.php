@@ -81,12 +81,10 @@ class LoginPresenter extends APresenter
             $errors[] = "Invalid OAuth state";
         } else {
             try {
-                // get access token
                 $token = $provider->getAccessToken(
                     "authorization_code",
                     ["code" => $_GET["code"]]
                 );
-                // get owner details
                 $ownerDetails = $provider->getResourceOwner(
                     $token, 
                     ["useOidcMode" => true,]
@@ -105,7 +103,6 @@ class LoginPresenter extends APresenter
                     . " "
                     . $ownerDetails->getEmail()
                 );
-
                 if ($this->getUserGroup() == "admin") {
                     if (\is_string($this->getCfg("DEBUG_COOKIE"))) {
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
@@ -121,11 +118,10 @@ class LoginPresenter extends APresenter
                         DOMAIN,
                     );
                 }
-                $this->clearCookie("oauth2state");
                 $this->setLocation();
-                exit;
             } catch (\Exception $e) {
                 $this->addError("Google OAuth: " . $e->getMessage());
+                $this->addAuditMessage("Google OAuth Error: " . $e->getMessage());
             }
         }
         ErrorPresenter::getInstance()->process(403);

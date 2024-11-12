@@ -868,6 +868,10 @@ class AdminPresenter extends APresenter
             $val = '';
             return;
         }
+        if (\stripos($val, 'Bad Gateway') !== false) {
+            $val = '';
+            return;
+        }
         $x = \explode(';', $val);
         if (!\is_array($x)) {
             return;
@@ -878,6 +882,11 @@ class AdminPresenter extends APresenter
         $this->_logcounter++;
         $t = \strtotime($x[0]);
         if ($t) {
+            $y = \date("Y", $t);
+            if ($y < 2024) {
+                $val = '';
+                return;
+            }
             $t = \date("d.\tn.\tY\nH:i:s", $t);
             $t = \str_replace("\t", '&nbsp;', $t);
             $t = \str_replace("\n", '<br>', $t);
