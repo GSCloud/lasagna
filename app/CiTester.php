@@ -34,18 +34,17 @@ class CiTester
      */
     public function __construct($cfg, $presenter, $type)
     {
-        // TODO: Implement https://requests.ryanmccue.info/api-2.x/classes/WpOrg-Requests-Requests.html#method_request_multiple
-        \Tracy\Debugger::timer("CITEST");
         $climate = new CLImate;
+        \Tracy\Debugger::timer("CITEST");
+
         $cfg = (array) $cfg;
         $presenter = (array) $presenter;
         $type = (string) $type;
-
-        $key = "";
+        $api_key = "";
         if (\is_array($cfg) && \array_key_exists("ci_tester", $cfg)
             && \is_string($cfg["ci_tester"]["api_key"])
         ) {
-            $key = $cfg["ci_tester"]["api_key"];
+            $api_key = $cfg["ci_tester"]["api_key"];
         }
 
         switch ($type) {
@@ -63,24 +62,23 @@ class CiTester
         }
 
         if (!$cfg['project']) {
-            $climate->out("<red>FATAL ERROR: missing project definition\n\007");
+            $climate->out("<red>ERROR: missing project definition\n\007");
             exit(99);
         }
 
         if (!$cfg['app']) {
-            $climate->out("<red>FATAL ERROR: missing app definition\n\007");
+            $climate->out("<red>ERROR: missing app definition\n\007");
             exit(99);
         }
 
         if (!strlen($target)) {
             $climate->out("<bold><green>{$cfg['project']}: {$cfg['app']} {$case}");
-            $climate->out("<red>FATAL ERROR: missing target URI!\n\007");
+            $climate->out("<red>ERROR: missing target URI!\n\007");
             exit(99);
         }
 
         $climate->out(
-            "CI testing: <bold><green>{$cfg['project']}: "
-            . "{$cfg['app']} {$case}\n"
+            "\n<bold><green>{$cfg['project']}: {$cfg['app']} {$case}\n"
         );
 
         $i = 0;
@@ -125,36 +123,35 @@ class CiTester
         $multi = \curl_multi_init();
         foreach ($pages_reworked as $x) {
             $ch[$i] = \curl_init();
-            \curl_setopt($ch[$i], CURLOPT_URL, $x["url"] . "?api={$key}");
             \curl_setopt($ch[$i], CURLINFO_HEADER_OUT, true);
-            \curl_setopt($ch[$i], CURLOPT_USERAGENT, 'curl');
             \curl_setopt($ch[$i], CURLOPT_BUFFERSIZE, 4096);
             \curl_setopt($ch[$i], CURLOPT_FAILONERROR, true);
+            \curl_setopt($ch[$i], CURLOPT_FORBID_REUSE, false);
             \curl_setopt($ch[$i], CURLOPT_HEADER, true);
             \curl_setopt($ch[$i], CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             \curl_setopt($ch[$i], CURLOPT_MAXREDIRS, 3);
             \curl_setopt($ch[$i], CURLOPT_NOBODY, false);
-            \curl_setopt($ch[$i], CURLOPT_RETURNTRANSFER, 1);
-            \curl_setopt($ch[$i], CURLOPT_TIMEOUT, 20);
+            \curl_setopt($ch[$i], CURLOPT_RETURNTRANSFER, true);
+            \curl_setopt($ch[$i], CURLOPT_TCP_FASTOPEN, true);
+            \curl_setopt($ch[$i], CURLOPT_TIMEOUT, 10);
+            \curl_setopt($ch[$i], CURLOPT_URL, $x["url"] . "?api={$api_key}");
+            \curl_setopt($ch[$i], CURLOPT_USERAGENT, 'curl');
             \curl_multi_add_handle($multi, $ch[$i]);
             $i++;
         }
-
-        // wait for curls to finish
         $active = null;
         do {
             $mrc = \curl_multi_exec($multi, $active);
         } while ($mrc == CURLM_CALL_MULTI_PERFORM);
-
         while ($active && $mrc == CURLM_OK) {
-            if (\curl_multi_select($multi) != -1) {
+            if (\curl_multi_select($multi) !== -1) {
                 do {
                     $mrc = \curl_multi_exec($multi, $active);
                 } while ($mrc == CURLM_CALL_MULTI_PERFORM);
             }
         }
 
-        // results
+        // RESULTS
         $i = 0;
         $errors = 0;
         foreach ($pages_reworked as $x) {
@@ -166,8 +163,6 @@ class CiTester
 
             // curl data
             $m = \curl_multi_getcontent($ch[$i]);
-
-            // skip if there's no data
             if (!$m) {
                 continue;
             }
@@ -193,8 +188,8 @@ class CiTester
 
             // assert JSON
             $json = true;
-            $jsformat = "HTML";
-            $jscode = "-";
+            $jsformat = 'HTML';
+            $jscode = '';
             if ($x["assert_json"] ?? false) {
                 $arr = @\json_decode($content ?: '', true);
                 if (empty($content) || \is_null($arr)) {
@@ -209,7 +204,7 @@ class CiTester
                         if ($arr["code"] == 200) {
                             $jscode = 'OK';
                         } else {
-                            $jscode = "BAD_CODE: " . $arr["code"];
+                            $jscode = "BAD CODE: " . $arr["code"];
                             $bad++;
                             $climate->out('!!! JSON ERRROR !!!');
                         }
@@ -227,33 +222,47 @@ class CiTester
             }
             if ($bad === 0) {
                 $climate->out(
-                    "{$u1} length: <green>{$length}</green>"
+                    "{$u1}"
+                    . " size: <green>{$length}</green>"
                     . " code: <green>{$code}</green>"
-                    . " time: <green>{$time} ms</green>"
-                    . " format: <blue>$jsformat</blue>"
-                    . " JS: <green>$jscode</green>"
+                    . " time: <green>{$time}</green>"
+                    . " <blue>$jsformat</blue>"
+                    . " <blue>$jscode</blue>"
                 );
                 @\file_put_contents(
                     ROOT . "/ci/tests_{$f1}.assert.txt",
-                    "{$u2};length:{$length};code:{$code};"
+                    "{$u2};"
+                    . "size:{$length};"
+                    . "code:{$code};"
                     . "assert:{$x['assert_httpcode']};"
-                    . "time:{$time};$jsformat;$jscode\n",
+                    . "time:{$time};"
+                    . "format:{$jsformat};"
+                    . "jscode:{$jscode}"
+                    . "\n",
                     FILE_APPEND | LOCK_EX
                 );
             } else {
-                // error
                 $errors++;
                 $climate->out(
-                    "<red>{$u1} length: <bold>{$length}</bold>"
+                    "<red>{$u1}"
+                    . " size: <bold>{$length}</bold>"
                     . " code: <bold>{$code}</bold>"
                     . " assert: <bold>{$x['assert_httpcode']}</bold>"
-                    . " time: {$time} ms format: $jsformat JScode: $jscode</red>\007"
+                    . " time: {$time}"
+                    . " $jsformat"
+                    . " $jscode"
+                    . "</red>\007"
                 );
                 @\file_put_contents(
                     ROOT . "/ci/errors_{$f1}.assert.txt",
-                    "{$u2};length:{$length};"
-                    . "code:{$code};assert:{$x['assert_httpcode']};"
-                    . "time:{$time};format:$jsformat;jscode:$jscode\n",
+                    "{$u2};"
+                    . "size:{$length};"
+                    . "code:{$code};"
+                    . "assert:{$x['assert_httpcode']};"
+                    . "time:{$time};"
+                    . "format:$jsformat;"
+                    . "jscode:$jscode"
+                    . "\n",
                     FILE_APPEND | LOCK_EX
                 );
             }
@@ -262,11 +271,9 @@ class CiTester
         \curl_multi_close($multi);
 
         $time = \round((float) \Tracy\Debugger::timer("CITEST"), 2);
-        $climate->out("\nTotal time: <bold><green>$time s</green></bold>");
-
+        $climate->out("\nTotal time: <bold><green>$time s</green></bold>\n");
         if ($errors) {
             $climate->out("\nErrors: <bold>" . $errors . "\n");
-            sleep(5);
             exit($errors);
         }
     }

@@ -58,6 +58,15 @@ class AdminPresenter extends APresenter
         '.webp',
     ];
 
+    /* @var string last log message */
+    private string $_lastlog = '';
+
+    /* @var int log counter */
+    private int $_logcounter = 0;
+
+    /* @var int max. display logs */
+    const MAX_LOGS = 500;
+
     /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
@@ -375,7 +384,7 @@ class AdminPresenter extends APresenter
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
-                while (($s = \fgets($file)) && ($c < 100)) {
+                while (($s = \fgets($file)) && ($c < self::MAX_LOGS)) {
                     $logs[] = $s;
                     $c++;
                 }
@@ -399,7 +408,7 @@ class AdminPresenter extends APresenter
                 ) {
                     $arr[$k] = [
                         'csv' => $v,
-                        'lines' => $this->getFileLines(DATA . DS . "{$k}.csv"),
+                        'lines' => $this->_getCSVFileLines(DATA . DS . "{$k}.csv"),
                         'sheet' => $cfg['lasagna_sheets'][$k] ?? null,
                         'timestamp' => \filemtime(DATA . DS . "{$k}.csv"),
                     ];
@@ -852,6 +861,10 @@ class AdminPresenter extends APresenter
     private function _decorateLogs(&$val, $key)
     {
         $x = \explode(';', $val);
+        if (!\is_array($x)) {
+            return;
+        }
+        $this->_logcounter++;
         $t = \strtotime($x[0]);
         if ($t) {
             $t = \date("d.\tn.\tY\nH:i:s", $t);
@@ -862,10 +875,29 @@ class AdminPresenter extends APresenter
         $x[2] = \str_replace('IP:', '', $x[2]);
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
-        $val = "<td class=center>{$x[0]}</td>"
-            .  "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
-            .  "<td class=mono>{$x[2]}</td>"
-            .  "<td>{$x[1]}</td>";
+        $class = '';
+        // colorization
+        if (\stripos($x[1], 'ADMIN') !== false) {
+            $class = 'green lighten-4';
+        }
+        if (\stripos($x[1], 'REMOTE') !== false) {
+            $class = 'red lighten-4';
+        }
+        if (\stripos($x[1], 'TOKEN') !== false) {
+            $class = 'red lighten-4';
+        }
+        // hide repetitions
+        if ($x[1] == $this->_lastlog) {
+            $class = 'hide';
+        }
+        $this->_lastlog = $x[1];
+        $val = "<tr class='{$class}'>"
+            . "<td>" . $this->_logcounter . "</td>"
+            . "<td class=center>{$x[0]}</td>"
+            . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
+            . "<td class=mono>{$x[2]}</td>"
+            . "<td>{$x[1]}</td>"
+            . "</tr>";
     }
 
     /**
@@ -996,7 +1028,7 @@ class AdminPresenter extends APresenter
      * 
      * @return int number of lines / -1 on error
      */
-    public function getFileLines($f)
+    private function _getCSVFileLines($f)
     {
         try {
             if (!\file_exists($f)) {

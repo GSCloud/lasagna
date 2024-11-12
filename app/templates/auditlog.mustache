@@ -64,17 +64,18 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
 <body>
 
 <table class="highlight">
-<thead style="position:sticky;border-bottom:2px solid #ccc!important">
-<tr>
-<th class=center>DATE</th>
-<th class=center width=15%>USER</th>
-<th>IP&nbsp;ADDRESS</th>
-<th width=75%>MESSAGE</th>
-</tr>
-</thead>
-<tbody>
-{{#content}}<tr>{{.}}</tr>{{/content}}
-</tbody>
+  <thead style="position:sticky;border-bottom:2px solid #ccc!important">
+    <tr>
+      <th></th>
+      <th class=center>DATE</th>
+      <th class=center width=15%>USER</th>
+      <th>IP&nbsp;ADDRESS</th>
+      <th width=75%>MESSAGE</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#content}}{{.}}{{/content}}
+  </tbody>
 </table>
 
 </body>
