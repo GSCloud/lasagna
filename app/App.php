@@ -376,7 +376,7 @@ if ($router[$view]['redirect'] ?? false) {
 
 // COUNTRY REDIRECT
 if ($router[$view]['country'] ?? false) {
-    $rand = \substr(\hash('sha256', \random_bytes(8) . (string) \time()), 0, 16);
+    $rand = substr(hash('sha256', random_bytes(8) . (string) time()), 0, 16);
     $nonce = "?nonce={$rand}";
     if (!LOCALHOST && array_key_exists($country, $router[$view]['country'])) {
         if (ob_get_level()) {
