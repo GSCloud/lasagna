@@ -17,7 +17,7 @@ use Tracy\Debugger;
 
 define('TESSERACT_START', microtime(true));
 
-// external include for cli SAPI
+// external include for CLI SAPI
 if (PHP_SAPI == 'cli') {
     $req = getenv('CLI_REQ');
     if ($req && file_exists($req) && is_readable($req)) {
@@ -25,7 +25,7 @@ if (PHP_SAPI == 'cli') {
     }
 }
 
-// PHP INI - modify default configuration
+// PHP INI
 ini_set(
     'auto_detect_line_endings',
     defined('AUTO_DETECT_LINE_ENDINGS') ? AUTO_DETECT_LINE_ENDINGS : 'true'
@@ -89,10 +89,10 @@ defined('LOGS') || define('LOGS', ROOT . DS . 'logs');
 // temporary files storage
 defined('TEMP') || define('TEMP', ROOT . DS . 'temp');
 
-// are we running from CLI?
+// running from CLI?
 defined('CLI') || define('CLI', (bool) (PHP_SAPI == 'cli'));
 
-// are we running from localhost?
+// running from localhost?
 defined('LOCALHOST') || define(
     'LOCALHOST', (bool) (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') || CLI
 );
@@ -110,7 +110,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
         $cfg = null;
     }
     if (!is_array($cfg)) {
-        die('FATAL ERROR: Invalid MAIN CONFIGURATION!');
+        die('FATAL ERROR: INVALID MAIN CONFIG!');
     }
     try {
         if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
@@ -121,16 +121,16 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 $priv = null;
             }
             if (!is_array($priv)) {
-                throw new Exception('FATAL ERROR: PRIVATE CONFIG NOT AN ARRAY!');
+                throw new Exception('FATAL ERROR: PRIVATE CONFIG IS NOT AN ARRAY!');
             }
             $cfg = array_replace_recursive($cfg, $priv);
         }
     } catch (Exception $e) {
-        die('FATAL ERROR: Invalid PRIVATE CONFIGURATION!');
+        die('FATAL ERROR: INVALID PRIVATE CONFIG!');
     }
 }
 if (!is_array($cfg)) {
-    die('FATAL ERROR: Invalid MAIN CONFIGURATION!');
+    die('FATAL ERROR: INVALID MAIN CONFIG!');
 }
 
 // DEFAULT TIME ZONE
@@ -139,18 +139,18 @@ date_default_timezone_set(
 );
 
 // DEBUGGER
-if (($_SERVER['SERVER_NAME'] ?? '') === 'localhost') { // LOCALHOST only
-    if (($cfg['dbg'] ?? null) === false) {
-        defined('DEBUG') || define('DEBUG', false); // DISABLED via configuration
-    }
-    defined('DEBUG') || define('DEBUG', true); // ENABLED for localhost
-}
 if (CLI === true) {
-    defined('DEBUG') || define('DEBUG', false); // DISABLED for CLI
+    defined('DEBUG') || define('DEBUG', false);
+}
+if (($_SERVER['SERVER_NAME'] ?? '') === 'localhost') {
+    if (($cfg['dbg'] ?? null) === false) {
+        defined('DEBUG') || define('DEBUG', false); // DISABLED - configuration
+    }
+    defined('DEBUG') || define('DEBUG', true); // ENABLED - localhost
 }
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') !== false) {
-        defined('DEBUG') || define('DEBUG', false); // DISABLED for curl
+        defined('DEBUG') || define('DEBUG', false); // DISABLED - curl
     }
 }
 defined('DEBUG') || define('DEBUG', (bool) ($cfg['dbg'] ?? false));
@@ -183,8 +183,5 @@ if (DEBUG === true) {
     }
 }
 
-// END-CREDITS timer
 Debugger::timer('RUN');
-
-// run App
 require_once APP . DS . 'App.php';
