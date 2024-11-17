@@ -27,7 +27,7 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-  //if (!(event.request.url.indexOf('http') === 0)) return;
+  if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== 'GET') return;
   if (event.request.url.startsWith('https://accounts.google.com') === true) return;
   if (event.request.url.endsWith('.flac') === true) return;
