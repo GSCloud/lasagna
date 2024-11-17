@@ -58,7 +58,6 @@ GetError:
   api: true
   api_description: "Error page"
   api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
-  cached: true
   method: GET|POST
   presenter: error
   api_example: [

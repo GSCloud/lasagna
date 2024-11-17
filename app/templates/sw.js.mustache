@@ -2,9 +2,9 @@
 'use strict';
 
 var version = '{{ VERSION }}';
+
 var core = [
-  'manifest.json',
-  {{#swpreload}}'{{ . }}', {{/swpreload}}
+  'manifest.json',{{#swpreload}}'{{ . }}', {{/swpreload}}
   {{#swpreload_cdn}}'{{ cdn }}{{ . }}', {{/swpreload_cdn}}
   '{{ cdn }}/img/favicon-16.webp',
   '{{ cdn }}/img/favicon-128.webp',
@@ -27,7 +27,7 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-  if (!(event.request.url.indexOf('http') === 0)) return;
+  //if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== 'GET') return;
   if (event.request.url.startsWith('https://accounts.google.com') === true) return;
   if (event.request.url.endsWith('.flac') === true) return;
@@ -35,7 +35,6 @@ self.addEventListener('fetch', function (event) {
   if (event.request.url.endsWith('.mp4') === true) return;
   if (event.request.url.endsWith('.mkv') === true) return;
   if (event.request.url.endsWith('.webm') === true) return;
-  if (event.request.url.endsWith('.torrent') === true) return;
   if (event.request.url.indexOf('/login') !== -1) return;
   if (event.request.url.indexOf('/logout') !== -1) return;
   if (event.request.url.indexOf('/print/') !== -1) return;
@@ -46,9 +45,10 @@ self.addEventListener('fetch', function (event) {
   if (event.request.url.indexOf('{{.}}') !== -1) return;
   {{/dontcache}}
 
+  //console.log('SW cache: ' + event.request.url);
+
   event.respondWith(
-    caches.match(event.request)
-    .then(function (cached) {
+    caches.match(event.request).then(function (cached) {
       var networked = fetch(event.request)
         .then(fetchedFromNetwork, unableToResolve)
         .catch(unableToResolve);
@@ -60,13 +60,12 @@ self.addEventListener('fetch', function (event) {
           .then(function add(cache) {
             return cache.put(event.request, cacheCopy);
           })
-          .then(function () {
-          });
+          .then(function () {});
         return response;
       }
 
       function unableToResolve() {
-        return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0"><h2 style="text-align:center">📵 No connectivity!</h2><h4 style="text-align:center"><a href="javascript:location.reload();">click to reload ↻</a></h4>', {
+        return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0"><h2 style="text-align:center">📵 NO INTERNET</h2><h3 style="text-align:center"><a href="javascript:location.reload();">↻</a></h3>', {
           status: 503,
           statusText: 'Service Unavailable',
           headers: new Headers({
@@ -82,12 +81,9 @@ self.addEventListener('fetch', function (event) {
 
 self.addEventListener('activate', function (event) {
   event.waitUntil(
-    caches
-    .keys()
-    .then(function (keys) {
+    caches.keys().then(function (keys) {
       return Promise.all(
-        keys
-        .filter(function (key) {
+        keys.filter(function (key) {
           return !key.startsWith(version);
         })
         .map(function (key) {
@@ -96,7 +92,7 @@ self.addEventListener('activate', function (event) {
       );
     })
     .then(function () {
-      console.log('Service Worker active');
+      console.log('Service Worker active.');
     })
   );
 });
