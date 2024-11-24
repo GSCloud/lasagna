@@ -51,9 +51,9 @@ $data['cfg'] = $cfg;
 // CLOUDFLARE GEO BLOCKING; XX = unknown location
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
-    'RU',
     'BY',
-    'CN',
+    'RU',
+    'IR',
 ]);
 $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
 $data['country'] = $country;
