@@ -258,9 +258,11 @@ class StringFilters implements IStringFilters
         " He's " => " He&rsquo;s ",
         " It's " => " It&rsquo;s ",
         " She's " => " She&rsquo;s ",
+        " The " => " The&nbsp;",
         " he's " => " he&rsquo;s ",
         " it's " => " it&rsquo;s ",
         " she's " => " she&rsquo;s ",
+        " the " => " the&nbsp;",
 
         " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
