@@ -134,7 +134,11 @@ class AdminPresenter extends APresenter
         // API calls
         switch ($view) {
         case 'upload':
-            $this->checkPermission('admin,editor');
+            $this->checkPermission('admin,manager,editor');
+
+            if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
+                continue;
+            }
 
             // process all uploads
             $uploads = [];
@@ -218,52 +222,59 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData($uploads, $extras);
 
         case 'uploadDelete':
-            $this->checkPermission('admin,editor');
-            if (isset($_POST['name'])) {
-                $name = \trim($_POST['name'], "\\/.");
-                $info = \pathinfo($name);
+            $this->checkPermission('admin,manager,editor');
 
-                // error for '.size' file
-                if ($name === '.size') {
-                    ErrorPresenter::getInstance()->process(500);
-                }
-
-                if (\is_array($info)) {
-                    $fn = $info['filename'];
-
-                    // delete all files by the extension
-                    foreach (self::THUMBS_EXTENSIONS as $x) {
-
-                        // delete old thumbnails
-                        foreach (self::THUMBS_DELETE as $w) {
-                            $file = UPLOAD . DS
-                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                . $fn . $x;
+            if (\is_dir(UPLOAD) && \is_writable(UPLOAD)) {
+                if (isset($_POST['name'])) {
+                    $name = \trim($_POST['name'], "\\/.");
+                    $info = \pathinfo($name);
+    
+                    // error for '.size' file
+                    if ($name === '.size') {
+                        ErrorPresenter::getInstance()->process(500);
+                    }
+    
+                    if (\is_array($info)) {
+                        $fn = $info['filename'];
+    
+                        // delete all files by the extension
+                        foreach (self::THUMBS_EXTENSIONS as $x) {
+    
+                            // delete old thumbnails
+                            foreach (self::THUMBS_DELETE as $w) {
+                                $file = UPLOAD . DS
+                                    . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                    . $fn . $x;
+                                if (\file_exists($file)) {
+                                    \unlink($file);
+                                }
+                            }
+    
+                            // delete main file(s)
+                            $file = UPLOAD . DS . $fn . $x;
                             if (\file_exists($file)) {
                                 \unlink($file);
                             }
                         }
-
-                        // delete main file(s)
-                        $file = UPLOAD . DS . $fn . $x;
-                        if (\file_exists($file)) {
-                            \unlink($file);
-                        }
                     }
+    
+                    // delete the origin
+                    $file = UPLOAD . DS . $name;
+                    if (\file_exists($file)) {
+                        \unlink($file);
+                    }
+                    $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
+                    return $this->writeJsonData($name, $extras);
                 }
-
-                // delete the origin
-                $file = UPLOAD . DS . $name;
-                if (\file_exists($file)) {
-                    \unlink($file);
-                }
-                $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
-                return $this->writeJsonData($name, $extras);
             }
             break;
 
         case 'getUploads':
-            $this->checkPermission('admin,editor');
+            $this->checkPermission('admin,manager,editor');
+
+            if (!\is_dir(UPLOAD) || !\is_readable(UPLOAD)) {
+                continue;
+            }
 
             $files = [];
             $stubs = [];
@@ -377,7 +388,7 @@ class AdminPresenter extends APresenter
             $this->setLocation();
 
         case 'AuditLog':
-            $this->checkPermission('admin');
+            $this->checkPermission('admin,manager');
             $this->setHeaderHTML();
             $filename = DATA . DS . 'AuditLog.txt';
             $file = \popen("tac {$filename}", 'r');
@@ -397,7 +408,7 @@ class AdminPresenter extends APresenter
             );
 
         case 'GetCsvInfo':
-            $this->checkPermission('admin,editor,tester');
+            $this->checkPermission('admin,manager,editor,tester');
             $arr = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
             foreach ($arr as $k => $v) {
                 if (!$k || !$v) {
@@ -420,7 +431,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData($arr, $extras);
 
         case 'GetArticlesInfo':
-            $this->checkPermission('admin,editor');
+            $this->checkPermission('admin,manager,editor');
             $data = [];
             $profile = 'default';
             $f = DATA . DS. "summernote_articles_{$profile}.txt";
@@ -569,13 +580,13 @@ class AdminPresenter extends APresenter
             $this->unauthorizedAccess();
 
         case 'FlushCache':
-            $this->checkPermission('admin,editor');
+            $this->checkPermission('admin,manager,editor');
             $this->flushCache();
             $this->addAuditMessage('ADMIN: Flush Cache');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'CoreUpdate':
-            $this->checkPermission('admin,editor');
+            $this->checkPermission('admin,manager,editor');
             $this->setForceCsvCheck(true);
             $this->postloadAppData('app_data');
             $this->flushCache();
@@ -583,7 +594,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'UpdateArticles':
-            $this->checkPermission('admin,editor');
+            $this->checkPermission('admin,manager,editor');
             $x = 0;
             $profile = 'default';
             if (isset($_POST['data'])) {
