@@ -31,7 +31,7 @@
               <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
             </g>
           </g>
-        </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
+        </svg>&nbsp;{{ l.a_umami_ttip }}&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
       </a>
       {{#umami.share}}
       <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
@@ -44,7 +44,7 @@
               <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
             </g>
           </g>
-        </svg>&nbsp;Umami&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
+        </svg>&nbsp;{{ l.a_umami_ttip }}&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
       </a>
       {{/umami.share}}
       {{/umami.id}}
@@ -53,10 +53,15 @@
         data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
         <i class="fa-solid fa-file-invoice"></i>&nbsp;FAKTURACE</a>
       {{/langcs}}
+      {{#langsk}}
+      <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+        data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
+        <i class="fa-solid fa-file-invoice"></i>&nbsp;FAKTURÁCIE</a>
+      {{/langsk}}
       {{#langen}}
       <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
         data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
-        <i class="fa-solid fa-file-invoice"></i>&nbsp;ACCOUNTING</a>
+        <i class="fa-solid fa-file-invoice"></i>&nbsp;INVOICES</a>
       {{/langen}}
     </div>
   </div>

@@ -168,6 +168,6 @@ a_logout_ttip,TOOLTIP,logout,odhlásit se,odhlásiť sa,Abmelden
 a_php_ttip,TOOLTIP,PHP information,PHP informace,PHP informácie,PHP-Informationen
 a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
 a_sysinfo_ttip,TOOLTIP,SysInfo - system information,SysInfo - systémové informace,SysInfo - systémové informácie,SysInfo – Systeminformationen
-a_umami_ttip,TOOLTIP,Umami analytics,Umami analytika,Umami analytika,Umami-Analyse
+a_umami_ttip,TOOLTIP,Analytics,Analytika,Analytika,Analyse
 a_update_ttip,TOOLTIP,update data from Google Cloud,aktualizovat data z Google Cloudu,aktualizovať údaje zo služby Google Cloud,Aktualisieren Sie Daten aus Google Cloud
 a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads
