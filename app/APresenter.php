@@ -1095,7 +1095,6 @@ abstract class APresenter implements IPresenter
                 }
                 if ($x) {
                     $this->logout(); // something is terribly wrong!!!
-                    break;
                 }
                 if ($q['nonce'] == $nonce) { // compare nonces
                     $this->identity = $q; // set identity

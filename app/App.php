@@ -46,6 +46,7 @@ $cfg = $data = $cfg ?? [];
 
 // inject base CSV locale into $cfg
 array_unshift($cfg['locales'], 'base.csv');
+
 $data['cfg'] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING; XX = unknown location
