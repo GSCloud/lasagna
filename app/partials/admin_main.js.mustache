@@ -158,7 +158,7 @@
       $("#a_summernote").unbind();
       $("#a_summernote").click(function () {
         if (GSC.offline) {
-          M.toast({text: "offline 📶"});
+          M.toast({text: "offline 📶", classes: "normaltoast"});
           return;
         }
         $("#a_summernote").attr("disabled", "disabled");
@@ -178,7 +178,7 @@
           path: location.pathname,
           data: JSON.stringify(data)
         }, function (data) {
-          M.toast({text: "💾 {{ l.a_saved_ok }}"});
+          M.toast({text: "💾 {{ l.a_saved_ok }}", classes: "normaltoast"});
         }).done(function () {
           $("#a_summernote").removeAttr("disabled");
           GSC.AdminUI();
@@ -186,7 +186,7 @@
           // error message
           alert(error);
           $("#a_summernote").removeAttr("disabled");
-          M.toast({text: "{{ l.a_error_general }}"});
+          M.toast({text: "{{ l.a_error_general }}", classes: "normaltoast"});
         });
       });
 
@@ -629,7 +629,7 @@
       // remote function selector
       $("#RemoteFnSelect").change(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶"});
+          M.toast({text: "offline 📶", classes: "normaltoast"});
           return GSC.PingDot("#sectok_ping", false);
         }
         if (!$("#RemoteFnSelect").val()) return;
@@ -641,19 +641,19 @@
           t = t.replace(/[a-zA-Z]*\?/, s + "?");
           GSC.CopyClipboard(t);
           GSC.PingDot("#sectok_ping");
-          M.toast({text: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }}"});
+          M.toast({text: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }, classes: "normaltoast"}"});
         }).fail(function () {
           $("#a_security_token").val("N/A");
           GSC.PingDot("#sectok_ping", false);
           GSC.CopyClipboard("");
-          M.toast({text: "{{ l.a_error_general }}"});
+          M.toast({text: "{{ l.a_error_general }}", classes: "normaltoast"});
         });
       });
 
       // update CSV data
       $("#a_update").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶"});
+          M.toast({text: "offline 📶", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
         $("#a_update").attr("disabled", "disabled");
@@ -663,13 +663,13 @@
 
         // API: CoreUpdate
         $.post("/admin/CoreUpdate");
-        M.toast({text: "{{ l.a_processing_data }}"});
+        M.toast({text: "{{ l.a_processing_data }}", classes: "normaltoast"});
       });
 
       // invoke Summernote editor
       $("#a_summernote").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶"});
+          ({text: "offline 📶", classes: "normaltoast"});
           return GSC.PingDot("#psi_ping", false);
         }
         GSC.ReadArticles(function () {
@@ -680,7 +680,7 @@
       // file manager
       $("#a_files").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶"});
+          M.toast({text: "offline 📶", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
 
@@ -913,7 +913,7 @@
             $("#a_file_manager .copydata").click(function () {
               var x = $(this).data("text");
               GSC.CopyClipboard(x);
-              M.toast({text: "📋 " + x});
+              M.toast({text: "📋 " + x, classes: "normaltoast"});
             });
             
             // UPLOAD: delete file
@@ -928,7 +928,7 @@
                 $.post("/admin/uploadDelete", {
                   name: x
                 }).done(function (data) {
-                  M.toast({text: "🚮 " + x});
+                  M.toast({text: "🚮 " + x, classes: "normaltoast"});
                   GSC.RenderUploadInfo();
                 });
               }
@@ -940,7 +940,7 @@
       // flush cache
       $("#a_flush").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶"});
+          M.toast({text: "offline 📶", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
         GSC.GetCsvInfo = function () {};
@@ -993,7 +993,7 @@
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
       ZeroUpload.on("complete", function (response) {
-        M.toast({text: "{{ l.a_uploading_finished }}"});
+        M.toast({text: "{{ l.a_uploading_finished }}", classes: "normaltoast"});
         var data = JSON.parse(response.data);
         if (data && data.data) {
           setCookie("open_filemanager", 1);
@@ -1003,7 +1003,7 @@
       });
 
       ZeroUpload.on("start", function (files, userData) {
-        M.toast({text: "{{ l.a_uploading }}"});
+        M.toast({text: "{{ l.a_uploading }}", classes: "normaltoast"});
       });
 
       ZeroUpload.on("error", function (type, message, userData) {
@@ -1027,7 +1027,7 @@
           default:
             s = "{{ l.a_upload_ajax }}";
         }
-        M.toast({text: s});
+        M.toast({text: s, classes: "normaltoast"});
       });
 
       ZeroUpload.on("progress", function (progress, userData) {
@@ -1048,7 +1048,7 @@
       // UI: upload button
       $("#a_upload").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶"});
+          M.toast({text: "offline 📶", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
         $("#a_uploader_progress").html("");

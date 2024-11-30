@@ -257,7 +257,7 @@ async function sha256(message) {
           t = $(that).text().trim();
         }
         GSC.CopyClipboard(t);
-        M.toast({text: "📋 " + t});
+        M.toast({text: "📋 " + t, classes: "normaltoast"});
       }
     }
 
@@ -267,7 +267,7 @@ async function sha256(message) {
         var t = $(that).text().trim();
         var h = $(that).html().trim();
         GSC.CopyClipboard(h);
-        M.toast({text: "📋 " + t});
+        M.toast({text: "📋 " + t, classes: "normaltoast"});
       }
     }
 
