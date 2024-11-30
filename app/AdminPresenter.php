@@ -284,10 +284,12 @@ class AdminPresenter extends APresenter
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
                     if (($f != '.') && ($f != '..')) {
+
                         // exclude thumbnails
                         if (\str_starts_with($f, self::THUMB_PREFIX)) {
                             continue;
                         }
+
                         // exclude '.size' file
                         if ($f === '.size') {
                             continue;

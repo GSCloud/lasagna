@@ -26,7 +26,8 @@
         "symfony/lock": "^4",
         "symfony/polyfill-mbstring": "^1",
         "tracy/tracy": "^2",
-        "tuupola/base58": "^1"
+        "tuupola/base58": "^1",
+        "symfony/polyfill-php80": "^1.31"
     },
     "autoload": {
         "psr-4": {
