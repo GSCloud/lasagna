@@ -1161,7 +1161,7 @@ class StringFilters implements IStringFilters
         }
         if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
-            return \glob($mask . '*.' . $format);
+            return \glob($mask . '*.' . $format) ?: null;
         }
         return null;
     }
