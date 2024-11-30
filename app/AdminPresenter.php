@@ -273,7 +273,7 @@ class AdminPresenter extends APresenter
             $this->checkPermission('admin,manager,editor');
 
             if (!\is_dir(UPLOAD) || !\is_readable(UPLOAD)) {
-                continue;
+                break;
             }
 
             $files = [];
