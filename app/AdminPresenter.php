@@ -137,7 +137,7 @@ class AdminPresenter extends APresenter
             $this->checkPermission('admin,manager,editor');
 
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                continue;
+                break;
             }
 
             // process all uploads
