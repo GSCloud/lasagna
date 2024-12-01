@@ -45,9 +45,9 @@ class AdminPresenter extends APresenter
         160, 320, 640
     ];
 
-    /* @var array thumbnails width to delete, incl. legacy */
+    /* @var array thumbnails width to delete */
     const THUMBS_DELETE = [
-        50, 64, 128, 150, 160, 320, 512, 640
+        160, 320, 640
     ];
 
     /* @var array thumbnail extensions */
@@ -72,17 +72,17 @@ class AdminPresenter extends APresenter
         IMAGETYPE_JPEG => [
             'load' => 'imagecreatefromjpeg',
             'save' => 'imagejpeg',
-            'quality' => 75,
+            'quality' => 90,
         ],
         IMAGETYPE_PNG => [
             'load' => 'imagecreatefrompng',
             'save' => 'imagepng',
-            'quality' => 8,
+            'quality' => 9,
         ],
         IMAGETYPE_WEBP => [
             'load' => 'imagecreatefromwebp',
             'save' => 'imagewebp',
-            'quality' => 75,
+            'quality' => 90,
         ],
     ];
 
@@ -1000,14 +1000,17 @@ class AdminPresenter extends APresenter
         }
 
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
+
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
         $w = \imagesx($image);
         $w = \intval($w);
+
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
         $h = \imagesy($image);
         $h = \intval($h);
+
         if ($tw === null) {
             $tw = $w;
         }
@@ -1042,9 +1045,11 @@ class AdminPresenter extends APresenter
                     \imagesavealpha($thmb, true);
                 }
             }
+
             // phpcs:ignore
             /** @phpstan-ignore-next-line */
             \imagecopyresampled($thmb, $image, 0, 0, 0, 0, $tw, $th, $w, $h);
+
             return \call_user_func(
                 self::IMAGE_HANDLERS[$type]['save'],
                 $thmb,
