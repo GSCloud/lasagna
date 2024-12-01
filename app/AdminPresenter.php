@@ -212,11 +212,16 @@ class AdminPresenter extends APresenter
                 }
             }
             $count = \count($uploads);
-            $names = \join(' ', $uploads);
+            $names = \array_map(
+                function ($value) {
+                    return "[$value] ";
+                }, $uploads
+            );
+            $names = \implode($names);
             $this->addAuditMessage(
                 'ADMIN: file(s) uploaded: '
                 . $count
-                . '<br>'
+                . 'x<br>'
                 . $names
             );
             return $this->writeJsonData($uploads, $extras);
@@ -392,21 +397,18 @@ class AdminPresenter extends APresenter
         case 'AuditLog':
             $this->checkPermission('admin,manager');
             $this->setHeaderHTML();
-
             $filename = DATA . DS . 'AuditLog.txt';
             $file = \popen("tac {$filename}", 'r');
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
-                while (($s = \fgets($file)) && ($c < self::MAX_LOGS)) {
-                    $logs[] = $s;
+                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS)) {
                     $c++;
                 }
                 \pclose($file);
             }
             \array_walk($logs, array($this, '_decorateLogs'));
             $data['content'] = $logs;
-
             return $this->setData(
                 'output', $this->setData($data)->renderHTML('auditlog')
             );
