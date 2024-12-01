@@ -392,6 +392,7 @@ class AdminPresenter extends APresenter
         case 'AuditLog':
             $this->checkPermission('admin,manager');
             $this->setHeaderHTML();
+
             $filename = DATA . DS . 'AuditLog.txt';
             $file = \popen("tac {$filename}", 'r');
             $c = 0;
@@ -405,6 +406,7 @@ class AdminPresenter extends APresenter
             }
             \array_walk($logs, array($this, '_decorateLogs'));
             $data['content'] = $logs;
+
             return $this->setData(
                 'output', $this->setData($data)->renderHTML('auditlog')
             );
@@ -864,76 +866,6 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Decorate log entries
-     *
-     * @param string $val log line
-     * @param int    $key array index
-     * 
-     * @return void
-     */
-    private function _decorateLogs(&$val, $key)
-    {
-        if (\stripos($val, 'exception') !== false) {
-            $val = '';
-            return;
-        }
-        if (\stripos($val, 'Origin Time-out') !== false) {
-            $val = '';
-            return;
-        }
-        if (\stripos($val, 'Bad Gateway') !== false) {
-            $val = '';
-            return;
-        }
-        $x = \explode(';', $val);
-        if (!\is_array($x)) {
-            return;
-        }
-        if (\count($x) < 5) {
-            return;
-        }
-        $this->_logcounter++;
-        $t = \strtotime($x[0]);
-        if ($t) {
-            $y = \date("Y", $t);
-            if ($y < 2024) {
-                $val = '';
-                return;
-            }
-            $t = \date("d.\tn.\tY\nH:i:s", $t);
-            $t = \str_replace("\t", '&nbsp;', $t);
-            $t = \str_replace("\n", '<br>', $t);
-            $x[0] = $t;
-        }
-        $x[2] = \str_replace('IP:', '', $x[2]);
-        $x[3] = \str_replace('NAME:', '', $x[3]);
-        $x[4] = \str_replace('EMAIL:', '', $x[4]);
-        $class = '';
-        // colorization
-        if (\stripos($x[1], 'ADMIN') !== false) {
-            $class = 'green lighten-4';
-        }
-        if (\stripos($x[1], 'REMOTE') !== false) {
-            $class = 'red lighten-4';
-        }
-        if (\stripos($x[1], 'TOKEN') !== false) {
-            $class = 'red lighten-4';
-        }
-        // hide repetitions
-        if ($x[1] == $this->_lastlog) {
-            $class = 'hide';
-        }
-        $this->_lastlog = $x[1];
-        $val = "<tr class='{$class}'>"
-            . "<td>" . $this->_logcounter . "</td>"
-            . "<td class=center>{$x[0]}</td>"
-            . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
-            . "<td class=mono>{$x[2]}</td>"
-            . "<td>{$x[1]}</td>"
-            . "</tr>";
-    }
-
-    /**
      * Create the admin key
      *
      * @return self
@@ -1057,6 +989,76 @@ class AdminPresenter extends APresenter
                 self::IMAGE_HANDLERS[$type]['quality']
             );
         }
+    }
+
+    /**
+     * Decorate log entries
+     *
+     * @param string $val log line
+     * @param int    $key array index
+     * 
+     * @return void
+     */
+    private function _decorateLogs(&$val, $key)
+    {
+        if (\stripos($val, 'exception') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Origin Time-out') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Bad Gateway') !== false) {
+            $val = '';
+            return;
+        }
+        $x = \explode(';', $val);
+        if (!\is_array($x)) {
+            return;
+        }
+        if (\count($x) < 5) {
+            return;
+        }
+        $this->_logcounter++;
+        $t = \strtotime($x[0]);
+        if ($t) {
+            $y = \date("Y", $t);
+            if ($y < 2024) {
+                $val = '';
+                return;
+            }
+            $t = \date("d.\tn.\tY\nH:i:s", $t);
+            $t = \str_replace("\t", '&nbsp;', $t);
+            $t = \str_replace("\n", '<br>', $t);
+            $x[0] = $t;
+        }
+        $x[2] = \str_replace('IP:', '', $x[2]);
+        $x[3] = \str_replace('NAME:', '', $x[3]);
+        $x[4] = \str_replace('EMAIL:', '', $x[4]);
+        $class = '';
+        // colorization
+        if (\stripos($x[1], 'ADMIN') !== false) {
+            $class = 'green lighten-4';
+        }
+        if (\stripos($x[1], 'REMOTE') !== false) {
+            $class = 'red lighten-4';
+        }
+        if (\stripos($x[1], 'TOKEN') !== false) {
+            $class = 'red lighten-4';
+        }
+        // hide repetitions
+        if ($x[1] == $this->_lastlog) {
+            $class = 'hide';
+        }
+        $this->_lastlog = $x[1];
+        $val = "<tr class='{$class}'>"
+            . "<td>" . $this->_logcounter . "</td>"
+            . "<td class=center>{$x[0]}</td>"
+            . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
+            . "<td class=mono>{$x[2]}</td>"
+            . "<td>{$x[1]}</td>"
+            . "</tr>";
     }
 
     /**
