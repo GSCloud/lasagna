@@ -90,17 +90,14 @@ class CliPresenter extends APresenter
         $data = $this->getData();
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
-
         $data["controller"] = $c = "CorePresenter";
         $controller = "\\GSC\\{$c}";
         $data["view"] = $v;
-
         $data["base"] = $arg["base"] ?? "https://example.com/";
         $data["match"] = $arg["match"] ?? null;
-
         echo $controller::getInstance()
             ->setData($data)->process()->getData()["output"] ?? "";
-        exit(0);
+        exit;
     }
 
     /**
@@ -211,7 +208,6 @@ class CliPresenter extends APresenter
             include_once "CiTester.php";
             new CiTester($this->getCfg(), $this->getPresenter(), $module);
             break;
-
         case "clearcache":
             foreach ($this->getData("cache_profiles") as $k => $v) {
                 // clear all cache profiles
@@ -224,42 +220,35 @@ class CliPresenter extends APresenter
             \clearstatcache();
             $climate->out("<bold>Cache 🧹</bold>");
             break;
-
         case "clearci":
             $files = \glob(ROOT . DS . "ci" . DS . "*");
             $c = \count($files);
             \array_map("unlink", $files);
             $climate->out("CI logs <bold>$c file(s) 🧹</bold>");
             break;
-
         case "clearlogs":
             $files = \glob(LOGS . DS . "*");
             $c = \count($files);
             \array_map("unlink", $files);
             $climate->out("Other logs <bold>$c file(s) 🧹</bold>");
             break;
-
         case "cleartemp":
             $files = \glob(TEMP . DS . "*");
             $c = \count($files);
             \array_map("unlink", $files);
             $climate->out("Temporary <bold>$c file(s) 🧹</bold>");
             break;
-
         case "unit":
             include_once "UnitTester.php";
             new UnitTester;
             break;
-
         case "doctor":
             include_once "Doctor.php";
             new Doctor;
             break;
-
         case "app":
             $this->evaler($this, $argc, $argv);
             break;
-
         default:
             $module = \ucfirst(\strtolower($module));
             $presenter = "\\GSC\\Cli{$module}";
