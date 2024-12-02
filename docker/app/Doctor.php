@@ -69,10 +69,6 @@ class Doctor
 
         $climate->out("\n<blue><bold>File System - FILES");
         $this->validate(
-            "<bold>.env</bold> in ROOT",
-            $this->isreadable(ROOT . DS . ".env")
-        );
-        $this->validate(
             "<bold>CONFIG</bold> » "
             . CONFIG, $this->isreadable(CONFIG)
         );
