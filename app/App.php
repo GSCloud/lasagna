@@ -189,20 +189,20 @@ $cache_profiles = array_replace(
 
 // INIT CACHE PROFILES
 foreach ($cache_profiles as $k => $v) {
+    Cache::setConfig(
+        "{$k}_file", [
+            'className' => 'Cake\Cache\Engine\FileEngine',
+            'duration' => $v,
+            'lock' => true,
+            'path' => CACHE,
+            'prefix' => PROJECT
+                . '_'
+                . APPNAME
+                . '_'
+                . CACHEPREFIX,
+        ]
+    );
     if ($cfg['redis']['port'] ?? null) {
-        Cache::setConfig(
-            "{$k}_file", [
-                'className' => 'Cake\Cache\Engine\FileEngine',
-                'duration' => $v,
-                'lock' => true,
-                'path' => CACHE,
-                'prefix' => PROJECT
-                    . '_'
-                    . APPNAME
-                    . '_'
-                    . CACHEPREFIX,
-            ]
-        );
         Cache::setConfig(
             $k, [
                 'className' => 'Cake\Cache\Engine\RedisEngine',
