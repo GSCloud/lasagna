@@ -46,15 +46,18 @@ $cfg = $data = $cfg ?? [];
 
 // inject base CSV locale into $cfg
 array_unshift($cfg['locales'], 'base.csv');
+unset($cfg['locales']['default']);
+unset($cfg['locales']['admin']);
 
 $data['cfg'] = $cfg;
 
-// CLOUDFLARE GEO BLOCKING; XX = unknown location
+// CLOUDFLARE GEO BLOCKING; XX = unknown, T1 = TOR anonymous
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
     'BY',
-    'RU',
     'IR',
+    'RU',
+    'T1',
 ]);
 $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
 $data['country'] = $country;
