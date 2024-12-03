@@ -80,10 +80,13 @@ if (!$requestUri) {
 
 $data['ARGC'] = $argc ?? 0;
 $data['ARGV'] = $argv ?? [];
-$data['COOKIE'] = array_map('htmlspecialchars', $_COOKIE);
 $data['GET'] = array_map('htmlspecialchars', $_GET);
 $data['POST'] = array_map('htmlspecialchars', $_POST);
-
+$data['COOKIE'] = array_map('htmlspecialchars', $_COOKIE);
+$data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
+$data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
+$data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP']
+    ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 $data['PHP_VERSION'] = PHP_VERSION;
 $data['DATA_VERSION'] = null;
 $data['VERSION'] = $version = trim(
@@ -117,7 +120,6 @@ if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
     $isSafari = true;
 }
 $data['isSafari'] = $isSafari;
-
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 $data['base'] = $data['BASE'] = $host ? (
     ($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/"

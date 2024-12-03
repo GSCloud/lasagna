@@ -89,7 +89,7 @@ class CorePresenter extends APresenter
         case "GetWebManifest":
             $this->setHeaderJson();
             $lang = $this->getData('router.defaults.language');
-            $lang = $this->validateLanguage($lang);
+            $lang = $this->_validateLanguage($lang);
             $l = $this->getLocale($lang);
             return $this->setData(
                 "output",
@@ -125,7 +125,7 @@ class CorePresenter extends APresenter
         case "GetRSSXML":
             $this->setHeaderXML();
             $lang = $this->getData('router.defaults.language');
-            $lang = $this->validateLanguage($lang);
+            $lang = $this->_validateLanguage($lang);
             $l = $this->getLocale($lang);
             if (\class_exists("\\GSC\\RSSPresenter")) {
                 $map = RSSPresenter::getInstance()->process();
@@ -269,7 +269,7 @@ class CorePresenter extends APresenter
         }
 
         $fl = '';
-        $language = $this->validateLanguage($presenter[$view]["language"]);
+        $language = $this->_validateLanguage($presenter[$view]["language"]);
         $locale = $this->getLocale($language);
         $flushed =(DATA . DS . '_default_cache_flushed_');
         if (\file_exists($flushed)) {
@@ -341,7 +341,7 @@ class CorePresenter extends APresenter
      * 
      * @return string correct language code
      */
-    public function validateLanguage($lang = "en")
+    private function _validateLanguage($lang = "en")
     {
         if (!$lang) {
             return "en";
@@ -356,7 +356,7 @@ class CorePresenter extends APresenter
                 "en",
                 "cs",
                 "sk",
-                "de",
+                //"de",
             ]
         )
         ) {
