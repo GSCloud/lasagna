@@ -215,6 +215,9 @@ class CorePresenter extends APresenter
             return $this->writeJsonData($d, $extras);
 
         case "ReadArticles":
+            if ($this->getCfg('disable_articles')) {
+                $this->setLocation(); // fn disabled
+            }
             $this->checkRateLimit();
             $x = 0;
             $hash = null;

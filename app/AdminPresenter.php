@@ -166,7 +166,7 @@ class AdminPresenter extends APresenter
                     continue;
                 }
                 
-                // skip the '.size' file
+                // skip '.size' file
                 if ($f === '.size') {
                     continue;
                 }
@@ -211,6 +211,7 @@ class AdminPresenter extends APresenter
                     }
                 }
             }
+
             $count = \count($uploads);
             $names = \array_map(
                 function ($value) {
@@ -218,12 +219,14 @@ class AdminPresenter extends APresenter
                 }, $uploads
             );
             $names = \implode($names);
+
             $this->addAuditMessage(
                 'ADMIN: file(s) uploaded: '
                 . $count
                 . 'x<br>'
                 . $names
             );
+
             return $this->writeJsonData($uploads, $extras);
 
         case 'uploadDelete':
@@ -916,7 +919,7 @@ class AdminPresenter extends APresenter
      *
      * @param string $src  file source
      * @param string $dest file target
-     * @param mixed  $tw   output width
+     * @param mixed  $tw   output width or null
      * @param mixed  $th   output height or null
      * 
      * @return mixed image conversion call result
@@ -951,7 +954,8 @@ class AdminPresenter extends APresenter
         if (\is_numeric($tw)) {
             $tw = \intval($tw);
         }
-        if ($th == null) {
+
+        if ($th === null) {
             $ratio = $w / $h;
             if ($w > $h) {
                 $th = \floor($tw / $ratio);
@@ -960,6 +964,7 @@ class AdminPresenter extends APresenter
                 $tw = \floor($tw * $ratio);
             }
         }
+
         $thmb = null;
         if (\is_numeric($tw)) {
             $tw = \intval($tw);
@@ -968,6 +973,7 @@ class AdminPresenter extends APresenter
                 $thmb = \imagecreatetruecolor($tw, $th);
             }
         }
+
         if ($thmb) {
             if ($type == IMAGETYPE_PNG) {
                 \imagecolortransparent(
