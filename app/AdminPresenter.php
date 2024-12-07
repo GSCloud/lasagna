@@ -417,7 +417,7 @@ class AdminPresenter extends APresenter
             );
 
         case 'GetCsvInfo':
-            $this->checkPermission('admin,manager,editor,tester');
+            $this->checkPermission('admin,manager,editor');
             $arr = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
             foreach ($arr as $k => $v) {
                 if (!$k || !$v) {

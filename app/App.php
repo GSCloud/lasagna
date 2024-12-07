@@ -67,7 +67,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // DATA ARRAY
-define('ENGINE', 'Tesseract 2.4.1');
+define('ENGINE', 'Tesseract 2.4.2');
 $data['ENGINE'] = ENGINE;
 
 \Tracy\Debugger::timer('DATA');
@@ -120,10 +120,12 @@ if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
     $isSafari = true;
 }
 $data['isSafari'] = $isSafari;
+
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 $data['base'] = $data['BASE'] = $host ? (
     ($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/"
 ) : '';
+
 $data['request_uri'] = $requestUri;
 
 $rqp = strtok($requestUri, '?&');
@@ -139,18 +141,18 @@ $data['nonce'] = $data['NONCE'] = $nonce = substr(
         'sha256', random_bytes(16) . (string) time()
     ), 0, 8
 );
-$data['utm'] = $data['UTM']
-    = "?utm_source={$host}&utm_medium=website&nonce={$nonce}";
 
 $data['LOCALHOST'] = (bool) LOCALHOST;
-$data['ALPHA'] = (in_array($host, (array) ($cfg['alpha_hosts'] ?? [])));
-$data['BETA'] = (in_array($host, (array) ($cfg['beta_hosts'] ?? [])));
+
+$data['codemirror'] = '6.65.7';
 
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
+
 defined('CACHEPREFIX') || define(
     'CACHEPREFIX',
     'cache_' . hash('sha256', $x) . '_'
 );
+
 defined('DOMAIN') || define(
     'DOMAIN',
     strtolower(
@@ -159,6 +161,7 @@ defined('DOMAIN') || define(
         )
     )
 );
+
 defined('SERVER') || define(
     'SERVER',
     strtolower(
@@ -167,7 +170,9 @@ defined('SERVER') || define(
         )
     )
 );
+
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
+
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 
 // CACHE PROFILES

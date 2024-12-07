@@ -100,11 +100,11 @@ app_data: []
 # design
 design: [
   css_font: []
-  background_color: "white"
+  skin: "white"
   content: "white black-text"
+  background_color: "white"
   footer_color: "grey darken-4"
   nav_color: "orange"
-  skin: "white"
   theme_color: "orange"
 ]
 

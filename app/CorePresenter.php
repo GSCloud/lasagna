@@ -197,6 +197,14 @@ class CorePresenter extends APresenter
 
         case "GetServiceWorker":
             $this->setHeaderJavaScript();
+
+            $g = $this->getUserGroup();
+            if (\is_string($g)) {
+                $data['admin'] = $g;
+                $data["admin_group_{$g}"] = true;
+                $this->setData("admin_group_{$g}", true);
+            }
+    
             return $this->setData(
                 "output", $this->renderHTML("sw.js")
             );

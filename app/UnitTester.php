@@ -55,7 +55,7 @@ class UnitTester
             'RSSPresenter',
         ];
 
-        // check controllers
+        // test controllers
         foreach ($controllers as $c) {
             $controller = "\\GSC\\$c";
 

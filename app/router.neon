@@ -3,7 +3,13 @@ defaults:
 
 home:
   path: /
-  sitemap: true
+  country: [
+    default: '/en'
+    localhost: '/cs'
+    CZ: '/cs'
+    XX: '/en'
+  ]
+  assert_httpcode: 303
 
 cs:
   path: /cs
@@ -22,4 +28,3 @@ APIDemo:
   api_info: "Returns (JSON): array of object records."
   assert_json: true
   presenter: api
-

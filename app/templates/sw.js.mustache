@@ -27,6 +27,7 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
+  {{#admin_group_admin}}return; // admin detected{{/admin_group_admin}}
   if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== 'GET') return;
   if (event.request.url.startsWith('https://accounts.google.com') === true) return;
@@ -41,10 +42,7 @@ self.addEventListener('fetch', function (event) {
   if (event.request.url.indexOf('?nonce=') !== -1) return;
 
   // DON'T CACHE patterns
-  {{#dontcache}}
-  if (event.request.url.indexOf('{{.}}') !== -1) return;
-  {{/dontcache}}
-
+  {{#dontcache}}if (event.request.url.indexOf('{{.}}') !== -1) return;{{/dontcache}}
   //console.log('SW cache: ' + event.request.url);
 
   event.respondWith(

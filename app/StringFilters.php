@@ -226,11 +226,16 @@ class StringFilters implements IStringFilters
     /**
      * @var array<string,string>
      */
-    public static $english = [
+    public static $common = [
         "  " => " ",
-        " 💗 " => " 💗&nbsp;",
         " ♥️ " => " ♥️&nbsp;",
         " ❤️ " => " ❤️&nbsp;",
+        " 💗 " => " 💗&nbsp;",
+        " 💙 " => " 💙&nbsp;",
+        " 💚 " => " 💚&nbsp;",
+        " 🖤 " => " 🖤&nbsp;",
+        " 🤍 " => " 🤍&nbsp;",
+        " 🧡 " => " 🧡&nbsp;",
 
         "0. " => "0.&nbsp;",
         "1. " => "1.&nbsp;",
@@ -242,27 +247,6 @@ class StringFilters implements IStringFilters
         "7. " => "7.&nbsp;",
         "8. " => "8.&nbsp;",
         "9. " => "9.&nbsp;",
-
-        " % " => "&nbsp;% ",
-        " - " => " — ",
-        " ... " => "&nbsp;… ",
-        " ..." => "&nbsp;…",
-        " / " => " /&nbsp;",
-        " <<" => " «",
-        " – " => " —&nbsp;",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " ‰ " => "&nbsp;‰",
-        ">> " => "» ",
-
-        " He's " => " He&rsquo;s ",
-        " It's " => " It&rsquo;s ",
-        " She's " => " She&rsquo;s ",
-        " The " => " The&nbsp;",
-        " he's " => " he&rsquo;s ",
-        " it's " => " it&rsquo;s ",
-        " she's " => " she&rsquo;s ",
-        " the " => " the&nbsp;",
 
         " 0 " => " 0&nbsp;",
         " 1 " => " 1&nbsp;",
@@ -282,31 +266,20 @@ class StringFilters implements IStringFilters
         " :-[" => "&nbsp;😕",
         " :-|" => "&nbsp;😐",
 
-        " A " => " A&nbsp;",
-        " AM" => "&nbsp;AM",
-        " CZK " => " CZK&nbsp;",
-        " EUR " => " EUR&nbsp;",
-        " I " => " I&nbsp;",
-        " ID: " => " ID:&nbsp;",
-        " INC." => "&nbsp;Inc.",
-        " Inc." => "&nbsp;Inc.",
-        " LTD." => "&nbsp;Ltd.",
-        " Ltd." => "&nbsp;Ltd.",
-        " Miss " => " Miss&nbsp;",
-        " Mr " => " Mr&nbsp;",
-        " Mr. " => " Mr.&nbsp;",
-        " Mrs " => " Mrs&nbsp;",
-        " Mrs. " => " Mrs.&nbsp;",
-        " Ms " => " Ms&nbsp;",
-        " Ms. " => " Ms.&nbsp;",
-        " PM" => "&nbsp;PM",
-        " USD " => " USD&nbsp;",
-        " a " => " a&nbsp;",
+        " °C " => "&nbsp;°C ",
+        " °De " => "&nbsp;°De ",
+        " °F " => "&nbsp;°F ",
+        " °N " => "&nbsp;°N ",
+        " °Ra " => "&nbsp;°Ra ",
+        " °Ré " => "&nbsp;°Ré ",
+        " °Rø " => "&nbsp;°Rø ",
+
         " h " => "&nbsp;h ",
         " h, " => "&nbsp;h, ",
         " h. " => "&nbsp;h. ",
         " id: " => " id:&nbsp;",
         " kg " => "&nbsp;kg ",
+        " kg)" => "&nbsp;kg)",
         " l " => "&nbsp;l ",
         " l) " => "&nbsp;l) ",
         " l, " => "&nbsp;l, ",
@@ -319,15 +292,64 @@ class StringFilters implements IStringFilters
         " m3 " => "&nbsp;m³ ",
         " m² " => "&nbsp;m² ",
         " m³ " => "&nbsp;m³ ",
-        " pcs " => "&nbsp;pcs ",
-        " pcs)" => "&nbsp;pcs)",
-        " s " => "&nbsp;s ",
+        " s " => "&nbsp;s&nbsp;",
         " s) " => "&nbsp;s) ",
         " s, " => "&nbsp;s, ",
         " s. " => "&nbsp;s. ",
         " sec. " => "&nbsp;sec. ",
-        " °C " => "&nbsp;°C ",
-        " °F " => "&nbsp;°F ",
+
+        " CZK " => " CZK&nbsp;",
+        " EUR " => " EUR&nbsp;",
+        " USD " => " USD&nbsp;",
+        " ID: " => " ID:&nbsp;",
+        " INC." => "&nbsp;Inc.",
+        " Inc." => "&nbsp;Inc.",
+        " LTD." => "&nbsp;Ltd.",
+        " Ltd." => "&nbsp;Ltd.",
+
+        " % " => "&nbsp;% ",
+        " ‰ " => "&nbsp;‰",
+        " ... " => "&nbsp;… ",
+        " ..." => "&nbsp;…",
+        " / " => " /&nbsp;",
+        " <<" => " «",
+        ">> " => "» ",
+        " - " => " — ",
+        " – " => " —&nbsp;",
+        " — " => " —&nbsp;",
+        " ― " => " ―&nbsp;",
+    ];
+
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
+    public static $english = [
+        " He's " => " He&rsquo;s ",
+        " It's " => " It&rsquo;s ",
+        " She's " => " She&rsquo;s ",
+        " The " => " The&nbsp;",
+        " he's " => " he&rsquo;s ",
+        " it's " => " it&rsquo;s ",
+        " she's " => " she&rsquo;s ",
+        " the " => " the&nbsp;",
+
+        " A " => " A&nbsp;",
+        " An " => " An&nbsp;",
+        " AM" => "&nbsp;AM",
+        " I " => " I&nbsp;",
+        " Miss " => " Miss&nbsp;",
+        " Mr " => " Mr&nbsp;",
+        " Mr. " => " Mr.&nbsp;",
+        " Mrs " => " Mrs&nbsp;",
+        " Mrs. " => " Mrs.&nbsp;",
+        " Ms " => " Ms&nbsp;",
+        " Ms. " => " Ms.&nbsp;",
+        " PM" => "&nbsp;PM",
+        " a " => " a&nbsp;",
+        " an " => " an&nbsp;",
+        " pcs " => "&nbsp;pcs ",
+        " pcs)" => "&nbsp;pcs)",
     ];
 
     // phpcs:ignore
@@ -335,95 +357,31 @@ class StringFilters implements IStringFilters
      * @var array<string,string>
      */
     public static $czech = [
-        "  " => " ",
-        " 💗 " => " 💗&nbsp;",
-        " ♥️ " => " ♥️&nbsp;",
-        " ❤️ " => " ❤️&nbsp;",
-
-        " % " => "&nbsp;% ",
-        " - " => " — ",
-        " ... " => "&nbsp;… ",
-        " ..." => "&nbsp;…",
-        " / " => " /&nbsp;",
-        " <<" => " «",
-        " – " => " —&nbsp;",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " ‰ " => "&nbsp;‰",
-        ">> " => "» ",
-
-        "0. " => "0.&nbsp;",
-        "1. " => "1.&nbsp;",
-        "2. " => "2.&nbsp;",
-        "3. " => "3.&nbsp;",
-        "4. " => "4.&nbsp;",
-        "5. " => "5.&nbsp;",
-        "6. " => "6.&nbsp;",
-        "7. " => "7.&nbsp;",
-        "8. " => "8.&nbsp;",
-        "9. " => "9.&nbsp;",
-
-        " 0 " => " 0&nbsp;",
-        " 1 " => " 1&nbsp;",
-        " 2 " => " 2&nbsp;",
-        " 3 " => " 3&nbsp;",
-        " 4 " => " 4&nbsp;",
-        " 5 " => " 5&nbsp;",
-        " 6 " => " 6&nbsp;",
-        " 7 " => " 7&nbsp;",
-        " 8 " => " 8&nbsp;",
-        " 9 " => " 9&nbsp;",
-
-        " :-(" => "&nbsp;😟",
-        " :-)" => "&nbsp;🙂",
-        " :-O" => "&nbsp;😮",
-        " :-P" => "&nbsp;😋",
-        " :-[" => "&nbsp;😕",
-        " :-|" => "&nbsp;😐",
+        " DIČ: " => " DIČ:&nbsp;",
+        " IČ: " => " IČ:&nbsp;",
+        " Kč" => "&nbsp;Kč",
 
         " A " => " A&nbsp;",
-        " CZK" => "&nbsp;CZK",
-        " DIČ: " => " DIČ:&nbsp;",
-        " EUR" => "&nbsp;EUR",
         " I " => " I&nbsp;",
-        " ID: " => " ID:&nbsp;",
-        " Inc." => "&nbsp;Inc.",
-        " IČ: " => " IČ:&nbsp;",
         " K " => " K&nbsp;",
-        " Kč" => "&nbsp;Kč",
-        " Ltd." => "&nbsp;Ltd.",
         " S " => " S&nbsp;",
         " U " => " U&nbsp;",
-        " USD" => "&nbsp;USD",
         " V " => " V&nbsp;",
         " Z " => " Z&nbsp;",
+
         " a " => " a&nbsp;",
         " a. s. " => "&nbsp;a.&nbsp;s. ",
         " a.s. " => "&nbsp;a.s. ",
         " cca. " => " cca.&nbsp;",
-        " h " => "&nbsp;h ",
-        " h, " => "&nbsp;h, ",
-        " h. " => "&nbsp;h. ",
         " hod. " => "&nbsp;hod. ",
         " hod.)" => "&nbsp;hod.)",
         " i " => " i&nbsp;",
-        " id: " => " id:&nbsp;",
         " k " => " k&nbsp;",
-        " kg " => "&nbsp;kg ",
-        " kg)" => "&nbsp;kg)",
         " ks " => "&nbsp;ks ",
         " ks)" => "&nbsp;ks)",
         " ks, " => "&nbsp;ks, ",
         " ks." => "&nbsp;ks.",
         " kupř. " => " kupř.&nbsp;",
-        " l " => "&nbsp;l ",
-        " m " => "&nbsp;m ",
-        " m, " => "&nbsp;m, ",
-        " m. " => "&nbsp;m. ",
-        " m2 " => "&nbsp;m² ",
-        " m3 " => "&nbsp;m³ ",
-        " m² " => "&nbsp;m² ",
-        " m³ " => "&nbsp;m³ ",
         " na " => " na&nbsp;",
         " např. " => " např.&nbsp;",
         " o " => " o&nbsp;",
@@ -433,10 +391,7 @@ class StringFilters implements IStringFilters
         " př. " => " př.&nbsp;",
         " přib. " => " přib.&nbsp;",
         " přibl. " => " přibl.&nbsp;",
-        " s " => " s&nbsp;",
-        " s. " => "&nbsp;s. ",
         " s.r.o." => "&nbsp;s.r.o.",
-        " sec. " => "&nbsp;sec. ",
         " spol. " => "&nbsp;spol.&nbsp;",
         " tj. " => "tj.&nbsp;",
         " tzn. " => " tzn.&nbsp;",
@@ -451,8 +406,6 @@ class StringFilters implements IStringFilters
         " z. s." => "&nbsp;z.&nbsp;s.",
         " z.s." => "&nbsp;z.s.",
         " zvl. " => " zvl.&nbsp;",
-        " °C " => "&nbsp;°C ",
-        " °F " => "&nbsp;°F ",
         " č. " => " č.&nbsp;",
         " č. j. " => " č.&nbsp;j.&nbsp;",
         " čj. " => " čj.&nbsp;",
@@ -477,105 +430,36 @@ class StringFilters implements IStringFilters
      * @var array<string,string>
      */
     public static $slovak = [
-        "  " => " ",
-        " 💗 " => " 💗&nbsp;",
-        " ♥️ " => " ♥️&nbsp;",
-        " ❤️ " => " ❤️&nbsp;",
-
-        " % " => "&nbsp;% ",
-        " - " => " — ",
-        " ... " => "&nbsp;… ",
-        " ..." => "&nbsp;…",
-        " / " => " /&nbsp;",
-        " <<" => " «",
-        " – " => " —&nbsp;",
-        " — " => " —&nbsp;",
-        " ― " => " ―&nbsp;",
-        " ‰ " => "&nbsp;‰",
-        ">> " => "» ",
-
-        "0. " => "0.&nbsp;",
-        "1. " => "1.&nbsp;",
-        "2. " => "2.&nbsp;",
-        "3. " => "3.&nbsp;",
-        "4. " => "4.&nbsp;",
-        "5. " => "5.&nbsp;",
-        "6. " => "6.&nbsp;",
-        "7. " => "7.&nbsp;",
-        "8. " => "8.&nbsp;",
-        "9. " => "9.&nbsp;",
-
-        " 0 " => " 0&nbsp;",
-        " 1 " => " 1&nbsp;",
-        " 2 " => " 2&nbsp;",
-        " 3 " => " 3&nbsp;",
-        " 4 " => " 4&nbsp;",
-        " 5 " => " 5&nbsp;",
-        " 6 " => " 6&nbsp;",
-        " 7 " => " 7&nbsp;",
-        " 8 " => " 8&nbsp;",
-        " 9 " => " 9&nbsp;",
-
-        " :-(" => "&nbsp;😟",
-        " :-)" => "&nbsp;🙂",
-        " :-O" => "&nbsp;😮",
-        " :-P" => "&nbsp;😋",
-        " :-[" => "&nbsp;😕",
-        " :-|" => "&nbsp;😐",
+        " DIČ: " => " DIČ:&nbsp;",
+        " IČ: " => " IČ:&nbsp;",
+        " Kč" => "&nbsp;Kč",
 
         " A " => " A&nbsp;",
-        " CZK" => "&nbsp;CZK",
-        " DIČ: " => " DIČ:&nbsp;",
-        " EUR" => "&nbsp;EUR",
         " I " => " I&nbsp;",
-        " ID: " => " ID:&nbsp;",
-        " Inc." => "&nbsp;Inc.",
-        " IČ: " => " IČ:&nbsp;",
         " K " => " K&nbsp;",
-        " Kč" => "&nbsp;Kč",
-        " Ltd." => "&nbsp;Ltd.",
         " S " => " S&nbsp;",
         " U " => " U&nbsp;",
-        " USD" => "&nbsp;USD",
         " V " => " V&nbsp;",
         " Z " => " Z&nbsp;",
+
         " a " => " a&nbsp;",
         " a. s. " => "&nbsp;a.&nbsp;s. ",
         " a.s. " => "&nbsp;a.s. ",
         " cca. " => " cca.&nbsp;",
-        " h " => "&nbsp;h ",
-        " h) " => "&nbsp;h) ",
-        " h, " => "&nbsp;h, ",
-        " h. " => "&nbsp;h. ",
         " hod. " => "&nbsp;hod. ",
         " hod.)" => "&nbsp;hod.)",
         " i " => " i&nbsp;",
-        " id: " => " id:&nbsp;",
         " k " => " k&nbsp;",
-        " kg " => "&nbsp;kg ",
-        " kg)" => "&nbsp;kg)",
         " ks " => "&nbsp;ks ",
         " ks)" => "&nbsp;ks)",
         " ks, " => "&nbsp;ks, ",
         " ks." => "&nbsp;ks.",
-        " l " => "&nbsp;l ",
-        " m " => "&nbsp;m ",
-        " m) " => "&nbsp;m) ",
-        " m, " => "&nbsp;m, ",
-        " m. " => "&nbsp;m. ",
-        " m2 " => "&nbsp;m² ",
-        " m3 " => "&nbsp;m³ ",
-        " m² " => "&nbsp;m² ",
-        " m³ " => "&nbsp;m³ ",
         " na " => " na&nbsp;",
         " napr. " => " napr.&nbsp;",
         " o " => " o&nbsp;",
         " od " => " od&nbsp;",
         " po " => " po&nbsp;",
-        " s " => " s&nbsp;",
-        " s. " => "&nbsp;s. ",
         " s.r.o." => "&nbsp;s.r.o.",
-        " sec. " => "&nbsp;sec. ",
         " spol. " => "&nbsp;spol.&nbsp;",
         " tj. " => "tj.&nbsp;",
         " tzn. " => " tzn.&nbsp;",
@@ -589,8 +473,7 @@ class StringFilters implements IStringFilters
         " z.s." => "&nbsp;z.s.",
         " zo " => " zo&nbsp;",
         " zvl. " => " zvl.&nbsp;",
-        " °C " => "&nbsp;°C ",
-        " °F " => "&nbsp;°F ",
+        
         " č. " => " č.&nbsp;",
         " č. j. " => " č.&nbsp;j.&nbsp;",
         " čj. " => " čj.&nbsp;",
@@ -623,86 +506,130 @@ class StringFilters implements IStringFilters
         '..' => '.',
         
         'á' => 'a',
-        'à' => 'a',
         'á' => 'a',
+        'à' => 'a',
         'ä' => 'a',
+        'ą' => 'a',
+
         'č' => 'c',
-        'ć' => 'c',
         'č' => 'c',
+        'ć' => 'c',
+        'ç' => 'c',
+
         'ď' => 'd',
-        'é' => 'e',
+
         'ě' => 'e',
-        'è' => 'e',
-        'é' => 'e',
-        'ë' => 'e',
         'ě' => 'e',
+        'é' => 'e',
+        'é' => 'e',
+        'è' => 'e',
+        'ë' => 'e',
+        'ę' => 'e',
+
         'í' => 'i',
         'í' => 'i',
+        'ï' => 'i',
+
         'ĺ' => 'l',
         'ľ' => 'l',
+
         'ḿ' => 'm',
-        'ń' => 'n',
+
         'ň' => 'n',
+        'ń' => 'n',
+        'ñ' => 'n',
+
         'ó' => 'o',
         'ö' => 'o',
+        'ô' => 'o',
         'ø' => 'o',
+        'õ' => 'o',
+
         'ř' => 'r',
-        'ŕ' => 'r',
         'ř' => 'r',
-        'ś' => 's',
+        'ŕ' => 'r',
+
         'š' => 's',
         'š' => 's',
+        'ś' => 's',
+
         'ť' => 't',
+
+        'ů' => 'u',
+        'ü' => 'u',
         'ú' => 'u',
         'ú' => 'u',
-        'ü' => 'u',
-        'ů' => 'u',
+
         'ý' => 'y',
         'ý' => 'y',
+
         'ź' => 'z',
         'ž' => 'z',
         'ž' => 'z',
+        'ż' => 'z',
 
         'Á' => 'a',
-        'À' => 'a',
         'Á' => 'a',
+        'À' => 'a',
         'Ä' => 'a',
+        'Ą' => 'a',
+
         'Č' => 'c',
-        'Ć' => 'c',
         'Č' => 'c',
+        'Ć' => 'c',
+        'Ç' => 'c',
+
         'Ď' => 'd',
-        'É' => 'e',
+
         'Ě' => 'e',
-        'È' => 'e',
-        'É' => 'e',
-        'Ë' => 'e',
         'Ě' => 'e',
+        'É' => 'e',
+        'É' => 'e',
+        'È' => 'e',
+        'Ë' => 'e',
+        'Ę' => 'e',
+
         'Í' => 'i',
         'Í' => 'i',
+        'Ï' => 'i',
+
         'Ĺ' => 'l',
         'Ľ' => 'l',
+
         'Ḿ' => 'M',
+
         'Ň' => 'n',
         'Ń' => 'n',
+        'Ñ' => 'n',
+
         'Ó' => 'o',
         'Ö' => 'o',
+        'Ô' => 'o',
         'Ø' => 'o',
+        'Õ' => 'o',
+
         'Ř' => 'r',
-        'Ŕ' => 'r',
         'Ř' => 'r',
-        'Ś' => 's',
+        'Ŕ' => 'r',
+
         'Š' => 's',
         'Š' => 's',
+        'Ś' => 's',
+
         'Ť' => 't',
+
+        'Ů' => 'u',
+        'Ü' => 'u',
         'Ú' => 'u',
         'Ú' => 'u',
-        'Ü' => 'u',
-        'Ů' => 'u',
+
         'Ý' => 'y',
         'Ý' => 'y',
-        'Ź' => 'z',
+
         'Ž' => 'z',
         'Ž' => 'z',
+        'Ź' => 'z',
+        'Ż' => 'z',
     ];
 
     /**
@@ -837,10 +764,8 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingEn($content)
     {
-        return \str_replace(
-            \array_keys(self::$english),
-            self::$english, $content
-        );
+        $merged = \array_merge(self::$common, self::$english);
+        return \str_replace(\array_keys($merged), $merged, $content);
     }
 
     /**
@@ -852,11 +777,8 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingCs($content)
     {
-        return \str_replace(
-            \array_keys(self::$czech),
-            self::$czech,
-            $content
-        );
+        $merged = \array_merge(self::$common, self::$czech);
+        return \str_replace(\array_keys($merged), $merged, $content);
     }
 
     /**
@@ -868,11 +790,8 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingSk($content)
     {
-        return \str_replace(
-            \array_keys(self::$slovak),
-            self::$slovak,
-            $content
-        );
+        $merged = \array_merge(self::$common, self::$slovak);
+        return \str_replace(\array_keys($merged), $merged, $content);
     }
 
     /**
