@@ -1430,8 +1430,8 @@ abstract class APresenter implements IPresenter
         $rate = (int) (Cache::read($f, 'limiter') ?? 0);
         Cache::write($f, ++$rate, 'limiter');
         if ($rate > (int) $max) {
-            // over!
-            $this->setLocation('/err/420');
+            \header('HTTP/1.1 429 Too Many Requests');
+            exit;
         }
         return $this;
     }

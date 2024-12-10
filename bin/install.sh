@@ -10,6 +10,7 @@ find . -name "*.sh" -exec chmod +x {} \;
 mkdir -p ci data logs temp www/download www/upload
 
 echo "We need a root permission to run some tasks 😎"
+
 sudo chmod 0777 ci data logs temp www/download www/upload
 sudo chown -R www-data:www-data data
 sudo chgrp -R www-data ci data www www/download www/upload

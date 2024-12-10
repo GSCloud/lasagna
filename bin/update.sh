@@ -17,9 +17,10 @@ rm -rf logs/* temp/* www/cdn-assets
 
 command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
 composer update --no-plugins --no-scripts
+if [[ "$?" -eq "2" ]]; then exit 2; fi
 
 # CRLF normalization
-git add --renormalize .
+#git add --renormalize .
 
 # commit changes
 git commit -am "automatic update"
