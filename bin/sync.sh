@@ -34,16 +34,17 @@ fi
 
 info "HOST: $HOST USER: $USER DEST: $DEST"
 
-mkdir -p app ci data temp www/cdn-assets www/download www/upload
+mkdir -p app ci data temp www/download www/upload
 chmod 0777 www/download www/upload >/dev/null 2>&1
 find www/ -type f -exec chmod 0644 {} \; >/dev/null 2>&1
 find . -type f -iname "*.sh" -exec chmod +x {} \;
+rm -rf www/cdn-assets
 
 VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
 REVISIONS=$(git rev-list --all --count)
 echo $REVISIONS > REVISIONS
-ln -s ../. www/cdn-assets/$VERSION >/dev/null 2>&1
+
 info "Version: $VERSION Revisions: $REVISIONS"
 
 # sync
