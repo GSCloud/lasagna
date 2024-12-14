@@ -39,7 +39,7 @@ update:
 unit:
 	@./cli.sh unit
 clear:
-	@./cli.sh clearall
+	@./cli.sh clear
 install:
 	@./bin/install.sh
 doctor:
