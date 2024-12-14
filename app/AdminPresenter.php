@@ -528,7 +528,7 @@ class AdminPresenter extends APresenter
             if ($user && $token || $this->isLocalAdmin()) {
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
-                    $this->setForceCsvCheck(true);
+                    $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
                     $this->addAuditMessage('REMOTE FN: CORE UPDATED');

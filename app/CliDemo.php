@@ -35,12 +35,12 @@ class CliDemo extends APresenter
      * 
      * @param mixed $param optional parameter
      * 
-     * @return object Controller
+     * @return object instance
      */
     public function process($param = null)
     {
-        $data = $this->getData();
         echo "Hello World! 🌎️\n";
-        echo "Data: " . count($data) . " items\n";
+        $data = $this->getData();
+        return $this;
     }
 }
