@@ -135,7 +135,7 @@ class CliPresenter extends APresenter
         $cli->out("<bold>clearlogs</bold>\t- clear runtime logs");
         $cli->out("<bold>cleartemp</bold>\t- clear temp files");
         $cli->out("<bold>doctor</bold>\t\t- run config Doctor");
-        $cli->out("<bold>refresh</bold>\t\t- refresh CSV cloud data");
+        $cli->out("<bold>refresh</bold>\t\t- refresh cloud data");
         $cli->out("<bold>local</bold>\t\t- local tests");
         $cli->out("<bold>prod</bold>\t\t- production tests");
         $cli->out("<bold>unit</bold>\t\t- run Unit tests");
