@@ -249,11 +249,9 @@ interface IPresenter
     /**
      * Force CSV checking
      *
-     * @param boolean $set Set true to force CSV check (optional)
-     * 
      * @return self
      */
-    public function setForceCsvCheck($set = true);
+    public function setForceCsvCheck();
 
     /**
      * Set HTTP header for CSV content
@@ -1521,13 +1519,11 @@ abstract class APresenter implements IPresenter
     /**
      * Force CSV checking
      *
-     * @param boolean $set Set true to force CSV check (optional)
-     * 
      * @return self
      */
-    public function setForceCsvCheck($set = true)
+    public function setForceCsvCheck()
     {
-        $this->force_csv_check = (bool) $set;
+        $this->force_csv_check = true;
         return $this;
     }
 
@@ -1688,12 +1684,6 @@ abstract class APresenter implements IPresenter
         $locales = $this->getCfg('locales') ?? null;
         if (\is_array($locales)) {
             foreach ($locales as $name => $csvkey) {
-                if ($name == 'default') {
-                    continue;
-                }
-                if ($name == 'admin') {
-                    continue;
-                }
                 $this->csvPreloader($name, $csvkey, (bool) $force);
             }
         }
@@ -1754,6 +1744,7 @@ abstract class APresenter implements IPresenter
      */
     public function csvPreloader($name, $csvkey, $force = false)
     {
+        //dump("csvPreloader", $name, $csvkey, $force);
         $name = \trim((string) $name);
         $csvkey = \trim((string) $csvkey);
         $force = (bool) $force;

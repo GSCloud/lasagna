@@ -190,9 +190,7 @@ class CliPresenter extends APresenter
         $module = \trim($module);
         switch ($module) {
         case "refresh":
-            $data = $this->getData();
-            $admin = AdminPresenter::getInstance()->setData($data);
-            $admin->setForceCsvCheck(true);
+            $this->setForceCsvCheck();
             break;
         case "clear":
             $this->selectModule("clearcache");
