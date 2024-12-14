@@ -596,7 +596,7 @@ class AdminPresenter extends APresenter
 
         case 'CoreUpdate':
             $this->checkPermission('admin,manager,editor');
-            $this->setForceCsvCheck(true);
+            $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
             $this->flushCache();
             $this->addAuditMessage('ADMIN: Core Update');
@@ -812,16 +812,10 @@ class AdminPresenter extends APresenter
             try {
                 @\ob_flush();
                 if (\is_array($this->getData('cache_profiles'))) {
-                    if (CLI) {
-                        echo "🔪 cache profiles\n";
-                    }
                     foreach ($this->getData('cache_profiles') as $k => $v) {
                         Cache::clear($k);
                         Cache::clear("{$k}_file");
                     }
-                }
-                if (CLI) {
-                    echo "🔪 cache files\n";
                 }
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);

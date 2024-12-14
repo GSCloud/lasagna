@@ -191,6 +191,7 @@ class CliPresenter extends APresenter
         switch ($module) {
         case "refresh":
             $this->setForceCsvCheck();
+            $this->postloadAppData('app_data');
             break;
         case "clear":
             $this->selectModule("clearcache");

@@ -1770,7 +1770,7 @@ abstract class APresenter implements IPresenter
                 }
                 if ($force) {
                     if (CLI) {
-                        echo "loading CSV: [{$name}]\n";
+                        echo "loading CSV [{$name}]\n";
                     }
                     // contains full path
                     if (\strpos($csvkey, 'https') === 0) {
