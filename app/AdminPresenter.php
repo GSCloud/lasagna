@@ -812,17 +812,16 @@ class AdminPresenter extends APresenter
             try {
                 @\ob_flush();
                 if (\is_array($this->getData('cache_profiles'))) {
+                    if (CLI) {
+                        echo "🔪 cache profiles\n";
+                    }
                     foreach ($this->getData('cache_profiles') as $k => $v) {
                         Cache::clear($k);
                         Cache::clear("{$k}_file");
-                        if (CLI) {
-                            echo "🔪 $k\n";
-                            echo "🔪 {$k}_file\n";
-                        }
                     }
                 }
                 if (CLI) {
-                    echo "🔪 " . CACHE . " ...\n";
+                    echo "🔪 cache files\n";
                 }
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
@@ -836,7 +835,9 @@ class AdminPresenter extends APresenter
                 $this->checkLocales();
             } finally {
                 @\touch(DATA . DS . '_default_cache_flushed_');
+                @\chmod(DATA . DS . '_default_cache_flushed_', 0666);
                 @\touch(DATA . DS . '_admin_cache_flushed_');
+                @\chmod(DATA . DS . '_admin_cache_flushed_', 0666);
                 @\file_put_contents(
                     DATA . DS . '_random_cdn_hash',
                     \hash('sha1', $this->getNonce()),
@@ -850,7 +851,6 @@ class AdminPresenter extends APresenter
                 echo 'ERROR: lock cannot be acquired';
             }
             $this->setLocation('/err/429');
-            exit;
         }
         return $this;
     }
@@ -864,10 +864,9 @@ class AdminPresenter extends APresenter
     {
         if (CLI) {
             echo "ERROR: unauthorized access\n";
-            exit;
+            exit(1);
         }
         $this->setLocation('/err/401');
-        exit;
     }
 
     /**

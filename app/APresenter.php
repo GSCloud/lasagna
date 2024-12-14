@@ -1464,7 +1464,6 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this;
         }
-
         if (empty($rolelist)) {
             return $this;
         }
@@ -1555,7 +1554,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Get locales from Google Sheets
+     * Get locale
      *
      * @param string $language language code
      * @param string $key      index column code (optional)
@@ -1648,6 +1647,7 @@ abstract class APresenter implements IPresenter
                         $dolar['{$' . $a . '}'] = $b;
                     }
                 }
+
                 // replace $ and $$
                 $locale = \str_replace(\array_keys($dolar), $dolar, $locale);
                 $locale = \str_replace(\array_keys($dolar), $dolar, $locale);
@@ -1778,6 +1778,9 @@ abstract class APresenter implements IPresenter
                     $force = true;
                 }
                 if ($force) {
+                    if (CLI) {
+                        echo "loading CSV: [{$name}]\n";
+                    }
                     // contains full path
                     if (\strpos($csvkey, 'https') === 0) {
                         $remote = $csvkey;
@@ -1800,28 +1803,25 @@ abstract class APresenter implements IPresenter
                 }
                 if (\strpos($data, '!DOCTYPE html') > 0) {
                     // this is HTML document = failure!
+                    $this->addError("ERROR: fetching {$remote} - HTML document");
                     return $this;
                 }
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, 'csv');
-
                     $f1 = DATA . DS . "{$file}.csv";
                     $f2 = DATA . DS . "{$file}.bak";
-
                     // remove old backup
                     if (\file_exists($f2)) {
                         if (@\unlink($f2) === false) {
                             $this->addError("FILE: remove {$file}.bak failed!");
                         }
                     }
-
                     // move CSV to backup
                     if (\file_exists($f1)) {
                         if (@\rename($f1, $f2) === false) {
                             $this->addError("FILE: backup {$file}.csv failed!");
                         }
                     }
-
                     // write new CSV
                     if (\file_put_contents($f1, $data, LOCK_EX) === false) {
                         $this->addError("FILE: save {$file}.csv failed!");

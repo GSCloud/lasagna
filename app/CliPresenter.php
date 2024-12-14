@@ -35,8 +35,8 @@ class CliPresenter extends APresenter
      */
     public function process($param = null)
     {
-        $climate = new CLImate;
-        $climate->out(
+        $cli = new CLImate;
+        $cli->out(
             "<bold><green>Tesseract CLI</green></bold>\tapp: "
             . $this->getData("VERSION_SHORT")
             . " (" . $this->getData("VERSION_DATE") . ")\n"
@@ -62,7 +62,6 @@ class CliPresenter extends APresenter
         $data = $this->getData();
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
-
         $route = $router[$p];
         $pres = $route["presenter"] ?? "home";
         $data["view"] = $route["view"] ?? "home";
@@ -70,7 +69,7 @@ class CliPresenter extends APresenter
         $controller = "\\GSC\\{$c}";
         echo $controller::getInstance()
             ->setData($data)->process()->getData()["output"] ?? "";
-        exit(0);
+        exit;
     }
 
     /**
@@ -124,26 +123,24 @@ class CliPresenter extends APresenter
      */
     public function help()
     {
-        $climate = new CLImate;
-        $climate->out(
+        $cli = new CLImate;
+        $cli->out(
             "Usage: \t<bold>php -f Bootstrap.php"
             . " <command> [<param> ...]</bold>\n"
         );
-        $climate->out("\t<bold>app</bold> '<code>'\t- run inline code");
-        $climate->out("\t<bold>clear</bold>\t\t- alias for <bold>clearall</bold>");
-        $climate->out("\t<bold>clearall</bold>\t- clear all temporary files");
-        $climate->out("\t<bold>clearcache</bold>\t- clear cache");
-        $climate->out("\t<bold>clearci</bold>\t\t- clear CI logs");
-        $climate->out("\t<bold>clearlogs</bold>\t- clear runtime logs");
-        $climate->out("\t<bold>cleartemp</bold>\t- clear temporary files");
-        $climate->out("\t<bold>doctor</bold>\t\t- check system requirements");
-        $climate->out("\t<bold>local</bold>\t\t- run local CI test");
-        $climate->out("\t<bold>prod</bold>\t\t- run production CI test");
-        $climate->out("\t<bold>unit</bold>\t\t- run Unit tests");
-        $climate->out(
-            "\t<bold>version</bold>\t\t"
-            . "- display version information in JSON format\n"
-        );
+        $cli->out("<bold>app</bold> '<code>'\t- run inline code");
+        $cli->out("<bold>clear</bold>\t\t- clear all temporary files");
+        $cli->out("<bold>clearcache</bold>\t- clear cache");
+        $cli->out("<bold>clearci</bold>\t\t- clear CI logs");
+        $cli->out("<bold>clearlogs</bold>\t- clear runtime logs");
+        $cli->out("<bold>cleartemp</bold>\t- clear temp files");
+        $cli->out("<bold>doctor</bold>\t\t- run config Doctor");
+        $cli->out("<bold>refresh</bold>\t\t- refresh CSV cloud data");
+        $cli->out("<bold>local</bold>\t\t- local tests");
+        $cli->out("<bold>prod</bold>\t\t- production tests");
+        $cli->out("<bold>unit</bold>\t\t- run Unit tests");
+        $cli->out("<bold>version</bold>\t\t- version info as text");
+        $cli->out("<bold>versionjson</bold>\t- version info as JSON");
         return $this;
     }
 
@@ -158,15 +155,15 @@ class CliPresenter extends APresenter
      */
     public function evaler($app, $argc, $argv)
     {
-        $climate = new CLImate;
+        $cli = new CLImate;
         if ($argc != 3) {
-            // show examples
-            $climate->out("Tesseract app examples:\n");
-            $climate->out('<bold>app</bold> \'$app->showConst()\'');
-            $climate->out('<bold>app</bold> \'dump($app->getIdentity())\'');
-            $climate->out('<bold>app</bold> \'dump($app->show("home"))\'');
+            $cli->out("Tesseract app examples:\n");
+            $cli->out('<bold>app</bold> \'$app->showConst()\'');
+            $cli->out('<bold>app</bold> \'dump($app->getIdentity())\'');
+            $cli->out('<bold>app</bold> \'dump($app->show("home"))\'');
         } else {
             $code = \trim($argv[2]) . ';';
+            $data = $this->getData();
             try {
                 eval($code);
             } catch (ParseError $e) {
@@ -189,18 +186,20 @@ class CliPresenter extends APresenter
      */
     public function selectModule($module, $argc = null, $argv = null)
     {
-        $climate = new CLImate;
+        $cli = new CLImate;
         $module = \trim($module);
         switch ($module) {
+        case "refresh":
+            $data = $this->getData();
+            $admin = AdminPresenter::getInstance()->setData($data);
+            $admin->setForceCsvCheck(true);
+            break;
         case "clear":
-        case "clearall":
             $this->selectModule("clearcache");
             $this->selectModule("clearci");
             $this->selectModule("clearlogs");
             $this->selectModule("cleartemp");
-            $climate->out('');
             break;
-
         case "local":
         case "prod":
         case "testlocal":
@@ -210,7 +209,6 @@ class CliPresenter extends APresenter
             break;
         case "clearcache":
             foreach ($this->getData("cache_profiles") as $k => $v) {
-                // clear all cache profiles
                 Cache::clear($k);
                 Cache::clear("{$k}_file");
             }
@@ -218,25 +216,28 @@ class CliPresenter extends APresenter
             \array_map("unlink", glob(CACHE . DS . "*.tmp"));
             \array_map("unlink", glob(CACHE . DS . CACHEPREFIX . "*"));
             \clearstatcache();
-            $climate->out("<bold>Cache 🧹</bold>");
+            $data = $this->getData();
+            $admin = AdminPresenter::getInstance()->setData($data);
+            $admin->flushCache();
+            $cli->out("🧹 cache cleared");
             break;
         case "clearci":
             $files = \glob(ROOT . DS . "ci" . DS . "*");
             $c = \count($files);
             \array_map("unlink", $files);
-            $climate->out("CI logs <bold>$c file(s) 🧹</bold>");
+            $cli->out("🧹 CI logs <bold>$c file(s)</bold>");
             break;
         case "clearlogs":
             $files = \glob(LOGS . DS . "*");
             $c = \count($files);
             \array_map("unlink", $files);
-            $climate->out("Other logs <bold>$c file(s) 🧹</bold>");
+            $cli->out("🧹 other logs <bold>$c file(s)</bold>");
             break;
         case "cleartemp":
             $files = \glob(TEMP . DS . "*");
             $c = \count($files);
             \array_map("unlink", $files);
-            $climate->out("Temporary <bold>$c file(s) 🧹</bold>");
+            $cli->out("🧹 temp <bold>$c file(s)</bold>");
             break;
         case "unit":
             include_once "UnitTester.php";
@@ -258,7 +259,7 @@ class CliPresenter extends APresenter
             }
             $this->help();
             return $this;
-                break;
+            break;
         }
     }
 }

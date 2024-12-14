@@ -64,7 +64,6 @@ class CliVersion extends APresenter
                 echo "\e[0;1m$x\e[0m: $y\n";
             }
         }
-        echo "\n";
         exit;
     }
 }
