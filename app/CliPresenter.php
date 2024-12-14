@@ -141,7 +141,7 @@ class CliPresenter extends APresenter
         $cli->out("<bold>unit</bold>\t\t- run Unit tests");
         $cli->out("<bold>version</bold>\t\t- version info as text");
         $cli->out("<bold>versionjson</bold>\t- version info as JSON");
-        return $this;
+        exit(0);
     }
 
     /**
@@ -210,10 +210,11 @@ class CliPresenter extends APresenter
             foreach ($this->getData("cache_profiles") as $k => $v) {
                 Cache::clear($k);
                 Cache::clear("{$k}_file");
+                echo '.';
             }
-            \array_map("unlink", glob(CACHE . DS . "*.php"));
-            \array_map("unlink", glob(CACHE . DS . "*.tmp"));
-            \array_map("unlink", glob(CACHE . DS . CACHEPREFIX . "*"));
+            \array_map('unlink', glob(CACHE . DS . "*.php") ?: []);
+            \array_map('unlink', glob(CACHE . DS . "*.tmp") ?: []);
+            \array_map('unlink', glob(CACHE . DS . CACHEPREFIX . "*") ?: []);
             \clearstatcache();
             $data = $this->getData();
             $admin = AdminPresenter::getInstance()->setData($data);
@@ -221,22 +222,28 @@ class CliPresenter extends APresenter
             $cli->out("🧹 cache cleared");
             break;
         case "clearci":
-            $files = \glob(ROOT . DS . "ci" . DS . "*");
+            $files = \glob(ROOT . DS . "ci" . DS . "*") ?: [];
             $c = \count($files);
-            \array_map("unlink", $files);
-            $cli->out("🧹 CI logs <bold>$c file(s)</bold>");
+            if ($c) {
+                \array_map('unlink', $files);
+                $cli->out("🧹 CI logs <bold>$c file(s)</bold>");
+            }
             break;
         case "clearlogs":
-            $files = \glob(LOGS . DS . "*");
+            $files = \glob(LOGS . DS . "*") ?: [];
             $c = \count($files);
-            \array_map("unlink", $files);
-            $cli->out("🧹 other logs <bold>$c file(s)</bold>");
+            if ($c) {
+                \array_map('unlink', $files);
+                $cli->out("🧹 other logs <bold>$c file(s)</bold>");
+            }
             break;
         case "cleartemp":
-            $files = \glob(TEMP . DS . "*");
+            $files = \glob(TEMP . DS . "*") ?: [];
             $c = \count($files);
-            \array_map("unlink", $files);
-            $cli->out("🧹 temp <bold>$c file(s)</bold>");
+            if ($c) {
+                \array_map('unlink', $files);
+                $cli->out("🧹 temp <bold>$c file(s)</bold>");
+            }
             break;
         case "unit":
             include_once "UnitTester.php";
@@ -254,11 +261,10 @@ class CliPresenter extends APresenter
             $presenter = "\\GSC\\Cli{$module}";
             if (\class_exists($presenter)) {
                 $presenter::getInstance()->setData($this->getData())->process();
-                exit;
+                break;
             }
             $this->help();
-            return $this;
-            break;
         }
+        exit(0);
     }
 }

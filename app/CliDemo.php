@@ -39,7 +39,8 @@ class CliDemo extends APresenter
      */
     public function process($param = null)
     {
+        $data = $this->getData();
         echo "Hello World! 🌎️\n";
-        return $this;
+        echo "Data: " . count($data) . " items\n";
     }
 }

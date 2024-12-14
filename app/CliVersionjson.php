@@ -31,7 +31,7 @@ class CliVersionjson extends APresenter
     }
 
     /**
-     * Controller - show version information as a JSON formatted string
+     * Controller - show version information as JSON
      * 
      * @param mixed $param optional parameter
      *
