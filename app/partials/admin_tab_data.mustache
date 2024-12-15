@@ -29,6 +29,7 @@
     {{/disable_articles}}
 
     <div class="col s12 l4">
+
       {{^disable_articles}}
       <a id="a_summernote"
         data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
@@ -40,14 +41,17 @@
         <i class="fas fa-plus-square"></i>&nbsp;URL</a>
       <hr>
       {{/disable_articles}}
+
       <a id="a_upload"
         data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
         style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;UPLOAD</a>
       <a id="a_files"
         data-position="top" data-tooltip="{{ l.a_files_ttip }}"
         style="margin:5px" class="tooltipped waves-effect brown waves btn">🫙 <span id="files_count"></span></a>
-      <br>
-      max&nbsp;uploads:&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b> max&nbsp;size:&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b> max&nbsp;filesize:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
+      <hr>
+      max&nbsp;uploads:&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>
+      max&nbsp;size:&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>
+      max&nbsp;filesize:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
     </div>
 
   </div>
