@@ -66,4 +66,14 @@ class CliVersion extends APresenter
         }
         exit;
     }
+
+    /**
+     * Help information for the CLI command
+     *
+     * @return string information for the CLI command
+     */
+    public function help()
+    {
+        return "app version";
+    }
 }

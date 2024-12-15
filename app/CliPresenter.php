@@ -118,7 +118,7 @@ class CliPresenter extends APresenter
 
     /**
      * Display CLI help
-     *
+     * 
      * @return self
      */
     public function help()
@@ -139,8 +139,29 @@ class CliPresenter extends APresenter
         $cli->out("<bold>local</bold>\t\t- local tests");
         $cli->out("<bold>prod</bold>\t\t- production tests");
         $cli->out("<bold>unit</bold>\t\t- run Unit tests");
-        $cli->out("<bold>version</bold>\t\t- version info as text");
-        $cli->out("<bold>versionjson</bold>\t- version info as JSON");
+        $cli->out("");
+        chdir(APP);
+        foreach (glob("Cli*.php") as $class) {
+            if ($class) {
+                $class = str_replace('.php', '', $class);
+                $name = str_replace('Cli', '', $class);
+                $name = strtolower($name);
+                if ($class === 'CliPresenter') {
+                    continue;
+                }
+                $class = "\\GSC\\{$class}";
+                if (\class_exists($class)) {
+                    if (\method_exists($class, 'help')) {
+                        $help = $class::getInstance()->help();
+                        $t = '';
+                        if (strlen($name) < 8) {
+                            $t = "\t";
+                        }
+                        $cli->out("<bold>{$name}</bold>\t{$t}- {$help}");
+                    }
+                }
+            }
+        }
         exit(0);
     }
 
@@ -245,6 +266,7 @@ class CliPresenter extends APresenter
                 $cli->out("🧹 temp <bold>$c file(s)</bold>");
             }
             break;
+        case "test":
         case "unit":
             include_once "UnitTester.php";
             new UnitTester;
@@ -257,10 +279,10 @@ class CliPresenter extends APresenter
             $this->evaler($this, $argc, $argv);
             break;
         default:
-            $module = \ucfirst(\strtolower($module));
-            $presenter = "\\GSC\\Cli{$module}";
-            if (\class_exists($presenter)) {
-                $presenter::getInstance()->setData($this->getData())->process();
+            $class = \ucfirst(\strtolower($module));
+            $class = "\\GSC\\Cli{$class}";
+            if (\class_exists($class)) {
+                $class::getInstance()->setData($this->getData())->process();
                 break;
             }
             $this->help();

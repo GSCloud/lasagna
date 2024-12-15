@@ -43,4 +43,14 @@ class CliDemo extends APresenter
         $data = $this->getData();
         return $this;
     }
+
+    /**
+     * Help information for the CLI command
+     *
+     * @return string information for the CLI command
+     */
+    public function help()
+    {
+        return "hello world demo";
+    }
 }

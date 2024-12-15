@@ -55,4 +55,14 @@ class CliVersionjson extends APresenter
         echo \json_encode($out, JSON_PRETTY_PRINT) . "\n";
         exit;
     }
+
+    /**
+     * Help information for the CLI command
+     *
+     * @return string information for the CLI command
+     */
+    public function help()
+    {
+        return "app version in JSON format";
+    }
 }
