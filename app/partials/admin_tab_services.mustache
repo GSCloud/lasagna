@@ -68,16 +68,18 @@
 
   <a style="margin:2px!important;" title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
     data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz"><i class="fas fa-server"></i>&nbsp;SYSINFO</a>
+  
   <a style="margin:2px!important;" title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
     data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz"><i class="fas fa-server"></i>&nbsp;PHPINFO</a>
-  <a style="margin:2px!important;" title="{{ l.a_locale_template_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-    data-tooltip="{{ l.a_locale_template_ttip }}" href="{{ l.a_locale_template_url }}"><i class="fas fa-clone"></i>&nbsp;TPL</a>
+  
   <a style="margin:2px!important;" title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
     data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
+  
   {{#google_drive_backup}}
   <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
     data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
   {{/google_drive_backup}}
+  
   <a id="debugger" style="margin:2px!important;" class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}" data-position="top"
     data-tooltip="CSS DEBUGGER"><i class="fa-solid fa-bug"></i></a>
 

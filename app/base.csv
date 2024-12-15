@@ -162,7 +162,6 @@ a_google_backup_ttip,TOOLTIP,Google Drive backup,Disk Google zálohování,Zálo
 a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter
 a_google_search_ttip,TOOLTIP,Google Search Console,konzole Google Search,Google Search Console,Google Search Console
 a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Dokumentácia Tesseract LASAGNA,Tesseract LASAGNA-Dokumentation
-a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage
 a_login_ttip,TOOLTIP,login,přihlásit se,prihlásiť sa,Login
 a_logout_ttip,TOOLTIP,logout,odhlásit se,odhlásiť sa,Abmelden
 a_php_ttip,TOOLTIP,PHP information,PHP informace,PHP informácie,PHP-Informationen
