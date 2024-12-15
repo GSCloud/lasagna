@@ -154,7 +154,7 @@ class CliPresenter extends APresenter
                     if (\method_exists($class, 'help')) {
                         $help = $class::getInstance()->help();
                         $t = '';
-                        if (strlen($name) < 8) {
+                        if (\strlen($name) < 8) {
                             $t = "\t";
                         }
                         $cli->out("<bold>{$name}</bold>\t{$t}- {$help}");
