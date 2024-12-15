@@ -140,15 +140,15 @@ class CliPresenter extends APresenter
         $cli->out("<bold>prod</bold>\t\t- production tests");
         $cli->out("<bold>unit</bold>\t\t- run Unit tests");
         $cli->out("");
-        chdir(APP);
-        foreach (glob("Cli*.php") as $class) {
+        \chdir(APP);
+        foreach (\glob("Cli*.php") as $class) {
             if ($class) {
-                $class = str_replace('.php', '', $class);
-                $name = str_replace('Cli', '', $class);
-                $name = strtolower($name);
+                $class = \str_replace('.php', '', $class);
                 if ($class === 'CliPresenter') {
                     continue;
                 }
+                $name = \str_replace('Cli', '', $class);
+                $name = \strtolower($name);
                 $class = "\\GSC\\{$class}";
                 if (\class_exists($class)) {
                     if (\method_exists($class, 'help')) {
