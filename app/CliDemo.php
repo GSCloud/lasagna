@@ -51,6 +51,6 @@ class CliDemo extends APresenter
      */
     public function help()
     {
-        return "hello world demo";
+        return "Hello World 🌎️ demo";
     }
 }
