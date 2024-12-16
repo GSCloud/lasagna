@@ -641,7 +641,7 @@
           t = t.replace(/[a-zA-Z]*\?/, s + "?");
           GSC.CopyClipboard(t);
           GSC.PingDot("#sectok_ping");
-          M.toast({text: s + " {{ l.a_remotecode }}: {{ l.a_clipboardcopy }, classes: "normaltoast"}"});
+          M.toast({text: "{{ l.a_clipboardcopy }} {{ l.a_remotecode }}: " + s, classes: "normaltoast"});
         }).fail(function () {
           $("#a_security_token").val("N/A");
           GSC.PingDot("#sectok_ping", false);
