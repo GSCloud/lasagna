@@ -17,6 +17,10 @@
 .tabs {overflow: auto;overflow-x: hidden}
 .upload-controls {margin:10px}
 .warning {padding:5px}
+
+@media only screen and (max-width:579px) {
+  .tabs a {font-size:11px!important;}
+}
 </style>
 
 <!-- WRENCH -->
@@ -38,15 +42,13 @@
 
   <!-- TABBED NAVIGATION -->
   <div id="menutabbed" class="row container noselect">
-    <div class="col s12">
-      <ul class="tabs grey bold">
-        <li class="tab col s2"><a href="#data">{{ l.a_tab_data }}</a></li>
-        <li class="tab col s2"><a href="#fn">{{ l.a_tab_fn }}</a></li>
-        <li class="tab col s2"><a href="#services">{{ l.a_tab_services }}</a></li>
-        <li class="tab col s2"><a href="#users">{{ l.a_tab_users }}</a></li>
-        <li class="tab col s2"><a href="#news">{{ l.a_tab_news }} </a></li>
-      </ul>
-    </div>
+    <ul class="tabs grey bold">
+      <li class="tab col s3"><a href="#data">{{ l.a_tab_data }}</a></li>
+      <li class="tab col s2"><a href="#fn">{{ l.a_tab_fn }}</a></li>
+      <li class="tab col s2"><a href="#services">{{ l.a_tab_services }}</a></li>
+      <li class="tab col s2"><a href="#users">{{ l.a_tab_users }}</a></li>
+      <li class="tab col s2"><a href="#news">{{ l.a_tab_news }} </a></li>
+    </ul>
   </div>
 
   <!-- DATA -->

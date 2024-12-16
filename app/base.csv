@@ -149,7 +149,7 @@ a_tab_news,TABS,"<i class=""fa-solid fa-circle-info""></i> NEWS","<i class=""fa-
 a_changes,TITLE,NEWS,NOVINKY,NOVINKY,NACHRICHT
 a_google,TITLE,GOOGLE / SERVICES,GOOGLE / SLUŽBY,GOOGLE / SLUŽBY,GOOGLE / DIENSTLEISTUNGEN
 a_groups_permissions,TITLE,USERS / GROUPS,UŽIVATELÉ / SKUPINY,POUŽÍVATELIA / SKUPINY,BENUTZER / GRUPPEN
-a_locales,TITLE,DATA / UPLOADS,DATA / UPLOADS,DATA / UPLOADS,DATEN / UPLOADS
+a_locales,TITLE,DATA,DATA,DATA,DATEN
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
 a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
