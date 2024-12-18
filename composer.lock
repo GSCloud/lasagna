@@ -499,16 +499,16 @@
         },
         {
             "name": "cloudflare/sdk",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cloudflare/cloudflare-php.git",
-                "reference": "fdfc656aa8b78016f4722acec30b54136c027d8e"
+                "reference": "2d3f198773e865b5de2357d7bdbc52bdf42e8f97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cloudflare/cloudflare-php/zipball/fdfc656aa8b78016f4722acec30b54136c027d8e",
-                "reference": "fdfc656aa8b78016f4722acec30b54136c027d8e",
+                "url": "https://api.github.com/repos/cloudflare/cloudflare-php/zipball/2d3f198773e865b5de2357d7bdbc52bdf42e8f97",
+                "reference": "2d3f198773e865b5de2357d7bdbc52bdf42e8f97",
                 "shasum": ""
             },
             "require": {
@@ -541,9 +541,9 @@
             "description": "PHP binding for v4 of the Cloudflare Client API.",
             "support": {
                 "issues": "https://github.com/cloudflare/cloudflare-php/issues",
-                "source": "https://github.com/cloudflare/cloudflare-php/tree/1.3.0"
+                "source": "https://github.com/cloudflare/cloudflare-php/tree/1.4.0"
             },
-            "time": "2021-10-13T03:40:33+00:00"
+            "time": "2024-12-17T23:18:20+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
