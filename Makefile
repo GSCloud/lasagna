@@ -2,9 +2,11 @@
 MAKEFLAGS += --no-print-directory
 include .env
 has_phpstan != command -v phpstan 2>/dev/null
+BASE="app/base.csv"
+DEFAULT_FILE := $(shell mktemp)
+ADMIN_FILE := $(shell mktemp)
 
 all: info
-
 info:
 	@echo "\e[1;32m👾 Welcome to ${APP_NAME}\e[0m"
 	@echo ""
@@ -22,6 +24,7 @@ info:
 	@echo "-\e[0;1m sync\e[0m - sync to the remote host"
 	@echo "-\e[0;1m doctor\e[0m - run doctor"
 	@echo "-\e[0;1m refresh\e[0m - refresh cloud data"
+	@echo "-\e[0;1m base\e[0m - download and build base CSV data"
 	@echo "-\e[0;1m clear\e[0m - clear all temporary files"
 	@echo ""
 	@echo "-\e[0;1m stan\e[0m - run PHPStan tests"
@@ -30,6 +33,17 @@ info:
 	@echo "-\e[0;1m prod\e[0m - run PRODUCTION integration tests"
 	@echo ""
 	@echo "-\e[0;1m docs\e[0m - build documentation"
+
+base:
+	@echo "download: [default]"
+	@wget -q -O $(DEFAULT_FILE) 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
+	@echo "download: [admin]"
+	@wget -q -O $(ADMIN_FILE) 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
+	@cat $(DEFAULT_FILE) > $(BASE)
+	@echo "" >> $(BASE)
+	@tail -n +3 $(ADMIN_FILE) >> $(BASE)
+	@cat $(BASE) | wc -l
+	@./cli.sh clearcache
 
 docs:
 	@find . -maxdepth 1 -iname "*.md" -exec echo "converting {} to ADOC" \; -exec docker run --rm -v "$$(pwd)":/data pandoc/core -f markdown -t asciidoc -i "{}" -o "{}.adoc" \;

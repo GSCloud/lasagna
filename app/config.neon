@@ -111,10 +111,6 @@ design: [
 # locale overrides
 locale_override: [
   copyright: 2024
-  #a_news_info: "some testing shit"
-  #a_news_os_info: "some testing shit"
-  #a_news_sc_info: "some testing shit"
-  #a_remote_fn_info: "some testing shit"
 ]
 
 # Service Worker preload
