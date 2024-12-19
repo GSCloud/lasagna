@@ -1,17 +1,17 @@
 #!/bin/bash
-# @author Fred Brooker <oscadal@gscloud.cz>
+#@author Fred Brooker <git@gscloud.cz>
 
 info() {
-  echo -e " \e[1;32m*\e[0;1m ${*}\e[0m" 1>&2
+  echo -e "\e[1;32m*\e[0;1m ${*}\e[0m" 1>&2
 }
 
 warn() {
-  echo -e " \e[1;33m***\e[0;1m ${*}\e[0m" 1>&2
+  echo -e "\n\n\e[1;33m***\e[0;1m ${*}\e[0m" 1>&2
+  sleep 3
 }
 
 fail() {
-  echo -e " \e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
-  sleep 5
+  echo -e "\n\n\e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
   exit 1
 }
 

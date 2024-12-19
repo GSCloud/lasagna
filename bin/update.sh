@@ -8,6 +8,7 @@ VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
 REVISIONS=$(git rev-list --all --count)
 echo $REVISIONS > REVISIONS
+
 rm -rf logs/* temp/* www/cdn-assets
 
 info "Version: $VERSION Revisions: $REVISIONS"

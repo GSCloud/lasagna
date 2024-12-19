@@ -12,6 +12,4 @@ source .env
 [ -z "${NAME}" ] && fail "Missing NAME definition!"
 [ "$(docker container inspect -f '{{.State.Status}}' ${NAME} 2>&1)" == "running" ] || fail "Container '${NAME}' is not running!"
 
-info "Updating CSV data"
-
-docker exec ${NAME} make du
+docker exec ${NAME} make refresh
