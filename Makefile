@@ -5,6 +5,7 @@ include .env
 has_docker != command -v docker 2>/dev/null
 has_phpstan != command -v vendor/bin/phpstan 2>/dev/null
 has_rename != command -v rename 2>/dev/null
+has_wget != command -v wget 2>/dev/null
 
 BASE = 'app/base.csv'
 DEFAULT_FILE := $(shell mktemp)
@@ -50,6 +51,7 @@ info:
 	@echo ""
 
 base:
+ifneq ($(strip $(has_wget)),)
 	@echo "download: [default]"
 	@wget -q -O $(DEFAULT_FILE) $(DEFAULT_URL) || \
 		(echo "Failed to download file. Exiting..." && exit 1)
@@ -62,6 +64,10 @@ base:
 	@rm -f $(DEFAULT_FILE) $(ADMIN_FILE)
 	@cat $(BASE) | wc -l
 	@./cli.sh clearcache
+else
+	@echo "ERROR: Missing wget command!"
+	@exit 1
+endif
 
 docs:
 ifneq ($(strip $(has_docker)),)
@@ -71,11 +77,14 @@ ifneq ($(strip $(has_docker)),)
 ifneq ($(strip $(has_rename)),)
 	@rename -f 's/\.md\././' *.md.*
 endif
+else
+	@echo "ERROR: Missing docker command!"
+	@exit 1
 endif
 
 update:
 	@./bin/update.sh
-	@make clear
+	@./cli.sh clear
 
 unit:
 	@./cli.sh unit
@@ -98,6 +107,14 @@ local: test
 test:
 	@./cli.sh unit
 	@./cli.sh local
+
+refresh:
+	@./cli.sh refresh
+	@./cli.sh clearcache
+
+prod:
+	@./cli.sh unit
+	@./cli.sh prod
 
 icons:
 	@cd ./www/img && ./create_favicons.sh
@@ -123,14 +140,6 @@ endif
 ifneq ($(strip $(PHPSTAN_EXTRA)),)
 	@./phpstan_extra.sh
 endif
-
-refresh:
-	@./cli.sh refresh
-	@./cli.sh clearcache
-
-prod:
-	@./cli.sh unit
-	@./cli.sh prod
 
 build:
 	@./bin/build.sh
