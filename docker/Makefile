@@ -17,18 +17,21 @@ info:
 	@echo ""
 
 doctor:
-	@bash ./cli.sh doctor
+	@./cli.sh doctor
 
 refresh:
 	@./cli.sh refresh
 	@./cli.sh clearcache
 
 clear:
-	@./cli.sh clear
-
-unit:
-	@./cli.sh unit
+	@./cli.sh clearcache
+	@./cli.sh clearci
+	@./cli.sh clearlogs
+	@./cli.sh cleartemp
 
 test:
 	@./cli.sh unit
 	@./cli.sh local
+
+unit:
+	@./cli.sh unit
