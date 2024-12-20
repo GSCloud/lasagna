@@ -1,7 +1,10 @@
 #@author Fred Brooker <git@gscloud.cz>
 MAKEFLAGS += --no-print-directory
 include .env
-has_phpstan != command -v phpstan 2>/dev/null
+
+has_docker != command -v docker 2>/dev/null
+has_phpstan != command -v vendor/bin/phpstan 2>/dev/null
+has_rename != command -v rename 2>/dev/null
 
 BASE = 'app/base.csv'
 DEFAULT_FILE := $(shell mktemp)
@@ -61,9 +64,14 @@ base:
 	@./cli.sh clearcache
 
 docs:
+ifneq ($(strip $(has_docker)),)
 	@find . -maxdepth 1 -iname "*.md" -exec echo "converting {} to ADOC" \; -exec docker run --rm -v "$$(pwd)":/data pandoc/core -f markdown -t asciidoc -i "{}" -o "{}.adoc" \;
 	@find . -maxdepth 1 -iname "*.adoc" -exec echo "converting {} to PDF" \; -exec docker run --rm -v $$(pwd):/documents/ asciidoctor/docker-asciidoctor asciidoctor-pdf -a allow-uri-read -d book "{}" \;
 	@find . -maxdepth 1 -iname "*.adoc" -delete
+ifneq ($(strip $(has_rename)),)
+	@rename -f 's/\.md\././' *.md.*
+endif
+endif
 
 update:
 	@./bin/update.sh
@@ -145,8 +153,6 @@ kill:
 exec:
 	@./bin/execbash.sh
 
-# macro
+# macros
 everything: clear update stan local test sync prod
-
-# macro
 image: clear update stan local test build
