@@ -94,7 +94,21 @@ icons:
 
 stan:
 ifneq ($(strip $(has_phpstan)),)
-	vendor/bin/phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php app/CiTester.php app/AdminPresenter.php app/CorePresenter.php app/CliDemo.php app/CliVersion.php app/CliVersionjson.php app/Doctor.php app/ErrorPresenter.php app/HomePresenter.php app/UnitTester.php app/ArticlePresenter.php app/LogoutPresenter.php app/RSSPresenter.php app/StringFilters.php
+	@vendor/bin/phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php \
+		app/AdminPresenter.php \
+		app/ArticlePresenter.php \
+		app/CiTester.php \
+		app/CliDemo.php \
+		app/CliVersion.php \
+		app/CliVersionjson.php \
+		app/CorePresenter.php \
+		app/Doctor.php \
+		app/ErrorPresenter.php \
+		app/HomePresenter.php \
+		app/LogoutPresenter.php \
+		app/RSSPresenter.php \
+		app/StringFilters.php \
+		app/UnitTester.php
 endif
 ifneq ($(strip $(PHPSTAN_EXTRA)),)
 	@./phpstan_extra.sh

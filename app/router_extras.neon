@@ -1,5 +1,5 @@
 # @author Fred Brooker <git@gscloud.cz>
-# extra routes, mostly content based
+# extra routes, mostly to supply content
 
 GetEnArticle:
   path: '/en/id/[**:trailing]'

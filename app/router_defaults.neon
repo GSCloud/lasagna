@@ -1,5 +1,5 @@
 # @author Fred Brooker <git@gscloud.cz>
-# router defaults
+# defaults
 
 defaults:
   # RESTful API
@@ -37,10 +37,10 @@ defaults:
   # MVP
   presenter: home # HomePresenter
   template: index # template/index.mustache
-  view: home # route
+  view: home # main route
 
   # routing extras
   alias: null # route name
   clone: null # route name
   country: null # country specific redirects - array: [default, localhost, CZ, XX]
-  redirect: null # full/relative URI
+  redirect: null # full / relative URI

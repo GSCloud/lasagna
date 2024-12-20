@@ -1,5 +1,9 @@
+# @author Fred Brooker <git@gscloud.cz>
+# main routes
+
 defaults:
   language: cs
+  home: redir # routing failure
 
 home:
   path: /
@@ -28,3 +32,7 @@ APIDemo:
   api_info: "Returns (JSON): array of object records."
   assert_json: true
   presenter: api
+
+# routing failure
+redir:
+  redirect: /

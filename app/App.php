@@ -273,7 +273,7 @@ foreach ($routes as $r) {
     $r = APP . DS . $r;
     if (($content = @file_get_contents($r)) === false) {
         if (ob_get_level()) {
-            ob_end_clean();
+            @ob_end_clean();
         }
         header('HTTP/1.1 500 Internal Server Error');
         echo "<h1>Server Error</h1><h2>Routing table:</h2><h3>{$r}</h3>";
@@ -289,7 +289,7 @@ foreach ($routes as $r) {
 $presenter = [];
 $defaults = $router['defaults'] ?? [];
 foreach ($router as $k => $v) {
-    if ($k == 'defaults') {
+    if ($k === 'defaults') {
         continue;
     }
     // ALIASED ROUTE
@@ -297,7 +297,7 @@ foreach ($router as $k => $v) {
         foreach ($defaults as $i => $j) {
             // data from the aliased origin
             $router[$k][$i] = $router[$v['alias']][$i] ?? $defaults[$i];
-            if ($i == 'path') {
+            if ($i === 'path') {
                 // path property from the source
                 $router[$k][$i] = $v[$i];
             }
@@ -331,14 +331,14 @@ foreach ($presenter as $k => $v) {
     if (!isset($v['path'])) {
         continue;
     }
-    if ($v['path'] == '/') {
+    if ($v['path'] === '/') {
         if ($data['request_path_hash'] == '') {
             // set homepage hash to default language
             $data['request_path_hash'] = hash('sha256', $v['language']);
         }
     }
     $alto->map($v['method'], $v['path'], $k, "route_{$k}");
-    if (substr($v['path'], -1) != '/') {
+    if (substr($v['path'], -1) !== '/') {
         // skip the root route, map also slash endings
         $alto->map($v['method'], $v['path'] . '/', $k, "route_{$k}_x");
     }
@@ -379,7 +379,7 @@ $data['view'] = $view;
 if ($router[$view]['redirect'] ?? false) {
     $r = $router[$view]['redirect'];
     if (ob_get_level()) {
-        ob_end_clean();
+        @ob_end_clean();
     }
     header('Location: ' . $r, true, 303);
     exit;
@@ -394,7 +394,7 @@ if ($router[$view]['country'] ?? false) {
     }
     if (!LOCALHOST && array_key_exists($country, $router[$view]['country'])) {
         if (ob_get_level()) {
-            ob_end_clean();
+            @ob_end_clean();
         }
         if (strpos($router[$view]['country'][$country], '?') !== false) {
             $nonce = '';
@@ -409,7 +409,7 @@ if ($router[$view]['country'] ?? false) {
     }
     if (LOCALHOST && array_key_exists('localhost', $router[$view]['country'])) {
         if (ob_get_level()) {
-            ob_end_clean();
+            @ob_end_clean();
         }
         if (strpos($router[$view]['country']['localhost'], '?') !== false) {
             $nonce = '';
@@ -424,7 +424,7 @@ if ($router[$view]['country'] ?? false) {
     }
     if (!LOCALHOST && array_key_exists('default', $router[$view]['country'])) {
         if (ob_get_level()) {
-            ob_end_clean();
+            @ob_end_clean();
         }
         if (strpos($router[$view]['country']['default'], '?') !== false) {
             $nonce = '';
@@ -472,7 +472,7 @@ $controller = "\\GSC\\{$p}";
 $app = $controller::getInstance()->setData($data)->process();
 $model = $app->getData();
 
-// PROFILER DATA
+// PROFILER
 $time1 = $model['time_data'];
 $time2 = $model['time_process'] = round(
     (float) \Tracy\Debugger::timer('PROCESS') * 1000, 2

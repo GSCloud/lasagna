@@ -1,6 +1,6 @@
 {
     "name": "gscloud/tesseractlasagna",
-    "description": "Tesseract LASAGNA",
+    "description": "Tesseract LASAGNA CMS",
     "require": {
         "adbario/php-dot-notation": "^3",
         "altorouter/altorouter": "^2",

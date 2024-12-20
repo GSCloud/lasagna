@@ -1,5 +1,5 @@
 # @author Fred Brooker <git@gscloud.cz>
-# core routes, mandatory - see CorePresenter.php
+# core routes
 
 GetWebManifest:
   path: /manifest.json
@@ -25,6 +25,19 @@ GetRSSXML:
 GetServiceWorker:
   path: /sw.js
   presenter: core
+
+GetError:
+  path: '/err/[i:code]'
+  api: true
+  api_description: "Generate an error page"
+  api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page"
+  method: GET|POST
+  presenter: error
+  api_example: [
+    "err/403"
+    "err/404"
+    "err/500"
+  ]
 
 GetCoreVersion:
   path: /version/core
@@ -52,15 +65,3 @@ GetSkDataVersion:
   language: sk
   method: GET|POST
   presenter: core
-
-GetError:
-  path: '/err/[i:code]'
-  api: true
-  api_description: "Error page"
-  api_info: "Parameters:\n<b><code></b> - numeric error code\n\nReturns: HTML page."
-  method: GET|POST
-  presenter: error
-  api_example: [
-    "err/404"
-    "err/500"
-  ]

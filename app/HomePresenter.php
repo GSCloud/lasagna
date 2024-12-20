@@ -13,7 +13,6 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
-
 use GSC\StringFilters as SF;
 
 /**
@@ -40,17 +39,17 @@ class HomePresenter extends APresenter
         $this->checkRateLimit();
 
         // Model
-        $data = $this->getData();
+        if (!\is_array($data = $this->getData())) {
+            return $this;
+        }
 
         // View
-        $view = $this->getView();
-        if (!$view) {
+        if (!\is_string($view = $this->getView())) {
             return $this;
         }
 
         // Presenter
-        $presenter = $this->getPresenter();
-        if (!\is_array($presenter)) {
+        if (!\is_array($presenter = $this->getPresenter())) {
             return $this;
         }
 

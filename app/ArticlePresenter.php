@@ -13,6 +13,7 @@
 namespace GSC;
 
 use Cake\Cache\Cache;
+use GSC\StringFilters as SF;
 
 /**
  * Article Presenter class
@@ -34,33 +35,58 @@ class ArticlePresenter extends APresenter
      */
     public function process($param = null)
     {
-        // get current Presenter and View
-        $presenter = $this->getPresenter();
-        if (!\is_array($presenter)) {
+        // rate limiting
+        $this->checkRateLimit();
+
+        // Model
+        if (!\is_array($data = $this->getData())) {
             return $this;
         }
-        $view = $this->getView();
-        if (!$view) {
+
+        // View
+        if (!\is_string($view = $this->getView())) {
             return $this;
         }
 
-        // process rate limiting + set HTML header + expand current data model
-        $data = $this->getData();
-        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
-
-        // fix current locale
-        foreach ($data["l"] ??=[] as $k => $v) {
-            StringFilters::convertEolHyphenToBrDot($data["l"][$k]);
-            StringFilters::convertEolToBr($data["l"][$k]);
-            StringFilters::correctTextSpacing(
-                $data["l"][$k], $data["lang"] ?? "en"
-            );
+        // Presenter
+        if (!\is_array($presenter = $this->getPresenter())) {
+            return $this;
         }
 
-        // turn ON article view in the content switcher
+        // HTML header + expand Model
+        $this->setHeaderHtml()->dataExpander($data);
+
+        // fix locales, HTML and shortcodes
+        $lang = $data['lang'] ?? 'en';
+        foreach ($data['l'] ??=[] as $k => $v) {
+            if (\str_starts_with($v, '[markdown]')) {
+                SF::renderMarkdown($data['l'][$k]);
+                SF::renderImageShortCode($data['l'][$k]);
+                SF::renderImageLeftShortCode($data['l'][$k]);
+                SF::renderImageRightShortCode($data['l'][$k]);
+                SF::renderImageRespShortCode($data['l'][$k]);
+                SF::renderGalleryShortCode($data['l'][$k], true);
+                SF::renderYouTubeShortCode($data['l'][$k]);
+                SF::renderSoundcloudShortCode($data['l'][$k]);
+            } elseif (\str_starts_with($v, '[markdownextra]')) {
+                SF::renderMarkdownExtra($data['l'][$k]);
+                SF::renderImageShortCode($data['l'][$k]);
+                SF::renderImageLeftShortCode($data['l'][$k]);
+                SF::renderImageRightShortCode($data['l'][$k]);
+                SF::renderImageRespShortCode($data['l'][$k]);
+                SF::renderGalleryShortCode($data['l'][$k], true);
+                SF::renderYouTubeShortCode($data['l'][$k]);
+                SF::renderSoundcloudShortCode($data['l'][$k]);
+            } else {
+                SF::convertEolToBrNbsp($data['l'][$k]);
+            }
+            SF::correctTextSpacing($data['l'][$k], $lang);
+        }
+
+        // article view content switcher
         $data["container_switch_article"] = true;
 
-        // output rendering
+        // render
         $output = '';
         if ($data) {
             $output = $this->setData(
@@ -69,8 +95,6 @@ class ArticlePresenter extends APresenter
                 $presenter[$view]["template"]
             );
         }
-
-        // strip comments
         StringFilters::trimHtmlComment($output);
         return $this->setData("output", $output);
     }
