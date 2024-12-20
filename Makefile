@@ -2,46 +2,59 @@
 MAKEFLAGS += --no-print-directory
 include .env
 has_phpstan != command -v phpstan 2>/dev/null
-BASE="app/base.csv"
+
+BASE = 'app/base.csv'
 DEFAULT_FILE := $(shell mktemp)
 ADMIN_FILE := $(shell mktemp)
+DEFAULT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
+ADMIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
+
+status != docker inspect --format '{{json .State.Running}}' ${NAME} 2>/dev/null | grep true
+ifneq ($(strip $(status)),)
+dot=🟢
+else
+dot=🔴
+endif
 
 all: info
 info:
-	@echo "\e[1;32m👾 Welcome to ${APP_NAME}\e[0m"
+	@echo "\n\e[1;32m👾 Welcome to ${APP_NAME}\e[0m"
 	@echo ""
-	@echo "-\e[0;1m build\e[0m - build image"
-	@echo "-\e[0;1m start\e[0m - start container"
-	@echo "-\e[0;1m stop\e[0m - stop container"
-	@echo "-\e[0;1m kill\e[0m - kill container"
-	@echo "-\e[0;1m run\e[0m - run container and show web browser"
-	@echo "-\e[0;1m push\e[0m - push image into the registry"
-	@echo "-\e[0;1m exec\e[0m - exec bash in the container"
+	@echo "\e[0;1m📦️ TESSERACT\e[0m\t$(dot) \e[0;4m${NAME}\e[0m \tport: ${PORT} \t🚀 http://localhost:${PORT}"
 	@echo ""
-	@echo "-\e[0;1m install\e[0m - install"
-	@echo "-\e[0;1m update\e[0m - update dependencies"
-	@echo "-\e[0;1m icons\e[0m - update icons"
-	@echo "-\e[0;1m sync\e[0m - sync to the remote host"
-	@echo "-\e[0;1m doctor\e[0m - run doctor"
-	@echo "-\e[0;1m refresh\e[0m - refresh cloud data"
-	@echo "-\e[0;1m base\e[0m - download and build base CSV data"
-	@echo "-\e[0;1m clear\e[0m - clear all temporary files"
+	@echo "\e[0;1mbuild\e[0m\t build image"
+	@echo "\e[0;1mstart\e[0m\t start container"
+	@echo "\e[0;1mstop\e[0m\t stop container"
+	@echo "\e[0;1mkill\e[0m\t kill container"
+	@echo "\e[0;1mrun\e[0m\t start container + show in the browser"
+	@echo "\e[0;1mpush\e[0m\t push image into the registry"
+	@echo "\e[0;1mexec\e[0m\t run interactive shell"
 	@echo ""
-	@echo "-\e[0;1m stan\e[0m - run PHPStan tests"
-	@echo "-\e[0;1m unit\e[0m - run Unit tests"
-	@echo "-\e[0;1m test\e[0m - run LOCAL integration tests"
-	@echo "-\e[0;1m prod\e[0m - run PRODUCTION integration tests"
+	@echo "\e[0;1minstall\e[0m\t install"
+	@echo "\e[0;1mdoctor\e[0m\t run Doctor"
+	@echo "\e[0;1mupdate\e[0m\t update dependencies"
+	@echo "\e[0;1micons\e[0m\t update icons"
+	@echo "\e[0;1mbase\e[0m\t download base CSV data"
+	@echo "\e[0;1mrefresh\e[0m\t refresh cloud CSV data"
+	@echo "\e[0;1mclear\e[0m\t clear all temporary files"
+	@echo "\e[0;1msync\e[0m\t sync to the remote host"
 	@echo ""
-	@echo "-\e[0;1m docs\e[0m - build documentation"
+	@echo "\e[0;1mstan\e[0m\t run PHPStan tests"
+	@echo "\e[0;1munit\e[0m\t run UNIT tests"
+	@echo "\e[0;1mtest\e[0m\t run LOCAL integration tests"
+	@echo "\e[0;1mprod\e[0m\t run PRODUCTION integration tests"
+	@echo "\e[0;1mdocs\e[0m\t transpile documentation"
+	@echo ""
 
 base:
 	@echo "download: [default]"
-	@wget -q -O $(DEFAULT_FILE) 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
+	@wget -q -O $(DEFAULT_FILE) $(DEFAULT_URL)
 	@echo "download: [admin]"
-	@wget -q -O $(ADMIN_FILE) 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
+	@wget -q -O $(ADMIN_FILE) $(ADMIN_URL)
 	@cat $(DEFAULT_FILE) > $(BASE)
-	@echo "" >> $(BASE)
+	@echo >> $(BASE)
 	@tail -n +3 $(ADMIN_FILE) >> $(BASE)
+	@rm -f $(DEFAULT_FILE) $(ADMIN_FILE)
 	@cat $(BASE) | wc -l
 	@./cli.sh clearcache
 
