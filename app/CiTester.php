@@ -86,6 +86,9 @@ class CiTester
         $redirects = [];
         if (\is_array($presenter)) {
             foreach ($presenter as $p) {
+                if (!isset($p['path'])) {
+                    continue;
+                }
                 if (\strpos($p["path"], "[") !== false) {
                     $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
                     continue;
