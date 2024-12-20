@@ -48,9 +48,11 @@ info:
 
 base:
 	@echo "download: [default]"
-	@wget -q -O $(DEFAULT_FILE) $(DEFAULT_URL)
+	@wget -q -O $(DEFAULT_FILE) $(DEFAULT_URL) || \
+		(echo "Failed to download file. Exiting..." && exit 1)
 	@echo "download: [admin]"
-	@wget -q -O $(ADMIN_FILE) $(ADMIN_URL)
+	@wget -q -O $(ADMIN_FILE) $(ADMIN_URL) || \
+		(echo "Failed to download file. Exiting..." && exit 1)
 	@cat $(DEFAULT_FILE) > $(BASE)
 	@echo >> $(BASE)
 	@tail -n +3 $(ADMIN_FILE) >> $(BASE)
