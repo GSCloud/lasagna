@@ -331,14 +331,14 @@ foreach ($presenter as $k => $v) {
     if (!isset($v['path'])) {
         continue;
     }
-    if ($v['path'] == '/') {
+    if ($v['path'] === '/') {
         if ($data['request_path_hash'] == '') {
             // set homepage hash to default language
             $data['request_path_hash'] = hash('sha256', $v['language']);
         }
     }
     $alto->map($v['method'], $v['path'], $k, "route_{$k}");
-    if (substr($v['path'], -1) != '/') {
+    if (substr($v['path'], -1) !== '/') {
         // skip the root route, map also slash endings
         $alto->map($v['method'], $v['path'] . '/', $k, "route_{$k}_x");
     }
