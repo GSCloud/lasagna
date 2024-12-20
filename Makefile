@@ -84,13 +84,19 @@ endif
 
 update:
 	@./bin/update.sh
-	@./cli.sh clear
+	@./cli.sh clearcache
+	@./cli.sh clearci
+	@./cli.sh clearlogs
+	@./cli.sh cleartemp
 
 unit:
 	@./cli.sh unit
 
 clear:
-	@./cli.sh clear
+	@./cli.sh clearcache
+	@./cli.sh clearci
+	@./cli.sh clearlogs
+	@./cli.sh cleartemp
 
 install:
 	@./bin/install.sh

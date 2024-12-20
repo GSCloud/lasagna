@@ -129,7 +129,6 @@ class CliPresenter extends APresenter
             . " <command> [<param> ...]</bold>\n"
         );
         $cli->out("<bold>app</bold> '<code>'\t- run inline code");
-        $cli->out("<bold>clear</bold>\t\t- clear all temporary files");
         $cli->out("<bold>clearcache</bold>\t- clear cache");
         $cli->out("<bold>clearci</bold>\t\t- clear CI logs");
         $cli->out("<bold>clearlogs</bold>\t- clear runtime logs");
@@ -209,16 +208,11 @@ class CliPresenter extends APresenter
     {
         $cli = new CLImate;
         $module = \trim($module);
+
         switch ($module) {
         case "refresh":
             $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
-            break;
-        case "clear":
-            $this->selectModule("clearcache");
-            $this->selectModule("clearci");
-            $this->selectModule("clearlogs");
-            $this->selectModule("cleartemp");
             break;
         case "local":
         case "prod":
@@ -240,7 +234,7 @@ class CliPresenter extends APresenter
             $data = $this->getData();
             $admin = AdminPresenter::getInstance()->setData($data);
             $admin->flushCache();
-            $cli->out("🧹 cache cleared");
+            $cli->out("🧹 cache");
             break;
         case "clearci":
             $files = \glob(ROOT . DS . "ci" . DS . "*") ?: [];
