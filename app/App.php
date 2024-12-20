@@ -67,7 +67,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // DATA ARRAY
-define('ENGINE', 'Tesseract 2.4.2');
+define('ENGINE', 'Tesseract 2.4.3');
 $data['ENGINE'] = ENGINE;
 
 \Tracy\Debugger::timer('DATA');
