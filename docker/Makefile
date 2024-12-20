@@ -8,7 +8,10 @@ info:
 	@echo ""
 	@echo "\e[0;1mdoctor\e[0m\t run Doctor"
 	@echo "\e[0;1mrefresh\e[0m\t refresh cloud CSV data"
+	@echo "\e[0;1mclear\e[0m\t clear all temporary files"
+	@echo ""
 	@echo "\e[0;1mtest\e[0m\t run local tests"
+	@echo "\e[0;1munit\e[0m\t run UNIT tests"
 	@echo ""
 
 doctor:
@@ -18,5 +21,12 @@ refresh:
 	@./cli.sh refresh
 	@./cli.sh clearcache
 
+clear:
+	@./cli.sh clear
+
+unit:
+	@./cli.sh unit
+
 test:
+	@./cli.sh unit
 	@./cli.sh local
