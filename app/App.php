@@ -245,27 +245,31 @@ foreach ($cache_profiles as $k => $v) {
 }
 
 // REDIS TEST
-$redis_test = 'redis_test';
-Cache::setConfig(
-    $redis_test,
-    [
-        'className' => 'Cake\Cache\Engine\RedisEngine',
-        'database' => $cfg['redis']['database'] ?? 0,
-        'duration' => '+10 seconds',
-        'host' => $cfg['redis']['host'] ?? '127.0.0.1',
-        'password' => $cfg['redis']['password'] ?? '',
-        'port' => $cfg['redis']['port'] ?? 6377,
-        'prefix' => PROJECT
-            . '_'
-            . APPNAME
-            . '_'
-            . CACHEPREFIX,
-        'timeout' => $cfg['redis']['timeout'] ?? 1,
-        'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
-    ]
-);
-Cache::write($redis_test, $redis_test, $redis_test);
-define('REDIS_CACHE', Cache::read($redis_test, $redis_test) === $redis_test);
+if ($cfg['redis']['port'] ?? null) {
+    $redis_test = 'redis_test';
+    Cache::setConfig(
+        $redis_test,
+        [
+            'className' => 'Cake\Cache\Engine\RedisEngine',
+            'database' => $cfg['redis']['database'] ?? 0,
+            'duration' => '+10 seconds',
+            'host' => $cfg['redis']['host'] ?? '127.0.0.1',
+            'password' => $cfg['redis']['password'] ?? '',
+            'port' => $cfg['redis']['port'] ?? 6377,
+            'prefix' => PROJECT
+                . '_'
+                . APPNAME
+                . '_'
+                . CACHEPREFIX,
+            'timeout' => $cfg['redis']['timeout'] ?? 1,
+            'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
+        ]
+    );
+    Cache::write($redis_test, $redis_test, $redis_test);
+    define('REDIS_CACHE', Cache::read($redis_test, $redis_test) === $redis_test);
+} else {
+    define('REDIS_CACHE', false);
+}
 
 // POPULATE DATA ARRAY
 $data['cache_profiles'] = $cache_profiles;
