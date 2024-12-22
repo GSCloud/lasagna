@@ -280,14 +280,9 @@ class CorePresenter extends APresenter
             );
         }
 
-        $fl = '';
         $language = $this->_validateLanguage($presenter[$view]["language"]);
         $locale = $this->getLocale($language);
-        $flushed =(DATA . DS . '_default_cache_flushed_');
-        if (\file_exists($flushed)) {
-            $fl = (string) \filemtime($flushed);
-        }
-        $hash = \hash("sha256", (string) \json_encode($locale) . $fl);
+        $hash = \hash("sha256", (string) \json_encode($locale));
 
         switch ($view) {
         case "GetEnDataVersion":

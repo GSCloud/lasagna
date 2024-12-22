@@ -70,10 +70,10 @@ hr {border:0;clear:both;margin:0 auto}
   {{>admin_tab_news}}
 
   <hr>
-  REDIS&nbsp;cache:&nbsp;<span class=bold>{{#CONST.REDIS_CACHE}}ON{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}OFF{{/CONST.REDIS_CACHE}}</span> &nbsp;
-  RATE limiter: <span class=bold id="limit"></span>/{{ CONST.LIMITER_MAXIMUM }} &nbsp;
+  REDIS cache: <span class=bold>{{#CONST.REDIS_CACHE}}ON{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}OFF{{/CONST.REDIS_CACHE}}</span> &nbsp;
+  LIMITER: <span class=bold id="limit"></span>/{{ CONST.LIMITER_MAXIMUM }} &nbsp;
   <br>
-  SPEED &ndash;
+  SPEED
   data: <span class=bold id="time1"></span> ms &nbsp;
   process: <span class=bold id="time2"></span> ms &nbsp;
   run: <span class=bold id="time3"></span> ms &nbsp;

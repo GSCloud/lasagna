@@ -828,10 +828,8 @@ class AdminPresenter extends APresenter
                 }
                 $this->checkLocales();
             } finally {
-                @\touch(DATA . DS . '_default_cache_flushed_');
-                @\chmod(DATA . DS . '_default_cache_flushed_', 0666);
-                @\touch(DATA . DS . '_admin_cache_flushed_');
-                @\chmod(DATA . DS . '_admin_cache_flushed_', 0666);
+                @\unlink(DATA . DS . '_default_cache_flushed_');
+                @\unlink(DATA . DS . '_admin_cache_flushed_');
                 @\file_put_contents(
                     DATA . DS . '_random_cdn_hash',
                     \hash('sha1', $this->getNonce()),

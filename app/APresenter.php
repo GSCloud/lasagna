@@ -1749,19 +1749,6 @@ abstract class APresenter implements IPresenter
         $file = \strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
-                $f = DATA . DS . "_{$file}_cache_flushed_";
-                switch ($file) {
-                case 'default':
-                case 'admin':
-                    if (\file_exists($f) && ($force === true)) {
-                        @\unlink($f);
-                    } else {
-                        if (Cache::read($file, 'csv') !== false) {
-                            return $this;
-                        }
-                    }
-                    break;
-                }
                 $data = false;
                 if (!\file_exists(DATA . DS . "{$file}.csv")) {
                     $force = true;
@@ -2073,13 +2060,8 @@ abstract class APresenter implements IPresenter
             $data['l'] = $l;
         }
 
-        // compute data hash from language and cache reset modification time
-        $fl = '';
-        $flushed =(DATA . DS . '_default_cache_flushed_');
-        if (\file_exists($flushed)) {
-            $fl = (string) \filemtime($flushed);
-        }
-        $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l) . $fl);
+        // compute data hash
+        $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l));
 
         // extract request path slug
         if (($pos = \strpos($data['request_path'], $language)) !== false) {
