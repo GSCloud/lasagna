@@ -1042,11 +1042,17 @@ class AdminPresenter extends APresenter
         if (\stripos($x[1], 'ADMIN') !== false) {
             $class = 'green lighten-4';
         }
-        if (\stripos($x[1], 'REMOTE') !== false) {
+        if (\stripos($x[1], 'ADMIN: file deleted') !== false) {
             $class = 'red lighten-4';
         }
+        if (\stripos($x[1], 'ADMIN: file(s) uploaded') !== false) {
+            $class = 'blue lighten-4';
+        }
+        if (\stripos($x[1], 'REMOTE') !== false) {
+            $class = 'orange lighten-4';
+        }
         if (\stripos($x[1], 'TOKEN') !== false) {
-            $class = 'red lighten-4';
+            $class = 'purple lighten-4';
         }
         // hide repetitions
         if ($x[1] == $this->_lastlog) {
