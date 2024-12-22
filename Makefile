@@ -7,11 +7,11 @@ has_phpstan != command -v vendor/bin/phpstan 2>/dev/null
 has_rename != command -v rename 2>/dev/null
 has_wget != command -v wget 2>/dev/null
 
-BASE = 'app/base.csv'
-DEFAULT_FILE := $(shell mktemp)
+BASE := 'app/base.csv'
 ADMIN_FILE := $(shell mktemp)
-DEFAULT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
-ADMIN_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
+ADMIN_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
+DEFAULT_FILE := $(shell mktemp)
+DEFAULT_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
 
 status != docker inspect --format '{{json .State.Running}}' ${NAME} 2>/dev/null | grep true
 ifneq ($(strip $(status)),)
@@ -47,7 +47,7 @@ info:
 	@echo "\e[0;1munit\e[0m\t run UNIT tests"
 	@echo "\e[0;1mtest\e[0m\t run LOCAL integration tests"
 	@echo "\e[0;1mprod\e[0m\t run PRODUCTION integration tests"
-	@echo "\e[0;1mdocs\e[0m\t transpile documentation"
+	@echo "\e[0;1mdocs\e[0m\t transpile documentation to PDF"
 	@echo ""
 
 base:
@@ -70,6 +70,7 @@ else
 endif
 
 docs:
+	@-mv "$(HOME)/Downloads/README.md" .
 ifneq ($(strip $(has_docker)),)
 	@find . -maxdepth 1 -iname "*.md" -exec echo "converting {} to ADOC" \; -exec docker run --rm -v "$$(pwd)":/data pandoc/core -f markdown -t asciidoc -i "{}" -o "{}.adoc" \;
 	@find . -maxdepth 1 -iname "*.adoc" -exec echo "converting {} to PDF" \; -exec docker run --rm -v $$(pwd):/documents/ asciidoctor/docker-asciidoctor asciidoctor-pdf -a allow-uri-read -d book "{}" \;

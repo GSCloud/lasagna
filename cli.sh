@@ -3,6 +3,6 @@
 
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
-cd $ABSDIR
 
+cd $ABSDIR
 php -f ./Bootstrap.php "$@"

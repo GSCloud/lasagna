@@ -38,7 +38,7 @@ foreach ([
     'ROOT',
     'TEMP',
 ] as $x) {
-    defined($x) || die("FATAL ERROR: sanity check for constant '{$x}' failed!");
+    defined($x) || die("FATAL ERROR: sanity check - constant '{$x}' failed!");
 }
 
 // POPULATE DATA ARRAY

@@ -27,11 +27,11 @@ define('LOGS', ROOT . DS . 'logs');
 define('TEMP', ROOT . DS . 'temp');
 define('CLI', (bool) (PHP_SAPI == 'cli'));
 define('LOCALHOST', (bool) (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') || CLI);
-define('DEBUG', true);
-define('CACHEPREFIX', 'cache_');
 define('APPNAME', 'app');
+define('CACHEPREFIX', 'cache_');
+define('DEBUG', true);
 define('DOMAIN', $_SERVER['SERVER_NAME'] ?? 'localhost');
 define('PROJECT', 'LASAGNA');
+define('REDIS_CACHE', false);
 define('SERVER', $_SERVER['SERVER_NAME'] ?? 'localhost');
-
 define('SF_ITERATIONS', 10);
