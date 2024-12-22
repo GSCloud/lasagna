@@ -4,7 +4,7 @@
 dir="$(dirname "$0")"
 cd $dir
 
-mkdir -p app ci data logs temp www/download www/upload
+mkdir -p app ci data logs temp www/{download,upload}
 
 [ ! -r ".env" ] && {
     echo -en "Missing .env file!\n"
@@ -35,11 +35,7 @@ if [ ! -z "$1" ]; then
 fi
 
 chown $USER:$USER .
-chmod 0777 ci data logs temp www/download www/upload 2>/dev/null
-chown www-data:www-data ci data www/download www/upload 2>/dev/null
-
-find www/ -type f -exec chmod 0644 {} 2>/dev/null \;
-
-rm -f data/_random_cdn_hash 2>/dev/null
-
-exit 0
+chmod -R 0777 ci data logs temp www/{download,upload} && \
+    chown -R www-data:www-data ci data www/{download,upload} && \
+    find www/ -type f -exec chmod 0644 {} + && \
+    rm -f data/_random_cdn_hash

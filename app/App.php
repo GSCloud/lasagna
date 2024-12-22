@@ -90,7 +90,7 @@ $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP']
 $data['PHP_VERSION'] = PHP_VERSION;
 $data['DATA_VERSION'] = null;
 $data['VERSION'] = $version = trim(
-    @file_get_contents(ROOT . DS . 'VERSION') ?: '', "\r\n"
+    @file_get_contents(ROOT . DS . 'VERSION') ?: ''
 );
 $data['VERSION_SHORT'] = $base58->encode(
     base_convert(substr($version, 0, 6), 16, 10)
@@ -100,7 +100,7 @@ $data['VERSION_DATE']
 $data['VERSION_TIMESTAMP']
     = @filemtime(ROOT . DS . 'VERSION') ?: time();
 $data['REVISIONS'] = (int) trim(
-    @file_get_contents(ROOT . DS . 'REVISIONS') ?: '0', "\r\n"
+    @file_get_contents(ROOT . DS . 'REVISIONS') ?: '0'
 );
 
 // random hash created by administrator
