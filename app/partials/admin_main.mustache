@@ -69,6 +69,14 @@
   <!-- UPLOADS -->
   <div id="a_uploader_progress"></div>
   <div id="a_file_manager"></div>
+  <hr>
+  REDIS&nbsp;cache:&nbsp;<span class=bold>{{#CONST.REDIS_CACHE}}ON{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}OFF{{/CONST.REDIS_CACHE}}</span> &nbsp;
+  RATE limiter: <span class=bold id="limit"></span>/{{ CONST.LIMITER_MAXIMUM }} &nbsp;
+  <hr>
+  SPEED &ndash;
+  data: <span class=bold id="time1"></span> ms &nbsp;
+  process: <span class=bold id="time2"></span> ms &nbsp;
+  run: <span class=bold id="time3"></span> ms &nbsp;
 </div>
 
 <script nonce="{{ csp_nonce }}">

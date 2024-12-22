@@ -186,7 +186,7 @@ $cache_profiles = array_replace(
         'hour' => '+60 minutes',
         'day' => '+24 hours',
         'csv' => '+72 hours', // CSV cold storage
-        'limiter' => '+5 seconds', // access limiter
+        'limiter' => '+5 seconds', // access rate limiter
     ], (array) ($cfg['cache_profiles'] ?? [])
 );
 
@@ -516,7 +516,30 @@ if ($limit && is_int($limit)) {
 }
 
 // OUTPUT
-echo $model['output'] ?? '';
+$output = $model['output'] ?? '';
+
+// TIMINGS
+$fn = [
+    "d.getElementById('time1').textContent='{$time1}';",
+    "d.getElementById('time2').textContent='{$time2}';",
+    "d.getElementById('time3').textContent='{$time3}';",
+    "d.getElementById('limit').textContent='{$limit}';",
+];
+foreach (headers_list() as $h) {
+    if (strpos($h, 'Content-Type: text/html;') === 0) {
+        $output = str_replace(
+            '</body>',
+            '<script nonce="'
+                . $data['csp_nonce']
+                .'">(function(d){'
+                . join("\n", $fn)
+                . '})(document);</script></body>',
+            $output
+        );
+        break;
+    }
+}
+echo $output;
 
 // DEBUGGING
 if (DEBUG) {

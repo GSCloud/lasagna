@@ -480,7 +480,7 @@ abstract class APresenter implements IPresenter
     /* @var string Google Sheet URL postfix */
     const GS_SHEET_POSTFIX = '/edit#gid=0';
 
-    /* @var integer access limiter maximum hits in 5 s */
+    /* @var integer access rate limiter maximum hits */
     const LIMITER_MAXIMUM = 100;
 
     /* @var string identity nonce filename */
@@ -741,6 +741,8 @@ abstract class APresenter implements IPresenter
                 'CONST.TEMPLATES' => TEMPLATES,
                 'CONST.UPLOAD' => UPLOAD,
                 'CONST.WWW' => WWW,
+
+                'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
 
                 'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
                 'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
@@ -1423,9 +1425,6 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this;
         }
-        if (LOCALHOST) {
-            return $this;
-        }
         $f = "user_rate_limit_{$this->getUID()}";
         $rate = (int) (Cache::read($f, 'limiter') ?? 0);
         Cache::write($f, ++$rate, 'limiter');
@@ -1444,9 +1443,6 @@ abstract class APresenter implements IPresenter
     public function getRateLimit()
     {
         if (CLI) {
-            return null;
-        }
-        if (LOCALHOST) {
             return null;
         }
         return Cache::read("user_rate_limit_{$this->getUID()}", 'limiter');
