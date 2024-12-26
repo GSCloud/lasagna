@@ -135,7 +135,6 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'upload':
             $this->checkPermission('admin,manager,editor');
-
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
                 break;
             }
@@ -147,9 +146,12 @@ class AdminPresenter extends APresenter
                 // sanitize filename
                 $f = $file['name'];
                 $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
+
                 StringFilters::transliterate($f);
                 StringFilters::sanitizeStringLC($f);
                 StringFilters::transliterate($f);
+
+                $info = \pathinfo($f);
 
                 // skip thumbnails
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
@@ -170,12 +172,23 @@ class AdminPresenter extends APresenter
                 if ($f === '.size') {
                     continue;
                 }
-                
+
+                // skip files without name
+                if (\is_array($info) && !$info['filename']) {
+                    continue;
+                }
+               
                 // process uploaded file
                 if (@\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
-                    $info = \pathinfo($f);
+
                     if (\is_array($info)) {
                         $fn = $info['filename'];
+
+                        // skip thumbnails generation
+                        if (empty($info['extension'])) {
+                            continue;
+                        }
+
                         $in = UPLOAD . DS . $f;
                         $uploads[$f] = \urlencode($f);
 
@@ -186,7 +199,7 @@ class AdminPresenter extends APresenter
                                     . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                     . $fn . $x;
                                 if (\file_exists($file)) {
-                                    \unlink($file);
+                                    @\unlink($file);
                                 }
                             }
                         }
@@ -195,15 +208,11 @@ class AdminPresenter extends APresenter
                         foreach (self::THUMBS_CREATE as $w) {
                             $out = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                . $f;
-                            $this->createThumbnail($in, $out, $w);
-                            $out = UPLOAD . DS
-                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                 . $fn . '.webp';
                             $this->createThumbnail($in, $out, $w);
                         }
 
-                        // skip conversion if the original is already in WebP
+                        // skip if the original is already WebP
                         if (\str_ends_with($f, '.webp')) {
                             continue;
                         }
@@ -235,33 +244,29 @@ class AdminPresenter extends APresenter
             if (\is_dir(UPLOAD) && \is_writable(UPLOAD)) {
                 if (isset($_POST['name'])) {
                     $name = \trim($_POST['name'], "\\/.");
-                    $info = \pathinfo($name);
     
                     // error for '.size' file
                     if ($name === '.size') {
                         ErrorPresenter::getInstance()->process(500);
                     }
     
+                    $info = \pathinfo($name);
                     if (\is_array($info)) {
                         $fn = $info['filename'];
-    
-                        // delete all files by the extension
+
+                        // delete old thumbnails
                         foreach (self::THUMBS_EXTENSIONS as $x) {
-    
-                            // delete old thumbnails
                             foreach (self::THUMBS_DELETE as $w) {
                                 $file = UPLOAD . DS
                                     . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                     . $fn . $x;
                                 if (\file_exists($file)) {
-                                    \unlink($file);
+                                    @\unlink($file);
                                 }
                             }
-    
-                            // delete main file(s)
                             $file = UPLOAD . DS . $fn . $x;
                             if (\file_exists($file)) {
-                                \unlink($file);
+                                @\unlink($file);
                             }
                         }
                     }
@@ -269,8 +274,9 @@ class AdminPresenter extends APresenter
                     // delete the origin
                     $file = UPLOAD . DS . $name;
                     if (\file_exists($file)) {
-                        \unlink($file);
+                        @\unlink($file);
                     }
+
                     $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
                     return $this->writeJsonData($name, $extras);
                 }
@@ -293,30 +299,34 @@ class AdminPresenter extends APresenter
                 while (false !== ($f = \readdir($handle))) {
                     if (($f != '.') && ($f != '..')) {
 
+                        // exclude '.size' file
+                        if ($f === '.size') {
+                            continue;
+                        }
+
                         // exclude thumbnails
                         if (\str_starts_with($f, self::THUMB_PREFIX)) {
                             continue;
                         }
 
-                        // exclude '.size' file
-                        if ($f === '.size') {
-                            continue;
-                        }
-                        
                         $thumbnails = [];
                         $info = \pathinfo($f);
                         if (\is_array($info)) {
                             $fn = $info['filename'];
                             $ext = $info['extension'] ?? '';
 
+                            if (!$fn) {
+                                continue;
+                            }
+
                             // check for the thumbnails
                             foreach (self::THUMBS_CREATE as $w) {
                                 $file = UPLOAD . DS
                                     . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                    . $f;
+                                    . $fn . '.webp';
                                 if (\file_exists($file) && \is_readable($file)) {
                                     $thumbnails[$w] = self::THUMB_PREFIX . $w
-                                        . self::THUMB_POSTFIX . $f;
+                                        . self::THUMB_POSTFIX . $fn . '.webp';
                                 }
                             }
 
@@ -330,9 +340,11 @@ class AdminPresenter extends APresenter
                                 unset($files["{$fn}.webp"]);
                             }
                             \array_push($uniques, $fn);
+
                             if (empty($thumbnails)) {
                                 $thumbnails = null;
                             }
+
                             $files[$f] = [
                                 'name' => $f,
                                 'size' => \filesize(UPLOAD . DS . $f),
@@ -820,7 +832,10 @@ class AdminPresenter extends APresenter
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
-                if (!LOCALHOST) {
+
+                if (LOCALHOST) {
+                    // localhost
+                } else {
                     $cf = $this->getCfg('cf');
                     if (\is_array($cf)) {
                         $this->cloudflarePurgeCache($cf);
@@ -908,44 +923,44 @@ class AdminPresenter extends APresenter
     /**
      * Create thumbnail from the source image
      *
-     * @param string $src  file source
-     * @param string $dest file target
+     * @param string $src  file name source
+     * @param string $dest file name target
      * @param mixed  $tw   output width or null
      * @param mixed  $th   output height or null
      * 
-     * @return mixed image conversion call result
+     * @return mixed image save call result
      */
     public function createThumbnail($src, $dest, $tw = null, $th = null
     ) {
         $type = \exif_imagetype($src);
-
         if (!$type) {
+            // unknown image type
             return null;
         }
-
         if (!\array_key_exists($type, self::IMAGE_HANDLERS)) {
+            // unsupported conversion definition
             return null;
         }
 
+        // create raw image
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
 
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
         $w = \imagesx($image);
         $w = \intval($w);
-
         // phpcs:ignore
         /** @phpstan-ignore-next-line */
         $h = \imagesy($image);
         $h = \intval($h);
 
+        // prepare conversion width and height
         if ($tw === null) {
             $tw = $w;
         }
         if (\is_numeric($tw)) {
             $tw = \intval($tw);
         }
-
         if ($th === null) {
             $ratio = $w / $h;
             if ($w > $h) {
@@ -981,11 +996,12 @@ class AdminPresenter extends APresenter
             /** @phpstan-ignore-next-line */
             \imagecopyresampled($thmb, $image, 0, 0, 0, 0, $tw, $th, $w, $h);
 
+            // save WebP thumbnail
             return \call_user_func(
-                self::IMAGE_HANDLERS[$type]['save'],
+                self::IMAGE_HANDLERS[IMAGETYPE_WEBP]['save'],
                 $thmb,
                 $dest,
-                self::IMAGE_HANDLERS[$type]['quality']
+                self::IMAGE_HANDLERS[IMAGETYPE_WEBP]['quality']
             );
         }
     }
