@@ -520,11 +520,12 @@ $output = $model['output'] ?? '';
 
 // TIMINGS
 $fn = [
-    "d.getElementById('time1').textContent='{$time1}';",
-    "d.getElementById('time2').textContent='{$time2}';",
-    "d.getElementById('time3').textContent='{$time3}';",
-    "d.getElementById('limit').textContent='{$limit}';",
+    "if(d.getElementById('time1'))d.getElementById('time1').textContent='{$time1}';",
+    "if(d.getElementById('time2'))d.getElementById('time2').textContent='{$time2}';",
+    "if(d.getElementById('time3'))d.getElementById('time3').textContent='{$time3}';",
+    "if(d.getElementById('limit'))d.getElementById('limit').textContent='{$limit}';",
 ];
+
 foreach (headers_list() as $h) {
     if (strpos($h, 'Content-Type: text/html;') === 0) {
         $output = str_replace(
@@ -539,6 +540,7 @@ foreach (headers_list() as $h) {
         break;
     }
 }
+
 echo $output;
 
 // DEBUGGING
