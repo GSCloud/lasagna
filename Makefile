@@ -172,4 +172,4 @@ exec:
 
 # macros
 everything: clear update stan local test sync prod
-image: clear update stan local test build
+image: docs clear update stan local test build
