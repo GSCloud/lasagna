@@ -7,9 +7,13 @@
 **`IDEA`**  
 ---
 
+`2024-12-27`
+
+* **`BUGFIX`**	admin panel timing info \- JS console errors fix
+
 `2024-12-26`
 
-* **`BUGFIX`**	WebP thumbnails creation routine
+* **`BUGFIX`**	thumbnails creation \- WebP output format fix
 
 `2024-12-23`
 
