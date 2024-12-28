@@ -221,6 +221,7 @@ class CorePresenter extends APresenter
             $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
             $d["LASAGNA"]["core"]["timestamp"] = (int) $data["VERSION_TIMESTAMP"];
             $d["LASAGNA"]["core"]["version"] = (string) $data["VERSION"];
+            $d["LASAGNA"]["core"]["cdn"] = CDN;
             return $this->writeJsonData($d, $extras);
 
         case "ReadArticles":

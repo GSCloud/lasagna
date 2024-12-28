@@ -843,8 +843,6 @@ class AdminPresenter extends APresenter
                 }
                 $this->checkLocales();
             } finally {
-                @\unlink(DATA . DS . '_default_cache_flushed_');
-                @\unlink(DATA . DS . '_admin_cache_flushed_');
                 @\file_put_contents(
                     DATA . DS . '_random_cdn_hash',
                     \hash('sha1', $this->getNonce()),

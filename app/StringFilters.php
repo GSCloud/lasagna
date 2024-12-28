@@ -418,11 +418,13 @@ class StringFilters implements IStringFilters
         " a&nbsp;s " => " a&nbsp;s&nbsp;",
         " a&nbsp;u " => " a&nbsp;u&nbsp;",
         " a&nbsp;v " => " a&nbsp;v&nbsp;",
+        " a&nbsp;z " => " a&nbsp;z&nbsp;",
         " i&nbsp;k " => " i&nbsp;k&nbsp;",
         " i&nbsp;o " => " i&nbsp;o&nbsp;",
         " i&nbsp;s " => " i&nbsp;s&nbsp;",
         " i&nbsp;u " => " i&nbsp;u&nbsp;",
         " i&nbsp;v " => " i&nbsp;v&nbsp;",
+        " i&nbsp;z " => " i&nbsp;z&nbsp;",
     ];
 
     // phpcs:ignore
@@ -486,11 +488,13 @@ class StringFilters implements IStringFilters
         " a&nbsp;s " => " a&nbsp;s&nbsp;",
         " a&nbsp;u " => " a&nbsp;u&nbsp;",
         " a&nbsp;v " => " a&nbsp;v&nbsp;",
+        " a&nbsp;z " => " a&nbsp;z&nbsp;",
         " i&nbsp;k " => " i&nbsp;k&nbsp;",
         " i&nbsp;o " => " i&nbsp;o&nbsp;",
         " i&nbsp;s " => " i&nbsp;s&nbsp;",
         " i&nbsp;u " => " i&nbsp;u&nbsp;",
         " i&nbsp;v " => " i&nbsp;v&nbsp;",
+        " i&nbsp;z " => " i&nbsp;z&nbsp;",
     ];
 
     // phpcs:ignore

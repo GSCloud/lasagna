@@ -286,6 +286,13 @@ async function sha256(message) {
                 return;
               }
             }
+            if (post.data.LASAGNA.core.cdn) {
+              if (post.data.LASAGNA.core.cdn != GSC.LASAGNA.core.cdn) {
+                $("#update-message").show();
+                GSC.VersionCheck = function () {};
+                return;
+              }
+            }
           });
           $.post("/{{ lang }}/version/data", function(post) {
             if (post.data.LASAGNA.data.version) {

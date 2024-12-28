@@ -105,7 +105,7 @@ $data['REVISIONS'] = (int) trim(
 
 // random hash created by administrator
 $hash = DATA . DS . '_random_cdn_hash';
-if (file_exists($hash)) {
+if (file_exists($hash) && is_readable($hash)) {
     $version = @file_get_contents($hash);
     trim($version);
 }
