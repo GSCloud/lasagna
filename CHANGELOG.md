@@ -9,18 +9,18 @@
 
 `2024-12-28`
 
-* **`BUGFIX`**	regression in a new CDN hash after cache flush fix  
-* **`FEATURE`**	StringFilters CZ/SK replacements update
+* **`BUGFIX-1005`**	regression in a new CDN hash after cache flush  
+* **`FEATURE-1004`**	StringFilters CZ/SK replacements
 
 `2024-12-27`
 
-* **`BUGFIX`**	admin panel timing info \- JS console errors fix
+* **`BUGFIX-1003`**	admin panel timing info JS console errors
 
 `2024-12-26`
 
-* **`BUGFIX`**	thumbnails creation \- WebP output format fix
+* **`BUGFIX-1002`**	thumbnails creation WebP output format
 
 `2024-12-23`
 
-* **`FEATURE`**	changelog added
+* **`FEATURE-1001`**	\+ changelog
 
