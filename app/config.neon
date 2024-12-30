@@ -100,12 +100,12 @@ app_data: []
 # design
 design: [
   css_font: []
-  skin: "white"
-  content: "white black-text"
-  background_color: "white"
   footer_color: "grey darken-4"
   nav_color: "orange"
   theme_color: "orange"
+  background_color: "white"
+  content: "white black-text"
+  skin: "white"
 ]
 
 # locale overrides
@@ -121,3 +121,6 @@ swpreload: [
 
 # Service Worker preload with CDN hash
 swpreload_cdn: []
+
+# DON'T CACHE patterns
+dontcache: []

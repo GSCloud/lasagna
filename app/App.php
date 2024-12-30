@@ -513,6 +513,8 @@ header("X-Time-Run: $time3 ms");
 $limit = $app->getRateLimit();
 if ($limit && is_int($limit)) {
     header("X-Rate-Limit: $limit");
+} else {
+    $limit = 1;
 }
 
 // OUTPUT
