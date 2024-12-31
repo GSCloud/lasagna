@@ -110,7 +110,7 @@ design: [
 
 # locale overrides
 locale_override: [
-  copyright: 2024
+  copyright: 2025
 ]
 
 # Service Worker preload
