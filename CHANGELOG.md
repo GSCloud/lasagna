@@ -3,6 +3,11 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-02`
+
+* **`1007-IDEA`** upload information on the latest files added  
+* **`1006-IDEA`** showing all uploads size in MB \+ uploads count on admin panel load via XHR
+
 `2024-12-28`
 
 * **`1005-BUGFIX`** regression in a new CDN hash after cache flush  
