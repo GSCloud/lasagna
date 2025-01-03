@@ -1,7 +1,7 @@
 KEY,SECTION,EN,CS,SK,DE
 klíč,sekce,anglicky,česky,slovensky,německy
 $author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker
-$gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud s.r.o.
+$gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud Ltd.
 $gscloud,$,$gsc,$gsc,$gsc,$gsc
 $year,$,2025,2025,2025,2025
 gsc_footer_img_size,PARAMETER,48,48,48,48
@@ -45,15 +45,11 @@ meta_author,META,$author,$author,$author,$author
 meta_description,META,$description,$description,$description,$description
 meta_generator,META,$lasagna,$lasagna,$lasagna,$lasagna
 meta_keywords,META,$keywords,$keywords,$keywords,$keywords
-meta_viewport,META,"width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3"
 og_description,META,$description,$description,$description,$description
 og_site_name,META,$title,$title,$title,$title
 og_title,META,$title,$title,$title,$title
 og_url,META,$canonical_url,$canonical_url,$canonical_url,$canonical_url
-twitter_creator,META,$author,$author,$author,$author
-twitter_description,META,$description,$description,$description,$description
-twitter_title,META,$title,$title,$title,$title
-twitter_url,META,$canonical_url,$canonical_url,$canonical_url,$canonical_url
+meta_viewport,META,"width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3"
 month_1,MONTHS,January,leden,január,Januar
 month_2,MONTHS,February,únor,február,Februar
 month_3,MONTHS,March,březen,marec,Marsch
@@ -78,19 +74,19 @@ month_2p_9,MONTHS,September,září,septembra,September
 month_2p_10,MONTHS,October,října,októbra,Oktober
 month_2p_11,MONTHS,November,listopadu,novembra,November
 month_2p_12,MONTHS,December,prosince,decembra,Dezember
-nojs_placeholder,NOJS,JavaScript is disabled!,JavaScript je vypnutý!,JavaScript je vypnutý!,JavaScript ist deaktiviert!
+nojs_placeholder,NOJS,JavaScript is disabled.,JavaScript je vypnutý.,JavaScript je vypnutý.,JavaScript ist deaktiviert.
 nojs_sorry,NOJS,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
 nojs_text,NOJS,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können."
 share_mastodon,BUTTON,Mastodon,Mastodon,Mastodon,Mastodon
 share_facebook,BUTTON,Facebook,Facebook,Facebook,Facebook
-a_close,BUTTON,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
-a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,Cache leeren
+a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
+a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
 a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
 a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
 a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG
 a_google_search,BUTTON,CONSOLE,KONZOLE,KONZOLA,KONSOLE
 a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
-a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,Abmelden
+a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
 a_show_translations,BUTTON,📍 translation sources,📍 zdroje překladu,📍 prekladové zdroje,📍 Übersetzungsquellen
@@ -159,13 +155,13 @@ a_google_account_ttip,TOOLTIP,Google Accounts settings,nastavení Google účtů
 a_google_backup_ttip,TOOLTIP,Google Drive backup,Disk Google zálohování,Záloha na Disk Google,Google Drive-Backup
 a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter
 a_google_search_ttip,TOOLTIP,Google Search Console,konzole Google Search,Google Search Console,Google Search Console
-a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Dokumentácia Tesseract LASAGNA,Tesseract LASAGNA-Dokumentation
+a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Tesseract LASAGNA manuál,Tesseract LASAGNA-Dokumentation
 a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage
 a_login_ttip,TOOLTIP,login,přihlásit se,prihlásiť sa,Login
 a_logout_ttip,TOOLTIP,logout,odhlásit se,odhlásiť sa,Abmelden
 a_php_ttip,TOOLTIP,PHP information,PHP informace,PHP informácie,PHP-Informationen
 a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
-a_sysinfo_ttip,TOOLTIP,SysInfo - system information,SysInfo - systémové informace,SysInfo - systémové informácie,SysInfo – Systeminformationen
+a_sysinfo_ttip,TOOLTIP,SysInfo,SysInfo,SysInfo,SysInfo
 a_umami_ttip,TOOLTIP,Umami analytics,Umami analytika,Umami analytika,Umami-Analyse
 a_update_ttip,TOOLTIP,update data from Google Cloud,aktualizovat data z Google Cloudu,aktualizovať údaje zo služby Google Cloud,Aktualisieren Sie Daten aus Google Cloud
 a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads

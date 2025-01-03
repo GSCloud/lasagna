@@ -16,7 +16,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="{{ design.theme_color }}">
 <meta name="viewport" content="{{ l.meta_viewport }}{{^l.meta_viewport}}width=device-width,initial-scale=1,maximum-scale=3{{/l.meta_viewport}}">
-
 <meta property="article:author" content="{{ l.article_author }}">
 <meta property="article:publisher" content="{{ l.article_publisher }}">
 <meta property="og:title" content="{{ l.og_title }}{{^l.og_title}}{{ l.title }}{{/l.og_title}}">
@@ -25,24 +24,19 @@
 <meta property="og:image" content="{{ l.og_image }}{{^l.og_image}}{{ canonical_url }}img/favicon-256.png{{/l.og_image}}">
 <meta property="og:type" content="{{ l.og_type }}{{^l.og_type}}website{{/l.og_type}}">
 <meta property="og:url" content="{{ l.og_url }}{{^l.og_url}}{{ canonical_url }}{{ request_path }}{{/l.og_url}}">
-
 {{#langen}}
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="cs_CZ">
 {{/langen}}
-
 {{#langcs}}
 <meta property="og:locale" content="cs_CZ">
 <meta property="og:locale:alternate" content="en_US">
 {{/langcs}}
-
 {{#langsk}}
 <meta property="og:locale" content="sk_SK">
 <meta property="og:locale:alternate" content="cs_CZ">
 {{/langsk}}
-
 {{#langde}}
 <meta property="og:locale" content="de_DE">
 <meta property="og:locale:alternate" content="en_US">
 {{/langde}}
-
