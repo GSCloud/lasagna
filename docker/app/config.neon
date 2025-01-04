@@ -13,7 +13,7 @@ secret_cookie_key: secure.key
 version: v1
 
 # test origin override
-test_origin: "http://localhost:80"
+test_origin: http://localhost:80
 
 # Google OAuth 2.0
 goauth_origin: "https://lasagna.gscloud.cz"
