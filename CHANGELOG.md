@@ -5,7 +5,7 @@
 
 `2025-01-04`
 
-* **`1011-FEATURE`** [changelog added](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) to admin panel  
+* **`1011-FEATURE`** [changelog](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) added to admin panel  
 * **`1010-BUGFIX`** Lightbox2 [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
 * **`1009-IDEA`** remember active admin tab, save to local storage  
 * **`1008-IDEA`** migrate Materialize framework to [v2.2.1](https://github.com/materializecss/materialize/releases/tag/v2.2.1)
