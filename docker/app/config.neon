@@ -13,7 +13,7 @@ secret_cookie_key: secure.key
 version: v1
 
 # test origin override
-test_origin: http://localhost:80
+test_origin: "http://localhost:80"
 
 # Google OAuth 2.0
 goauth_origin: "https://lasagna.gscloud.cz"
@@ -46,9 +46,9 @@ redis: [
 
 # CSS sources
 css_sources: [
-  "https://cdn.gscloud.cz/tesseract/css/fontawesome.min.css",
-  "https://cdn.gscloud.cz/tesseract/css/brands.min.css",
-  "https://cdn.gscloud.cz/tesseract/css/solid.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v6.7.2/css/fontawesome.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v6.7.2/css/brands.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v6.7.2/css/solid.min.css",
 ]
 
 # extra CSS sources
@@ -58,7 +58,7 @@ css_sources_extra: [
 
 # script sources
 script_sources: [
-  "https://cdn.gscloud.cz/tesseract/js/materialize.min.js",
+  "https://cdn.gscloud.cz/materialize/v1.2.2/js/materialize.min.js",
 ]
 
 # extra script sources
@@ -94,7 +94,7 @@ locale_override: [
 # Service Worker preload
 swpreload: [
   "https://cdn.gscloud.cz/tesseract/js/jquery.min.js"
-  "https://cdn.gscloud.cz/tesseract/css/materialize.min.css"
+  "https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css"
 ]
 
 # Service Worker preload with CDN hash
