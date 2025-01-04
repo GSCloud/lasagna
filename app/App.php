@@ -104,11 +104,13 @@ $data['REVISIONS'] = (int) trim(
     @file_get_contents(ROOT . DS . 'REVISIONS') ?: '0'
 );
 
-// random hash created by administrator
+// random hash set by administrator after cache purge
 $hash = DATA . DS . '_random_cdn_hash';
 if (file_exists($hash) && is_readable($hash)) {
-    $version = @file_get_contents($hash);
-    trim($version);
+    $hash = @file_get_contents($hash);
+    if ($hash) {
+        $version = trim($hash);
+    }
 }
 
 $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
@@ -549,11 +551,7 @@ if (DEBUG) {
     // protect private information
     $model['cf'] = '[protected]';
     $model['goauth_secret'] = '[protected]';
-    // phpcs:ignore
-    /** @phpstan-ignore-next-line */
     bdump($app->getIdentity(), 'identity');
-    // phpcs:ignore
-    /** @phpstan-ignore-next-line */
     bdump($model, 'model');
 }
 

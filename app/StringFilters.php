@@ -1082,7 +1082,7 @@ class StringFilters implements IStringFilters
         if (!\in_array($format, ['jpg', 'png', 'gif'])) {
             $format = 'webp';
         }
-        if (\is_string($mask) && \is_dir(UPLOAD)) {
+        if (\is_string($mask) && UPLOAD && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             return \glob($mask . '*.' . $format) ?: null;
         }

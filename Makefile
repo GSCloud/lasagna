@@ -2,6 +2,7 @@
 MAKEFLAGS += --no-print-directory
 include .env
 
+has_chrome != command -v google-chrome 2>/dev/null
 has_docker != command -v docker 2>/dev/null
 has_phpstan != command -v vendor/bin/phpstan 2>/dev/null
 has_rename != command -v rename 2>/dev/null
@@ -9,11 +10,12 @@ has_wget != command -v wget 2>/dev/null
 
 BASE := 'app/base.csv'
 ADMIN_FILE := $(shell mktemp)
-ADMIN_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
 DEFAULT_FILE := $(shell mktemp)
+ADMIN_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
 DEFAULT_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
 
 status != docker inspect --format '{{json .State.Running}}' ${NAME} 2>/dev/null | grep true
+
 ifneq ($(strip $(status)),)
 dot=🟢
 else
@@ -27,27 +29,29 @@ info:
 	@echo "\e[0;1m📦️ TESSERACT\e[0m\t$(dot) \e[0;4m${NAME}\e[0m \tport: ${PORT} \t🚀 http://localhost:${PORT}"
 	@echo ""
 	@echo "\e[0;1mbuild\e[0m\t build image"
-	@echo "\e[0;1mstart\e[0m\t start container"
-	@echo "\e[0;1mstop\e[0m\t stop container"
-	@echo "\e[0;1mkill\e[0m\t kill container"
-	@echo "\e[0;1mrun\e[0m\t start container + show in the browser"
+	@echo "\e[0;1mstart\e[0m\t container start"
+	@echo "\e[0;1mstop\e[0m\t container stop"
+	@echo "\e[0;1mkill\e[0m\t container kill"
+	@echo "\e[0;1mremove\e[0m\t container remove"
+	@echo "\e[0;1mrun\e[0m\t container start + show in the browser"
 	@echo "\e[0;1mpush\e[0m\t push image into the registry"
+	@echo "\e[0;1mcref\e[0m\t container refresh cloud CSV"
 	@echo "\e[0;1mexec\e[0m\t run interactive shell"
 	@echo ""
 	@echo "\e[0;1minstall\e[0m\t install"
 	@echo "\e[0;1mdoctor\e[0m\t run Doctor"
 	@echo "\e[0;1mupdate\e[0m\t update dependencies"
 	@echo "\e[0;1micons\e[0m\t update icons"
-	@echo "\e[0;1mbase\e[0m\t download base CSV data"
-	@echo "\e[0;1mrefresh\e[0m\t refresh cloud CSV data"
-	@echo "\e[0;1mclear\e[0m\t clear all temporary files"
+	@echo "\e[0;1mbase\e[0m\t download base CSV"
+	@echo "\e[0;1mrefresh\e[0m\t refresh cloud CSV"
 	@echo "\e[0;1msync\e[0m\t sync to the remote host"
+	@echo "\e[0;1mclear\e[0m\t clear all temporary files"
 	@echo ""
 	@echo "\e[0;1mstan\e[0m\t run PHPStan tests"
 	@echo "\e[0;1munit\e[0m\t run UNIT tests"
 	@echo "\e[0;1mtest\e[0m\t run LOCAL integration tests"
 	@echo "\e[0;1mprod\e[0m\t run PRODUCTION integration tests"
-	@echo "\e[0;1mdocs\e[0m\t transpile documentation to PDF"
+	@echo "\e[0;1mdocs\e[0m\t prepare and convert documentation"
 	@echo ""
 
 base:
@@ -65,8 +69,7 @@ ifneq ($(strip $(has_wget)),)
 	@cat $(BASE) | wc -l
 	@./cli.sh clearcache
 else
-	@echo "ERROR: Missing wget command!"
-	@exit 1
+	$(error "ERROR: Missing wget command")
 endif
 
 docs:
@@ -80,8 +83,7 @@ ifneq ($(strip $(has_rename)),)
 	@rename -f 's/\.md\././' *.md.*
 endif
 else
-	@echo "ERROR: Missing docker command!"
-	@exit 1
+	@$(error "ERROR: Missing docker command")
 endif
 
 update:
@@ -130,6 +132,7 @@ icons:
 stan:
 ifneq ($(strip $(has_phpstan)),)
 	@vendor/bin/phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php \
+		app/App.php \
 		app/AdminPresenter.php \
 		app/ArticlePresenter.php \
 		app/CiTester.php \
@@ -144,31 +147,159 @@ ifneq ($(strip $(has_phpstan)),)
 		app/RSSPresenter.php \
 		app/StringFilters.php \
 		app/UnitTester.php
+else
+	$(error "PHPStan is not installed")
 endif
 ifneq ($(strip $(PHPSTAN_EXTRA)),)
 	@./phpstan_extra.sh
 endif
 
 build:
-	@./bin/build.sh
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+ifeq ($(origin TAG), undefined)
+	$(error "TAG is not defined")
+endif
+	@docker build --pull -t ${TAG} .
 
 push:
-	@./bin/push.sh
-
-run:
-	@./bin/run.sh
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+ifeq ($(origin TAG), undefined)
+	$(error "TAG is not defined")
+endif
+	@docker push ${TAG}
 
 start:
-	@./bin/start.sh
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifneq ($(strip $(status)),)
+	$(error "Container is already running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+ifeq ($(origin TAG), undefined)
+	$(error "TAG is not defined")
+endif
+	@docker run -d --rm --name ${NAME} -p ${PORT}:80 -v "$$(pwd)/app/config_private.neon":/var/www/app/config_private.neon ${TAG}
+	@echo "\n🚀 http://localhost:${PORT}\n"
+
+run:
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifneq ($(strip $(status)),)
+	$(error "Container is already running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+ifeq ($(origin TAG), undefined)
+	$(error "TAG is not defined")
+endif
+ifneq ($(strip $(has_chrome)),)
+	@docker run -d --rm --name ${NAME} -p ${PORT}:80 -v "$$(pwd)/app/config_private.neon":/var/www/app/config_private.neon ${TAG}
+	@google-chrome http://localhost:${PORT} >/dev/null 2>&1 &
+else
+	$(error "Google Chrome is not installed")
+endif
 
 stop:
-	@./bin/stop.sh
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(strip $(status)),)
+	$(error "Container is not running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+	@docker stop ${NAME}
 
 kill:
-	@./bin/kill.sh
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(strip $(status)),)
+	$(error "Container is not running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+	@docker kill ${NAME}
+
+remove:
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(strip $(status)),)
+	$(error "Container is not running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+	@docker remove ${NAME} --force
 
 exec:
-	@./bin/execbash.sh
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(strip $(status)),)
+	$(error "Container is not running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+	@docker exec -it ${NAME} /bin/bash
+
+cref:
+ifeq ($(strip $(has_docker)),)
+	$(error "Docker is not installed")
+endif
+ifeq ($(strip $(status)),)
+	$(error "Container is not running")
+endif
+ifeq ($(origin NAME), undefined)
+	$(error "NAME is not defined")
+endif
+ifeq ($(origin PORT), undefined)
+	$(error "PORT is not defined")
+endif
+	@docker exec -it ${NAME} make refresh
 
 # macros
 everything: clear update stan local test sync prod

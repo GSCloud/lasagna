@@ -135,6 +135,9 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'upload':
             $this->checkPermission('admin,manager,editor');
+            if (\is_null(UPLOAD)) {
+                break;
+            }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
                 break;
             }
@@ -157,22 +160,18 @@ class AdminPresenter extends APresenter
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
                     continue;
                 }
-
                 // skip PHP extension
                 if (\str_ends_with($f, '.php')) {
                     continue;
                 }
-                
                 // skip PHP extension
                 if (\str_ends_with($f, '.inc')) {
                     continue;
                 }
-                
                 // skip '.size' file
                 if ($f === '.size') {
                     continue;
                 }
-
                 // skip files without name
                 if (\is_array($info) && !$info['filename']) {
                     continue;
@@ -240,53 +239,59 @@ class AdminPresenter extends APresenter
 
         case 'uploadDelete':
             $this->checkPermission('admin,manager,editor');
+            if (\is_null(UPLOAD)) {
+                break;
+            }
+            if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
+                break;
+            }
 
-            if (\is_dir(UPLOAD) && \is_writable(UPLOAD)) {
-                if (isset($_POST['name'])) {
-                    $name = \trim($_POST['name'], "\\/.");
-    
-                    // error for '.size' file
-                    if ($name === '.size') {
-                        ErrorPresenter::getInstance()->process(500);
-                    }
-    
-                    $info = \pathinfo($name);
-                    if (\is_array($info)) {
-                        $fn = $info['filename'];
+            if (isset($_POST['name'])) {
+                $name = \trim($_POST['name'], "\\/.");
 
-                        // delete old thumbnails
-                        foreach (self::THUMBS_EXTENSIONS as $x) {
-                            foreach (self::THUMBS_DELETE as $w) {
-                                $file = UPLOAD . DS
-                                    . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                    . $fn . $x;
-                                if (\file_exists($file)) {
-                                    @\unlink($file);
-                                }
-                            }
-                            $file = UPLOAD . DS . $fn . $x;
+                // error for '.size' file
+                if ($name === '.size') {
+                    ErrorPresenter::getInstance()->process(500);
+                }
+
+                $info = \pathinfo($name);
+                if (\is_array($info)) {
+                    $fn = $info['filename'];
+
+                    // delete old thumbnails
+                    foreach (self::THUMBS_EXTENSIONS as $x) {
+                        foreach (self::THUMBS_DELETE as $w) {
+                            $file = UPLOAD . DS
+                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                . $fn . $x;
                             if (\file_exists($file)) {
                                 @\unlink($file);
                             }
                         }
+                        $file = UPLOAD . DS . $fn . $x;
+                        if (\file_exists($file)) {
+                            @\unlink($file);
+                        }
                     }
-    
-                    // delete the origin
-                    $file = UPLOAD . DS . $name;
-                    if (\file_exists($file)) {
-                        @\unlink($file);
-                    }
-
-                    $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
-                    return $this->writeJsonData($name, $extras);
                 }
+
+                // delete the origin
+                $file = UPLOAD . DS . $name;
+                if (\file_exists($file)) {
+                    @\unlink($file);
+                }
+
+                $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
+                return $this->writeJsonData($name, $extras);
             }
             break;
 
         case 'getUploads':
             $this->checkPermission('admin,manager,editor');
-
-            if (!\is_dir(UPLOAD) || !\is_readable(UPLOAD)) {
+            if (\is_null(UPLOAD)) {
+                break;
+            }
+            if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
                 break;
             }
 
@@ -298,12 +303,10 @@ class AdminPresenter extends APresenter
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
                     if (($f != '.') && ($f != '..')) {
-
                         // exclude '.size' file
                         if ($f === '.size') {
                             continue;
                         }
-
                         // exclude thumbnails
                         if (\str_starts_with($f, self::THUMB_PREFIX)) {
                             continue;
@@ -761,16 +764,12 @@ class AdminPresenter extends APresenter
         if (CLI) {
             return true;
         }
-        $ip = $_SERVER['REMOTE_ADDR'];
-        switch ($ip) {
-        case '127.0.0.1':
+        if ($_SERVER['REMOTE_ADDR'] === '127.0.0.1') {
             return true;
-        break;
         }
         $key = $this->readAdminKey();
         $gkey = $_GET['key'] ?? null;
-        if ($key && $key == $gkey) {
-            // GET ?key is same as the admin key
+        if ($key && $key === $gkey) {
             return true;
         }
         return false;
