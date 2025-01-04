@@ -69,6 +69,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 // DATA ARRAY
 define('ENGINE', 'Tesseract 2.4.3');
 $data['ENGINE'] = ENGINE;
+$data['codemirror'] = '6.65.7'; // CodeMirror version to load for admin interface
 
 \Tracy\Debugger::timer('DATA');
 $base58 = new \Tuupola\Base58;
@@ -143,8 +144,6 @@ $data['nonce'] = $data['NONCE'] = $nonce = substr(
 );
 
 $data['LOCALHOST'] = (bool) LOCALHOST;
-
-$data['codemirror'] = '6.65.7';
 
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
 
