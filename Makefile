@@ -26,18 +26,23 @@ all: info
 info:
 	@echo "\n\e[1;32m👾 Welcome to ${APP_NAME}\e[0m"
 	@echo ""
-	@echo "\e[0;1m📦️ TESSERACT\e[0m\t$(dot) \e[0;4m${NAME}\e[0m \tport: ${PORT} \t🚀 http://localhost:${PORT}"
-	@echo ""
+ifneq ($(origin NAME), undefined)
+ifneq ($(origin PORT), undefined)
+	@echo "\e[0;1m📦️ TESSERACT\e[0m\t$(dot) \e[0;4m${NAME}\e[0m \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
+endif
+endif
+	@echo "\e[0;2m» CONTAINER\e[0m"
 	@echo "\e[0;1mbuild\e[0m\t build image"
+	@echo "\e[0;1mpush\e[0m\t push image into the registry"
 	@echo "\e[0;1mstart\e[0m\t container start"
+	@echo "\e[0;1mrun\e[0m\t container start + show in the browser"
 	@echo "\e[0;1mstop\e[0m\t container stop"
 	@echo "\e[0;1mkill\e[0m\t container kill"
 	@echo "\e[0;1mremove\e[0m\t container remove"
-	@echo "\e[0;1mrun\e[0m\t container start + show in the browser"
-	@echo "\e[0;1mpush\e[0m\t push image into the registry"
 	@echo "\e[0;1mcref\e[0m\t container refresh cloud CSV"
 	@echo "\e[0;1mexec\e[0m\t run interactive shell"
 	@echo ""
+	@echo "\e[0;2m» DEVELOPMENT\e[0m"
 	@echo "\e[0;1minstall\e[0m\t install"
 	@echo "\e[0;1mdoctor\e[0m\t run Doctor"
 	@echo "\e[0;1mupdate\e[0m\t update dependencies"
@@ -46,12 +51,13 @@ info:
 	@echo "\e[0;1mrefresh\e[0m\t refresh cloud CSV"
 	@echo "\e[0;1msync\e[0m\t sync to the remote host"
 	@echo "\e[0;1mclear\e[0m\t clear all temporary files"
-	@echo ""
-	@echo "\e[0;1mstan\e[0m\t run PHPStan tests"
-	@echo "\e[0;1munit\e[0m\t run UNIT tests"
-	@echo "\e[0;1mtest\e[0m\t run LOCAL integration tests"
-	@echo "\e[0;1mprod\e[0m\t run PRODUCTION integration tests"
 	@echo "\e[0;1mdocs\e[0m\t prepare and convert documentation"
+	@echo ""
+	@echo "\e[0;2m» TESTS\e[0m"
+	@echo "\e[0;1mstan\e[0m\t PHPStan tests"
+	@echo "\e[0;1munit\e[0m\t UNIT tests"
+	@echo "\e[0;1mtest\e[0m\t LOCAL integration tests"
+	@echo "\e[0;1mprod\e[0m\t PRODUCTION integration tests"
 	@echo ""
 
 base:
