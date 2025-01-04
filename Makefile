@@ -22,42 +22,50 @@ else
 dot=🔴
 endif
 
+B := \e[0;1m
+L := \e[0;2m
+R := \e[0m
+GREEN  := \e[0;32m
+RED    := \e[0;31m
+YELLOW := \e[0;33m
+BLUE   := \e[0;34m
+
 all: info
 info:
-	@echo "\n\e[1;32m👾 Welcome to ${APP_NAME}\e[0m"
+	@echo "\n\e[1;32m👾 Welcome to ${APP_NAME}${R}"
 	@echo ""
 ifneq ($(origin NAME), undefined)
 ifneq ($(origin PORT), undefined)
-	@echo "\e[0;1m📦️ TESSERACT\e[0m\t$(dot) \e[0;4m${NAME}\e[0m \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
+	@echo "${R}📦️ TESSERACT${R}\t$(dot) \e[0;4m${NAME}${R} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
 endif
 endif
-	@echo "\e[0;2m» CONTAINER\e[0m"
-	@echo "\e[0;1mbuild\e[0m\t build image"
-	@echo "\e[0;1mpush\e[0m\t push image into the registry"
-	@echo "\e[0;1mstart\e[0m\t container start"
-	@echo "\e[0;1mrun\e[0m\t container start + show in the browser"
-	@echo "\e[0;1mstop\e[0m\t container stop"
-	@echo "\e[0;1mkill\e[0m\t container kill"
-	@echo "\e[0;1mremove\e[0m\t container remove"
-	@echo "\e[0;1mcref\e[0m\t container refresh cloud CSV"
-	@echo "\e[0;1mexec\e[0m\t run interactive shell"
+	@echo "${L}» CONTAINER${R}"
+	@echo "${B}build${R}\t build image"
+	@echo "${B}push${R}\t push image into the registry"
+	@echo "${B}start${R}\t container start"
+	@echo "${B}run${R}\t container start + show in the browser"
+	@echo "${B}stop${R}\t container stop"
+	@echo "${B}kill${R}\t container kill"
+	@echo "${B}remove${R}\t container remove"
+	@echo "${B}cref${R}\t container refresh cloud CSV"
+	@echo "${B}exec${R}\t run interactive shell"
 	@echo ""
-	@echo "\e[0;2m» DEVELOPMENT\e[0m"
-	@echo "\e[0;1minstall\e[0m\t install"
-	@echo "\e[0;1mdoctor\e[0m\t run Doctor"
-	@echo "\e[0;1mupdate\e[0m\t update dependencies"
-	@echo "\e[0;1micons\e[0m\t update icons"
-	@echo "\e[0;1mbase\e[0m\t download base CSV"
-	@echo "\e[0;1mrefresh\e[0m\t refresh cloud CSV"
-	@echo "\e[0;1msync\e[0m\t sync to the remote host"
-	@echo "\e[0;1mclear\e[0m\t clear all temporary files"
-	@echo "\e[0;1mdocs\e[0m\t prepare and convert documentation"
+	@echo "${L}» DEVELOPMENT${R}"
+	@echo "${B}install${R}\t install"
+	@echo "${B}doctor${R}\t run Doctor"
+	@echo "${B}update${R}\t update dependencies"
+	@echo "${B}icons${R}\t update icons"
+	@echo "${B}base${R}\t download base CSV"
+	@echo "${B}refresh${R}\t refresh cloud CSV"
+	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${B}clear${R}\t clear all temporary files"
+	@echo "${B}docs${R}\t prepare and convert documentation"
 	@echo ""
-	@echo "\e[0;2m» TESTS\e[0m"
-	@echo "\e[0;1mstan\e[0m\t PHPStan tests"
-	@echo "\e[0;1munit\e[0m\t UNIT tests"
-	@echo "\e[0;1mtest\e[0m\t LOCAL integration tests"
-	@echo "\e[0;1mprod\e[0m\t PRODUCTION integration tests"
+	@echo "${L}» TESTS${R}"
+	@echo "${B}stan${R}\t PHPStan tests"
+	@echo "${B}unit${R}\t UNIT tests"
+	@echo "${B}test${R}\t LOCAL integration tests"
+	@echo "${B}prod${R}\t PRODUCTION integration tests"
 	@echo ""
 
 base:
