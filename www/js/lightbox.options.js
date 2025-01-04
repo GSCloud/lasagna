@@ -4,7 +4,7 @@ lightbox.option({
   'albumLabel': '%1 / %2',
   'alwaysShowNavOnTouchDevices': true,
   'disableScrolling': true,
-  'fadeDuration': 200,
-  'resizeDuration': 500,
+  'fadeDuration': 100,
+  'resizeDuration': 100,
   'wrapAround': true
 })

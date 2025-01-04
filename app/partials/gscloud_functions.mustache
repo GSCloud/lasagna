@@ -1,12 +1,12 @@
 <script nonce="{{ csp_nonce }}">
 'use strict';
 
-// POLYFILLS
-Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
-Array.prototype.sample=function(){return this[Math.floor(Math.random()*this.length)];}
-String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
+// @TODO remove this
+//Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
+//Array.prototype.sample=function(){return this[Math.floor(Math.random()*this.length)];}
+//String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
 
-// CREATE LOCAL STORAGE UUID
+// CREATE UUID
 var uuid = null;
 try {
   uuid = crypto.randomUUID();
@@ -15,6 +15,9 @@ try {
       c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
+
+// TEST LOCAL STORAGE + SET UUID
+var nolocalstorage = false;
 try {
   if (localStorage) {
     if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
@@ -22,7 +25,7 @@ try {
     }
   }
 } catch (e) {
-  var nolocalstorage = true;
+  nolocalstorage = true;
   console.log('WARNING: localStorage is blocked');
 }
 
@@ -55,7 +58,7 @@ async function sha256(message) {
   function onscroll() {
     var scroll = d.body.scrollTop || d.documentElement.scrollTop;
     var height = d.documentElement.scrollHeight - d.documentElement.clientHeight;
-    var scrolled = (scroll / height) * 100;
+    var scrolled = Math.round(scroll * 100 / height);
     if (d.getElementById(pbar)) {
       d.getElementById(pbar).style.width = scrolled + '%';
     }
@@ -113,7 +116,7 @@ async function sha256(message) {
       document.cookie = key + "=" + value + ";path=/";
     } else {
       var d1 = new Date().getTime();
-      var d2 = d1 + (parseInt(days) * 86400 * 1000); // time is in miliseconds!
+      var d2 = d1 + (parseInt(days) * 86400 * 1000); // time is in miliseconds
       document.cookie = key + "=" + value + ";path=/" + ";expires=" + new Date(d2).toGMTString();
     }
   }
@@ -306,12 +309,10 @@ async function sha256(message) {
               }
             }
           });
-          // repeat
-          setTimeout(function() {GSC.VersionCheck()}, 15000);
+          setTimeout(function() {GSC.VersionCheck()}, 10000);
         }
       }
-
-      setTimeout(function() {GSC.VersionCheck()}, 5000);
+      setTimeout(function() {GSC.VersionCheck()}, 10000);
     });
 
     // GSC.ReadArticles()
@@ -380,8 +381,6 @@ async function sha256(message) {
           }
           if (typeof callback === "function") callback();
         });
-
-        // check later
         setTimeout(function() {GSC.ReadArticles()}, 10000);
       }
       GSC.ReadArticles();
