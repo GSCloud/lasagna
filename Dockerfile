@@ -9,6 +9,7 @@ FROM php:${CODE_VERSION}
 ENV TERM=xterm LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 RUN apt-get update -qq && apt-get upgrade -yqq && apt-get install -yqq --no-install-recommends curl openssl redis
+
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd redis imagick
 
@@ -22,10 +23,10 @@ RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
 COPY app/*.txt app/*.redist  app/*.php app/router* app/csp.neon app/base.csv /var/www/app/
 COPY app/partials/* /var/www/app/partials/
 COPY app/templates/* /var/www/app/templates/
-
 COPY Bootstrap.php composer.json composer.lock LICENSE *.md REVISIONS VERSION docker/ /var/www/
 COPY vendor /var/www/vendor
 COPY www /var/www/html
+COPY bashrc /root/.bashrc
 
 WORKDIR /var/www/
 EXPOSE 80
