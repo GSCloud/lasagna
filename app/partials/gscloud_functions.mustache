@@ -161,7 +161,7 @@ async function sha256(message) {
       $('.oauth').removeClass('hide');
     }
 
-    // GSC.FormatBytes()
+    // GSC.FormatBytes(integer)
     if (typeof GSC.FormatBytes !== "function") GSC.FormatBytes = function(number, precision) {
       number = parseInt(number);
       if (precision === undefined) precision = 2;
@@ -172,7 +172,7 @@ async function sha256(message) {
       return parseFloat((number / Math.pow(c, f)).toFixed(precision)) + "&nbsp;" + e[f];
     }
 
-    // GSC.GetTime()
+    // GSC.GetTime(string)
     if (typeof GSC.GetTime !== "function") GSC.GetTime = function(dateString) {
 
       function englishExt(x) {
@@ -225,7 +225,7 @@ async function sha256(message) {
       return x;
     }
 
-    // GSC.CopyClipboard() - copy data to clipboard
+    // GSC.CopyClipboard(data) - copy data to clipboard
     if (typeof GSC.CopyClipboard !== "function") GSC.CopyClipboard = function(data) {
       var el = d.createElement("textarea");
       el.value = data;
@@ -244,10 +244,19 @@ async function sha256(message) {
       }
     }
 
-    // GSC.GetFileExtension() - get filename extension
+    // GSC.GetFileExtension(filename) - get filename extension
     if (typeof GSC.GetFileExtension !== "function") GSC.GetFileExtension = function(filename) {
       if (filename) {
           return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+      }
+      return '';
+    }
+
+    // GSC.GetFileName(path) - get filename from path
+    if (typeof GSC.GetFileName !== "function") GSC.GetFileName = function(path) {
+      if (path) {
+        const parts = path.split(/[/\\]/); 
+        return parts[parts.length - 1];
       }
       return '';
     }

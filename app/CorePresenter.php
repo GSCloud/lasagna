@@ -40,6 +40,9 @@ class CorePresenter extends APresenter
 
         // Model
         $data = $this->getData();
+        if (!\is_array($data)) {
+            return $this;
+        }
 
         // View
         $view = $this->getView();

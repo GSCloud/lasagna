@@ -1,11 +1,12 @@
 (function (w, d, undefined) {
 
-  // check logout cookie
+  // logout cookie
   if (getCookie("logout")) {
     d.getElementById("admin_main").style.display = "none";
     setCookie("motyle", "true");
+    delCookie("logout");
+    return;
   }
-  delCookie("logout");
 
   // GSC.init
   if (w.GSC.init) {
@@ -158,7 +159,7 @@
       $("#a_summernote").unbind();
       $("#a_summernote").click(function () {
         if (GSC.offline) {
-          M.toast({text: "offline 📶", classes: "normaltoast"});
+          M.toast({text: "📶 offline", classes: "normaltoast"});
           return;
         }
         $("#a_summernote").attr("disabled", "disabled");
@@ -604,16 +605,16 @@
       $("#a_summernote").removeAttr("disabled");
     }
 
-    // setup admin UI
+    // SETUP ADMIN UI
     w.GSC.init.push(function () {
       w.GSC.names.push("admin UI - bind");
 
-      // admin show
+      // SHOW ADMIN UI?
       if (!getCookie("motyle") || getCookie("motyle") == "false") {
         $("#admin_main").show(100);
       }
 
-      // wrench
+      // TOGLE WRENCH
       $(".motyle").click(function () {
         $("#admin_main").toggle(200, function () {
           window.scrollTo(0, 0);
@@ -621,15 +622,15 @@
         })
       });
 
-      // articles URL selector
+      // ARTICLES URL SELECTOR
       $("#ArticleURLSelect").change(function () {
         location.pathname = $('#ArticleURLSelect').val();
       });
 
-      // remote function selector
+      // REMOTE FUNCTION SELECTOR
       $("#RemoteFnSelect").change(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶", classes: "normaltoast"});
+          M.toast({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#sectok_ping", false);
         }
         if (!$("#RemoteFnSelect").val()) return;
@@ -650,10 +651,10 @@
         });
       });
 
-      // update CSV data
+      // UPDATE CSV DATA
       $("#a_update").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶", classes: "normaltoast"});
+          M.toast({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
         $("#a_update").attr("disabled", "disabled");
@@ -666,10 +667,10 @@
         M.toast({text: "{{ l.a_processing_data }}", classes: "normaltoast"});
       });
 
-      // invoke Summernote editor
+      // INVOKE SUMMERNOTE EDITOR
       $("#a_summernote").click(function () {
         if (w.GSC.offline) {
-          ({text: "offline 📶", classes: "normaltoast"});
+          ({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#psi_ping", false);
         }
         GSC.ReadArticles(function () {
@@ -677,14 +678,12 @@
         });
       });
 
-      // file manager
+      // FILE MANAGER
       $("#a_files").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶", classes: "normaltoast"});
+          M.toast({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
-
-        // clear file & upload content if present
         if (getCookie("open_filemanager") == 1) {
           return GSC.CloseFileManager();
         }
@@ -695,7 +694,26 @@
       if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
           delCookie("open_filemanager");
           $("#a_file_manager").hide(50);
-          $("#a_uploader_progress").html("");
+          $("#a_uploader_progress").html('');
+      }
+
+      // GSC.GetUploadsInfo
+      if (typeof GSC.GetUploadsInfo !== "function") GSC.GetUploadsInfo = function (info) {
+        if (info === undefined) {
+
+          // API: getUploadsInfo
+          $.get("/admin/getUploadsInfo?" + Date.now(), function (data) {
+            if (data && data.data && data.data.reg_count && data.data.reg_size) {
+              var i1 = data.data.reg_count;
+              var i2 = GSC.FormatBytes(data.data.reg_size);
+              var i3 = data.data.dot_count;
+              var i4 = GSC.FormatBytes(data.data.dot_size);
+              $('#files_count').html(i1 + '&nbsp;📦️&nbsp;' + i2);
+              $('#uploads_extended_info').html('<i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + i3 + '&nbsp;📦️&nbsp;' + i4);
+            }
+          });
+        }
+        $('#files_count').text(info);
       }
 
       // GSC.RenderUploadInfo()
@@ -703,14 +721,13 @@
         $.get("/admin/getUploads?" + Date.now(), function (data) {
           if (data && data.data && data.data.files) {
 
-            // remember state
             setCookie("open_filemanager", 1);
 
             var s = '';
             var t = 0;
             var printed = 0;
 
-            // search data
+            // search
             var search = '';
             if (localStorage.getItem('search')) {
               var search = localStorage.getItem('search');
@@ -746,6 +763,7 @@
 
               // stubs
               var stubs = '';
+              var stubs_rendered = 0;
               if (data.data.stubs && data.data.stubs_count) {
                 stubs = '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
                 for (var i in data.data.stubs) {
@@ -756,6 +774,7 @@
                   if (data.data.stubs[i] === search) stubcolor = 'red';
 
                   stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
+                  stubs_rendered++;
                 }
                 stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
               }
@@ -824,7 +843,7 @@
                   sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '📋</span>&nbsp;&nbsp;';
                 }
                 if (sml.length) {
-                  sml = '<div class="row center extrapadding">' + sml + '</div>';
+                  sml = '<div class="row center extrapadding"><i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + sml + '</div>';
                 }
   
                 // DELETE + RCB
@@ -854,7 +873,7 @@
               // close listing
               if (t) {
                 s += "</div>";
-                $('#files_count').html(t);
+                GSC.GetUploadsInfo();
               }
             }
             
@@ -864,14 +883,13 @@
             } else {
               $("#a_file_manager").hide().html(s).show(100);
             }
+            if (!stubs_rendered) $('.btn-stubs').hide();
             $('#uploadimagescount').html(printed);
 
             // searchbox focus
             if (localStorage.getItem('searchset')) {
               $('#searchbox').focus();
             }
-
-            // clear searchbox sign
             localStorage.removeItem('searchset');
 
             // UPLOAD: disable images
@@ -913,7 +931,7 @@
             $("#a_file_manager .copydata").click(function () {
               var x = $(this).data("text");
               GSC.CopyClipboard(x);
-              M.toast({text: "📋 " + x, classes: "normaltoast"});
+              M.toast({text: "📋 " + GSC.GetFileName(x), classes: "normaltoast"});
             });
             
             // UPLOAD: delete file
@@ -925,7 +943,7 @@
                 $('#fig' + fig).hide(250);
 
                 // API: UploadedFileDelete
-                $.post("/admin/uploadDelete", {
+                $.post("/admin/UploadDelete", {
                   name: x
                 }).done(function (data) {
                   M.toast({text: "🚮 " + x, classes: "normaltoast"});
@@ -937,10 +955,10 @@
         });
       }
 
-      // flush cache
+      // FLUSH CACHE
       $("#a_flush").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶", classes: "normaltoast"});
+          M.toast({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
         GSC.GetCsvInfo = function () {};
@@ -951,7 +969,7 @@
         location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}");
       });
 
-      // logout
+      // LOGOUT
       $("#a_logout").click(function () {
         setCookie("logout", 1);
         GSC.offline ? location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}") : location.replace("/logout");
@@ -959,7 +977,7 @@
 
     });
 
-    // CSV info timer
+    // CSV INFO TIMER
     w.GSC.init.push(function () {
       w.GSC.names.push("CSV timer");
       setInterval(function () {
@@ -968,7 +986,7 @@
       GSC.GetCsvInfo();
     });
 
-    // show admin UI
+    // SHOW ADMIN UI
     w.GSC.init.push(function () {
       w.GSC.names.push("show admin UI");
       GSC.AdminUI();
@@ -982,19 +1000,22 @@
       if (getCookie("open_filemanager") == 1) {
         $("#a_file_manager").hide();
         GSC.RenderUploadInfo();
+      } else {
+        GSC.GetUploadsInfo();
       }
     });
 
-    // setup ZeroUpload
+    // SETUP ZEROUPLOAD
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
-      ZeroUpload.setURL("/admin/upload");
+      ZeroUpload.setURL("/admin/Upload");
       ZeroUpload.setMaxFiles(100);
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
       ZeroUpload.on("complete", function (response) {
         M.toast({text: "{{ l.a_uploading_finished }}", classes: "normaltoast"});
         var data = JSON.parse(response.data);
+        $("#a_uploader_progress").delay(3000).hide(200);
         if (data && data.data) {
           setCookie("open_filemanager", 1);
           GSC.RenderUploadInfo();
@@ -1048,7 +1069,7 @@
       // UI: upload button
       $("#a_upload").click(function () {
         if (w.GSC.offline) {
-          M.toast({text: "offline 📶", classes: "normaltoast"});
+          M.toast({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
         $("#a_uploader_progress").html("");
@@ -1056,5 +1077,5 @@
       });
     });
     
-  } // end GSC.init
+  }
 })(window, document);

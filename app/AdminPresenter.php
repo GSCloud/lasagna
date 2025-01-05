@@ -41,20 +41,17 @@ class AdminPresenter extends APresenter
     const THUMB_POSTFIX = 'px_';
 
     /* @var array thumbnails width to create */
-    const THUMBS_CREATE = [
+    const THUMBS_CREATE_WIDTH = [
         160, 320, 640
     ];
 
     /* @var array thumbnails width to delete */
-    const THUMBS_DELETE = [
+    const THUMBS_DELETE_WIDTH = [
         160, 320, 640
     ];
 
-    /* @var array thumbnail extensions */
-    const THUMBS_EXTENSIONS = [
-        '.jpeg',
-        '.jpg',
-        '.png',
+    /* @var array thumbnail extensions to delete */
+    const THUMBS_DELETE_EXTENSIONS = [
         '.webp',
     ];
 
@@ -72,16 +69,19 @@ class AdminPresenter extends APresenter
         IMAGETYPE_JPEG => [
             'load' => 'imagecreatefromjpeg',
             'save' => 'imagejpeg',
+            'ext' => '.jpg',
             'quality' => 90,
         ],
         IMAGETYPE_PNG => [
             'load' => 'imagecreatefrompng',
             'save' => 'imagepng',
+            'ext' => '.png',
             'quality' => 9,
         ],
         IMAGETYPE_WEBP => [
             'load' => 'imagecreatefromwebp',
             'save' => 'imagewebp',
+            'ext' => '.webp',
             'quality' => 90,
         ],
     ];
@@ -95,28 +95,39 @@ class AdminPresenter extends APresenter
      */
     public function process($param = null)
     {
+        \setlocale(LC_ALL, "cs_CZ.utf8");
+        \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
+        // Config
         $cfg = $this->getCfg();
         if (!\is_array($cfg)) {
             return $this;
         }
 
+        // Model
         $data = $this->getData();
         if (!\is_array($data)) {
             return $this;
         }
 
+        // Match and View
         $match = $this->getMatch();
         if (\is_array($match)) {
             $view = $match['params']['p'] ?? null;
         } else {
             $view = $this->getView();
+            if (!$view) {
+                return $this;
+            }
         }
 
+        // User
         $u = $this->getCurrentUser();
         if (\is_array($u)) {
             $data['user'] = $u;
         }
 
+        // Group
         $g = $this->getUserGroup();
         if (\is_string($g)) {
             $data['admin'] = $g;
@@ -124,22 +135,26 @@ class AdminPresenter extends APresenter
         }
 
         $extras = [
+            'name' => 'Tesseract Admin REST API',
             'fn' => $view,
-            'ip' => $this->getIP(),
-            'name' => 'Tesseract',
+            "endpoint" => \explode('?', $_SERVER['REQUEST_URI'])[0],
+            "api_quota" => "unlimited",
+            "cached" => false,
+            "uuid" => $this->getUID(),
+            "ip" => $this->getIP(),
             // override: ?key= parameter
             'override' => (bool) $this->isLocalAdmin(),
         ];
 
         // API calls
         switch ($view) {
-        case 'upload':
+        case 'Upload':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                break;
+                return $this->writeJsonData(400, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                break;
+                return $this->writeJsonData(400, $extras);
             }
 
             // process all uploads
@@ -192,8 +207,8 @@ class AdminPresenter extends APresenter
                         $uploads[$f] = \urlencode($f);
 
                         // delete old thumbnails
-                        foreach (self::THUMBS_EXTENSIONS as $x) {
-                            foreach (self::THUMBS_DELETE as $w) {
+                        foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
+                            foreach (self::THUMBS_DELETE_WIDTH as $w) {
                                 $file = UPLOAD . DS
                                     . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                     . $fn . $x;
@@ -204,7 +219,7 @@ class AdminPresenter extends APresenter
                         }
 
                         // create new thumbnails
-                        foreach (self::THUMBS_CREATE as $w) {
+                        foreach (self::THUMBS_CREATE_WIDTH as $w) {
                             $out = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                 . $fn . '.webp';
@@ -234,33 +249,30 @@ class AdminPresenter extends APresenter
                 . 'x<br>'
                 . $names
             );
-
             return $this->writeJsonData($uploads, $extras);
 
-        case 'uploadDelete':
+        case 'UploadDelete':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                break;
+                return $this->writeJsonData(400, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                break;
+                return $this->writeJsonData(400, $extras);
             }
 
             if (isset($_POST['name'])) {
                 $name = \trim($_POST['name'], "\\/.");
-
-                // error for '.size' file
                 if ($name === '.size') {
-                    ErrorPresenter::getInstance()->process(500);
+                    return $this->writeJsonData(400, $extras);
                 }
 
                 $info = \pathinfo($name);
                 if (\is_array($info)) {
                     $fn = $info['filename'];
 
-                    // delete old thumbnails
-                    foreach (self::THUMBS_EXTENSIONS as $x) {
-                        foreach (self::THUMBS_DELETE as $w) {
+                    // delete thumbnails
+                    foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
+                        foreach (self::THUMBS_DELETE_WIDTH as $w) {
                             $file = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                 . $fn . $x;
@@ -275,7 +287,7 @@ class AdminPresenter extends APresenter
                     }
                 }
 
-                // delete the origin
+                // delete origin
                 $file = UPLOAD . DS . $name;
                 if (\file_exists($file)) {
                     @\unlink($file);
@@ -286,13 +298,53 @@ class AdminPresenter extends APresenter
             }
             break;
 
+        case 'getUploadsInfo':
+            $this->checkPermission('admin,manager,editor');
+            if (\is_null(UPLOAD)) {
+                return $this->writeJsonData(400, $extras);
+            }
+            if (!\is_dir(UPLOAD) || !\is_readable(UPLOAD)) {
+                return $this->writeJsonData(400, $extras);
+            }
+
+            $size = $dotsize = $count = $dotcount = 0;
+            $files = \scandir(UPLOAD);
+            if ($files) {
+                foreach ($files as $name) {
+                    if ($name != "." && $name != "..") {
+                        $path = UPLOAD . DS . $name;
+                        if (\is_file($path)) {
+                            $size += \filesize($path);
+                            $count++;
+                            if (\str_starts_with($name, '.')) {
+                                $dotsize += \filesize($path);
+                                $dotcount++;
+                            }
+                        }
+                    }
+                }
+            } else {
+                return $this->writeJsonData(500, $extras);
+            }
+            return $this->writeJsonData(
+                [
+                    'count' => $count,
+                    'size' => $size,
+                    'dot_count' => $dotcount,
+                    'dot_size' => $dotsize,
+                    'reg_count' => $count - $dotcount,
+                    'reg_size' => $size - $dotsize,
+                ],
+                $extras
+            );
+        
         case 'getUploads':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                break;
+                return $this->writeJsonData(400, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                break;
+                return $this->writeJsonData(400, $extras);
             }
 
             $files = [];
@@ -316,14 +368,13 @@ class AdminPresenter extends APresenter
                         $info = \pathinfo($f);
                         if (\is_array($info)) {
                             $fn = $info['filename'];
-                            $ext = $info['extension'] ?? '';
-
                             if (!$fn) {
                                 continue;
                             }
+                            $ext = $info['extension'] ?? '';
 
                             // check for the thumbnails
-                            foreach (self::THUMBS_CREATE as $w) {
+                            foreach (self::THUMBS_CREATE_WIDTH as $w) {
                                 $file = UPLOAD . DS
                                     . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                     . $fn . '.webp';
@@ -397,21 +448,6 @@ class AdminPresenter extends APresenter
                 $extras
             );
     
-        case 'clearcache':
-            \header('Clear-Site-Data: "cache"');
-            $this->addMessage('Browser cache cleared');
-            $this->setLocation();
-
-        case 'clearcookies':
-            \header('Clear-Site-Data: "cookies"');
-            $this->addMessage('Browser cookies cleared');
-            $this->setLocation();
-
-        case 'clearbrowser':
-            \header('Clear-Site-Data: "cache", "cookies", "storage"');
-            $this->addMessage('Browser storage cleared');
-            $this->setLocation();
-
         case 'AuditLog':
             $this->checkPermission('admin,manager');
             $this->setHeaderHTML();
@@ -471,6 +507,124 @@ class AdminPresenter extends APresenter
             }
             return $this->writeJsonData($data, $extras);
 
+        case 'UpdateArticles':
+            $this->checkPermission('admin,manager,editor');
+            $x = 0;
+            $profile = 'default';
+            if (isset($_POST['data'])) {
+                $data = (string) \trim((string) $_POST['data']);
+                // remove all extra whitespace
+                $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST['data']);
+                $x++;
+            }
+            if (isset($_POST['path'])) {
+                $path = \trim((string) $_POST['path']);
+                // URL path
+                if (\strlen($path)) {
+                    $x++;
+                }
+            }
+            if (isset($_POST['hash'])) {
+                $hash = \trim((string) $_POST['hash']);
+                // SHA 256 hexadecimal
+                if (\strlen($hash) == 64) {
+                    $x++;
+                }
+            }
+            if ($x != 3) {
+                $extras['error_descriptions'] = 'incorrect number of parameters';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (!isset($hash)) {
+                $extras['error_descriptions'] = 'incorrect hash';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (!isset($path)) {
+                $extras['error_descriptions'] = 'incorrect path';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (!isset($data_nows)) {
+                $extras['error_descriptions'] = 'incorrect data_nows';
+                return $this->writeJsonData(500, $extras);
+            }
+            if (\file_exists(DATA . DS. "summernote_{$profile}_{$hash}.json")
+                && \is_readable(DATA . DS. "summernote_{$profile}_{$hash}.json")
+            ) {
+                if (@\copy(
+                    DATA . DS . "summernote_{$profile}_{$hash}.json",
+                    DATA . DS . "summernote_{$profile}_{$hash}.bak"
+                ) === false
+                ) {
+                    $this->addError("Article $path backup failed.");
+                    $this->addAuditMessage("Article $path backup failed.");
+                    return $this->writeJsonData(
+                        [
+                            'code' => 401,
+                            'status' => 'Article backup failed.',
+                            'profile' => $profile,
+                            'hash' => $hash,
+                        ], $extras
+                    );
+                };
+            }
+            if (@\file_put_contents(
+                DATA . DS . "summernote_{$profile}_{$hash}.db",
+                $data_nows . "\n", LOCK_EX | FILE_APPEND
+            ) === false
+            ) {
+                $this->addError("Article $path history write failed.");
+                $this->addAuditMessage("Article $path history write failed.");
+                return $this->writeJsonData(
+                    [
+                        'code' => 401,
+                        'status' => 'Article write to history file failed.',
+                        'profile' => $profile,
+                        'hash' => $hash,
+                    ], $extras
+                );
+            };
+            if (@\file_put_contents(
+                DATA . DS . "summernote_{$profile}_{$hash}.json", $data, LOCK_EX
+            ) === false
+            ) {
+                $this->addError("Article $path write to file failed.");
+                $this->addAuditMessage("Article $path write to file failed.");
+                return $this->writeJsonData(
+                    [
+                        'code' => 500,
+                        'status' => 'Article write to file failed.',
+                        'profile' => $profile,
+                        'hash' => $hash,
+                    ], $extras
+                );
+            }
+            // save article meta data
+            $p = [];
+            $f = DATA . DS . "summernote_articles_{$profile}.txt";
+            if (\file_exists($f) && \is_readable($f)) {
+                $p = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            } else {
+                $p = [];
+            }
+            if (\is_array($p)) {
+                $p[] = $path;
+            } else {
+                $extras['error_descriptions'] = 'incorrect metadata';
+                return $this->writeJsonData(500, $extras);
+            }
+            \sort($p, SORT_LOCALE_STRING);
+            $p = \array_unique($p, SORT_LOCALE_STRING);
+            \file_put_contents($f, \implode("\n", $p), LOCK_EX);
+
+            $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
+            return $this->writeJsonData(
+                [
+                    'status' => 'OK',
+                    'profile' => $profile,
+                    'hash' => $hash,
+                ], $extras
+            );
+    
         case 'GetUpdateToken':
             $this->checkPermission('admin');
             if (!$key = $this->readAdminKey()) {
@@ -617,123 +771,21 @@ class AdminPresenter extends APresenter
             $this->addAuditMessage('ADMIN: Core Update');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
-        case 'UpdateArticles':
-            $this->checkPermission('admin,manager,editor');
-            $x = 0;
-            $profile = 'default';
-            if (isset($_POST['data'])) {
-                $data = (string) \trim((string) $_POST['data']);
-                // remove all extra whitespace
-                $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST['data']);
-                $x++;
-            }
-            if (isset($_POST['path'])) {
-                $path = \trim((string) $_POST['path']);
-                // URL path
-                if (\strlen($path)) {
-                    $x++;
-                }
-            }
-            if (isset($_POST['hash'])) {
-                $hash = \trim((string) $_POST['hash']);
-                // SHA 256 hexadecimal
-                if (\strlen($hash) == 64) {
-                    $x++;
-                }
-            }
-            if ($x != 3) {
-                $extras['error_descriptions'] = 'incorrect number of parameters';
-                return $this->writeJsonData(500, $extras);
-            }
-            if (!isset($hash)) {
-                $extras['error_descriptions'] = 'incorrect hash';
-                return $this->writeJsonData(500, $extras);
-            }
-            if (!isset($path)) {
-                $extras['error_descriptions'] = 'incorrect path';
-                return $this->writeJsonData(500, $extras);
-            }
-            if (!isset($data_nows)) {
-                $extras['error_descriptions'] = 'incorrect data_nows';
-                return $this->writeJsonData(500, $extras);
-            }
-            if (\file_exists(DATA . DS. "summernote_{$profile}_{$hash}.json")
-                && \is_readable(DATA . DS. "summernote_{$profile}_{$hash}.json")
-            ) {
-                if (@\copy(
-                    DATA . DS . "summernote_{$profile}_{$hash}.json",
-                    DATA . DS . "summernote_{$profile}_{$hash}.bak"
-                ) === false
-                ) {
-                    $this->addError("Article $path backup failed.");
-                    $this->addAuditMessage("Article $path backup failed.");
-                    return $this->writeJsonData(
-                        [
-                            'code' => 401,
-                            'status' => 'Article backup failed.',
-                            'profile' => $profile,
-                            'hash' => $hash,
-                        ], $extras
-                    );
-                };
-            }
-            if (@\file_put_contents(
-                DATA . DS . "summernote_{$profile}_{$hash}.db",
-                $data_nows . "\n", LOCK_EX | FILE_APPEND
-            ) === false
-            ) {
-                $this->addError("Article $path history write failed.");
-                $this->addAuditMessage("Article $path history write failed.");
-                return $this->writeJsonData(
-                    [
-                        'code' => 401,
-                        'status' => 'Article write to history file failed.',
-                        'profile' => $profile,
-                        'hash' => $hash,
-                    ], $extras
-                );
-            };
-            if (@\file_put_contents(
-                DATA . DS . "summernote_{$profile}_{$hash}.json", $data, LOCK_EX
-            ) === false
-            ) {
-                $this->addError("Article $path write to file failed.");
-                $this->addAuditMessage("Article $path write to file failed.");
-                return $this->writeJsonData(
-                    [
-                        'code' => 500,
-                        'status' => 'Article write to file failed.',
-                        'profile' => $profile,
-                        'hash' => $hash,
-                    ], $extras
-                );
-            }
-            // save article meta data
-            $p = [];
-            $f = DATA . DS . "summernote_articles_{$profile}.txt";
-            if (\file_exists($f) && \is_readable($f)) {
-                $p = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            } else {
-                $p = [];
-            }
-            if (\is_array($p)) {
-                $p[] = $path;
-            } else {
-                $extras['error_descriptions'] = 'incorrect metadata';
-                return $this->writeJsonData(500, $extras);
-            }
-            \sort($p, SORT_LOCALE_STRING);
-            $p = \array_unique($p, SORT_LOCALE_STRING);
-            \file_put_contents($f, \implode("\n", $p), LOCK_EX);
-            $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
-            return $this->writeJsonData(
-                [
-                    'status' => 'OK',
-                    'profile' => $profile,
-                    'hash' => $hash,
-                ], $extras
-            );
+        case 'clearcache':
+            \header('Clear-Site-Data: "cache"');
+            $this->addMessage('Browser cache cleared');
+            $this->setLocation();
 
+        case 'clearcookies':
+            \header('Clear-Site-Data: "cookies"');
+            $this->addMessage('Browser cookies cleared');
+            $this->setLocation();
+
+        case 'clearbrowser':
+            \header('Clear-Site-Data: "cache", "cookies", "storage"');
+            $this->addMessage('Browser storage cleared');
+            $this->setLocation();
+    
         default:
             $this->unauthorizedAccess();
         }

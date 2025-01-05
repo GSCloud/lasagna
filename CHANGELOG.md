@@ -3,6 +3,11 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-05`
+
+* **`1013-FEATURE`** **1006-IDEA** show total uploads size \+ counts in admin panel  
+  * API: **/admin/getUploadsInfo**
+
 `2025-01-04`
 
 * **`1012-BUGFIX`** migrate Materialize framework to [v1.2.2](https://github.com/materializecss/materialize/releases/tag/v1.2.2)  
@@ -13,8 +18,8 @@
 
 `2025-01-02`
 
-* **`1007-IDEA`** add visual labels for latest files uploaded, save to local storage  
-* **`1006-IDEA`** show total uploads size \+ count in admin panel
+* **`1007-IDEA`** add visual labels for latest files uploaded  
+* **~~`1006-IDEA`** show total uploads sizes \+ counts in admin panel~~
 
 `2024-12-28`
 

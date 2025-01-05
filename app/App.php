@@ -426,8 +426,7 @@ if ($router[$view]['country'] ?? false) {
         header(
             'Location: '
             . $router[$view]['country'][$country] . $nonce,
-            true,
-            303
+            true, 303
         );
         exit;
     }
@@ -441,8 +440,7 @@ if ($router[$view]['country'] ?? false) {
         header(
             'Location: '
             . $router[$view]['country']['localhost'] . $nonce,
-            true,
-            303
+            true, 303
         );
         exit;
     }
@@ -456,8 +454,7 @@ if ($router[$view]['country'] ?? false) {
         header(
             'Location: '
             . $router[$view]['country']['default'] . $nonce,
-            true,
-            303
+            true, 303
         );
         exit;
     }
