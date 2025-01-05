@@ -12,7 +12,7 @@
   if (w.GSC.init) {
     w.GSC.data = {};
 
-    // fn PingDot()
+    // GSC.PingDot()
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
       if (!el) return;
       if (status) {
@@ -26,7 +26,7 @@
       }).fadeTo("slow", 0);
     }
 
-    // fn GetCsvInfo()
+    // GSC.GetCsvInfo()
     if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
       if (w.GSC.offline) {
         return GSC.PingDot("#csv_ping", false);
@@ -70,14 +70,14 @@
         });
     }
 
-    // fn AdminUI
+    // GSC.AdminUI()
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+      // fix various CSS styles
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
       $("#admin_main h4").addClass("a_reset a_h4");
       $("#admin_main h5").addClass("a_reset a_h5");
       $("#admin_main p").addClass("a_reset");
-
       // remove tooltips for touch display
       if (w.GSC.touch) {
         if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
@@ -148,7 +148,7 @@
       });
     }
 
-    // fn DeploySummernote()
+    // GSC.DeploySummernote()
     if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
       GSC.summernote_on = true;
       $("#a_summernote").attr("disabled", "disabled");
@@ -690,14 +690,14 @@
         GSC.RenderUploadInfo();
       });
 
-      // GSC.CloseFileManager
+      // GSC.CloseFileManager()
       if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
           delCookie("open_filemanager");
           $("#a_file_manager").hide(50);
           $("#a_uploader_progress").html('');
       }
 
-      // GSC.GetUploadsInfo
+      // GSC.GetUploadsInfo()
       if (typeof GSC.GetUploadsInfo !== "function") GSC.GetUploadsInfo = function (info) {
         if (info === undefined) {
 
@@ -1000,6 +1000,7 @@
       if (getCookie("open_filemanager") == 1) {
         $("#a_file_manager").hide();
         GSC.RenderUploadInfo();
+        GSC.GetUploadsInfo();
       } else {
         GSC.GetUploadsInfo();
       }

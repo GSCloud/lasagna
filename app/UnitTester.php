@@ -6,8 +6,8 @@
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 
 namespace GSC;
@@ -21,8 +21,8 @@ use Tester\Assert;
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 class UnitTester
 {

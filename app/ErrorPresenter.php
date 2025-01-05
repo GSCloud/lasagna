@@ -6,8 +6,8 @@
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 
 declare (strict_types = 1);
@@ -20,8 +20,8 @@ namespace GSC;
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 class ErrorPresenter extends APresenter
 {

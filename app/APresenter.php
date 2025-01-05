@@ -6,8 +6,8 @@
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 
 namespace GSC;
@@ -24,8 +24,8 @@ use ParagonIE\Halite\KeyFactory;
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 interface IPresenter
 {
@@ -448,8 +448,8 @@ interface IPresenter
  * @category CMS
  * @package  Framework
  * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE
- * @link     https://lasagna.gscloud.cz
+ * @license  MIT https://gscloud.cz/LICENSE.txt
+ * @link     https://github.com/GSCloud/lasagna
  */
 abstract class APresenter implements IPresenter
 {
