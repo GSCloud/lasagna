@@ -43,4 +43,18 @@ class SIconstants implements ISIconstants
     const BOLTZMANN_CONSTANT = 1.380649e-23; // J/K
     const AVOGADRO_CONSTANT = 6.02214076e23; // mol^-1
     const CAESIUM_HYPERFINE_FREQUENCY = 9192631770; // Hz
+
+    // others
+    const PI = M_PI; // π
+    public static $GOLDEN_RATIO;
+
+    /**
+     * Returns the mathematical constant Golden Ratio (φ).
+     *
+     * @return float The Golden Ratio (φ).
+     */
+    public static function goldenRatio()
+    {
+        return (1 + sqrt(5)) / 2;
+    }
 }
