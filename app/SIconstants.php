@@ -50,6 +50,7 @@ class SIconstants implements ISIconstants
 
     // others
     const PI = M_PI; // π
+    public static $GOLDEN_RATIO = null;
 
     /**
      * Returns the mathematical constant Golden Ratio (φ).
@@ -59,5 +60,15 @@ class SIconstants implements ISIconstants
     public static function goldenRatio()
     {
         return (1 + sqrt(5)) / 2;
+    }
+
+    /**
+     * Set missing constants that need to be calculated
+     *
+     * @return void
+     */
+    public static function setup()
+    {
+        self::$GOLDEN_RATIO = self::goldenRatio();
     }
 }
