@@ -37,13 +37,13 @@ interface ISIconstants
 class SIconstants implements ISIconstants
 {
     // SI Base Units
-    const PLANCK_CONSTANT = 6.62607015e-34; // J⋅s
-    const BOLTZMANN_CONSTANT = 1.380649e-23; // J/K
     const AVOGADRO_CONSTANT = 6.02214076e23; // mol^-1
+    const BOLTZMANN_CONSTANT = 1.380649e-23; // J/K
+    const PLANCK_CONSTANT = 6.62607015e-34; // J⋅s
 
     const CAESIUM_HYPERFINE_FREQUENCY = 9192631770; // Hz, 133Cs frq of 9.2 GHz
-    const SPEED_OF_LIGHT = 299792458; // m/s
     const ELEMENTARY_CHARGE = 1.602176634e-19; // C
+    const SPEED_OF_LIGHT = 299792458; // m/s
 
     // Frequency
     const HERTZ_TIME = 1 / self::CAESIUM_HYPERFINE_FREQUENCY; // sec
