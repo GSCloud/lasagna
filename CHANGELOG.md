@@ -3,9 +3,14 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-06`
+
+* **`1015-BUGFIX`** show “displayed / total” counts in the file manager  
+* **`1014-BUGFIX`** natural sort order of generated image galleries
+
 `2025-01-05`
 
-* **`1013-FEATURE`** **1006-IDEA** show total uploads size \+ counts in admin panel  
+* **`1013-FEATURE`** **1006-IDEA** show total uploads size \+ file counts in the admin panel, separate info for generated thumbnails  
   * API: **/admin/getUploadsInfo**
 
 `2025-01-04`
