@@ -179,6 +179,15 @@ interface IStringFilters
     public static function findImagesByMask($mask, $format = 'webp');
 
     /**
+     * Find uploaded files by mask
+     *
+     * @param string $mask file mask
+     * 
+     * @return mixed
+     */
+    public static function findFilesByMask($mask = null);
+
+    /**
      * Sanitize a string to a safe variant
      *
      * @param string $string string by reference
@@ -1071,21 +1080,60 @@ class StringFilters implements IStringFilters
             return null;
         }
         $mask = \trim($mask);
-        $mask = \trim($mask, '.*/\\');
         $mask = \strtolower($mask);
-        // hack to fix _XXX_ Markdown
+        // hack to fix Markdown <em> markup
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
+
+        $mask = \preg_replace("/[^a-z0-9!@#+-=.,;_*]+/i", '', \trim($mask));
+        if ($mask) {
+            $mask = \preg_replace('/^\.\.\//', '', $mask);
+        }
+        if (!\is_string($mask)) {
+            return null;
+        }
+
         $format = \strtolower($format);
-        if (!\is_string($format) || \strlen($format)) {
+        if (!\is_string($format) || !\strlen($format)) {
             $format = 'webp';
         }
-        if (!\in_array($format, ['jpg', 'png', 'webp'])) {
+        if (!\in_array($format, ['gif', 'jpg', 'png', 'webp'])) {
             $format = 'webp';
         }
         if (\is_string($mask) && UPLOAD && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask . '*.' . $format) ?: null;
+            if ($data) {
+                \usort(
+                    $data, function ($a, $b) {
+                        return \strnatcmp($a, $b);
+                    }
+                );
+            }
+            return $data;
+        }
+        return null;
+    }
+
+    /**
+     * Find uploaded files by mask
+     *
+     * @param string $mask file mask
+     * 
+     * @return mixed
+     */
+    public static function findFilesByMask($mask = null)
+    {
+        if (!\is_string($mask)) {
+            return null;
+        }
+        $mask = \preg_replace("/[^a-z0-9!@#+-=.,;_*]+/i", '', \trim($mask));
+        if ($mask) {
+            $mask = \preg_replace('/^\.\.\//', '', $mask);
+        }
+        if (\is_string($mask) && UPLOAD && \is_dir(UPLOAD)) {
+            \chdir(UPLOAD);
+            $data = \glob($mask) ?: null;
             if ($data) {
                 \usort(
                     $data, function ($a, $b) {

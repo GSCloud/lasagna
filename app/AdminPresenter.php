@@ -66,6 +66,12 @@ class AdminPresenter extends APresenter
 
     /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
+        IMAGETYPE_GIF => [
+            'load' => 'imagecreatefromgif',
+            'save' => 'imagegif',
+            'ext' => '.gif',
+            'quality' => 100,
+        ],
         IMAGETYPE_JPEG => [
             'load' => 'imagecreatefromjpeg',
             'save' => 'imagejpeg',
@@ -983,15 +989,13 @@ class AdminPresenter extends APresenter
     ) {
         $type = \exif_imagetype($src);
         if (!$type) {
-            // unknown image type
-            return null;
+            return null; // unknown type
         }
         if (!\array_key_exists($type, self::IMAGE_HANDLERS)) {
-            // unsupported conversion definition
-            return null;
+            return null; // unsupported conversion
         }
 
-        // create raw image
+        // load raw image
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
 
         // phpcs:ignore
@@ -1003,7 +1007,7 @@ class AdminPresenter extends APresenter
         $h = \imagesy($image);
         $h = \intval($h);
 
-        // prepare conversion width and height
+        // calculate width and height
         if ($tw === null) {
             $tw = $w;
         }
@@ -1025,20 +1029,18 @@ class AdminPresenter extends APresenter
             $tw = \intval($tw);
             if (\is_numeric($th)) {
                 $th = \intval($th);
-                $thmb = \imagecreatetruecolor($tw, $th);
+                $thmb = \imagecreatetruecolor($tw, $th); // placeholder image
             }
         }
 
         if ($thmb) {
-            if ($type == IMAGETYPE_PNG) {
+            if ($type === IMAGETYPE_PNG) {
                 \imagecolortransparent(
                     $thmb,
                     \imagecolorallocate($thmb, 0, 0, 0) ?: 0
                 );
-                if ($type == IMAGETYPE_PNG) {
-                    \imagealphablending($thmb, false);
-                    \imagesavealpha($thmb, true);
-                }
+                \imagealphablending($thmb, false);
+                \imagesavealpha($thmb, true);
             }
 
             // phpcs:ignore

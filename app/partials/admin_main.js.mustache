@@ -839,11 +839,11 @@
                 saz += '</span>';
                 saz += '</div>';
   
-                // S-M-L
+                // SML
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
-                  sml += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '📋</span>&nbsp;&nbsp;';
+                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped extrapadding imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">📋' + wt[j] + '</span>&nbsp;&nbsp;';
                 }
                 if (sml.length) {
                   sml = '<div class="row center extrapadding"><i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + sml + '</div>';
@@ -853,16 +853,16 @@
                 var sd = '';
                 if (data.data.files[i]["thumbnails"] === null) {
                   sd += '<div class="row">';
-                  sd += '&nbsp;<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
-                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
                   sd += '</div>';
                 }
                 else {
                   sd += '<div class="row">';
-                  sd += '<span title="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
-                  sd += '<span title="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">' + ext + '📋</span>';
+                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
                   if (ext != 'webp') {
-                    sd += '<span title="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">webp📋</span>';
+                    sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">📋webp</span>';
                   }
                   sd += '</div>';
                 }
@@ -888,6 +888,13 @@
             }
             if (!stubs_rendered) $('.btn-stubs').hide();
             $('#uploadimagescount').html(printed + '&nbsp;/&nbsp;' + data.data.count);
+
+            // activate new tooltips
+            $('.tooltipped').tooltip();
+            // thumbnail tooltip previews
+            $('.imgthumb').each(function(index) {
+              $(this).tooltip({html: '<img src="' + $(this).data('text') + '">'});
+            });
 
             // searchbox focus
             if (localStorage.getItem('searchset')) {
