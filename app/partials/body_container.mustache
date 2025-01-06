@@ -53,13 +53,21 @@
     if (w.GSC.init) {
 
 {{^admin_group_admin}}
-      // prevent context menu for customers
+
+      // track element under pointer
+      d.addEventListener('mousemove', e => {
+      w.GSC.elfp = document.elementFromPoint(e.clientX, e.clientY)
+      }, {passive:true});
+
+      // prevent context menu
       w.oncontextmenu = function(e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
+        $(w.GSC.elfp).click(); // click the element under pointer
         return false;
       };
+
 {{/admin_group_admin}}
 
       w.GSC.init.push(function () {
