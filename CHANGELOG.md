@@ -19,7 +19,7 @@
 `2025-01-02`
 
 * **`1007-IDEA`** add visual labels for latest files uploaded  
-* **~~`1006-IDEA`** show total uploads sizes \+ counts in admin panel~~
+* ~~**`1006-IDEA`** show total uploads sizes \+ counts in admin panel~~
 
 `2024-12-28`
 
