@@ -90,6 +90,7 @@ docs:
 	@-mv "$(HOME)/Downloads/README.md" . 2>/dev/null
 	@-mv "$(HOME)/Downloads/CHANGELOG.md" . 2>/dev/null
 	@sed -i 's/`~~\*\*/`\*\*/g' CHANGELOG.md
+	@sed -i 's/ \*\*~~/ \*\*~~/g' CHANGELOG.md
 ifneq ($(strip $(has_docker)),)
 	@find . -maxdepth 1 -iname "*.md" -exec echo "converting {} to ADOC" \; -exec docker run --rm -v "$$(pwd)":/data pandoc/core -f markdown -t asciidoc -i "{}" -o "{}.adoc" \;
 	@find . -maxdepth 1 -iname "*.adoc" -exec echo "converting {} to PDF" \; -exec docker run --rm -v "$$(pwd)":/documents/ asciidoctor/docker-asciidoctor asciidoctor-pdf -a allow-uri-read -a icons=font -a icon-set=fas -d book "{}" \;
