@@ -1065,26 +1065,35 @@ class StringFilters implements IStringFilters
      * 
      * @return mixed
      */
-    public static function findImagesByMask($mask, $format = 'webp')
+    public static function findImagesByMask($mask = null, $format = 'webp')
     {
+        if (!\is_string($mask)) {
+            return null;
+        }
         $mask = \trim($mask);
         $mask = \trim($mask, '.*/\\');
         $mask = \strtolower($mask);
-
         // hack to fix _XXX_ Markdown
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
-
         $format = \strtolower($format);
         if (!\is_string($format) || \strlen($format)) {
             $format = 'webp';
         }
-        if (!\in_array($format, ['jpg', 'png', 'gif'])) {
+        if (!\in_array($format, ['jpg', 'png', 'webp'])) {
             $format = 'webp';
         }
         if (\is_string($mask) && UPLOAD && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
-            return \glob($mask . '*.' . $format) ?: null;
+            $data = \glob($mask . '*.' . $format) ?: null;
+            if ($data) {
+                \usort(
+                    $data, function ($a, $b) {
+                        return \strnatcmp($a, $b);
+                    }
+                );
+            }
+            return $data;
         }
         return null;
     }

@@ -759,6 +759,7 @@
             if (!data.data.count) {
               s = '';
               $('#files_count').html('0');
+              data.data.count = 0;
             } else {
 
               // stubs
@@ -824,10 +825,12 @@
   
                 // AGE + SIZE
                 var saz = '';
+
                 var warn = '';
                 if (data.data.files[i]["size"] > 1024*1024) {
                   warn = 'bold red warning';
                 }
+
                 saz += '<div class="center">⏳️&nbsp;';
                 saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
                 saz += '&nbsp;🫙&nbsp;';
@@ -884,7 +887,7 @@
               $("#a_file_manager").hide().html(s).show(100);
             }
             if (!stubs_rendered) $('.btn-stubs').hide();
-            $('#uploadimagescount').html(printed);
+            $('#uploadimagescount').html(printed + '&nbsp;/&nbsp;' + data.data.count);
 
             // searchbox focus
             if (localStorage.getItem('searchset')) {
@@ -1065,7 +1068,7 @@
 
       // init uploader
       ZeroUpload.init();
-      ZeroUpload.addDropTarget("#admin_main");
+      ZeroUpload.addDropTarget("body");
 
       // UI: upload button
       $("#a_upload").click(function () {

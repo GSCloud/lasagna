@@ -53,22 +53,14 @@ class SIconstants implements ISIconstants
     public static $GOLDEN_RATIO = null;
 
     /**
-     * Returns the mathematical constant Golden Ratio (φ).
-     *
-     * @return float The Golden Ratio (φ).
-     */
-    public static function goldenRatio()
-    {
-        return (1 + sqrt(5)) / 2;
-    }
-
-    /**
-     * Set missing constants that need to be calculated
-     *
+     * Class setup
+     * 
      * @return void
      */
     public static function setup()
     {
-        self::$GOLDEN_RATIO = self::goldenRatio();
+        if (self::$GOLDEN_RATIO === null) {
+            self::$GOLDEN_RATIO = (1 + \sqrt(5)) / 2;
+        }
     }
 }
