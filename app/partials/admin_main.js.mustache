@@ -1020,7 +1020,7 @@
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
       ZeroUpload.setURL("/admin/Upload");
-      ZeroUpload.setMaxFiles(100);
+      ZeroUpload.setMaxFiles({{ CONST.MAX_FILE_UPLOADS }});
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 
       ZeroUpload.on("complete", function (response) {
