@@ -33,7 +33,7 @@ $cfg = $data = $cfg ?? [];
 // CLEAR COOKIES on ?logout
 if (isset($_GET['logout'])) {
     header('Clear-Site-Data: "cookies"');
-    header('Location: ' . $cfg['canonical_url'] ?? '/', true, 303);
+    header('Location: ' . $cfg['canonical_url'] ?: '/', true, 303);
     exit;
 }
 
