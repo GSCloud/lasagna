@@ -1895,6 +1895,8 @@ abstract class APresenter implements IPresenter
             'timestamp' => $time,
             'timestamp_RFC2822' => date(\DATE_RFC2822, $time),
             'version' => (string) ($this->getCfg('version') ?? 'v1'),
+            'engine' => ENGINE,
+            'domain' => DOMAIN,
         ];
         switch (\json_last_error()) { // last decoding error
         case JSON_ERROR_NONE:
@@ -1990,9 +1992,7 @@ abstract class APresenter implements IPresenter
                 \header("$h $code $m"); // set corresponding HTTP header
             }
         }
-        // output
         $this->setHeaderJson();
-        //$out['code'] = (int) $code;
         $out['message'] = $msg;
         $out['processing_time'] = \round(
             (\microtime(true) - TESSERACT_START) * 1000, 2
