@@ -1899,7 +1899,7 @@ abstract class APresenter implements IPresenter
         switch (\json_last_error()) { // last decoding error
         case JSON_ERROR_NONE:
             $code = 200;
-            $msg = 'DATA OK';
+            $msg = 'OK';
             break;
         case JSON_ERROR_DEPTH:
             $code = 400;
@@ -1992,7 +1992,7 @@ abstract class APresenter implements IPresenter
         }
         // output
         $this->setHeaderJson();
-        $out['code'] = (int) $code;
+        //$out['code'] = (int) $code;
         $out['message'] = $msg;
         $out['processing_time'] = \round(
             (\microtime(true) - TESSERACT_START) * 1000, 2
