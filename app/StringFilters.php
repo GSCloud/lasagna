@@ -1100,7 +1100,7 @@ class StringFilters implements IStringFilters
         if (!\in_array($format, ['gif', 'jpg', 'png', 'webp'])) {
             $format = 'webp';
         }
-        if (\is_string($mask) && UPLOAD && \is_dir(UPLOAD)) {
+        if (UPLOAD && \is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask . '*.' . $format) ?: null;
             if ($data) {
@@ -1131,7 +1131,7 @@ class StringFilters implements IStringFilters
         if ($mask) {
             $mask = \preg_replace('/^\.\.\//', '', $mask);
         }
-        if (\is_string($mask) && UPLOAD && \is_dir(UPLOAD)) {
+        if (UPLOAD && \is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask) ?: null;
             if ($data) {

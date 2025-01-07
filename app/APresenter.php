@@ -658,7 +658,6 @@ abstract class APresenter implements IPresenter
         $type = (file_exists(TEMPLATES . DS . "{$template}.mustache")) ? 1 : 0;
         $renderer = new \Mustache_Engine(
             array(
-            //'template_class_prefix' => '__' . SERVER . '_' . PROJECT . '_',
             'template_class_prefix' => PROJECT . '_',
             'cache' => TEMP,
             'cache_file_mode' => 0666,

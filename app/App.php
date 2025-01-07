@@ -464,7 +464,7 @@ if ($router[$view]['country'] ?? false) {
 $data['csp_nonce'] = '';
 switch ($presenter[$view]['template']) {
 default:
-    if (file_exists(CSP) && is_readable(CSP)) {
+    if (CSP && file_exists(CSP) && is_readable(CSP)) {
         $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
         if (is_array($csp)) {
             $cspn = $data['csp_nonce'] = sha1(random_bytes(8));

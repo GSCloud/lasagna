@@ -10,4 +10,6 @@ parameters:
     bootstrapFiles:
         - phpstan_constants.php
     dynamicConstantNames:
-#        - DEBUG
+        - DEBUG
+        - UPLOAD
+        - CSP
