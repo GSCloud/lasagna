@@ -3,11 +3,15 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-07`
+
+* **`1017-BUGFIX`** admin logout goes to the main site
+
 `2025-01-06`
 
 * **`1016-FEATURE`** various admin panel enhancements  
 * **`1015-BUGFIX`** show “displayed / total” counts in the file manager  
-* **`1014-BUGFIX`** natural sort order of generated image galleries
+* **`1014-BUGFIX`** natural sort order for generated image galleries
 
 `2025-01-05`
 
@@ -29,16 +33,16 @@
 
 `2024-12-28`
 
-* **`1005-BUGFIX`** regression in a new CDN hash after cache flush  
+* **`1005-BUGFIX`** regression in a new CDN hash after global cache flush  
 * **`1004-FEATURE`** StringFilters CZ/SK replacements update
 
 `2024-12-27`
 
-* **`1003-BUGFIX`** admin panel timing info JS console errors
+* **`1003-BUGFIX`** admin panel timings info JS console errors
 
 `2024-12-26`
 
-* **`1002-BUGFIX`** thumbnails creation in WebP output format
+* **`1002-BUGFIX`** thumbnails creation in WebP output format (were in the original format)
 
 `2024-12-23`
 
