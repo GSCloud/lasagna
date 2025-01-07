@@ -15,20 +15,6 @@ namespace GSC;
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 
-// CLEAR COOKIES on ?logout
-if (isset($_GET['logout'])) {
-    header('Clear-Site-Data: "cookies"');
-    header('Location: /', true, 303);
-    exit;
-}
-
-// CLEAR EVERYTHING on ?clearall
-if (isset($_GET['clearall'])) {
-    header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
-    header('Location: /', true, 303);
-    exit;
-}
-
 // SANITY CHECK
 foreach ([
     'APP',
@@ -41,8 +27,22 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check - constant '{$x}' failed!");
 }
 
-// POPULATE DATA ARRAY
+// POPULATE MODEL ARRAY
 $cfg = $data = $cfg ?? [];
+
+// CLEAR COOKIES on ?logout
+if (isset($_GET['logout'])) {
+    header('Clear-Site-Data: "cookies"');
+    header('Location: ' . $cfg['canonical_url'] ?? '/', true, 303);
+    exit;
+}
+
+// CLEAR EVERYTHING on ?clearall
+if (isset($_GET['clearall'])) {
+    header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+    header('Location: ' . $cfg['canonical_url'] ?? '/', true, 303);
+    exit;
+}
 
 // inject base CSV locale into $cfg
 array_unshift($cfg['locales'], 'base.csv');
