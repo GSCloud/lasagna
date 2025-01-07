@@ -40,7 +40,7 @@ if (isset($_GET['logout'])) {
 // CLEAR EVERYTHING on ?clearall
 if (isset($_GET['clearall'])) {
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
-    header('Location: ' . $cfg['canonical_url'] ?? '/', true, 303);
+    header('Location: ' . $cfg['canonical_url'] ?: '/', true, 303);
     exit;
 }
 
