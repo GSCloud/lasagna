@@ -54,25 +54,31 @@ $x = ROOT . DS . 'app';
 if (is_dir($x) && is_readable($x)) {
     defined($d) || define($d, $x);
 } else {
-    die('Could not read the data directory: ' . $d);
+    die('Could not read the APP directory: ' . $x);
 }
 
 // CACHE directory
 $d = 'CACHE';
 $x = ROOT . DS . 'temp';
-if (is_dir($x) && is_writable($x)) {
-    defined($d) || define($d, $x);
+if (defined($d) && is_dir($x) && is_readable($x)) {
 } else {
-    defined($d) || define($d, '/tmp');
+    if (is_dir($x) && is_writable($x)) {
+        define($d, $x);
+    } else {
+        define($d, '/tmp');
+    }
 }
 
 // DATA directory
 $d = 'DATA';
 $x = ROOT . DS . 'data';
-if (is_dir($x) && is_writable($x)) {
-    defined($d) || define($d, $x);
+if (defined($d) && is_dir($x) && is_writable($x)) {
 } else {
-    defined($d) || define($d, '/tmp');
+    if (is_dir($x) && is_writable($x)) {
+        define($d, $x);
+    } else {
+        define($d, '/tmp');
+    }
 }
 
 // Apache root directory
