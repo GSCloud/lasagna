@@ -1,19 +1,19 @@
 <div id="users" class="col s12">
-  <div class="">
-
     <!-- groups -->
-    <div class="row center extrapadding">
+    <div class="container">
       <h4>{{ l.a_groups_permissions }}</h4>
       <div class="white-text">
         <div class="row center">
 
+          {{#admin_groups}}
           <strong>🧑‍🤝‍🧑 ADMIN</strong>
           <div class="container">
             <div class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
               {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
             </div>
           </div>
-          {{#admin_groups.editor}}
+          <br>
+          <br>
 
           <strong>🧑‍🤝‍🧑 MANAGER</strong>
           <div class="container">
@@ -21,25 +21,19 @@
               {{^admin_groups.manager}}<i class="red-text fas fa-times"></i>{{/admin_groups.manager}}
             </div>
           </div>
-          {{#admin_groups.editor}}
+          <br>
+          <br>
 
           <strong>🧑‍🤝‍🧑 EDITOR</strong>
           <div class="container">
-            <p class="orange-text">{{#admin_groups.editor}}{{ . }} {{/admin_groups.editor}}</p>
+            <div class="orange-text">{{#admin_groups.editor}}{{ . }} {{/admin_groups.editor}}
+              {{^admin_groups.editor}}<i class="red-text fas fa-times"></i>{{/admin_groups.editor}}
+            </div>
           </div>
-          {{/admin_groups.editor}}
-
-          {{#admin_groups.tester}}
-          <strong>🧑‍🤝‍🧑 TESTER</strong>
-          <div class="container">
-            <p class="orange-text">{{#admin_groups.tester}}{{ . }} {{/admin_groups.tester}}</p>
-          </div>
-          {{/admin_groups.tester}}
+          <br>
+          {{/admin_groups}}
 
         </div>
       </div>
     </div>
-
-  </div>
-  <br>
 </div>
