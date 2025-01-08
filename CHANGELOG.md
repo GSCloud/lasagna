@@ -3,6 +3,11 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-08`
+
+* **`1019-FEATURE`** admin logout/Auditlog block is sticky to the right top  
+* **`1018-BUGFIX`** various extra tests in Bootstrap.php
+
 `2025-01-07`
 
 * **`1017-BUGFIX`** admin logout goes to the main site
