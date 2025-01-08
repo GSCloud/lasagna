@@ -64,7 +64,8 @@
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        $(w.GSC.elfp).click(); // click the element under pointer
+        // click the element under pointer on RMB or long-press
+        $(w.GSC.elfp).click();
         return false;
       };
 
