@@ -15,6 +15,14 @@
           </div>
           {{#admin_groups.editor}}
 
+          <strong>🧑‍🤝‍🧑 MANAGER</strong>
+          <div class="container">
+            <div class="orange-text">{{#admin_groups.manager}}{{ . }} {{/admin_groups.manager}}
+              {{^admin_groups.manager}}<i class="red-text fas fa-times"></i>{{/admin_groups.manager}}
+            </div>
+          </div>
+          {{#admin_groups.editor}}
+
           <strong>🧑‍🤝‍🧑 EDITOR</strong>
           <div class="container">
             <p class="orange-text">{{#admin_groups.editor}}{{ . }} {{/admin_groups.editor}}</p>
@@ -27,13 +35,6 @@
             <p class="orange-text">{{#admin_groups.tester}}{{ . }} {{/admin_groups.tester}}</p>
           </div>
           {{/admin_groups.tester}}
-
-          {{#admin_groups.default}}
-          <strong>🧑‍🤝‍🧑 DEFAULT</strong>
-          <div class="container">
-            <p class="orange-text">{{#admin_groups.default}}{{ . }} {{/admin_groups.default}}</p>
-          </div>
-          {{/admin_groups.default}}
 
         </div>
       </div>
