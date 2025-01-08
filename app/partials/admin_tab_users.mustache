@@ -39,22 +39,6 @@
       </div>
     </div>
 
-    <!-- current user -->
-    <div class="row center extrapadding">
-      <div style="display:inline-block;border:2px solid red;border-radius:5px;margin:auto;padding:2rem">
-        <strong>{{user.name}}</strong><br>
-        <b>{{user.email}}</b>
-        <br>
-        <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
-          data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
-          <i class="fas fa-sign-out-alt"></i>
-          {{ l.a_logout }}</a>
-        <a title="Audit Log" target="_blank" ref="nofollow" href="/admin/AuditLog?nonce={{ nonce }}" class="waves-effect blue waves-light btn">
-          <i class="fas fa-list"></i></a>
-      </div>
-    </div>
   </div>
-
   <br>
-
 </div>

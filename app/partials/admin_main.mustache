@@ -30,7 +30,22 @@ hr {border:0;clear:both;margin:0 auto}
 <span style="position:fixed;left:10px;top:10px;z-index:999999" class="noselect motyle btn white z-depth-5">🛠️</span>
 
 <!-- ADMIN PANEL -->
-<div id="admin_main" class="row center black white-text" style="display:none;margin:0!important;padding-bottom:1rem">
+<div id="admin_main" class="row center black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
+
+  <!-- CURRENT USER -->
+  <div class="right black" style="z-index:99;position:sticky!important;top:70px;right:0;padding:1rem!important">
+    <div style="display:inline-block;margin:auto">
+      <strong>{{user.name}}</strong><br>
+      <b>{{user.email}}</b>
+      <br>
+      <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
+        data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
+        <i class="fas fa-sign-out-alt"></i>
+        {{ l.a_logout }}</a>
+      <a title="Audit Log" target="_blank" ref="nofollow" href="/admin/AuditLog?nonce={{ nonce }}" class="waves-effect blue waves-light btn">
+        <i class="fas fa-list"></i></a>
+    </div>
+  </div>
 
   <!-- EXTERNAL LINKS -->
   <div class="row center black">
