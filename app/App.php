@@ -289,10 +289,10 @@ array_walk_recursive(
         $l = $p[0];
         $d = $p[1];
         if (strlen($l) > 3) {
-            $l = substr($l, 0, 4) . str_repeat('*', strlen($l) - 4);
+            $l = substr($l, 0, 4) . '*';
         }
         if (strlen($d) > 4) {
-            $d = substr($d, 0, 5) . str_repeat('*', strlen($d) - 5);
+            $d = substr($d, 0, 5) . '*';
         }
         $e = "{$l}@{$d}";
     }
