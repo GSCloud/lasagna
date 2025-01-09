@@ -5,11 +5,11 @@
       <div class="white-text">
         <div class="row center">
 
-          {{#admin_groups}}
+          {{#admin_groups_masked}}
           <strong>🧑‍🤝‍🧑 ADMIN</strong>
           <div class="container">
-            <div class="orange-text">{{#admin_groups.admin}}{{ . }} {{/admin_groups.admin}}
-              {{^admin_groups.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups.admin}}
+            <div class="orange-text">{{#admin_groups_masked.admin}}{{ . }} {{/admin_groups_masked.admin}}
+              {{^admin_groups_masked.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.admin}}
             </div>
           </div>
           <br>
@@ -17,8 +17,8 @@
 
           <strong>🧑‍🤝‍🧑 MANAGER</strong>
           <div class="container">
-            <div class="orange-text">{{#admin_groups.manager}}{{ . }} {{/admin_groups.manager}}
-              {{^admin_groups.manager}}<i class="red-text fas fa-times"></i>{{/admin_groups.manager}}
+            <div class="orange-text">{{#admin_groups_masked.manager}}{{ . }} {{/admin_groups_masked.manager}}
+              {{^admin_groups_masked.manager}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.manager}}
             </div>
           </div>
           <br>
@@ -26,12 +26,12 @@
 
           <strong>🧑‍🤝‍🧑 EDITOR</strong>
           <div class="container">
-            <div class="orange-text">{{#admin_groups.editor}}{{ . }} {{/admin_groups.editor}}
-              {{^admin_groups.editor}}<i class="red-text fas fa-times"></i>{{/admin_groups.editor}}
+            <div class="orange-text">{{#admin_groups_masked.editor}}{{ . }} {{/admin_groups_masked.editor}}
+              {{^admin_groups_masked.editor}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.editor}}
             </div>
           </div>
           <br>
-          {{/admin_groups}}
+          {{/admin_groups_masked}}
 
         </div>
       </div>

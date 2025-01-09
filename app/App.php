@@ -281,6 +281,23 @@ if ($cfg['redis']['port'] ?? null) {
 // POPULATE DATA ARRAY
 $data['cache_profiles'] = $cache_profiles;
 
+// MASKED ADMIN GROUPS
+$data['admin_groups_masked'] = $data['admin_groups'] ?? [];
+array_walk_recursive(
+    $data['admin_groups_masked'], function (&$e) {
+        $p = explode('@', $e);
+        $l = $p[0];
+        $d = $p[1];
+        if (strlen($l) > 3) {
+            $l = substr($l, 0, 4) . str_repeat('*', strlen($l) - 4);
+        }
+        if (strlen($d) > 4) {
+            $d = substr($d, 0, 5) . str_repeat('*', strlen($d) - 5);
+        }
+        $e = "{$l}@{$d}";
+    }
+);
+
 // ROUTING CONFIGURATION
 $router = [];
 $routes = $cfg['routers'] ?? [];
