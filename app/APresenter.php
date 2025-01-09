@@ -1945,7 +1945,7 @@ abstract class APresenter implements IPresenter
                 $m = 'Not Modified';
                 break;
             case 400:
-                $m = 'Bad request';
+                $m = 'Bad Request';
                 break;
             case 401:
                 $m = 'Unauthorized';
@@ -1982,6 +1982,9 @@ abstract class APresenter implements IPresenter
                 break;
             case 417:
                 $m = 'Expectation Failed';
+                break;
+            case 500:
+                $m = 'Internal Server Error';
                 break;
             default:
                 $msg = 'Unknown Error';

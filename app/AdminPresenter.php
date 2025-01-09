@@ -157,26 +157,20 @@ class AdminPresenter extends APresenter
         case 'Upload':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
 
-            // process all uploads
+            // process uploads
             $uploads = [];
             foreach ($_FILES as $key => &$file) {
-
-                // sanitize filename
                 $f = $file['name'];
                 $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
-
                 StringFilters::transliterate($f);
                 StringFilters::sanitizeStringLC($f);
                 StringFilters::transliterate($f);
-
-                $info = \pathinfo($f);
-
                 // skip thumbnails
                 if (\str_starts_with($f, self::THUMB_PREFIX)) {
                     continue;
@@ -193,6 +187,8 @@ class AdminPresenter extends APresenter
                 if ($f === '.size') {
                     continue;
                 }
+
+                $info = \pathinfo($f);
                 // skip files without name
                 if (\is_array($info) && !$info['filename']) {
                     continue;
@@ -203,7 +199,6 @@ class AdminPresenter extends APresenter
 
                     if (\is_array($info)) {
                         $fn = $info['filename'];
-
                         // skip thumbnails generation
                         if (empty($info['extension'])) {
                             continue;
@@ -260,28 +255,26 @@ class AdminPresenter extends APresenter
         case 'UploadDelete':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
 
             if (isset($_POST['name'])) {
                 $name = \trim($_POST['name']);
                 $name = \strtr(\trim($name), " '\"\\()", '______');
-
                 StringFilters::transliterate($name);
                 StringFilters::sanitizeStringLC($name);
                 StringFilters::transliterate($name);
-
                 if ($name) {
                     $name = \preg_replace('/^\.\.\//', '', $name);
                 }
-                if ($name === '.size') {
-                    return $this->writeJsonData(400, $extras);
-                }
                 if (!\is_string($name)) {
                     return $this->writeJsonData(400, $extras);
+                }
+                if ($name === '.size') {
+                    return $this->writeJsonData(405, $extras);
                 }
 
                 $info = \pathinfo($name);
@@ -319,10 +312,10 @@ class AdminPresenter extends APresenter
         case 'getUploadsInfo':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_readable(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
 
             $size = $dotsize = $count = $dotcount = 0;
@@ -359,10 +352,10 @@ class AdminPresenter extends APresenter
         case 'getUploads':
             $this->checkPermission('admin,manager,editor');
             if (\is_null(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
-                return $this->writeJsonData(400, $extras);
+                return $this->writeJsonData(410, $extras);
             }
 
             $files = [];
