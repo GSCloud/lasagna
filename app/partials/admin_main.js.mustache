@@ -8,9 +8,8 @@
     return;
   }
 
-  // GSC.init
   if (w.GSC.init) {
-    w.GSC.data = {};
+    w.GSC.data = {} || w.GSC.data;
 
     // GSC.PingDot()
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
@@ -148,462 +147,6 @@
       });
     }
 
-    // GSC.DeploySummernote()
-    if (!w.GSC.DeploySummernote) w.GSC.DeploySummernote = function () {
-      GSC.summernote_on = true;
-      $("#a_summernote").attr("disabled", "disabled");
-      $("#a_summernote").text("{{ l.a_save_all }}");
-      $("#a_summernote").unbind("click");
-
-      // Summernote: SAVE ALL
-      $("#a_summernote").unbind();
-      $("#a_summernote").click(function () {
-        if (GSC.offline) {
-          M.toast({text: "📶 offline", classes: "normaltoast"});
-          return;
-        }
-        $("#a_summernote").attr("disabled", "disabled");
-        var id;
-        var data = {};
-        $(".summernote").each(function (i, obj) {
-          // collect HTML data
-          id = $(obj).attr("id");
-          if (id) {
-            data[id] = $(obj).summernote("code");
-          }
-        });
-
-        // API: UpdateArticles (POST - save all articles data)
-        $.post("/admin/UpdateArticles", {
-          hash: "{{ request_path_hash }}",
-          path: location.pathname,
-          data: JSON.stringify(data)
-        }, function (data) {
-          M.toast({text: "💾 {{ l.a_saved_ok }}", classes: "normaltoast"});
-        }).done(function () {
-          $("#a_summernote").removeAttr("disabled");
-          GSC.AdminUI();
-        }).fail(function (xhr, status, error) {
-          // error message
-          alert(error);
-          $("#a_summernote").removeAttr("disabled");
-          M.toast({text: "{{ l.a_error_general }}", classes: "normaltoast"});
-        });
-      });
-
-      // SaveAllButton() button
-      var SaveAllButton = function (context) {
-        var ui = $.summernote.ui;
-        var button = ui.button({
-          className: "note-btn-bold blue",
-          contents: '<span title="💾 {{ l.a_summer_save_ttip }}"><i class="fas fa-save"></i>&nbsp;<b>{{ l.a_summer_save }}</b></span>',
-          codeviewKeepButton: false,
-          click: function (e) {
-            $("#a_summernote").click();
-          }
-        });
-        return button.render();
-      }
-
-      // DestroyButton() button
-      var DestroyButton = function (context) {
-        var ui = $.summernote.ui;
-        var button = ui.button({
-          className: "note-btn-bold",
-          contents: '<span title="{{ l.a_summer_close_ttip }}"><i class="fas fa-window-close"></i>&nbsp;<b>{{ l.a_summer_close }}</b></span>',
-          codeviewKeepButton: true,
-          click: function (e) {
-            $(".summernote").each(function (i, obj) {
-              $(obj).summernote("destroy");
-              GSC.AdminUI();
-              $("#a_summernote").html('<i class="fas fa-edit"></i>{{ l.a_summernote }}');
-              $("#a_summernote").unbind("click");
-              $("#a_summernote").click(function () {
-                GSC.ReadArticles(function () {
-                  GSC.DeploySummernote();
-                });
-              });
-              GSC.summernote_on = false;
-            });
-          }
-        });
-        return button.render();
-      }
-
-      // HistorySelector() listbox
-      var HistorySelector = function (context) {
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_history_ttip }}" class="fas fa-history"></span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style",
-            contents: "<ul></ul>",
-            callback: function ($dropdown) {
-              $dropdown.find("li").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.insertText", $(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji1Selector() listbox
-      var Emoji1Selector = function (context) {
-        var list = "";
-        var emoji = "©,®,Ⓜ,™,①,②,③,④,⑤,⑥,⑦,⑧,⑨,⑩,¢,£,¥,§,¬,±,°,²,¶,«,»,×,‘,’,“,”,†,‡,•,‣,…,′,″,‹,›,⁉,‼,€,ℓ,ℵ,ℹ,π,‍,⌘,←,↑,→,↓,↔,↕,↖,↗,↘,↙,↩,↪,↶,↷,↺,↻,⇄,⇒,⇞,⇟,⇤,⇥,∀,∂,∃,∅,∈,∉,∎,∑,√,∞,∡,∧,∨,∫,≈,≔,≠,≡,≤,≥,⊂,⊃,⊄,⊆,⊇,⊕,⊗,⊙,⋂,⋃,⌈,⌉,⌊,⌋,■,▪,▫,▲,△,▶,▷,▼,▽,◀,◁,◆,●,◻,◼,◽,◾,⌦,⌨,⌫,⎈,⏎,✏,✒,✓,✔,✖,✚,✝,✡,✳,✴,❄,❇,❣,❦,⬆,⬇,☀,☁,☂,☃,☄,★,☆,☇,☈,☎,☑,☘,☙,☠,☢,☣,☦,☪,☭,☮,☯,☸,☹,☼,☾,♀,♂,♠,♣,♥,♦,♞,♟,♘,♨,♩,♪,♫,♬,♲,♻,♾,⚒,⚓,⚔,⚕,⚖,⚗,⚙,⚛,⚜,⚠,✂,✈,✉,♈,♉,♊,♋,♌,♍,♎,♏,♐,♑,♒,♓";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji1_ttip }}">©</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji2Selector() listbox
-      var Emoji2Selector = function (context) {
-        var list = "";
-        var emoji = "😀,😃,😄,😁,😆,😅,🤣,😂,🙂,🙃,😉,😊,😇,🥰,😍,🤩,😘,😗,😚,😙,😋,😛,😜,🤪,😝,🤑,🤗,🤭,🤫,🤔,🤐,🤨,😐,😑,😶,😏,😒,🙄,😬,🤥,😌,😔,😪,🤤,😴,😷,🤒,🤕,🤢,🤮,🤧,🥵,🥶,🥴,😵,🤯,🤠,🥳,😎,🤓,🧐,😕,😟,🙁,😮,😯,😲,😳,🥺,😦,😧,😨,😰,😥,😢,😭,😱,😖,😣,😞,😓,😩,😫,😤,😡,😠,🤬,😈,👿,💀,💩,🤡,👹,👺,👻,👽,👾,🤖,😺,😸,😹,😻,😼,😽,🙀,😿,😾,💋,👋,🤚,🖐️,✋,🖖,👌,🤞,🤟,🤘,🤙,👈,👉,👆,🖕,👇,👍,👎,✊,👊,🤛,🤜,👏,🙌,👐,🤲,🤝,🙏,💅,🤳,💪,🦵,🦶,👂,👃,🧠,🦷,🦴,👀,👁️,👅,👄,👶,🧒,👦,👧,🧑,👱,👨,🧔,👨‍🦰,👨‍🦱,👨‍🦳,👨‍🦲,👩,👩‍🦰,👩‍🦱,👩‍🦳,👩‍🦲,👱‍♀️,👱‍♂️,🧓,👴,👵,🙍‍♂️,🙍‍♀️,🙎,🙎‍♂️,🙎‍♀️,🙅‍♂️,🙅‍♀️,🙆‍♂️,🙆‍♀️,💁‍♂️,💁‍♀️,🙋‍♂️,🙋‍♀️,🙇‍♂️,🙇‍♀️,🤦‍♂️,🤦‍♀️,🤷‍♂️,🤷‍♀️,👨‍⚕️,👩‍⚕️,👨‍🎓,👩‍🎓,👨‍🏫,👩‍🏫,👨‍⚖️,👩‍⚖️,👩‍🌾,👩‍🍳,👨‍🔧,👩‍🔧,👨‍🏭,👩‍🏭,👨‍💼,👩‍💼,👨‍🔬,👩‍🔬,👨‍💻,👩‍💻,👨‍🎤,👩‍🎤,👨‍🎨,👩‍🎨,👨‍✈️,👩‍✈️,👨‍🚀,👩‍🚀,👨‍🚒,👩‍🚒,👮‍♂️,👮‍♀️,🕵️‍♂️,🕵️‍♀️,💂‍♂️,💂‍♀️,👷‍♂️,👷‍♀️,🤴,👸,👳‍♂️,👳‍♀️,👲,🧕,🤵,👰,🤰,🤱,👼,🎅,🤶,🦸‍♂️,🦹‍♀️,🧙,🧙‍♂️,🧚‍♂️,🧚‍♀️,🧛‍♂️,🧛‍♀️,🧜,🧜‍♂️,🧜‍♀️,🧝‍♂️,🧝‍♀️,🧞‍♂️,🧞‍♀️,🧟‍♂️,🧟‍♀️,💆‍♂️,💆‍♀️,💇‍♂️,💇‍♀️,🚶‍♂️,🚶‍♀️,🏃‍♂️,🏃‍♀️,💃,🕺,🕴️,👯‍♂️,🧖‍♂️,🧖‍♀️,🧘,👭,👫,👬,👨‍❤️‍💋‍👨,👩‍❤️‍💋‍👩,👨‍❤️‍👨,👩‍❤️‍👩,👨‍👩‍👦,👨‍👩‍👧,👨‍👩‍👧‍👦,👨‍👩‍👦‍👦,👨‍👩‍👧‍👧,👨‍👨‍👦,👨‍👨‍👧,👨‍👨‍👧‍👦,👨‍👨‍👦‍👦,👨‍👨‍👧‍👧,👩‍👩‍👦,👩‍👩‍👧,👩‍👩‍👧‍👦,👩‍👩‍👦‍👦,👩‍👩‍👧‍👧,👨‍👦,👨‍👦‍👦,👨‍👧,👨‍👧‍👦,👨‍👧‍👧,👩‍👦,👩‍👦‍👦,👩‍👧,👩‍👧‍👦,👩‍👧‍👧";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji2_ttip }}">😀</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji3Selector() listbox
-      var Emoji3Selector = function (context) {
-        var list = "";
-        var emoji = "🐵,🙈,🙉,🙊,💥,💫,💦,💨,🐒,🦍,🐶,🐕,🐩,🐺,🦊,🦝,🐱,🐈,🦁,🐯,🐅,🐆,🐴,🐎,🦄,🦓,🦌,🐮,🐂,🐃,🐄,🐷,🐖,🐗,🐽,🐏,🐑,🐐,🐪,🐫,🦙,🦒,🐘,🦏,🦛,🐭,🐁,🐀,🐹,🐰,🐇,🐿️,🦔,🦇,🐻,🐨,🐼,🦘,🦡,🐾,🦃,🐔,🐓,🐣,🐤,🐥,🐦,🐧,🕊️,🦅,🦆,🦢,🦉,🦚,🦜,🐸,🐊,🐢,🦎,🐍,🐲,🐉,🦕,🦖,🐳,🐋,🐬,🐟,🐠,🐡,🦈,🐙,🐚,🐌,🦋,🐛,🐜,🐝,🐞,🦗,🕷️,🕸️,🦂,🦟,🦠,💐,🌸,💮,🏵️,🌹,🥀,🌺,🌻,🌼,🌷,🌱,🌲,🌳,🌴,🌵,🌾,🌿,🍀,🍁,🍂,🍃,🍄,🌰,🦀,🦞,🦐,🦑,🌍,🌎,🌏,🌐,🌑,🌒,🌓,🌔,🌕,🌖,🌗,🌘,🌙,🌚,🌛,🌜,🌝,🌞,⭐,🌟,🌠,⛅,⛈️,🌤️,🌥️,🌦️,🌧️,🌨️,🌩️,🌪️,🌫️,🌬️,🌈,⛄,🔥,💧,🌊,🎄,✨,🎋,🎍";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji3_ttip }}">🐵</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji4Selector() listbox
-      var Emoji4Selector = function (context) {
-        var list = "";
-        var emoji = "🍓,🍇,🍈,🍉,🍊,🍋,🍌,🍍,🥭,🍎,🍏,🍐,🍑,🍒,🥝,🍅,🥥,🥑,🍆,🥔,🥕,🌽,🌶️,🥒,🥬,🥦,🍄,🥜,🌰,🍞,🥐,🥖,🥨,🥯,🥞,🧀,🍖,🍗,🥩,🥓,🍔,🍟,🍕,🌭,🥪,🌮,🌯,🥙,🥚,🍳,🥘,🍲,🥣,🥗,🍿,🧂,🥫,🍱,🍘,🍙,🍚,🍛,🍜,🍝,🍠,🍢,🍣,🍤,🍥,🥮,🍡,🥟,🥠,🥡,🍦,🍧,🍨,🍩,🍪,🎂,🍰,🧁,🥧,🍫,🍬,🍭,🍮,🍯,🍼,🥛,🍵,🍶,🍾,🍷,🍸,🍹,🍺,🍻,🥂,🥃,🥤,🥢,🍽️,🍴,🥄";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji4_ttip }}">🍓</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji5Selector() listbox
-      var Emoji5Selector = function (context) {
-        var list = "";
-        var emoji = "🏆,🎖️,🏅,🥇,🥈,🥉,🧗‍♂️,🧗‍♀️,🕴️,🤺,🏇,⛷️,🏂,🏌️‍♂️,🏌️‍♀️,🏄‍♂️,🏄‍♀️,🚣‍♂️,🚣‍♀️,🏊‍♂️,🏊‍♀️,⛹️‍♂️,⛹️‍♀️,🏋️‍♂️,🏋️‍♀️,🚴‍♂️,🚴‍♀️,🚵‍♂️,🚵‍♀️,🤸‍♂️,🤸‍♀️,🤼‍♂️,🤼‍♀️,🤽‍♂️,🤽‍♀️,🤾‍♂️,🤾‍♀️,🤹‍♂️,🤹‍♀️,🎭,🧘‍♂️,🧘‍♀️,🎪,🛹,🛶,🎗️,🎟️,🎫,⚽,⚾,🥎,🏀,🏐,🏈,🏉,🎾,🥏,🎳,🏏,🏑,🏒,🥍,🏓,🏸,🥊,🥋,🥅,⛳,⛸️,🎣,🎽,🎿,🛷,🥌,🎯,🎱,🎮,🎰,🎲,🧩,🎨,🧵,🧶,🎼,🎤,🎧,🎷,🎸,🎹,🎺,🎻,🥁,🎬,🏹,🗣️,👤,👥,👣,💴,💵,💶,💷,💣,💌,🕳️,🛀,🛌,🔪,🏺,🗺️,🧭,🧱,💈,🛢️,🛎️,🧳,⌛,⏳,⌚,⏰,⏱️,⏲️,🕰️,🌡️,⛱️,🧨,🎈,🎉,🎊,🎎,🎏,🎐,🧧,🎀,🎁,🔮,🧿,🕹️,🧸,🖼️,🧵,🧶,🛍️,📿,💎,📯,🎙️,🎚️,🎛️,📻,📱,📲,📞,📟,📠,🔋,🔌,💻,🖥️,🖨️,🖱️,🖲️,💽,💾,💿,📀,🧮,🎥,🎞️,📽️,📺,📷,📸,📹,📼,🔍,🔎,🕯️,💡,🔦,🏮,📔,📕,📖,📗,📘,📙,📚,📓,📒,📃,📜,📄,📰,🗞️,📑,🔖,🏷️,💰,💸,💳,🧾,📧,📨,📩,📤,📥,📦,📫,📪,📬,📭,📮,🗳️,🖋️,🖊️,🖌️,🖍️,📝,📁,📂,🗂️,📅,📆,🗓️,📇,📈,📉,📊,🗒️,📋,📌,📍,📎,🖇️,📏,📐,🗃️,🗄️,🗑️,🔒,🔓,🔏,🔐,🔑,🗝️,🔨,⛏️,🛠️,🗡️,🔫,🛡️,🔧,🔩,🗜️,🔗,⛓️,🧰,🧲,🧪,🧫,🧬,🔬,🔭,📡,💉,💊,🚪,🛏️,🛋️,🚽,🚿,🛁,🧴,🧷,🧹,🧺,🧻,🧼,🧽,🧯,🛒,🚬,🗿,🧳,🌂,🎃,🧵,🧶,👓,🕶️,🥽,🥼,👔,👕,👖,🧣,🧤,🧥,🧦,👗,👘,👙,👚,👛,👜,👝,🎒,👞,👟,🥾,🥿,👠,👡,👢,👑,👒,🎩,🎓,🧢,⛑️,💄,💍,💼";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji5_ttip }}">🏆</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji6Selector() listbox
-      var Emoji6Selector = function (context) {
-        var list = "";
-        var emoji = "🏡,🏠,🏘️,🚣,🗾,🏔️,⛰️,🌋,🗻,🏕️,🏖️,🏜️,🏝️,🏞️,🏟️,🏛️,🏗️,🏚️,🏢,🏣,🏤,🏥,🏦,🏨,🏩,🏪,🏫,🏬,🏭,🏯,🏰,💒,🗼,🗽,⛪,🕌,🕍,⛩️,🕋,⛲,⛺,🌁,🌃,🏙️,🌄,🌅,🌆,🌇,🌉,🎠,🎡,🎢,🚂,🚃,🚄,🚅,🚆,🚇,🚈,🚉,🚊,🚝,🚞,🚋,🚌,🚍,🚎,🚐,🚑,🚒,🚓,🚔,🚕,🚖,🚗,🚘,🚙,🚚,🚛,🚜,🏎️,🏍️,🛵,🚲,🛴,🚏,🛣️,🛤️,⛽,🚨,🚥,🚦,🚧,⛵,🚤,🛳️,⛴️,🛥️,🚢,🛩️,🛫,🛬,💺,🚁,🚟,🚠,🚡,🛰️,🚀,🛸,🌠,🌌,⛱️,🎆,🎇,🎑,🛂,🛃,🛄,🛅";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji6_ttip }}">🏡</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // Emoji7Selector() listbox
-      var Emoji7Selector = function (context) {
-        var list = "";
-        var emoji = "💘,💝,💖,💗,💓,💞,💕,💟,💔,🧡,💛,💚,💙,💜,🖤,💯,💢,💬,👁️‍🗨️,🗨️,🗯️,💭,💤,💮,🛑,🕛,🕧,🕐,🕜,🕑,🕝,🕒,🕞,🕓,🕟,🕔,🕠,🕕,🕡,🕖,🕢,🕗,🕣,🕘,🕤,🕙,🕥,🕚,🕦,🌀,🃏,🀄,🎴,🔇,🔈,🔉,🔊,📢,📣,📯,🔔,🔕,🎵,🎶,💹,🏧,🚮,🚰,🚹,🚺,🚻,🚼,🚾,🚸,⛔,🚫,🚳,🚭,🚯,🚱,🚷,📵,🔞,⤴️,⤵️,🔃,🔄,🔙,🔚,🔛,🔜,🔝,🛐,🕉️,🕎,🔯,⛎,🔀,🔁,🔂,⏩,⏭️,⏯️,⏪,⏮️,🔼,⏫,🔽,⏬,⏸️,⏹️,⏺️,🎦,🔅,🔆,📶,📳,📴,➕,➖,➗,❓,❔,❕,❗,〰️,💱,💲,🔱,📛,🔰,⭕,❌,❎,➰,➿,〽️,#️⃣,*️⃣,0️⃣,1️⃣,2️⃣,3️⃣,4️⃣,5️⃣,6️⃣,7️⃣,8️⃣,9️⃣,🔟,🔠,🔡,🔢,🔣,🔤,🅰️,🆎,🅱️,🆑,🆒,Ⓜ️,🆓,ℹ️,🆕,🆖,🆗,🆙,🅿️,🅾️,🆘,🆔,🆚,🈁,🈂️,🈷️,🈶,🈯,🉐,🈹,🈚,🈲,🉑,🈸,🈴,🈳,🈺,🈵,🔴,🔵,⚫,⚪,⬛,⬜,🔶,🔷,🔸,🔹,🔺,🔻,💠,🔘,🔳,🔲,🏁,🚩,🎌,🏴,🏳️,🏳️‍🌈,🏴‍☠️";
-        var emojis = emoji.split(",");
-        for (i = 0; i < emojis.length; i++) {
-          list += "<i>" + emojis[i] + "</i>\n";
-        }
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_emoji7_ttip }}">💘</span> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style emoji-list",
-            contents: list,
-            callback: function ($dropdown) {
-              $dropdown.find("i").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).html());
-                  GSC.CopyClipboard($(this).html());
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // PluginSelector() listbox
-      var PluginSelector = function (context) {
-        var ui = $.summernote.ui;
-        var list = ui.buttonGroup([
-          ui.button({
-            className: "dropdown-toggle",
-            contents: '<span title="{{ l.a_summer_plugins_ttip }}" class="fas fa-plug"></> <span class="caret"></span>',
-            data: {
-              toggle: "dropdown"
-            }
-          }),
-          ui.dropdown({
-            className: "dropdown-style",
-            contents: "",
-            <!-- contents: '<ol><li data-copy=\' [remote_content url=""] \'>remote_content</li></ol>', -->
-            callback: function ($dropdown) {
-              $dropdown.find("li").each(function () {
-                $(this).click(function () {
-                  context.invoke("editor.restoreRange");
-                  context.invoke("editor.focus");
-                  context.invoke("editor.insertText", $(this).data("copy"));
-                  GSC.CopyClipboard($(this).data("copy"));
-                });
-              });
-            }
-          })
-        ]);
-        return list.render();
-      }
-
-      // FullScreen() button
-      var FullScreenButton = function (context) {
-        var ui = $.summernote.ui;
-        var button = ui.button({
-          contents: '<span title="{{ l.a_summer_fullscreen_ttip }}"><i class="fas fa-expand"></i></span>',
-          codeviewKeepButton: true,
-          click: function (e) {
-            context.invoke("fullscreen.toggle");
-            context.invoke("codeview.toggle");
-          }
-        });
-        return button.render();
-      }
-
-      // Summernote configuration
-      $(".summernote").summernote({
-        codeviewFilter: true,
-        codeviewIframeFilter: true,
-        dialogsInBody: false,
-        disableDragAndDrop: true,
-        height: 300,
-        codemirror: {
-          theme: "material-darker"
-        },
-        lang: '{{#langcs}}cs-CZ{{/langcs}}{{#langen}}en-US{{/langen}}',
-        maximumImageFileSize: 1024 * 1024 * 4,
-        placeholder: '{{#langcs}}Vítejte v Summernote!{{/langcs}}{{#langen}}Welcome to Summernote!{{/langen}}',
-        callbacks: {
-          onChange: function (contents, $editable) {
-            $("div.note-btn-group.note-custom2>button").removeClass("blue").addClass("red");
-          }
-        },
-        tableClassName: "table table-bordered striped highlight responsive-table",
-        styleTags: [
-          "p", "blockquote", "pre", "h2", "h3", "h4", "h5", "h6",
-        ],
-        lineHeights: [
-          "0.2", "0.3", "0.4", "0.5", "0.6", "0.8", "1.0", "1.2", "1.4", "1.5", "2.0", "3.0"
-        ],
-        fontSizes: [
-          "6", "7", "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "30", "36", "42", "48", "55", "64", "82", "100", "130", "160", "200"
-        ],
-        toolbar: [
-          ["style", ["style"]],
-          ["font", ["bold", "italic", "underline", "fontsize", "fontname", "strikethrough", "superscript", "subscript", "clear"]],
-          ["color", ["forecolor", "backcolor", "color"]],
-          ["paragraph", ["ul", "ol", "paragraph", "height"]],
-          ["table", ["table"]],
-          ["insert", ["hr", "link", "picture", "video"]],
-          ["history", ["undo", "redo"]],
-          ["emojis", ["emoji1", "emoji2", "emoji3", "emoji4", "emoji5", "emoji6", "emoji7"]],
-          ["view", ["fs"]],
-          ["custom1", ["plugins", "history"]],
-          ["close", ["destroy"]],
-          ["custom2", ["saveall"]],
-        ],
-        buttons: {
-          destroy: DestroyButton,
-          emoji1: Emoji1Selector,
-          emoji2: Emoji2Selector,
-          emoji3: Emoji3Selector,
-          emoji4: Emoji4Selector,
-          emoji5: Emoji5Selector,
-          emoji6: Emoji6Selector,
-          emoji7: Emoji7Selector,
-          plugins: PluginSelector,
-          fs: FullScreenButton,
-          history: HistorySelector,
-          saveall: SaveAllButton,
-        }
-      });
-      $("#a_summernote").removeAttr("disabled");
-    }
 
     // SETUP ADMIN UI
     w.GSC.init.push(function () {
@@ -782,8 +325,8 @@
 
               // controls + search
               s += '<div id="stubs" class="row">' + stubs + '</div>';
-              s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-bars"></i></div>';
-              s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-regular fa-image"></i></div>';
+              s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-list"></i></div>';
+              s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-solid fa-image"></i></div>';
               s += '<div id="uploadimagescount" style="cursor:auto!important" class="noselect btn black text-white bold upload-controls right"></div>';
               s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
 
@@ -793,7 +336,7 @@
 
                 t++;
                 if (t === 1) {
-                  s += '<div class="row">';
+                  s += '<div class=row>';
                 }
   
                 var name = data.data.files[i]["name"];
@@ -812,15 +355,15 @@
                 var si = '';
                 if (data.data.files[i]["thumbnails"] == null) {
                   // icon
-                  si += '<a target=_blank title="{{ l.a_open_tit }}: ' + name + '" class="hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
                   si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align white-text" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
                   // thumbnail
-                  si += '<a target=_blank title="{{ l.a_open_tit }}: ' + name + '" class="hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
                   if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" height=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
                   si += '</a>';
                   si += '<div style="margin:3px" class="center bold truncate">';
-                  si += '<a target=_blank title="{{ l.a_open_tit }}: ' + name + '" class="hover center-align card-link" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align card-link" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
                 }
   
                 // AGE + SIZE
@@ -1089,4 +632,5 @@
     });
     
   }
+
 })(window, document);
