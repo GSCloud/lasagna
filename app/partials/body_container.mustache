@@ -60,6 +60,7 @@
 {{#admin_group_admin}}
       // prevent context menu
       w.oncontextmenu = function(e) {
+        if (!w.GSC.touch) return true;
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
