@@ -319,4 +319,4 @@ endif
 
 # macros
 everything: clear update stan local sync prod
-image: clear docs stan build
+image: clear stan build
