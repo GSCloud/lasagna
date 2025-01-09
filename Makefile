@@ -318,5 +318,5 @@ endif
 	@docker exec -it ${NAME} make refresh
 
 # macros
-everything: clear docs update stan local sync prod
+everything: clear update stan local sync prod
 image: clear docs stan build

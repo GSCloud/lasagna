@@ -175,16 +175,22 @@ defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 // CACHE PROFILES
 $cache_profiles = array_replace(
     [
-        'default' => '+2 minutes',
+        'default' => '+3 minutes',
         'second' => '+1 seconds',
         'fiveseconds' => '+5 seconds',
         'tenseconds' => '+10 seconds',
         'thirtyseconds' => '+30 seconds',
         'minute' => '+60 seconds',
+        'threeminutes' => '+3 minutes',
         'fiveminutes' => '+5 minutes',
         'tenminutes' => '+10 minutes',
+        'fifteenminutes' => '+15 minutes',
         'thirtyminutes' => '+30 minutes',
         'hour' => '+60 minutes',
+        'twohours' => '+2 hours',
+        'threehours' => '+3 hours',
+        'sixhours' => '+6 hours',
+        'twelfhours' => '+12 hours',
         'day' => '+24 hours',
         'csv' => '+72 hours', // CSV cold storage
         'limiter' => '+5 seconds', // access rate limiter
