@@ -267,8 +267,20 @@ class AdminPresenter extends APresenter
             }
 
             if (isset($_POST['name'])) {
-                $name = \trim($_POST['name'], "\\/.");
+                $name = \trim($_POST['name']);
+                $name = \strtr(\trim($name), " '\"\\()", '______');
+
+                StringFilters::transliterate($name);
+                StringFilters::sanitizeStringLC($name);
+                StringFilters::transliterate($name);
+
+                if ($name) {
+                    $name = \preg_replace('/^\.\.\//', '', $name);
+                }
                 if ($name === '.size') {
+                    return $this->writeJsonData(400, $extras);
+                }
+                if (!\is_string($name)) {
                     return $this->writeJsonData(400, $extras);
                 }
 

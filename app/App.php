@@ -286,8 +286,8 @@ $data['admin_groups_masked'] = $data['admin_groups'] ?? [];
 array_walk_recursive(
     $data['admin_groups_masked'], function (&$e) {
         $p = explode('@', $e);
-        $l = $p[0];
-        $d = $p[1];
+        $l = $p[0] ?: '';
+        $d = $p[1] ?: '';
         if (strlen($l) > 3) {
             $l = substr($l, 0, 4) . '*';
         }
