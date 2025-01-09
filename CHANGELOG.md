@@ -3,6 +3,10 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-09`
+
+* **`1020-BUGFIX`** masked email addresses in the admin panel to enhance security
+
 `2025-01-08`
 
 * **`1019-FEATURE`** admin logout/Auditlog block is sticky to the right top  
