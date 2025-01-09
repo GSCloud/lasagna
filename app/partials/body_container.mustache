@@ -52,23 +52,36 @@
   (function (w, d, undefined) {
     if (w.GSC.init) {
 
-{{^admin_group_admin}}
-
       // track element under pointer
       d.addEventListener('mousemove', e => {
       w.GSC.elfp = document.elementFromPoint(e.clientX, e.clientY)
       }, {passive:true});
 
+{{#admin_group_admin}}
+      // prevent context menu
+      w.oncontextmenu = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        // hover the element under pointer on RMB or long-press
+        if (w.GSC.elfp) {
+          $(w.GSC.elfp).mouseover();
+        }
+        return false;
+      };
+{{/admin_group_admin}}
+{{^admin_group_admin}}
       // prevent context menu
       w.oncontextmenu = function(e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
         // click the element under pointer on RMB or long-press
-        $(w.GSC.elfp).click();
+        if (w.GSC.elfp) {
+          $(w.GSC.elfp).click();
+        }
         return false;
       };
-
 {{/admin_group_admin}}
 
       w.GSC.init.push(function () {
