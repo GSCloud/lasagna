@@ -5,12 +5,13 @@
 
 `2025-01-09`
 
-* **`1020-BUGFIX`** masked email addresses in the admin panel to enhance security
+* **`1020-BUGFIX`** masked email addresses in the admin panel to enhance security  
+  * reported by *@Krusty*
 
 `2025-01-08`
 
 * **`1019-FEATURE`** admin logout/Auditlog block is sticky to the right top  
-* **`1018-BUGFIX`** various extra tests in Bootstrap.php
+* **`1018-BUGFIX`** extra constants hardening in **Bootstrap.php**
 
 `2025-01-07`
 
@@ -18,7 +19,7 @@
 
 `2025-01-06`
 
-* **`1016-FEATURE`** various admin panel enhancements  
+* **`1016-FEATURE`** various admin panel enhancements (tooltipped thumbnails, icons…)  
 * **`1015-BUGFIX`** show “displayed / total” counts in the file manager  
 * **`1014-BUGFIX`** natural sort order for generated image galleries
 
