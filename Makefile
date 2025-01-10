@@ -320,3 +320,6 @@ endif
 # macros
 everything: clear update stan local sync prod
 image: clear stan build
+full: everything image push
+	@git push origin
+	@git push hub
