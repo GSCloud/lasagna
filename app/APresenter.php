@@ -1390,6 +1390,9 @@ abstract class APresenter implements IPresenter
      */
     public function setLocation($location = null, $code = 303)
     {
+        if (CLI) {
+            exit;
+        }
         $code = (int) $code;
         if (empty($location)) {
             $location = '/?nonce=' . $this->getNonce();

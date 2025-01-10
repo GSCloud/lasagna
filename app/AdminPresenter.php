@@ -915,7 +915,7 @@ class AdminPresenter extends APresenter
             }
         } else {
             if (CLI) {
-                echo 'ERROR: lock cannot be acquired';
+                exit;
             }
             $this->setLocation('/err/429');
         }

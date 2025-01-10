@@ -3,8 +3,13 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-10`
+
+* **`1022-BUGFIX`** testing jQuery [v4.0.0 beta](https://blog.jquery.com/2024/02/06/jquery-4-0-0-beta/)
+
 `2025-01-09`
 
+* **`1021-FEATURE`** right-click and long-press on touch devices possible event handling in JavaScript  
 * **`1020-BUGFIX`** masked email addresses in the admin panel to enhance security  
   * reported by *@Krusty*
 
