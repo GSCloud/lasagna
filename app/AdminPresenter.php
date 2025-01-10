@@ -914,9 +914,6 @@ class AdminPresenter extends APresenter
                 $lock->release();
             }
         } else {
-            if (CLI) {
-                exit;
-            }
             $this->setLocation('/err/429');
         }
         return $this;
@@ -951,7 +948,6 @@ class AdminPresenter extends APresenter
             ) {
                 $this->addError('CREATE ADMIN KEY: Internal Server Error');
                 $this->setLocation('/err/500');
-                exit;
             }
             @\chmod($f, 0660);
             $this->addMessage('ADMIN: keyfile created');
