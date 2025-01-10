@@ -115,7 +115,7 @@ locale_override: [
 
 # Service Worker preload
 swpreload: [
-  "https://cdn.gscloud.cz/tesseract/js/jquery.min.js"
+  "https://cdn.gscloud.cz/tesseract/js/jquery-beta.min.js"
   "https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css"
 ]
 
