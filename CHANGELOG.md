@@ -10,7 +10,7 @@
 `2025-01-09`
 
 * **`1021-FEATURE`** **right-click** and **long-press** on touch devices possible event handling in JavaScript  
-* **`1020-BUGFIX`** **masked email addresses** in the admin panel to enhance security  
+* **`1020-BUGFIX`** **masked email addresses** @ admin panel to enhance security  
   * reported by *@Krusty*
 
 `2025-01-08`
@@ -30,7 +30,7 @@
 
 `2025-01-05`
 
-* **`1013-FEATURE < 1006-IDEA`** total uploads size \+ file counts in the admin panel, separate info for generated thumbnails  
+* **`1013-FEATURE < 1006-IDEA` total uploads size \+ file counts** @ admin panel, separate **info about generated thumbnails**  
   * API: **`/admin/getUploadsInfo`**
 
 `2025-01-04`
