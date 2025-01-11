@@ -31,7 +31,7 @@ GetQR:
   path: "/qr/[s|m|l|x:size]/[**:trailing]"
   api: true
   api_description: "Get QR code as image"
-  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size,\n<b><trailing></b> - text to render.\n\nReturns (binary): image."
+  api_info: "Parameters:\n<b><size = s/m/l/x></b> - image size,\n<b><trailing></b> - text to render.\n\nResult (binary): image."
   method: GET|POST
   presenter: core
   api_example: [

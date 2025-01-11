@@ -281,14 +281,14 @@
             var now = ~~(Date.now() / 1000);
             moment.locale('{{ lang }}');
 
-            var imageson = 'black';
+            var imageson = 'grey darken-3';
             var imagesoff = 'orange';
             var cardsize = '150px';
             var displaystate = 'hide-images';
 
             if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 1) {
               imageson = 'orange';
-              imagesoff = 'black';
+              imagesoff = 'grey darken-3';
               cardsize = '300px';
               displaystate = '';
             }
@@ -320,7 +320,7 @@
                   stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
                   stubs_rendered++;
                 }
-                stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
+                if (stubs_rendered > 19) stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
               }
 
               // controls + search
@@ -449,8 +449,8 @@
             $('#uploadimagesko').click(function () {
               $('.uploaded-image').hide();
               $('.uploaded-card').css('height', '150px');
-              $('#uploadimagesok').removeClass('orange').addClass('black');
-              $('#uploadimagesko').removeClass('black').addClass('orange');
+              $('#uploadimagesok').removeClass('orange').addClass('grey darken-2');
+              $('#uploadimagesko').removeClass('grey darken-2').addClass('orange');
               delCookie("displayimages");
               localStorage.removeItem("displayimages");
             });

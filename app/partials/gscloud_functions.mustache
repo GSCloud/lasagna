@@ -338,7 +338,7 @@ async function sha256(message) {
           html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
         }
         if (html != "") {
-          var obj = jQuery.parseJSON(html);
+          var obj = JSON.parse(html);
           for (var p in obj) if (obj.hasOwnProperty(p)) {
             if (obj[p] == "<p><br></p>") {
               obj[p] = " ";
@@ -372,7 +372,7 @@ async function sha256(message) {
             if (data.data.crc) {
               GSC.data.articlescrc = data.data.crc;
               if (data.data.html != "") {
-                var obj = jQuery.parseJSON(data.data.html);
+                var obj = JSON.parse(data.data.html);
                 for (var p in obj) if (obj.hasOwnProperty(p)) {
                   if (obj[p] == "<p><br></p>") {
                     obj[p] = " ";
@@ -412,12 +412,16 @@ async function sha256(message) {
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
-        {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-        $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
-        {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
-        {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-        $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
-        {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+
+        {{^is_admin}}
+          {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
+          $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
+          {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+          {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
+          $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
+          {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+        {{/is_admin}}
+
       }
       setInterval(checkNetwork, 500);
     });

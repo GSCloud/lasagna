@@ -60,6 +60,7 @@ class CliPresenter extends APresenter
         }
 
         $data = $this->getData();
+        $this->dataExpander($data);
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
         $route = $router[$p];
@@ -80,13 +81,14 @@ class CliPresenter extends APresenter
      * 
      * @return void
      */
-    public function showCore($v = "PingBack", $arg = null)
+    public function showCore($v = "Home", $arg = null)
     {
         $v = \trim($v);
         if (empty($v) || !\strlen($v)) { // no view
             die("FATAL ERROR: No view is set!\n");
         }
         $data = $this->getData();
+        $this->dataExpander($data);
         $router = $this->getRouter();
         $presenter = $this->getPresenter();
         $data["controller"] = $c = "CorePresenter";
@@ -184,6 +186,7 @@ class CliPresenter extends APresenter
         } else {
             $code = \trim($argv[2]) . ';';
             $data = $this->getData();
+            $this->dataExpander($data);
             try {
                 eval($code);
             } catch (ParseError $e) {

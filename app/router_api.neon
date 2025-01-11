@@ -17,6 +17,6 @@ APIDemo:
   path: /api/v1/APIDemo
   api: true
   api_description: "API demo"
-  api_info: "Returns (JSON): array of object records."
+  api_info: "Result (JSON): array of object records."
   assert_json: true
   presenter: api
