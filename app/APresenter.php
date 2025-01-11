@@ -2033,7 +2033,7 @@ abstract class APresenter implements IPresenter
 
         // user and group
         $data['user'] = $user = $this->getCurrentUser();
-        $data['admin'] = $group = $this->getUserGroup();
+        $data['group'] = $data['admin'] = $group = $this->getUserGroup();
         $data["is_admin"] = false;
         if ($group) {
             $data["admin_group_{$group}"] = true;
