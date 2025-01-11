@@ -2032,15 +2032,15 @@ abstract class APresenter implements IPresenter
         }
 
         // user and group
+        $data["is_admin"] = false;
         $data['user'] = $user = $this->getCurrentUser();
         $data['group'] = $data['admin'] = $group = $this->getUserGroup();
-        $data["is_admin"] = false;
         if ($group) {
             $data["admin_group_{$group}"] = true;
             $data["is_admin"] = true;
         }
 
-        // set language
+        // language
         $presenter = $this->getPresenter();
         $view = $this->getView();
         if ($presenter && $view) {
