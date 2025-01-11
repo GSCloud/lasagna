@@ -314,7 +314,7 @@
                   if (typeof data.data.stubs[i] === 'function') continue;
                   if (data.data.stubs_count[data.data.stubs[i]] < 3) continue;
 
-                  var stubcolor = 'grey';
+                  var stubcolor = 'grey darken-3';
                   if (data.data.stubs[i] === search) stubcolor = 'red';
 
                   stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
@@ -449,8 +449,8 @@
             $('#uploadimagesko').click(function () {
               $('.uploaded-image').hide();
               $('.uploaded-card').css('height', '150px');
-              $('#uploadimagesok').removeClass('orange').addClass('grey darken-2');
-              $('#uploadimagesko').removeClass('grey darken-2').addClass('orange');
+              $('#uploadimagesok').removeClass('orange').addClass('grey darken-3');
+              $('#uploadimagesko').removeClass('grey darken-3').addClass('orange');
               delCookie("displayimages");
               localStorage.removeItem("displayimages");
             });
@@ -459,8 +459,8 @@
             $('#uploadimagesok').click(function () {
               $('.uploaded-image').show();
               $('.uploaded-card').css('height', '300px');
-              $('#uploadimagesok').removeClass('black').addClass('orange');
-              $('#uploadimagesko').removeClass('orange').addClass('black');
+              $('#uploadimagesok').removeClass('grey darken-3').addClass('orange');
+              $('#uploadimagesko').removeClass('orange').addClass('grey darken-3');
               setCookie("displayimages", 1);
               localStorage.setItem("displayimages", 1);
             });

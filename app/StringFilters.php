@@ -228,8 +228,66 @@ interface IStringFilters
  */
 class StringFilters implements IStringFilters
 {
-    // max. shortcode iterations in the loop
+    // max. shortcode loop iterations
     const ITERATIONS = SF_ITERATIONS;
+
+    // all possible English characters
+    // phpcs:ignore
+    /**
+     * @var array<string>
+     */
+    public static $lo_chars_english = [
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    ];
+    // phpcs:ignore
+    /**
+     * @var array<string>
+     */
+    public static $up_chars_english = [
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+        'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    ];
+
+    // all possible Czech characters
+    // phpcs:ignore
+    /**
+     * @var array<string>
+     */
+    public static $lo_chars_czech = [
+        'a', 'á', 'b', 'c', 'č', 'd', 'ď', 'e', 'é', 'ě', 'f', 'g', 'h', 'i', 'í',
+        'j', 'k', 'l', 'm', 'n', 'ň', 'o', 'ó', 'p', 'q', 'r', 'ř', 's', 'š', 't',
+        'ť', 'u', 'ú', 'ů', 'v', 'w', 'x', 'y', 'ý', 'z', 'ž'
+    ];
+    // phpcs:ignore
+    /**
+     * @var array<string>
+     */
+    public static $up_chars_czech = [
+        'A', 'Á', 'B', 'C', 'Č', 'D', 'Ď', 'E', 'É', 'Ě', 'F', 'G', 'H', 'I', 'Í',
+        'J', 'K', 'L', 'M', 'N', 'Ň', 'O', 'Ó', 'P', 'Q', 'R', 'Ř', 'S', 'Š', 'T',
+        'Ť', 'U', 'Ú', 'Ů', 'V', 'W', 'X', 'Y', 'Ý', 'Z', 'Ž'
+    ];
+
+    // all possible Slovak characters
+    // phpcs:ignore
+    /**
+     * @var array<string>
+     */
+    public static $lo_chars_slovak = [
+        'a', 'á', 'ä', 'b', 'c', 'č', 'd', 'ď', 'e', 'é', 'ě', 'f', 'g', 'h', 'i',
+        'í', 'j', 'k', 'l', 'ľ', 'm', 'n', 'ň', 'o', 'ó', 'ô', 'p', 'q', 'r', 'ř',
+        's', 'š', 't', 'ť', 'u', 'ú', 'ů', 'v', 'w', 'x', 'y', 'ý', 'z', 'ž',
+    ];
+    // phpcs:ignore
+    /**
+     * @var array<string>
+     */
+    public static $up_chars_slovak = [
+        'A', 'Á', 'Ä', 'B', 'C', 'Č', 'D', 'Ď', 'E', 'É', 'Ě', 'F', 'G', 'H', 'I',
+        'Í', 'J', 'K', 'L', 'Ľ', 'M', 'N', 'Ň', 'O', 'Ó', 'Ô', 'P', 'Q', 'R', 'Ř',
+        'S', 'Š', 'T', 'Ť', 'U', 'Ú', 'Ů', 'V', 'W', 'X', 'Y', 'Ý', 'Z', 'Ž',
+    ];
 
     // phpcs:ignore
     /**
