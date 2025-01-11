@@ -27,7 +27,7 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check - constant '{$x}' failed!");
 }
 
-// POPULATE MODEL ARRAY
+// DEFINE MODEL
 $cfg = $data = $cfg ?? [];
 
 // CLEAR COOKIES on ?logout
@@ -66,8 +66,8 @@ if (!LOCALHOST && in_array($country, $blocked)) {
     exit;
 }
 
-// DATA ARRAY
-define('ENGINE', 'Tesseract 2.4.3');
+// + MODEL
+define('ENGINE', 'Tesseract v2.4.4');
 $data['ENGINE'] = ENGINE;
 $data['codemirror'] = '6.65.7'; // CodeMirror version to load for admin interface
 
@@ -278,7 +278,7 @@ if ($cfg['redis']['port'] ?? null) {
     define('REDIS_CACHE', false);
 }
 
-// POPULATE DATA ARRAY
+// + MODEL
 $data['cache_profiles'] = $cache_profiles;
 
 // MASKED ADMIN GROUPS
@@ -312,7 +312,7 @@ if ($routers = glob('router_*.neon')) {
 }
 array_push($routes, 'router.neon'); // main router
 
-// POPULATE DATA ARRAY
+// + MODEL
 $data['router_files'] = $routes;
 
 // ROUTING TABLES
