@@ -8,7 +8,7 @@ gsc_footer_img_size,PARAMETER,48,48,48,48
 page_outdated_button,BUTTON,UPDATE 👷‍♀️,AKTUALIZOVAT 👷‍♀️,AKTUALIZOVAŤ 👷‍♀️,AKTUALISIEREN 👷‍♀️
 webshare_button,BUTTON,Share 📲,Sdílet 📲,Zdieľať 📲,Teilen 📲
 company_eet,COMPANY,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Nach dem Sales Records Act ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, die erhaltenen Einnahmen online beim Steueramt zu registrieren; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
-page_outdated,CORE,A new version of the application is available!,K dispozici je nová verze aplikace!,K dispozícii je nová verzia aplikácie!,Eine neue Version der Anwendung ist verfügbar!
+page_outdated,CORE,A new version of the application is available.,K dispozici je nová verze aplikace.,K dispozícii je nová verzia aplikácie.,Eine neue Version der Anwendung ist verfügbar.
 poweredby,CORE,"Powered by Hetzner, Google and Cloudflare technology. We don't use 3rd party cookies.","Využívá technologie Hetzner, Google a Cloudflare. Nepoužíváme cookies třetích stran.","Používa technológiu Hetzner, Google a Cloudflare. Nepoužívame cookies tretích strán.","Unterstützt durch Hetzner-, Google- und Cloudflare-Technologie. Wir verwenden keine Cookies von Drittanbietern."
 day_of_the_week_1,DAYS,Monday,pondělí,pondelok,Montag
 day_of_the_week_2,DAYS,Tuesday,úterý,utorok,Dienstag
@@ -17,16 +17,16 @@ day_of_the_week_4,DAYS,Thursday,čtvrtek,štvrtok,Donnerstag
 day_of_the_week_5,DAYS,Friday,pátek,piatok,Freitag
 day_of_the_week_6,DAYS,Saturday,sobota,sobota,Samstag
 day_of_the_week_7,DAYS,Sunday,neděle,nedeľa,Sonntag
-server_error_304,ERROR,Not Modified,Not Modified,Not Modified,Nicht geändert
-server_error_400,ERROR,Bad Request,Bad Request,Bad Request,Ungültige Anforderung
-server_error_401,ERROR,Unauthorized,Unauthorized,Unauthorized,Nicht autorisiert
-server_error_403,ERROR,Forbidden,Forbidden,Forbidden,Verboten
-server_error_404,ERROR,Not Found,Not Found,Not Found,Nicht gefunden
-server_error_406,ERROR,Not Acceptable,Not Acceptable,Not Acceptable,Nicht akzeptabel
-server_error_410,ERROR,Gone,Gone,Gone,Gegangen
-server_error_420,ERROR,Enhance Your Calm,Enhance Your Calm,Enhance Your Calm,Verbessern Sie Ihre Ruhe
-server_error_429,ERROR,Too Many Requests,Too Many Requests,Too Many Requests,Zu viele Anfragen
-server_error_500,ERROR,Internal Server Error,Internal Server Error,Internal Server Error,interner Serverfehler
+server_error_304,ERROR,Not Modified,Not Modified,Not Modified,Not Modified
+server_error_400,ERROR,Bad Request,Bad Request,Bad Request,Bad Request
+server_error_401,ERROR,Unauthorized,Unauthorized,Unauthorized,Unauthorized
+server_error_403,ERROR,Forbidden,Forbidden,Forbidden,Forbidden
+server_error_404,ERROR,Not Found,Not Found,Not Found,Not Found
+server_error_406,ERROR,Not Acceptable,Not Acceptable,Not Acceptable,Not Acceptable
+server_error_410,ERROR,Gone,Gone,Gone,Gone
+server_error_420,ERROR,Enhance Your Calm,Enhance Your Calm,Enhance Your Calm,Enhance Your Calm
+server_error_429,ERROR,Too Many Requests,Too Many Requests,Too Many Requests,Too Many Requests
+server_error_500,ERROR,Internal Server Error,Internal Server Error,Internal Server Error,Internal Server Error
 server_error_info_304,ERROR,There is no need to retransmit the requested resources.,There is no need to retransmit the requested resources.,There is no need to retransmit the requested resources.,There is no need to retransmit the requested resources.
 server_error_info_400,ERROR,The request cannot be fulfilled due to bad syntax.,The request cannot be fulfilled due to bad syntax.,The request cannot be fulfilled due to bad syntax.,The request cannot be fulfilled due to bad syntax.
 server_error_info_401,ERROR,Missing or invalid authentication token.,Missing or invalid authentication token.,Missing or invalid authentication token.,Missing or invalid authentication token.
@@ -84,7 +84,7 @@ a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
 a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
 a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
 a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG
-a_google_search,BUTTON,CONSOLE,KONZOLE,KONZOLA,KONSOLE
+a_google_search,BUTTON,SEARCH CONSOLE,SEARCH CONSOLE,SEARCH CONSOLE,SUCHKONSOLE
 a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
 a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
@@ -113,7 +113,7 @@ a_news_os_info,INFO,open source libraries are continuously updated,open source k
 a_news_sc_info,INFO,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
 a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
 a_processing_data,INFO,"The system is processing data, please wait ☕️","Systém zpracovává data, vyčkejte ☕️","Systém spracováva údaje, čakajte prosím ☕️","Das System verarbeitet Daten, bitte warten ☕️"
-a_remote_fn_info,INFO,"allows you to generate a link to call a remote function, including authorization",umožňuje vygenerovat odkaz na volání vzdálené funkce včetně autorizace,umožňuje vygenerovať odkaz na zavolanie vzdialenej funkcie vrátane autorizácie,"ermöglicht Ihnen die Generierung eines Links zum Aufruf einer Remote-Funktion, einschließlich der Autorisierung"
+a_remote_fn_info,INFO,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufrufen einer Remote-Systemfunktion
 a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,REMOTE-FUNKTIONSAUFRUFE
 a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Fernbedienung fn
 a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,OK GESPEICHERT
