@@ -23,10 +23,10 @@ hr {border:0;clear:both;margin:0 auto}
 .warning {padding:5px}
 
 /*  group icons */
-.group_icon_admin:before {content:"🫅 "}
-.group_icon_editor:before {content:"🧑‍💼 "}
-.group_icon_manager:before {content:"🧙 "}
-.group_icon_tester:before {content:"👷 "}
+.group_icon_admin::before {content:"🫅 ";font-size:1.3rem}
+.group_icon_editor::before {content:"🧑‍💼 ";font-size:1.3rem}
+.group_icon_manager::before {content:"🧙 ";font-size:1.3rem}
+.group_icon_tester::before {content:"👷 ";font-size:1.3rem}
 
 /*@media only screen and (max-width:579px) {
   .tabs a {font-size:11px!important;}
@@ -40,7 +40,7 @@ hr {border:0;clear:both;margin:0 auto}
 <div id="admin_main" class="row center black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
 
   <!-- CURRENT USER -->
-  <div class="right black" style="z-index:99;position:sticky!important;top:70px;right:0;padding:5px!important;opacity:0.8">
+  <div class="right black" style="z-index:99;position:sticky!important;top:70px;right:0;padding:5px!important;opacity:0.9">
     <div style="display:inline-block;margin:auto">
       <b class="group_icon_{{ group }}">{{user.email}}</b>
       <br>

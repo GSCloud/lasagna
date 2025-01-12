@@ -139,6 +139,7 @@ async function sha256(message) {
   // ########################### GSC NAMESPACE ###############################
   if (w.GSC) {
     GSC.data = {};
+    GSC.nolocalstorage = false;
     if (nolocalstorage) {
       GSC.localStorage = [];
       GSC.nolocalstorage = true;

@@ -250,7 +250,7 @@ class AdminPresenter extends APresenter
                 . 'x<br>'
                 . $names
             );
-            return $this->writeJsonData($uploads, $extras);
+            return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
             $this->checkPermission('admin,manager,editor');

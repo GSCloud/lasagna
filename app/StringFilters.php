@@ -27,6 +27,24 @@ use Michelf\MarkdownExtra;
 interface IStringFilters
 {
     /**
+     * Converts a string to lowercase
+     *
+     * @param string $string input string
+     *
+     * @return string lowercase version of the input string
+     */
+    public static function strtolower($string);
+
+    /**
+     * Converts a string to uppercase
+     *
+     * @param string $string input string
+     *
+     * @return string uppercase version of the input string
+     */
+    public static function strtoupper($string);
+
+    /**
      * Convert EOLs to <br>
      *
      * @param string $content content by reference
@@ -1249,5 +1267,29 @@ class StringFilters implements IStringFilters
             self::$transliteration,
             $string
         );
+    }
+
+    /**
+     * Converts a string to lowercase
+     *
+     * @param string $string input string
+     *
+     * @return string lowercase version of the input string
+     */
+    public static function strtolower($string)
+    {
+        return \mb_strtolower($string, 'UTF-8');
+    }
+
+    /**
+     * Converts a string to uppercase
+     *
+     * @param string $string input string
+     *
+     * @return string uppercase version of the input string
+     */
+    public static function strtoupper($string)
+    {
+        return \mb_strtoupper($string, 'UTF-8');
     }
 }

@@ -571,6 +571,9 @@
         var data = JSON.parse(response.data);
         $("#a_uploader_progress").delay(3000).hide(200);
         if (data && data.data) {
+          if (!w.GSC.nolocalstorage) {
+            GSC.last_upload = localStorage['last_upload'] = JSON.stringify(data.data);
+          }
           setCookie("open_filemanager", 1);
           GSC.RenderUploadInfo();
           return;
