@@ -930,9 +930,14 @@ class StringFilters implements IStringFilters
             ) {
             $counter++;
             $replace = '<span class="img-container">'
-                . '<img data-name="$1" data-counter=' . $counter . ' src="'
-                . CDN . '/upload/'
-                . '$1.webp" alt="$1" class=imagesc></span>';
+                . '<img '
+                . 'class=imagesc '
+                . 'src="' . CDN . '/upload/$1.webp" '
+                . 'data-name="$1" '
+                . 'data-counter=' . $counter . ' '
+                . 'alt="$1"'
+                . '>'
+                . '</span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -956,9 +961,14 @@ class StringFilters implements IStringFilters
             ) {
             $counter++;
             $replace = '<span class="img-left-container">'
-                . '<img data-name="$1" data-counter=' . $counter . ' src="'
-                . CDN . '/upload/'
-                . '$1.webp" alt="$1" class="left imageleftsc"></span>';
+                . '<img '
+                . 'class="left imageleftsc" '
+                . 'src="' . CDN . '/upload/$1.webp" '
+                . 'data-name="$1" '
+                . 'data-counter=' . $counter . ' '
+                . 'alt="$1"'
+                . '>'
+                . '</span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -982,9 +992,14 @@ class StringFilters implements IStringFilters
             ) {
             $counter++;
             $replace = '<span class="img-right-container">'
-                . '<img data-name="$1" data-counter=' . $counter . ' src="'
-                . CDN . '/upload/'
-                . '$1.webp" alt="$1" class="right imagerightsc"></span>';
+                . '<img '
+                . 'class="right imagerightsc" '
+                . 'src="' . CDN . '/upload/$1.webp" '
+                . 'data-name="$1" '
+                . 'data-counter=' . $counter . ' '
+                . 'alt="$1"'
+                . '>'
+                . '</span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1008,9 +1023,14 @@ class StringFilters implements IStringFilters
             ) {
             $counter++;
             $replace = '<span class="img-responsive-container">'
-                . '<img data-name="$1" data-counter=' . $counter . ' src="'
-                . CDN . '/upload/'
-                . '$1.webp" alt="$1" class="responsive-img imagerespsc"></span>';
+                . '<img '
+                . 'class="responsive-img imagerespsc" '
+                . 'src="' . CDN . '/upload/$1.webp" '
+                . 'data-name="$1" '
+                . 'data-counter=' . $counter . ' '
+                . 'alt="$1"'
+                . '>'
+                . '</span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1035,14 +1055,15 @@ class StringFilters implements IStringFilters
             $counter++;
             $replace = '<div '
                 . 'class="audio-container center row soundcloud-container" '
-                . 'data-counter=' . $counter
-                . '><iframe loading=lazy width="100%" height=300 '
+                . 'data-counter=' . $counter . '>'
+                . '<iframe loading=lazy width="100%" height=300 '
                 . 'scrolling=no frameborder=no controls '
-                . 'src="https://w.soundcloud.com/player/'
-                . '?url=https%3A//api.soundcloud.com/tracks/'
-                . '$1&auto_play=false&hide_related=false&show_comments=true'
-                . '&show_user=true&show_reposts=false&show_teaser=true&visual=true">'
-                . '</iframe></div>';
+                . 'src="https://w.soundcloud.com/player/?url='
+                . 'https%3A//api.soundcloud.com/tracks/$1&'
+                . 'auto_play=false&hide_related=false&show_comments=true&'
+                . 'show_user=true&show_reposts=false&show_teaser=true&visual=true">'
+                . '</iframe>'
+                . '</div>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1065,10 +1086,13 @@ class StringFilters implements IStringFilters
             \str_contains($content, '[youtube ') && $counter < self::ITERATIONS
             ) {
             $counter++;
-            $replace = '<div class="video-container center row youtube-container" '
-                . 'data-counter=' . $counter
-                . '><iframe loading=lazy width=426 height=240 controls '
-                . 'src="https://www.youtube.com/embed/$1"></iframe></div>';
+            $replace = '<div '
+                . 'class="video-container center row youtube-container" '
+                . 'data-counter=' . $counter . '>'
+                . '<iframe loading=lazy width=426 height=240 controls '
+                . 'src="https://www.youtube.com/embed/$1">'
+                . '</iframe>'
+                . '</div>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1103,6 +1127,7 @@ class StringFilters implements IStringFilters
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
+
                 // find all images
                 if (\is_array($files)) {
                     if ($shuffle !== false) {
@@ -1111,26 +1136,29 @@ class StringFilters implements IStringFilters
                     $id = 0;
                     foreach ($files as $f) {
                         $id++;
+                        $t = CDN . "/upload/.thumb_{$size}px_{$f}";
                         $n = \pathinfo(
                             \strtoupper(
                                 \str_ireplace($gallery, '', $f)
                             ), PATHINFO_FILENAME
                         );
-                        $n = \trim(\strtr($n, '-_()', '    '));
-                        $t = CDN . "/upload/.thumb_{$size}px_{$f}";
+                        $n = \trim(\strtr($n, '+-_()[]', '       '));
                         $images .=
-                            "<a data-lightbox='{$gallery}'"
-                            . " href='" . CDN . "/upload/{$f}'>"
+                            "<a data-lightbox='{$gallery}' "
+                            . "href='" . CDN . "/upload/{$f}'>"
                             . "<img loading=lazy class=gallery-img "
-                            . " data-source='" . CDN . "/upload/{$f}'"
-                            . " data-thumb='{$t}'"
-                            . " data-id={$id}"
-                            . " alt='$id. {$gallery}{$n}' src='{$t}'></a>";
+                            . "data-source='" . CDN . "/upload/{$f}' "
+                            . "data-thumb='{$t}' "
+                            . "data-id={$id} "
+                            . "data-tooltip='{$n}' "
+                            . "alt='$id. {$gallery}{$n}' src='{$t}'>"
+                            . "</a>";
                     }
                 }
-                // gallery <DIV>
-                $replace = "<div class='row center gallery-container'"
-                    . " data-gallery='$gallery'>$images</div>";
+                $replace = "<div "
+                    . "class='row center gallery-container' "
+                    . "data-gallery='$gallery'>$images"
+                    . "</div>";
                 if (\is_string($content)) {
                     $content = \str_replace(
                         "[gallery {$gallery}]",
