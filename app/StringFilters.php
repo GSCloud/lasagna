@@ -1149,8 +1149,9 @@ class StringFilters implements IStringFilters
                             . "href='" . CDN . "/upload/{$f}'>"
                             . "<img loading=lazy class=gallery-img "
                             . "data-source='" . CDN . "/upload/{$f}' "
-                            . "data-thumb='{$t}' "
                             . "data-id={$id} "
+                            . "data-thumb='{$t}' "
+                            . "data-tooltip='{$n}' "
                             . "alt='$id. {$gallery}{$n}' src='{$t}'>"
                             . "</a>";
                     }
