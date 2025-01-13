@@ -666,10 +666,10 @@ abstract class APresenter implements IPresenter
                 : new \Mustache_Loader_StringLoader,
             'partials_loader' => new \Mustache_Loader_FilesystemLoader(PARTIALS),
             'helpers' => [
-                'unix_timestamp' => function () {
+                'timestamp' => function () {
                     return (string) time();
                 },
-                'sha256_nonce' => function () {
+                'rndstr' => function () {
                     return $this->getNonce();
                 },
                 'convert_hyperlinks' => function (

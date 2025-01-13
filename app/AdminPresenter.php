@@ -363,7 +363,7 @@ class AdminPresenter extends APresenter
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
-                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS)) {
+                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS - 1)) {
                     $c++;
                 }
                 \pclose($file);
@@ -1176,7 +1176,7 @@ class AdminPresenter extends APresenter
                 $val = '';
                 return;
             }
-            $t = \date("d.\tn.\tY\nH:i:s", $t);
+            $t = \date("j.\tn.\tY\nH:i:s", $t);
             $t = \str_replace("\t", '&nbsp;', $t);
             $t = \str_replace("\n", '<br>', $t);
             $x[0] = $t;
@@ -1207,10 +1207,9 @@ class AdminPresenter extends APresenter
         }
         $this->_lastlog = $x[1];
         $val = "<tr class='{$class}'>"
-            . "<td>" . $this->_logcounter . "</td>"
-            . "<td class=center>{$x[0]}</td>"
-            . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
-            . "<td class=mono>{$x[2]}</td>"
+            . "<td class=center>" . $this->_logcounter . "</td>"
+            . "<td class=center>{$x[0]}<div class='truncate mono'>{$x[2]}</div></td>"
+            . "<td class='center'><b>{$x[3]}</b><br>{$x[4]}</td>"
             . "<td>{$x[1]}</td>"
             . "</tr>";
     }
