@@ -3,9 +3,19 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-13`
+
+* **`1026-FEATURE`** support for **external link** CSS icons  
+* **`1025-BUGFIX`** **reverting back to jQuery v3.7.1**, 1022 was a failure in Summernote editor
+
+`2025-01-11`  **`v2.4.4 `**
+
+* **`1024-FEATURE`** various **admin panel enhancements**  
+* **`1023-BUGFIX`** switching from **jQuery.parseJSON()** to **JSON.parse()**
+
 `2025-01-10`
 
-* **`1022-BUGFIX`** testing **jQuery** [v4.0.0 beta](https://blog.jquery.com/2024/02/06/jquery-4-0-0-beta/)
+* ~~**`1022-BUGFIX`** testing **jQuery** [v4.0.0 beta](https://blog.jquery.com/2024/02/06/jquery-4-0-0-beta/)~~
 
 `2025-01-09`
 
@@ -24,7 +34,7 @@
 
 `2025-01-06`
 
-* **`1016-FEATURE`** various **admin panel enhancements** (tooltipped thumbnails, icons…)  
+* **`1016-FEATURE`** various **admin panel enhancements**  
 * **`1015-BUGFIX`** show “displayed / total” **counts in the file manager**  
 * **`1014-BUGFIX`** **natural sort order** for generated image galleries
 
@@ -39,7 +49,8 @@
 * **`1011-FEATURE`** [changelog](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) added to the admin panel  
 * **`1010-BUGFIX`** **Lightbox2** [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
 * **`1009-IDEA`** **remember active admin tab**  
-* **`1008-IDEA`** **migrate Materialize framework** to the newest [v2.2.1](https://github.com/materializecss/materialize/releases/tag/v2.2.1)
+* **`1008-IDEA`** **migrate Materialize framework** to the newest [v2.2.1](https://github.com/materializecss/materialize/releases/tag/v2.2.1)  
+  * note: [https://github.com/materializecss/materialize/pull/49](https://github.com/materializecss/materialize/pull/49)
 
 `2025-01-02`
 
