@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="{{ lang }}">
 <head>
+{{>head_pre}}
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>{{#LOCALHOST}}LOCAL |{{/LOCALHOST}}{{#l.alfa}}{{ l.alfa }}>{{/l.alfa}}{{#l.beta}}{{ l.beta }}>{{/l.beta}} {{ l.title }}</title>
@@ -78,7 +79,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 .bold{font-weight:bold}
 #update-message{display:none;width:100%;padding:5px;font-size:1em;position:fixed;top:0;right:0;z-index:9999999;font-family:Arial!important}
 #offline-message{opacity:0;visibility:hidden;padding:10px;position:fixed;bottom:10px;left:0;transition:0.5s;z-index:9999999;font-family:Arial!important;font-size:2rem}
-#movetotop{opacity:0;cursor:pointer;visibility:hidden;padding:10px;position:fixed;bottom:10px;right:0;transition:0.5s;z-index:999;font-family:Arial!important;font-size:3rem}
+#movetotop{opacity:0;cursor:pointer;visibility:hidden;padding:1rem;position:fixed;bottom:1rem;right:2rem;transition:0.5s;z-index:999;font-family:Arial!important;font-size:4rem;text-shadow:0px 0px 8px #000000;}
 [offline="true"] #offline-message{visibility:visible;opacity:1;z-index:999}
 .footer-copyright a{font-weight:bold}
 .normaltoast{font-size:1rem!important}
@@ -87,9 +88,9 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 .progress-container{width:100%;height:8px;background:#ccc;position:fixed;bottom:0;z-index:9999999}.progress-bar{height:8px;background: #4caf50;width:0%}
 .summernote:empty{display:none}
 </style>
-{{>head_post}}
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery-beta.min.js"></script>
+{{>head_post}}
 </head>
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
 <noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
@@ -98,13 +99,13 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
   <br><a id="update-button" rel="nofollow" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
 </div>
 <div aria-hidden="true" tabindex="-1" id="offline-message">📵</div>
-<div aria-hidden="true" tabindex="-1" id="movetotop"><i class="fa-solid fa-circle-up grey-text noselect"></i></div>
+<div aria-hidden="true" tabindex="-1" id="movetotop"><i class="fa-solid fa-caret-up noselect white-text"></i></div>
 <script nonce="{{ csp_nonce }}">
 // GSC init
 !(function(c,e){a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+(b+1)+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.cdn="{{ CDN }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version="{{ DATA_VERSION }}";a.LASAGNA.data.timestamp=a.LASAGNA.core.timestamp;c.GSC=a;})(window);
 </script>
 {{>gscloud_functions}}
-<div class="{{ design.content }}">
+<div id="maincontent" class="{{ design.content }}">
   {{>container_switcher}}
 </div>
 {{>body_resources}}

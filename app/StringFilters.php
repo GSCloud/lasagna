@@ -1142,6 +1142,7 @@ class StringFilters implements IStringFilters
                                 \str_ireplace($gallery, '', $f)
                             ), PATHINFO_FILENAME
                         );
+                        $n = \trim($n, '+-_()[]');
                         $n = \trim(\strtr($n, '+-_()[]', '       '));
                         $images .=
                             "<a data-lightbox='{$gallery}' "
@@ -1150,7 +1151,6 @@ class StringFilters implements IStringFilters
                             . "data-source='" . CDN . "/upload/{$f}' "
                             . "data-thumb='{$t}' "
                             . "data-id={$id} "
-                            . "data-tooltip='{$n}' "
                             . "alt='$id. {$gallery}{$n}' src='{$t}'>"
                             . "</a>";
                     }

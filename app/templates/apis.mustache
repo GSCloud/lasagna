@@ -77,40 +77,40 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery-beta.min.js"></script>
 </head>
 <body style="font-family: 'Roboto', sans-serif;">
-<noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
-<!-- update -->
-<div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
-  <br><a id="update-button" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
-</div>
+  <noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
+  <!-- update -->
+  <div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
+    <br><a id="update-button" rel="noopener nofollow noreferrer" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
+  </div>
 {{>gscloud_functions}}
   <div class="container">
-  <h1><a href="/">{{ l.title }}</a> API</h1>
-  <ol>
+    <h1><a href="/">{{ l.title }}</a> API</h1>
+    <ol>
   {{#apis}}
-  <li>
-    <p>
-      <b>{{ desc }}</b>
-      <br>
-      {{#linkit}}
-      <a target="_blank" class="blue-text bold" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</a>
-      {{/linkit}}
-      {{^linkit}}
-      <b class="blue-text" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</b>
-      {{/linkit}}
-      {{#count}}
-      <br>
-      <br>
-      <i>Example:</i>
-      {{/count}}
-      {{#exam}}
-      <br>
-      <a target="_blank" rel="nolink" href="{{ base }}{{ . }}">{{ base }}{{ . }}</a>
-      {{/exam}}
-      <i>{{ info }}</i>
-    </p>
-  </li>
+      <li>
+        <p>
+          <b>{{ desc }}</b>
+          <br>
+          {{#linkit}}
+          <a target="_blank" class="blue-text bold" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</a>
+          {{/linkit}}
+          {{^linkit}}
+          <b class="blue-text" rel="nolink" href="{{ base }}{{ path }}">{{ base }}{{ path }}</b>
+          {{/linkit}}
+          {{#count}}
+          <br>
+          <br>
+          <i>Example:</i>
+          {{/count}}
+          {{#exam}}
+          <br>
+          <a target="_blank" rel="nolink" href="{{ base }}{{ . }}">{{ base }}{{ . }}</a>
+          {{/exam}}
+          <i>{{ info }}</i>
+        </p>
+      </li>
   {{/apis}}
-  </ol>
+    </ol>
   </div>
 </body>
 </html>

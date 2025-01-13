@@ -156,86 +156,19 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'Upload':
             $this->checkPermission('admin,manager,editor');
+
+            // Check if the upload directory is set
             if (\is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
+
+            // Check if the upload directory exists and is writable
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
 
-            // process uploads
-            $uploads = [];
-            foreach ($_FILES as $key => &$file) {
-                $f = $file['name'];
-                $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
-                StringFilters::transliterate($f);
-                StringFilters::sanitizeStringLC($f);
-                StringFilters::transliterate($f);
-                // skip thumbnails
-                if (\str_starts_with($f, self::THUMB_PREFIX)) {
-                    continue;
-                }
-                // skip PHP extension
-                if (\str_ends_with($f, '.php')) {
-                    continue;
-                }
-                // skip PHP extension
-                if (\str_ends_with($f, '.inc')) {
-                    continue;
-                }
-                // skip '.size' file
-                if ($f === '.size') {
-                    continue;
-                }
-
-                $info = \pathinfo($f);
-                // skip files without name
-                if (\is_array($info) && !$info['filename']) {
-                    continue;
-                }
-               
-                // process uploaded file
-                if (@\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
-
-                    if (\is_array($info)) {
-                        $fn = $info['filename'];
-                        // skip thumbnails generation
-                        if (empty($info['extension'])) {
-                            continue;
-                        }
-
-                        $in = UPLOAD . DS . $f;
-                        $uploads[$f] = \urlencode($f);
-
-                        // delete old thumbnails
-                        foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
-                            foreach (self::THUMBS_DELETE_WIDTH as $w) {
-                                $file = UPLOAD . DS
-                                    . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                    . $fn . $x;
-                                if (\file_exists($file)) {
-                                    @\unlink($file);
-                                }
-                            }
-                        }
-
-                        // create new thumbnails
-                        foreach (self::THUMBS_CREATE_WIDTH as $w) {
-                            $out = UPLOAD . DS
-                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                . $fn . '.webp';
-                            $this->createThumbnail($in, $out, $w);
-                        }
-
-                        // skip if the original is already WebP
-                        if (\str_ends_with($f, '.webp')) {
-                            continue;
-                        }
-                        $this->createThumbnail($in, UPLOAD . DS . $fn . '.webp');
-                    }
-                }
-            }
-
+            // process
+            $uploads = $this->processUpload();
             $count = \count($uploads);
             $names = \array_map(
                 function ($value) {
@@ -244,12 +177,7 @@ class AdminPresenter extends APresenter
             );
             $names = \implode($names);
 
-            $this->addAuditMessage(
-                'ADMIN: file(s) uploaded: '
-                . $count
-                . 'x<br>'
-                . $names
-            );
+            $this->addAuditMessage("ADMIN: file(s) uploaded: {$count}x<br>{$names}");
             return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
@@ -261,53 +189,18 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(410, $extras);
             }
 
-            if (isset($_POST['name'])) {
-                $name = \trim($_POST['name']);
-                $name = \strtr(\trim($name), " '\"\\()", '______');
-                StringFilters::transliterate($name);
-                StringFilters::sanitizeStringLC($name);
-                StringFilters::transliterate($name);
-                if ($name) {
-                    $name = \preg_replace('/^\.\.\//', '', $name);
-                }
-                if (!\is_string($name)) {
-                    return $this->writeJsonData(400, $extras);
-                }
-                if ($name === '.size') {
-                    return $this->writeJsonData(405, $extras);
-                }
+            // process
+            $result = $this->processDelete();
 
-                $info = \pathinfo($name);
-                if (\is_array($info)) {
-                    $fn = $info['filename'];
-
-                    // delete thumbnails
-                    foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
-                        foreach (self::THUMBS_DELETE_WIDTH as $w) {
-                            $file = UPLOAD . DS
-                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                                . $fn . $x;
-                            if (\file_exists($file)) {
-                                @\unlink($file);
-                            }
-                        }
-                        $file = UPLOAD . DS . $fn . $x;
-                        if (\file_exists($file)) {
-                            @\unlink($file);
-                        }
-                    }
-                }
-
-                // delete origin
-                $file = UPLOAD . DS . $name;
-                if (\file_exists($file)) {
-                    @\unlink($file);
-                }
-
-                $this->addAuditMessage('ADMIN: file deleted [' . $name . ']');
-                return $this->writeJsonData($name, $extras);
+            if (\is_numeric($result)) {
+                return $this->writeJsonData($result, $extras);
             }
-            break;
+            if (!$result) {
+                return $this->writeJsonData(400, $extras);
+            }
+
+            $this->addAuditMessage('ADMIN: file deleted [' . $result . ']');
+            return $this->writeJsonData($result, $extras);
 
         case 'getUploadsInfo':
             $this->checkPermission('admin,manager,editor');
@@ -337,6 +230,7 @@ class AdminPresenter extends APresenter
             } else {
                 return $this->writeJsonData(500, $extras);
             }
+
             return $this->writeJsonData(
                 [
                     'count' => $count,
@@ -446,9 +340,11 @@ class AdminPresenter extends APresenter
                     unset($stubs_count[$k]);
                 }
             }
+
             \ksort($stubs);
             \ksort($files);
             \arsort($stubs_count);
+
             return $this->writeJsonData(
                 [
                     'stubs' => \array_values($stubs),
@@ -474,32 +370,36 @@ class AdminPresenter extends APresenter
             }
             \array_walk($logs, array($this, '_decorateLogs'));
             $data['content'] = $logs;
+
             return $this->setData(
                 'output', $this->setData($data)->renderHTML('auditlog')
             );
 
         case 'GetCsvInfo':
             $this->checkPermission('admin,manager,editor');
-            $arr = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
-            foreach ($arr as $k => $v) {
+            $csv_info = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
+
+            // enhance the CSV array with information
+            foreach ($csv_info as $k => $v) {
                 if (!$k || !$v) {
                     continue;
                 }
                 if (\file_exists(DATA . DS . "{$k}.csv")
                     && \is_readable(DATA . DS . "{$k}.csv")
                 ) {
-                    $arr[$k] = [
+                    $csv_info[$k] = [
                         'csv' => $v,
                         'lines' => $this->_getCSVFileLines(DATA . DS . "{$k}.csv"),
                         'sheet' => $cfg['lasagna_sheets'][$k] ?? null,
                         'timestamp' => \filemtime(DATA . DS . "{$k}.csv"),
                     ];
-                    if ($arr[$k]['lines'] === -1) {
-                        unset($arr[$k]);
+                    if ($csv_info[$k]['lines'] === -1) {
+                        unset($csv_info[$k]);
                     }
                 }
             }
-            return $this->writeJsonData($arr, $extras);
+
+            return $this->writeJsonData($csv_info, $extras);
 
         case 'GetArticlesInfo':
             $this->checkPermission('admin,manager,editor');
@@ -654,7 +554,7 @@ class AdminPresenter extends APresenter
                 $this->addAuditMessage('Get UPDATE TOKEN');
                 return $this->writeJsonData($code, $extras);
             }
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
 
         case 'RebuildAdminKeyRemote':
             if (!$key = $this->readAdminKey()) {
@@ -676,7 +576,7 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
 
         case 'FlushCacheRemote':
             if (!$key = $this->readAdminKey()) {
@@ -697,7 +597,7 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
 
         case 'CoreUpdateRemote':
             if (!$key = $this->readAdminKey()) {
@@ -720,7 +620,7 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
 
         case 'RebuildNonceRemote':
             if (!$key = $this->readAdminKey()) {
@@ -743,7 +643,7 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
 
         case 'RebuildSecureKeyRemote':
             if (!$key = $this->readAdminKey()) {
@@ -766,7 +666,7 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
 
         case 'FlushCache':
             $this->checkPermission('admin,manager,editor');
@@ -783,38 +683,205 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'clearcache':
-            \header('Clear-Site-Data: "cache"');
-            $this->addMessage('Browser cache cleared');
-            $this->setLocation();
+            $this->clearBrowserCache();
 
         case 'clearcookies':
-            \header('Clear-Site-Data: "cookies"');
-            $this->addMessage('Browser cookies cleared');
-            $this->setLocation();
+            $this->clearBrowserCookies();
 
         case 'clearbrowser':
-            \header('Clear-Site-Data: "cache", "cookies", "storage"');
-            $this->addMessage('Browser storage cleared');
-            $this->setLocation();
-    
+            $this->clearBrowserStorage();
+
         default:
-            $this->unauthorizedAccess();
+            $this->setUnauthorizedAccess();
         }
         return $this;
     }
 
     /**
-     * Rebuild the identity nonce
+     * Clears the browser cache for the current site.
      *
-     * @return object
+     * @return void
      */
-    public function rebuildNonce()
+    public function clearBrowserCache()
     {
-        if (\file_exists(DATA . DS . self::IDENTITY_NONCE)) {
-            @\unlink(DATA . DS . self::IDENTITY_NONCE);
+        \header('Clear-Site-Data: "cache"');
+        $this->addMessage('Browser cache cleared');
+        $this->setLocation();
+    }
+
+    /**
+     * Clears the browser cookies for the current site.
+     *
+     * @return void
+     */
+    public function clearBrowserCookies()
+    {
+        \header('Clear-Site-Data: "cookies"');
+        $this->addMessage('Browser cookies cleared');
+        $this->setLocation();
+    }
+    /**
+     * Clears the browser's cache, cookies, and storage.
+     *
+     * @return void
+     */
+    public function clearBrowserStorage()
+    {
+        \header('Clear-Site-Data: "cache", "cookies", "storage"');
+        $this->addMessage('Browser storage cleared');
+        $this->setLocation();
+    }
+
+    /**
+     * Process uploaded files and generate thumbnails
+     *
+     * @return array<string> array of uploaded filenames
+     */
+    public function processUpload()
+    {
+        $uploads = [];
+
+        // Loop through each uploaded file
+        foreach ($_FILES as $key => &$file) {
+            $f = $file['name'];
+
+            // Sanitize the filename
+            $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
+            StringFilters::transliterate($f);
+            StringFilters::sanitizeStringLC($f);
+            StringFilters::transliterate($f);
+
+            // Skip thumbnails
+            if (\str_starts_with($f, self::THUMB_PREFIX)) {
+                continue;
+            }
+
+            // Skip PHP extension
+            if (\str_ends_with($f, '.php')) {
+                continue;
+            }
+
+            // Skip .inc extension
+            if (\str_ends_with($f, '.inc')) {
+                continue;
+            }
+
+            // Skip '.size' file
+            if ($f === '.size') {
+                continue;
+            }
+
+            // Get the file information
+            $info = \pathinfo($f);
+
+            // Skip files without a name
+            if (\is_array($info) && !$info['filename']) {
+                continue;
+            }
+
+            // Process the uploaded file
+            if (@\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
+                if (\is_array($info)) {
+                    $fn = $info['filename'];
+
+                    // Skip thumbnails generation if the file has no extension
+                    if (empty($info['extension'])) {
+                        continue;
+                    }
+
+                    $in = UPLOAD . DS . $f;
+                    $uploads[$f] = \urlencode($f);
+
+                    // Delete old thumbnails
+                    foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
+                        foreach (self::THUMBS_DELETE_WIDTH as $w) {
+                            $file = UPLOAD . DS
+                                . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                                . $fn . $x;
+                            if (\file_exists($file)) {
+                                @\unlink($file);
+                            }
+                        }
+                    }
+
+                    // Create new thumbnails
+                    foreach (self::THUMBS_CREATE_WIDTH as $w) {
+                        $out = UPLOAD . DS
+                            . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                            . $fn . '.webp';
+                        $this->createThumbnail($in, $out, $w);
+                    }
+
+                    // Skip if the original file is already in WebP
+                    if (\str_ends_with($f, '.webp')) {
+                        continue;
+                    }
+
+                    // Create a WebP thumbnail for the original file
+                    $this->createThumbnail($in, UPLOAD . DS . $fn . '.webp');
+                }
+            }
         }
-        \clearstatcache();
-        return $this->setIdentity();
+        return $uploads;
+    }
+
+    /**
+     * Process the deletion of a file and its associated thumbnails
+     *
+     * This function handles the deletion of a file specified in the POST request.
+     * It sanitizes the filename, removes any thumbnails associated with the file,
+     * and then deletes the original file.
+     *
+     * @return string|int return the sanitized filename if deletion was successful
+     *                    or an HTTP status code (400 or 405) if an error occurred
+     */
+    public function processDelete()
+    {
+        if (isset($_POST['name'])) {
+            $name = \trim($_POST['name']);
+            $name = \strtr(\trim($name), " '\"\\()", '______');
+            StringFilters::transliterate($name);
+            StringFilters::sanitizeStringLC($name);
+            StringFilters::transliterate($name);
+            if ($name) {
+                $name = \preg_replace('/^\.\.\//', '', $name);
+            }
+            if (!\is_string($name)) {
+                return 400;
+            }
+            if ($name === '.size') {
+                return 405;
+            }
+
+            $info = \pathinfo($name);
+            if (\is_array($info)) {
+                $fn = $info['filename'];
+
+                // delete thumbnails
+                foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
+                    foreach (self::THUMBS_DELETE_WIDTH as $w) {
+                        $file = UPLOAD . DS
+                            . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
+                            . $fn . $x;
+                        if (\file_exists($file)) {
+                            @\unlink($file);
+                        }
+                    }
+                    $file = UPLOAD . DS . $fn . $x;
+                    if (\file_exists($file)) {
+                        @\unlink($file);
+                    }
+                }
+            }
+
+            // delete origin
+            $file = UPLOAD . DS . $name;
+            if (\file_exists($file)) {
+                @\unlink($file);
+            }
+            return $name;
+        }
+        return 400;
     }
 
     /**
@@ -836,6 +903,20 @@ class AdminPresenter extends APresenter
             return true;
         }
         return false;
+    }
+
+    /**
+     * Rebuild the identity nonce
+     *
+     * @return object
+     */
+    public function rebuildNonce()
+    {
+        if (\file_exists(DATA . DS . self::IDENTITY_NONCE)) {
+            @\unlink(DATA . DS . self::IDENTITY_NONCE);
+        }
+        \clearstatcache();
+        return $this->setIdentity();
     }
 
     /**
@@ -924,7 +1005,7 @@ class AdminPresenter extends APresenter
      * 
      * @return void
      */
-    public function unauthorizedAccess()
+    public function setUnauthorizedAccess()
     {
         if (CLI) {
             echo "ERROR: unauthorized access\n";
