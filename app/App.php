@@ -132,7 +132,6 @@ $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 $data['base'] = $data['BASE'] = $host ? (
     ($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/"
 ) : '';
-
 $data['request_uri'] = $requestUri;
 
 $rqp = strtok($requestUri, '?&');
@@ -142,7 +141,6 @@ if (!$rqp) {
 $rqp = trim($rqp, '/');
 $data['request_path'] = $rqp;
 $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
-
 $data['nonce'] = $data['NONCE'] = $nonce = substr(
     hash(
         'sha256', random_bytes(16) . (string) time()
@@ -157,6 +155,7 @@ defined('CACHEPREFIX') || define(
     'CACHEPREFIX',
     'cache_' . hash('sha256', $x) . '_'
 );
+
 defined('DOMAIN') || define(
     'DOMAIN',
     strtolower(
@@ -165,6 +164,7 @@ defined('DOMAIN') || define(
         )
     )
 );
+
 defined('SERVER') || define(
     'SERVER',
     strtolower(
@@ -173,8 +173,15 @@ defined('SERVER') || define(
         )
     )
 );
+
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
+
+// running on Google OAuth origin server?
+$data['is_goauth_origin'] = false;
+if (DOMAIN === str_replace('https://', '', $cfg['goauth_origin'] ?? '')) {
+    $data['is_goauth_origin'] = true;
+}
 
 // CACHE PROFILES
 $cache_profiles = array_replace(

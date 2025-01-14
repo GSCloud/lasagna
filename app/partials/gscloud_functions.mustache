@@ -408,12 +408,12 @@ async function sha256(message) {
       $(".summernote>ul").each(function(i, obj) {
         $(obj).addClass("browser-default");
       });
+
       if (GSC.touch) {
         if (typeof window.WebShareFactory === "function") {
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
-
         {{^is_admin}}
           {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
           $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
@@ -422,7 +422,17 @@ async function sha256(message) {
           $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
           {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
         {{/is_admin}}
-
+      } else {
+        {{^is_admin}}
+          {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
+          $('.main-header nav.navbar ul').append('<li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i></a></li>');
+          {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+          {{#is_goauth_origin}}
+          {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
+          $('.main-header nav.navbar ul').append('<li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i></a></li>');
+          {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
+          {{/is_goauth_origin}}
+        {{/is_admin}}
       }
       setInterval(checkNetwork, 500);
     });

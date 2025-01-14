@@ -503,6 +503,7 @@
                 GSC.deleteconfirmed = true;
                 var x = $(this).data("id");
                 var fig = $(this).data("fig");
+                $(this).tooltip('close');
                 $('#fig' + fig).hide(250);
 
                 // API: UploadedFileDelete
