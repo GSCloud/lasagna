@@ -3,10 +3,16 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-01-14`
+
+* **`1028-IDEA`** **complete rework of the Lightbox2 plugin**  
+* **`1027-FEATURE`** various **admin panel enhancements**  
+* **`1026-FEATURE < 1007-IDEA` add visual labels** for latest files uploaded: 🟡
+
 `2025-01-13`
 
 * **`1026-FEATURE`** support for **external link** CSS icons  
-* **`1025-BUGFIX`** **reverting back to jQuery v3.7.1**, 1022 was a failure in Summernote editor
+* **`1025-BUGFIX`** **reverting back to jQuery v3.7.1**, **`1022-BUGFIX`** was a **failure in Summernote** editor
 
 `2025-01-11`  **`v2.4.4 `**
 
@@ -54,8 +60,8 @@
 
 `2025-01-02`
 
-* **`1007-IDEA`** **add visual labels** for latest files uploaded  
-* ~~**`1006-IDEA`** show total uploads sizes \+ counts in admin panel~~
+* ~~**`1007-IDEA`** **add visual labels** for latest files uploaded~~  
+* ~~**`1006-IDEA`** show **total uploads sizes** \+ counts in admin panel~~
 
 `2024-12-28`
 
@@ -72,5 +78,5 @@
 
 `2024-12-23`
 
-* **`1001-FEATURE`** **changelog** added
+* **`1001-FEATURE`** **changelog**
 

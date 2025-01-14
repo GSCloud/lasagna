@@ -330,6 +330,12 @@
               s += '<div id="uploadimagescount" style="cursor:auto!important" class="noselect btn black text-white bold upload-controls right"></div>';
               s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
 
+              // last upload
+              var lastupload = [];
+              if (localStorage['last_upload']) {
+                lastupload = JSON.parse(localStorage['last_upload']);
+              }
+
               // process all uploads
               for (var i in data.data.files) {
                 if (typeof data.data.files[i] === 'function') continue;
@@ -339,10 +345,15 @@
                   s += '<div class=row>';
                 }
   
-                var name = data.data.files[i]["name"];
-                var name1 = name;
+                var name1 = name = data.data.files[i]["name"];
                 var name2 = name.replace(/\.[^.]+$/, '.webp');
                 var ext = GSC.GetFileExtension(name);
+
+                // process last uploads
+                var labelnew = '';
+                if (lastupload && lastupload.includes(name)) {
+                  labelnew = '🟡&nbsp;&nbsp;&nbsp;';
+                }
 
                 // process search if available
                 if (search && name.indexOf(search) === -1) {
@@ -353,7 +364,7 @@
   
                 // ICON
                 var si = '';
-                if (data.data.files[i]["thumbnails"] == null) {
+                if (data.data.files[i]["thumbnails"] === null) {
                   // icon
                   si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
                   si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align white-text" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
@@ -373,7 +384,7 @@
                   warn = 'bold red warning';
                 }
 
-                saz += '<div class="center">⏳️&nbsp;';
+                saz += '<div class="center">' + labelnew + '⏳️&nbsp;';
                 saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
                 saz += '&nbsp;🫙&nbsp;';
                 saz += '<span class="' + warn + '">';
