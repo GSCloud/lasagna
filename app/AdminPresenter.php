@@ -1176,7 +1176,7 @@ class AdminPresenter extends APresenter
                 $val = '';
                 return;
             }
-            $t = \date("j.\tn.\tY\nH:i:s", $t);
+            $t = \date("<b>j.\tn.\tY</b>\nH:i:s", $t);
             $t = \str_replace("\t", '&nbsp;', $t);
             $t = \str_replace("\n", '<br>', $t);
             $x[0] = $t;
@@ -1184,7 +1184,14 @@ class AdminPresenter extends APresenter
         $x[2] = \str_replace('IP:', '', $x[2]);
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
-        $class = '';
+        $class = $class2 = '';
+        if (strpos($x[2], ':') !== false) {
+            $x[2] = \str_replace(':', ':&#173;', $x[2]);
+            $class2 = 'ipadd ipv6';
+        } else {
+            $class2 = 'ipadd';
+        }
+
         // colorization
         if (\stripos($x[1], 'ADMIN') !== false) {
             $class = 'green lighten-4';
@@ -1201,15 +1208,19 @@ class AdminPresenter extends APresenter
         if (\stripos($x[1], 'TOKEN') !== false) {
             $class = 'purple lighten-4';
         }
+
         // hide repetitions
-        if ($x[1] == $this->_lastlog) {
+        if ($x[1] === $this->_lastlog) {
             $class = 'hide';
         }
+        $x[1] = str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
         $this->_lastlog = $x[1];
         $val = "<tr class='{$class}'>"
             . "<td class=center>" . $this->_logcounter . "</td>"
-            . "<td class=center>{$x[0]}<div class='truncate mono'>{$x[2]}</div></td>"
-            . "<td class='center'><b>{$x[3]}</b><br>{$x[4]}</td>"
+            . "<td class='center c2'>"
+            . "{$x[0]}<br><div class='{$class2}'>{$x[2]}"
+            . "</div></td>"
+            . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
             . "<td>{$x[1]}</td>"
             . "</tr>";
     }

@@ -246,8 +246,14 @@ interface IStringFilters
  */
 class StringFilters implements IStringFilters
 {
-    // max. shortcode loop iterations
+    // maximum shortcode loop iterations
     const ITERATIONS = SF_ITERATIONS;
+
+    // find images mask sanitization
+    const UPLOAD_SANITIZE = '/[^a-z0-9!@#+\-=.,;_*]+/i';
+
+    // general string sanitization
+    const STRING_SANITIZE = '/[^a-z0-9\-._]+/i';
 
     // all possible English characters
     // phpcs:ignore
@@ -1190,9 +1196,9 @@ class StringFilters implements IStringFilters
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
 
-        $mask = \preg_replace("/[^a-z0-9!@#+-=.,;_*]+/i", '', \trim($mask));
+        $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
-            $mask = \preg_replace('/^\.\.\//', '', $mask);
+            $mask = \str_replace('..', '.', $mask);
         }
         if (!\is_string($mask)) {
             return null;
@@ -1232,9 +1238,9 @@ class StringFilters implements IStringFilters
         if (!\is_string($mask)) {
             return null;
         }
-        $mask = \preg_replace("/[^a-z0-9!@#+-=.,;_*]+/i", '', \trim($mask));
+        $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
-            $mask = \preg_replace('/^\.\.\//', '', $mask);
+            $mask = \str_replace('..', '.', $mask);
         }
         if (UPLOAD && \is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
@@ -1261,7 +1267,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeString(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9\-\.]+/i", '_', \trim($string));
+            $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
         }
     }
 
@@ -1275,7 +1281,7 @@ class StringFilters implements IStringFilters
     public static function sanitizeStringLC(&$string)
     {
         if ($string && \is_string($string)) {
-            $string = \preg_replace("/[^a-zA-Z0-9\-\.]+/i", '_', \trim($string));
+            $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
             if ($string && \is_string($string)) {
                 $string = \strtolower($string);
             }

@@ -32,8 +32,12 @@ $cfg = $data = $cfg ?? [];
 
 // CLEAR COOKIES on ?logout
 if (isset($_GET['logout'])) {
+    $cu = $cfg['canonical_url'];
+    $go = $cfg['goauth_origin'];
+    $lgo = $cfg['local_goauth_origin'];
+    $go = LOCALHOST ? $lgo : $go ?? $cu;
     header('Clear-Site-Data: "cookies"');
-    header('Location: ' . $cfg['canonical_url'] ?: '/', true, 303);
+    header("Location: {$go}", true, 303);
     exit;
 }
 

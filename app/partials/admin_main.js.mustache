@@ -524,6 +524,8 @@
       // LOGOUT
       $("#a_logout").click(function () {
         setCookie("logout", 1);
+        $("#admin_main").hide(100);
+        M.toast({text: "{{ l.a_logout_msg }}", classes: "normaltoast"});
         GSC.offline ? location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}") : location.replace("/logout");
       });
 

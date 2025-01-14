@@ -56,26 +56,26 @@
 /* ADMIN LOG */
 td,th {padding:5px!important}
 th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid #aaa!important;padding-left:5px!important}
-.mono {font-family:monospace;}
+.c2 {line-height:0.9rem}
+.ipadd {color:#fff;background-color:#666;font-family:monospace;font-size:0.9rem;margin-top:5px;padding:2px}
+.ipv6 {word-break:break-word}
 </style>
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
 </head>
 <body>
-
-<table class="highlight">
-  <thead style="position:sticky;border-bottom:2px solid #ccc!important">
-    <tr>
-      <th class=center><a href="?nonce={{#rndstr}}{{/rndstr}}"><i class="material-icons">history</i></a></th>
-      <th class=center>DATE<br>TIME<br>IP&nbsp;ADDRESS</th>
-      <th class=center>USER NAME<br>E-MAIL</th>
-      <th width=75%>MESSAGE</th>
-    </tr>
-  </thead>
-  <tbody>
-  {{#content}}{{.}}{{/content}}
-  </tbody>
-</table>
-
+  <table class="highlight">
+    <thead style="position:sticky;border-bottom:2px solid #ccc!important">
+      <tr>
+        <th class=center><a href="?nonce={{#rndstr}}{{/rndstr}}"><i class="material-icons">history</i></a></th>
+        <th class=center>DATE<br>TIME<br>IP&nbsp;ADDRESS</th>
+        <th class=center>USER NAME<br>E-MAIL</th>
+        <th width=60%>MESSAGE</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#content}}{{.}}{{/content}}
+    </tbody>
+  </table>
 </body>
 </html>
