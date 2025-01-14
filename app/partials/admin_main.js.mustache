@@ -334,6 +334,7 @@
               var lastupload = [];
               if (localStorage['last_upload']) {
                 lastupload = JSON.parse(localStorage['last_upload']);
+                console.log(lastupload);
               }
 
               // process all uploads
@@ -351,7 +352,7 @@
 
                 // process last uploads
                 var labelnew = '';
-                if (lastupload && lastupload.includes(name)) {
+                if (lastupload && typeof lastupload === 'object' && lastupload.includes(name)) {
                   labelnew = '🟡&nbsp;&nbsp;&nbsp;';
                 }
 
