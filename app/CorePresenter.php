@@ -14,6 +14,7 @@ namespace GSC;
 
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use GSC\StringFilters as SF;
 
 /**
  * Core Presenter class
@@ -70,6 +71,15 @@ class CorePresenter extends APresenter
         ];
 
         switch ($view) {
+        case 'clearcache':
+            $this->clearBrowserCache();
+
+        case 'clearcookies':
+            $this->clearBrowserCookies();
+
+        case 'clearbrowser':
+            $this->clearBrowserStorage();
+    
         case "GetRobotsTxt":
             $this->setHeaderText();
             $file = APP . DS . 'badrobots.txt';
@@ -307,7 +317,7 @@ class CorePresenter extends APresenter
             foreach ($presenter as $p) {
                 if (isset($p["api"]) && $p["api"]) {
                     $info = $p["api_info"] ?? "";
-                    StringFilters::convertEolToBr($info);
+                    SF::convertEolToBr($info);
                     $info = \htmlspecialchars($info);
                     $info = \preg_replace(
                         array(
@@ -368,12 +378,47 @@ class CorePresenter extends APresenter
                 "en",
                 "cs",
                 "sk",
-                "de",
+                //"de",
             ]
         )
         ) {
             $lang = "en";
         }
         return $lang;
+    }
+
+    /**
+     * Clears the browser cache for the current site.
+     *
+     * @return void
+     */
+    public function clearBrowserCache()
+    {
+        \header('Clear-Site-Data: "cache"');
+        $this->addMessage('Browser cache cleared');
+        $this->setLocation();
+    }
+
+    /**
+     * Clears the browser cookies for the current site.
+     *
+     * @return void
+     */
+    public function clearBrowserCookies()
+    {
+        \header('Clear-Site-Data: "cookies"');
+        $this->addMessage('Browser cookies cleared');
+        $this->setLocation();
+    }
+    /**
+     * Clears the browser's cache, cookies, and storage.
+     *
+     * @return void
+     */
+    public function clearBrowserStorage()
+    {
+        \header('Clear-Site-Data: "cache", "cookies", "storage"');
+        $this->addMessage('Browser storage cleared');
+        $this->setLocation();
     }
 }

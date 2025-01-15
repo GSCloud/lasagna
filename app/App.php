@@ -43,8 +43,12 @@ if (isset($_GET['logout'])) {
 
 // CLEAR EVERYTHING on ?clearall
 if (isset($_GET['clearall'])) {
+    $cu = $cfg['canonical_url'];
+    $go = $cfg['goauth_origin'];
+    $lgo = $cfg['local_goauth_origin'];
+    $go = LOCALHOST ? $lgo : $go ?? $cu;
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
-    header('Location: ' . $cfg['canonical_url'] ?: '/', true, 303);
+    header("Location: {$go}", true, 303);
     exit;
 }
 

@@ -95,7 +95,7 @@ class ArticlePresenter extends APresenter
                 $presenter[$view]["template"]
             );
         }
-        StringFilters::trimHtmlComment($output);
+        SF::trimHtmlComment($output);
         return $this->setData("output", $output);
     }
 }

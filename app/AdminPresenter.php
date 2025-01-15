@@ -16,6 +16,7 @@ use Cake\Cache\Cache;
 use League\Csv\Reader;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
+use GSC\StringFilters as SF;
 
 /**
  * Admin Presenter class
@@ -566,8 +567,8 @@ class AdminPresenter extends APresenter
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildAdminKey();
-                    $this->addMessage('REMOTE FN: admin key rebuilt');
-                    $this->addAuditMessage('REMOTE FN: admin key rebuilt');
+                    $this->addMessage('REMOTE FN: ADMIN KEY REBUILT');
+                    $this->addAuditMessage('REMOTE FN: ADMIN KEY REBUILT');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -588,8 +589,7 @@ class AdminPresenter extends APresenter
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->flushCache();
-                    $this->addMessage('REMOTE FN: cache flushed');
-                    $this->addAuditMessage('REMOTE FN: cache flushed');
+                    $this->addAuditMessage('REMOTE FN: CACHE FLUSHED');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -612,8 +612,7 @@ class AdminPresenter extends APresenter
                     $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
-                    $this->addMessage('REMOTE FN: core updated');
-                    $this->addAuditMessage('REMOTE FN: core updated');
+                    $this->addAuditMessage('REMOTE FN: CORE UPDATED');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -634,8 +633,8 @@ class AdminPresenter extends APresenter
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildNonce();
-                    $this->addMessage('REMOTE FN: new nonce');
-                    $this->addAuditMessage('REMOTE FN: new nonce');
+                    $this->addMessage('REMOTE FN: NEW NONCE');
+                    $this->addAuditMessage('REMOTE FN: NEW NONCE');
                     return $this->writeJsonData(
                         [
                             'function' => $view,
@@ -657,8 +656,8 @@ class AdminPresenter extends APresenter
                 $code = hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildSecureKey();
-                    $this->addMessage('REMOTE FN: new secure key');
-                    $this->addAuditMessage('REMOTE FN: new secure key');
+                    $this->addMessage('REMOTE FN: NEW SECURE KEY');
+                    $this->addAuditMessage('REMOTE FN: NEW SECURE KEY');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -684,54 +683,10 @@ class AdminPresenter extends APresenter
             $this->addAuditMessage('ADMIN: Core Update');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
-        case 'clearcache':
-            $this->clearBrowserCache();
-
-        case 'clearcookies':
-            $this->clearBrowserCookies();
-
-        case 'clearbrowser':
-            $this->clearBrowserStorage();
-
         default:
             $this->setUnauthorizedAccess();
         }
         return $this;
-    }
-
-    /**
-     * Clears the browser cache for the current site.
-     *
-     * @return void
-     */
-    public function clearBrowserCache()
-    {
-        \header('Clear-Site-Data: "cache"');
-        $this->addMessage('Browser cache cleared');
-        $this->setLocation();
-    }
-
-    /**
-     * Clears the browser cookies for the current site.
-     *
-     * @return void
-     */
-    public function clearBrowserCookies()
-    {
-        \header('Clear-Site-Data: "cookies"');
-        $this->addMessage('Browser cookies cleared');
-        $this->setLocation();
-    }
-    /**
-     * Clears the browser's cache, cookies, and storage.
-     *
-     * @return void
-     */
-    public function clearBrowserStorage()
-    {
-        \header('Clear-Site-Data: "cache", "cookies", "storage"');
-        $this->addMessage('Browser storage cleared');
-        $this->setLocation();
     }
 
     /**
@@ -749,9 +704,9 @@ class AdminPresenter extends APresenter
 
             // Sanitize the filename
             $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
-            StringFilters::transliterate($f);
-            StringFilters::sanitizeStringLC($f);
-            StringFilters::transliterate($f);
+            SF::transliterate($f);
+            SF::sanitizeStringLC($f);
+            SF::transliterate($f);
 
             // Skip thumbnails
             if (\str_starts_with($f, self::THUMB_PREFIX)) {
@@ -842,9 +797,9 @@ class AdminPresenter extends APresenter
         if (isset($_POST['name'])) {
             $name = \trim($_POST['name']);
             $name = \strtr(\trim($name), " '\"\\()", '______');
-            StringFilters::transliterate($name);
-            StringFilters::sanitizeStringLC($name);
-            StringFilters::transliterate($name);
+            SF::transliterate($name);
+            SF::sanitizeStringLC($name);
+            SF::transliterate($name);
             if ($name) {
                 $name = \preg_replace('/^\.\.\//', '', $name);
             }
