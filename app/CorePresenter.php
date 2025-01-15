@@ -292,6 +292,7 @@ class CorePresenter extends APresenter
         case "GetEnDataVersion":
         case "GetCsDataVersion":
         case "GetSkDataVersion":
+        case "GetDeDataVersion":
             $d = [];
             $d["LASAGNA"]["data"]["language"] = $language;
             $d["LASAGNA"]["data"]["version"] = $hash;
@@ -367,7 +368,7 @@ class CorePresenter extends APresenter
                 "en",
                 "cs",
                 "sk",
-                //"de",
+                "de",
             ]
         )
         ) {

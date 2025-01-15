@@ -5,9 +5,9 @@
 
 `2025-01-14`
 
-* **`1028-IDEA`** **complete rework of the Lightbox2 plugin**  
-* **`1027-FEATURE`** various **admin panel enhancements**  
-* **`1026-FEATURE < 1007-IDEA` add visual labels** for latest files uploaded: 🟡
+* **`1029-IDEA`** **complete rework of the Lightbox2 plugin**  
+* **`1028-FEATURE`** various **admin panel enhancements**  
+* **`1027-FEATURE < 1007-IDEA` add visual labels** for latest files uploaded: 🟡
 
 `2025-01-13`
 

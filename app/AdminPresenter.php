@@ -566,8 +566,8 @@ class AdminPresenter extends APresenter
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildAdminKey();
-                    $this->addMessage('REMOTE FN: ADMIN KEY REBUILT');
-                    $this->addAuditMessage('REMOTE FN: ADMIN KEY REBUILT');
+                    $this->addMessage('REMOTE FN: admin key rebuilt');
+                    $this->addAuditMessage('REMOTE FN: admin key rebuilt');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -588,7 +588,8 @@ class AdminPresenter extends APresenter
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->flushCache();
-                    $this->addAuditMessage('REMOTE FN: CACHE FLUSHED');
+                    $this->addMessage('REMOTE FN: cache flushed');
+                    $this->addAuditMessage('REMOTE FN: cache flushed');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -611,7 +612,8 @@ class AdminPresenter extends APresenter
                     $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
-                    $this->addAuditMessage('REMOTE FN: CORE UPDATED');
+                    $this->addMessage('REMOTE FN: core updated');
+                    $this->addAuditMessage('REMOTE FN: core updated');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -632,8 +634,8 @@ class AdminPresenter extends APresenter
                 $code = \hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildNonce();
-                    $this->addMessage('REMOTE FN: NEW NONCE');
-                    $this->addAuditMessage('REMOTE FN: NEW NONCE');
+                    $this->addMessage('REMOTE FN: new nonce');
+                    $this->addAuditMessage('REMOTE FN: new nonce');
                     return $this->writeJsonData(
                         [
                             'function' => $view,
@@ -655,8 +657,8 @@ class AdminPresenter extends APresenter
                 $code = hash('sha256', $key . $user);
                 if ($code == $token || $this->isLocalAdmin()) {
                     $this->rebuildSecureKey();
-                    $this->addMessage('REMOTE FN: NEW SECURE KEY');
-                    $this->addAuditMessage('REMOTE FN: NEW SECURE KEY');
+                    $this->addMessage('REMOTE FN: new secure key');
+                    $this->addAuditMessage('REMOTE FN: new secure key');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
