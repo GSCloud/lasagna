@@ -3,11 +3,11 @@
 
     <h4>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h4>
 
-    <div class="col s12 l4">
+    <div class="bl col s12 l4">
       <p id="a_update_info"></p>
     </div>
 
-    <div class="col s12 l4">
+    <div class="bl col s12 l4">
       <p style="font-size:12px!important">
         <a id="showpins" class="waves-effect grey waves-light btn trans_pin hover" style="font-size:15px!important">{{ l.a_show_translations }}</a>
       </p>
@@ -22,16 +22,14 @@
       </div>
     </div>
 
-    {{^disable_articles}}
-    <div class="col s12 l4 white">
-      <label for="ArticleURLSelect">{{ l.a_articles }}</label>
-      <select id="ArticleURLSelect"></select>
-    </div>
-    {{/disable_articles}}
-
-    <div class="col s12 l4">
+    <div class="bl col s12 l4">
+      <p>
 
       {{^disable_articles}}
+      <div class="white">
+        <label for="ArticleURLSelect">{{ l.a_articles }}</label>
+        <select id="ArticleURLSelect"></select>
+      </div>
       <a id="a_summernote"
         data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
         style="margin:5px" class="tooltipped waves-effect green waves-light btn">
@@ -56,8 +54,8 @@
       max&nbsp;file&nbsp;size:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
       <div id="uploads_extended_info"></div>
       {{/CONST.UPLOAD}}
+      </p>
+
     </div>
-
   </div>
-
 </div>
