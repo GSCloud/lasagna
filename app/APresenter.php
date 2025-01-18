@@ -2055,6 +2055,7 @@ abstract class APresenter implements IPresenter
         }
 
         // get locale if not already present
+        $l = null;
         if (!\array_key_exists('l', $data)) {
             $l = $this->getLocale($language);
             if (\is_null($l)) {
@@ -2068,7 +2069,9 @@ abstract class APresenter implements IPresenter
         }
 
         // compute data hash
-        $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l));
+        if ($l) {
+            $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l));
+        }
 
         // extract request path slug
         if (($pos = \strpos($data['request_path'], $language)) !== false) {

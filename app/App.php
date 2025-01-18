@@ -53,9 +53,11 @@ if (isset($_GET['clearall'])) {
 }
 
 // inject base CSV locale into $cfg
-array_unshift($cfg['locales'], 'base.csv');
-unset($cfg['locales']['default']);
-unset($cfg['locales']['admin']);
+if (\array_key_exists('locales', $cfg)) {
+    array_unshift($cfg['locales'], 'base.csv');
+    unset($cfg['locales']['default']);
+    unset($cfg['locales']['admin']);
+}
 
 $data['cfg'] = $cfg;
 
