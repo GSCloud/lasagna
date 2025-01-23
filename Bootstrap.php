@@ -95,6 +95,16 @@ defined('CONFIG_PRIVATE') || define(
     'CONFIG_PRIVATE', APP . DS . 'config_private.neon'
 );
 
+// configuration file, use inside Docker only, test later
+defined('CONFIG_DOCKER') || define(
+    'CONFIG_DOCKER', APP . DS . 'config_docker.neon'
+);
+
+// GUI based configuration file, not mandatory
+defined('CONFIG_GUI') || define(
+    'CONFIG_GUI', DATA . DS . 'config_gui.json'
+);
+
 // CSP definition file, used in App.php, not mandatory - can use system temp
 $d = 'CSP';
 $x = APP . DS . 'csp.neon';
@@ -183,19 +193,33 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
     }
     try {
         if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
-            $priv_content = file_get_contents(CONFIG_PRIVATE);
-            if ($priv_content) {
-                $priv = Neon::decode($priv_content);
-            } else {
-                $priv = null;
+            $arr = null;
+            if ($content = file_get_contents(CONFIG_PRIVATE)) {
+                $arr = Neon::decode($content);
             }
-            if (!is_array($priv)) {
-                throw new Exception('FATAL ERROR: PRIVATE CONFIG IS NOT AN ARRAY!');
+            if (!is_array($arr)) {
+                throw new Exception('FATAL ERROR: INVALID PRIVATE CONFIG!');
             }
-            $cfg = array_replace_recursive($cfg, $priv);
+            $cfg = array_replace_recursive($cfg, $arr);
         }
     } catch (Exception $e) {
         die('FATAL ERROR: INVALID PRIVATE CONFIG!');
+    }
+    try {
+        if (!file_exists(ROOT . DS . '.env')) {
+            if (file_exists(CONFIG_DOCKER) && is_readable(CONFIG_DOCKER)) {
+                $arr = null;
+                if ($content = file_get_contents(CONFIG_DOCKER)) {
+                    $arr = Neon::decode($content);
+                }
+                if (!is_array($arr)) {
+                    throw new Exception('FATAL ERROR: INVALID DOCKER CONFIG!');
+                }
+                $cfg = array_replace_recursive($cfg, $arr);
+            }
+        }
+    } catch (Exception $e) {
+        die('FATAL ERROR: INVALID DOCKER CONFIG!');
     }
 }
 if (!is_array($cfg)) {
