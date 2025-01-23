@@ -54,6 +54,11 @@
       max&nbsp;file&nbsp;size:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
       <div id="uploads_extended_info"></div>
       {{/CONST.UPLOAD}}
+
+      {{^CONST.UPLOAD}}
+      <b>UPLOAD is disabled.</b>
+      {{/CONST.UPLOAD}}
+
       </p>
 
     </div>
