@@ -1284,6 +1284,7 @@ class StringFilters implements IStringFilters
             $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
             if ($string && \is_string($string)) {
                 $string = \strtolower($string);
+                $string = \preg_replace('/_+/', '_', $string);
             }
         }
     }
