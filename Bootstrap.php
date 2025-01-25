@@ -105,7 +105,7 @@ defined('CONFIG_GUI') || define(
     'CONFIG_GUI', DATA . DS . 'config_gui.json'
 );
 
-// CSP definition file, used in App.php, not mandatory - can use system temp
+// CSP definition file, used in App.php, not mandatory
 $d = 'CSP';
 $x = APP . DS . 'csp.neon';
 if (file_exists($x) && is_readable($x)) {
@@ -114,7 +114,7 @@ if (file_exists($x) && is_readable($x)) {
     defined($d) || define($d, null);
 }
 
-// Mustache templates, not mandatory - can use system temp
+// Mustache templates, not mandatory
 $d = 'TEMPLATES';
 $x = APP . DS . 'templates';
 if (is_dir($x) && is_readable($x)) {
@@ -123,7 +123,7 @@ if (is_dir($x) && is_readable($x)) {
     defined($d) || define($d, '/tmp');
 }
 
-// Mustache partials, not mandatory - can use system temp
+// Mustache partials, not mandatory
 $d = 'PARTIALS';
 $x = APP . DS . 'partials';
 if (is_dir($x) && is_readable($x)) {
@@ -159,7 +159,7 @@ if (is_dir($x) && is_writable($x)) {
     defined($d) || define($d, null);
 }
 
-// TEMP files storage, not mandatory - can use system temp
+// TEMP files storage, not mandatory
 $d = 'TEMP';
 $x = ROOT . DS . 'temp';
 if (is_dir($x) && is_writable($x)) {
@@ -189,7 +189,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
         $cfg = null;
     }
     if (!is_array($cfg)) {
-        die('FATAL ERROR: INVALID MAIN CONFIG!');
+        die('FATAL ERROR: INVALID CONFIG');
     }
     try {
         if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
@@ -198,12 +198,12 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 $arr = Neon::decode($content);
             }
             if (!is_array($arr)) {
-                throw new Exception('FATAL ERROR: INVALID PRIVATE CONFIG!');
+                throw new Exception('INVALID PRIVATE CONFIG');
             }
             $cfg = array_replace_recursive($cfg, $arr);
         }
     } catch (Exception $e) {
-        die('FATAL ERROR: INVALID PRIVATE CONFIG!');
+        die('FATAL ERROR: ' . $e->getMessage());
     }
     try {
         if (!file_exists(ROOT . DS . '.env')) {
@@ -213,17 +213,17 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                     $arr = Neon::decode($content);
                 }
                 if (!is_array($arr)) {
-                    throw new Exception('FATAL ERROR: INVALID DOCKER CONFIG!');
+                    throw new Exception('INVALID DOCKER CONFIG');
                 }
                 $cfg = array_replace_recursive($cfg, $arr);
             }
         }
     } catch (Exception $e) {
-        die('FATAL ERROR: INVALID DOCKER CONFIG!');
+        die('FATAL ERROR: ' . $e->getMessage());
     }
 }
 if (!is_array($cfg)) {
-    die('FATAL ERROR: INVALID MAIN CONFIG!');
+    die('FATAL ERROR: INVALID CONFIG');
 }
 
 // DEFAULT TIME ZONE

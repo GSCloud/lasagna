@@ -18,11 +18,9 @@ use Nette\Neon\Neon;
 // SANITY CHECK
 foreach ([
     'APP',
-    'CACHE',
+    'CONFIG',
     'DATA',
-    'LOGS',
     'ROOT',
-    'TEMP',
 ] as $x) {
     defined($x) || die("FATAL ERROR: sanity check - constant '{$x}' failed!");
 }

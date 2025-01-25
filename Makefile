@@ -216,7 +216,7 @@ endif
 ifeq ($(origin TAG), undefined)
 	$(error "TAG is not defined")
 endif
-	@echo "mappings: ${B}app/config_private.neon${R}\n"
+	@echo "volumes: ${B}app/config_private.neon${R}\n"
 	@docker run -d --rm --name ${NAME} -p ${PORT}:80 -v "$$(pwd)/app/config_private.neon":/var/www/app/config_private.neon ${TAG}
 	@echo "\n🚀 http://localhost:${PORT}\n"
 
