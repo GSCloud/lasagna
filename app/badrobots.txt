@@ -9,10 +9,12 @@ ChatGPT-User
 Claude-Web
 ClaudeBot
 DataForSeoBot
+DotBot
 FacebookBot
 GPTBot
 Google-Extended
 KStandBot
+MJ12bot
 Meta-ExternalAgent
 Meta-ExternalFetcher
 OAI-SearchBot

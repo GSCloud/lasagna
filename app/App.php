@@ -59,7 +59,7 @@ if (\array_key_exists('locales', $cfg)) {
 
 $data['cfg'] = $cfg;
 
-// CLOUDFLARE GEO BLOCKING; XX = unknown, T1 = TOR anonymous
+// CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anonymous
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
     'BY',
@@ -74,18 +74,16 @@ if (!LOCALHOST && in_array($country, $blocked)) {
     exit;
 }
 
+// TIMER START
+\Tracy\Debugger::timer('DATA');
+
 // + MODEL
 define('ENGINE', 'Tesseract v2.4.4');
 $data['ENGINE'] = ENGINE;
-$data['codemirror'] = '6.65.7'; // CodeMirror version to load for admin interface
+$data['codemirror'] = '6.65.7'; // CodeMirror version to load in admin interface
 
-\Tracy\Debugger::timer('DATA');
+// Base58 encoder
 $base58 = new \Tuupola\Base58;
-
-$requestUri = $_SERVER['REQUEST_URI'] ?? '';
-if (!$requestUri) {
-    $requestUri = '';
-}
 
 $data['ARGC'] = $argc ?? 0;
 $data['ARGV'] = $argv ?? [];
@@ -136,8 +134,12 @@ $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 $data['base'] = $data['BASE'] = $host ? (
     ($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/"
 ) : '';
-$data['request_uri'] = $requestUri;
 
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+if (!$requestUri) {
+    $requestUri = '';
+}
+$data['request_uri'] = $requestUri;
 $rqp = strtok($requestUri, '?&');
 if (!$rqp) {
     $rqp = '';
@@ -145,6 +147,7 @@ if (!$rqp) {
 $rqp = trim($rqp, '/');
 $data['request_path'] = $rqp;
 $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
+
 $data['nonce'] = $data['NONCE'] = $nonce = substr(
     hash(
         'sha256', random_bytes(16) . (string) time()
@@ -528,7 +531,10 @@ $data['controller'] = $p = ucfirst(
     strtolower($presenter[$view]['presenter'])
 ) . 'Presenter';
 $controller = "\\GSC\\{$p}";
+
+// TIMER START
 \Tracy\Debugger::timer('PROCESS');
+
 $app = $controller::getInstance()->setData($data)->process();
 $model = $app->getData();
 

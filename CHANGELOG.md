@@ -5,11 +5,12 @@
 
 `2025-02-03`
 
-* **`1025-BUGFIX`** **improved automatic rate limiting** and new ban handling
+* **`1031-FEATURE`** updated **badrobots.txt definition** and **robots.txt template**  
+* **`1030-BUGFIX`** improved **automatic rate limiting** and **ban handling** (new)
 
 `2025-01-14`
 
-* **`1029-IDEA`** **complete rework of the Lightbox2 plugin**  
+* **`1029-IDEA`** **complete rewrite of Lightbox2 plugin**  
 * **`1028-FEATURE`** various **admin panel enhancements**  
 * **`1027-FEATURE < 1007-IDEA` add visual labels** for latest files uploaded: 🟡
 
