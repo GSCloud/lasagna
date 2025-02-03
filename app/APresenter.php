@@ -480,8 +480,11 @@ abstract class APresenter implements IPresenter
     /* @var string Google Sheet URL postfix */
     const GS_SHEET_POSTFIX = '/edit#gid=0';
 
-    /* @var integer access rate limiter maximum hits */
+    /* @var integer rate limiter - max hits */
     const LIMITER_MAXIMUM = 30;
+
+    /* @var integer rate limiter - ban max hits */
+    const BAN_MAXIMUM = 10;
 
     /* @var string identity nonce filename */
     const IDENTITY_NONCE = 'identity_nonce.key';
@@ -758,6 +761,7 @@ abstract class APresenter implements IPresenter
                 'CONST.GS_CSV_PREFIX' => self::GS_CSV_PREFIX,
                 'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
                 'CONST.GS_SHEET_PREFIX' => self::GS_SHEET_PREFIX,
+                'CONST.BAN_MAXIMUM' => self::BAN_MAXIMUM,
                 'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
                 'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
             ]
@@ -1425,12 +1429,30 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this;
         }
-        $f = "user_rate_limit_{$this->getUID()}";
-        $rate = (int) (Cache::read($f, 'limiter') ?? 0);
-        Cache::write($f, ++$rate, 'limiter');
-        if ($rate > (int) $max) {
-            \header('HTTP/1.1 429 Too Many Requests');
-            exit;
+
+        $uuid = $this->getUID();
+        // cache key for rate limit count
+        $r = "user_rate_limit_{$uuid}";
+        // cache key for ban rate count
+        $rb = "user_ban_limit_{$uuid}";
+
+        // test ban status
+        $rateb = (int) (Cache::read($rb, 'ban') ?? 0);
+        if ($rateb >= self::BAN_MAXIMUM) {
+            $this->setLocation('/err/429');
+        }
+
+        // rate limiting
+        $rate = (int) (Cache::read($r, 'limiter') ?? 0);
+        Cache::write($r, ++$rate, 'limiter');
+        if ($rate >= (int) $max) {
+            // increment ban
+            Cache::write($rb, ++$rateb, 'ban');
+            if ($rateb > self::BAN_MAXIMUM) {
+                // banned user
+                $this->addAuditMessage('LIMITER: User is banned!');
+            }
+            $this->setLocation('/err/420');
         }
         return $this;
     }

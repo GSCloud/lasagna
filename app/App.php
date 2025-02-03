@@ -207,8 +207,9 @@ $cache_profiles = array_replace(
         'sixhours' => '+6 hours',
         'twelfhours' => '+12 hours',
         'day' => '+24 hours',
+        'ban' => '+30 minutes', // ban limiter
         'csv' => '+72 hours', // CSV cold storage
-        'limiter' => '+5 seconds', // access rate limiter
+        'limiter' => '+5 seconds', // rate limiter
     ], (array) ($cfg['cache_profiles'] ?? [])
 );
 

@@ -47,6 +47,28 @@ class ErrorPresenter extends APresenter
         600 => "Unsupported Browser",
     ];
 
+    // custom messages
+    const MESSAGE = [
+        400 => "Bad Request 🪲",
+        401 => "You are not unauthorized 👾",
+        402 => "Payment is required 🤑",
+        403 => "Access is forbidden ⛔️",
+        404 => "Not Found 😵",
+        405 => "Method Not Allowed 🤒",
+        406 => "Not Acceptable 🤒",
+        409 => "Conflict 😒",
+        410 => "Gone 🏃‍♀️",
+        412 => "Precondition Failed 🤒",
+        415 => "Unsupported Media Type 🤒",
+        416 => "Requested Range Not Satisfiable",
+        417 => "Expectation Failed",
+        420 => "Enhance Your Calm ⌛️",
+        429 => "Banned for 30 minutes 🤯",
+        500 => "Internal Server Error 👾",
+        503 => "Service Unavailable 👾",
+        600 => "Unsupported Browser 🎠",
+    ];
+
     /**
      * Controller processor
      *
@@ -58,7 +80,7 @@ class ErrorPresenter extends APresenter
     {
         $this->setHeaderHtml();
 
-        // get the error code as a parameter or from URL
+        // get the error code as a parameter or from the URL
         $code = 404;
         if (\is_int($err)) {
             $code = $err;
@@ -72,7 +94,7 @@ class ErrorPresenter extends APresenter
             }
         }
 
-        // check validity of the code
+        // check code validity
         if (!isset(self::CODESET[$code])) {
             $code = 404;
         }
@@ -95,7 +117,7 @@ class ErrorPresenter extends APresenter
         $template = '<!DOCTYPE html><html><head><meta charset="utf-8">';
         $template .= '<meta http-equiv="x-ua-compatible" content="IE=edge"><body>';
         $template .= "<center><h1><br>🤔 Error {$code}</h1>";
-        $template .= '<h2>' . self::CODESET[$code] . '</h2>';
+        $template .= '<h2>' . self::MESSAGE[$code] . '</h2>';
         $template .= '<h2><center><a rel=nofollow '
             . 'style="color:red;text-decoration:none" href="/?nonce='
             . $this->getNonce()
@@ -103,8 +125,6 @@ class ErrorPresenter extends APresenter
         $template .= "<img style='border:10px solid #000;' height='100%'"
             . " alt='$error' "
             . "src='https://cdn.gscloud.cz/img/$img'></center></body></html>";
-
-            // export
         return $this->setData("output", $this->renderHTML($template));
     }
 }
