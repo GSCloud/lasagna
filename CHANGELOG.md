@@ -3,6 +3,10 @@
 **`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
 ---
 
+`2025-02-03`
+
+* **`1025-BUGFIX`** **improved automatic rate limiting** and new ban handling
+
 `2025-01-14`
 
 * **`1029-IDEA`** **complete rework of the Lightbox2 plugin**  
