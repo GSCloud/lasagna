@@ -194,25 +194,30 @@ if (DOMAIN === str_replace('https://', '', $cfg['goauth_origin'] ?? '')) {
 $cache_profiles = array_replace(
     [
         'default' => '+3 minutes',
+
         'second' => '+1 seconds',
         'fiveseconds' => '+5 seconds',
         'tenseconds' => '+10 seconds',
         'thirtyseconds' => '+30 seconds',
+
         'minute' => '+60 seconds',
         'threeminutes' => '+3 minutes',
         'fiveminutes' => '+5 minutes',
         'tenminutes' => '+10 minutes',
         'fifteenminutes' => '+15 minutes',
         'thirtyminutes' => '+30 minutes',
+
         'hour' => '+60 minutes',
         'twohours' => '+2 hours',
         'threehours' => '+3 hours',
         'sixhours' => '+6 hours',
         'twelfhours' => '+12 hours',
+
         'day' => '+24 hours',
+
         'ban' => '+30 minutes', // ban limiter
-        'csv' => '+72 hours', // CSV cold storage
         'limiter' => '+5 seconds', // rate limiter
+        'csv' => '+72 hours', // CSV cold storage
     ], (array) ($cfg['cache_profiles'] ?? [])
 );
 

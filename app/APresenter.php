@@ -1431,12 +1431,10 @@ abstract class APresenter implements IPresenter
         }
 
         $uuid = $this->getUID();
-        // cache key for rate limit count
-        $r = "user_rate_limit_{$uuid}";
-        // cache key for ban rate count
-        $rb = "user_ban_limit_{$uuid}";
+        $r = "user_rate_limit_{$uuid}"; // cache key for rate limit count
+        $rb = "user_ban_limit_{$uuid}"; // cache key for ban rate count
 
-        // test ban status
+        // ban limiting
         $rateb = (int) (Cache::read($rb, 'ban') ?? 0);
         if ($rateb >= self::BAN_MAXIMUM) {
             $this->setLocation('/err/429');
@@ -1448,8 +1446,8 @@ abstract class APresenter implements IPresenter
         if ($rate >= (int) $max) {
             // increment ban
             Cache::write($rb, ++$rateb, 'ban');
-            if ($rateb > self::BAN_MAXIMUM) {
-                // banned user
+            if ($rateb >= self::BAN_MAXIMUM) {
+                // banned
                 $this->addAuditMessage('LIMITER: User is banned!');
             }
             $this->setLocation('/err/420');
