@@ -1,6 +1,6 @@
 # **Tesseract LASAGNA changelog**
 
-**`ERROR`** `WARNING BUGFIX FEATURE IDEA`  
+**`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
 `2025-02-03`
