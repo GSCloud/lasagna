@@ -17,7 +17,7 @@
 `2025-01-13`
 
 * **`1026-FEATURE`** support for **external link** CSS icons  
-* **`1025-BUGFIX`** **reverting back to jQuery v3.7.1**, **`1022-BUGFIX`** was a **failure in Summernote** editor
+* **`1025-BUGFIX`** **reverting back** to **jQuery v3.7.1**, **`1022-BUGFIX`** was a **failure in Summernote**
 
 `2025-01-11`  **`v2.4.4 `**
 
@@ -51,12 +51,11 @@
 
 `2025-01-05`
 
-* **`1013-FEATURE < 1006-IDEA` total uploads size \+ file counts** @ admin panel, separate **info about generated thumbnails**  
-  * API: **`/admin/getUploadsInfo`**
+* **`1013-FEATURE < 1006-IDEA` total uploads size \+ file counts** @ admin panel, separate **info about generated thumbnails**
 
 `2025-01-04`
 
-* **`1012-BUGFIX`** migrate **Materialize framework** to [v1.2.2](https://github.com/materializecss/materialize/releases/tag/v1.2.2)  
+* **`1012-BUGFIX`** migrate **Materialize framework** to [v1.2.2](https://github.com/materializecss/materialize/releases/tag/1.2.2)  
 * **`1011-FEATURE`** [changelog](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) added to the admin panel  
 * **`1010-BUGFIX`** **Lightbox2** [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
 * **`1009-IDEA`** **remember active admin tab**  
