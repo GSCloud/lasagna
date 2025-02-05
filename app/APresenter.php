@@ -1437,6 +1437,12 @@ abstract class APresenter implements IPresenter
         // ban limiting
         $rateb = (int) (Cache::read($rb, 'ban') ?? 0);
         if ($rateb >= self::BAN_MAXIMUM) {
+            if ($this->checkPermission('admin,manager,editor', true)) {
+                Cache::write($rb, 0, 'ban');
+                // limited
+                $this->setLocation('/err/420');
+            }
+            // banned
             $this->setLocation('/err/429');
         }
 
@@ -1449,7 +1455,9 @@ abstract class APresenter implements IPresenter
             if ($rateb >= self::BAN_MAXIMUM) {
                 // banned
                 $this->addAuditMessage('LIMITER: User is banned!');
+                $this->setLocation('/err/429');
             }
+            // limited
             $this->setLocation('/err/420');
         }
         return $this;
@@ -1472,35 +1480,42 @@ abstract class APresenter implements IPresenter
      * Check if current user has access rights
      *
      * @param mixed $rolelist roles separated by comma (optional)
+     * @param bool  $retbool  return the status as boolean? (optional)
      * 
      * @return self
      */
-    public function checkPermission($rolelist = 'admin')
+    public function checkPermission($rolelist = 'admin', $retbool = false)
     {
-        if (CLI) {
-            return $this;
-        }
-        if (empty($rolelist)) {
+        if (CLI || empty($rolelist)) {
             return $this;
         }
 
         $roles = \explode(',', \trim((string) $rolelist));
         if (\is_array($roles)) {
+            $email = $this->getIdentity()['email'] ?? '';
+            $groups = $this->getCfg('admin_groups') ?? [];
             foreach ($roles as $role) {
                 $role = \strtolower(\trim($role));
-                $email = $this->getIdentity()['email'] ?? '';
-                $groups = $this->getCfg('admin_groups') ?? [];
                 if (\strlen($role) && \strlen($email)) {
                     // check if email is allowed
                     if (\in_array($email, $groups[$role] ?? [], true)) {
+                        if ($retbool) {
+                            return true;
+                        }
                         return $this;
                     }
                     // check if any users is allowed
                     if (\in_array('*', $groups[$role] ?? [], true)) {
+                        if ($retbool) {
+                            return true;
+                        }
                         return $this;
                     }
                 }
             }
+        }
+        if ($retbool) {
+            return false;
         }
         $this->setLocation('/err/401'); // not authorized
     }

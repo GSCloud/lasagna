@@ -713,17 +713,22 @@ class AdminPresenter extends APresenter
                 continue;
             }
 
-            // Skip PHP extension
+            // skip .bak extension
+            if (\str_ends_with($f, '.bak')) {
+                continue;
+            }
+
+            // skip .php extension
             if (\str_ends_with($f, '.php')) {
                 continue;
             }
 
-            // Skip .inc extension
+            // skip .inc extension
             if (\str_ends_with($f, '.inc')) {
                 continue;
             }
 
-            // Skip '.size' file
+            // skip '.size' file
             if ($f === '.size') {
                 continue;
             }
@@ -968,6 +973,7 @@ class AdminPresenter extends APresenter
             echo "ERROR: unauthorized access\n";
             exit(1);
         }
+        $this->addAuditMessage('Unauthorized');
         $this->setLocation('/err/401');
     }
 
@@ -1149,7 +1155,7 @@ class AdminPresenter extends APresenter
             $class2 = 'ipadd';
         }
 
-        // colorization
+        // colorize
         if (\stripos($x[1], 'ADMIN') !== false) {
             $class = 'green lighten-4';
         }
@@ -1170,7 +1176,7 @@ class AdminPresenter extends APresenter
         if ($x[1] === $this->_lastlog) {
             $class = 'hide';
         }
-        $x[1] = str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
+        $x[1] = \str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
         $this->_lastlog = $x[1];
         $val = "<tr class='{$class}'>"
             . "<td class=center>" . $this->_logcounter . "</td>"

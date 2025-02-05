@@ -319,8 +319,8 @@ class StringFilters implements IStringFilters
      */
     public static $common = [
         "  " => " ",
-        " ♥️ " => " ♥️&nbsp;",
         " ❤️ " => " ❤️&nbsp;",
+        " ♥️ " => " ♥️&nbsp;",
         " 💗 " => " 💗&nbsp;",
         " 💙 " => " 💙&nbsp;",
         " 💚 " => " 💚&nbsp;",
@@ -350,12 +350,24 @@ class StringFilters implements IStringFilters
         " 8 " => " 8 ",
         " 9 " => " 9 ",
 
-        " :-(" => "&nbsp;😟",
         " :-)" => "&nbsp;🙂",
+        " :-D" => "&nbsp;😄",
         " :-O" => "&nbsp;😮",
         " :-P" => "&nbsp;😋",
-        " :-[" => "&nbsp;😕",
+        " :-*" => "&nbsp;😘",
+        " :-X" => "&nbsp;😘",
+        " :-x" => "&nbsp;😘",
+        " ;-)" => "&nbsp;😉",
+        " :'(" => "&nbsp;😥",
+        " :-(" => "&nbsp;😟",
+        " :-/" => "&nbsp;😒",
         " :-|" => "&nbsp;😐",
+        " :-[" => "&nbsp;😕",
+        " :-))" => "&nbsp;😆",
+        " :'-(" => "&nbsp;😥",
+        " >:-(" => "&nbsp;😡",
+        " 3:-)" => "&nbsp;😎",
+        " O:-)" => "&nbsp;😇",
 
         " °C " => " °C ",
         " °De " => " °De ",
@@ -409,6 +421,9 @@ class StringFilters implements IStringFilters
         " – " => " —&nbsp;",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
+
+        " VL70-m" => " VL70‑m",
+        " DX7 IID" => " DX7IID",
     ];
 
     // phpcs:ignore
