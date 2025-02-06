@@ -28,7 +28,8 @@ hr {border:0;clear:both;margin:0 auto}
 .group_icon_manager::before {content:"🧙 ";font-size:1.3rem}
 .group_icon_tester::before {content:"👷 ";font-size:1.3rem}
 
-div#data .bl {background-color:#222;border:2px solid #000;border-radius:3px}
+div#data .bl {background:linear-gradient(to bottom, #222, #100, #011);border:2px solid #000;border-radius:3px}
+div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 </style>
 
 <!-- WRENCH -->
@@ -63,7 +64,7 @@ div#data .bl {background-color:#222;border:2px solid #000;border-radius:3px}
 
   <!-- TABBED NAVIGATION -->
   <div id="menutabbed" class="row container noselect">
-    <ul class="tabs grey bold">
+    <ul class="tabs grey darken-3 bold">
       <li class="tab col s3"><a href="#data">{{ l.a_tab_data }}</a></li>
       <li class="tab col s2"><a href="#fn">{{ l.a_tab_fn }}</a></li>
       <li class="tab col s2"><a href="#services">{{ l.a_tab_services }}</a></li>

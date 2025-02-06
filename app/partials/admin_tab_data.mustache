@@ -24,43 +24,41 @@
 
     <div class="bl col s12 l4">
       <p>
+        {{^disable_articles}}
+        <div class="white">
+          <label for="ArticleURLSelect">{{ l.a_articles }}</label>
+          <select id="ArticleURLSelect"></select>
+        </div>
+        <a id="a_summernote"
+          data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
+          <i class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
+        <a id="a_article"
+          data-position="top" data-tooltip="{{ l.a_article_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
+          <i class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
+        <br>
+        {{/disable_articles}}
 
-      {{^disable_articles}}
-      <div class="white">
-        <label for="ArticleURLSelect">{{ l.a_articles }}</label>
-        <select id="ArticleURLSelect"></select>
-      </div>
-      <a id="a_summernote"
-        data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
-        style="margin:5px" class="tooltipped waves-effect green waves-light btn">
-        <i class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
-      <a id="a_article"
-        data-position="top" data-tooltip="{{ l.a_article_ttip }}"
-        style="margin:5px" class="tooltipped waves-effect green waves-light btn">
-        <i class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
-      <br>
-      {{/disable_articles}}
+        {{#CONST.UPLOAD}}
+        <a id="a_upload"
+          data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
+        <a id="a_files"
+          data-position="top" data-tooltip="{{ l.a_files_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect brown waves btn">🫙&nbsp;<span id="files_count"></span></a>
+        <br>
+        max&nbsp;uploads:&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>
+        max&nbsp;size:&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>
+        max&nbsp;file&nbsp;size:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
+        <div id="uploads_extended_info"></div>
+        {{/CONST.UPLOAD}}
 
-      {{#CONST.UPLOAD}}
-      <a id="a_upload"
-        data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
-        style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
-      <a id="a_files"
-        data-position="top" data-tooltip="{{ l.a_files_ttip }}"
-        style="margin:5px" class="tooltipped waves-effect brown waves btn">🫙&nbsp;<span id="files_count"></span></a>
-      <br>
-      max&nbsp;uploads:&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>
-      max&nbsp;size:&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>
-      max&nbsp;file&nbsp;size:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
-      <div id="uploads_extended_info"></div>
-      {{/CONST.UPLOAD}}
-
-      {{^CONST.UPLOAD}}
-      <b>UPLOAD is disabled.</b>
-      {{/CONST.UPLOAD}}
-
+        {{^CONST.UPLOAD}}
+        <b>UPLOAD is disabled.</b>
+        {{/CONST.UPLOAD}}
       </p>
-
     </div>
+
   </div>
 </div>
