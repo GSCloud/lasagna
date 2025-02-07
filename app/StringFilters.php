@@ -120,6 +120,16 @@ interface IStringFilters
     public static function renderMarkdownExtra(&$content);
 
     /**
+     * Render Google Map short code(s)
+     *
+     * @param string $content text data containing [googlemap param]
+     * @param mixed  $key     Google Maps API key
+     * 
+     * @return void
+     */
+    public static function renderGoogleMapShortCode(&$content, $key);
+
+    /**
      * Render Image short code(s)
      *
      * @param string $content text data containing [image param]
@@ -931,7 +941,9 @@ class StringFilters implements IStringFilters
         if (\is_string($content)) {
             $x = \trim($content);
             if (\str_starts_with($x, '[markdown]')) {
-                $content = Markdown::defaultTransform(substr($x, 10));
+                $x = \substr($x, 10);
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs
+                $content = Markdown::defaultTransform($x);
             }
         }
     }
@@ -948,7 +960,9 @@ class StringFilters implements IStringFilters
         if (\is_string($content)) {
             $x = \trim($content);
             if (\str_starts_with($x, '[markdownextra]')) {
-                $content = MarkdownExtra::defaultTransform(substr($x, 15));
+                $x = \substr($x, 15);
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs
+                $content = MarkdownExtra::defaultTransform($x);
             }
         }
     }

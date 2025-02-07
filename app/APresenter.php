@@ -734,6 +734,7 @@ abstract class APresenter implements IPresenter
                 'CONST.DOWNLOAD' => DOWNLOAD,
                 'CONST.ENGINE' => ENGINE,
                 'CONST.LOGS' => LOGS,
+                'CONST.LOCALHOST' => LOCALHOST,
                 'CONST.PARTIALS' => PARTIALS,
                 'CONST.PROJECT' => PROJECT,
                 'CONST.REDIS_CACHE' => REDIS_CACHE,
@@ -1790,7 +1791,7 @@ abstract class APresenter implements IPresenter
                 }
                 if ($force) {
                     if (CLI) {
-                        echo "loading CSV [{$name}]\n";
+                        echo "downloading CSV: [{$name}]\n";
                     }
                     // contains full path
                     if (\strpos($csvkey, 'https') === 0) {
