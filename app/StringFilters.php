@@ -745,46 +745,53 @@ class StringFilters implements IStringFilters
     /**
      * Convert EOLs to HTML breakline
      *
-     * @param string $content content by reference
+     * @param string $content string content by reference
      * 
      * @return void
      */
     public static function convertEolToBr(&$content)
     {
-        $content = \str_replace(
-            array(
-            "\n",
-            "\r\n",
-            ), "<br>", (string) $content
-        );
+        if (\is_string($content)) {
+            $content = \str_replace(
+                array(
+                "\n",
+                "\r\n",
+                ), "<br>", $content
+            );
+        }
     }
 
     /**
      * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
      *
-     * @param string $content content by reference
+     * @param string $content string content by reference
      * 
      * @return void
      */
     public static function convertEolToBrNbsp(&$content)
     {
-        $content = \str_replace(
-            array(
-            "\n",
-            "\r\n",
-            ), "<br><span class=indentation></span>", (string) $content
-        );
+        if (\is_string($content)) {
+            $content = \str_replace(
+                array(
+                "\n",
+                "\r\n",
+                ), "<br><span class=indentation></span>", $content
+            );
+        }
     }
 
     /**
      * Convert EOL + hyphen/star to HTML
      *
-     * @param string $content content by reference
+     * @param string $content string content by reference
      * 
      * @return void
      */
     public static function convertEolHyphenToBrDot(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $content = \str_replace(
             array(
             "\n- ",
@@ -799,19 +806,21 @@ class StringFilters implements IStringFilters
     /**
      * Trim various EOL combinations
      *
-     * @param string $content content by reference
+     * @param string $content string content by reference
      * 
      * @return void
      */
     public static function trimEol(&$content)
     {
-        $content = \str_replace(
-            array(
-            "\r\n",
-            "\n",
-            "\r",
-            ), "", (string) $content
-        );
+        if (\is_string($content)) {
+            $content = \str_replace(
+                array(
+                "\r\n",
+                "\n",
+                "\r",
+                ), "", $content
+            );
+        }
     }
 
     /**
@@ -823,6 +832,9 @@ class StringFilters implements IStringFilters
      */
     public static function trimHtmlComment(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $body = "<body";
         $c = \explode($body, (string) $content, 2);
         $regex = '/<!--(.|\s)*?-->/';
@@ -849,6 +861,9 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacing(&$content, $language = "en")
     {
+        if (!\is_string($content)) {
+            return;
+        }
         if (!\is_string($language)) {
             $language = "en";
         }
@@ -913,9 +928,11 @@ class StringFilters implements IStringFilters
      */
     public static function renderMarkdown(&$content)
     {
-        $x = \trim($content);
-        if (\str_starts_with($x, '[markdown]')) {
-            $content = Markdown::defaultTransform(substr($x, 10));
+        if (\is_string($content)) {
+            $x = \trim($content);
+            if (\str_starts_with($x, '[markdown]')) {
+                $content = Markdown::defaultTransform(substr($x, 10));
+            }
         }
     }
 
@@ -928,9 +945,44 @@ class StringFilters implements IStringFilters
      */
     public static function renderMarkdownExtra(&$content)
     {
-        $x = \trim($content);
-        if (\str_starts_with($x, '[markdownextra]')) {
-            $content = MarkdownExtra::defaultTransform(substr($x, 15));
+        if (\is_string($content)) {
+            $x = \trim($content);
+            if (\str_starts_with($x, '[markdownextra]')) {
+                $content = MarkdownExtra::defaultTransform(substr($x, 15));
+            }
+        }
+    }
+
+    /**
+     * Render Google Map short code(s)
+     *
+     * @param string $content text data containing [googlemap param]
+     * @param mixed  $key     Google Maps API key
+     * 
+     * @return void
+     */
+    public static function renderGoogleMapShortCode(&$content, $key)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+        if (!\is_string($key)) {
+            return;
+        }
+        $content = \trim($content);
+        $key = \trim($key);
+        $pattern = '#\[googlemap\s.*?(.*?)\]#is';
+        while (
+            \str_contains($content, '[googlemap ')
+            ) {
+            $replace = '<iframe width="100%" height="400" '
+                . 'style="border:0" loading="lazy" allowfullscreen '
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'src="https://www.google.com/maps/embed/v1/place?key='
+                . $key . '&q=$1"></iframe>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
+            }
         }
     }
 
@@ -943,6 +995,9 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageShortCode(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $content = \trim($content);
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
@@ -974,6 +1029,9 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageLeftShortCode(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $x = \trim($content);
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
@@ -1005,6 +1063,9 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageRightShortCode(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $content = \trim($content);
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
@@ -1036,6 +1097,9 @@ class StringFilters implements IStringFilters
      */
     public static function renderImageRespShortCode(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $content = \trim($content);
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
@@ -1067,6 +1131,9 @@ class StringFilters implements IStringFilters
      */
     public static function renderSoundcloudShortCode(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $content = \trim($content);
         $counter = 0;
         $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
@@ -1100,6 +1167,9 @@ class StringFilters implements IStringFilters
      */
     public static function renderYouTubeShortCode(&$content)
     {
+        if (!\is_string($content)) {
+            return;
+        }
         $content = \trim($content);
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
@@ -1132,11 +1202,14 @@ class StringFilters implements IStringFilters
     public static function renderGalleryShortCode(
         &$content, $shuffle = false, $size = 160
     ) {
+        if (!\is_string($content)) {
+            return;
+        }
+        $content = \trim($content);
         $size = \intval($size);
         if (!$size) {
             $size = 160;
         }
-        $content = \trim($content);
         $counter = 0;
         $pattern = '#\[gallery\s.*?(.*?)\]#is';
         while (
@@ -1281,7 +1354,7 @@ class StringFilters implements IStringFilters
      */
     public static function sanitizeString(&$string)
     {
-        if ($string && \is_string($string)) {
+        if (\is_string($string)) {
             $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
         }
     }
@@ -1295,11 +1368,13 @@ class StringFilters implements IStringFilters
      */
     public static function sanitizeStringLC(&$string)
     {
-        if ($string && \is_string($string)) {
-            $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
+        if (\is_string($string)) {
             if ($string && \is_string($string)) {
-                $string = \strtolower($string);
-                $string = \preg_replace('/_+/', '_', $string);
+                $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
+                if ($string && \is_string($string)) {
+                    $string = \strtolower($string);
+                    $string = \preg_replace('/_+/', '_', $string);
+                }
             }
         }
     }
@@ -1313,11 +1388,13 @@ class StringFilters implements IStringFilters
      */
     public static function transliterate(&$string)
     {
-        $string = \str_replace(
-            \array_keys(self::$transliteration),
-            self::$transliteration,
-            $string
-        );
+        if (\is_string($string)) {
+            $string = \str_replace(
+                \array_keys(self::$transliteration),
+                self::$transliteration,
+                $string
+            );
+        }
     }
 
     /**
@@ -1329,7 +1406,9 @@ class StringFilters implements IStringFilters
      */
     public static function strtolower($string)
     {
-        return \mb_strtolower($string, 'UTF-8');
+        if (\is_string($string)) {
+            return \mb_strtolower($string, 'UTF-8');
+        }
     }
 
     /**
@@ -1341,6 +1420,8 @@ class StringFilters implements IStringFilters
      */
     public static function strtoupper($string)
     {
-        return \mb_strtoupper($string, 'UTF-8');
+        if (\is_string($string)) {
+            return \mb_strtoupper($string, 'UTF-8');
+        }
     }
 }
