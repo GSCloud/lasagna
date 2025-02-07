@@ -5,6 +5,7 @@
 
 `2025-02-07`
 
+* **`1034-FEATURE`** a new **StringFilter** shortcut **`[googlemap <location>]`** added  
 * **`1033-BUGFIX`** improved **StringFilters** input validation and replacement pairs  
 * **`1032-FEATURE`** various **admin panel enhancements**
 
