@@ -3,6 +3,11 @@
 **`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
+`2025-02-07`
+
+* **`1033-BUGFIX`** improved **StringFilters** input validation and replacement pairs  
+* **`1032-FEATURE`** various **admin panel enhancements**
+
 `2025-02-03`
 
 * **`1031-FEATURE`** updated **badrobots.txt definition** and **robots.txt template**  
