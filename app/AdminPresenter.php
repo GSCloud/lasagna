@@ -357,7 +357,7 @@ class AdminPresenter extends APresenter
             );
     
         case 'AuditLog':
-            $this->checkPermission('admin,manager');
+            $this->checkPermission('admin'); // only for admins
             $this->setHeaderHTML();
             $filename = DATA . DS . 'AuditLog.txt';
             $file = \popen("tac {$filename}", 'r');

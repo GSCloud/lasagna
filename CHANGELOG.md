@@ -3,11 +3,16 @@
 **`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
+`2025-02-08`
+
+* **`1035-FEATURE`** **admin/manager roles differentiated** (managers cannot access Audit Log)
+
 `2025-02-07`
 
-* **`1034-FEATURE`** a new **StringFilter** shortcode: **`[googlemap <location>]`** added  
+* **`1034-FEATURE`** new **StringFilter** shortcode: **`[googlemap <location>]`**  
+  * location should be a “plus glued string” e.g. `prague+castle+czechia`  
 * **`1033-BUGFIX`** improved **StringFilters** input validation and **replacement pairs**  
-* **`1032-FEATURE`** various **admin panel enhancements**
+* **`1032-FEATURE`** **admin panel enhancements**
 
 `2025-02-03`
 

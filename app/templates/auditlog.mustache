@@ -64,6 +64,7 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
 </head>
 <body>
+{{#admin_group_admin}}
   <table class="highlight">
     <thead style="position:sticky;border-bottom:2px solid #ccc!important">
       <tr>
@@ -77,5 +78,6 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
     {{#content}}{{.}}{{/content}}
     </tbody>
   </table>
+{{/admin_group_admin}}
 </body>
 </html>

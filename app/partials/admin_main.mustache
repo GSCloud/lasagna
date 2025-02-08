@@ -1,5 +1,3 @@
-{{#admin_group_admin}}
-
 <!-- EXTRA ADMIN STYLES -->
 <link href="https://cdn.gscloud.cz/tesseract/css/admin.css" rel="stylesheet">
 
@@ -46,8 +44,10 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
       <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
         data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
         <i class="fas fa-sign-out-alt"></i></a>
+{{#admin_group_admin}}
       <a title="Audit Log" target="_blank" ref="nofollow" href="/admin/AuditLog?nonce={{ nonce }}" class="waves-effect blue waves-light btn">
         <i class="fas fa-list"></i></a>
+{{/admin_group_admin}}
     </div>
   </div>
 
@@ -129,4 +129,3 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/moment-with-locales.min.js" defer></script>
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/zeroupload.min.js" defer></script>
-{{/admin_group_admin}}
