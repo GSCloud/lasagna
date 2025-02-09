@@ -5,7 +5,7 @@
 
 `2025-02-09`
 
-* **`1036-FEATURE`** **Audit Log repetitions** can be expanded with a single click
+* **`1036-FEATURE`** **Audit Log repetitions** can be expanded with a single click, **IP address inspection** links
 
 `2025-02-08`
 
