@@ -56,28 +56,34 @@
 /* ADMIN LOG */
 td,th {padding:5px!important}
 th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid #aaa!important;padding-left:5px!important}
+.normaltoast{font-size:1rem!important}
+.noscript{font-size:1rem!important;padding:0.5rem!important}
+.noselect{-webkit-user-select:none;-ms-user-select:none;user-select:none}
 .c2 {line-height:0.9rem}
 .ipadd {color:#fff;background-color:#666;font-family:monospace;font-size:0.9rem;margin-top:5px;padding:2px}
 .ipv6 {word-break:break-word}
-#repetitions {cursor:pointer}
+.reps {border:2px solid #000}
+#repetitions, .reload {cursor:pointer;line-height:2.5rem;font-size:2rem}
 </style>
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/materialize/v1.2.2/js/materialize.min.js"></script>
 </head>
 <body>
 {{#admin_group_admin}}
-  <table class="highlight">
+  <table class="highlight noselect">
     <thead style="position:sticky;border-bottom:2px solid #ccc!important">
       <tr>
         <th class=center>
           <a
+            style="color:#fff"
             href="?nonce={{#rndstr}}{{/rndstr}}"><i
-            class="material-icons">history</i></a>
-          {{#repetitions }}<div id=repetitions>+<b>{{ repetitions }}</b></div>{{/repetitions }}
+            class="reload material-icons">history</i></a>
+          {{#repetitions }}<div id=repetitions class=noselect>🔍&nbsp;<b>{{ repetitions }}</b></div>{{/repetitions }}
         </th>
-        <th class=center>DATE<br>TIME<br>IP&nbsp;ADDRESS</th>
+        <th class=center>DATE & TIME<br>IP&nbsp;ADDRESS</th>
         <th class=center>USER NAME<br>E-MAIL</th>
-        <th width=60%>MESSAGE</th>
+        <th width=70%>DETAILED LOG MESSAGE</th>
       </tr>
     </thead>
     <tbody>
@@ -85,13 +91,22 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
     </tbody>
   </table>
 {{/admin_group_admin}}
+
 <script nonce="{{ csp_nonce }}">
 $(document).ready(function() {
+  M.toast({text: 'You can filter by message type by double-clicking on a row.'})
   $('#repetitions').click(function () {
-    $('.hide').removeClass('hide');
-    $('#repetitions').html('&#x21e3;');
+    $('.reps').toggleClass('hide');
+    $(this).toggleClass('blue darken-4 yellow-text');
+  });
+  $('.logrow').dblclick(function () {
+    $type=$(this).data('type');
+    $('.logrow').addClass('hide');
+    $('.' + $type).removeClass('hide');
+    $('#repetitions').addClass('blue darken-4 yellow-text');
   });
 });
 </script>
+
 </body>
 </html>

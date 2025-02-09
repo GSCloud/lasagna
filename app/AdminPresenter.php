@@ -1164,31 +1164,38 @@ class AdminPresenter extends APresenter
 
         // colorize
         if (\stripos($x[1], 'ADMIN') !== false) {
+            $type = 'type_admin';
             $class = 'green lighten-4';
         }
         if (\stripos($x[1], 'ADMIN: file deleted') !== false) {
+            $type = 'type_file_delete';
             $class = 'red lighten-4';
         }
         if (\stripos($x[1], 'ADMIN: file(s) uploaded') !== false) {
+            $type = 'type_file_upload';
             $class = 'blue lighten-4';
         }
         if (\stripos($x[1], 'DOWNLOAD') !== false) {
+            $type = 'type_download';
             $class = 'grey lighten-2';
         }
         if (\stripos($x[1], 'OAuth login:') !== false) {
+            $type = 'type_oauth_login';
             $class = 'lime lighten-4';
         }
         if (\stripos($x[1], 'REMOTE') !== false) {
+            $type = 'type_remote';
             $class = 'orange lighten-4';
         }
         if (\stripos($x[1], 'TOKEN') !== false) {
+            $type = 'type_token';
             $class = 'purple lighten-4';
         }
 
         // hide repetitions
         if ($x[1] === $this->_lastlog) {
             $this->_repetitions++;
-            $class = 'hide';
+            $class = 'reps hide';
         }
         $this->_lastlog = $x[1];
 
@@ -1196,14 +1203,15 @@ class AdminPresenter extends APresenter
         $x[1] = \str_replace('OAuth', '<b>OAuth</b>', $x[1]);
         $x[1] = \str_replace('Download', '<b>Download</b>', $x[1]);
 
-        $val = "<tr class='{$class}'>"
-            . "<td class=center>" . $this->_logcounter . "</td>"
+        $val = "<tr data-type='{$type}' class='logrow {$type} {$class}'>"
+            . "<td class=center><b>" . $this->_logcounter . "</b></td>"
             . "<td class='center c2'>"
             . "{$x[0]}<br>"
-            . "<div class='{$class2}'><a style='color:#fff' "
-            . "href='https://ipinfo.io/{$x[2]}'>{$x[2]}</a>"
-            . "</div></td>"
-            . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
+            . "<a target=_blank style='color:#fff' href='https://ipinfo.io/{$x[2]}'>"
+            . "<div class='{$class2}'>"
+            . "{$x[2]}"
+            . "</div></a></td>"
+            . "<td class='center truncate'><b>{$x[3]}</b><br>{$x[4]}</td>"
             . "<td>{$x[1]}</td>"
             . "</tr>";
     }
