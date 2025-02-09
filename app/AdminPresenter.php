@@ -1163,6 +1163,7 @@ class AdminPresenter extends APresenter
         }
 
         // colorize
+        $type = 'type_unknown';
         if (\stripos($x[1], 'ADMIN') !== false) {
             $type = 'type_admin';
             $class = 'green lighten-4';
