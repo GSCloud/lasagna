@@ -5,7 +5,7 @@
 
 `2025-02-09`
 
-* **`1036-FEATURE`** **recurrences in the Audit Log** **expandable** with a single click**, links to check IP addresses, filtering rows by type** with a double click
+* **`1036-FEATURE`** **recurrences in the Audit Log** expandable with a single click, **links to check IP addresses**, **filtering rows by type** with a double click
 
 `2025-02-08`
 
@@ -34,7 +34,7 @@
 * **`1026-FEATURE`** support for **external link** CSS icons  
 * **`1025-BUGFIX`** **reverting back** to **jQuery v3.7.1**, **`1022-BUGFIX`** was a **failure in Summernote**
 
-`2025-01-11`  **`v2.4.4 `**
+`2025-01-11`  **`v2.4.4`**
 
 * **`1024-FEATURE`** various **admin panel enhancements**  
 * **`1023-BUGFIX`** switching from **jQuery.parseJSON()** to **JSON.parse()**

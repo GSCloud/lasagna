@@ -9,6 +9,7 @@ has_rename != command -v rename 2>/dev/null
 has_wget != command -v wget 2>/dev/null
 
 BASE := 'app/base.csv'
+DOWNLOADS := $(HOME)/Downloads
 ADMIN_FILE := $(shell mktemp)
 DEFAULT_FILE := $(shell mktemp)
 ADMIN_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
@@ -87,10 +88,9 @@ else
 endif
 
 docs:
-	@-mv "$(HOME)/Downloads/README.md" . 2>/dev/null
-	@-mv "$(HOME)/Downloads/CHANGELOG.md" . 2>/dev/null
-	@sed -i 's/`~~\*\*/`**/g' CHANGELOG.md
-	@sed -i 's/\* \*\*~~/* ~~**/g' CHANGELOG.md
+	@-mv "$(DOWNLOADS)/Downloads/README.md" . 2>/dev/null
+	@-mv "$(DOWNLOADS)/CHANGELOG.md" . 2>/dev/null
+	@sed -i -e 's/`~~\*\*/`**/g' -e 's/\* \*\*~~/* ~~**/g' -e 's/ `\*\*/`**/g' CHANGELOG.md
 ifneq ($(strip $(has_docker)),)
 	@find . -maxdepth 1 -iname "*.md" -exec echo "converting {} to ADOC" \; -exec docker run --rm -v "$$(pwd)":/data pandoc/core -f markdown -t asciidoc -i "{}" -o "{}.adoc" \;
 	@find . -maxdepth 1 -iname "*.adoc" -exec echo "converting {} to PDF" \; -exec docker run --rm -v "$$(pwd)":/documents/ asciidoctor/docker-asciidoctor asciidoctor-pdf -a allow-uri-read -a icons=font -a icon-set=fas -d book "{}" \;
