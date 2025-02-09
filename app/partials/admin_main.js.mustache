@@ -281,14 +281,14 @@
             var now = ~~(Date.now() / 1000);
             moment.locale('{{ lang }}');
 
-            var imageson = 'grey darken-3';
-            var imagesoff = 'orange';
+            var imageson = 'grey darken-3 cursorpointer';
+            var imagesoff = 'orange cursordefault';
             var cardsize = '150px';
             var displaystate = 'hide-images';
 
             if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 1) {
-              imageson = 'orange';
-              imagesoff = 'grey darken-3';
+              imageson = 'orange cursordefault';
+              imagesoff = 'grey darken-3 cursorpointer';
               cardsize = '300px';
               displaystate = '';
             }
@@ -334,7 +334,6 @@
               var lastupload = [];
               if (localStorage['last_upload']) {
                 lastupload = JSON.parse(localStorage['last_upload']);
-                console.log(lastupload);
               }
 
               // process all uploads
@@ -460,8 +459,8 @@
             $('#uploadimagesko').click(function () {
               $('.uploaded-image').hide();
               $('.uploaded-card').css('height', '150px');
-              $('#uploadimagesok').removeClass('orange').addClass('grey darken-3');
-              $('#uploadimagesko').removeClass('grey darken-3').addClass('orange');
+              $('#uploadimagesok').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
+              $('#uploadimagesko').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
               delCookie("displayimages");
               localStorage.removeItem("displayimages");
             });
@@ -470,8 +469,8 @@
             $('#uploadimagesok').click(function () {
               $('.uploaded-image').show();
               $('.uploaded-card').css('height', '300px');
-              $('#uploadimagesok').removeClass('grey darken-3').addClass('orange');
-              $('#uploadimagesko').removeClass('orange').addClass('grey darken-3');
+              $('#uploadimagesok').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
+              $('#uploadimagesko').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
               setCookie("displayimages", 1);
               localStorage.setItem("displayimages", 1);
             });
