@@ -3,9 +3,13 @@
 **`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
+`2025-02-09`
+
+* **`1036-FEATURE`** **Audit Log repetitions** can be expanded with a single click
+
 `2025-02-08`
 
-* **`1035-FEATURE`** **admin/manager roles differentiated** (managers cannot access Audit Log)
+* **`1035-FEATURE`** **admin/manager roles differentiated** (managers cannot access **Audit Log**)
 
 `2025-02-07`
 
