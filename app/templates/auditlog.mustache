@@ -59,6 +59,7 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
 .c2 {line-height:0.9rem}
 .ipadd {color:#fff;background-color:#666;font-family:monospace;font-size:0.9rem;margin-top:5px;padding:2px}
 .ipv6 {word-break:break-word}
+#repetitions {cursor:pointer}
 </style>
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
@@ -68,7 +69,12 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
   <table class="highlight">
     <thead style="position:sticky;border-bottom:2px solid #ccc!important">
       <tr>
-        <th class=center><a href="?nonce={{#rndstr}}{{/rndstr}}"><i class="material-icons">history</i></a></th>
+        <th class=center>
+          <a
+            href="?nonce={{#rndstr}}{{/rndstr}}"><i
+            class="material-icons">history</i></a>
+          {{#repetitions }}<div id=repetitions>+<b>{{ repetitions }}</b></div>{{/repetitions }}
+        </th>
         <th class=center>DATE<br>TIME<br>IP&nbsp;ADDRESS</th>
         <th class=center>USER NAME<br>E-MAIL</th>
         <th width=60%>MESSAGE</th>
@@ -79,5 +85,13 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
     </tbody>
   </table>
 {{/admin_group_admin}}
+<script nonce="{{ csp_nonce }}">
+$(document).ready(function() {
+  $('#repetitions').click(function () {
+    $('.hide').removeClass('hide');
+    $('#repetitions').html('&#x21e3;');
+  });
+});
+</script>
 </body>
 </html>

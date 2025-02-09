@@ -59,6 +59,9 @@ class AdminPresenter extends APresenter
     /* @var string last log message */
     private string $_lastlog = '';
 
+    // @var int number of log message repetitions
+    private int $_repetitions = 0;
+
     /* @var int log counter */
     private int $_logcounter = 0;
 
@@ -371,7 +374,7 @@ class AdminPresenter extends APresenter
             }
             \array_walk($logs, array($this, '_decorateLogs'));
             $data['content'] = $logs;
-
+            $data['repetitions'] = $this->_repetitions;
             return $this->setData(
                 'output', $this->setData($data)->renderHTML('auditlog')
             );
@@ -1131,7 +1134,9 @@ class AdminPresenter extends APresenter
         if (\count($x) < 5) {
             return;
         }
+
         $this->_logcounter++;
+
         $t = \strtotime($x[0]);
         if ($t) {
             $y = \date("Y", $t);
@@ -1144,11 +1149,13 @@ class AdminPresenter extends APresenter
             $t = \str_replace("\n", '<br>', $t);
             $x[0] = $t;
         }
+
         $x[2] = \str_replace('IP:', '', $x[2]);
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
+
         $class = $class2 = '';
-        if (strpos($x[2], ':') !== false) {
+        if (\strpos($x[2], ':') !== false) {
             $x[2] = \str_replace(':', ':&#173;', $x[2]);
             $class2 = 'ipadd ipv6';
         } else {
@@ -1165,6 +1172,12 @@ class AdminPresenter extends APresenter
         if (\stripos($x[1], 'ADMIN: file(s) uploaded') !== false) {
             $class = 'blue lighten-4';
         }
+        if (\stripos($x[1], 'DOWNLOAD') !== false) {
+            $class = 'grey lighten-2';
+        }
+        if (\stripos($x[1], 'OAuth login:') !== false) {
+            $class = 'lime lighten-4';
+        }
         if (\stripos($x[1], 'REMOTE') !== false) {
             $class = 'orange lighten-4';
         }
@@ -1174,14 +1187,21 @@ class AdminPresenter extends APresenter
 
         // hide repetitions
         if ($x[1] === $this->_lastlog) {
+            $this->_repetitions++;
             $class = 'hide';
         }
-        $x[1] = \str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
         $this->_lastlog = $x[1];
+
+        $x[1] = \str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
+        $x[1] = \str_replace('OAuth', '<b>OAuth</b>', $x[1]);
+        $x[1] = \str_replace('Download', '<b>Download</b>', $x[1]);
+
         $val = "<tr class='{$class}'>"
             . "<td class=center>" . $this->_logcounter . "</td>"
             . "<td class='center c2'>"
-            . "{$x[0]}<br><div class='{$class2}'>{$x[2]}"
+            . "{$x[0]}<br>"
+            . "<div class='{$class2}'><a style='color:#fff' "
+            . "href='https://ipinfo.io/{$x[2]}'>{$x[2]}</a>"
             . "</div></td>"
             . "<td class=center><b>{$x[3]}</b><br>{$x[4]}</td>"
             . "<td>{$x[1]}</td>"
