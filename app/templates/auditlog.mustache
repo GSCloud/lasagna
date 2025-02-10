@@ -102,6 +102,7 @@ $(document).ready(function() {
   $('#repetitions').click(function () {
     $('.reps').toggleClass('hide');
     $(this).toggleClass('blue darken-4 yellow-text');
+    $('#note').hide(750);
   });
   $('.logrow').dblclick(function () {
     if (filtered) {
@@ -115,11 +116,11 @@ $(document).ready(function() {
     $('.logrow').addClass('hide');
     $('.' + $type).removeClass('hide');
     $('#repetitions').addClass('blue darken-4 yellow-text');
-    $('#note').hide(500);
+    $('#note').hide(750);
     filtered = true;
   });
   $(window).one('scroll', function() {
-    $('#note').hide(500);
+    $('#note').hide(750);
   });
 });
 </script>
