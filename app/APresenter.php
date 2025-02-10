@@ -1784,9 +1784,9 @@ abstract class APresenter implements IPresenter
     /**
      * Load CSV data into cache
      *
-     * @param string  $name   CSV nickname (foobar)
-     * @param string  $csvkey Google CSV token (partial or full URI to CSV endpoint)
-     * @param boolean $force  force the resource refresh? (optional)
+     * @param string  $name   CSV nickname
+     * @param string  $csvkey Google CSV token (partial or full URL to CSV endpoint)
+     * @param boolean $force  force the resource to refresh (optional)
      * 
      * @return self
      */
