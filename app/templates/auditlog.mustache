@@ -63,6 +63,7 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
 .ipadd {color:#fff;background-color:#666;font-family:monospace;font-size:0.9rem;margin-top:5px;padding:2px}
 .ipv6 {word-break:break-word}
 .reps {border:2px solid #000}
+.note {text-align:center;color:#000;background-color:#fff;position:fixed;top:0;right:0;z-index:99999999;display:block;margin:1rem}
 #repetitions, .reload {cursor:pointer;line-height:2.5rem;font-size:2rem}
 </style>
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
@@ -87,6 +88,9 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
       </tr>
     </thead>
     <tbody>
+      <tr id=note>
+        <td colspan=4 class=note><b>You can filter the message type by double-clicking on a row.</b></td>
+      </tr>
     {{#content}}{{.}}{{/content}}
     </tbody>
   </table>
@@ -94,16 +98,28 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
 
 <script nonce="{{ csp_nonce }}">
 $(document).ready(function() {
-  M.toast({text: 'You can filter by message type by double-clicking on a row.'})
+  var filtered = false;
   $('#repetitions').click(function () {
     $('.reps').toggleClass('hide');
     $(this).toggleClass('blue darken-4 yellow-text');
   });
   $('.logrow').dblclick(function () {
+    if (filtered) {
+      $('.logrow').removeClass('hide');
+      $('.reps').addClass('hide');
+      $('#repetitions').removeClass('blue darken-4 yellow-text');
+      filtered = false;
+      return;
+    }
     $type=$(this).data('type');
     $('.logrow').addClass('hide');
     $('.' + $type).removeClass('hide');
     $('#repetitions').addClass('blue darken-4 yellow-text');
+    $('#note').hide(500);
+    filtered = true;
+  });
+  $(window).one('scroll', function() {
+    $('#note').hide(500);
   });
 });
 </script>
