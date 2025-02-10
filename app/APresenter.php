@@ -172,28 +172,28 @@ interface IPresenter
     public function getUserGroup();
 
     /**
-     * Match getter (alias)
+     * Match getter
      *
      * @return mixed Match data array
      */
     public function getMatch();
 
     /**
-     * Presenter getter (alias)
+     * Presenter getter
      *
      * @return mixed Rresenter data array
      */
     public function getPresenter();
 
     /**
-     * Router getter (alias)
+     * Router getter
      *
      * @return mixed Router data array
      */
     public function getRouter();
 
     /**
-     * View getter (alias)
+     * View getter
      *
      * @return mixed Router view
      */
@@ -468,26 +468,35 @@ abstract class APresenter implements IPresenter
     /* @var integer cookie TTL in seconds */
     const COOKIE_TTL = 86400 * 31;
 
-    /* @var string Google CSV URL prefix */
+    /* @var string Google Sheet export URL prefix */
     const GS_CSV_PREFIX = 'https://docs.google.com/spreadsheets/d/e/';
 
-    /* @var string Google CSV URL postfix */
+    /* @var string Google Sheet export to CSV URL postfix */
     const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
+
+    /* @var string Google Sheet export to TSV URL postfix */
+    const GS_TSV_POSTFIX = '/pub?gid=0&single=true&output=tsv';
 
     /* @var string Google Sheet URL prefix */
     const GS_SHEET_PREFIX = 'https://docs.google.com/spreadsheets/d/';
 
-    /* @var string Google Sheet URL postfix */
+    /* @var string Google Sheet edit URL postfix */
     const GS_SHEET_POSTFIX = '/edit#gid=0';
 
-    /* @var integer rate limiter - max hits */
+    /* @var integer rate limiter - max. hits per cache interval */
     const LIMITER_MAXIMUM = 30;
 
-    /* @var integer rate limiter - ban max hits */
+    /* @var integer rate limiter - max. limiter ceil hits before ban */
     const BAN_MAXIMUM = 10;
 
+    /* @var integer update ignore interval in seconds */
+    const CSV_UPDATE_IGNORE = 120;
+
     /* @var string identity nonce filename */
-    const IDENTITY_NONCE = 'identity_nonce.key';
+    const IDENTITY_NONCE_FILE = 'identity_nonce.key';
+
+    /* @var string audit log filename */
+    const AUDITLOG_FILE = 'AuditLog.txt';
 
     /* @var array data model */
     public $data = [];
@@ -719,7 +728,7 @@ abstract class APresenter implements IPresenter
     {
         $dot = new \Adbar\Dot((array) $this->data);
 
-        // global constants
+        // global engine constants
         $dot->set(
             [
                 'CONST.APP' => APP,
@@ -745,6 +754,7 @@ abstract class APresenter implements IPresenter
                 'CONST.UPLOAD' => UPLOAD,
                 'CONST.WWW' => WWW,
 
+                // PHP ini constants
                 'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
                 'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
                 'CONST.UPLOAD_MAX_FILESIZE' => ini_get('upload_max_filesize'),
@@ -754,17 +764,21 @@ abstract class APresenter implements IPresenter
         // class constants
         $dot->set(
             [
-                'CONST.COOKIE_KEY_FILEMODE' => self::COOKIE_KEY_FILEMODE,
-                'CONST.COOKIE_TTL' => self::COOKIE_TTL,
+                'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
                 'CONST.CSV_FILEMODE' => self::CSV_FILEMODE,
                 'CONST.CSV_MIN_SIZE' => self::CSV_MIN_SIZE,
-                'CONST.GS_CSV_POSTFIX' => self::GS_CSV_POSTFIX,
+                'CONST.COOKIE_KEY_FILEMODE' => self::COOKIE_KEY_FILEMODE,
+                'CONST.COOKIE_TTL' => self::COOKIE_TTL,
                 'CONST.GS_CSV_PREFIX' => self::GS_CSV_PREFIX,
-                'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
+                'CONST.GS_CSV_POSTFIX' => self::GS_CSV_POSTFIX,
+                'CONST.GS_TSV_POSTFIX' => self::GS_TSV_POSTFIX,
                 'CONST.GS_SHEET_PREFIX' => self::GS_SHEET_PREFIX,
-                'CONST.BAN_MAXIMUM' => self::BAN_MAXIMUM,
+                'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
                 'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
-                'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
+                'CONST.BAN_MAXIMUM' => self::BAN_MAXIMUM,
+                'CONST.CSV_UPDATE_IGNORE' => self::CSV_UPDATE_IGNORE,
+                'CONST.IDENTITY_NONCE_FILE' => self::IDENTITY_NONCE_FILE,
+                'CONST.AUDITLOG_FILE' => self::AUDITLOG_FILE,
             ]
         );
         if (\is_string($key)) {
@@ -839,7 +853,7 @@ abstract class APresenter implements IPresenter
     public function addAuditMessage($message = null)
     {
         if (\is_string($message) && !empty($message)) {
-            $file = DATA . DS . 'AuditLog.txt';
+            $file = DATA . DS . self::AUDITLOG_FILE;
             $date = \date('c');
             $message = \trim($message);
             $i = $this->getIdentity();
@@ -969,7 +983,7 @@ abstract class APresenter implements IPresenter
             'ip' => '',
             'name' => '',
         ];
-        $file = DATA . DS . self::IDENTITY_NONCE; // nonce file
+        $file = DATA . DS . self::IDENTITY_NONCE_FILE; // nonce file
         if (!\file_exists($file)) {
             try {
                 $nonce = \hash('sha256', \random_bytes(1024) . \time());
@@ -1048,7 +1062,7 @@ abstract class APresenter implements IPresenter
         if ($id && $email && $name) {
             return $this->identity;
         }
-        $file = DATA . DS . self::IDENTITY_NONCE;
+        $file = DATA . DS . self::IDENTITY_NONCE_FILE;
         if (!\file_exists($file)) {
             // set empty identity
             $this->setIdentity();
@@ -1152,7 +1166,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Match getter (alias)
+     * Match getter
      *
      * @return mixed Match data array
      */
@@ -1162,7 +1176,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Presenter getter (alias)
+     * Presenter getter
      *
      * @return mixed Rresenter data array
      */
@@ -1172,7 +1186,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Router getter (alias)
+     * Router getter
      *
      * @return mixed Router data array
      */
@@ -1182,7 +1196,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * View getter (alias)
+     * View getter
      *
      * @return mixed Router view
      */
@@ -1778,7 +1792,6 @@ abstract class APresenter implements IPresenter
      */
     public function csvPreloader($name, $csvkey, $force = false)
     {
-        //dump("csvPreloader", $name, $csvkey, $force);
         $name = \trim((string) $name);
         $csvkey = \trim((string) $csvkey);
         $force = (bool) $force;
@@ -1786,21 +1799,35 @@ abstract class APresenter implements IPresenter
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
                 $data = false;
-                if (!\file_exists(DATA . DS . "{$file}.csv")) {
+                if (\file_exists(DATA . DS . "{$file}.csv")) {
+                    // CSV file exists
+                    $modtime = \filemtime(DATA . DS . "{$file}.csv");
+                    if ($modtime + self::CSV_UPDATE_IGNORE > time()) {
+                        // CSV file is too fresh to update
+                        return $this;
+                    }
+                } else {
+                    // no CSV file to load
                     $force = true;
+                }
+                if (!$force) {
+                    // bail out
+                    return $this;
                 }
                 if ($force) {
                     if (CLI) {
                         echo "downloading CSV: [{$name}]\n";
                     }
-                    // contains full path
+                    // full path
                     if (\strpos($csvkey, 'https') === 0) {
                         $remote = $csvkey;
                     } else {
-                        // contains path incl. parameters
+                        // partial path
                         if (\strpos($csvkey, '?gid=') > 0) {
+                            // partial path incl. parameters
                             $remote = self::GS_CSV_PREFIX . $csvkey;
                         } else {
+                            // partial path without parameters
                             $remote = self::GS_CSV_PREFIX
                                 . $csvkey . self::GS_CSV_POSTFIX;
                         }
@@ -1813,27 +1840,38 @@ abstract class APresenter implements IPresenter
                         $data = '';
                     }
                 }
-                if (\strpos($data, '!DOCTYPE html') > 0) {
-                    // this is HTML document = failure!
-                    $this->addError("ERROR: fetching {$remote} - HTML document");
+                if (!$data) {
+                    $this->addError("ERROR: csvPreloader: [{$name}] - no data");
+                    return $this;
+                }
+                if ($data && !\is_string($data)) {
+                    $this->addError("ERROR: csvPreloader: [{$name}] - no data");
+                    return $this;
+                }
+                if ($data && \strpos($data, '!DOCTYPE html') > 0) {
+                    // ERROR: got HTML document
+                    $this->addError("ERROR: csvPreloader: [{$remote}] - HTML");
                     return $this;
                 }
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, 'csv');
                     $f1 = DATA . DS . "{$file}.csv";
                     $f2 = DATA . DS . "{$file}.bak";
+
                     // remove old backup
                     if (\file_exists($f2)) {
                         if (@\unlink($f2) === false) {
                             $this->addError("FILE: remove {$file}.bak failed!");
                         }
                     }
+
                     // move CSV to backup
                     if (\file_exists($f1)) {
                         if (@\rename($f1, $f2) === false) {
                             $this->addError("FILE: backup {$file}.csv failed!");
                         }
                     }
+
                     // write new CSV
                     if (\file_put_contents($f1, $data, LOCK_EX) === false) {
                         $this->addError("FILE: save {$file}.csv failed!");

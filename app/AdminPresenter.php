@@ -877,8 +877,8 @@ class AdminPresenter extends APresenter
      */
     public function rebuildNonce()
     {
-        if (\file_exists(DATA . DS . self::IDENTITY_NONCE)) {
-            @\unlink(DATA . DS . self::IDENTITY_NONCE);
+        if (\file_exists(DATA . DS . self::IDENTITY_NONCE_FILE)) {
+            @\unlink(DATA . DS . self::IDENTITY_NONCE_FILE);
         }
         \clearstatcache();
         return $this->setIdentity();
