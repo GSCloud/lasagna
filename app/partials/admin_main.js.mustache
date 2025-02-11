@@ -251,8 +251,8 @@
               var i2 = GSC.FormatBytes(data.data.reg_size);
               var i3 = data.data.dot_count;
               var i4 = GSC.FormatBytes(data.data.dot_size);
-              $('#files_count').html(i1 + '&nbsp;📦️&nbsp;' + i2);
-              $('#uploads_extended_info').html('<i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + i3 + '&nbsp;📦️&nbsp;' + i4);
+              $('#files_count').html(i1 + '&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;' + i2);
+              $('#uploads_extended_info').html('<i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + i3 + '&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;' + i4);
             }
           });
         }
@@ -352,7 +352,7 @@
                 // process last uploads
                 var labelnew = '';
                 if (lastupload && typeof lastupload === 'object' && lastupload.includes(name)) {
-                  labelnew = '🟡&nbsp;&nbsp;&nbsp;';
+                  labelnew = '<i class="left yellow-text transparent fa-solid fa-diamond btn-flat btn-floating pulse cursordefault"></i> ';
                 }
 
                 // process search if available
@@ -384,9 +384,9 @@
                   warn = 'bold red warning';
                 }
 
-                saz += '<div class="center">' + labelnew + '⏳️&nbsp;';
+                saz += '<div class="center">' + labelnew + '<i class="fa-solid fa-clock"></i>&nbsp;&nbsp;';
                 saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
-                saz += '&nbsp;🫙&nbsp;';
+                saz += '&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;';
                 saz += '<span class="' + warn + '">';
                 saz += GSC.FormatBytes(data.data.files[i]["size"]);
                 saz += '</span>';
