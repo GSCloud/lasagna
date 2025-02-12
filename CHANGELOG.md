@@ -5,6 +5,7 @@
 
 `2025-02-12`
 
+* **`1039-FEATURE`** **complete blocking of the robots** (optional)  
 * **`1038-FEATURE`** **admin panel enhancements**  
 * **`1037-FEATURE`** **robots definition** and **robots.txt template**
 

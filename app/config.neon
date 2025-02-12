@@ -124,3 +124,6 @@ swpreload_cdn: []
 
 # DON'T CACHE patterns
 dontcache: []
+
+# completely block robots? (not only via robots.txt)
+block_robots: true

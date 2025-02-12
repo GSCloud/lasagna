@@ -22,7 +22,25 @@ foreach ([
     'DATA',
     'ROOT',
 ] as $x) {
-    defined($x) || die("FATAL ERROR: sanity check - constant '{$x}' failed!");
+    defined($x) || die("FATAL ERROR: sanity check for constant '{$x}' failed!");
+}
+
+// BLOCK BAD ROBOTS
+if (isset($cfg['block_robots']) && $cfg['block_robots']) {
+    $bots = APP . DS . 'badrobots.txt';
+    if (file_exists($bots) && is_readable($bots)) {
+        $blockedUA = @file($bots, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (is_array($blockedUA) && isset($_SERVER['HTTP_USER_AGENT'])) {
+            $ua = trim($_SERVER['HTTP_USER_AGENT']);
+            foreach ($blockedUA as $x) {
+                if (stripos($ua, trim($x)) !== false) {
+                    header("HTTP/1.1 403 Forbidden");
+                    echo "You are not authorized to access this page.";
+                    exit;
+                }
+            }
+        }
+    }
 }
 
 // DEFINE MODEL
