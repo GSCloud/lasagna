@@ -3,6 +3,11 @@
 **`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
+`2025-02-12`
+
+* **`1038-FEATURE`** **admin panel enhancements**  
+* **`1037-FEATURE`** **robots definition** and **robots.txt template**
+
 `2025-02-09`
 
 * **`1036-FEATURE`** **recurrences in the Audit Log** expandable with a single click, **links to check IP addresses**, **filtering rows by type** with a double click
@@ -20,13 +25,13 @@
 
 `2025-02-03`
 
-* **`1031-FEATURE`** updated **badrobots.txt definition** and **robots.txt template**  
+* **`1031-FEATURE`** **robots definition** and **robots.txt template**  
 * **`1030-BUGFIX`** improved **automatic rate limiting** and **ban handling** (new)
 
 `2025-01-14`
 
 * **`1029-IDEA`** **complete rewrite of Lightbox2 plugin**  
-* **`1028-FEATURE`** various **admin panel enhancements**  
+* **`1028-FEATURE`** **admin panel enhancements**  
 * **`1027-FEATURE < 1007-IDEA` add visual labels** for latest files uploaded: 🟡
 
 `2025-01-13`
@@ -36,7 +41,7 @@
 
 `2025-01-11`  **`v2.4.4`**
 
-* **`1024-FEATURE`** various **admin panel enhancements**  
+* **`1024-FEATURE`** **admin panel enhancements**  
 * **`1023-BUGFIX`** switching from **jQuery.parseJSON()** to **JSON.parse()**
 
 `2025-01-10`
@@ -60,7 +65,7 @@
 
 `2025-01-06`
 
-* **`1016-FEATURE`** various **admin panel enhancements**  
+* **`1016-FEATURE`** **admin panel enhancements**  
 * **`1015-BUGFIX`** show “displayed / total” **counts in the file manager**  
 * **`1014-BUGFIX`** **natural sort order** for generated image galleries
 
