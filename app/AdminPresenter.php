@@ -513,6 +513,7 @@ class AdminPresenter extends APresenter
                     ], $extras
                 );
             }
+
             // save article meta data
             $p = [];
             $f = DATA . DS . "summernote_articles_{$profile}.txt";
@@ -540,23 +541,26 @@ class AdminPresenter extends APresenter
                 ], $extras
             );
     
-        case 'GetUpdateToken':
-            $this->checkPermission('admin');
+        case 'GetToken':
+            $this->checkPermission('admin,manager,editor');
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
-            $code = '';
             $user = $this->getCurrentUser();
-            if (($user['id'] ?? null)) {
-                $hashid = \hash('sha256', $user['id']);
-                $code = $data['base']
-                    . 'admin/CoreUpdateRemote?user='
-                    . $hashid
-                    . '&token='
-                    . \hash('sha256', $key . $hashid);
-                $this->addMessage('Get UPDATE TOKEN');
-                $this->addAuditMessage('Get UPDATE TOKEN');
-                return $this->writeJsonData($code, $extras);
+            if ($user['id']) {
+                if ($role = $this->getUserGroup()) {
+                    $hashid = \hash('sha256', $user['id']);
+                    $code = $data['base']
+                        . 'admin/FNXXXRemote?role='
+                        . $role
+                        . '&user='
+                        . $hashid
+                        . '&token='
+                        . \hash('sha256', $role . $key . $hashid);
+                    $this->addMessage("Get TOKEN as [{$role}]");
+                    $this->addAuditMessage("Get TOKEN as [{$role}]");
+                    return $this->writeJsonData($code, $extras);
+                }
             }
             $this->setUnauthorizedAccess();
 
@@ -564,14 +568,22 @@ class AdminPresenter extends APresenter
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
+            $role = $_GET['role'] ?? null;
             $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
-            if ($user && $token || $this->isLocalAdmin()) {
-                $code = \hash('sha256', $key . $user);
-                if ($code == $token || $this->isLocalAdmin()) {
-                    $this->rebuildAdminKey();
-                    $this->addMessage('REMOTE FN: ADMIN KEY REBUILT');
-                    $this->addAuditMessage('REMOTE FN: ADMIN KEY REBUILT');
+            switch ($role) {
+            case 'admin':
+            case 'manager':
+                break;
+            default:
+                $this->setUnauthorizedAccess();
+            }
+            if ($role && $user && $token || $this->isLocalAdmin()) {
+                $code = \hash('sha256', $role . $key . $user);
+                if ($code === $token || $this->isLocalAdmin()) {
+                    $this->_rebuildAdminKey();
+                    $this->addMessage('REMOTE FN: NEW ADMIN KEY');
+                    $this->addAuditMessage('REMOTE FN: NEW ADMIN KEY');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -586,13 +598,22 @@ class AdminPresenter extends APresenter
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
+            $role = $_GET['role'] ?? null;
             $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
-            if ($user && $token || $this->isLocalAdmin()) {
-                $code = \hash('sha256', $key . $user);
-                if ($code == $token || $this->isLocalAdmin()) {
+            switch ($role) {
+            case 'admin':
+            case 'manager':
+            case 'editor':
+                break;
+            default:
+                $this->setUnauthorizedAccess();
+            }
+            if ($role && $user && $token || $this->isLocalAdmin()) {
+                $code = \hash('sha256', $role . $key . $user);
+                if ($code === $token || $this->isLocalAdmin()) {
                     $this->flushCache();
-                    $this->addAuditMessage('REMOTE FN: CACHE FLUSHED');
+                    $this->addAuditMessage('REMOTE FN: CACHE FLUSH');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -607,15 +628,24 @@ class AdminPresenter extends APresenter
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
+            $role = $_GET['role'] ?? null;
             $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
-            if ($user && $token || $this->isLocalAdmin()) {
-                $code = \hash('sha256', $key . $user);
-                if ($code == $token || $this->isLocalAdmin()) {
+            switch ($role) {
+            case 'admin':
+            case 'manager':
+            case 'editor':
+                break;
+            default:
+                $this->setUnauthorizedAccess();
+            }
+            if ($role && $user && $token || $this->isLocalAdmin()) {
+                $code = \hash('sha256', $role . $key . $user);
+                if ($code === $token || $this->isLocalAdmin()) {
                     $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
-                    $this->addAuditMessage('REMOTE FN: CORE UPDATED');
+                    $this->addAuditMessage('REMOTE FN: CORE UPDATE');
                     return $this->writeJsonData(
                         [
                             'host' => $_SERVER['HTTP_HOST'],
@@ -630,12 +660,20 @@ class AdminPresenter extends APresenter
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
+            $role = $_GET['role'] ?? null;
             $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
-            if ($user && $token || $this->isLocalAdmin()) {
-                $code = \hash('sha256', $key . $user);
-                if ($code == $token || $this->isLocalAdmin()) {
-                    $this->rebuildNonce();
+            switch ($role) {
+            case 'admin':
+            case 'manager':
+                break;
+            default:
+                $this->setUnauthorizedAccess();
+            }
+            if ($role && $user && $token || $this->isLocalAdmin()) {
+                $code = \hash('sha256', $role . $key . $user);
+                if ($code === $token || $this->isLocalAdmin()) {
+                    $this->_rebuildNonce();
                     $this->addMessage('REMOTE FN: NEW NONCE');
                     $this->addAuditMessage('REMOTE FN: NEW NONCE');
                     return $this->writeJsonData(
@@ -653,12 +691,20 @@ class AdminPresenter extends APresenter
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
+            $role = $_GET['role'] ?? null;
             $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
-            if ($user && $token || $this->isLocalAdmin()) {
-                $code = hash('sha256', $key . $user);
-                if ($code == $token || $this->isLocalAdmin()) {
-                    $this->rebuildSecureKey();
+            switch ($role) {
+            case 'admin':
+            case 'manager':
+                break;
+            default:
+                $this->setUnauthorizedAccess();
+            }
+            if ($role && $user && $token || $this->isLocalAdmin()) {
+                $code = hash('sha256', $role . $key . $user);
+                if ($code === $token || $this->isLocalAdmin()) {
+                    $this->_rebuildSecureKey();
                     $this->addMessage('REMOTE FN: NEW SECURE KEY');
                     $this->addAuditMessage('REMOTE FN: NEW SECURE KEY');
                     return $this->writeJsonData(
@@ -675,6 +721,7 @@ class AdminPresenter extends APresenter
         case 'FlushCache':
             $this->checkPermission('admin,manager,editor');
             $this->flushCache();
+            $this->addMessage('ADMIN: Flush Cache');
             $this->addAuditMessage('ADMIN: Flush Cache');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
@@ -683,6 +730,7 @@ class AdminPresenter extends APresenter
             $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
             $this->flushCache();
+            $this->addMessage('ADMIN: Core Update');
             $this->addAuditMessage('ADMIN: Core Update');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
@@ -875,7 +923,7 @@ class AdminPresenter extends APresenter
      *
      * @return object
      */
-    public function rebuildNonce()
+    private function _rebuildNonce()
     {
         if (\file_exists(DATA . DS . self::IDENTITY_NONCE_FILE)) {
             @\unlink(DATA . DS . self::IDENTITY_NONCE_FILE);
@@ -889,7 +937,7 @@ class AdminPresenter extends APresenter
      *
      * @return self
      */
-    public function rebuildAdminKey()
+    private function _rebuildAdminKey()
     {
         if (\file_exists(DATA . DS . self::ADMIN_KEY)) {
             @\unlink(DATA . DS . self::ADMIN_KEY);
@@ -902,7 +950,7 @@ class AdminPresenter extends APresenter
      *
      * @return object
      */
-    public function rebuildSecureKey()
+    private function _rebuildSecureKey()
     {
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         if (!\is_string($key)) {

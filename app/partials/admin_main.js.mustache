@@ -178,8 +178,8 @@
         }
         if (!$("#RemoteFnSelect").val()) return;
 
-        // API: GetUpdateToken
-        $.get("/admin/GetUpdateToken?" + Date.now(), function (data) {
+        // API: GetToken
+        $.get("/admin/GetToken?" + Date.now(), function (data) {
           var s = $("#RemoteFnSelect").val();
           var t = data.data[0];
           t = t.replace(/[a-zA-Z]*\?/, s + "?");
