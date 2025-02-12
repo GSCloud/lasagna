@@ -98,12 +98,17 @@ th {position:sticky;top:0;color:#fff;background-color:#000;border-left:1px solid
 
 <script nonce="{{ csp_nonce }}">
 $(document).ready(function() {
+
   var filtered = false;
+
+  // manage repetitions
   $('#repetitions').click(function () {
     $('.reps').toggleClass('hide');
     $(this).toggleClass('blue darken-4 yellow-text');
     $('#note').hide(750);
   });
+
+ // filter rows on double click
   $('.logrow').dblclick(function () {
     if (filtered) {
       $('.logrow').removeClass('hide');
@@ -112,6 +117,7 @@ $(document).ready(function() {
       filtered = false;
       return;
     }
+
     $type=$(this).data('type');
     $('.logrow').addClass('hide');
     $('.' + $type).removeClass('hide');
@@ -119,6 +125,8 @@ $(document).ready(function() {
     $('#note').hide(750);
     filtered = true;
   });
+
+  // hide the note when scrolling
   $(window).one('scroll', function() {
     $('#note').hide(750);
   });
