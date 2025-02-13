@@ -6,6 +6,9 @@
 `2025-02-12`
 
 * **`1040-FEATURE`** **remote function roles**: admin, manager, editor  
+  * **Admins** can: rebuild admin secure key, see the Audit Log  
+  * **Managers** can: rebuild cookie secure key, rebuild authentication nonce  
+  * **Editors** can: refresh CSV data, flush caches  
 * **`1039-FEATURE`** **complete blocking of the robots** (optional)  
 * **`1038-FEATURE`** **admin panel enhancements**  
 * **`1037-FEATURE`** **robots definition** and **robots.txt template**
