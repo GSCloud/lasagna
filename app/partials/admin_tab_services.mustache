@@ -1,6 +1,6 @@
 <div id="services" class="col s12">
 
-  <h4>{{ l.a_google }}</h4>
+  <h4>{{ l.a_services }}</h4>
 
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
@@ -8,18 +8,21 @@
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
     <i class="fa-solid fa-unlock"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_password }}</a>
+
   {{#google.google-site-verification}}
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
     href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
     <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
   {{/google.google-site-verification}}
+
   {{#google.google-site-domain-verification}}
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
     href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
     <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
   {{/google.google-site-domain-verification}}
+
   {{#umami.id}}
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
@@ -33,7 +36,6 @@
       </g>
     </svg>&nbsp;{{ l.a_umami_ttip }}&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
   </a>
-
   {{#umami.share}}
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
@@ -48,9 +50,13 @@
     </svg>&nbsp;{{ l.a_umami_ttip }}&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
   </a>
   {{/umami.share}}
-
   {{/umami.id}}
 
+  {{#langen}}
+  <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
+    data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
+    <i class="fa-solid fa-file-invoice"></i>&nbsp;INVOICES</a>
+  {{/langen}}
   {{#langcs}}
   <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
     data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
@@ -61,28 +67,7 @@
     data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
     <i class="fa-solid fa-file-invoice"></i>&nbsp;FAKTURÁCIE</a>
   {{/langsk}}
-  {{#langen}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect blue waves-light btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
-    <i class="fa-solid fa-file-invoice"></i>&nbsp;INVOICES</a>
-  {{/langen}}
 
-  <br>
-
-  <a style="margin:2px!important;" title="{{ l.a_sysinfo_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-    data-tooltip="{{ l.a_sysinfo_ttip }}" href="https://sys.gscloud.cz"><i class="fas fa-server"></i>&nbsp;SYSINFO</a>
-  
-  <a style="margin:2px!important;" title="{{ l.a_php_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-    data-tooltip="{{ l.a_php_ttip }}" href="https://php.gscloud.cz"><i class="fas fa-server"></i>&nbsp;PHPINFO</a>
-  
-  <a style="margin:2px!important;" title="{{ l.a_github_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-    data-tooltip="{{ l.a_github_ttip }}" href="https://github.com/gscloud"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
-  
-  {{#google_drive_backup}}
-  <a style="margin:2px!important;" title="{{ l.a_google_backup_ttip }}" rel="noreferrer noopener" target="_blank" class="btn waves-light tooltipped white-text blue" data-position="top"
-    data-tooltip="{{ l.a_google_backup_ttip }}" href="{{ google_drive_backup }}"><i class="fa-brands fa-google-drive"></i>&nbsp;BACKUP</a>
-  {{/google_drive_backup}}
-  
   <a id="debugger" style="margin:2px!important;" class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}" data-position="top"
     data-tooltip="CSS DEBUGGER"><i class="fa-solid fa-bug"></i></a>
 

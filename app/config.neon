@@ -21,8 +21,8 @@ local_goauth_redirect: "http://localhost:8009/login"
 # Google
 google: [
 #  map_query: "Prague,Czechia"
-  google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
-#  google-site-domain-verification: true
+#  google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
+  google-site-domain-verification: true
 ]
 
 # RSS feed
@@ -84,12 +84,12 @@ script_sources_extra: [
   "/js/lightbox.options.js",
 ]
 
-# locales
+# locale CSV
 locales: [
   lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
 ]
 
-# sheets
+# locale Sheets
 lasagna_sheets: [
   lasagna: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
 ]
