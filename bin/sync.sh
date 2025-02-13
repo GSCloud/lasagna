@@ -19,10 +19,12 @@ ENABLE_ALPHA=${ENABLE_ALPHA:-0}
 if [ -z "$BETA" ]; then
   if [ "$ENABLE_PROD" == "0" ]; then echo "PRODUCTION is disabled"; exit 0; fi
 fi
+
 if [ "$BETA" == "a" ]; then
   if [ "$ENABLE_ALPHA" == "0" ]; then echo "ALPHA is disabled"; exit 0; fi
   export DEST=$DESTA
 fi
+
 if [ "$BETA" == "b" ]; then
   if [ "$ENABLE_BETA" == "0" ]; then echo "BETA is disabled"; exit 0; fi
   export DEST=$DESTB
@@ -42,18 +44,18 @@ rm -rf www/cdn-assets
 
 VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
+
 REVISIONS=$(git rev-list --all --count)
 echo $REVISIONS > REVISIONS
 
 info "Version: $VERSION Revisions: $REVISIONS"
 
-# sync
 rsync -ahz --progress --delete-after --delay-updates \
   --exclude "www/download" \
   --exclude "www/upload" \
   .env \
   *.json \
-  *.pdf \
+  *.md \
   *.php \
   *.txt \
   app \
@@ -64,7 +66,6 @@ rsync -ahz --progress --delete-after --delay-updates \
   vendor \
   www \
   Makefile \
-  README.* \
   LICENSE \
   REVISIONS \
   VERSION \
