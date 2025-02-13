@@ -360,7 +360,7 @@ class AdminPresenter extends APresenter
             );
     
         case 'AuditLog':
-            $this->checkPermission('admin'); // only for admins
+            $this->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . 'AuditLog.txt';
             $file = \popen("tac {$filename}", 'r');
@@ -382,7 +382,6 @@ class AdminPresenter extends APresenter
         case 'GetCsvInfo':
             $this->checkPermission('admin,manager,editor');
             $csv_info = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
-
             // enhance the CSV array with information
             foreach ($csv_info as $k => $v) {
                 if (!$k || !$v) {
@@ -402,7 +401,6 @@ class AdminPresenter extends APresenter
                     }
                 }
             }
-
             return $this->writeJsonData($csv_info, $extras);
 
         case 'GetArticlesInfo':
@@ -546,10 +544,9 @@ class AdminPresenter extends APresenter
             if (!$key = $this->readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
-            $user = $this->getCurrentUser();
-            if ($user['id']) {
+            if ($user = $this->getCurrentUser()['id'] ?? null) {
                 if ($role = $this->getUserGroup()) {
-                    $hashid = \hash('sha256', $user['id']);
+                    $hashid = \hash('sha256', $user);
                     $code = $data['base']
                         . 'admin/FNXXXRemote?role='
                         . $role
@@ -573,7 +570,6 @@ class AdminPresenter extends APresenter
             $user = $_GET['user'] ?? null;
             switch ($role) {
             case 'admin':
-            case 'manager':
                 break;
             default:
                 $this->setUnauthorizedAccess();
@@ -586,7 +582,7 @@ class AdminPresenter extends APresenter
                     $this->addAuditMessage('REMOTE FN: NEW ADMIN KEY');
                     return $this->writeJsonData(
                         [
-                            'host' => $_SERVER['HTTP_HOST'],
+                            'host' => HOST,
                             'message' => 'OK',
                         ], $extras
                     );
@@ -616,7 +612,7 @@ class AdminPresenter extends APresenter
                     $this->addAuditMessage('REMOTE FN: CACHE FLUSH');
                     return $this->writeJsonData(
                         [
-                            'host' => $_SERVER['HTTP_HOST'],
+                            'host' => HOST,
                             'message' => 'OK',
                         ], $extras
                     );
@@ -648,7 +644,7 @@ class AdminPresenter extends APresenter
                     $this->addAuditMessage('REMOTE FN: CORE UPDATE');
                     return $this->writeJsonData(
                         [
-                            'host' => $_SERVER['HTTP_HOST'],
+                            'host' => HOST,
                             'message' => 'OK',
                         ], $extras
                     );
@@ -679,7 +675,7 @@ class AdminPresenter extends APresenter
                     return $this->writeJsonData(
                         [
                             'function' => $view,
-                            'host' => $_SERVER['HTTP_HOST'],
+                            'host' => HOST,
                             'message' => 'OK',
                         ], $extras
                     );
@@ -709,7 +705,7 @@ class AdminPresenter extends APresenter
                     $this->addAuditMessage('REMOTE FN: NEW SECURE KEY');
                     return $this->writeJsonData(
                         [
-                            'host' => $_SERVER['HTTP_HOST'],
+                            'host' => HOST,
                             'function' => $view,
                             'message' => 'OK',
                         ], $extras
@@ -1052,9 +1048,9 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Read the admin key
+     * Read or create the secure admin key
      *
-     * @return mixed admin key or null if not found
+     * @return mixed admin key / null on error or if cannot be created
      */
     public function readAdminKey()
     {
@@ -1065,7 +1061,7 @@ class AdminPresenter extends APresenter
             $this->createAdminKey();
             $key = \trim(@\file_get_contents($f) ?: '');
         }
-        if (strlen($key) > 0) {
+        if (\strlen($key) > 0) {
             return $key;
         }
         return null;
@@ -1125,7 +1121,7 @@ class AdminPresenter extends APresenter
             $tw = \intval($tw);
             if (\is_numeric($th)) {
                 $th = \intval($th);
-                $thmb = \imagecreatetruecolor($tw, $th); // placeholder image
+                $thmb = \imagecreatetruecolor($tw, $th); // placeholder
             }
         }
 
@@ -1154,7 +1150,7 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Decorate log entries
+     * Decorate log entries by reference
      *
      * @param string $val log line
      * @param int    $key array index

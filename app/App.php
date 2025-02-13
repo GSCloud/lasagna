@@ -149,6 +149,8 @@ if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
 $data['isSafari'] = $isSafari;
 
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
+define('HOST', $host);
+
 $data['base'] = $data['BASE'] = $host ? (
     ($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/"
 ) : '';
