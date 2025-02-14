@@ -1,8 +1,14 @@
 #!/bin/bash
 #@author Fred Brooker <git@gscloud.cz>
 
-dir="$(dirname "$0")"
-. "$dir/_includes.sh"
+info() {
+  echo -e "\e[1;32m*\e[0;1m ${*}\e[0m" 1>&2
+}
+
+fail() {
+  echo -e "\n\n\e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
+  exit 1
+}
 
 if [ -n "$1" ]; then export BETA="$1"; else export BETA="b"; fi
 if [ "$BETA" == "x" ]; then

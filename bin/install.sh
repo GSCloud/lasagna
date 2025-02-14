@@ -1,15 +1,28 @@
 #!/bin/bash
 #@author Fred Brooker <git@gscloud.cz>
 
-dir="$(dirname "$0")"
-. "$dir/_includes.sh"
+info() {
+  echo -e "\e[1;32m*\e[0;1m ${*}\e[0m" 1>&2
+}
+
+function yes_or_no () {
+  while true
+  do
+    read -p "$* [y/N]: " yn
+    case $yn in
+      [Yy]*) return 0 ;;
+      [Nn]*) return 1 ;;
+      *)
+      return 1 ;;
+    esac
+  done
+}
 
 info "Installing 👶"
 
 mkdir -p ci data logs temp www/{download,upload} && find . -name "*.sh" -exec chmod +x {} +
 
 echo "Root permission needed to run some tasks 😎"
-
 sudo chmod 0777 ci data logs temp www/{download,upload}
 sudo chown -R www-data:www-data data
 sudo chgrp -R www-data ci data www www/{download,upload}

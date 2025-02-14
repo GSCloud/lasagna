@@ -1,11 +1,11 @@
 #!/bin/bash
 #@author Fred Brooker <git@gscloud.cz>
 
-INPUT="logo.png"
-OUT_DIR="."
+INPUT=logo.png
+OUT_DIR=.
 
 if ! [ -x "$(command -v convert)" ]; then
-  echo "ERROR: convert not found. Check if ImageMagick is installed." >&2
+  echo "ERROR: convert command not found" >&2
   exit 1
 fi
 
@@ -18,12 +18,13 @@ if [ -f $INPUT ]; then
     if [ -f favicon-${size}.png ]; then
       echo -ne "."
     else
-      echo "ERROR: Could not process input file $INPUT" >&2
+      echo "ERROR: could not process input file $INPUT" >&2
       exit 1
     fi
   done
 else
-  echo "ERROR: Input file $INPUT does not exist." >&2
+  echo "ERROR: input file $INPUT does not exist" >&2
   exit 1
 fi
+
 echo -en "\nDone.\n"

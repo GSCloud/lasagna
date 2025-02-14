@@ -34,40 +34,44 @@ BLUE := $(shell tput setaf 4)
 
 all: info
 info:
-	@echo "\n\e[1;32m👾 Welcome to ${APP_NAME}${R}"
+	@echo "${GREEN}${B}👾 Welcome to ${APP_NAME}${R}"
 	@echo ""
 ifneq ($(origin NAME), undefined)
 ifneq ($(origin PORT), undefined)
 	@echo "${R}📦️ TESSERACT${R}\t$(dot) \e[0;4m${NAME}${R} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
 endif
 endif
-	@echo "${L}» CONTAINER${R}"
+	@echo "${L}» CONTAINER «${R}"
 	@echo "${B}build${R}\t build image"
 	@echo "${B}push${R}\t push image into the registry"
-	@echo "${B}start${R}\t container start"
-	@echo "${B}run${R}\t container start + show in the browser"
-	@echo "${B}stop${R}\t container stop"
-	@echo "${B}kill${R}\t container kill"
-	@echo "${B}remove${R}\t container remove"
-	@echo "${B}cref${R}\t container refresh cloud CSV"
-	@echo "${B}exec${R}\t run interactive shell"
 	@echo ""
-	@echo "${L}» DEVELOPMENT${R}"
-	@echo "${B}install${R}\t install"
-	@echo "${B}doctor${R}\t run Doctor"
+	@echo "${B}start${R}\t start"
+	@echo "${B}stop${R}\t stop"
+	@echo "${B}kill${R}\t kill"
+	@echo "${B}remove${R}\t remove"
+	@echo ""
+	@echo "${B}run${R}\t start + show in the browser"
+	@echo "${B}cref${R}\t refresh cloud CSV"
+	@echo "${B}exec${R}\t interactive shell (HINT: run \`make\`)"
+	@echo ""
+	@echo "${L}» DEVELOPMENT «${R}"
+	@echo "${B}install${R}\t core installation"
 	@echo "${B}update${R}\t update dependencies"
-	@echo "${B}icons${R}\t update icons"
-	@echo "${B}base${R}\t download base CSV"
-	@echo "${B}refresh${R}\t refresh cloud CSV"
-	@echo "${B}sync${R}\t sync to the remote host"
-	@echo "${B}clear${R}\t clear all temporary files"
-	@echo "${B}docs${R}\t prepare and convert documentation"
+	@echo "${B}doctor${R}\t check installation"
 	@echo ""
-	@echo "${L}» TESTS${R}"
-	@echo "${B}stan${R}\t PHPStan tests"
-	@echo "${B}unit${R}\t UNIT tests"
-	@echo "${B}test${R}\t LOCAL integration tests"
-	@echo "${B}prod${R}\t PRODUCTION integration tests"
+	@echo "${B}icons${R}\t update icons"
+	@echo "${B}base${R}\t download and build base CSV"
+	@echo "${B}refresh${R}\t refresh cloud CSV"
+	@echo "${B}clear${R}\t clear temporary files"
+	@echo "${B}sync${R}\t sync to the remote host"
+	@echo ""
+	@echo "${B}docs${R}\t convert documentation"
+	@echo ""
+	@echo "${L}» TESTING «${R}"
+	@echo "${B}stan${R}\t PHPStan test"
+	@echo "${B}unit${R}\t UNIT test"
+	@echo "${B}test${R}\t LOCAL integration test"
+	@echo "${B}prod${R}\t PRODUCTION integration test"
 	@echo ""
 
 base:
@@ -257,7 +261,7 @@ endif
 ifeq ($(origin PORT), undefined)
 	$(error "PORT is not defined")
 endif
-	@docker stop ${NAME}
+	@-docker stop ${NAME}
 
 kill:
 ifeq ($(strip $(has_docker)),)
@@ -272,7 +276,7 @@ endif
 ifeq ($(origin PORT), undefined)
 	$(error "PORT is not defined")
 endif
-	@docker kill ${NAME}
+	@-docker kill ${NAME} --force
 
 remove:
 ifeq ($(strip $(has_docker)),)
@@ -287,7 +291,7 @@ endif
 ifeq ($(origin PORT), undefined)
 	$(error "PORT is not defined")
 endif
-	@docker remove ${NAME} --force
+	@-docker remove ${NAME} --force
 
 exec:
 ifeq ($(strip $(has_docker)),)
