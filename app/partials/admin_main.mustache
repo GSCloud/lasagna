@@ -91,9 +91,10 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   {{>admin_tab_news}}
 
   <hr>
+  FCGI: <span class=bold>{{#CONST.FCGI_ENABLED}}ON{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}OFF{{/CONST.FCGI_ENABLED}}</span> &nbsp;
   REDIS: <span class=bold>{{#CONST.REDIS_CACHE}}ON{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}OFF{{/CONST.REDIS_CACHE}}</span> &nbsp;
-  LIMITER: <span class=bold id="limit">?</span> ({{ CONST.LIMITER_MAXIMUM }}x / {{ cache_profiles.limiter }}) &nbsp;
-  BAN: {{ CONST.BAN_MAXIMUM }}x / {{ cache_profiles.ban }}
+  LIMITER: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
+  BAN: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
   <br>
   model: <span class=bold id="time1">?</span> ms &nbsp;
   processing: <span class=bold id="time2">?</span> ms &nbsp;

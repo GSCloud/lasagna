@@ -42,6 +42,13 @@ ini_set(
 ob_start();
 error_reporting(E_ALL);
 
+// FastCGI?
+if (getenv('FCGI_ROLE') === 'RESPONDER') {
+    define('FCGI_ENABLED', true);
+} else {
+    define('FCGI_ENABLED', false);
+}
+
 // directory separator
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 

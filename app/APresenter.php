@@ -598,18 +598,18 @@ abstract class APresenter implements IPresenter
      */
     public function __destruct()
     {
-        // clear outbut buffering
         if (\ob_get_level()) {
             @\ob_end_flush();
         }
-        // finish request
         if (\function_exists('fastcgi_finish_request')) {
             \fastcgi_finish_request();
         }
+
         // preload CSV definitions
         foreach ($this->csv_postload as $key) {
             $this->preloadAppData((string) $key, true);
         }
+
         // load actual CSV data
         $this->checkLocales((bool) $this->force_csv_check);
         list($usec, $sec) = \explode(' ', \microtime());
@@ -742,6 +742,7 @@ abstract class APresenter implements IPresenter
                 'CONST.DOMAIN' => DOMAIN,
                 'CONST.DOWNLOAD' => DOWNLOAD,
                 'CONST.ENGINE' => ENGINE,
+                'CONST.FCGI_ENABLED' => FCGI_ENABLED,
                 'CONST.LOGS' => LOGS,
                 'CONST.LOCALHOST' => LOCALHOST,
                 'CONST.PARTIALS' => PARTIALS,
