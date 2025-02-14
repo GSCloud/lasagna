@@ -2,34 +2,35 @@
 MAKEFLAGS += --no-print-directory
 include .env
 
-has_chrome != command -v google-chrome 2>/dev/null
-has_docker != command -v docker 2>/dev/null
-has_phpstan != command -v vendor/bin/phpstan 2>/dev/null
-has_rename != command -v rename 2>/dev/null
-has_wget != command -v wget 2>/dev/null
+# app checks
+has_chrome := $(shell command -v google-chrome 2>/dev/null)
+has_docker := $(shell command -v docker 2>/dev/null)
+has_phpstan := $(shell command -v vendor/bin/phpstan 2>/dev/null)
+has_rename := $(shell command -v rename 2>/dev/null)
+has_wget := $(shell command -v wget 2>/dev/null)
 
-BASE := 'app/base.csv'
+BASE := app/base.csv
 DOWNLOADS := $(HOME)/Downloads
 ADMIN_FILE := $(shell mktemp)
 DEFAULT_FILE := $(shell mktemp)
 ADMIN_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDwThuqEPGHzRWCJNs3KRy1OO8gh_t0qMRH2e5N2Ok_dSf29tqxnAImE4pnc8B4qE_2ZJKgHIiyIIk/pub?output=csv'
 DEFAULT_URL := 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrx4arHlU3KLpy3Vlw_sX9iEZz2t_gZz5SV4NFa8ufcFqbVo1Cxgsp4J81-Z02cPNPJ9Jc7b_Qy_ay/pub?output=csv'
 
-status != docker inspect --format '{{json .State.Running}}' ${NAME} 2>/dev/null | grep true
-
-ifneq ($(strip $(status)),)
-dot=🟢
+status := $(shell docker inspect --format '{{.State.Running}}' ${NAME} 2>/dev/null)
+ifeq ($(status),true)
+	dot := 🟢
 else
-dot=🔴
+	dot := 🔴
 endif
 
-B := \e[0;1m
-L := \e[0;2m
-R := \e[0m
-GREEN  := \e[0;32m
-RED    := \e[0;31m
-YELLOW := \e[0;33m
-BLUE   := \e[0;34m
+# color definitions
+B := $(shell tput bold)
+L := $(shell tput dim)
+R := $(shell tput sgr0)
+GREEN := $(shell tput setaf 2)
+RED := $(shell tput setaf 1)
+YELLOW := $(shell tput setaf 3)
+BLUE := $(shell tput setaf 4)
 
 all: info
 info:
