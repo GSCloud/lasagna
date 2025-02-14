@@ -969,7 +969,9 @@ class AdminPresenter extends APresenter
         $lock = $factory->createLock('core-update');
         if ($lock->acquire()) {
             try {
-                \ob_flush();
+                if (ob_get_level()) {
+                    @ob_end_clean();
+                }
                 if (\is_array($this->getData('cache_profiles'))) {
                     foreach ($this->getData('cache_profiles') as $k => $v) {
                         Cache::clear($k);
