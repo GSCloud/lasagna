@@ -153,7 +153,7 @@ class AdminPresenter extends APresenter
             "uuid" => $this->getUID(),
             "ip" => $this->getIP(),
             // override: ?key= parameter
-            'override' => (bool) $this->isLocalAdmin(),
+            'override' => (bool) $this->_isLocalAdmin(),
         ];
 
         // API calls
@@ -181,6 +181,7 @@ class AdminPresenter extends APresenter
             );
             $names = \implode($names);
 
+            $this->addMessage("ADMIN: file(s) uploaded: {$count}x<br>{$names}");
             $this->addAuditMessage("ADMIN: file(s) uploaded: {$count}x<br>{$names}");
             return $this->writeJsonData(\array_values($uploads), $extras);
 
@@ -203,6 +204,7 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(400, $extras);
             }
 
+            $this->addMessage('ADMIN: file deleted [' . $result . ']');
             $this->addAuditMessage('ADMIN: file deleted [' . $result . ']');
             return $this->writeJsonData($result, $extras);
 
@@ -211,7 +213,7 @@ class AdminPresenter extends APresenter
             if (\is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
-            if (!\is_dir(UPLOAD) || !\is_readable(UPLOAD)) {
+            if (!\is_dir(UPLOAD) || !is_readable(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
 
@@ -287,7 +289,7 @@ class AdminPresenter extends APresenter
                                 $file = UPLOAD . DS
                                     . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                     . $fn . '.webp';
-                                if (\file_exists($file) && \is_readable($file)) {
+                                if (file_exists($file) && is_readable($file)) {
                                     $thumbnails[$w] = self::THUMB_PREFIX . $w
                                         . self::THUMB_POSTFIX . $fn . '.webp';
                                 }
@@ -387,8 +389,8 @@ class AdminPresenter extends APresenter
                 if (!$k || !$v) {
                     continue;
                 }
-                if (\file_exists(DATA . DS . "{$k}.csv")
-                    && \is_readable(DATA . DS . "{$k}.csv")
+                if (file_exists(DATA . DS . "{$k}.csv")
+                    && is_readable(DATA . DS . "{$k}.csv")
                 ) {
                     $csv_info[$k] = [
                         'csv' => $v,
@@ -408,10 +410,9 @@ class AdminPresenter extends APresenter
             $data = [];
             $profile = 'default';
             $f = DATA . DS. "summernote_articles_{$profile}.txt";
-            if (\file_exists($f) && \is_readable($f)) {
-                $data = @\file(
-                    $f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
-                );
+            $perm = FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES;
+            if (file_exists($f) && is_readable($f)) {
+                $data = \file($f, $perm);
                 if (\is_array($data)) {
                     $data = \array_unique($data, SORT_LOCALE_STRING);
                 } else {
@@ -426,7 +427,7 @@ class AdminPresenter extends APresenter
             $profile = 'default';
             if (isset($_POST['data'])) {
                 $data = (string) \trim((string) $_POST['data']);
-                // remove all extra whitespace
+                // remove extra whitespace
                 $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST['data']);
                 $x++;
             }
@@ -440,7 +441,7 @@ class AdminPresenter extends APresenter
             if (isset($_POST['hash'])) {
                 $hash = \trim((string) $_POST['hash']);
                 // SHA 256 hexadecimal
-                if (\strlen($hash) == 64) {
+                if (\strlen($hash) === 64) {
                     $x++;
                 }
             }
@@ -460,16 +461,12 @@ class AdminPresenter extends APresenter
                 $extras['error_descriptions'] = 'incorrect data_nows';
                 return $this->writeJsonData(500, $extras);
             }
-            if (\file_exists(DATA . DS. "summernote_{$profile}_{$hash}.json")
-                && \is_readable(DATA . DS. "summernote_{$profile}_{$hash}.json")
-            ) {
-                if (@\copy(
-                    DATA . DS . "summernote_{$profile}_{$hash}.json",
-                    DATA . DS . "summernote_{$profile}_{$hash}.bak"
-                ) === false
-                ) {
-                    $this->addError("Article $path backup failed.");
-                    $this->addAuditMessage("Article $path backup failed.");
+            $fr = DATA . DS. "summernote_{$profile}_{$hash}.json";
+            $fb = DATA . DS. "summernote_{$profile}_{$hash}.bak";
+            if (file_exists($fr) && is_readable($fr)) {
+                if (copy($fr, $fb) === false) {
+                    $this->addError("ADMIN: Article $path backup failed.");
+                    $this->addAuditMessage("ADMIN: Article $path backup failed.");
                     return $this->writeJsonData(
                         [
                             'code' => 401,
@@ -480,13 +477,11 @@ class AdminPresenter extends APresenter
                     );
                 };
             }
-            if (@\file_put_contents(
-                DATA . DS . "summernote_{$profile}_{$hash}.db",
-                $data_nows . "\n", LOCK_EX | FILE_APPEND
-            ) === false
-            ) {
-                $this->addError("Article $path history write failed.");
-                $this->addAuditMessage("Article $path history write failed.");
+            $fp = DATA . DS . "summernote_{$profile}_{$hash}.db";
+            $perm = LOCK_EX | FILE_APPEND;
+            if (file_put_contents($fp, $data_nows . "\n", $perm) === false) {
+                $this->addError("ADMIN: Article $path history write failed.");
+                $this->addAuditMessage("ADMIN: Article $path history write failed.");
                 return $this->writeJsonData(
                     [
                         'code' => 401,
@@ -496,12 +491,11 @@ class AdminPresenter extends APresenter
                     ], $extras
                 );
             };
-            if (@\file_put_contents(
-                DATA . DS . "summernote_{$profile}_{$hash}.json", $data, LOCK_EX
-            ) === false
-            ) {
-                $this->addError("Article $path write to file failed.");
-                $this->addAuditMessage("Article $path write to file failed.");
+            $fp = DATA . DS . "summernote_{$profile}_{$hash}.json";
+            $perm = LOCK_EX;
+            if (file_put_contents($fp, $data, $perm) === false) {
+                $this->addError("ADMIN: Article $path write to file failed.");
+                $this->addAuditMessage("ADMIN: Article $path write to file failed.");
                 return $this->writeJsonData(
                     [
                         'code' => 500,
@@ -515,10 +509,10 @@ class AdminPresenter extends APresenter
             // save article meta data
             $p = [];
             $f = DATA . DS . "summernote_articles_{$profile}.txt";
-            if (\file_exists($f) && \is_readable($f)) {
-                $p = @\file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            } else {
-                $p = [];
+            $perm = FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES;
+            $p = [];
+            if (file_exists($f) && is_readable($f)) {
+                $p = \file($f, $perm);
             }
             if (\is_array($p)) {
                 $p[] = $path;
@@ -528,8 +522,7 @@ class AdminPresenter extends APresenter
             }
             \sort($p, SORT_LOCALE_STRING);
             $p = \array_unique($p, SORT_LOCALE_STRING);
-            \file_put_contents($f, \implode("\n", $p), LOCK_EX);
-
+            file_put_contents($f, \implode("\n", $p), LOCK_EX);
             $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
             return $this->writeJsonData(
                 [
@@ -541,7 +534,7 @@ class AdminPresenter extends APresenter
     
         case 'GetToken':
             $this->checkPermission('admin,manager,editor');
-            if (!$key = $this->readAdminKey()) {
+            if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
             if ($user = $this->getCurrentUser()['id'] ?? null) {
@@ -554,15 +547,15 @@ class AdminPresenter extends APresenter
                         . $hashid
                         . '&token='
                         . \hash('sha256', $role . $key . $hashid);
-                    $this->addMessage("Get TOKEN as [{$role}]");
-                    $this->addAuditMessage("Get TOKEN as [{$role}]");
+                    $this->addMessage("ADMIN: Get TOKEN as [{$role}]");
+                    $this->addAuditMessage("ADMIN: Get TOKEN as [{$role}]");
                     return $this->writeJsonData($code, $extras);
                 }
             }
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
 
         case 'RebuildAdminKeyRemote':
-            if (!$key = $this->readAdminKey()) {
+            if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
@@ -572,11 +565,11 @@ class AdminPresenter extends APresenter
             case 'admin':
                 break;
             default:
-                $this->setUnauthorizedAccess();
+                $this->_unauthorizedAccess();
             }
-            if ($role && $user && $token || $this->isLocalAdmin()) {
+            if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
-                if ($code === $token || $this->isLocalAdmin()) {
+                if ($code === $token || $this->_isLocalAdmin()) {
                     $this->_rebuildAdminKey();
                     $this->addMessage('REMOTE FN: NEW ADMIN KEY');
                     $this->addAuditMessage('REMOTE FN: NEW ADMIN KEY');
@@ -588,10 +581,10 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
 
         case 'FlushCacheRemote':
-            if (!$key = $this->readAdminKey()) {
+            if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
@@ -603,12 +596,13 @@ class AdminPresenter extends APresenter
             case 'editor':
                 break;
             default:
-                $this->setUnauthorizedAccess();
+                $this->_unauthorizedAccess();
             }
-            if ($role && $user && $token || $this->isLocalAdmin()) {
+            if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
-                if ($code === $token || $this->isLocalAdmin()) {
+                if ($code === $token || $this->_isLocalAdmin()) {
                     $this->flushCache();
+                    $this->addMessage('REMOTE FN: CACHE FLUSH');
                     $this->addAuditMessage('REMOTE FN: CACHE FLUSH');
                     return $this->writeJsonData(
                         [
@@ -618,10 +612,10 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
 
         case 'CoreUpdateRemote':
-            if (!$key = $this->readAdminKey()) {
+            if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
@@ -633,14 +627,15 @@ class AdminPresenter extends APresenter
             case 'editor':
                 break;
             default:
-                $this->setUnauthorizedAccess();
+                $this->_unauthorizedAccess();
             }
-            if ($role && $user && $token || $this->isLocalAdmin()) {
+            if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
-                if ($code === $token || $this->isLocalAdmin()) {
+                if ($code === $token || $this->_isLocalAdmin()) {
                     $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
+                    $this->addMessage('REMOTE FN: CORE UPDATE');
                     $this->addAuditMessage('REMOTE FN: CORE UPDATE');
                     return $this->writeJsonData(
                         [
@@ -650,10 +645,10 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
 
         case 'RebuildNonceRemote':
-            if (!$key = $this->readAdminKey()) {
+            if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
@@ -664,11 +659,11 @@ class AdminPresenter extends APresenter
             case 'manager':
                 break;
             default:
-                $this->setUnauthorizedAccess();
+                $this->_unauthorizedAccess();
             }
-            if ($role && $user && $token || $this->isLocalAdmin()) {
+            if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
-                if ($code === $token || $this->isLocalAdmin()) {
+                if ($code === $token || $this->_isLocalAdmin()) {
                     $this->_rebuildNonce();
                     $this->addMessage('REMOTE FN: NEW NONCE');
                     $this->addAuditMessage('REMOTE FN: NEW NONCE');
@@ -681,10 +676,10 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
 
         case 'RebuildSecureKeyRemote':
-            if (!$key = $this->readAdminKey()) {
+            if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
@@ -695,11 +690,11 @@ class AdminPresenter extends APresenter
             case 'manager':
                 break;
             default:
-                $this->setUnauthorizedAccess();
+                $this->_unauthorizedAccess();
             }
-            if ($role && $user && $token || $this->isLocalAdmin()) {
+            if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = hash('sha256', $role . $key . $user);
-                if ($code === $token || $this->isLocalAdmin()) {
+                if ($code === $token || $this->_isLocalAdmin()) {
                     $this->_rebuildSecureKey();
                     $this->addMessage('REMOTE FN: NEW SECURE KEY');
                     $this->addAuditMessage('REMOTE FN: NEW SECURE KEY');
@@ -712,7 +707,7 @@ class AdminPresenter extends APresenter
                     );
                 }
             }
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
 
         case 'FlushCache':
             $this->checkPermission('admin,manager,editor');
@@ -731,7 +726,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         default:
-            $this->setUnauthorizedAccess();
+            $this->_unauthorizedAccess();
         }
         return $this;
     }
@@ -789,7 +784,7 @@ class AdminPresenter extends APresenter
             }
 
             // Process the uploaded file
-            if (@\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
+            if (\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
                 if (\is_array($info)) {
                     $fn = $info['filename'];
 
@@ -807,8 +802,8 @@ class AdminPresenter extends APresenter
                             $file = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                 . $fn . $x;
-                            if (\file_exists($file)) {
-                                @\unlink($file);
+                            if (file_exists($file)) {
+                                @unlink($file);
                             }
                         }
                     }
@@ -872,21 +867,21 @@ class AdminPresenter extends APresenter
                         $file = UPLOAD . DS
                             . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                             . $fn . $x;
-                        if (\file_exists($file)) {
-                            @\unlink($file);
+                        if (file_exists($file)) {
+                            @unlink($file);
                         }
                     }
                     $file = UPLOAD . DS . $fn . $x;
-                    if (\file_exists($file)) {
-                        @\unlink($file);
+                    if (file_exists($file)) {
+                        @unlink($file);
                     }
                 }
             }
 
             // delete origin
             $file = UPLOAD . DS . $name;
-            if (\file_exists($file)) {
-                @\unlink($file);
+            if (file_exists($file)) {
+                @unlink($file);
             }
             return $name;
         }
@@ -898,17 +893,16 @@ class AdminPresenter extends APresenter
      *
      * @return boolean is there a local administrator?
      */
-    public function isLocalAdmin()
+    private function _isLocalAdmin()
     {
         if (CLI) {
             return true;
         }
-        if ($_SERVER['REMOTE_ADDR'] === '127.0.0.1') {
+        if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] === '127.0.0.1') { // phpcs:ignore
             return true;
         }
-        $key = $this->readAdminKey();
-        $gkey = $_GET['key'] ?? null;
-        if ($key && $key === $gkey) {
+        $key = $this->_readAdminKey();
+        if ($key && isset($_GET['key']) && $key === $_GET['key']) { // phpcs:ignore
             return true;
         }
         return false;
@@ -921,8 +915,8 @@ class AdminPresenter extends APresenter
      */
     private function _rebuildNonce()
     {
-        if (\file_exists(DATA . DS . self::IDENTITY_NONCE_FILE)) {
-            @\unlink(DATA . DS . self::IDENTITY_NONCE_FILE);
+        if (file_exists(DATA . DS . self::IDENTITY_NONCE_FILE)) {
+            @unlink(DATA . DS . self::IDENTITY_NONCE_FILE);
         }
         \clearstatcache();
         return $this->setIdentity();
@@ -935,10 +929,11 @@ class AdminPresenter extends APresenter
      */
     private function _rebuildAdminKey()
     {
-        if (\file_exists(DATA . DS . self::ADMIN_KEY)) {
-            @\unlink(DATA . DS . self::ADMIN_KEY);
+        $file = DATA . DS . self::ADMIN_KEY;
+        if (file_exists($file)) {
+            @unlink($file);
         }
-        return $this->createAdminKey();
+        return $this->_createAdminKey();
     }
 
     /**
@@ -950,15 +945,15 @@ class AdminPresenter extends APresenter
     {
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         if (!\is_string($key)) {
-            ErrorPresenter::getInstance()->process(500);
+            $this->setLocation('/err/500');
         }
         if (\is_string($key)) {
             $key = \trim($key, '/.');
-            if (\file_exists(DATA . DS . $key)) {
-                @\unlink(DATA . DS . $key);
+            if (file_exists(DATA . DS . $key)) {
+                unlink(DATA . DS . $key);
+                clearstatcache();
             }
         }
-        \clearstatcache();
         return $this->setIdentity();
     }
 
@@ -974,7 +969,7 @@ class AdminPresenter extends APresenter
         $lock = $factory->createLock('core-update');
         if ($lock->acquire()) {
             try {
-                @\ob_flush();
+                \ob_flush();
                 if (\is_array($this->getData('cache_profiles'))) {
                     foreach ($this->getData('cache_profiles') as $k => $v) {
                         Cache::clear($k);
@@ -984,7 +979,6 @@ class AdminPresenter extends APresenter
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
-
                 if (LOCALHOST) {
                     // localhost
                 } else {
@@ -995,7 +989,7 @@ class AdminPresenter extends APresenter
                 }
                 $this->checkLocales();
             } finally {
-                @\file_put_contents(
+                @file_put_contents(
                     DATA . DS . '_random_cdn_hash',
                     \hash('sha1', $this->getNonce()),
                     LOCK_EX
@@ -1014,13 +1008,14 @@ class AdminPresenter extends APresenter
      * 
      * @return void
      */
-    public function setUnauthorizedAccess()
+    private function _unauthorizedAccess()
     {
         if (CLI) {
             echo "ERROR: unauthorized access\n";
             exit(1);
         }
-        $this->addAuditMessage('Unauthorized');
+        $this->addMessage('ADMIN: Unauthorized.');
+        $this->addAuditMessage('ADMIN: Unauthorized.');
         $this->setLocation('/err/401');
     }
 
@@ -1029,37 +1024,47 @@ class AdminPresenter extends APresenter
      *
      * @return self
      */
-    public function createAdminKey()
+    private function _createAdminKey()
     {
         $f = DATA . DS . self::ADMIN_KEY;
-        if (!\file_exists($f)) {
-            if (!\file_put_contents(
-                $f, \hash('sha256', \random_bytes(256) . \time())
-            )
-            ) {
-                $this->addError('CREATE ADMIN KEY: Internal Server Error');
+        if (!file_exists($f)) {
+            $key = \hash('sha256', \random_bytes(32) . \time());
+            if (file_put_contents($f, $key) === false) {
+                $error = error_get_last();
+                $errorMessage = 'ADMIN: CREATE KEY - Error writing file: '
+                    . ($error ? $error['message'] : 'Unknown error');
+                unlink($f);
+                $this->addError($errorMessage);
+                $this->addAuditMessage($errorMessage);
+                $this->setLocation('/err/500');
+            } else if (!chmod($f, 0600)) {
+                $error = error_get_last();
+                $errorMessage = 'ADMIN: CREATE KEY - Error setting permissions: '
+                    . ($error ? $error['message'] : 'Unknown error');
+                unlink($f);
+                $this->addError($errorMessage);
+                $this->addAuditMessage($errorMessage);
                 $this->setLocation('/err/500');
             }
-            @\chmod($f, 0660);
-            $this->addMessage('ADMIN: keyfile created');
-            $this->addAuditMessage('ADMIN: keyfile created');
+            $this->addMessage('ADMIN: Keyfile created');
+            $this->addAuditMessage('ADMIN: Keyfile created');
         }
         return $this;
     }
 
     /**
-     * Read or create the secure admin key
+     * Read the secure admin key or create a new one if there is no key available
      *
      * @return mixed admin key / null on error or if cannot be created
      */
-    public function readAdminKey()
+    private function _readAdminKey()
     {
         $f = DATA . DS . self::ADMIN_KEY;
-        if (\file_exists($f) && \is_readable($f)) {
-            $key = \trim(@\file_get_contents($f) ?: '');
+        if (file_exists($f) && is_readable($f)) {
+            $key = \trim(\file_get_contents($f) ?: '');
         } else {
-            $this->createAdminKey();
-            $key = \trim(@\file_get_contents($f) ?: '');
+            $this->_createAdminKey();
+            $key = \trim(\file_get_contents($f) ?: '');
         }
         if (\strlen($key) > 0) {
             return $key;
@@ -1271,7 +1276,7 @@ class AdminPresenter extends APresenter
     private function _getCSVFileLines($f)
     {
         try {
-            if (!\file_exists($f)) {
+            if (!file_exists($f)) {
                 return -1;
             }
             $csv = Reader::createFromPath($f, 'r');

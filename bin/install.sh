@@ -23,6 +23,7 @@ info "Installing 👶"
 mkdir -p ci data logs temp www/{download,upload} && find . -name "*.sh" -exec chmod +x {} +
 
 echo "Root permission needed to run some tasks 😎"
+
 sudo chmod 0777 ci data logs temp www/{download,upload}
 sudo chown -R www-data:www-data data
 sudo chgrp -R www-data ci data www www/{download,upload}
