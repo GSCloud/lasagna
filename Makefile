@@ -24,54 +24,63 @@ else
 endif
 
 # color definitions
-B := $(shell tput bold)
-L := $(shell tput dim)
-R := $(shell tput sgr0)
-GREEN := $(shell tput setaf 2)
-RED := $(shell tput setaf 1)
-YELLOW := $(shell tput setaf 3)
-BLUE := $(shell tput setaf 4)
+ifeq ($(NO_COLOR),1)  # Check if NO_COLOR environment variable is set
+	BOLD :=
+	DIM :=
+	RESET :=
+	GREEN :=
+	RED :=
+	YELLOW :=
+	BLUE :=
+else
+	BOLD := $(shell tput bold)
+	DIM := $(shell tput dim)
+	RESET := $(shell tput sgr0)
+	GREEN := $(shell tput setaf 2)
+	RED := $(shell tput setaf 1)
+	YELLOW := $(shell tput setaf 3)
+	BLUE := $(shell tput setaf 4)
+endif
 
 all: info
 info:
-	@echo "${GREEN}${B}👾 Welcome to ${APP_NAME}${R}"
+	@echo "${GREEN}${BOLD}👾 ${APP_NAME}${RESET}"
 	@echo ""
 ifneq ($(origin NAME), undefined)
 ifneq ($(origin PORT), undefined)
-	@echo "${R}📦️ TESSERACT${R}\t$(dot) \e[0;4m${NAME}${R} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
+	@echo "${RESET}📦️ ${BOLD}TESSERACT: ${YELLOW}${NAME}${RESET}\t$(dot) \e[0;4m${NAME}${RESET} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
 endif
 endif
-	@echo "${L}» CONTAINER «${R}"
-	@echo "${B}build${R}\t build image"
-	@echo "${B}push${R}\t push image into the registry"
+	@echo "${L}» CONTAINER${RESET}"
+	@echo "${BOLD}build${RESET}\t build image"
+	@echo "${BOLD}push${RESET}\t push image into the registry"
 	@echo ""
-	@echo "${B}start${R}\t start"
-	@echo "${B}stop${R}\t stop"
-	@echo "${B}kill${R}\t kill"
-	@echo "${B}remove${R}\t remove"
+	@echo "${BOLD}start${RESET}\t start"
+	@echo "${BOLD}stop${RESET}\t stop"
+	@echo "${BOLD}kill${RESET}\t kill"
+	@echo "${BOLD}remove${RESET}\t remove"
 	@echo ""
-	@echo "${B}run${R}\t start + show in the browser"
-	@echo "${B}cref${R}\t refresh cloud CSV"
-	@echo "${B}exec${R}\t interactive shell (HINT: run \`make\`)"
+	@echo "${BOLD}run${RESET}\t start + show in the browser"
+	@echo "${BOLD}cref${RESET}\t refresh cloud CSV"
+	@echo "${BOLD}exec${RESET}\t interactive shell (HINT: ${DIM}run \`make\`${RESET})"
 	@echo ""
-	@echo "${L}» DEVELOPMENT «${R}"
-	@echo "${B}install${R}\t core installation"
-	@echo "${B}update${R}\t update dependencies"
-	@echo "${B}doctor${R}\t check installation"
+	@echo "${L}» DEVELOPMENT${RESET}"
+	@echo "${BOLD}install${RESET}\t core installation"
+	@echo "${BOLD}update${RESET}\t update dependencies"
+	@echo "${BOLD}doctor${RESET}\t check installation"
 	@echo ""
-	@echo "${B}icons${R}\t update icons"
-	@echo "${B}base${R}\t download and build base CSV"
-	@echo "${B}refresh${R}\t refresh cloud CSV"
-	@echo "${B}clear${R}\t clear temporary files"
-	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${BOLD}icons${RESET}\t update icons"
+	@echo "${BOLD}base${RESET}\t download and build base CSV"
+	@echo "${BOLD}refresh${RESET}\t refresh cloud CSV"
+	@echo "${BOLD}clear${RESET}\t clear temporary files"
+	@echo "${BOLD}sync${RESET}\t sync to the remote host"
+	@echo "${BOLD}docs${RESET}\t convert documentation"
 	@echo ""
-	@echo "${B}docs${R}\t convert documentation"
-	@echo ""
-	@echo "${L}» TESTING «${R}"
-	@echo "${B}stan${R}\t PHPStan test"
-	@echo "${B}unit${R}\t UNIT test"
-	@echo "${B}test${R}\t LOCAL integration test"
-	@echo "${B}prod${R}\t PRODUCTION integration test"
+	@echo "${L}» TESTING${RESET}"
+	@echo "${BOLD}stan${RESET}\t PHPStan test"
+	@echo "${BOLD}unit${RESET}\t UNIT test"
+	@echo "${BOLD}test${RESET}\t LOCAL integration test"
+	@echo "${BOLD}prod${RESET}\t PRODUCTION integration test"
 	@echo ""
 
 base:
@@ -221,7 +230,7 @@ endif
 ifeq ($(origin TAG), undefined)
 	$(error "TAG is not defined")
 endif
-	@echo "volumes: ${B}app/config_private.neon${R}\n"
+	@echo "volumes: ${BOLD}app/config_private.neon${RESET}\n"
 	@docker run -d --rm --name ${NAME} -p ${PORT}:80 -v "$$(pwd)/app/config_private.neon":/var/www/app/config_private.neon ${TAG}
 	@echo "\n🚀 http://localhost:${PORT}\n"
 
