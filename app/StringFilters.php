@@ -241,6 +241,28 @@ interface IStringFilters
      * @return string
      */
     public static function transliterate(&$string);
+
+    /**
+     * Sort an array of mixed data types in ascending order: numbers and strings.
+     *
+     * @param array<mixed> $arr array to be sorted by reference
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException If the input is not an array.
+     */
+    public static function sort(&$arr);
+
+    /**
+     * Sort an array of mixed data types in descending order: numbers and strings.
+     *
+     * @param array<mixed> $arr array to be sorted by reference
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException If the input is not an array.
+     */
+    public static function rsort(&$arr);
 }
 
 /**
@@ -1438,4 +1460,63 @@ class StringFilters implements IStringFilters
             return \mb_strtoupper($string, 'UTF-8');
         }
     }
+
+    /**
+     * Sort an array of mixed data types in ascending order: numbers and strings.
+     *
+     * @param array<mixed> $arr array to be sorted by reference
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException If the input is not an array.
+     */
+    public static function sort(&$arr)
+    {
+        if (!\is_array($arr)) {
+            throw new \InvalidArgumentException('Input must be an array.');
+        }
+
+        $numbers = [];
+        $strings = [];
+
+        foreach ($arr as $a) {
+            if (\is_numeric($a)) {
+                $numbers[] = $a;
+            } else {
+                $strings[] = $a;
+            }
+        }
+        \sort($numbers, SORT_NUMERIC);
+        \sort($strings);
+        $arr = \array_merge($numbers, $strings);
+    }
+
+    /**
+     * Sort an array of mixed data types in descending order: numbers and strings.
+     *
+     * @param array<mixed> $arr array to be sorted by reference
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException If the input is not an array.
+     */
+    public static function rsort(&$arr)
+    {
+        if (!\is_array($arr)) {
+            throw new \InvalidArgumentException('Input must be an array.');
+        }
+        $numbers = [];
+        $strings = [];
+        foreach ($arr as $a) {
+            if (\is_numeric($a)) {
+                $numbers[] = $a;
+            } else {
+                $strings[] = $a;
+            }
+        }
+        \rsort($numbers, SORT_NUMERIC);
+        \rsort($strings);
+        $arr = \array_merge($numbers, $strings);
+    }
+
 }
