@@ -59,27 +59,13 @@ class HomePresenter extends APresenter
         // content switching
         $data[$view . '_menu'] = true;
 
-        // fix locales, HTML and shortcodes
+        // process shortcodes, fix HTML and translations
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($v, '[markdown]')) {
-                SF::renderMarkdown($data['l'][$k]);
-                SF::renderImageShortCode($data['l'][$k]);
-                SF::renderImageLeftShortCode($data['l'][$k]);
-                SF::renderImageRightShortCode($data['l'][$k]);
-                SF::renderImageRespShortCode($data['l'][$k]);
-                SF::renderGalleryShortCode($data['l'][$k], true);
-                SF::renderYouTubeShortCode($data['l'][$k]);
-                SF::renderSoundcloudShortCode($data['l'][$k]);
+                SF::shortCodesProcessor($data['l'][$k], SF::GALLERY_RANDOM);
             } elseif (\str_starts_with($v, '[markdownextra]')) {
-                SF::renderMarkdownExtra($data['l'][$k]);
-                SF::renderImageShortCode($data['l'][$k]);
-                SF::renderImageLeftShortCode($data['l'][$k]);
-                SF::renderImageRightShortCode($data['l'][$k]);
-                SF::renderImageRespShortCode($data['l'][$k]);
-                SF::renderGalleryShortCode($data['l'][$k], true);
-                SF::renderYouTubeShortCode($data['l'][$k]);
-                SF::renderSoundcloudShortCode($data['l'][$k]);
+                SF::shortCodesProcessor($data['l'][$k], SF::GALLERY_RANDOM);
             } else {
                 SF::convertEolToBrNbsp($data['l'][$k]);
             }

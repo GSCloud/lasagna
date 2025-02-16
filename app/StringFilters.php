@@ -263,6 +263,18 @@ interface IStringFilters
      * @throws \InvalidArgumentException If the input is not an array.
      */
     public static function rsort(&$arr);
+
+    /**
+     * Process short codes in a string
+     *
+     * @param string $string input string containing short codes by reference
+     * @param int    $flags  additional flags for processing:
+     *                       GALLERY_RANDOM - randomize gallery entries
+     *
+     * @return void
+     */
+    public static function shortCodesProcessor(&$string, $flags = 0);
+
 }
 
 /**
@@ -286,6 +298,9 @@ class StringFilters implements IStringFilters
 
     // general string sanitization
     const STRING_SANITIZE = '/[^a-z0-9\-._]+/i';
+
+    // FLAG: randomize gallery images
+    const GALLERY_RANDOM = 1;
 
     // all possible English characters
     // phpcs:ignore
@@ -1519,4 +1534,36 @@ class StringFilters implements IStringFilters
         $arr = \array_merge($numbers, $strings);
     }
 
+    /**
+     * Process short codes in a string
+     *
+     * @param string $string input string containing short codes by reference
+     * @param int    $flags  additional flags for processing:
+     *                       GALLERY_RANDOM - randomize gallery entries
+     *
+     * @return void
+     */
+    public static function shortCodesProcessor(&$string, $flags = 0)
+    {
+        if (!\is_string($string) || empty($string)) { // Check for empty string too
+            return;
+        }
+        $x = 0;
+        if (\str_starts_with($string, '[markdown]')) {
+            self::renderMarkdown($string);
+            $x++;
+        } elseif (\str_starts_with($string, '[markdownextra]')) {
+            self::renderMarkdownExtra($string);
+            $x++;
+        } else {
+            return;
+        }
+        self::renderImageShortCode($string);
+        self::renderImageLeftShortCode($string);
+        self::renderImageRightShortCode($string);
+        self::renderImageRespShortCode($string);
+        self::renderGalleryShortCode($string, (bool) ($flags & self::GALLERY_RANDOM)); // phpcs:ignore
+        self::renderYouTubeShortCode($string);
+        self::renderSoundcloudShortCode($string);
+    }
 }

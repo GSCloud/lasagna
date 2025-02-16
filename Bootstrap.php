@@ -17,7 +17,7 @@ use Tracy\Debugger;
 
 define('TESSERACT_START', microtime(true));
 
-// CLI SAPI external include
+// CLI SAPI external include (optional)
 if (PHP_SAPI === 'cli') {
     $req = getenv('CLI_REQ');
     if ($req && file_exists($req) && is_readable($req)) {
@@ -42,7 +42,7 @@ ini_set(
 ob_start();
 error_reporting(E_ALL);
 
-// FastCGI?
+// is FastCGI on?
 if (getenv('FCGI_ROLE') === 'RESPONDER') {
     define('FCGI_ENABLED', true);
 } else {
@@ -178,7 +178,7 @@ if (is_dir($x) && is_writable($x)) {
 // running from CLI?
 defined('CLI') || define('CLI', (bool) (PHP_SAPI == 'cli'));
 
-// running from localhost?
+// running on localhost?
 defined('LOCALHOST') || define(
     'LOCALHOST', (bool) (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') || CLI
 );
