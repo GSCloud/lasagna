@@ -5,6 +5,7 @@
 
 `2025-02-17`
 
+* **`1043-FEATURE < 1009-IDEA`** **remember active admin tab**  
 * **`1042-FEATURE`** **StringFilter functions**:  
   * *`SF::shortCodesProcessor()`* \- process all codes excl. `[googlemap]`  
   * *`SF::sort()`* \- sort array containing both numeric and textual values  
@@ -32,7 +33,7 @@
 `2025-02-07`
 
 * **`1034-FEATURE`** **StringFilter** shortcode: **`[googlemap <location>]`**  
-  * location should be a “plus glued string” e.g. `prague+castle+czechia`  
+  * location should be a “*plus glued string*”, e.g. `prague+castle+czechia`  
   * *SF::renderGoogleMapShortCode()*  
 * **`1033-BUGFIX`** improved **StringFilters** input validation and **replacement pairs**  
 * **`1032-FEATURE`** **admin panel enhancements**
@@ -40,7 +41,7 @@
 `2025-02-03`
 
 * **`1031-FEATURE`** **robots definition** and **robots.txt template**  
-* **`1030-BUGFIX`** improved **automatic rate limiting** and **ban handling** (new)
+* **`1030-BUGFIX`** **improved automatic rate limiting** and **ban handling** (new)
 
 `2025-01-14`
 
@@ -92,7 +93,7 @@
 * **`1012-BUGFIX`** migrate **Materialize framework** to [v1.2.2](https://github.com/materializecss/materialize/releases/tag/1.2.2)  
 * **`1011-FEATURE`** [changelog](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) added to the admin panel  
 * **`1010-BUGFIX`** **Lightbox2** [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
-* **`1009-IDEA`** **remember active admin tab**  
+* ~~**`1009-IDEA`** **remember active admin tab**~~  
 * **`1008-IDEA`** **migrate Materialize framework** to the newest [v2.2.1](https://github.com/materializecss/materialize/releases/tag/v2.2.1)  
   * note: [https://github.com/materializecss/materialize/pull/49](https://github.com/materializecss/materialize/pull/49)
 

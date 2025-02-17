@@ -157,6 +157,21 @@
         $("#admin_main").show(100);
       }
 
+      // TABBED MENU
+      $('#menutabbed .tabs a').click(function (e) {
+        if (GSC.nolocalstorage) return;
+        let id = $(this).data('id');
+        if (id) localStorage['admintab'] = id;
+      });
+
+      // SELECT LAST TABBED MENU
+      if (!GSC.nolocalstorage) {
+        if (localStorage && localStorage['admintab']) {
+          let id = localStorage['admintab'];
+          $('#menutabbed .tabs').tabs('select', id);
+        }
+      }
+
       // TOGLE WRENCH
       $(".motyle").click(function () {
         $("#admin_main").toggle(200, function () {
