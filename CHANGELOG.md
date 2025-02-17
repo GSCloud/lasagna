@@ -3,6 +3,14 @@
 **`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
+`2025-02-17`
+
+* **`1042-FEATURE`** **StringFilter functions**:  
+  * *`SF::shortCodesProcessor()`* \- process all codes excl. `[googlemap]`  
+  * *`SF::sort()`* \- sort array containing both numeric and textual values  
+  * *`SF::rsort()`* \- sort array containing both numeric and textual values, reversed  
+* **`1041-FEATURE`** **translations update**
+
 `2025-02-12`
 
 * **`1040-FEATURE`** **remote function roles**: admin, manager, editor  
@@ -23,8 +31,9 @@
 
 `2025-02-07`
 
-* **`1034-FEATURE`** new **StringFilter** shortcode: **`[googlemap <location>]`**  
+* **`1034-FEATURE`** **StringFilter** shortcode: **`[googlemap <location>]`**  
   * location should be a “plus glued string” e.g. `prague+castle+czechia`  
+  * *SF::renderGoogleMapShortCode()*  
 * **`1033-BUGFIX`** improved **StringFilters** input validation and **replacement pairs**  
 * **`1032-FEATURE`** **admin panel enhancements**
 
