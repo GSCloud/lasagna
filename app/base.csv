@@ -1,15 +1,19 @@
 KEY,SECTION,EN,CS,SK,DE
 klíč,sekce,anglicky,česky,slovensky,německy
 $author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker
-$gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud Ltd.
+$gsc,$,GS Cloud Ltd.,GS Cloud Ltd.,GS Cloud Ltd.,GS Cloud Ltd.
 $gscloud,$,$gsc,$gsc,$gsc,$gsc
 $year,$,2025,2025,2025,2025
-gsc_footer_img_size,PARAMETER,48,48,48,48
-page_outdated_button,BUTTON,UPDATE 👷‍♀️,AKTUALIZOVAT 👷‍♀️,AKTUALIZOVAŤ 👷‍♀️,AKTUALISIEREN 👷‍♀️
-webshare_button,BUTTON,Share 📲,Sdílet 📲,Zdieľať 📲,Teilen 📲
-company_eet,COMPANY,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Nach dem Sales Records Act ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, die erhaltenen Einnahmen online beim Steueramt zu registrieren; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
-page_outdated,CORE,A new version of the application is available.,K dispozici je nová verze aplikace.,K dispozícii je nová verzia aplikácie.,Eine neue Version der Anwendung ist verfügbar.
-poweredby,CORE,"Powered by Hetzner, Google and Cloudflare technology. We don't use 3rd party cookies.","Využívá technologie Hetzner, Google a Cloudflare. Nepoužíváme cookies třetích stran.","Používa technológiu Hetzner, Google a Cloudflare. Nepoužívame cookies tretích strán.","Unterstützt durch Hetzner-, Google- und Cloudflare-Technologie. Wir verwenden keine Cookies von Drittanbietern."
+nojs_placeholder,ALERT,JAVASCRIPT IS DISABLED,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT IST DEAKTIVIERT
+nojs_sorry,ALERT,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
+nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können."
+page_outdated,ALERT,A new version of the application is available.,K dispozici je nová verze aplikace.,K dispozícii je nová verzia aplikácie.,Eine neue Version der Anwendung ist verfügbar.
+page_outdated_button,BUTTON,👷‍♀️ UPDATE,👷‍♀️ AKTUALIZOVAT,👷‍♀️ AKTUALIZOVAŤ,👷‍♀️ AKTUALISIEREN
+share_bluesky,BUTTON,Bluesky,Bluesky,Bluesky,Bluesky
+share_facebook,BUTTON,Facebook,Facebook,Facebook,Facebook
+share_instagram,BUTTON,Instagram,Instagram,Instagram,Instagram
+share_mastodon,BUTTON,Mastodon,Mastodon,Mastodon,Mastodon
+webshare_button,BUTTON,📲 share,📲 sdílet,📲 zdieľať ,📲 Teilen
 day_of_the_week_1,DAYS,Monday,pondělí,pondelok,Montag
 day_of_the_week_2,DAYS,Tuesday,úterý,utorok,Dienstag
 day_of_the_week_3,DAYS,Wednesday,středa,streda,Mittwoch
@@ -37,19 +41,19 @@ server_error_info_410,ERROR,The resource requested is no longer available and wi
 server_error_info_420,ERROR,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.
 server_error_info_429,ERROR,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.
 server_error_info_500,ERROR,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.
+poweredby,FOOTER,"Powered by Hetzner, Google and Cloudflare technology. We don't use 3rd party cookies.","Využívá technologie Hetzner, Google a Cloudflare. Nepoužíváme cookies třetích stran.","Používa technológiu Hetzner, Google a Cloudflare. Nepoužívame cookies tretích strán.","Unterstützt durch Hetzner-, Google- und Cloudflare-Technologie. Wir verwenden keine Cookies von Drittanbietern."
 privacy_policy,FOOTER,Privacy Policy,Zásady ochrany osobních údajů,Zásady ochrany osobných údajov,Datenschutzrichtlinie
-article_author,META,$author,$author,$author,$author
-article_publisher,META,$author,$author,$author,$author
+company_eet,INFO,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Nach dem Sales Records Act ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, die erhaltenen Einnahmen online beim Steueramt zu registrieren; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
+meta_keywords,META,$keywords,$keywords,$keywords,$keywords
 author,META,$author,$author,$author,$author
 meta_author,META,$author,$author,$author,$author
+article_author,META,$author,$author,$author,$author
+article_publisher,META,$author,$author,$author,$author
 meta_description,META,$description,$description,$description,$description
-meta_generator,META,$lasagna,$lasagna,$lasagna,$lasagna
-meta_keywords,META,$keywords,$keywords,$keywords,$keywords
 og_description,META,$description,$description,$description,$description
 og_site_name,META,$title,$title,$title,$title
 og_title,META,$title,$title,$title,$title
 og_url,META,$canonical_url,$canonical_url,$canonical_url,$canonical_url
-meta_viewport,META,"width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3","width=device-width,initial-scale=1,maximum-scale=3"
 month_1,MONTHS,January,leden,január,Januar
 month_2,MONTHS,February,únor,február,Februar
 month_3,MONTHS,March,březen,marec,Marsch
@@ -74,11 +78,8 @@ month_2p_9,MONTHS,September,září,septembra,September
 month_2p_10,MONTHS,October,října,októbra,Oktober
 month_2p_11,MONTHS,November,listopadu,novembra,November
 month_2p_12,MONTHS,December,prosince,decembra,Dezember
-nojs_placeholder,NOJS,JavaScript is disabled.,JavaScript je vypnutý.,JavaScript je vypnutý.,JavaScript ist deaktiviert.
-nojs_sorry,NOJS,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
-nojs_text,NOJS,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können."
-share_mastodon,BUTTON,Mastodon,Mastodon,Mastodon,Mastodon
-share_facebook,BUTTON,Facebook,Facebook,Facebook,Facebook
+meta_viewport,PARAMS,"width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0"
+gsc_footer_img_size,PARAMS,48,48,48,48
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
 a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
@@ -159,7 +160,7 @@ a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
 a_groups_permissions,TITLE,USERS,UŽIVATELÉ,UŽÍVATELIA,BENUTZER
 a_locales,TITLE,DATA,DATA,DATA,DATEN
-a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
+a_services,TITLE,services,SLUŽBY,SLUŽBY,Dienstleistungen
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
