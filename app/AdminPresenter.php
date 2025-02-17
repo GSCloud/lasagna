@@ -571,7 +571,7 @@ class AdminPresenter extends APresenter
             }
             if ($user = $this->getCurrentUser()['id'] ?? null) {
                 if ($role = $this->getUserGroup()) {
-                    $hashid = \hash('sha256', $role . $user . time());
+                    $hashid = \hash('sha256', $role . $user . \time());
                     $hashid = \substr($hashid, 0, 16);
                     $code = $data['base']
                         . 'admin/FNXXXRemote?role='
