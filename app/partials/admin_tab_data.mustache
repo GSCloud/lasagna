@@ -48,14 +48,14 @@
           data-position="top" data-tooltip="{{ l.a_files_ttip }}"
           style="margin:5px" class="tooltipped waves-effect brown waves btn"><i class="fa-solid fa-bucket"></i>&nbsp;&nbsp;<span id="files_count"></span></a>
         <br>
-        max&nbsp;uploads:&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>
-        max&nbsp;size:&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>
-        max&nbsp;file&nbsp;size:&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
+        {{ l.a_max_post_size }}&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>
+        {{ l.a_max_file_uploads }}&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>
+        {{ l.a_max_upload_size }}&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
         <div id="uploads_extended_info"></div>
         {{/CONST.UPLOAD}}
 
         {{^CONST.UPLOAD}}
-        <b>UPLOAD is disabled.</b>
+        <b>{{ l.a_upload_disabled }}</b>
         {{/CONST.UPLOAD}}
       </p>
     </div>

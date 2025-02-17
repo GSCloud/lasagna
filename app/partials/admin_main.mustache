@@ -17,6 +17,7 @@
 .tabs .indicator {background-color: transparent!important}
 .tabs a.active {border-bottom: 4px solid #fff!important}
 .tabs {overflow: auto;overflow-x: hidden}
+.tabs>li>a>i {margin-right:1rem;font-size:20px}
 .upload-controls {margin:10px}
 .warning {padding:5px}
 .cursordefault {cursor:default!important}
@@ -56,7 +57,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <!-- EXTERNAL LINKS -->
   <div class="row center black">
     {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="tooltipped {{#color}}{{color}}{{/color}}{{^color}}green{{/color}} white-text" style="padding:4px;line-height:2em;border-radius:2px"
+      <a rel="noreferrer noopener" target="_blank" class="btn tooltipped {{#color}}{{color}}{{/color}}{{^color}}green{{/color}} white-text" style="padding:4px;line-height:2em;border-radius:2px"
         data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;
     {{/external_links}}
   </div>
@@ -67,11 +68,11 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <!-- TABBED NAVIGATION -->
   <div id="menutabbed" class="row container noselect">
     <ul class="tabs grey darken-3 bold">
-      <li class="tab col s3"><a href="#data">{{ l.a_tab_data }}</a></li>
-      <li class="tab col s2"><a href="#fn">{{ l.a_tab_fn }}</a></li>
-      <li class="tab col s2"><a href="#services">{{ l.a_tab_services }}</a></li>
-      <li class="tab col s2"><a href="#users">{{ l.a_tab_users }}</a></li>
-      <li class="tab col s2"><a href="#news">{{ l.a_tab_changes }} </a></li>
+      <li class="tab col s3"><a href="#data"><i class="fa-solid small fa-database"></i> {{ l.a_tab_data }}</a></li>
+      <li class="tab col s2"><a href="#fn"><i class="fa-solid small fa-robot"></i> {{ l.a_tab_fn }}</a></li>
+      <li class="tab col s2"><a href="#services"><i class="fa-solid small fa-screwdriver-wrench"></i> {{ l.a_tab_services }}</a></li>
+      <li class="tab col s2"><a href="#users"><i class="fa-regular small fa-user"></i> {{ l.a_tab_users }}</a></li>
+      <li class="tab col s2"><a href="#news"><i class="fa-solid small fa-circle-info"></i> {{ l.a_tab_changes }} </a></li>
     </ul>
   </div>
 
@@ -92,16 +93,16 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 
   <hr>
 
-  FCGI: <span class=bold>{{#CONST.FCGI_ENABLED}}ON{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}OFF{{/CONST.FCGI_ENABLED}}</span> &nbsp;
-  REDIS: <span class=bold>{{#CONST.REDIS_CACHE}}ON{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}OFF{{/CONST.REDIS_CACHE}}</span> &nbsp;
-  LIMITER: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
-  BAN: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
+  {{ l.a_fcgi }}: <span class=bold>{{#CONST.FCGI_ENABLED}}{{ l.a_on }}{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}{{ l.a_off }}{{/CONST.FCGI_ENABLED}}</span> &nbsp;
+  {{ l.a_redis }}: <span class=bold>{{#CONST.REDIS_CACHE}}{{ l.a_on }}{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}{{ l.a_off }}{{/CONST.REDIS_CACHE}}</span> &nbsp;
+  {{ l.a_limiter }}: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
+  {{ l.a_ban }}: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
   
   <br>
 
-  model: <span class=bold id="time1">?</span> ms &nbsp;
-  processing: <span class=bold id="time2">?</span> ms &nbsp;
-  total: <span class=bold id="time3">?</span> ms
+  {{ l.a_model }}: <span class=bold id="time1">?</span> ms &nbsp;
+  {{ l.a_processing }}: <span class=bold id="time2">?</span> ms &nbsp;
+  {{ l.a_total }}: <span class=bold id="time3">?</span> ms
   
   <br>
 

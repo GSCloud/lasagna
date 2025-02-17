@@ -79,18 +79,21 @@ nojs_sorry,NOJS,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNU
 nojs_text,NOJS,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können."
 share_mastodon,BUTTON,Mastodon,Mastodon,Mastodon,Mastodon
 share_facebook,BUTTON,Facebook,Facebook,Facebook,Facebook
+a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
+a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
 a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
 a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
 a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG
 a_google_search,BUTTON,SEARCH CONSOLE,SEARCH CONSOLE,SEARCH CONSOLE,SUCHKONSOLE
+a_invoices,BUTTON,INVOICES,FAKTURY,FAKTÚRY,RECHNUNGEN
 a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
 a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
-a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,Tschüss 👋
-a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
+a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,TSCHÜSS 👋
+a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
-a_show_translations,BUTTON,📍 translation sources,📍 zdroje překladu,📍 prekladové zdroje,📍 Übersetzungsquellen
+a_show_translations,BUTTON,📍 TRANSLATION SOURCES,📍 ZDROJE PŘEKLADU,📍 PREKLADOVÉ ZDROJE,📍 ÜBERSETZUNGSQUELLEN
 a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
 a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
 a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN
@@ -102,22 +105,35 @@ a_upload_maxbytes,ERROR,😵 Total filesize is too big (max. 100 MB).,😵 Obsah
 a_upload_maxfiles,ERROR,😵 Too many files were selected (max. 100).,😵 Vybráno příliš mnoho souborů (max. 100).,😵 Bolo vybratých príliš veľa súborov (max. 100).,😵 Es wurden zu viele Dateien ausgewählt (max. 100).
 a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.
 a_age,INFO,age,stáří,vek,Alter
-a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /en/id/)
+a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /de/id/)
 a_articles,INFO,ARTICLES,ČLÁNKY,ČLÁNKY,ARTIKEL
+a_ban,INFO,BAN,BAN,BAN,VERBOT
 a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋 
 a_copy_tit,INFO,copy URL,kopírovat URL,kopírovať URL,URL kopieren
 a_delete_tit,INFO,delete file,smazat soubor,odstrániť súbor,Datei löschen
-a_footer_app,INFO,app code,app code,app code,App-Code
+a_fcgi,INFO,FCGI,FCGI,FCGI,FCGI
+a_footer_app,INFO,app code,kód appky,kód appky,App-Code
 a_footer_date,INFO,updated,aktualizováno,aktualizované,aktualisiert
+a_limiter,INFO,LIMITER,LIMITER,LIMITER,RATENBEGRENZER
+a_max_file_uploads,INFO,max.&nbsp;files&nbsp;count:,max.&nbsp;počet&nbsp;nahrávaných&nbsp;souborů:,max.&nbsp;počet&nbsp;súborov:,Max.&nbsp;Anzahl&nbsp;der&nbsp;Upload-Dateien:
+a_max_post_size,INFO,max.&nbsp;POST&nbsp;size:,max.&nbsp;POST&nbsp;velikost:,max.&nbsp;POST&nbsp;veľkosť:,Max.&nbsp;POST&nbsp;Größe:
+a_max_upload_size,INFO,max.&nbsp;file&nbsp;size:,max.&nbsp;velikost&nbsp;souboru:,max.&nbsp;veľkosť&nbsp;súboru:,Max.&nbsp;Dateigröße:
+a_model,INFO,model,model,model,Modell
 a_news_info,INFO,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
 a_news_os_info,INFO,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
 a_news_sc_info,INFO,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
+a_off,INFO,OFF,VYP,VYP,AUS
+a_on,INFO,ON,ZAP,ZAP,AN
 a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
+a_processing,INFO,processing,zpracování,spracovanie,Verwechseln
 a_processing_data,INFO,The system is processing data ☕️,Systém zpracovává data ☕️,Systém spracováva údaje ☕️,Das System verarbeitet Daten ☕️
+a_redis,INFO,REDIS,REDIS,REDIS,REDIS
 a_remote_fn_info,INFO,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufrufen einer Remote-Systemfunktion
 a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,REMOTE-FUNKTIONSAUFRUFE
 a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Fernbedienung fn
 a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,OK GESPEICHERT
+a_total,INFO,total,celkem,celkom,Gesamt
+a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnutý.,UPLOAD ist deaktiviert.
 a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
 a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.
 a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
@@ -136,29 +152,29 @@ a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte
 a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
 a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
 a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern
-a_tab_data,TABS,"<i class=""fa-solid fa-database""></i> DATA","<i class=""fa-solid fa-database""></i> DATA","<i class=""fa-solid fa-database""></i> DATA","<i class=""fa-solid fa-database""></i> DATA"
-a_tab_fn,TABS,"<i class=""fa-solid fa-robot""></i> FN","<i class=""fa-solid fa-robot""></i> FN","<i class=""fa-solid fa-robot""></i> FN","<i class=""fa-solid fa-robot""></i> FN"
-a_tab_changes,TABS,"<i class=""fa-solid fa-circle-info""></i> CHANGES","<i class=""fa-solid fa-circle-info""></i> ZMĚNY","<i class=""fa-solid fa-circle-info""></i> ZMENY","<i class=""fa-solid fa-circle-info""></i> ÄNDERUNGEN"
-a_tab_services,TABS,"<i class=""fa-solid fa-screwdriver-wrench""></i> SERVICES","<i class=""fa-solid fa-screwdriver-wrench""></i> SLUŽBY","<i class=""fa-solid fa-screwdriver-wrench""></i> SLUŽBY","<i class=""fa-solid fa-screwdriver-wrench""></i> DIENSTLEISTUNGEN"
-a_tab_users,TABS,"<i class=""fa-regular fa-user""></i> USERS","<i class=""fa-regular fa-user""></i> UŽIVATELÉ","<i class=""fa-regular fa-user""></i> UŽÍVATEĽA","<i class=""fa-regular fa-user""></i> BENUTZER"
-a_changes,TITLE,CHANGES,ZMĚNY,ZMENY,ÄNDERUNGEN
-a_services,TITLE,EXTERNAL SERVICES,EXTERNÍ SLUŽBY,EXTERNÉ SLUŽBY,EXTERNE DIENSTLEISTUNGEN
+a_tab_changes,TAB,CHANGES,ZMĚNY,ZMENY,ÄNDERUNGEN
+a_tab_data,TAB,DATA,DATA,DATA,DATEN
+a_tab_fn,TAB,FN,FN,FN,FN
+a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
+a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
 a_groups_permissions,TITLE,USERS,UŽIVATELÉ,UŽÍVATELIA,BENUTZER
 a_locales,TITLE,DATA,DATA,DATA,DATEN
+a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
+a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
 a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
 a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 Emoji-Panel
 a_files_ttip,TOOLTIP,file manager,správce souborů,správca súborov,Dateimanager
 a_flush_ttip,TOOLTIP,clears all caches,vyprázdní veškerou cache,vyprázdní všetku cache,löscht alle Caches
-a_google_account_ttip,TOOLTIP,Google Accounts settings,nastavení Google účtů,Nastavenia účtov Google,Einstellungen für Google-Konten
+a_google_account_ttip,TOOLTIP,Google Account settings,nastavení Google účtu,Nastavenia účtu Google,Google-Kontoeinstellungen
 a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter
 a_google_search_ttip,TOOLTIP,Google Search Console,Google Search konzole,Google Search Console,Google Search Console
 a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Tesseract LASAGNA manuál,Tesseract LASAGNA-Dokumentation
 a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage
-a_login_ttip,TOOLTIP,login,přihlásit se,prihlásiť sa,Login
-a_logout_ttip,TOOLTIP,logout,odhlásit se,odhlásiť sa,Abmelden
+a_login_ttip,TOOLTIP,LOGIN,PŘIHLÁSIT SE,PRIHLÁSIŤ SA,LOGIN
+a_logout_ttip,TOOLTIP,LOGOUT,ODHLÁSIT SE,ODHLÁSIŤ SA,ABMELDEN
 a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
 a_umami_ttip,TOOLTIP,Umami Analytics,Umami Analytika,Umami Analytika,Umami Analytics
-a_update_ttip,TOOLTIP,update data from Google Cloud,aktualizovat data z Google Cloudu,aktualizovať údaje zo služby Google Cloud,Aktualisieren Sie Daten aus Google Cloud
+a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje od spoločnosti Google,Daten von Google aktualisieren
 a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads
