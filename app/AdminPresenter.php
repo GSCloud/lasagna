@@ -382,20 +382,36 @@ class AdminPresenter extends APresenter
             );
 
         case 'AuditLogJSONRemote':
-            $this->checkPermission('admin');
-            $this->setHeaderJson();
-            $filename = DATA . DS . 'AuditLog.txt';
-            $file = \popen("tac {$filename}", 'r');
-            $c = 0;
-            $logs = [];
-            if (\is_resource($file)) {
-                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS - 1)) {
-                    $c++;
-                }
-                \pclose($file);
+            if (!$key = $this->_readAdminKey()) {
+                return $this->writeJsonData(500, $extras);
             }
-            \array_walk($logs, array($this, '_decorateLogsExport'));
-            return $this->writeJsonData($logs, $extras);
+            $role = $_GET['role'] ?? null;
+            $user = $_GET['user'] ?? null;
+            $token = $_GET['token'] ?? null;
+            switch ($role) {
+            case 'admin':
+                break;
+            default:
+                $this->_unauthorizedAccess();
+            }
+            if ($role && $user && $token || $this->_isLocalAdmin()) {
+                $code = \hash('sha256', $role . $key . $user);
+                if ($code === $token || $this->_isLocalAdmin()) {
+                    $filename = DATA . DS . 'AuditLog.txt';
+                    $file = \popen("tac {$filename}", 'r');
+                    $c = 0;
+                    $logs = [];
+                    if (\is_resource($file)) {
+                        while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS - 1)) { // phpcs:ignore
+                            $c++;
+                        }
+                        \pclose($file);
+                    }
+                    \array_walk($logs, array($this, '_decorateLogsExport'));
+                    return $this->writeJsonData($logs, $extras);
+                }
+            }
+            $this->_unauthorizedAccess();
     
         case 'GetCsvInfo':
             $this->checkPermission('admin,manager,editor');
