@@ -381,6 +381,22 @@ class AdminPresenter extends APresenter
                 'output', $this->setData($data)->renderHTML('auditlog')
             );
 
+        case 'AuditLogJSONRemote':
+            $this->checkPermission('admin');
+            $this->setHeaderJson();
+            $filename = DATA . DS . 'AuditLog.txt';
+            $file = \popen("tac {$filename}", 'r');
+            $c = 0;
+            $logs = [];
+            if (\is_resource($file)) {
+                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS - 1)) {
+                    $c++;
+                }
+                \pclose($file);
+            }
+            \array_walk($logs, array($this, '_decorateLogsExport'));
+            return $this->writeJsonData($logs, $extras);
+    
         case 'GetCsvInfo':
             $this->checkPermission('admin,manager,editor');
             $csv_info = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
@@ -539,7 +555,8 @@ class AdminPresenter extends APresenter
             }
             if ($user = $this->getCurrentUser()['id'] ?? null) {
                 if ($role = $this->getUserGroup()) {
-                    $hashid = \hash('sha256', $user);
+                    $hashid = \hash('sha256', $role . $user . time());
+                    $hashid = \substr($hashid, 0, 16);
                     $code = $data['base']
                         . 'admin/FNXXXRemote?role='
                         . $role
@@ -559,8 +576,8 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
-            $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
+            $token = $_GET['token'] ?? null;
             switch ($role) {
             case 'admin':
                 break;
@@ -588,8 +605,8 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
-            $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
+            $token = $_GET['token'] ?? null;
             switch ($role) {
             case 'admin':
             case 'manager':
@@ -619,8 +636,8 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
-            $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
+            $token = $_GET['token'] ?? null;
             switch ($role) {
             case 'admin':
             case 'manager':
@@ -652,8 +669,8 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
-            $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
+            $token = $_GET['token'] ?? null;
             switch ($role) {
             case 'admin':
             case 'manager':
@@ -683,8 +700,8 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(500, $extras);
             }
             $role = $_GET['role'] ?? null;
-            $token = $_GET['token'] ?? null;
             $user = $_GET['user'] ?? null;
+            $token = $_GET['token'] ?? null;
             switch ($role) {
             case 'admin':
             case 'manager':
@@ -1266,6 +1283,93 @@ class AdminPresenter extends APresenter
             . "<td class='center truncate'><b>{$x[3]}</b><br>{$x[4]}</td>"
             . "<td>{$x[1]}</td>"
             . "</tr>";
+    }
+
+    /**
+     * Decorate log entries by reference for export
+     *
+     * @param string $val log line
+     * @param int    $key array index
+     * 
+     * @return void
+     */
+    private function _decorateLogsExport(&$val, $key)
+    {
+        if (\stripos($val, 'exception') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Origin Time-out') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Bad Gateway') !== false) {
+            $val = '';
+            return;
+        }
+
+        $x = \explode(';', $val);
+        if (!\is_array($x)) {
+            return;
+        }
+        if (\count($x) < 5) {
+            return;
+        }
+
+        $t = \strtotime($x[0]);
+        if ($t) {
+            $y = \date("Y", $t);
+            if ($y < 2024) {
+                $val = '';
+                return;
+            }
+            $x[0] = \date("j. n. Y H:i:s", $t);
+        }
+        $x[2] = \str_replace('IP:', '', $x[2]);
+        $x[3] = \str_replace('NAME:', '', $x[3]);
+        $x[4] = \str_replace('EMAIL:', '', $x[4]);
+
+        // trim
+        $x[1] = \trim($x[1], "\r\n\t");
+        $x[2] = \trim($x[2], "\r\n\t");
+        $x[3] = \trim($x[3], "\r\n\t");
+        $x[4] = \trim($x[4], "\r\n\t");
+
+        // categorization
+        $type = 'unknown';
+        if (\stripos($x[1], 'ADMIN') !== false) {
+            $type = 'admin';
+        }
+        if (\stripos($x[1], 'ADMIN: file deleted') !== false) {
+            $type = 'file_delete';
+        }
+        if (\stripos($x[1], 'ADMIN: file(s) uploaded') !== false) {
+            $type = 'file_upload';
+        }
+        if (\stripos($x[1], 'DOWNLOAD') !== false) {
+            $type = 'download';
+        }
+        if (\stripos($x[1], 'OAuth login:') !== false) {
+            $type = 'oauth_login';
+        }
+        if (\stripos($x[1], 'REMOTE') !== false) {
+            $type = 'remote';
+        }
+        if (\stripos($x[1], 'TOKEN') !== false) {
+            $type = 'token';
+        }
+
+        // export
+        $val = [
+            'id' => $key + 1,
+            'timestamp' => $t,
+            'datetime' => $x[0],
+            'ip' => $x[2],
+            'name' => $x[3],
+            'email' => $x[4],
+            'type' => $type,
+            'message' => $x[1],
+        ];
     }
 
     /**
