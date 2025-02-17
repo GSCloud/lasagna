@@ -265,7 +265,7 @@ interface IStringFilters
     public static function rsort(&$arr);
 
     /**
-     * Process short codes in a string
+     * Process short codes in a string (also process Markdown if starting with it)
      *
      * @param string $string input string containing short codes by reference
      * @param int    $flags  additional flags for processing:
@@ -1535,7 +1535,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Process short codes in a string
+     * Process short codes in a string (also process Markdown if starting with it)
      *
      * @param string $string input string containing short codes by reference
      * @param int    $flags  additional flags for processing:
@@ -1545,18 +1545,13 @@ class StringFilters implements IStringFilters
      */
     public static function shortCodesProcessor(&$string, $flags = 0)
     {
-        if (!\is_string($string) || empty($string)) { // Check for empty string too
+        if (!\is_string($string) || empty($string)) {
             return;
         }
-        $x = 0;
         if (\str_starts_with($string, '[markdown]')) {
             self::renderMarkdown($string);
-            $x++;
         } elseif (\str_starts_with($string, '[markdownextra]')) {
             self::renderMarkdownExtra($string);
-            $x++;
-        } else {
-            return;
         }
         self::renderImageShortCode($string);
         self::renderImageLeftShortCode($string);
