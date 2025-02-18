@@ -605,9 +605,9 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->_rebuildAdminKey();
                     $this->addMessage("REMOTE FN: NEW ADMIN KEY by [{$user}]");
                     $this->addAuditMessage("REMOTE FN: NEW ADMIN KEY by [{$user}]");
+                    $this->_rebuildAdminKey();
                     return $this->writeJsonData(
                         [
                             'host' => HOST,
@@ -636,9 +636,9 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->flushCache();
                     $this->addMessage("REMOTE FN: CACHE FLUSH by [{$user}]");
                     $this->addAuditMessage("REMOTE FN: CACHE FLUSH by [{$user}]");
+                    $this->flushCache();
                     return $this->writeJsonData(
                         [
                             'host' => HOST,
@@ -667,11 +667,11 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
+                    $this->addMessage("REMOTE FN: CORE UPDATE by [{$user}]");
+                    $this->addAuditMessage("REMOTE FN: CORE UPDATE by [{$user}]");
                     $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
-                    $this->addMessage("REMOTE FN: CORE UPDATE by [{$user}]");
-                    $this->addAuditMessage("REMOTE FN: CORE UPDATE by [{$user}]");
                     return $this->writeJsonData(
                         [
                             'host' => HOST,
@@ -699,9 +699,9 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->_rebuildNonce();
                     $this->addMessage("REMOTE FN: NEW NONCE by [{$user}]");
                     $this->addAuditMessage("REMOTE FN: NEW NONCE by [{$user}]");
+                    $this->_rebuildNonce();
                     return $this->writeJsonData(
                         [
                             'function' => $view,
@@ -730,9 +730,9 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->_rebuildSecureKey();
                     $this->addMessage("REMOTE FN: NEW SECURE KEY by [{$user}]");
                     $this->addAuditMessage("REMOTE FN: NEW SECURE KEY by [{$user}]");
+                    $this->_rebuildSecureKey();
                     return $this->writeJsonData(
                         [
                             'host' => HOST,
@@ -746,18 +746,18 @@ class AdminPresenter extends APresenter
 
         case 'FlushCache':
             $this->checkPermission('admin,manager,editor');
-            $this->flushCache();
             $this->addMessage('ADMIN: FLUSH CACHE');
             $this->addAuditMessage('ADMIN: FLUSH CACHE');
+            $this->flushCache();
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'CoreUpdate':
             $this->checkPermission('admin,manager,editor');
+            $this->addMessage('ADMIN: CORE UPDATE');
+            $this->addAuditMessage('ADMIN: CORE UPDATE');
             $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
             $this->flushCache();
-            $this->addMessage('ADMIN: CORE UPDATE');
-            $this->addAuditMessage('ADMIN: CORE UPDATE');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         default:
