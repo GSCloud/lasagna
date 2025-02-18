@@ -104,7 +104,7 @@ interface IStringFilters
     /**
      * Render Markdown to HTML
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return void
      */
@@ -113,7 +113,7 @@ interface IStringFilters
     /**
      * Render Markdown Extra to HTML
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return void
      */
@@ -122,7 +122,7 @@ interface IStringFilters
     /**
      * Render Google Map short code(s)
      *
-     * @param string $content text data containing [googlemap param]
+     * @param string $content string containing [googlemap param]
      * @param mixed  $key     Google Maps API key
      * 
      * @return void
@@ -132,7 +132,7 @@ interface IStringFilters
     /**
      * Render Image short code(s)
      *
-     * @param string $content text data containing [image param]
+     * @param string $content string containing [image param]
      * 
      * @return void
      */
@@ -141,7 +141,7 @@ interface IStringFilters
     /**
      * Render Image Left short code(s)
      *
-     * @param string $content text data containing [imageleft param]
+     * @param string $content string containing [imageleft param]
      * 
      * @return void
      */
@@ -150,7 +150,7 @@ interface IStringFilters
     /**
      * Render Image Right short code(s)
      *
-     * @param string $content text data containing [imageright param]
+     * @param string $content string containing [imageright param]
      * 
      * @return void
      */
@@ -159,7 +159,7 @@ interface IStringFilters
     /**
      * Render Image Responsive short code(s)
      *
-     * @param string $content text data containing [imageresp param]
+     * @param string $content string containing [imageresp param]
      * 
      * @return void
      */
@@ -168,7 +168,7 @@ interface IStringFilters
     /**
      * Render Soundcloud short code(s)
      *
-     * @param string $content text data containing [soundcloud param]
+     * @param string $content string containing [soundcloud param]
      * 
      * @return void
      */
@@ -177,7 +177,7 @@ interface IStringFilters
     /**
      * Render YouTube short code(s)
      *
-     * @param string $content text data containing [youtube param]
+     * @param string $content string containing [youtube param]
      * 
      * @return void
      */
@@ -186,7 +186,7 @@ interface IStringFilters
     /**
      * Render gallery short code(s)
      *
-     * @param string $content text data containing [gallery param]
+     * @param string $content string containing [gallery param]
      * @param bool   $shuffle shuffle the gallery
      * @param int    $size    size of thumbnails in pixels
      * 
@@ -236,7 +236,7 @@ interface IStringFilters
     /**
      * Transliterate a string to safe characters without accents
      *
-     * @param string $string text data
+     * @param string $string string
      * 
      * @return string
      */
@@ -270,11 +270,11 @@ interface IStringFilters
      * @param string $string input string containing short codes by reference
      * @param int    $flags  additional flags for processing:
      *                       GALLERY_RANDOM - randomize gallery entries
+     * @param int    $size   selected width of thumbnails in pixels
      *
      * @return void
      */
-    public static function shortCodesProcessor(&$string, $flags = 0);
-
+    public static function shortCodesProcessor(&$string, $flags = 0, $size = 160);
 }
 
 /**
@@ -290,7 +290,7 @@ interface IStringFilters
  */
 class StringFilters implements IStringFilters
 {
-    // maximum shortcode loop iterations
+    // GALLERY: maximum shortcode loop iterations
     const ITERATIONS = SF_ITERATIONS;
 
     // find images mask sanitization
@@ -930,7 +930,7 @@ class StringFilters implements IStringFilters
     /**
      * Correct text spacing - English
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return string
      */
@@ -943,7 +943,7 @@ class StringFilters implements IStringFilters
     /**
      * Correct text spacing - Czech
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return string
      */
@@ -956,7 +956,7 @@ class StringFilters implements IStringFilters
     /**
      * Correct text spacing - Slovak
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return string
      */
@@ -969,7 +969,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Markdown to HTML
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return void
      */
@@ -979,7 +979,7 @@ class StringFilters implements IStringFilters
             $x = \trim($content);
             if (\str_starts_with($x, '[markdown]')) {
                 $x = \substr($x, 10);
-                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra <hr> EOLs
                 $content = Markdown::defaultTransform($x);
             }
         }
@@ -988,7 +988,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Markdown Extra to HTML
      *
-     * @param string $content text data
+     * @param string $content string
      * 
      * @return void
      */
@@ -998,7 +998,7 @@ class StringFilters implements IStringFilters
             $x = \trim($content);
             if (\str_starts_with($x, '[markdownextra]')) {
                 $x = \substr($x, 15);
-                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra <hr> EOLs
                 $content = MarkdownExtra::defaultTransform($x);
             }
         }
@@ -1007,7 +1007,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Google Map short code(s)
      *
-     * @param string $content text data containing [googlemap param]
+     * @param string $content string containing [googlemap param]
      * @param mixed  $key     Google Maps API key
      * 
      * @return void
@@ -1022,13 +1022,15 @@ class StringFilters implements IStringFilters
         }
         $content = \trim($content);
         $key = \trim($key);
+
+        $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[googlemap ')
-            ) {
+        while (\str_contains($content, '[googlemap ')) {
+            $counter++;
             $replace = '<iframe width="100%" height="400" '
                 . 'style="border:0" loading="lazy" allowfullscreen '
                 . 'referrerpolicy="no-referrer-when-downgrade" '
+                . "data-counter={$counter} "
                 . 'src="https://www.google.com/maps/embed/v1/place?key='
                 . $key . '&q=$1"></iframe>';
             if (\is_string($content)) {
@@ -1040,7 +1042,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Image short code(s)
      *
-     * @param string $content text data containing [image param]
+     * @param string $content string containing [image param]
      * 
      * @return void
      */
@@ -1050,18 +1052,17 @@ class StringFilters implements IStringFilters
             return;
         }
         $content = \trim($content);
+
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[image ')
-            ) {
+        while (\str_contains($content, '[image ')) {
             $counter++;
             $replace = '<span class="img-container">'
                 . '<img '
                 . 'class=imagesc '
                 . 'src="' . CDN . '/upload/$1.webp" '
+                . "data-counter={$counter} "
                 . 'data-name="$1" '
-                . 'data-counter=' . $counter . ' '
                 . 'alt="$1"'
                 . '>'
                 . '</span>';
@@ -1074,7 +1075,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Image Left short code(s)
      *
-     * @param string $content text data containing [imageleft param]
+     * @param string $content string containing [imageleft param]
      * 
      * @return void
      */
@@ -1084,18 +1085,17 @@ class StringFilters implements IStringFilters
             return;
         }
         $x = \trim($content);
+
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[imageleft ')
-            ) {
+        while (\str_contains($content, '[imageleft ')) {
             $counter++;
             $replace = '<span class="img-left-container">'
                 . '<img '
                 . 'class="left imageleftsc" '
                 . 'src="' . CDN . '/upload/$1.webp" '
+                . "data-counter={$counter} "
                 . 'data-name="$1" '
-                . 'data-counter=' . $counter . ' '
                 . 'alt="$1"'
                 . '>'
                 . '</span>';
@@ -1108,7 +1108,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Image Right short code(s)
      *
-     * @param string $content text data containing [imageright param]
+     * @param string $content string containing [imageright param]
      * 
      * @return void
      */
@@ -1118,18 +1118,17 @@ class StringFilters implements IStringFilters
             return;
         }
         $content = \trim($content);
+
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[imageright ')
-            ) {
+        while (\str_contains($content, '[imageright ')) {
             $counter++;
             $replace = '<span class="img-right-container">'
                 . '<img '
                 . 'class="right imagerightsc" '
                 . 'src="' . CDN . '/upload/$1.webp" '
+                . "data-counter={$counter} "
                 . 'data-name="$1" '
-                . 'data-counter=' . $counter . ' '
                 . 'alt="$1"'
                 . '>'
                 . '</span>';
@@ -1142,7 +1141,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Image Responsive short code(s)
      *
-     * @param string $content text data containing [imageresp param]
+     * @param string $content string containing [imageresp param]
      * 
      * @return void
      */
@@ -1152,18 +1151,17 @@ class StringFilters implements IStringFilters
             return;
         }
         $content = \trim($content);
+
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[imageresp ')
-            ) {
+        while (\str_contains($content, '[imageresp ')) {
             $counter++;
             $replace = '<span class="img-responsive-container">'
                 . '<img '
                 . 'class="responsive-img imagerespsc" '
                 . 'src="' . CDN . '/upload/$1.webp" '
+                . "data-counter={$counter} "
                 . 'data-name="$1" '
-                . 'data-counter=' . $counter . ' '
                 . 'alt="$1"'
                 . '>'
                 . '</span>';
@@ -1176,7 +1174,7 @@ class StringFilters implements IStringFilters
     /**
      * Render Soundcloud short code(s)
      *
-     * @param string $content text data containing [soundcloud param]
+     * @param string $content string containing [soundcloud param]
      * 
      * @return void
      */
@@ -1186,15 +1184,15 @@ class StringFilters implements IStringFilters
             return;
         }
         $content = \trim($content);
+
         $counter = 0;
         $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[soundcloud ') && $counter < self::ITERATIONS
-            ) {
+        while (\str_contains($content, '[soundcloud ')) {
             $counter++;
             $replace = '<div '
                 . 'class="audio-container center row soundcloud-container" '
-                . 'data-counter=' . $counter . '>'
+                . "data-counter={$counter} "
+                . '>'
                 . '<iframe loading=lazy width="100%" height=300 '
                 . 'scrolling=no frameborder=no controls '
                 . 'src="https://w.soundcloud.com/player/?url='
@@ -1212,7 +1210,7 @@ class StringFilters implements IStringFilters
     /**
      * Render YouTube short code(s)
      *
-     * @param string $content text data containing [youtube param]
+     * @param string $content string containing [youtube param]
      * 
      * @return void
      */
@@ -1222,15 +1220,15 @@ class StringFilters implements IStringFilters
             return;
         }
         $content = \trim($content);
+
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[youtube ') && $counter < self::ITERATIONS
-            ) {
+        while (\str_contains($content, '[youtube ')) {
             $counter++;
             $replace = '<div '
                 . 'class="video-container center row youtube-container" '
-                . 'data-counter=' . $counter . '>'
+                . "data-counter={$counter} "
+                . '>'
                 . '<iframe loading=lazy width=426 height=240 controls '
                 . 'src="https://www.youtube.com/embed/$1">'
                 . '</iframe>'
@@ -1244,7 +1242,7 @@ class StringFilters implements IStringFilters
     /**
      * Render gallery short code(s)
      *
-     * @param string $content text data containing [gallery param]
+     * @param string $content string containing [gallery param]
      * @param bool   $shuffle shuffle the gallery?
      * @param int    $size    selected width of thumbnails in pixels
      * 
@@ -1257,10 +1255,12 @@ class StringFilters implements IStringFilters
             return;
         }
         $content = \trim($content);
+
         $size = \intval($size);
         if (!$size) {
             $size = 160;
         }
+
         $counter = 0;
         $pattern = '#\[gallery\s.*?(.*?)\]#is';
         while (
@@ -1303,7 +1303,9 @@ class StringFilters implements IStringFilters
                 }
                 $replace = "<div "
                     . "class='row center gallery-container' "
-                    . "data-gallery='$gallery'>$images"
+                    . "data-counter={$counter} "
+                    . "data-gallery='$gallery'>"
+                    . $images
                     . "</div>";
                 if (\is_string($content)) {
                     $content = \str_replace(
@@ -1329,8 +1331,13 @@ class StringFilters implements IStringFilters
         if (!\is_string($mask)) {
             return null;
         }
+        if (!UPLOAD) {
+            return null;
+        }
+
         $mask = \trim($mask);
         $mask = \strtolower($mask);
+
         // hack to fix Markdown <em> markup
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
@@ -1350,7 +1357,7 @@ class StringFilters implements IStringFilters
         if (!\in_array($format, ['gif', 'jpg', 'png', 'webp'])) {
             $format = 'webp';
         }
-        if (UPLOAD && \is_string($mask) && \is_dir(UPLOAD)) {
+        if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask . '*.' . $format) ?: null;
             if ($data) {
@@ -1377,11 +1384,14 @@ class StringFilters implements IStringFilters
         if (!\is_string($mask)) {
             return null;
         }
+        if (!UPLOAD) {
+            return null;
+        }
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
         }
-        if (UPLOAD && \is_string($mask) && \is_dir(UPLOAD)) {
+        if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask) ?: null;
             if ($data) {
@@ -1433,7 +1443,7 @@ class StringFilters implements IStringFilters
     /**
      * Transliterate a string to safe characters without accents
      *
-     * @param string $string text data
+     * @param string $string string by reference
      * 
      * @return void
      */
@@ -1540,24 +1550,32 @@ class StringFilters implements IStringFilters
      * @param string $string input string containing short codes by reference
      * @param int    $flags  additional flags for processing:
      *                       GALLERY_RANDOM - randomize gallery entries
+     * @param int    $size   selected width of thumbnails in pixels
      *
      * @return void
      */
-    public static function shortCodesProcessor(&$string, $flags = 0)
+    public static function shortCodesProcessor(&$string, $flags = 0, $size = 160)
     {
         if (!\is_string($string) || empty($string)) {
             return;
         }
+
+        $size = \intval($size);
+        if (!$size) {
+            $size = 160;
+        }
+
         if (\str_starts_with($string, '[markdown]')) {
             self::renderMarkdown($string);
         } elseif (\str_starts_with($string, '[markdownextra]')) {
             self::renderMarkdownExtra($string);
         }
+
         self::renderImageShortCode($string);
         self::renderImageLeftShortCode($string);
         self::renderImageRightShortCode($string);
         self::renderImageRespShortCode($string);
-        self::renderGalleryShortCode($string, (bool) ($flags & self::GALLERY_RANDOM)); // phpcs:ignore
+        self::renderGalleryShortCode($string, (bool) ($flags & self::GALLERY_RANDOM), $size); // phpcs:ignore
         self::renderYouTubeShortCode($string);
         self::renderSoundcloudShortCode($string);
     }
