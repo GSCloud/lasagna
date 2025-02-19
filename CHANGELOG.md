@@ -3,6 +3,11 @@
 **`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
 ---
 
+`2025-02-19`
+
+* **`1045-FEATURE` returnURL support** in login workflow  
+* **`1044-FEATURE` refactorization of StringFilter** class
+
 `2025-02-17`
 
 * **`1043-FEATURE < 1009-IDEA`** **remember active admin tab**  
