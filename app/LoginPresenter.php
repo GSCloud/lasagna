@@ -136,22 +136,9 @@ class LoginPresenter extends APresenter
 
                 if (isset($_COOKIE['returnURL'])) {
                     $url = $_COOKIE['returnURL'];
-                    setcookie(
-                        'returnURL',
-                        '',
-                        \time() - 3600,
-                        '/',
-                        DOMAIN,
-                        true,
-                        true
-                    );
-                    if (strpos($url, '/') === 0) {
-                        $this->setLocation($url);
-                        exit();
-                    } else {
-                        $this->setLocation();
-                    }
+                    $this->setLocation($url + '?nonce=' . $this->getNonce());
                 }
+                $this->setLocation();
 
             } catch (\Exception $e) {
                 $this->addError('Google OAuth: ' . $e->getMessage());
