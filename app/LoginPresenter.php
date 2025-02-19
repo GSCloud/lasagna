@@ -55,6 +55,8 @@ class LoginPresenter extends APresenter
                 \time() + 120,
                 '/',
                 DOMAIN,
+                true,
+                true
             );
         }
         
