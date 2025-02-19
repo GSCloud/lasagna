@@ -38,33 +38,23 @@ class LoginPresenter extends APresenter
         $this->checkRateLimit()->setHeaderHtml();
 
         $cfg = $this->getCfg();
-
         if (($cfg["goauth_client_id"] ?? null) === null) {
             ErrorPresenter::getInstance()->process(403);
             exit;
         }
-
         if (($cfg["goauth_secret"] ?? null) === null) {
             ErrorPresenter::getInstance()->process(403);
             exit;
         }
 
+        // save return URL
         if (!empty($_GET["returnURL"])) {
-            $cookieName = "returnURL";
-            $cookieValue = $_GET["returnURL"];
-            $cookieExpiration = 60;
-            $cookiePath = '/';
-            $cookieDomain = '';
-            $cookieSecure = true;
-            $cookieHttpOnly = true;
             \setcookie(
-                $cookieName,
-                $cookieValue,
-                $cookieExpiration,
-                $cookiePath,
-                $cookieDomain,
-                $cookieSecure,
-                $cookieHttpOnly
+                "returnURL",
+                $_GET["returnURL"],
+                \time() + 120,
+                '/',
+                DOMAIN,
             );
         }
         
@@ -123,13 +113,8 @@ class LoginPresenter extends APresenter
                     . " "
                     . $ownerDetails->getEmail()
                 );
-                $this->addAuditMessage(
-                    "OAuth login:<br>"
-                    . $ownerDetails->getName()
-                    . " "
-                    . $ownerDetails->getEmail()
-                );
-                if ($this->getUserGroup() == "admin") {
+                $this->addAuditMessage('OAuth login.');
+                if ($this->getUserGroup() === "admin") {
                     if (\is_string($this->getCfg("DEBUG_COOKIE"))) {
                         \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
                     }
@@ -137,10 +122,10 @@ class LoginPresenter extends APresenter
                 $this->clearCookie("oauth2state");
                 if (\strlen($ownerDetails->getEmail())) {
                     \setcookie(
-                        "login_hint",
+                        'login_hint',
                         $ownerDetails->getEmail() ?? "",
                         \time() + 86400 * 31,
-                        "/",
+                        '/',
                         DOMAIN,
                     );
                 }
