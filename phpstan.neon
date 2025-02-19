@@ -13,3 +13,4 @@ parameters:
         - DEBUG
         - UPLOAD
         - CSP
+    treatPhpDocTypesAsCertain: false

@@ -38,6 +38,7 @@ class LoginPresenter extends APresenter
         $this->checkRateLimit()->setHeaderHtml();
 
         $cfg = $this->getCfg();
+
         if (($cfg["goauth_client_id"] ?? null) === null) {
             ErrorPresenter::getInstance()->process(403);
             exit;
@@ -48,6 +49,25 @@ class LoginPresenter extends APresenter
             exit;
         }
 
+        if (!empty($_GET["returnURL"])) {
+            $cookieName = "returnURL";
+            $cookieValue = $_GET["returnURL"];
+            $cookieExpiration = 60;
+            $cookiePath = '/';
+            $cookieDomain = '';
+            $cookieSecure = true;
+            $cookieHttpOnly = true;
+            \setcookie(
+                $cookieName,
+                $cookieValue,
+                $cookieExpiration,
+                $cookiePath,
+                $cookieDomain,
+                $cookieSecure,
+                $cookieHttpOnly
+            );
+        }
+        
         try {
             $provider = new \League\OAuth2\Client\Provider\Google(
                 [

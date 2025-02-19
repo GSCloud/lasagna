@@ -26,6 +26,9 @@ use GSC\StringFilters as SF;
  */
 class ArticlePresenter extends APresenter
 {
+    // short codes processor flags
+    const PROCESSOR_FLAGS = SF::GALLERY_RANDOM | SF::LAZY_LOADING;
+
     /**
      * Controller processor
      *
@@ -60,9 +63,9 @@ class ArticlePresenter extends APresenter
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($v, '[markdown]')) {
-                SF::shortCodesProcessor($data['l'][$k], SF::GALLERY_RANDOM);
+                SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
             } elseif (\str_starts_with($v, '[markdownextra]')) {
-                SF::shortCodesProcessor($data['l'][$k], SF::GALLERY_RANDOM);
+                SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
             } else {
                 SF::convertEolToBrNbsp($data['l'][$k]);
             }

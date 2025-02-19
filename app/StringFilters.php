@@ -16,268 +16,6 @@ use Michelf\Markdown;
 use Michelf\MarkdownExtra;
 
 /**
- * String Filters interface
- * 
- * @category CMS
- * @package  Framework
- * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE.txt
- * @link     https://github.com/GSCloud/lasagna
- */
-interface IStringFilters
-{
-    /**
-     * Converts a string to lowercase
-     *
-     * @param string $string input string
-     *
-     * @return string lowercase version of the input string
-     */
-    public static function strtolower($string);
-
-    /**
-     * Converts a string to uppercase
-     *
-     * @param string $string input string
-     *
-     * @return string uppercase version of the input string
-     */
-    public static function strtoupper($string);
-
-    /**
-     * Convert EOLs to <br>
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function convertEolToBr(&$content);
-
-    /**
-     * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function convertEolToBrNbsp(&$content);
-
-    /**
-     * Convert EOL + hyphen/star to HTML
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function convertEolHyphenToBrDot(&$content);
-
-    /**
-     * Correct text spacing
-     * 
-     * Correct the text spacing in passed content for various languages.
-     *
-     * @param string $content  content by reference
-     * @param string $language (optional: "cs", "sk", "en")
-     * 
-     * @return void
-     */
-    public static function correctTextSpacing(&$content, $language);
-
-    /**
-     * Trim various EOL combinations
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function trimEol(&$content);
-
-    /**
-     * Trim THML comments inside the <body> tag
-     *
-     * @param string $content content by reference
-     * 
-     * @return void
-     */
-    public static function trimHtmlComment(&$content);
-
-    /**
-     * Render Markdown to HTML
-     *
-     * @param string $content string
-     * 
-     * @return void
-     */
-    public static function renderMarkdown(&$content);
-
-    /**
-     * Render Markdown Extra to HTML
-     *
-     * @param string $content string
-     * 
-     * @return void
-     */
-    public static function renderMarkdownExtra(&$content);
-
-    /**
-     * Render Google Map short code(s)
-     *
-     * @param string $content string containing [googlemap param]
-     * @param mixed  $key     Google Maps API key
-     * 
-     * @return void
-     */
-    public static function renderGoogleMapShortCode(&$content, $key);
-
-    /**
-     * Render Image short code(s)
-     *
-     * @param string $content string containing [image param]
-     * 
-     * @return void
-     */
-    public static function renderImageShortCode(&$content);
-
-    /**
-     * Render Image Left short code(s)
-     *
-     * @param string $content string containing [imageleft param]
-     * 
-     * @return void
-     */
-    public static function renderImageLeftShortCode(&$content);
-
-    /**
-     * Render Image Right short code(s)
-     *
-     * @param string $content string containing [imageright param]
-     * 
-     * @return void
-     */
-    public static function renderImageRightShortCode(&$content);
-
-    /**
-     * Render Image Responsive short code(s)
-     *
-     * @param string $content string containing [imageresp param]
-     * 
-     * @return void
-     */
-    public static function renderImageRespShortCode(&$content);
-
-    /**
-     * Render Soundcloud short code(s)
-     *
-     * @param string $content string containing [soundcloud param]
-     * 
-     * @return void
-     */
-    public static function renderSoundcloudShortCode(&$content);
-
-    /**
-     * Render YouTube short code(s)
-     *
-     * @param string $content string containing [youtube param]
-     * 
-     * @return void
-     */
-    public static function renderYouTubeShortCode(&$content);
-
-    /**
-     * Render gallery short code(s)
-     *
-     * @param string $content string containing [gallery param]
-     * @param bool   $shuffle shuffle the gallery
-     * @param int    $size    size of thumbnails in pixels
-     * 
-     * @return void
-     */
-    public static function renderGalleryShortCode(
-        &$content, $shuffle = false, $size = 160
-    );
-
-    /**
-     * Find uploaded images by a mask
-     *
-     * @param string $mask   file mask
-     * @param string $format image format
-     * 
-     * @return mixed
-     */
-    public static function findImagesByMask($mask, $format = 'webp');
-
-    /**
-     * Find uploaded files by mask
-     *
-     * @param string $mask file mask
-     * 
-     * @return mixed
-     */
-    public static function findFilesByMask($mask = null);
-
-    /**
-     * Sanitize a string to a safe variant
-     *
-     * @param string $string string by reference
-     * 
-     * @return void
-     */
-    public static function sanitizeString(&$string);
-
-    /**
-     * Sanitize a string to a lowercase safe variant
-     *
-     * @param string $string string by reference
-     * 
-     * @return void
-     */
-    public static function sanitizeStringLC(&$string);
-
-    /**
-     * Transliterate a string to safe characters without accents
-     *
-     * @param string $string string
-     * 
-     * @return string
-     */
-    public static function transliterate(&$string);
-
-    /**
-     * Sort an array of mixed data types in ascending order: numbers and strings.
-     *
-     * @param array<mixed> $arr array to be sorted by reference
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException If the input is not an array.
-     */
-    public static function sort(&$arr);
-
-    /**
-     * Sort an array of mixed data types in descending order: numbers and strings.
-     *
-     * @param array<mixed> $arr array to be sorted by reference
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException If the input is not an array.
-     */
-    public static function rsort(&$arr);
-
-    /**
-     * Process short codes in a string (also process Markdown if starting with it)
-     *
-     * @param string $string input string containing short codes by reference
-     * @param int    $flags  additional flags for processing:
-     *                       GALLERY_RANDOM - randomize gallery entries
-     * @param int    $size   selected width of thumbnails in pixels
-     *
-     * @return void
-     */
-    public static function shortCodesProcessor(&$string, $flags = 0, $size = 160);
-}
-
-/**
  * String Filters class
  * 
  * Modify a string content passed by a reference to fix common problems.
@@ -288,83 +26,106 @@ interface IStringFilters
  * @license  MIT https://gscloud.cz/LICENSE.txt
  * @link     https://github.com/GSCloud/lasagna
  */
-class StringFilters implements IStringFilters
+class StringFilters
 {
-    // GALLERY: maximum shortcode loop iterations
-    const ITERATIONS = SF_ITERATIONS;
-
-    // find images mask sanitization
+    // string sanitization: IMAGE MASK for search
     const UPLOAD_SANITIZE = '/[^a-z0-9!@#+\-=.,;_*]+/i';
 
-    // general string sanitization
+    // string sanitization: allowed CHARACTERS
     const STRING_SANITIZE = '/[^a-z0-9\-._]+/i';
+
+    // GALLERY: max. loop iterations
+    const ITERATIONS = 30;
 
     // FLAG: randomize gallery images
     const GALLERY_RANDOM = 1;
 
-    // all possible English characters
+    // FLAG: use lazy loading property
+    const LAZY_LOADING = 2;
+
+    // FLAG: use 160px thumbnails
+    const THUMBS_160 = 4;
+
+    // FLAG: use 320px thumbnails
+    const THUMBS_320 = 8;
+
+    // FLAG: use 640px thumbnails
+    const THUMBS_640 = 16;
+
+    // English lowercase characters
     // phpcs:ignore
     /**
      * @var array<string>
      */
     public static $lo_chars_english = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-        'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
     ];
+
+    // English uppercase characters
     // phpcs:ignore
     /**
      * @var array<string>
      */
     public static $up_chars_english = [
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-        'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ];
 
-    // all possible Czech characters
+    // Czech lowercase characters
     // phpcs:ignore
     /**
      * @var array<string>
      */
     public static $lo_chars_czech = [
-        'a', 'á', 'b', 'c', 'č', 'd', 'ď', 'e', 'é', 'ě', 'f', 'g', 'h', 'i', 'í',
-        'j', 'k', 'l', 'm', 'n', 'ň', 'o', 'ó', 'p', 'q', 'r', 'ř', 's', 'š', 't',
-        'ť', 'u', 'ú', 'ů', 'v', 'w', 'x', 'y', 'ý', 'z', 'ž'
+        'a', 'á', 'b', 'c', 'č', 'd', 'ď', 'e', 'é', 'ě', 'f', 'g', 'h',
+        'i', 'í', 'j', 'k', 'l', 'm', 'n', 'ň', 'o', 'ó', 'p', 'q', 'r',
+        'ř', 's', 'š', 't', 'ť', 'u', 'ú', 'ů', 'v', 'w', 'x', 'y', 'ý',
+        'z', 'ž'
     ];
-    // phpcs:ignore
+
+    // Czech uppercase characters
+    // // phpcs:ignore
     /**
      * @var array<string>
      */
     public static $up_chars_czech = [
-        'A', 'Á', 'B', 'C', 'Č', 'D', 'Ď', 'E', 'É', 'Ě', 'F', 'G', 'H', 'I', 'Í',
-        'J', 'K', 'L', 'M', 'N', 'Ň', 'O', 'Ó', 'P', 'Q', 'R', 'Ř', 'S', 'Š', 'T',
-        'Ť', 'U', 'Ú', 'Ů', 'V', 'W', 'X', 'Y', 'Ý', 'Z', 'Ž'
+        'A', 'Á', 'B', 'C', 'Č', 'D', 'Ď', 'E', 'É', 'Ě', 'F', 'G', 'H',
+        'I', 'Í', 'J', 'K', 'L', 'M', 'N', 'Ň', 'O', 'Ó', 'P', 'Q', 'R',
+        'Ř', 'S', 'Š', 'T', 'Ť', 'U', 'Ú', 'Ů', 'V', 'W', 'X', 'Y', 'Ý',
+        'Z', 'Ž'
     ];
 
-    // all possible Slovak characters
+    // Slovak lowercase characters
     // phpcs:ignore
     /**
      * @var array<string>
      */
     public static $lo_chars_slovak = [
-        'a', 'á', 'ä', 'b', 'c', 'č', 'd', 'ď', 'e', 'é', 'ě', 'f', 'g', 'h', 'i',
-        'í', 'j', 'k', 'l', 'ľ', 'm', 'n', 'ň', 'o', 'ó', 'ô', 'p', 'q', 'r', 'ř',
-        's', 'š', 't', 'ť', 'u', 'ú', 'ů', 'v', 'w', 'x', 'y', 'ý', 'z', 'ž',
+        'a', 'á', 'ä', 'b', 'c', 'č', 'd', 'ď', 'e', 'é', 'ě', 'f', 'g',
+        'h', 'i', 'í', 'j', 'k', 'l', 'ľ', 'm', 'n', 'ň', 'o', 'ó', 'ô',
+        'p', 'q', 'r', 'ř', 's', 'š', 't', 'ť', 'u', 'ú', 'ů', 'v', 'w',
+        'x', 'y', 'ý', 'z', 'ž',
     ];
+
+    // Slovak uppercase characters
     // phpcs:ignore
     /**
      * @var array<string>
      */
     public static $up_chars_slovak = [
-        'A', 'Á', 'Ä', 'B', 'C', 'Č', 'D', 'Ď', 'E', 'É', 'Ě', 'F', 'G', 'H', 'I',
-        'Í', 'J', 'K', 'L', 'Ľ', 'M', 'N', 'Ň', 'O', 'Ó', 'Ô', 'P', 'Q', 'R', 'Ř',
-        'S', 'Š', 'T', 'Ť', 'U', 'Ú', 'Ů', 'V', 'W', 'X', 'Y', 'Ý', 'Z', 'Ž',
+        'A', 'Á', 'Ä', 'B', 'C', 'Č', 'D', 'Ď', 'E', 'É', 'Ě', 'F', 'G',
+        'H', 'I', 'Í', 'J', 'K', 'L', 'Ľ', 'M', 'N', 'Ň', 'O', 'Ó', 'Ô',
+        'P', 'Q', 'R', 'Ř', 'S', 'Š', 'T', 'Ť', 'U', 'Ú', 'Ů', 'V', 'W',
+        'X', 'Y', 'Ý', 'Z', 'Ž',
     ];
 
+    // common string replacements
     // phpcs:ignore
     /**
      * @var array<string,string>
      */
-    public static $common = [
+    private static $_common = [
         "  " => " ",
         " ❤️ " => " ❤️&nbsp;",
         " ♥️ " => " ♥️&nbsp;",
@@ -396,25 +157,27 @@ class StringFilters implements IStringFilters
         " 7 " => " 7 ",
         " 8 " => " 8 ",
         " 9 " => " 9 ",
-
+        
         " :-)" => "&nbsp;🙂",
+        " :-))" => "&nbsp;😆",
         " :-D" => "&nbsp;😄",
-        " :-O" => "&nbsp;😮",
+        " ;-D" => "&nbsp;😂",
         " :-P" => "&nbsp;😋",
         " :-*" => "&nbsp;😘",
-        " :-X" => "&nbsp;😘",
         " :-x" => "&nbsp;😘",
+        " :-X" => "&nbsp;😍",
         " ;-)" => "&nbsp;😉",
-        " :'(" => "&nbsp;😥",
-        " :-(" => "&nbsp;😟",
-        " :-/" => "&nbsp;😒",
-        " :-|" => "&nbsp;😐",
-        " :-[" => "&nbsp;😕",
-        " :-))" => "&nbsp;😆",
-        " :'-(" => "&nbsp;😥",
-        " >:-(" => "&nbsp;😡",
         " 3:-)" => "&nbsp;😎",
         " O:-)" => "&nbsp;😇",
+
+        " :-|" => "&nbsp;😐",
+        " :-O" => "&nbsp;😮",
+        " :-(" => "&nbsp;😟",
+        " :'(" => "&nbsp;😥",
+        " :'-(" => "&nbsp;😥",
+        " :-/" => "&nbsp;😒",
+        " :-[" => "&nbsp;😕",
+        " >:-(" => "&nbsp;😡",
 
         " °C " => " °C ",
         " °De " => " °De ",
@@ -424,10 +187,10 @@ class StringFilters implements IStringFilters
         " °Ré " => " °Ré ",
         " °Rø " => " °Rø ",
 
+        
         " h " => "&nbsp;h ",
         " h, " => "&nbsp;h, ",
         " h. " => "&nbsp;h. ",
-        " id: " => " id:&nbsp;",
         " kg " => "&nbsp;kg ",
         " kg)" => "&nbsp;kg)",
         " l " => "&nbsp;l ",
@@ -447,37 +210,37 @@ class StringFilters implements IStringFilters
         " s, " => "&nbsp;s, ",
         " s. " => "&nbsp;s. ",
         " sec. " => "&nbsp;sec. ",
-
+        
         " CZK " => " CZK&nbsp;",
         " EUR " => " EUR&nbsp;",
         " USD " => " USD&nbsp;",
+
+        " id: " => " id:&nbsp;",
         " ID: " => " ID:&nbsp;",
-        " INC." => "&nbsp;Inc.",
         " Inc." => "&nbsp;Inc.",
-        " LTD." => "&nbsp;Ltd.",
+        " INC." => "&nbsp;Inc.",
         " Ltd." => "&nbsp;Ltd.",
+        " LTD." => "&nbsp;Ltd.",
+        " X " => "&nbsp;X ",
 
         " % " => "&nbsp;% ",
         " ‰ " => "&nbsp;‰",
         " ... " => "&nbsp;… ",
         " ..." => "&nbsp;…",
         " / " => " /&nbsp;",
-        " <<" => " «",
-        ">> " => "» ",
+        " << " => " « ",
+        " >> " => " » ",
         " - " => " — ",
         " – " => " —&nbsp;",
         " — " => " —&nbsp;",
         " ― " => " ―&nbsp;",
-
-        " VL70-m" => " VL70‑m",
-        " DX7 IID" => " DX7IID",
     ];
 
     // phpcs:ignore
     /**
      * @var array<string,string>
      */
-    public static $english = [
+    private static $_english = [
         " He's " => " He&rsquo;s ",
         " It's " => " It&rsquo;s ",
         " She's " => " She&rsquo;s ",
@@ -509,7 +272,7 @@ class StringFilters implements IStringFilters
     /**
      * @var array<string,string>
      */
-    public static $czech = [
+    private static $_czech = [
         " DIČ: " => " DIČ:&nbsp;",
         " IČ: " => " IČ:&nbsp;",
         " Kč" => "&nbsp;Kč",
@@ -517,6 +280,7 @@ class StringFilters implements IStringFilters
         " A " => " A&nbsp;",
         " I " => " I&nbsp;",
         " K " => " K&nbsp;",
+        " O " => " O&nbsp;",
         " S " => " S&nbsp;",
         " U " => " U&nbsp;",
         " V " => " V&nbsp;",
@@ -564,6 +328,7 @@ class StringFilters implements IStringFilters
         " čj. " => " čj.&nbsp;",
         " čp. " => " čp.&nbsp;",
         " čís. " => " čís.&nbsp;",
+        " v.o.s." => "&nbsp;v.o.s.",
 
         " a&nbsp;i " => " a&nbsp;i&nbsp;",
         " a&nbsp;k " => " a&nbsp;k&nbsp;",
@@ -584,7 +349,7 @@ class StringFilters implements IStringFilters
     /**
      * @var array<string,string>
      */
-    public static $slovak = [
+    private static $_slovak = [
         " DIČ: " => " DIČ:&nbsp;",
         " IČ: " => " IČ:&nbsp;",
         " Kč" => "&nbsp;Kč",
@@ -654,7 +419,7 @@ class StringFilters implements IStringFilters
     /**
      * @var array<string,string>
      */
-    public static $transliteration = [
+    private static $_transliteration = [
         ' ' => '_',
         '--' => '-',
         '__' => '_',
@@ -788,6 +553,69 @@ class StringFilters implements IStringFilters
         'Ź' => 'z',
         'Ż' => 'z',
     ];
+
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
+    private static $_custom = [];
+
+    /**
+     * Set custom replacements
+     *
+     * @param array<string,string> $array associative array of custom replacements
+     *
+     * @return void
+     * 
+     * @throws \InvalidArgumentException invalid input array passed
+     */
+    public static function setCustomReplacements($array)
+    {
+        if (!\is_array($array)) {
+            throw new \InvalidArgumentException(
+                'Invalid argument: Expected an array.'
+            );
+        }
+
+        foreach ($array as $key => $value) {
+            if (!\is_string($key) || !\is_string($value)) {
+                throw new \InvalidArgumentException(
+                    'Keys and values must be strings.'
+                );
+            }
+        }
+        self::$_custom = $array;
+    }
+
+    /**
+     * Add custom replacements to the existing set
+     *
+     * @param array<string,string> $array associative array of custom replacements
+     *
+     * @return void
+     * 
+     * @throws \InvalidArgumentException invalid input array passed
+     */
+    public static function addCustomReplacements($array)
+    {
+        if (!\is_array($array)) {
+            throw new \InvalidArgumentException(
+                'Invalid argument: Expected an array.'
+            );
+        }
+
+        foreach ($array as $key => $value) {
+            if (!\is_string($key) || !\is_string($value)) {
+                throw new \InvalidArgumentException(
+                    'Keys and values must be strings.'
+                );
+            }
+        }
+        self::$_custom = \array_merge(
+            self::$_custom,
+            $array
+        );
+    }
 
     /**
      * Convert EOLs to HTML breakline
@@ -928,7 +756,7 @@ class StringFilters implements IStringFilters
     }
 
     /**
-     * Correct text spacing - English
+     * Correct text spacing for English
      *
      * @param string $content string
      * 
@@ -936,12 +764,16 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingEn($content)
     {
-        $merged = \array_merge(self::$common, self::$english);
+        if (!\is_string($content)) {
+            return $content;
+        }
+
+        $merged = \array_merge(self::$_custom, self::$_common, self::$_english);
         return \str_replace(\array_keys($merged), $merged, $content);
     }
 
     /**
-     * Correct text spacing - Czech
+     * Correct text spacing for Czech
      *
      * @param string $content string
      * 
@@ -949,12 +781,16 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingCs($content)
     {
-        $merged = \array_merge(self::$common, self::$czech);
+        if (!\is_string($content)) {
+            return $content;
+        }
+
+        $merged = \array_merge(self::$_custom, self::$_common, self::$_czech);
         return \str_replace(\array_keys($merged), $merged, $content);
     }
 
     /**
-     * Correct text spacing - Slovak
+     * Correct text spacing for Slovak
      *
      * @param string $content string
      * 
@@ -962,7 +798,11 @@ class StringFilters implements IStringFilters
      */
     public static function correctTextSpacingSk($content)
     {
-        $merged = \array_merge(self::$common, self::$slovak);
+        if (!\is_string($content)) {
+            return $content;
+        }
+
+        $merged = \array_merge(self::$_custom, self::$_common, self::$_slovak);
         return \str_replace(\array_keys($merged), $merged, $content);
     }
 
@@ -1009,10 +849,13 @@ class StringFilters implements IStringFilters
      *
      * @param string $content string containing [googlemap param]
      * @param mixed  $key     Google Maps API key
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderGoogleMapShortCode(&$content, $key)
+    public static function renderGoogleMapShortCode(&$content, $key = null, $flags = null) // phpcs:ignore
     {
         if (!\is_string($content)) {
             return;
@@ -1023,13 +866,26 @@ class StringFilters implements IStringFilters
         $content = \trim($content);
         $key = \trim($key);
 
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderGoogleMapShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : ''; 
+        }
+
         $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
         while (\str_contains($content, '[googlemap ')) {
             $counter++;
-            $replace = '<iframe width="100%" height="400" '
-                . 'style="border:0" loading="lazy" allowfullscreen '
+            $replace = '<iframe '
+                . $lazy
                 . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width="100%" '
+                . 'height="400" '
+                . 'scrolling=no '
+                . 'frameborder=no '
+                . 'style="border:0" '
+                . 'allowfullscreen '
                 . "data-counter={$counter} "
                 . 'src="https://www.google.com/maps/embed/v1/place?key='
                 . $key . '&q=$1"></iframe>';
@@ -1043,15 +899,25 @@ class StringFilters implements IStringFilters
      * Render Image short code(s)
      *
      * @param string $content string containing [image param]
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderImageShortCode(&$content)
+    public static function renderImageShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
         }
         $content = \trim($content);
+
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderImageShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : '';
+        }
 
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
@@ -1059,6 +925,7 @@ class StringFilters implements IStringFilters
             $counter++;
             $replace = '<span class="img-container">'
                 . '<img '
+                . $lazy
                 . 'class=imagesc '
                 . 'src="' . CDN . '/upload/$1.webp" '
                 . "data-counter={$counter} "
@@ -1076,15 +943,25 @@ class StringFilters implements IStringFilters
      * Render Image Left short code(s)
      *
      * @param string $content string containing [imageleft param]
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderImageLeftShortCode(&$content)
+    public static function renderImageLeftShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
         }
         $x = \trim($content);
+
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderImageLeftShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : '';
+        }
 
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
@@ -1092,6 +969,7 @@ class StringFilters implements IStringFilters
             $counter++;
             $replace = '<span class="img-left-container">'
                 . '<img '
+                . $lazy
                 . 'class="left imageleftsc" '
                 . 'src="' . CDN . '/upload/$1.webp" '
                 . "data-counter={$counter} "
@@ -1109,15 +987,25 @@ class StringFilters implements IStringFilters
      * Render Image Right short code(s)
      *
      * @param string $content string containing [imageright param]
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderImageRightShortCode(&$content)
+    public static function renderImageRightShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
         }
         $content = \trim($content);
+
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderImageRightShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : '';
+        }
 
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
@@ -1125,6 +1013,7 @@ class StringFilters implements IStringFilters
             $counter++;
             $replace = '<span class="img-right-container">'
                 . '<img '
+                . $lazy
                 . 'class="right imagerightsc" '
                 . 'src="' . CDN . '/upload/$1.webp" '
                 . "data-counter={$counter} "
@@ -1142,15 +1031,25 @@ class StringFilters implements IStringFilters
      * Render Image Responsive short code(s)
      *
      * @param string $content string containing [imageresp param]
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderImageRespShortCode(&$content)
+    public static function renderImageRespShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
         }
         $content = \trim($content);
+
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderImageRespShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : '';
+        }
 
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
@@ -1158,6 +1057,7 @@ class StringFilters implements IStringFilters
             $counter++;
             $replace = '<span class="img-responsive-container">'
                 . '<img '
+                . $lazy
                 . 'class="responsive-img imagerespsc" '
                 . 'src="' . CDN . '/upload/$1.webp" '
                 . "data-counter={$counter} "
@@ -1175,15 +1075,25 @@ class StringFilters implements IStringFilters
      * Render Soundcloud short code(s)
      *
      * @param string $content string containing [soundcloud param]
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderSoundcloudShortCode(&$content)
+    public static function renderSoundcloudShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
         }
         $content = \trim($content);
+
+        if (!\is_integer($flags)) {
+            throw new \Exception('renderSoundcloudShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy' : '';
+        }
 
         $counter = 0;
         $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
@@ -1193,8 +1103,17 @@ class StringFilters implements IStringFilters
                 . 'class="audio-container center row soundcloud-container" '
                 . "data-counter={$counter} "
                 . '>'
-                . '<iframe loading=lazy width="100%" height=300 '
-                . 'scrolling=no frameborder=no controls '
+                . '<iframe '
+                . $lazy
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width="100%" '
+                . 'height=300 '
+                . 'scrolling=no '
+                . 'frameborder=no '
+                . 'style="border:0" '
+                . 'allowfullscreen '
+                . 'controls '
+                . "data-counter={$counter} "
                 . 'src="https://w.soundcloud.com/player/?url='
                 . 'https%3A//api.soundcloud.com/tracks/$1&'
                 . 'auto_play=false&hide_related=false&show_comments=true&'
@@ -1211,15 +1130,25 @@ class StringFilters implements IStringFilters
      * Render YouTube short code(s)
      *
      * @param string $content string containing [youtube param]
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderYouTubeShortCode(&$content)
+    public static function renderYouTubeShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
         }
         $content = \trim($content);
+
+        if (!\is_integer($flags)) {
+            throw new \Exception('renderYouTubeShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy' : '';
+        }
 
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
@@ -1229,7 +1158,15 @@ class StringFilters implements IStringFilters
                 . 'class="video-container center row youtube-container" '
                 . "data-counter={$counter} "
                 . '>'
-                . '<iframe loading=lazy width=426 height=240 controls '
+                . '<iframe '
+                . $lazy
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width=426 '
+                . 'height=240 '
+                . 'frameborder=no '
+                . 'style="border:0" '
+                . 'allowfullscreen '
+                . 'controls '
                 . 'src="https://www.youtube.com/embed/$1">'
                 . '</iframe>'
                 . '</div>';
@@ -1243,22 +1180,35 @@ class StringFilters implements IStringFilters
      * Render gallery short code(s)
      *
      * @param string $content string containing [gallery param]
-     * @param bool   $shuffle shuffle the gallery?
-     * @param int    $size    selected width of thumbnails in pixels
+     * @param mixed  $flags   flags
      * 
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderGalleryShortCode(
-        &$content, $shuffle = false, $size = 160
-    ) {
+    public static function renderGalleryShortCode(&$content, $flags = null)
+    {
         if (!\is_string($content)) {
             return;
         }
         $content = \trim($content);
 
-        $size = \intval($size);
-        if (!$size) {
+        if (!\is_integer($flags)) {
+            throw new \Exception('renderGalleryShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : ''; 
+            $shuffle = (bool) ($flags & self::GALLERY_RANDOM);
             $size = 160;
+            if ($flags & self::THUMBS_160) {
+                $size = 160;
+            }
+            if ($flags & self::THUMBS_320) {
+                $size = 320;
+            }
+            if ($flags & self::THUMBS_640) {
+                $size = 640;
+            }
         }
 
         $counter = 0;
@@ -1291,20 +1241,24 @@ class StringFilters implements IStringFilters
                         $n = \trim(\strtr($n, '+-_()[]', '       '));
                         $images .=
                             "<a data-lightbox='{$gallery}' "
-                            . "href='" . CDN . "/upload/{$f}'>"
-                            . "<img loading=lazy class=gallery-img "
-                            . "data-source='" . CDN . "/upload/{$f}' "
+                            . 'href="' . CDN . "/upload/{$f}\""
+                            . '>'
+                            . '<img '
+                            . "src=\"{$t}\" "
+                            . $lazy
+                            . 'class=gallery-img '
+                            . 'data-source="' . CDN . "/upload/{$f}" . '" '
                             . "data-id={$id} "
-                            . "data-thumb='{$t}' "
-                            . "data-tooltip='{$n}' "
-                            . "alt='$id. {$gallery}{$n}' src='{$t}'>"
-                            . "</a>";
+                            . "data-thumb=\"{$t}\" "
+                            . "data-tooltip=\"{$n}\" "
+                            . "alt=\"{$id}. {$gallery} [{$n}]\" "
+                            . '></a>';
                     }
                 }
                 $replace = "<div "
                     . "class='row center gallery-container' "
                     . "data-counter={$counter} "
-                    . "data-gallery='$gallery'>"
+                    . "data-gallery=\"{$gallery}\">"
                     . $images
                     . "</div>";
                 if (\is_string($content)) {
@@ -1328,10 +1282,11 @@ class StringFilters implements IStringFilters
      */
     public static function findImagesByMask($mask = null, $format = 'webp')
     {
-        if (!\is_string($mask)) {
+        if (!UPLOAD) {
             return null;
         }
-        if (!UPLOAD) {
+
+        if (!\is_string($mask)) {
             return null;
         }
 
@@ -1346,6 +1301,7 @@ class StringFilters implements IStringFilters
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
         }
+
         if (!\is_string($mask)) {
             return null;
         }
@@ -1357,6 +1313,7 @@ class StringFilters implements IStringFilters
         if (!\in_array($format, ['gif', 'jpg', 'png', 'webp'])) {
             $format = 'webp';
         }
+
         if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask . '*.' . $format) ?: null;
@@ -1381,16 +1338,19 @@ class StringFilters implements IStringFilters
      */
     public static function findFilesByMask($mask = null)
     {
-        if (!\is_string($mask)) {
-            return null;
-        }
         if (!UPLOAD) {
             return null;
         }
+
+        if (!\is_string($mask)) {
+            return null;
+        }
+
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
         }
+
         if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
             $data = \glob($mask) ?: null;
@@ -1451,38 +1411,38 @@ class StringFilters implements IStringFilters
     {
         if (\is_string($string)) {
             $string = \str_replace(
-                \array_keys(self::$transliteration),
-                self::$transliteration,
+                \array_keys(self::$_transliteration),
+                self::$_transliteration,
                 $string
             );
         }
     }
 
     /**
-     * Converts a string to lowercase
+     * Converts a Unicode string to lowercase
      *
      * @param string $string input string
      *
-     * @return string lowercase version of the input string
+     * @return void
      */
-    public static function strtolower($string)
+    public static function strtolower(&$string)
     {
         if (\is_string($string)) {
-            return \mb_strtolower($string, 'UTF-8');
+            $string = \mb_strtolower($string, 'UTF-8');
         }
     }
 
     /**
-     * Converts a string to uppercase
+     * Converts a Unicode string to uppercase
      *
      * @param string $string input string
      *
-     * @return string uppercase version of the input string
+     * @return void
      */
-    public static function strtoupper($string)
+    public static function strtoupper(&$string)
     {
         if (\is_string($string)) {
-            return \mb_strtoupper($string, 'UTF-8');
+            $string = \mb_strtoupper($string, 'UTF-8');
         }
     }
 
@@ -1493,7 +1453,7 @@ class StringFilters implements IStringFilters
      *
      * @return void
      *
-     * @throws \InvalidArgumentException If the input is not an array.
+     * @throws \InvalidArgumentException if the input is not an array
      */
     public static function sort(&$arr)
     {
@@ -1523,7 +1483,7 @@ class StringFilters implements IStringFilters
      *
      * @return void
      *
-     * @throws \InvalidArgumentException If the input is not an array.
+     * @throws \InvalidArgumentException if the input is not an array
      */
     public static function rsort(&$arr)
     {
@@ -1548,21 +1508,20 @@ class StringFilters implements IStringFilters
      * Process short codes in a string (also process Markdown if starting with it)
      *
      * @param string $string input string containing short codes by reference
-     * @param int    $flags  additional flags for processing:
-     *                       GALLERY_RANDOM - randomize gallery entries
-     * @param int    $size   selected width of thumbnails in pixels
+     * @param mixed  $flags  flags
      *
      * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function shortCodesProcessor(&$string, $flags = 0, $size = 160)
+    public static function shortCodesProcessor(&$string, $flags)
     {
         if (!\is_string($string) || empty($string)) {
             return;
         }
 
-        $size = \intval($size);
-        if (!$size) {
-            $size = 160;
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('shortCodesProcessor: FLAGS!');
         }
 
         if (\str_starts_with($string, '[markdown]')) {
@@ -1570,13 +1529,12 @@ class StringFilters implements IStringFilters
         } elseif (\str_starts_with($string, '[markdownextra]')) {
             self::renderMarkdownExtra($string);
         }
-
-        self::renderImageShortCode($string);
-        self::renderImageLeftShortCode($string);
-        self::renderImageRightShortCode($string);
-        self::renderImageRespShortCode($string);
-        self::renderGalleryShortCode($string, (bool) ($flags & self::GALLERY_RANDOM), $size); // phpcs:ignore
-        self::renderYouTubeShortCode($string);
-        self::renderSoundcloudShortCode($string);
+        self::renderImageShortCode($string, $flags);
+        self::renderImageLeftShortCode($string, $flags);
+        self::renderImageRightShortCode($string, $flags);
+        self::renderImageRespShortCode($string, $flags);
+        self::renderGalleryShortCode($string, $flags);
+        self::renderYouTubeShortCode($string, $flags);
+        self::renderSoundcloudShortCode($string, $flags);
     }
 }

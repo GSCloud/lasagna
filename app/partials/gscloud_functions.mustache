@@ -1,11 +1,6 @@
 <script nonce="{{ csp_nonce }}">
 'use strict';
 
-// @TODO remove this
-//Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(f,g){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),b=e.length>>>0;if(0===b)return!1;var a=g|0;for(a=Math.max(0<=a?a:b-Math.abs(a),0);a<b;){var c=e[a],d=f;if(c===d||"number"===typeof c&&"number"===typeof d&&isNaN(c)&&isNaN(d))return!0;a++}return!1}});
-//Array.prototype.sample=function(){return this[Math.floor(Math.random()*this.length)];}
-//String.prototype.trim||(String.prototype.trim=function(){return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,"")});
-
 // CREATE UUID
 var uuid = null;
 try {
@@ -16,7 +11,7 @@ try {
   );
 }
 
-// TEST LOCAL STORAGE + SET UUID
+// LOCAL STORAGE TEST + SET UUID
 var nolocalstorage = false;
 try {
   if (localStorage) {
@@ -39,12 +34,11 @@ async function sha256(message) {
   return hash;
 }
 
-// IIFE
 (function(w, d, undefined) {
     w.GSC.scroll = 0;
     w.GSC.scrolled = 0;
 
-  // CREATE BOTTOM PROGRESS BAR
+  // CREATE PROGRESS BAR
   var pbar = "_" + Date.now();
   w.GSC.pbarid = pbar;
   d.getElementsByTagName("body")[0].insertAdjacentHTML(
@@ -52,7 +46,7 @@ async function sha256(message) {
     '<div class="progress-container"><div class="progress-bar" id="' + pbar + '"></div></div>'
   );
 
-  // PROGRESS BAR DYNAMIC SCROLLING
+  // PROGRESS BAR on SCROLLING
   window.ontouchmove = onscroll;
   window.onscroll = onscroll;
   function onscroll() {
@@ -99,7 +93,7 @@ async function sha256(message) {
     }
   }
 
-  // ONLINE FEATURE DETECTION
+  // ONLINE DETECTION
   if ("onLine" in navigator) {
     w.addEventListener("load", function() {
       w.addEventListener("online", checkNetwork);
@@ -319,10 +313,10 @@ async function sha256(message) {
               }
             }
           });
-          setTimeout(function() {GSC.VersionCheck()}, 10000);
+          setTimeout(function() {GSC.VersionCheck()}, 30000);
         }
       }
-      setTimeout(function() {GSC.VersionCheck()}, 10000);
+      setTimeout(function() {GSC.VersionCheck()}, 2500);
     });
 
     // GSC.ReadArticles()
@@ -399,41 +393,64 @@ async function sha256(message) {
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
+
+      // update message
       $("#update-message").click(function() {
         location.replace(location.pathname + '?nonce={{ nonce }}');
       });
+
+      // move to top button
       $('#movetotop').click(function() {
         $("html,body").animate({scrollTop:0}, "fast");
       });
+
+      // fix summernote CSS
       $(".summernote>ul").each(function(i, obj) {
         $(obj).addClass("browser-default");
       });
 
       if (GSC.touch) {
+
+        // enable webshare
         if (typeof window.WebShareFactory === "function") {
           $(".webshareicon").append("{{ l.webshare_button }}");
           $(".webshare-container").removeClass("hide").show();
         }
+
         {{^is_admin}}
+          // mobile login menu
           {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-          $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
+          $('#nav-mobile').append('<br><li><a class="login white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
           {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
           {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-          $('#nav-mobile').append('<br><li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
+          $('#nav-mobile').append('<br><li><a class="login white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i>Login</a></li>');
           {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
         {{/is_admin}}
       } else {
         {{^is_admin}}
+          // desktop login menu
           {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-          $('.main-header nav.navbar ul').append('<li><a class="white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i></a></li>');
+          $('.main-header nav.navbar ul').append('<li><a class="login white-text bold right" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i></a></li>');
           {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
           {{#is_goauth_origin}}
           {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-          $('.main-header nav.navbar ul').append('<li><a class="white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i></a></li>');
+          $('.main-header nav.navbar ul').append('<li><a class="login white-text bold right" href="{{ goauth_redirect }}"><i class="fa-solid fa-key left yellow-text"></i></a></li>');
           {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
           {{/is_goauth_origin}}
         {{/is_admin}}
       }
+
+    $(".login").each(function() {
+        const currentURL = new URL(window.location.href);
+        const returnPath = currentURL.pathname;
+        const href = $(this).attr("href");
+        if (href) {
+          const newHref = new URL(href, window.location.href);
+          newHref.searchParams.set("returnURL", returnPath);
+          $(this).attr("href", newHref.toString());
+        }
+      });
+
       setInterval(checkNetwork, 500);
     });
 

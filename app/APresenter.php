@@ -863,11 +863,6 @@ abstract class APresenter implements IPresenter
                 FILE_APPEND | LOCK_EX
             );
         }
-
-        if (CLI) {
-            return $this;
-        }
-
         return $this;
     }
 
@@ -881,7 +876,7 @@ abstract class APresenter implements IPresenter
     public function addMessage($message = null)
     {
         if (\is_string($message) && !empty($message)) {
-            $this->messages[] = (string) $message;
+            $this->messages[] = $message;
         }
         return $this;
     }
@@ -896,8 +891,7 @@ abstract class APresenter implements IPresenter
     public function addError($message = null)
     {
         if (\is_string($message) && !empty($message)) {
-            $this->errors[] = (string) $message;
-            $this->addAuditMessage($message);
+            $this->errors[] = $message;
         }
         return $this;
     }
@@ -912,7 +906,7 @@ abstract class APresenter implements IPresenter
     public function addCritical($message = null)
     {
         if (\is_string($message) && !empty($message)) {
-            $this->criticals[] = (string) $message;
+            $this->criticals[] = $message;
         }
         return $this;
     }

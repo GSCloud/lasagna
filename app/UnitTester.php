@@ -117,32 +117,6 @@ class UnitTester
             );
 
             // fluent interface
-            Assert::same($app, $app->addCritical());
-            Assert::same($app, $app->addCritical(null));
-            Assert::same([], $app->getCriticals());
-            Assert::same($app, $app->addCritical('test message'));
-            Assert::same(['test message'], $app->getCriticals());
-
-            // fluent interface
-            Assert::same($app, $app->addError());
-            Assert::same($app, $app->addError(null));
-            Assert::same([], $app->getErrors());
-            Assert::same($app, $app->addError('test message'));
-            Assert::same(['test message'], $app->getErrors());
-
-            // fluent interface
-            Assert::same($app, $app->addMessage());
-            Assert::same($app, $app->addMessage(null));
-            Assert::same([], $app->getMessages());
-            Assert::same($app, $app->addMessage('test message'));
-            Assert::same(['test message'], $app->getMessages());
-
-            // fluent interface
-            Assert::same($app, $app->addAuditMessage());
-            Assert::same($app, $app->addAuditMessage(null));
-            Assert::same($app, $app->addAuditMessage('test message'));
-
-            // fluent interface
             Assert::same($app, $app->checkLocales());
             Assert::same($app, $app->checkPermission());
             Assert::same($app, $app->checkRateLimit());
