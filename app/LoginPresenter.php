@@ -129,6 +129,8 @@ class LoginPresenter extends APresenter
                         \time() + 86400 * 31,
                         '/',
                         DOMAIN,
+                        true,
+                        true
                     );
                 }
                 $this->setLocation();
