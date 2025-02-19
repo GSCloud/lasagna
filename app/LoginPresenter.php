@@ -38,20 +38,20 @@ class LoginPresenter extends APresenter
         $this->checkRateLimit()->setHeaderHtml();
 
         $cfg = $this->getCfg();
-        if (($cfg["goauth_client_id"] ?? null) === null) {
+        if (($cfg['goauth_client_id'] ?? null) === null) {
             ErrorPresenter::getInstance()->process(403);
             exit;
         }
-        if (($cfg["goauth_secret"] ?? null) === null) {
+        if (($cfg['goauth_secret'] ?? null) === null) {
             ErrorPresenter::getInstance()->process(403);
             exit;
         }
 
         // save return URL
-        if (!empty($_GET["returnURL"])) {
+        if (!empty($_GET['returnURL'])) {
             \setcookie(
-                "returnURL",
-                $_GET["returnURL"],
+                'returnURL',
+                $_GET['returnURL'],
                 \time() + 120,
                 '/',
                 DOMAIN,
@@ -63,69 +63,69 @@ class LoginPresenter extends APresenter
         try {
             $provider = new \League\OAuth2\Client\Provider\Google(
                 [
-                "clientId" => $cfg["goauth_client_id"],
-                "clientSecret" => $cfg["goauth_secret"],
-                "redirectUri" => (LOCALHOST === true)
-                    ? $cfg["local_goauth_redirect"] : $cfg["goauth_redirect"],
+                'clientId' => $cfg['goauth_client_id'],
+                'clientSecret' => $cfg['goauth_secret'],
+                'redirectUri' => (LOCALHOST === true)
+                    ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect'],
                 ]
             );
         } finally {
         }
 
         $errors = [];
-        if (!empty($_GET["error"])) {
-            $errors[] = \htmlspecialchars($_GET["error"], ENT_QUOTES, "UTF-8");
-        } elseif (empty($_GET["code"])) {
-            $email = $_GET["login_hint"] ?? $_COOKIE["login_hint"] ?? null;
+        if (!empty($_GET['error'])) {
+            $errors[] = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
+        } elseif (empty($_GET['code'])) {
+            $email = $_GET['login_hint'] ?? $_COOKIE['login_hint'] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : '';
             $authUrl = $provider->getAuthorizationUrl(
                 [
-                    "prompt" => "select_account",
-                    "response_type" => "code",
+                    'prompt' => 'select_account',
+                    'response_type' => 'code',
                 ]
             );
-            \setcookie("oauth2state", $provider->getState());
-            \header("Location: " . $authUrl . $hint, true, 303);
+            \setcookie('oauth2state', $provider->getState());
+            \header('Location: ' . $authUrl . $hint, true, 303);
             exit;
-        } elseif (empty($_GET["state"])
-            || (!isset($_COOKIE["oauth2state"]))
+        } elseif (empty($_GET['state'])
+            || (!isset($_COOKIE['oauth2state']))
         ) {
-            $errors[] = "Invalid OAuth state";
+            $errors[] = 'Invalid OAuth state';
         } else {
             try {
                 $token = $provider->getAccessToken(
-                    "authorization_code",
-                    ["code" => $_GET["code"]]
+                    'authorization_code',
+                    ['code' => $_GET['code']]
                 );
                 $ownerDetails = $provider->getResourceOwner(
                     $token, 
-                    ["useOidcMode" => true,]
+                    ['useOidcMode' => true,]
                 );
                 $this->setIdentity(
                     [
-                        "avatar" => $ownerDetails->getAvatar(),
-                        "email" => $ownerDetails->getEmail(),
-                        "id" => $ownerDetails->getId(),
-                        "name" => $ownerDetails->getName(),
+                        'avatar' => $ownerDetails->getAvatar(),
+                        'email' => $ownerDetails->getEmail(),
+                        'id' => $ownerDetails->getId(),
+                        'name' => $ownerDetails->getName(),
                     ]
                 );
                 $this->addMessage(
-                    "OAuth: "
+                    'OAuth: '
                     . $ownerDetails->getName()
-                    . " "
+                    . ' '
                     . $ownerDetails->getEmail()
                 );
                 $this->addAuditMessage('OAuth login.');
-                if ($this->getUserGroup() === "admin") {
-                    if (\is_string($this->getCfg("DEBUG_COOKIE"))) {
-                        \setcookie("tracy-debug", $this->getCfg("DEBUG_COOKIE"));
+                if ($this->getUserGroup() === 'admin') {
+                    if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
+                        \setcookie('tracy-debug', $this->getCfg('DEBUG_COOKIE'));
                     }
                 }
-                $this->clearCookie("oauth2state");
+                $this->clearCookie('oauth2state');
                 if (\strlen($ownerDetails->getEmail())) {
                     \setcookie(
                         'login_hint',
-                        $ownerDetails->getEmail() ?? "",
+                        $ownerDetails->getEmail() ?? '',
                         \time() + 86400 * 31,
                         '/',
                         DOMAIN,
@@ -133,10 +133,29 @@ class LoginPresenter extends APresenter
                         true
                     );
                 }
-                $this->setLocation();
+
+                if (isset($_COOKIE['returnURL'])) {
+                    $url = $_COOKIE['returnURL'];
+                    setcookie(
+                        'returnURL',
+                        '',
+                        \time() - 3600,
+                        '/',
+                        DOMAIN,
+                        true,
+                        true
+                    );
+                    if (strpos($url, '/') === 0) {
+                        $this->setLocation($url);
+                        exit();
+                    } else {
+                        $this->setLocation();
+                    }
+                }
+
             } catch (\Exception $e) {
-                $this->addError("Google OAuth: " . $e->getMessage());
-                $this->addAuditMessage("Google OAuth error: " . $e->getMessage());
+                $this->addError('Google OAuth: ' . $e->getMessage());
+                $this->addAuditMessage('Google OAuth error: ' . $e->getMessage());
             }
         }
         ErrorPresenter::getInstance()->process(403);
