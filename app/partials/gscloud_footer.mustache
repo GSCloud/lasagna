@@ -5,13 +5,13 @@
       <div class="col s12">
         {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
         <a rel="nofollow" href="{{ local_goauth_redirect }}"
-          class="oauth">
+          class="login oauth">
           <img class="img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}" title="{{ l.a_login }}">
         </a>
         {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}
         {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
         <a id="google-login-footer1" data-umami-event="google-login-footer1" rel="nofollow" href="{{ goauth_redirect }}"
-          class="oauth">
+          class="login oauth">
           <img class="img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}" title="{{ l.a_login }}">
         </a>
         {{/goauth_secret}}{{/goauth_client_id}}{{/LOCALHOST}}

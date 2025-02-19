@@ -115,12 +115,15 @@ class LoginPresenter extends APresenter
                     . ' '
                     . $ownerDetails->getEmail()
                 );
-                $this->addAuditMessage('OAuth login.');
-                if ($this->getUserGroup() === 'admin') {
+
+                $group = $this->getUserGroup();
+                $this->addAuditMessage("OAuth login. User group: [{$group}]");
+                if ($group === 'admin') {
                     if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
                         \setcookie('tracy-debug', $this->getCfg('DEBUG_COOKIE'));
                     }
                 }
+
                 $this->clearCookie('oauth2state');
                 if (\strlen($ownerDetails->getEmail())) {
                     \setcookie(
@@ -135,8 +138,11 @@ class LoginPresenter extends APresenter
                 }
 
                 if (isset($_COOKIE['returnURL'])) {
-                    $url = $_COOKIE['returnURL'];
-                    $this->setLocation($url + '?nonce=' . $this->getNonce());
+                    $url = \urldecode($_COOKIE['returnURL']);
+                    if (strpos($url, "/") !== 0) {
+                        $this->setLocation();
+                    }
+                    $this->setLocation($url . '?nonce=' . $this->getNonce());
                 }
                 $this->setLocation();
 
