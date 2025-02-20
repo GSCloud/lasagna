@@ -1004,14 +1004,17 @@ abstract class APresenter implements IPresenter
         // add a cookie if not CLI
         if (!CLI) {
             $name = self::COOKIE_UUID;
-            if (isset($_COOKIE[$name])) {
-                $cookieValue = $this->getNonce();
-                if (!\setcookie($name, $cookieValue, \time() + self::COOKIE_TTL, '/', DOMAIN, true, true)) { // phpcs:ignore
+            if (!isset($_COOKIE[$name])) {
+                $uid = $this->getNonce();
+                if (!setcookie($name, $uid, time() + self::COOKIE_TTL, '/', DOMAIN, true)) { // phpcs:ignore
                     $this->addError("Error setting UUID cookie.");
                 }
-                $_COOKIE[$name] = $cookieValue;
-                $parts[] = $_COOKIE[$name];
+                $_COOKIE[$name] = $uid;
+            } else {
+                $uid = $_COOKIE[$name];
             }
+            $parts[] = $uid;
+            \header('X-UID: ' . $uid);
         }
         $parts = \array_filter($parts);
         return \preg_replace('/__/', SS, \strtr(\implode(SS, $parts), ' ', SS));
