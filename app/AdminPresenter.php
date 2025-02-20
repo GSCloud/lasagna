@@ -464,7 +464,6 @@ class AdminPresenter extends APresenter
             if (file_exists($fr) && is_readable($fr)) {
                 if (copy($fr, $fb) === false) {
                     $this->addError("ADMIN: Article '{$path}' backup failed.");
-                    $this->addAuditMessage("ADMIN: Article '{$path}' backup failed."); // phpcs:ignore
                     return $this->writeJsonData(
                         [
                             'code' => 401,
@@ -478,7 +477,6 @@ class AdminPresenter extends APresenter
             $perm = LOCK_EX | FILE_APPEND;
             if (file_put_contents($fp, $data_nows . "\n", $perm) === false) {
                 $this->addError("ADMIN: Article '{$path}' history write failed.");
-                $this->addAuditMessage("ADMIN: Article '{$path}' history write failed."); // phpcs:ignore
                 return $this->writeJsonData(
                     [
                         'code' => 401,
@@ -491,7 +489,6 @@ class AdminPresenter extends APresenter
             $perm = LOCK_EX;
             if (file_put_contents($fp, $data, $perm) === false) {
                 $this->addError("ADMIN: Article '{$path}' write to file failed.");
-                $this->addAuditMessage("ADMIN: Article '{$path}' write to file failed."); // phpcs:ignore
                 return $this->writeJsonData(
                     [
                         'code' => 500,
@@ -770,26 +767,22 @@ class AdminPresenter extends APresenter
             SF::sanitizeStringLC($f);
             SF::transliterate($f);
 
-            // Skip thumbnails
+            // skip thumbnails
             if (\str_starts_with($f, self::THUMB_PREFIX)) {
                 continue;
             }
-
             // skip .bak extension
             if (\str_ends_with($f, '.bak')) {
                 continue;
             }
-
             // skip .php extension
             if (\str_ends_with($f, '.php')) {
                 continue;
             }
-
             // skip .inc extension
             if (\str_ends_with($f, '.inc')) {
                 continue;
             }
-
             // skip '.size' file
             if ($f === '.size') {
                 continue;
@@ -1060,7 +1053,6 @@ class AdminPresenter extends APresenter
                     . ($error ? $error['message'] : 'Unknown error');
                 unlink($f);
                 $this->addError($errorMessage);
-                $this->addAuditMessage($errorMessage);
                 $this->setLocation('/err/500');
             } else if (!chmod($f, 0600)) {
                 $error = error_get_last();
@@ -1068,7 +1060,6 @@ class AdminPresenter extends APresenter
                     . ($error ? $error['message'] : 'Unknown error');
                 unlink($f);
                 $this->addError($errorMessage);
-                $this->addAuditMessage($errorMessage);
                 $this->setLocation('/err/500');
             }
             $this->addMessage('ADMIN: Keyfile created.');
