@@ -972,10 +972,38 @@ abstract class APresenter implements IPresenter
      */
     public function getIP()
     {
-        return $_SERVER['HTTP_CF_CONNECTING_IP']
-            ?? $_SERVER['HTTP_X_FORWARDED_FOR']
-            ?? $_SERVER['REMOTE_ADDR']
-            ?? '127.0.0.1';
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP']) && $this->_isValidIP($_SERVER['HTTP_CF_CONNECTING_IP'], true)) { // phpcs:ignore
+            return $_SERVER['HTTP_CF_CONNECTING_IP']; // Cloudflare, allow IPv6
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipList = \explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = \trim(\end($ipList));
+            if ($this->_isValidIP($ip, true)) { // allow IPv6
+                return $ip;
+            }
+        }
+        if (isset($_SERVER['REMOTE_ADDR']) && $this->_isValidIP($_SERVER['REMOTE_ADDR'], true)) { // phpcs:ignore
+            return $_SERVER['REMOTE_ADDR']; // direct connection, allow IPv6
+        }
+        return '127.0.0.1';
+    }
+    
+    /**
+     * Validate an IP address
+     *
+     * @param string $ip        IP address to validate
+     * @param bool   $allowIPv6 Whether to allow IPv6 addresses (default: false)
+     *
+     * @return bool  true if the IP address is valid, false otherwise.
+     */
+    private function _isValidIP($ip, $allowIPv6 = false)
+    {
+        $flags = FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE
+            | FILTER_FLAG_NO_RES_RANGE;
+        if (!$allowIPv6) {
+            $flags |= FILTER_FLAG_IPV4;
+        }
+        return filter_var($ip, $flags) !== false;
     }
 
     /**
