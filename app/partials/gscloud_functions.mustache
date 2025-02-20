@@ -417,6 +417,10 @@ async function sha256(message) {
           $(".webshare-container").removeClass("hide").show();
         }
 
+        {{#is_admin}}
+          // mobile logout menu
+          $('#nav-mobile').append('<br><li><a class="white-text bold right" href="/logout"><i class="fa-solid fa-right-from-bracket left red-text"></i>Logout</a></li>');
+        {{/is_admin}}
         {{^is_admin}}
           // mobile login menu
           {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
