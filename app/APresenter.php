@@ -1755,8 +1755,6 @@ abstract class APresenter implements IPresenter
                             $values[] = $x;
                         }
                     } catch (\Exception $e) {
-                        $this->addCritical("LOCALE: $language [$k] ERR");
-                        //$this->addAuditMessage("LOCALE: $language [$k] ERR");
                         continue;
                     }
                     $locale = \array_replace(

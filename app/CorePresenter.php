@@ -395,7 +395,6 @@ class CorePresenter extends APresenter
     public function clearBrowserCache()
     {
         \header('Clear-Site-Data: "cache"');
-        $this->addMessage('Browser cache cleared');
         $this->setLocation();
     }
 
@@ -407,7 +406,6 @@ class CorePresenter extends APresenter
     public function clearBrowserCookies()
     {
         \header('Clear-Site-Data: "cookies"');
-        $this->addMessage('Browser cookies cleared');
         $this->setLocation();
     }
     /**
@@ -418,7 +416,6 @@ class CorePresenter extends APresenter
     public function clearBrowserStorage()
     {
         \header('Clear-Site-Data: "cache", "cookies", "storage"');
-        $this->addMessage('Browser storage cleared');
         $this->setLocation();
     }
 }

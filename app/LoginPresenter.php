@@ -109,21 +109,13 @@ class LoginPresenter extends APresenter
                         'name' => $ownerDetails->getName(),
                     ]
                 );
-                $this->addMessage(
-                    'OAuth: '
-                    . $ownerDetails->getName()
-                    . ' '
-                    . $ownerDetails->getEmail()
-                );
-
                 $group = $this->getUserGroup();
-                $this->addAuditMessage("OAuth login. User group: [{$group}]");
+                $this->addMessage("OAuth login. User group: [{$group}]");
                 if ($group === 'admin') {
                     if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
                         \setcookie('tracy-debug', $this->getCfg('DEBUG_COOKIE'));
                     }
                 }
-
                 $this->clearCookie('oauth2state');
                 if (\strlen($ownerDetails->getEmail())) {
                     \setcookie(
@@ -136,7 +128,6 @@ class LoginPresenter extends APresenter
                         true
                     );
                 }
-
                 if (isset($_COOKIE['returnURL'])) {
                     $url = \urldecode($_COOKIE['returnURL']);
                     if (strpos($url, "/") !== 0) {
@@ -148,7 +139,6 @@ class LoginPresenter extends APresenter
 
             } catch (\Exception $e) {
                 $this->addError('Google OAuth: ' . $e->getMessage());
-                $this->addAuditMessage('Google OAuth error: ' . $e->getMessage());
             }
         }
         ErrorPresenter::getInstance()->process(403);
