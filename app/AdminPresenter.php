@@ -108,6 +108,9 @@ class AdminPresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
+        // rate limiting
+        $this->checkRateLimit();
+
         // Config
         $cfg = $this->getCfg();
         if (!\is_array($cfg)) {
@@ -844,10 +847,6 @@ class AdminPresenter extends APresenter
 
     /**
      * Process the deletion of a file and its associated thumbnails
-     *
-     * This function handles the deletion of a file specified in the POST request.
-     * It sanitizes the filename, removes any thumbnails associated with the file,
-     * and then deletes the original file.
      *
      * @return string|int return the sanitized filename if deletion was successful
      *                    or an HTTP status code (400 or 405) if an error occurred

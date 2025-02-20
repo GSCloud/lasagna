@@ -1555,7 +1555,11 @@ abstract class APresenter implements IPresenter
             }
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
                 // user is banned
-                $this->addAuditMessage('LIMITER: User is banned!');
+                $path = $this->getData('request_path');
+                if (!\is_string($path)) {
+                    $path = '*** not set ***';
+                }
+                $this->addAuditMessage("LIMITER: User is banned! Path:\n'{$path}'");
                 header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
