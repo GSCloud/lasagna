@@ -110,8 +110,7 @@ class UnitTester
                 'id' => 1,
                 'name' => 'John Doe',
                 'ip' => '127.0.0.1',
-                'uid' => '5d93b9f0de6d0b30934db74b6d877'
-                    . '154d704f562ad5bb88002409d51db5345c1',
+                'uid' => '24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', // phpcs:ignore
                 'uidstring' => 'CLI_127.0.0.1',
                 ], $app->getCurrentUser()
             );
@@ -127,10 +126,7 @@ class UnitTester
             Assert::same(null, $app->getView());
 
             // getUID()
-            Assert::same(
-                '5d93b9f0de6d0b30934db74b6d87715'
-                . '4d704f562ad5bb88002409d51db5345c1', $app->getUID()
-            );
+            Assert::same('24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', $app->getUID()); // phpcs:ignore
 
             // getUIDstring()
             Assert::same('CLI_127.0.0.1', $app->getUIDstring());
