@@ -462,31 +462,14 @@ abstract class APresenter implements IPresenter
     /* @var integer CSV min. file size - something meaningful :) */
     const CSV_MIN_SIZE = 42;
 
-    /* @var string UUID cookie name */
-    const COOKIE_UUID = 'UUID';
+    /* @var string UID cookie name */
+    const COOKIE_UID = 'UID';
 
     /* @var string cookie secret filename */
     const COOKIE_KEY_FILE = 'cookie_key.key';
 
     /* @var string cookie secret filename */
     const COOKIE_KEY_FILE_TEST = 'cookie_key_test.key';
-
-    /* @var string log directory */
-    const LOG_DIR = '/tmp/lasagna_logs/';
-
-    /* @var string log filename */
-    const LOG_FILE = 'lasagna.log';
-
-    /* @var string CSV directory */
-    const CSV_DIR = '/tmp/lasagna_csv/';
-
-    /* @var string CSV filename */
-    const CSV_FILE = 'lasagna.csv';
-
-    /* @var string TSV directory */
-    const TSV_DIR = '/tmp/lasagna_tsv/';
-
-    /* @var string TSV filename */
 
     /* @var integer octal file mode for cookie secret */
     const COOKIE_KEY_FILEMODE = 0600;
@@ -1003,10 +986,10 @@ abstract class APresenter implements IPresenter
 
         // add a cookie if not CLI
         if (!CLI) {
-            $name = self::COOKIE_UUID;
+            $name = self::COOKIE_UID;
             if (!isset($_COOKIE[$name])) {
                 $uid = $this->getNonce();
-                if (!setcookie($name, $uid, time() + self::COOKIE_TTL, '/', DOMAIN, true)) { // phpcs:ignore
+                if (!setcookie($name, $uid, time() + self::COOKIE_TTL, '/', DOMAIN, true, true)) { // phpcs:ignore
                     $this->addError("Error setting UUID cookie.");
                 }
                 $_COOKIE[$name] = $uid;
@@ -1412,7 +1395,7 @@ abstract class APresenter implements IPresenter
             $enc = KeyFactory::generateEncryptionKey();
             if (is_writable(DATA)) {
                 KeyFactory::save($enc, $keyfile);
-                @\chmod($keyfile, self::COOKIE_KEY_FILEMODE);
+                \chmod($keyfile, self::COOKIE_KEY_FILEMODE);
                 $this->addMessage('HALITE: New keyfile created');
             } else {
                 $this->addError('HALITE: Cannot write encryption key!');
@@ -1432,7 +1415,7 @@ abstract class APresenter implements IPresenter
             $cookie->store(
                 $name,
                 (string) $data,
-                time() + self::COOKIE_TTL,
+                \time() + self::COOKIE_TTL,
                 '/',
                 DOMAIN,
                 $secure,

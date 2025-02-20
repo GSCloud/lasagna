@@ -110,6 +110,7 @@ $data['ARGV'] = $argv ?? [];
 $data['GET'] = array_map('htmlspecialchars', $_GET);
 $data['POST'] = array_map('htmlspecialchars', $_POST);
 $data['COOKIE'] = array_map('htmlspecialchars', $_COOKIE);
+
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
 $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
