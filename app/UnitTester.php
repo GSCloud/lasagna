@@ -126,7 +126,7 @@ class UnitTester
             Assert::same(null, $app->getView());
 
             // getUID()
-            Assert::same('24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', $app->getUID()); // phpcs:ignore
+            Assert::same('x24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', $app->getUID()); // phpcs:ignore
 
             // getUIDstring()
             Assert::same('CLI_127.0.0.1', $app->getUIDstring());
@@ -154,6 +154,5 @@ class UnitTester
         echo 'Unit test finished in '
         . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2)
         . ' ms';
-        exit(0);
     }
 }
