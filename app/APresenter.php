@@ -999,9 +999,9 @@ abstract class APresenter implements IPresenter
     private function _isValidIP($ip, $allowIPv6 = false)
     {
         if ($allowIPv6) {
-            $flags = FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE; // phpcs:ignore
+            $flags = FILTER_VALIDATE_IP | FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE; // phpcs:ignore
         } else {
-            $flags = FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_IPV4; // phpcs:ignore
+            $flags = FILTER_VALIDATE_IP | FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE; // phpcs:ignore
         }
         return filter_var($ip, $flags) !== false;
     }
