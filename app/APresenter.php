@@ -914,6 +914,10 @@ abstract class APresenter implements IPresenter
     {
         if (\is_string($message) && !empty($message)) {
             $this->messages[] = $message;
+            $this->addAuditMessage($message);
+            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
+            \error_log($message, 0);
+            \error_log($message . PHP_EOL, 3, LOGS . DS . 'messages.txt');
         }
         return $this;
     }
@@ -929,6 +933,11 @@ abstract class APresenter implements IPresenter
     {
         if (\is_string($message) && !empty($message)) {
             $this->errors[] = $message;
+            $message = '* ERROR: ' . $message;
+            $this->addAuditMessage($message);
+            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
+            \error_log($message, 0);
+            \error_log($message . PHP_EOL, 3, LOGS . DS . 'errors.txt');
         }
         return $this;
     }
@@ -944,6 +953,11 @@ abstract class APresenter implements IPresenter
     {
         if (\is_string($message) && !empty($message)) {
             $this->criticals[] = $message;
+            $message = '*** CRITICAL: ' . $message;
+            $this->addAuditMessage($message);
+            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
+            \error_log($message, 0);
+            \error_log($message . PHP_EOL, 3, LOGS . DS . 'critical_errors.txt');
         }
         return $this;
     }
@@ -976,15 +990,6 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
-        $cookieOptions = [
-            'expires' => \time() + self::COOKIE_TTL,
-            'path' => '/',
-            'domain' => DOMAIN,
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'Strict',
-        ];
-
         $parts = [
             CLI ? 'CLI' : '',
             CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
@@ -993,7 +998,6 @@ abstract class APresenter implements IPresenter
             $this->getIP(),
         ];
 
-        // add a cookie if not CLI
         if (!CLI) {
             $name = self::COOKIE_UID;
             if (isset($_COOKIE[$name])) {
@@ -1005,6 +1009,14 @@ abstract class APresenter implements IPresenter
             }
             if (!isset($_COOKIE[$name])) {
                 $uid = $this->getNonce();
+                $cookieOptions = [
+                    'expires' => \time() + self::COOKIE_TTL,
+                    'path' => '/',
+                    'domain' => DOMAIN,
+                    'secure' => true,
+                    'httponly' => true,
+                    'samesite' => 'Strict',
+                ];
                 if (!setcookie($name, $uid, $cookieOptions)) {
                     $this->addError("Error setting UUID cookie.");
                 }

@@ -115,7 +115,7 @@ a_fcgi,INFO,FCGI,FCGI,FCGI,FCGI
 a_footer_app,INFO,app code,kód appky,kód appky,App-Code
 a_footer_date,INFO,updated,aktualizováno,aktualizované,aktualisiert
 a_limiter,INFO,LIMITER,LIMITER,LIMITER,RATENBEGRENZER
-a_max_file_uploads,INFO,max.&nbsp;files&nbsp;count:,max.&nbsp;počet&nbsp;nahrávaných&nbsp;souborů:,max.&nbsp;počet&nbsp;súborov:,Max.&nbsp;Anzahl&nbsp;der&nbsp;Upload-Dateien:
+a_max_file_uploads,INFO,max.&nbsp; files&nbsp;count:,max.&nbsp;počet nahrávaných&nbsp;souborů:,max.&nbsp;počet nahrávaných&nbsp;súborov:,Max.&nbsp;Anzahl der&nbsp;Upload-Dateien:
 a_max_post_size,INFO,max.&nbsp;POST&nbsp;size:,max.&nbsp;POST&nbsp;velikost:,max.&nbsp;POST&nbsp;veľkosť:,Max.&nbsp;POST&nbsp;Größe:
 a_max_upload_size,INFO,max.&nbsp;file&nbsp;size:,max.&nbsp;velikost&nbsp;souboru:,max.&nbsp;veľkosť&nbsp;súboru:,Max.&nbsp;Dateigröße:
 a_model,INFO,model,model,model,Modell
@@ -140,7 +140,7 @@ a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
 a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
 a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
 a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Legacy,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
 a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken
