@@ -33,13 +33,13 @@ class UnitTester
      */
     public function __construct()
     {
-        \Tracy\Debugger::timer('UNIT');
-        \Tester\Environment::setup();
-
         $climate = new CLImate;
         $climate->out('<green><bold>Tesseract Unit Tester');
 
-        // all testable controllers
+        \Tracy\Debugger::timer('UNIT');
+        \Tester\Environment::setup();
+
+        // testable controllers
         $controllers = [
             'AdminPresenter',
             'ApiPresenter',
@@ -70,22 +70,22 @@ class UnitTester
             Assert::type('\\GSC\\APresenter', $app);
 
             // getData(), setData(), getCfg()
-            Assert::same(null, $app->getData('just.null.testing'));
-            Assert::type('array', $app->getData());
             Assert::same($app->getData('cfg'), $app->getCfg());
             Assert::same(null, $app->getData('foo'));
             Assert::same(null, $app->getData('foo.bar'));
             Assert::same(null, $app->getData('foo.bar.testing'));
+            Assert::same(null, $app->getData('just.null.testing'));
+            Assert::type('array', $app->getData());
+
             $app->setData('foo.bar.testing', 'just_a_test');
             Assert::same(['testing' => 'just_a_test'], $app->getData('foo.bar'));
+
             $app->setData('animal.farm', ['dog', 'cat', 'bird']);
-            Assert::same(
-                ['farm' => ['dog', 'cat', 'bird']], $app->getData('animal')
-            );
+            Assert::same(['farm' => ['dog', 'cat', 'bird']], $app->getData('animal')); // phpcs:ignore
 
             // magic __toString()
-            Assert::type('string', $app->__toString());
             Assert::truthy(strlen($app->__toString()));
+            Assert::type('string', $app->__toString());
 
             // getIP()
             Assert::same('127.0.0.1', $app->getIP());
@@ -126,33 +126,18 @@ class UnitTester
             Assert::same(null, $app->getView());
 
             // getUID()
-            Assert::same('x24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', $app->getUID()); // phpcs:ignore
+            Assert::same('24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', $app->getUID()); // phpcs:ignore
 
             // getUIDstring()
             Assert::same('CLI_127.0.0.1', $app->getUIDstring());
 
             // renderHTML()
-            Assert::same(
-                '<title></title>',
-                $app->renderHTML('<title>{{notitle}}</title>')
-            );
-            Assert::same(
-                '<title>foo bar</title>',
-                $app->setData(
-                    'title',
-                    'foo bar'
-                )->renderHTML('<title>{{title}}</title>')
-            );
-            Assert::same('<b>dog</b>', $app->renderHTML('<b>{{animal.farm.0}}</b>'));
             Assert::same('<b>cat</b>', $app->renderHTML('<b>{{animal.farm.1}}</b>'));
-            Assert::same(
-                'dogcatbird',
-                $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}')
-            );
+            Assert::same('<b>dog</b>', $app->renderHTML('<b>{{animal.farm.0}}</b>'));
+            Assert::same('<title></title>', $app->renderHTML('<title>{{notitle}}</title>')); // phpcs:ignore
+            Assert::same('<title>foo bar</title>', $app->setData('title', 'foo bar')->renderHTML('<title>{{title}}</title>')); // phpcs:ignore
+            Assert::same('dogcatbird', $app->renderHTML('{{#animal.farm}}{{.}}{{/animal.farm}}')); // phpcs:ignore
         }
-
-        echo 'Unit test finished in '
-        . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2)
-        . ' ms';
+        echo 'Unit test finished in ' . round((float) \Tracy\Debugger::timer('UNIT') * 1000, 2) . ' ms'; // phpcs:ignore
     }
 }
