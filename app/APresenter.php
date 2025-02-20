@@ -976,6 +976,15 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
+        $cookieOptions = [
+            'expires' => \time() + self::COOKIE_TTL,
+            'path' => '/',
+            'domain' => DOMAIN,
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Strict',
+        ];
+
         $parts = [
             CLI ? 'CLI' : '',
             CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
@@ -987,14 +996,19 @@ abstract class APresenter implements IPresenter
         // add a cookie if not CLI
         if (!CLI) {
             $name = self::COOKIE_UID;
+            if (isset($_COOKIE[$name])) {
+                $uid = $_COOKIE[$name];
+                if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
+                    $this->addError("Invalid UUID cookie.");
+                    unset($_COOKIE[$name]);
+                }
+            }
             if (!isset($_COOKIE[$name])) {
                 $uid = $this->getNonce();
-                if (!setcookie($name, $uid, time() + self::COOKIE_TTL, '/', DOMAIN, true, true)) { // phpcs:ignore
+                if (!setcookie($name, $uid, $cookieOptions)) {
                     $this->addError("Error setting UUID cookie.");
                 }
                 $_COOKIE[$name] = $uid;
-            } else {
-                $uid = $_COOKIE[$name];
             }
             $parts[] = $uid;
             \header('X-UID: ' . $uid);
@@ -2225,6 +2239,8 @@ abstract class APresenter implements IPresenter
      */
     public function getNonce()
     {
-        return \substr(\hash('sha256', \random_bytes(8) . (string) \time()), 0, 16);
+        $time = (string) \time();
+        $randomBytes = (string) random_int(0, PHP_INT_MAX);
+        return \substr(\hash('sha256', $randomBytes . $time), 0, 16);
     }
 }
