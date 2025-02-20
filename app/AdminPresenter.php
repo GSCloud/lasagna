@@ -471,7 +471,6 @@ class AdminPresenter extends APresenter
                         [
                             'code' => 401,
                             'status' => 'Article backup failed.',
-                            'profile' => $profile,
                             'hash' => $hash,
                         ], $extras
                     );
@@ -486,7 +485,6 @@ class AdminPresenter extends APresenter
                     [
                         'code' => 401,
                         'status' => 'Article write to history file failed.',
-                        'profile' => $profile,
                         'hash' => $hash,
                     ], $extras
                 );
@@ -500,7 +498,6 @@ class AdminPresenter extends APresenter
                     [
                         'code' => 500,
                         'status' => 'Article write to file failed.',
-                        'profile' => $profile,
                         'hash' => $hash,
                     ], $extras
                 );
@@ -523,11 +520,10 @@ class AdminPresenter extends APresenter
             \sort($p, SORT_LOCALE_STRING);
             $p = \array_unique($p, SORT_LOCALE_STRING);
             file_put_contents($f, \implode("\n", $p), LOCK_EX);
-            $this->addMessage("UPDATE ARTICLE $profile - $path - $hash");
+            $this->addMessage("UPDATE ARTICLE\n{$path}\n{$hash}");
             return $this->writeJsonData(
                 [
                     'status' => 'OK',
-                    'profile' => $profile,
                     'hash' => $hash,
                 ], $extras
             );
@@ -1251,38 +1247,47 @@ class AdminPresenter extends APresenter
             $class2 = 'ipadd';
         }
 
-        // colorize
+        $lookup = [
+            'admin' => [
+                'type' => 'type_admin',
+                'class' => 'green lighten-4'
+            ],
+            'admin: file deleted' => [
+                'type' => 'type_file_delete',
+                'class' => 'red lighten-4'
+            ],
+            'admin: file(s) uploaded' => [
+                'type' => 'type_file_upload',
+                'class' => 'blue lighten-4'
+            ],
+            'download' => [
+                'type' => 'type_download',
+                'class' => 'grey lighten-2'
+            ],
+            'oauth login:' => [
+                'type' => 'type_oauth',
+                'class' => 'lime lighten-4'
+            ],
+            'remote' => [
+                'type' => 'type_remote',
+                'class' => 'orange lighten-4'
+            ],
+            'token' => [
+                'type' => 'type_token',
+                'class' => 'purple lighten-4'
+            ],
+        ];
+
+        $class = '';
         $type = 'type_unknown';
-        if (\stripos($x[1], 'ADMIN') !== false) {
-            $type = 'type_admin';
-            $class = 'green lighten-4';
-        }
-        if (\stripos($x[1], 'ADMIN: file deleted') !== false) {
-            $type = 'type_file_delete';
-            $class = 'red lighten-4';
-        }
-        if (\stripos($x[1], 'ADMIN: file(s) uploaded') !== false) {
-            $type = 'type_file_upload';
-            $class = 'blue lighten-4';
-        }
-        if (\stripos($x[1], 'DOWNLOAD') !== false) {
-            $type = 'type_download';
-            $class = 'grey lighten-2';
-        }
-        if (\stripos($x[1], 'OAuth login:') !== false) {
-            $type = 'type_oauth_login';
-            $class = 'lime lighten-4';
-        }
-        if (\stripos($x[1], 'REMOTE') !== false) {
-            $type = 'type_remote';
-            $class = 'orange lighten-4';
-        }
-        if (\stripos($x[1], 'TOKEN') !== false) {
-            $type = 'type_token';
-            $class = 'purple lighten-4';
+        foreach ($lookup as $keyword => $data) {
+            if (\stripos($x[1], $keyword) !== false) {
+                $type = $data['type'];
+                $class = $data['class'];
+                break;
+            }
         }
 
-        // hide repetitions
         if ($x[1] === $this->_lastlog) {
             $this->_repetitions++;
             $class = 'reps hide';
@@ -1293,7 +1298,9 @@ class AdminPresenter extends APresenter
         $x[1] = \str_replace('OAuth login', '<b>OAuth login</b>', $x[1]);
         $x[1] = \str_replace('Download', '<b>Download</b>', $x[1]);
 
-        $val = "<tr data-type='{$type}' class='logrow {$type} {$class}'>"
+        $val = "<tr data-type='{$type}'"
+            . " class='logrow {$type} {$class}'"
+            . ">"
             . "<td class=center><b>" . $this->_logcounter . "</b></td>"
             . "<td class='center c2'>"
             . "{$x[0]}<br>"
@@ -1350,37 +1357,30 @@ class AdminPresenter extends APresenter
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
 
-        // trim
         $x[1] = \trim($x[1], "\r\n\t");
         $x[2] = \trim($x[2], "\r\n\t");
         $x[3] = \trim($x[3], "\r\n\t");
         $x[4] = \trim($x[4], "\r\n\t");
 
-        // categorization
         $type = 'unknown';
-        if (\stripos($x[1], 'ADMIN') !== false) {
-            $type = 'admin';
-        }
-        if (\stripos($x[1], 'ADMIN: file deleted') !== false) {
-            $type = 'file_delete';
-        }
-        if (\stripos($x[1], 'ADMIN: file(s) uploaded') !== false) {
-            $type = 'file_upload';
-        }
-        if (\stripos($x[1], 'DOWNLOAD') !== false) {
-            $type = 'download';
-        }
-        if (\stripos($x[1], 'OAuth login:') !== false) {
-            $type = 'oauth';
-        }
-        if (\stripos($x[1], 'REMOTE') !== false) {
-            $type = 'remote';
-        }
-        if (\stripos($x[1], 'TOKEN') !== false) {
-            $type = 'token';
+        $lookup = [
+            'admin' => 'admin',
+            'admin: file deleted' => 'file_delete',
+            'admin: file(s) uploaded' => 'file_upload',
+            'download' => 'download',
+            'limiter' => 'limiter',
+            'oauth' => 'oauth',
+            'remote' => 'remote',
+            'token' => 'token',
+        ];
+        
+        foreach ($lookup as $keyword => $category) {
+            if (\stripos($x[1], $keyword) !== false) {
+                $type = $category;
+                break;
+            }
         }
 
-        // export
         $val = [
             'id' => $key + 1,
             'timestamp' => $t,

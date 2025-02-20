@@ -923,7 +923,7 @@ abstract class APresenter implements IPresenter
     /**
      * Add info message
      *
-     * @param string $message Message string
+     * @param string $message message string
      * 
      * @return self
      */
@@ -938,7 +938,7 @@ abstract class APresenter implements IPresenter
     /**
      * Add error message
      *
-     * @param string $message Error string
+     * @param string $message error string
      * 
      * @return self
      */
@@ -953,7 +953,7 @@ abstract class APresenter implements IPresenter
     /**
      * Add critical message
      *
-     * @param string $message Critical error string
+     * @param string $message error string
      * 
      * @return self
      */
@@ -976,8 +976,8 @@ abstract class APresenter implements IPresenter
             return $_SERVER['HTTP_CF_CONNECTING_IP'];
         }
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipList = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            $ip = trim(end($ipList));
+            $ipList = \explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = \trim(\end($ipList));
             return $ip;
         }
         if (isset($_SERVER['REMOTE_ADDR'])) {
@@ -1004,17 +1004,17 @@ abstract class APresenter implements IPresenter
         // add a cookie if not CLI
         if (!CLI) {
             $name = self::COOKIE_UUID;
-            if (!isset($_COOKIE[$name])) {
+            if (isset($_COOKIE[$name])) {
                 $cookieValue = $this->getNonce();
                 if (!\setcookie($name, $cookieValue, \time() + self::COOKIE_TTL, '/', DOMAIN, true, true)) { // phpcs:ignore
                     $this->addError("Error setting UUID cookie.");
                 }
                 $_COOKIE[$name] = $cookieValue;
+                $parts[] = $_COOKIE[$name];
             }
-            $parts[] = $_COOKIE[$name];
         }
-        $parts = array_filter($parts);
-        return preg_replace('/__/', SS, strtr(implode(SS, $parts), ' ', SS));
+        $parts = \array_filter($parts);
+        return \preg_replace('/__/', SS, \strtr(\implode(SS, $parts), ' ', SS));
     }
 
     /**
