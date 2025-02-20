@@ -507,6 +507,9 @@ abstract class APresenter implements IPresenter
     /* @var string audit log filename */
     const AUDITLOG_FILE = 'AuditLog.txt';
 
+    /* @var integer octal file mode for Audit Log */
+    const AUDITLOG_FILEMODE = 0600;
+
     /* @var array data model */
     public $data = [];
 
@@ -893,6 +896,10 @@ abstract class APresenter implements IPresenter
             $date = \date('c');
             $i = $this->getIdentity();
             $file = DATA . DS . self::AUDITLOG_FILE;
+            if (!\file_exists($file)) {
+                \touch($file);
+                \chmod($file, self::AUDITLOG_FILEMODE);
+            }
             if (\file_exists($file) && \is_writable($file)) {
                 \file_put_contents(
                     $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
@@ -1003,7 +1010,7 @@ abstract class APresenter implements IPresenter
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
                 if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
-                    $this->addError("Invalid UUID cookie.");
+                    $this->addError("Invalid UUID cookie!");
                     unset($_COOKIE[$name]);
                 }
             }
@@ -1018,7 +1025,7 @@ abstract class APresenter implements IPresenter
                     'samesite' => 'Strict',
                 ];
                 if (!setcookie($name, $uid, $cookieOptions)) {
-                    $this->addError("Error setting UUID cookie.");
+                    $this->addError("Error setting UUID cookie!");
                 }
                 $_COOKIE[$name] = $uid;
             }
@@ -1064,21 +1071,21 @@ abstract class APresenter implements IPresenter
             try {
                 $nonce = \hash('sha256', \random_bytes(1024) . \time());
                 if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-                    $this->addError('ERROR 500: write nonce file');
+                    $this->addCritical('Write nonce file failed!');
                     $this->setLocation('/err/500');
                 }
                 @\chmod($file, 0660);
-                $this->addMessage('ADMIN: nonce file created');
+                $this->addMessage('ADMIN: Nonce file created.');
             } catch (\Exception $e) {
-                $this->addError('ERROR 500: create nonce file: ' . $e->getMessage());
+                $this->addCritical('Create nonce file failed!' . $e->getMessage()); // phpcs:ignore
                 $this->setLocation('/err/500');
             }
         }
         if (!$nonce = @\file_get_contents($file)) {
-            $this->addError('ERROR 500: read nonce file');
+            $this->addCritical('Read nonce file failed!');
             $this->setLocation('/err/500');
         }
-        $i['nonce'] = \substr(\trim($nonce), 0, 16); // trim nonce to 16 chars
+        $i['nonce'] = \substr(\trim($nonce), 0, 16);
         // check all keys
         if (\array_key_exists('avatar', $identity)) {
             $i['avatar'] = (string) $identity['avatar'];
@@ -1145,7 +1152,7 @@ abstract class APresenter implements IPresenter
             return $this->identity;
         }
         if (!$nonce = @\file_get_contents($file)) {
-            $this->addError('ERROR 500: cannot read nonce file');
+            $this->addCritical('Cannot read nonce file!');
             $this->setLocation('/err/500');
         }
         $nonce = \substr(\trim($nonce), 0, 16);
@@ -1422,9 +1429,9 @@ abstract class APresenter implements IPresenter
             if (is_writable(DATA)) {
                 KeyFactory::save($enc, $keyfile);
                 \chmod($keyfile, self::COOKIE_KEY_FILEMODE);
-                $this->addMessage('HALITE: New keyfile created');
+                $this->addMessage('HALITE: Cookie encryption keyfile created.'); // phpcs:ignore
             } else {
-                $this->addError('HALITE: Cannot write encryption key!');
+                $this->addCritical('HALITE: Cannot write cookie encryption key!'); // phpcs:ignore
             }
         }
         $cookie = new Cookie($enc);
@@ -1860,13 +1867,13 @@ abstract class APresenter implements IPresenter
                     foreach ($myzones as $myzone) {
                         if ($zone->id == $myzone) {
                             $zones->cachePurgeEverything($zone->id);
-                            $this->addMessage("Cloudflare: zone {$myzone} purged");
+                            $this->addMessage("Cloudflare: zone [{$myzone}] purged."); // phpcs:ignore
                         }
                     }
                 }
             }
         } catch (\Exception $e) {
-            $this->addError('ERROR: Cloudflare exception!');
+            $this->addError('Cloudflare exception! ' . $e->getMessage);
         }
         return $this;
     }
@@ -1922,25 +1929,23 @@ abstract class APresenter implements IPresenter
                                 . $csvkey . self::GS_CSV_POSTFIX;
                         }
                     }
-                    //$this->addMessage("FILE: fetching {$remote}");
                     try {
                         $data = @\file_get_contents($remote);
                     } catch (\Exception $e) {
-                        $this->addError("ERROR: fetching {$remote}");
                         $data = '';
+                        $this->addError("ERROR: fetching {$remote}");
                     }
                 }
                 if (!$data) {
-                    $this->addError("ERROR: csvPreloader: [{$name}] - no data");
+                    $this->addError("ERROR: csvPreloader [{$name}] - no data!");
                     return $this;
                 }
                 if ($data && !\is_string($data)) {
-                    $this->addError("ERROR: csvPreloader: [{$name}] - no data");
+                    $this->addError("ERROR: csvPreloader [{$name}] - no data!");
                     return $this;
                 }
                 if ($data && \strpos($data, '!DOCTYPE html') > 0) {
-                    // ERROR: got HTML document
-                    $this->addError("ERROR: csvPreloader: [{$remote}] - HTML");
+                    $this->addError("ERROR: csvPreloader [{$remote}] - HTML!");
                     return $this;
                 }
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {

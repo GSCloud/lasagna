@@ -29,6 +29,9 @@ use GSC\StringFilters as SF;
  */
 class AdminPresenter extends APresenter
 {
+    /* @var string admin URI stub */
+    const ADMIN_STUB = 'tess';
+
     /* @var string admin key filename */
     const ADMIN_KEY = 'admin.key';
 
@@ -536,7 +539,8 @@ class AdminPresenter extends APresenter
                     $h = \hash('sha256', $role . $user . \time());
                     $h = \substr($h, 0, 8);
                     $code = $data['base']
-                        . 'admin/FNXXXRemote?role='
+                        . self::ADMIN_STUB
+                        . '/FNXXXRemote?role='
                         . $role
                         . '&user='
                         . $h
@@ -1226,25 +1230,21 @@ class AdminPresenter extends APresenter
         }
 
         $lookup = [
-            'admin' => [
-                'type' => 'type_admin',
-                'class' => 'green lighten-4'
+            'oauth' => [
+                'type' => 'type_oauth',
+                'class' => 'lime lighten-4'
             ],
-            'admin: file deleted' => [
+            'file deleted' => [
                 'type' => 'type_file_delete',
                 'class' => 'red lighten-4'
             ],
-            'admin: file(s) uploaded' => [
+            'uploaded' => [
                 'type' => 'type_file_upload',
                 'class' => 'blue lighten-4'
             ],
             'download' => [
                 'type' => 'type_download',
                 'class' => 'grey lighten-2'
-            ],
-            'oauth login:' => [
-                'type' => 'type_oauth',
-                'class' => 'lime lighten-4'
             ],
             'remote' => [
                 'type' => 'type_remote',
@@ -1253,6 +1253,10 @@ class AdminPresenter extends APresenter
             'token' => [
                 'type' => 'type_token',
                 'class' => 'purple lighten-4'
+            ],
+            'admin' => [
+                'type' => 'type_admin',
+                'class' => 'green lighten-4'
             ],
         ];
 
@@ -1342,14 +1346,14 @@ class AdminPresenter extends APresenter
 
         $type = 'unknown';
         $lookup = [
-            'admin' => 'admin',
-            'admin: file deleted' => 'file_delete',
-            'admin: file(s) uploaded' => 'file_upload',
+            'file deleted' => 'file_delete',
+            'file(s) uploaded' => 'file_upload',
             'download' => 'download',
             'limiter' => 'limiter',
             'oauth' => 'oauth',
             'remote' => 'remote',
             'token' => 'token',
+            'admin' => 'admin',
         ];
         
         foreach ($lookup as $keyword => $category) {

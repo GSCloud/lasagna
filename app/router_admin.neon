@@ -3,7 +3,7 @@
 
 admin:
   method: GET|POST|DELETE
-  path: '/admin/[a:p]'
+  path: '/tess/[a:p]'
   presenter: admin
 
 login:

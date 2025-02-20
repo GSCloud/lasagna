@@ -310,7 +310,7 @@ class CorePresenter extends APresenter
         }
 
         // check $view starting with 'API'
-        if (is_string($view) && substr(strtoupper($view), 0, 3) === "API") {
+        if (\is_string($view) && \substr(\strtoupper($view), 0, 3) === "API") {
             $this->checkRateLimit();
             $this->setHeaderHTML();
             $map = [];
