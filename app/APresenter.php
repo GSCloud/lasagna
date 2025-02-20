@@ -633,6 +633,17 @@ abstract class APresenter implements IPresenter
      */
     final public static function getInstance()
     {
+        // SANITY CHECK
+        foreach ([
+            'APP',
+            'CONFIG',
+            'DATA',
+            'DS',
+            'ROOT',
+            'SS',
+        ] as $x) {
+            defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
+        }
         $class = get_called_class();
         if (array_key_exists($class, self::$instances) === false) {
             self::$instances[$class] = new $class();
@@ -650,6 +661,17 @@ abstract class APresenter implements IPresenter
      */
     final public static function getTestInstance()
     {
+        // SANITY CHECK
+        foreach ([
+            'APP',
+            'CONFIG',
+            'DATA',
+            'DS',
+            'ROOT',
+            'SS',
+        ] as $x) {
+            defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
+        }
         $class = get_called_class();
         return new $class();
     }
@@ -670,7 +692,7 @@ abstract class APresenter implements IPresenter
         $type = (file_exists(TEMPLATES . DS . "{$template}.mustache")) ? 1 : 0;
         $renderer = new \Mustache_Engine(
             array(
-            'template_class_prefix' => PROJECT . '_',
+            'template_class_prefix' => PROJECT . SS,
             'cache' => TEMP,
             'cache_file_mode' => 0666,
             'cache_lambda_templates' => true,
@@ -845,7 +867,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Add audit message
+     * Add audit message to the Audit Log
      *
      * @param string $message Message string
      * 
@@ -854,14 +876,20 @@ abstract class APresenter implements IPresenter
     public function addAuditMessage($message = null)
     {
         if (\is_string($message) && !empty($message)) {
-            $file = DATA . DS . self::AUDITLOG_FILE;
-            $date = \date('c');
             $message = \trim($message);
+            $message = \str_replace("\n", "<br>", $message);
+            $message = \str_replace("\r", " ", $message);
+            $message = \str_replace("\t", " ", $message);
+            $message = \str_replace(';', ',', $message);
+            $date = \date('c');
             $i = $this->getIdentity();
-            @\file_put_contents(
-                $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
-                FILE_APPEND | LOCK_EX
-            );
+            $file = DATA . DS . self::AUDITLOG_FILE;
+            if (\file_exists($file) && \is_writable($file)) {
+                \file_put_contents(
+                    $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
+                    FILE_APPEND | LOCK_EX
+                );
+            }
         }
         return $this;
     }
@@ -925,25 +953,25 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Get universal ID string
+     * Get Universal ID string
      *
      * @return string Universal ID string
      */
     public function getUIDstring()
     {
         return preg_replace(
-            '/__/', '_', strtr(
+            '/__/', SS, strtr(
                 implode(
-                    '_',
+                    SS,
                     [
-                    CLI ? 'CLI' : '',
-                    CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
-                    CLI ? '' : $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A',
-                    CLI ? '' : $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
-                    $this->getIP(),
+                        CLI ? 'CLI' : '',
+                        CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
+                        CLI ? '' : $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A',
+                        CLI ? '' : $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
+                        $this->getIP(),
                     ]
                 ),
-                ' ', '_'
+                ' ', SS
             )
         );
     }
@@ -1439,40 +1467,47 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this;
         }
-
         $uuid = $this->getUID();
-        $r = "user_rate_limit_{$uuid}"; // rate limit count
-        $rb = "user_ban_limit_{$uuid}"; // ban rate count
+        $rate_limit = "user_rate_limit_{$uuid}";
+        $ban_rate = "user_ban_limit_{$uuid}";
+        $limiter_secs = $this->getData['limiter_secs'] ?? 5;
+        $ban_secs = $this->getData['ban_secs'] ?? 1800;
 
         // ban limiting
-        $rateb = (int) (Cache::read($rb, 'ban') ?? 0);
-        if ($rateb >= self::BAN_MAXIMUM) {
+        $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
+        if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
-                Cache::write($rb, 0, 'ban');
-                // limited
+                Cache::write($ban_rate, \floor(self::BAN_MAXIMUM / 2), 'ban');
+                $this->addAuditMessage("LIMITER: Ban rate reset.");
+                // user is limited
+                header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
             }
-            // banned
+            // user is banned
+            header('Retry-After: ' . $ban_secs);
             $this->setLocation('/err/429');
         }
 
         // rate limiting
-        $rate = (int) (Cache::read($r, 'limiter') ?? 0);
-        Cache::write($r, ++$rate, 'limiter');
-        if ($rate >= (int) $max) {
+        $rate_limit_count = (int) (Cache::read($rate_limit, 'limiter') ?? 0);
+        Cache::write($rate_limit, ++$rate_limit_count, 'limiter');
+
+        if ($rate_limit_count >= (int) $max) {
             // increment ban
-            $rateb = (int) (Cache::read($rb, 'ban') ?? 0);
-            Cache::write($rb, ++$rateb, 'ban');
-            if ($rateb === \floor(self::BAN_MAXIMUM / 2)) {
+            $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
+            Cache::write($ban_rate, ++$ban_rate_count, 'ban');
+            if ($ban_rate_count === \floor(self::BAN_MAXIMUM / 2)) {
                 // half-ban rate reached
-                $this->addAuditMessage("LIMITER: User reached {$rateb} limit.");
+                $this->addAuditMessage("LIMITER: Reached {$ban_rate_count} limit.");
             }
-            if ($rateb >= self::BAN_MAXIMUM) {
-                // banned
+            if ($ban_rate_count >= self::BAN_MAXIMUM) {
+                // user is banned
                 $this->addAuditMessage('LIMITER: User is banned!');
+                header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
-            // limited
+            // user is limited
+            header('Retry-After: ' . $limiter_secs);
             $this->setLocation('/err/429');
         }
         return $this;

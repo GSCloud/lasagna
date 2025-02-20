@@ -15,7 +15,14 @@ declare (strict_types = 1);
 use Nette\Neon\Neon;
 use Tracy\Debugger;
 
+// TIMER START
 define('TESSERACT_START', microtime(true));
+
+// directory separator
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+
+// string separator
+defined('SS') || define('SS', '_');
 
 // CLI SAPI external include (optional)
 if (PHP_SAPI === 'cli') {
@@ -49,10 +56,7 @@ if (getenv('FCGI_ROLE') === 'RESPONDER') {
     define('FCGI_ENABLED', false);
 }
 
-// directory separator
-defined('DS') || define('DS', DIRECTORY_SEPARATOR);
-
-// app root
+// app root = current working directory
 defined('ROOT') || define('ROOT', __DIR__);
 
 // Apache root, not mandatory for the main code

@@ -181,8 +181,8 @@ class AdminPresenter extends APresenter
             );
             $names = \implode($names);
 
-            $this->addMessage("ADMIN: file(s) uploaded: {$count}x<br>{$names}");
-            $this->addAuditMessage("ADMIN: file(s) uploaded: {$count}x<br>{$names}");
+            $this->addMessage("ADMIN: file(s) uploaded: {$count}x\n{$names}");
+            $this->addAuditMessage("ADMIN: file(s) uploaded: {$count}x\n{$names}");
             return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
@@ -204,8 +204,8 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(400, $extras);
             }
 
-            $this->addMessage('ADMIN: file deleted [' . $result . ']');
-            $this->addAuditMessage('ADMIN: file deleted [' . $result . ']');
+            $this->addMessage("ADMIN: file deleted\n[{$result}]");
+            $this->addAuditMessage("ADMIN: file deleted\n[{$result}]");
             return $this->writeJsonData($result, $extras);
 
         case 'getUploadsInfo':
@@ -364,7 +364,7 @@ class AdminPresenter extends APresenter
         case 'AuditLog':
             $this->checkPermission('admin');
             $this->setHeaderHTML();
-            $filename = DATA . DS . 'AuditLog.txt';
+            $filename = DATA . DS . self::AUDITLOG_FILE;
             $file = \popen("tac {$filename}", 'r');
             $c = 0;
             $logs = [];
@@ -465,8 +465,8 @@ class AdminPresenter extends APresenter
             $fb = DATA . DS. "summernote_{$profile}_{$hash}.bak";
             if (file_exists($fr) && is_readable($fr)) {
                 if (copy($fr, $fb) === false) {
-                    $this->addError("ADMIN: Article $path backup failed.");
-                    $this->addAuditMessage("ADMIN: Article $path backup failed.");
+                    $this->addError("ADMIN: Article '{$path}' backup failed.");
+                    $this->addAuditMessage("ADMIN: Article '{$path}' backup failed."); // phpcs:ignore
                     return $this->writeJsonData(
                         [
                             'code' => 401,
@@ -480,8 +480,8 @@ class AdminPresenter extends APresenter
             $fp = DATA . DS . "summernote_{$profile}_{$hash}.db";
             $perm = LOCK_EX | FILE_APPEND;
             if (file_put_contents($fp, $data_nows . "\n", $perm) === false) {
-                $this->addError("ADMIN: Article $path history write failed.");
-                $this->addAuditMessage("ADMIN: Article $path history write failed.");
+                $this->addError("ADMIN: Article '{$path}' history write failed.");
+                $this->addAuditMessage("ADMIN: Article '{$path}' history write failed."); // phpcs:ignore
                 return $this->writeJsonData(
                     [
                         'code' => 401,
@@ -494,8 +494,8 @@ class AdminPresenter extends APresenter
             $fp = DATA . DS . "summernote_{$profile}_{$hash}.json";
             $perm = LOCK_EX;
             if (file_put_contents($fp, $data, $perm) === false) {
-                $this->addError("ADMIN: Article $path write to file failed.");
-                $this->addAuditMessage("ADMIN: Article $path write to file failed.");
+                $this->addError("ADMIN: Article '{$path}' write to file failed.");
+                $this->addAuditMessage("ADMIN: Article '{$path}' write to file failed."); // phpcs:ignore
                 return $this->writeJsonData(
                     [
                         'code' => 500,
@@ -571,7 +571,7 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $filename = DATA . DS . 'AuditLog.txt';
+                    $filename = DATA . DS . self::AUDITLOG_FILE;
                     $file = \popen("tac {$filename}", 'r');
                     $c = 0;
                     $logs = [];
@@ -1048,11 +1048,14 @@ class AdminPresenter extends APresenter
     private function _unauthorizedAccess()
     {
         if (CLI) {
-            echo "ERROR: unauthorized access\n";
+            echo "ERROR: Unauthorized access.\n";
             exit(1);
         }
-        $this->addMessage('ADMIN: Unauthorized.');
-        $this->addAuditMessage('ADMIN: Unauthorized.');
+        $path = $this->getData('request_path');
+        if (!\is_string($path)) {
+            $path = '*** not set ***';
+        }
+        $this->addAuditMessage("ADMIN: Unauthorized access. Path:\n'{$path}'");
         $this->setLocation('/err/401');
     }
 
@@ -1068,7 +1071,7 @@ class AdminPresenter extends APresenter
             $key = \hash('sha256', \random_bytes(32) . \time());
             if (file_put_contents($f, $key) === false) {
                 $error = error_get_last();
-                $errorMessage = 'ADMIN: CREATE KEY - Error writing file: '
+                $errorMessage = "ADMIN: CREATE KEY - Error writing file:\n"
                     . ($error ? $error['message'] : 'Unknown error');
                 unlink($f);
                 $this->addError($errorMessage);
@@ -1076,15 +1079,15 @@ class AdminPresenter extends APresenter
                 $this->setLocation('/err/500');
             } else if (!chmod($f, 0600)) {
                 $error = error_get_last();
-                $errorMessage = 'ADMIN: CREATE KEY - Error setting permissions: '
+                $errorMessage = "ADMIN: CREATE KEY - Error setting permissions:\n"
                     . ($error ? $error['message'] : 'Unknown error');
                 unlink($f);
                 $this->addError($errorMessage);
                 $this->addAuditMessage($errorMessage);
                 $this->setLocation('/err/500');
             }
-            $this->addMessage('ADMIN: Keyfile created');
-            $this->addAuditMessage('ADMIN: Keyfile created');
+            $this->addMessage('ADMIN: Keyfile created.');
+            $this->addAuditMessage('ADMIN: Keyfile created.');
         }
         return $this;
     }

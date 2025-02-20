@@ -20,9 +20,11 @@ foreach ([
     'APP',
     'CONFIG',
     'DATA',
+    'DS',
     'ROOT',
+    'SS',
 ] as $x) {
-    defined($x) || die("FATAL ERROR: sanity check for constant '{$x}' failed!");
+    defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
 }
 
 // BLOCK BAD ROBOTS
@@ -68,13 +70,14 @@ if (isset($_GET['clearall'])) {
     exit;
 }
 
-// inject base CSV locale into $cfg
-if (\array_key_exists('locales', $cfg)) {
+// inject prebaked base CSV locales (default, admin) into $cfg
+if (array_key_exists('locales', $cfg)) {
     array_unshift($cfg['locales'], 'base.csv');
     unset($cfg['locales']['default']);
     unset($cfg['locales']['admin']);
 }
 
+// backup original $cfg values
 $data['cfg'] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anonymous
@@ -85,8 +88,7 @@ $blocked = (array) ($data['geoblock'] ?? [
     'RU',
     'T1',
 ]);
-$country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
-$data['country'] = $country;
+$data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
 if (!LOCALHOST && in_array($country, $blocked)) {
     header('HTTP/1.1 403 Not Found', true, 301);
     exit;
@@ -98,7 +100,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 // + MODEL
 define('ENGINE', 'Tesseract v2.4.4');
 $data['ENGINE'] = ENGINE;
-$data['codemirror'] = '6.65.7'; // CodeMirror version to load in admin interface
+$data['codemirror'] = '6.65.7'; // CodeMirror version to load in the admin interface
 
 // Base58 encoder
 $base58 = new \Tuupola\Base58;
@@ -110,23 +112,14 @@ $data['POST'] = array_map('htmlspecialchars', $_POST);
 $data['COOKIE'] = array_map('htmlspecialchars', $_COOKIE);
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
 $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
-$data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP']
-    ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+$data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
 $data['PHP_VERSION'] = PHP_VERSION;
 $data['DATA_VERSION'] = null;
-$data['VERSION'] = $version = trim(
-    @file_get_contents(ROOT . DS . 'VERSION') ?: ''
-);
-$data['VERSION_SHORT'] = $base58->encode(
-    base_convert(substr($version, 0, 6), 16, 10)
-);
-$data['VERSION_DATE']
-    = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time());
-$data['VERSION_TIMESTAMP']
-    = @filemtime(ROOT . DS . 'VERSION') ?: time();
-$data['REVISIONS'] = (int) trim(
-    @file_get_contents(ROOT . DS . 'REVISIONS') ?: '0'
-);
+$data['VERSION'] = $version = trim(@file_get_contents(ROOT . DS . 'VERSION') ?: '');
+$data['VERSION_SHORT'] = $base58->encode(base_convert(substr($version, 0, 6), 16, 10)); // phpcs:ignore
+$data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time()); // phpcs:ignore
+$data['VERSION_TIMESTAMP'] = @filemtime(ROOT . DS . 'VERSION') ?: time();
+$data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
 
 // random hash set by administrator after cache purge
 $hash = DATA . DS . '_random_cdn_hash';
@@ -151,9 +144,7 @@ $data['isSafari'] = $isSafari;
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 define('HOST', $host);
 
-$data['base'] = $data['BASE'] = $host ? (
-    ($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/"
-) : '';
+$data['base'] = $data['BASE'] = $host ? (($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/") : ''; // phpcs:ignore
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
 if (!$requestUri) {
@@ -167,40 +158,14 @@ if (!$rqp) {
 $rqp = trim($rqp, '/');
 $data['request_path'] = $rqp;
 $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
-
-$data['nonce'] = $data['NONCE'] = $nonce = substr(
-    hash(
-        'sha256', random_bytes(16) . (string) time()
-    ), 0, 8
-);
-
+$data['nonce'] = $data['NONCE'] = $nonce = substr(hash('sha256', random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
 $data['LOCALHOST'] = (bool) LOCALHOST;
 
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
+defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . hash('sha256', $x) . SS);
 
-defined('CACHEPREFIX') || define(
-    'CACHEPREFIX',
-    'cache_' . hash('sha256', $x) . '_'
-);
-
-defined('DOMAIN') || define(
-    'DOMAIN',
-    strtolower(
-        preg_replace(
-            "/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'
-        )
-    )
-);
-
-defined('SERVER') || define(
-    'SERVER',
-    strtolower(
-        preg_replace(
-            "/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'
-        )
-    )
-);
-
+defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
+defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 
@@ -210,33 +175,36 @@ if (DOMAIN === str_replace('https://', '', $cfg['goauth_origin'] ?? '')) {
     $data['is_goauth_origin'] = true;
 }
 
+// BAN/LIMITER times in seconds
+if (!isset($data['ban_secs'])) {
+    $data['ban_secs'] = 1800;
+}
+if (!isset($data['limiter_secs'])) {
+    $data['limiter_secs'] = 5;
+}
+
 // CACHE PROFILES
 $cache_profiles = array_replace(
     [
         'default' => '+3 minutes',
-
         'second' => '+1 seconds',
         'fiveseconds' => '+5 seconds',
         'tenseconds' => '+10 seconds',
         'thirtyseconds' => '+30 seconds',
-
         'minute' => '+60 seconds',
         'threeminutes' => '+3 minutes',
         'fiveminutes' => '+5 minutes',
         'tenminutes' => '+10 minutes',
         'fifteenminutes' => '+15 minutes',
         'thirtyminutes' => '+30 minutes',
-
         'hour' => '+60 minutes',
         'twohours' => '+2 hours',
         'threehours' => '+3 hours',
         'sixhours' => '+6 hours',
         'twelfhours' => '+12 hours',
-
         'day' => '+24 hours',
-
-        'ban' => '+30 minutes', // ban time
-        'limiter' => '+5 seconds', // rate limiter
+        'ban' => '+30 minutes', // ban time - UUID is blocked
+        'limiter' => '+5 seconds', // rate limiting interval
         'csv' => '+72 hours', // CSV cold storage
     ], (array) ($cfg['cache_profiles'] ?? [])
 );
@@ -249,11 +217,7 @@ foreach ($cache_profiles as $k => $v) {
             'duration' => $v,
             'lock' => true,
             'path' => CACHE,
-            'prefix' => PROJECT
-                . '_'
-                . APPNAME
-                . '_'
-                . CACHEPREFIX,
+            'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
         ]
     );
     if ($cfg['redis']['port'] ?? null) {
@@ -267,13 +231,9 @@ foreach ($cache_profiles as $k => $v) {
                 'password' => $cfg['redis']['password'] ?? '',
                 'path' => CACHE,
                 'persistent' => true,
-                'port' => $cfg['redis']['port'] ?? 6377,
-                'prefix' => PROJECT
-                    . '_'
-                    . APPNAME
-                    . '_'
-                    . CACHEPREFIX,
-                'timeout' => $cfg['redis']['timeout'] ?? 1,
+                'port' => (int) $cfg['redis']['port'],
+                'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
+                'timeout' => (int) ($cfg['redis']['timeout'] ?? 1),
                 'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
             ]
         );
@@ -285,42 +245,35 @@ foreach ($cache_profiles as $k => $v) {
                 'fallback' => false,
                 'lock' => true,
                 'path' => CACHE,
-                'prefix' => PROJECT
-                    . '_'
-                    . APPNAME
-                    . '_'
-                    . CACHEPREFIX,
+                'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
             ]
         );
     }
 }
 
 // REDIS TEST
-if ($cfg['redis']['port'] ?? null) {
-    $redis_test = 'redis_test';
-    Cache::setConfig(
-        $redis_test,
-        [
-            'className' => 'Cake\Cache\Engine\RedisEngine',
-            'database' => $cfg['redis']['database'] ?? 0,
-            'duration' => '+10 seconds',
-            'host' => $cfg['redis']['host'] ?? '127.0.0.1',
-            'password' => $cfg['redis']['password'] ?? '',
-            'port' => $cfg['redis']['port'] ?? 6377,
-            'prefix' => PROJECT
-                . '_'
-                . APPNAME
-                . '_'
-                . CACHEPREFIX,
-            'timeout' => $cfg['redis']['timeout'] ?? 1,
-            'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
-        ]
-    );
-    Cache::write($redis_test, $redis_test, $redis_test);
-    define('REDIS_CACHE', Cache::read($redis_test, $redis_test) === $redis_test);
-} else {
-    define('REDIS_CACHE', false);
+if (Cache::enabled()) {
+    if ($cfg['redis']['port'] ?? null) {
+        $redis_test = 'redis_test';
+        Cache::setConfig(
+            $redis_test,
+            [
+                'className' => 'Cake\Cache\Engine\RedisEngine',
+                'database' => $cfg['redis']['database'] ?? 0,
+                'duration' => '+5 seconds',
+                'host' => $cfg['redis']['host'] ?? '127.0.0.1',
+                'password' => $cfg['redis']['password'] ?? '',
+                'port' => (int) $cfg['redis']['port'],
+                'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
+                'timeout' => (int) ($cfg['redis']['timeout'] ?? 1),
+                'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
+            ]
+        );
+        Cache::write($redis_test, 42, $redis_test);
+        define('REDIS_CACHE', Cache::read($redis_test, $redis_test) === 42);
+    }
 }
+defined('REDIS_CACHE') || define('REDIS_CACHE', false);
 
 // + MODEL
 $data['cache_profiles'] = $cache_profiles;
@@ -476,7 +429,7 @@ if ($router[$view]['redirect'] ?? false) {
     exit;
 }
 
-// COUNTRY REDIRECT
+// COUNTRY REDIRECTS
 if ($router[$view]['country'] ?? false) {
     $nonce = '';
     if (isset($_GET['nonce'])) {
@@ -490,11 +443,7 @@ if ($router[$view]['country'] ?? false) {
         if (strpos($router[$view]['country'][$country], '?') !== false) {
             $nonce = '';
         }
-        header(
-            'Location: '
-            . $router[$view]['country'][$country] . $nonce,
-            true, 303
-        );
+        header('Location: ' . $router[$view]['country'][$country] . $nonce, true, 303); // phpcs:ignore
         exit;
     }
     if (LOCALHOST && array_key_exists('localhost', $router[$view]['country'])) {
@@ -504,11 +453,7 @@ if ($router[$view]['country'] ?? false) {
         if (strpos($router[$view]['country']['localhost'], '?') !== false) {
             $nonce = '';
         }
-        header(
-            'Location: '
-            . $router[$view]['country']['localhost'] . $nonce,
-            true, 303
-        );
+        header('Location: ' . $router[$view]['country']['localhost'] . $nonce, true, 303); // phpcs:ignore
         exit;
     }
     if (!LOCALHOST && array_key_exists('default', $router[$view]['country'])) {
@@ -518,11 +463,7 @@ if ($router[$view]['country'] ?? false) {
         if (strpos($router[$view]['country']['default'], '?') !== false) {
             $nonce = '';
         }
-        header(
-            'Location: '
-            . $router[$view]['country']['default'] . $nonce,
-            true, 303
-        );
+        header('Location: ' . $router[$view]['country']['default'] . $nonce, true, 303); // phpcs:ignore
         exit;
     }
 }
@@ -547,30 +488,24 @@ default:
 }
 
 // PROFILER
-$data['time_data'] = round(
-    (float) \Tracy\Debugger::timer('DATA') * 1000, 2
-);
+$data['time_data'] = round((float) \Tracy\Debugger::timer('DATA') * 1000, 2);
 
-// SINGLETON
-$data['controller'] = $p = ucfirst(
-    strtolower($presenter[$view]['presenter'])
-) . 'Presenter';
+// SINGLETON TEMPLATE
+$data['controller'] = $p = ucfirst(strtolower($presenter[$view]['presenter'])) . 'Presenter'; // phpcs:ignore
 $controller = "\\GSC\\{$p}";
 
 // TIMER START
 \Tracy\Debugger::timer('PROCESS');
 
+// RUN!
 $app = $controller::getInstance()->setData($data)->process();
+// ... AND GET DATA BACK
 $model = $app->getData();
 
 // PROFILER
 $time1 = $model['time_data'];
-$time2 = $model['time_process'] = round(
-    (float) \Tracy\Debugger::timer('PROCESS') * 1000, 2
-);
-$time3 = $model['time_run'] = round(
-    (float) \Tracy\Debugger::timer('RUN') * 1000, 2
-);
+$time2 = $model['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 2); // phpcs:ignore
+$time3 = $model['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 2); // phpcs:ignore
 
 // X-HEADERS
 header('X-Engine: ' . ENGINE);
@@ -578,6 +513,7 @@ header("X-Country: $country");
 header("X-Time-Data: $time1 ms");
 header("X-Time-Process: $time2 ms");
 header("X-Time-Run: $time3 ms");
+
 $limit = $app->getRateLimit();
 if ($limit && is_int($limit)) {
     header("X-Rate-Limit: $limit");
