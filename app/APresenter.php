@@ -462,6 +462,32 @@ abstract class APresenter implements IPresenter
     /* @var integer CSV min. file size - something meaningful :) */
     const CSV_MIN_SIZE = 42;
 
+    /* @var string UUID cookie name */
+    const COOKIE_UUID = 'UUID';
+
+    /* @var string cookie secret filename */
+    const COOKIE_KEY_FILE = 'cookie_key.key';
+
+    /* @var string cookie secret filename */
+    const COOKIE_KEY_FILE_TEST = 'cookie_key_test.key';
+
+    /* @var string log directory */
+    const LOG_DIR = '/tmp/lasagna_logs/';
+
+    /* @var string log filename */
+    const LOG_FILE = 'lasagna.log';
+
+    /* @var string CSV directory */
+    const CSV_DIR = '/tmp/lasagna_csv/';
+
+    /* @var string CSV filename */
+    const CSV_FILE = 'lasagna.csv';
+
+    /* @var string TSV directory */
+    const TSV_DIR = '/tmp/lasagna_tsv/';
+
+    /* @var string TSV filename */
+
     /* @var integer octal file mode for cookie secret */
     const COOKIE_KEY_FILEMODE = 0600;
 
@@ -959,25 +985,32 @@ abstract class APresenter implements IPresenter
      */
     public function getUIDstring()
     {
-        return preg_replace(
-            '/__/', SS, strtr(
-                implode(
-                    SS,
-                    [
-                        CLI ? 'CLI' : '',
-                        CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
-                        CLI ? '' : $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A',
-                        CLI ? '' : $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
-                        $this->getIP(),
-                    ]
-                ),
-                ' ', SS
-            )
-        );
+        $parts = [
+            CLI ? 'CLI' : '',
+            CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
+            CLI ? '' : $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A',
+            CLI ? '' : $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
+            $this->getIP(),
+        ];
+
+        // add a cookie if not CLI
+        if (!CLI) {
+            $name = self::COOKIE_UUID;
+            if (!isset($_COOKIE[$name])) {
+                $cookieValue = $this->getNonce();
+                if (!\setcookie($name, $cookieValue, \time() + self::COOKIE_TTL, '/', DOMAIN, true, true)) { // phpcs:ignore
+                    $this->addError("Error setting UUID cookie.");
+                }
+                $_COOKIE[$name] = $cookieValue;
+            }
+            $parts[] = $_COOKIE[$name];
+        }
+        $parts = array_filter($parts);
+        return preg_replace('/__/', SS, strtr(implode(SS, $parts), ' ', SS));
     }
 
     /**
-     * Get universal ID hash
+     * Get Universal ID (hash)
      *
      * @return string SHA-256 hash
      */
