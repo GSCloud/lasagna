@@ -1918,7 +1918,7 @@ abstract class APresenter implements IPresenter
                                 . $csvkey . self::GS_CSV_POSTFIX;
                         }
                     }
-                    $this->addMessage("FILE: fetching {$remote}");
+                    //$this->addMessage("FILE: fetching {$remote}");
                     try {
                         $data = @\file_get_contents($remote);
                     } catch (\Exception $e) {
