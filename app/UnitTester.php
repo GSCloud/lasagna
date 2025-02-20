@@ -112,7 +112,7 @@ class UnitTester
                 'ip' => '127.0.0.1',
                 'uid' => '5d93b9f0de6d0b30934db74b6d877'
                     . '154d704f562ad5bb88002409d51db5345c1',
-                'uidstring' => 'CLI__127.0.0.1',
+                'uidstring' => 'CLI_127.0.0.1',
                 ], $app->getCurrentUser()
             );
 
@@ -133,7 +133,7 @@ class UnitTester
             );
 
             // getUIDstring()
-            Assert::same('CLI__127.0.0.1', $app->getUIDstring());
+            Assert::same('CLI_127.0.0.1', $app->getUIDstring());
 
             // renderHTML()
             Assert::same(
