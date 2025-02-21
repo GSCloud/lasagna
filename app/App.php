@@ -165,10 +165,10 @@ $data['LOCALHOST'] = (bool) LOCALHOST;
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
 defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . hash('sha256', $x) . SS);
 
+defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
+defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
-defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
-defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 
 // OFFLINE TEMPLATE
 $file = TEMPLATES . DS . 'offline.mustache';

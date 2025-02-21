@@ -1106,12 +1106,17 @@ abstract class APresenter
         $ban_secs = $this->getData['ban_secs'] ?? 1800;
         $limiter_secs = $this->getData['limiter_secs'] ?? 5;
 
-        // bans
+        // bans limiting
         $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
-                Cache::write($ban_rate, \floor(self::BAN_MAXIMUM / 2), 'ban');
-                $this->addAuditMessage("LIMITER: Ban rate reset.");
+                $ban_reset = \floor(self::BAN_MAXIMUM / 2);
+                $path = $this->getData('request_path');
+                if (!\is_string($path)) {
+                    $path = '*** not set ***';
+                }
+                Cache::write($ban_rate, $ban_reset, 'ban');
+                $this->addAuditMessage("LIMITER: Ban rate reset to {$ban_reset}. \n'{$path}'"); // phpcs:ignore
                 // user is limited
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
@@ -1126,20 +1131,20 @@ abstract class APresenter
         Cache::write($rate_limit, ++$rate_limit_count, 'limiter');
 
         if ($rate_limit_count >= (int) $max) {
+            $path = $this->getData('request_path');
+            if (!\is_string($path)) {
+                $path = '*** not set ***';
+            }
             // increment ban
             $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
             Cache::write($ban_rate, ++$ban_rate_count, 'ban');
             if ($ban_rate_count === \floor(self::BAN_MAXIMUM / 2)) {
                 // half-ban rate reached
-                $this->addAuditMessage("LIMITER: Reached {$ban_rate_count} limit.");
+                $this->addAuditMessage("LIMITER: Reached {$ban_rate_count} limit. Path:\n'{$path}'"); // phpcs:ignore
             }
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
                 // user is banned
-                $path = $this->getData('request_path');
-                if (!\is_string($path)) {
-                    $path = '*** not set ***';
-                }
-                $this->addAuditMessage("LIMITER: User is banned! Path:\n'{$path}'");
+                $this->addAuditMessage("LIMITER: User is banned. Path:\n'{$path}'");
                 header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
