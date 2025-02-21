@@ -580,7 +580,7 @@ abstract class APresenter
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
                 if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
-                    $this->addError("Invalid UUID cookie!");
+                    $this->addError("Invalid UUID cookie.");
                     unset($_COOKIE[$name]);
                 }
             }
@@ -595,7 +595,7 @@ abstract class APresenter
                     'samesite' => 'Strict',
                 ];
                 if (!setcookie($name, $uid, $cookieOptions)) {
-                    $this->addError("Error setting UUID cookie!");
+                    $this->addError("Cannot set UUID cookie.");
                 }
                 $_COOKIE[$name] = $uid;
             }
@@ -955,12 +955,11 @@ abstract class APresenter
      */
     public function getCookie($name)
     {
-        if (empty($name)) {
-            return null;
-        }
-
         if (CLI) {
             return $this->cookies[$name] ?? null;
+        }
+        if (empty($name)) {
+            return null;
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
@@ -969,7 +968,7 @@ abstract class APresenter
         if (\file_exists($keyfile) && is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
-            $this->addError('HALITE: Missing encryption key!');
+            $this->addError('HALITE: Missing encryption key.');
             return null;
         }
         $cookie = new Cookie($enc);
@@ -1116,7 +1115,7 @@ abstract class APresenter
                     $path = '*** not set ***';
                 }
                 Cache::write($ban_rate, $ban_reset, 'ban');
-                $this->addAuditMessage("LIMITER: Ban rate reset to {$ban_reset}. \n'{$path}'"); // phpcs:ignore
+                $this->addMessage("LIMITER: Ban rate reset to {$ban_reset}. \n'{$path}'"); // phpcs:ignore
                 // user is limited
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
@@ -1140,11 +1139,11 @@ abstract class APresenter
             Cache::write($ban_rate, ++$ban_rate_count, 'ban');
             if ($ban_rate_count === \floor(self::BAN_MAXIMUM / 2)) {
                 // half-ban rate reached
-                $this->addAuditMessage("LIMITER: Reached {$ban_rate_count} limit. Path:\n'{$path}'"); // phpcs:ignore
+                $this->addMessage("LIMITER: Reached {$ban_rate_count}x ban limit. Path:\n'{$path}'"); // phpcs:ignore
             }
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
                 // user is banned
-                $this->addAuditMessage("LIMITER: User is banned. Path:\n'{$path}'");
+                $this->addMessage("LIMITER: User is banned. Path:\n'{$path}'");
                 header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
@@ -1511,19 +1510,19 @@ abstract class APresenter
                         $data = @\file_get_contents($remote);
                     } catch (\Exception $e) {
                         $data = '';
-                        $this->addError("ERROR: fetching {$remote}");
+                        $this->addError("csvPreloader: Fetching '{$remote}' failed."); // phpcs:ignore
                     }
                 }
                 if (!$data) {
-                    $this->addError("ERROR: csvPreloader [{$name}] - no data!");
+                    $this->addError("csvPreloader: No data for [{$name}]");
                     return $this;
                 }
                 if ($data && !\is_string($data)) {
-                    $this->addError("ERROR: csvPreloader [{$name}] - no data!");
+                    $this->addError("csvPreloader: No data for [{$name}]");
                     return $this;
                 }
                 if ($data && \strpos($data, '!DOCTYPE html') > 0) {
-                    $this->addError("ERROR: csvPreloader [{$remote}] - HTML!");
+                    $this->addError("csvPreloader: Got HTML data from [{$remote}]"); // phpcs:ignore
                     return $this;
                 }
                 if (\strlen($data) >= self::CSV_MIN_SIZE) {
@@ -1534,20 +1533,20 @@ abstract class APresenter
                     // remove old backup
                     if (\file_exists($f2)) {
                         if (@\unlink($f2) === false) {
-                            $this->addError("FILE: remove {$file}.bak failed!");
+                            $this->addError("csvPreloader: Delete [{$file}.bak] failed."); // phpcs:ignore
                         }
                     }
 
                     // move CSV to backup
                     if (\file_exists($f1)) {
                         if (@\rename($f1, $f2) === false) {
-                            $this->addError("FILE: backup {$file}.csv failed!");
+                            $this->addError("csvPreloader: Backup of [{$file}.csv] failed."); // phpcs:ignore
                         }
                     }
 
                     // write new CSV
                     if (\file_put_contents($f1, $data, LOCK_EX) === false) {
-                        $this->addError("FILE: save {$file}.csv failed!");
+                        $this->addError("csvPreloader: Save to [{$file}.csv] failed."); // phpcs:ignore
                     }
                 }
             }

@@ -39,12 +39,12 @@ class LoginPresenter extends APresenter
 
         $cfg = $this->getCfg();
         if (($cfg['goauth_client_id'] ?? null) === null) {
-            ErrorPresenter::getInstance()->process(403);
-            exit;
+            $this->addError('OAuth: Missing [goauth_client_id].');
+            $this->setLocation('/err/412');
         }
         if (($cfg['goauth_secret'] ?? null) === null) {
-            ErrorPresenter::getInstance()->process(403);
-            exit;
+            $this->addError('OAuth: Missing [goauth_secret].');
+            $this->setLocation('/err/412');
         }
 
         // save return URL
@@ -52,7 +52,7 @@ class LoginPresenter extends APresenter
             \setcookie(
                 'returnURL',
                 $_GET['returnURL'],
-                \time() + 120,
+                \time() + 30,
                 '/',
                 DOMAIN,
                 true,
@@ -74,7 +74,8 @@ class LoginPresenter extends APresenter
 
         $errors = [];
         if (!empty($_GET['error'])) {
-            $errors[] = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
+            $error = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
+            $this->addError("OAuth: failure. Message:\n" . $error);
         } elseif (empty($_GET['code'])) {
             $email = $_GET['login_hint'] ?? $_COOKIE['login_hint'] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : '';
@@ -87,10 +88,9 @@ class LoginPresenter extends APresenter
             \setcookie('oauth2state', $provider->getState());
             \header('Location: ' . $authUrl . $hint, true, 303);
             exit;
-        } elseif (empty($_GET['state'])
-            || (!isset($_COOKIE['oauth2state']))
+        } elseif (empty($_GET['state']) || (!isset($_COOKIE['oauth2state']))
         ) {
-            $errors[] = 'Invalid OAuth state';
+            $this->addError('OAuth: Invalid OAuth state.');
         } else {
             try {
                 $token = $provider->getAccessToken(
@@ -130,18 +130,16 @@ class LoginPresenter extends APresenter
                 }
                 if (isset($_COOKIE['returnURL'])) {
                     $url = \urldecode($_COOKIE['returnURL']);
-                    if (strpos($url, "/") !== 0) {
-                        $this->setLocation();
+                    if (\strpos($url, '/') === 0) {
+                        $this->setLocation($url . '?nonce=' . $this->getNonce());
                     }
-                    $this->setLocation($url . '?nonce=' . $this->getNonce());
                 }
                 $this->setLocation();
 
             } catch (\Exception $e) {
-                $this->addError('Google OAuth: ' . $e->getMessage());
+                $this->addError("OAuth: failure. Message:\n" . $e->getMessage());
             }
         }
-        ErrorPresenter::getInstance()->process(403);
-        exit;
+        $this->setLocation('/err/403');
     }
 }

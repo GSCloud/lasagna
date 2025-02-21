@@ -1032,7 +1032,7 @@ class AdminPresenter extends APresenter
         if (!\is_string($path)) {
             $path = '*** not set ***';
         }
-        $this->addAuditMessage("ADMIN: Unauthorized access. Path:\n'{$path}'");
+        $this->addMessage("ADMIN: Unauthorized access. Path:\n'{$path}'");
         $this->setLocation('/err/401');
     }
 
