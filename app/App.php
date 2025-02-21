@@ -98,7 +98,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 \Tracy\Debugger::timer('DATA');
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.4.4');
+define('ENGINE', 'Tesseract v2.4.5');
 $data['ENGINE'] = ENGINE;
 $data['codemirror'] = '6.65.7'; // CodeMirror version to load in the admin interface
 

@@ -3,9 +3,9 @@
 **`[BUGFIX]`** `[FEATURE] [IDEA]`  
 ---
 
-`2025-02-21`
+`2025-02-21`  **`v2.4.5`**
 
-* **`1047-FEATURE` enhanced offline/error pages**
+* **`1047-FEATURE` enhanced offline/error pages, error messages**
 
 `2025-02-19`
 
