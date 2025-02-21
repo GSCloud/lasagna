@@ -91,7 +91,7 @@ class ApiPresenter extends APresenter
                 }
             }
 
-            // populate model
+            // model
             $data = [];
             $data[] = "Hello World!";
 
@@ -100,7 +100,7 @@ class ApiPresenter extends APresenter
             return $this->writeJsonData($data, $extras);
 
         default:
-            return ErrorPresenter::getInstance()->process(404);
+            return $this->writeJsonData(404, $extras);
         }
     }
 

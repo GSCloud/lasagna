@@ -647,7 +647,7 @@ abstract class APresenter
                 @\chmod($file, 0660);
                 $this->addMessage('ADMIN: Nonce file created.');
             } catch (\Exception $e) {
-                $this->addCritical('Create nonce file failed!' . $e->getMessage()); // phpcs:ignore
+                $this->addCritical("Create nonce file failed! Exception:\n" . $e->getMessage()); // phpcs:ignore
                 $this->setLocation('/err/500');
             }
         }
@@ -1001,6 +1001,7 @@ abstract class APresenter
                 $this->addMessage('HALITE: Cookie encryption keyfile created.'); // phpcs:ignore
             } else {
                 $this->addCritical('HALITE: Cannot write cookie encryption key!'); // phpcs:ignore
+                $this->setLocation('/err/500');
             }
         }
         $cookie = new Cookie($enc);
@@ -1373,10 +1374,8 @@ abstract class APresenter
         }
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
-                \header('HTTP/1.1 500 FATAL ERROR');
-                $this->addCritical('ERR: LOCALES CORRUPTED!');
-                echo '<body><h1>ERR 500</h1><h2>LOCALES CORRUPTED!</h2></body>';
-                exit;
+                $this->addCritical('Corrupted locales!');
+                $this->setLocation('/err/500');
             } else {
                 $this->checkLocales(true); // second try!
                 return $this->getLocale($language, $key);
@@ -1793,9 +1792,8 @@ abstract class APresenter
             ) ?? 'en';
             $data["lang{$language}"] = true;
         } else {
-            // something is terribly wrong
-            ErrorPresenter::getInstance()->process(500);
-            return $this;
+            $this->addCritical('Something is terribly wrong with locales!');
+            $this->setLocation('/err/500');
         }
 
         // get locale if not already present
@@ -1806,7 +1804,7 @@ abstract class APresenter
                 $l = $this->getLocale('en');
                 if (\is_null($l)) {
                     $l = [];
-                    $l['title'] = 'ERR: MISSING ENGLISH LOCALE!';
+                    $l['title'] = 'ERROR! NO ENGLISH LOCALE';
                 }
             }
             $data['l'] = $l;

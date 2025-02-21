@@ -32,7 +32,7 @@ class CorePresenter extends APresenter
      * 
      * @param mixed $param optional parameter
      * 
-     * @return object Controller
+     * @return mixed
      */
     public function process($param = null)
     {
@@ -148,30 +148,27 @@ class CorePresenter extends APresenter
             $this->setData("rss_channel_description", $l["meta_description"] ?? "");
             $this->setData("rss_channel_link", $l['$canonical_url'] ?? "");
             $this->setData("rss_channel_title", $l["title"] ?? "");
-            return $this->setData(
-                "output",
-                $this->setData("rss_items", (array) $map)->renderHTML("rss.xml")
-            );
+            return $this->setData('output', $this->setData('rss_items', (array) $map)->renderHTML('rss.xml'));  // phpcs:ignore
 
         case "GetQR":
             $this->checkRateLimit();
             $x = 0;
             if (!\is_array($match)) {
-                ErrorPresenter::getInstance()->process(404);
-                exit;
+                $this->setLocation('/err/404');
             }
             $scale = 5;
-            if (isset($match["params"]["size"])) {
-                $size = \trim($match["params"]["size"]);
+            if ($match && \is_array($match) && isset($match["params"]["size"])) {
+                $size = \trim((string) $match["params"]["size"]);
+                $size = \strtolower($size);
                 switch ($size) {
-                case "m":
-                    $scale = 7;
+                case "x":
+                    $scale = 15;
                     break;
                 case "l":
                     $scale = 10;
                     break;
-                case "x":
-                    $scale = 15;
+                case "m":
+                    $scale = 7;
                     break;
                 case "s":
                 default:
@@ -180,8 +177,8 @@ class CorePresenter extends APresenter
                 $x++;
             }
             $text = 'Hello World!';
-            if (isset($match["params"]["trailing"])) {
-                $text = \trim($match["params"]["trailing"]);
+            if ($match && \is_array($match) && isset($match["params"]["trailing"])) {
+                $text = \trim((string) $match["params"]["trailing"]);
                 $x++;
             }
             if ($x !== 2) {
@@ -218,7 +215,6 @@ class CorePresenter extends APresenter
                     $this->setData("admin_group_{$g}", true);
                 }
             }
-    
             return $this->setData(
                 "output", $this->renderHTML("sw.js")
             );
@@ -226,8 +222,7 @@ class CorePresenter extends APresenter
         case "GetCoreVersion":
             $this->checkRateLimit();
             if (!\is_array($data)) {
-                ErrorPresenter::getInstance()->process(404);
-                exit;
+                $this->setLocation('/err/404');
             }
             $d = [];
             $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
@@ -239,15 +234,14 @@ class CorePresenter extends APresenter
 
         case "ReadArticles":
             if ($this->getCfg('disable_articles')) {
-                $this->setLocation(); // fn disabled
+                return $this->writeJsonData(403, $extras);
             }
             $this->checkRateLimit();
             $x = 0;
             $hash = null;
             $profile = "default";
             if (!\is_array($match)) {
-                ErrorPresenter::getInstance()->process(404);
-                exit;
+                return $this->writeJsonData(400, $extras);
             }
             if (isset($match["params"]["profile"])) {
                 $profile = \trim($match["params"]["profile"]);
@@ -352,8 +346,7 @@ class CorePresenter extends APresenter
                     ->renderHTML("apis")
             );
         }
-        ErrorPresenter::getInstance()->process(404);
-        exit;
+        $this->setLocation('/err/404');
     }
 
     /**
