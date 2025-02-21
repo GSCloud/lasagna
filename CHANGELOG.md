@@ -1,12 +1,16 @@
 # **Tesseract LASAGNA changelog**
 
-**`[ERROR]`** `[BUGFIX] [FEATURE] [IDEA]`  
+**`[BUGFIX]`** `[FEATURE] [IDEA]`  
 ---
+
+`2025-02-21`
+
+* **`1047-FEATURE` enhanced offline/error pages**
 
 `2025-02-19`
 
-* **`1046-FEATURE` no more META keywords, removed**  
-* **`1045-FEATURE` returnURL support** in login workflow  
+* **`1046-FEATURE` no more META keywords**, feature removed  
+* **`1045-FEATURE`** login workflow **returnURL support**  
 * **`1044-FEATURE` refactorization of StringFilter** class
 
 `2025-02-17`
