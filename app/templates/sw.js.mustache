@@ -31,6 +31,7 @@ self.addEventListener('fetch', function (event) {
   if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== 'GET') return;
   if (event.request.url.startsWith('https://accounts.google.com') === true) return;
+  if (event.request.url.startsWith('https://cdn.') === true) return;
   if (event.request.url.endsWith('.flac') === true) return;
   if (event.request.url.endsWith('.mp3') === true) return;
   if (event.request.url.endsWith('.mp4') === true) return;
@@ -63,7 +64,7 @@ self.addEventListener('fetch', function (event) {
       }
 
       function unableToResolve() {
-        return new Response('<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1.0"><h2 style="text-align:center">📵 NO INTERNET</h2><h3 style="text-align:center"><a href="javascript:location.reload();">↻</a></h3>', {
+        return new Response('{{ offline_template }}', {
           status: 503,
           statusText: 'Service Unavailable',
           headers: new Headers({

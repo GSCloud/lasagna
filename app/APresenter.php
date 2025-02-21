@@ -19,430 +19,6 @@ use ParagonIE\Halite\Cookie;
 use ParagonIE\Halite\KeyFactory;
 
 /**
- * APresenter interface
- * 
- * @category CMS
- * @package  Framework
- * @author   Fred Brooker <git@gscloud.cz>
- * @license  MIT https://gscloud.cz/LICENSE.txt
- * @link     https://github.com/GSCloud/lasagna
- */
-interface IPresenter
-{
-    /**
-     * Add critical message
-     *
-     * @param string $message Critical error string
-     * 
-     * @return self
-     */
-    public function addCritical($message);
-
-    /**
-     * Add error message
-     *
-     * @param string $message Error string
-     * 
-     * @return self
-     */
-    public function addError($message);
-
-    /**
-     * Add info message
-     *
-     * @param string $message Message string
-     * 
-     * @return self
-     */
-    public function addMessage($message);
-
-    /**
-     * Add audit message
-     *
-     * @param string $message Message string
-     * 
-     * @return self
-     */
-    public function addAuditMessage($message);
-
-    /**
-     * Criticals getter
-     *
-     * @return array Array of critical messages
-     */
-    public function getCriticals();
-
-    /**
-     * Errors getter
-     *
-     * @return array Array of errors
-     */
-    public function getErrors();
-
-    /**
-     * Messages getter
-     *
-     * @return array Array of messages
-     */
-    public function getMessages();
-
-    /**
-     * Cfg getter
-     *
-     * @param string $key Index to configuration data / void
-     * 
-     * @return mixed Configuration data by index / whole array
-     */
-    public function getCfg($key);
-
-    /**
-     * Get encrypted cookie
-     *
-     * @param string $name Cookie name
-     * 
-     * @return mixed Cookie value
-     */
-    public function getCookie($name);
-
-    /**
-     * Get current user
-     *
-     * @return array current user data
-     */
-    public function getCurrentUser();
-    /**
-     * Data getter
-     *
-     * @param string $key array key, dot notation (optional)
-     * 
-     * @return mixed value / whole array
-     */
-    public function getData($key);
-
-    /**
-     * Get IP address
-     *
-     * @return string IP address
-     */
-    public function getIP();
-
-    /**
-     * Get user identity
-     *
-     * @return array Identity array
-     */
-    public function getIdentity();
-
-    /**
-     * Get locales from GS Sheets
-     *
-     * @param string $language language code
-     * @param string $key      index column code (optional)
-     * 
-     * @return array locales
-     */
-    public function getLocale($language, $key = 'KEY');
-    
-    /**
-     * Get current user rate limits
-     *
-     * @return integer current rate limit
-     */
-    public function getRateLimit();
-
-    /**
-     * Get universal ID hash
-     *
-     * @return string SHA-256 hash
-     */
-    public function getUID();
-
-    /**
-     * Get universal ID string
-     *
-     * @return string Universal ID string
-     */
-    public function getUIDstring();
-
-    /**
-     * Get current user group
-     *
-     * @return string User group name
-     */
-    public function getUserGroup();
-
-    /**
-     * Match getter
-     *
-     * @return mixed Match data array
-     */
-    public function getMatch();
-
-    /**
-     * Presenter getter
-     *
-     * @return mixed Rresenter data array
-     */
-    public function getPresenter();
-
-    /**
-     * Router getter
-     *
-     * @return mixed Router data array
-     */
-    public function getRouter();
-
-    /**
-     * View getter
-     *
-     * @return mixed Router view
-     */
-    public function getView();
-
-    /**
-     * Check and preload locales
-     *
-     * @param boolean $force force loading locales (optional)
-     * 
-     * @return self
-     */
-    public function checkLocales(bool $force);
-
-    /**
-     * Check if current user has access rights
-     *
-     * @param mixed $rolelist roles (optional)
-     * 
-     * @return self
-     */
-    public function checkPermission($rolelist = 'admin');
-
-    /**
-     * Check and enforce current user rate limits
-     *
-     * @param integer $max Hits per second (optional)
-     * 
-     * @return self
-     */
-    public function checkRateLimit($max = self::LIMITER_MAXIMUM);
-
-    /**
-     * Set encrypted cookie
-     *
-     * @param string $name Cookie name
-     * @param string $data Cookie data
-     * 
-     * @return self
-     */
-    public function setCookie($name, $data);
-
-    /**
-     * Data setter
-     *
-     * @param mixed $data  array / key
-     * @param mixed $value value
-     * 
-     * @return self
-     */
-    public function setData($data, $value);
-
-    /**
-     * Force CSV checking
-     *
-     * @return self
-     */
-    public function setForceCsvCheck();
-
-    /**
-     * Set HTTP header for CSV content
-     *
-     * @return self
-     */
-    public function setHeaderCsv();
-
-    /**
-     * Set HTTP header for binary content
-     *
-     * @return self
-     */
-    public function setHeaderFile();
-
-    /**
-     * Set HTTP header for HTML content
-     *
-     * @return self
-     */
-    public function setHeaderHtml();
-
-    /**
-     * Set HTTP header for JavaScript content
-     *
-     * @return self
-     */
-    public function setHeaderJavaScript();
-
-    /**
-     * Set HTTP header for JSON content
-     *
-     * @return self
-     */
-    public function setHeaderJson();
-
-    /**
-     * Set HTTP header for PDF content
-     *
-     * @return self
-     */
-    public function setHeaderPdf();
-
-    /**
-     * Set HTTP header for TEXT content
-     *
-     * @return self
-     */
-    public function setHeaderText();
-
-    /**
-     * Set HTTP header for XML content
-     *
-     * @return self
-     */
-    public function setHeaderXML();
-
-    /**
-     * Set user identity
-     *
-     * @param array $identity Identity array
-     * 
-     * @return self
-     */
-    public function setIdentity($identity);
-
-    /**
-     * Set URL location and exit
-     *
-     * @param string  $location URL address (optional)
-     * @param integer $code     HTTP code (optional)
-     * 
-     * @return void
-     */
-    public function setLocation($location = null, $code = 303);
-
-    /**
-     * Clear encrypted cookie
-     *
-     * @param string $name Cookie name
-     * 
-     * @return object Singleton instance
-     */
-    public function clearCookie($name);
-
-    /**
-     * Purge Cloudflare cache
-     *
-     * @param array $cf Cloudflare authentication array
-     * 
-     * @return self
-     */
-    public function cloudflarePurgeCache($cf);
-
-    /**
-     * Data model expander
-     *
-     * @param array $data model by reference
-     * 
-     * @return self
-     */
-    public function dataExpander(&$data);
-
-    /**
-     * Logout
-     * 
-     * @return void
-     */
-    public function logout();
-
-    /**
-     * Post-load CSV data
-     *
-     * @param mixed $key string / array to be merged
-     * 
-     * @return self
-     */
-    public function postloadAppData($key);
-
-    /**
-     * Pre-load application CSV data
-     *
-     * @param string  $key   configuration array (optional)
-     * @param boolean $force load? (optional)
-     * 
-     * @return self
-     */
-    public function preloadAppData($key, $force);
-
-    /**
-     * Read application CSV data
-     *
-     * @param string $name CSV nickname (foobar)
-     * 
-     * @return mixed CSV data
-     */
-    public function readAppData($name);
-
-    /**
-     * Render HTML content from given template
-     *
-     * @param string $template Template name
-     * 
-     * @return string HTML output
-     */
-    public function renderHTML($template);
-
-    /**
-     * Write JSON data to output
-     *
-     * @param mixed $data     error code / data array
-     * @param array $headers  array of extra data (optional)
-     * @param mixed $switches JSON encoder switches
-     * 
-     * @return object instance
-     */
-    public function writeJsonData($data, $headers = [], $switches = null);
-
-    /**
-     * Abstract Processor
-     *
-     * @param mixed $param optional parameter
-     * 
-     * @abstract
-     * 
-     * @return object instance
-     */
-    public function process($param = null);
-
-    /**
-     * Get singleton object
-     *
-     * @static
-     * @final
-     * 
-     * @return self
-     */
-    public static function getInstance();
-
-    /**
-     * Get instance for testing
-     *
-     * @static
-     * @final
-     * 
-     * @return object Class instance
-     */
-    public static function getTestInstance();
-}
-
-/**
  * Abstract Presenter class
  *
  * @category CMS
@@ -451,7 +27,7 @@ interface IPresenter
  * @license  MIT https://gscloud.cz/LICENSE.txt
  * @link     https://github.com/GSCloud/lasagna
  */
-abstract class APresenter implements IPresenter
+abstract class APresenter
 {
     /* @var integer octal file mode for logs */
     const LOG_FILEMODE = 0664;
@@ -508,7 +84,7 @@ abstract class APresenter implements IPresenter
     const AUDITLOG_FILE = 'AuditLog.txt';
 
     /* @var integer octal file mode for Audit Log */
-    const AUDITLOG_FILEMODE = 0600;
+    const AUDITLOG_FILEMODE = 0644;
 
     /* @var array data model */
     public $data = [];
@@ -896,16 +472,10 @@ abstract class APresenter implements IPresenter
             $date = \date('c');
             $i = $this->getIdentity();
             $file = DATA . DS . self::AUDITLOG_FILE;
-            if (!\file_exists($file)) {
-                \touch($file);
-                \chmod($file, self::AUDITLOG_FILEMODE);
-            }
-            if (\file_exists($file) && \is_writable($file)) {
-                \file_put_contents(
-                    $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
-                    FILE_APPEND | LOCK_EX
-                );
-            }
+            \file_put_contents(
+                $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
+                FILE_APPEND | LOCK_EX
+            );
         }
         return $this;
     }
@@ -1151,7 +721,7 @@ abstract class APresenter implements IPresenter
             $this->setIdentity();
             return $this->identity;
         }
-        if (!$nonce = @\file_get_contents($file)) {
+        if (!$nonce = \file_get_contents($file)) {
             $this->addCritical('Cannot read nonce file!');
             $this->setLocation('/err/500');
         }
@@ -1516,7 +1086,7 @@ abstract class APresenter implements IPresenter
     }
 
     /**
-     * Check and enforce current user rate limits
+     * Enforce current user rate limits
      *
      * @param integer $max hits per limiter cache time (optional)
      * 
@@ -1527,13 +1097,16 @@ abstract class APresenter implements IPresenter
         if (CLI) {
             return $this;
         }
+        if (!\is_numeric($max)) {
+            return $this;
+        }
         $uuid = $this->getUID();
-        $rate_limit = "user_rate_limit_{$uuid}";
         $ban_rate = "user_ban_limit_{$uuid}";
-        $limiter_secs = $this->getData['limiter_secs'] ?? 5;
+        $rate_limit = "user_rate_limit_{$uuid}";
         $ban_secs = $this->getData['ban_secs'] ?? 1800;
+        $limiter_secs = $this->getData['limiter_secs'] ?? 5;
 
-        // ban limiting
+        // bans
         $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {

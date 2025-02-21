@@ -100,8 +100,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 // + MODEL
 define('ENGINE', 'Tesseract v2.4.4');
 $data['ENGINE'] = ENGINE;
-$data['codemirror'] = '6.65.7'; // CodeMirror version - the admin interface
-$data['admin_stub'] = '/tess/'; // admin URI stub - the admin interface
+$data['codemirror'] = '6.65.7'; // CodeMirror version to load in the admin interface
 
 // Base58 encoder
 $base58 = new \Tuupola\Base58;
@@ -170,6 +169,19 @@ defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
+
+// OFFLINE TEMPLATE
+$file = TEMPLATES . DS . 'offline.mustache';
+if (file_exists($file) && is_readable($file)) {
+    $offline = file_get_contents($file);
+    if (is_string($offline)) {
+        $offline = preg_replace("/[\n\r\t]/", '', $offline);
+        if (is_string($offline)) {
+            $offline = preg_replace("/\s+/", ' ', $offline);
+            $data['offline_template'] = $offline;
+        }
+    }
+}
 
 // running on Google OAuth origin server?
 $data['is_goauth_origin'] = false;
@@ -498,6 +510,7 @@ $controller = "\\GSC\\{$p}";
 
 // TIMER START
 \Tracy\Debugger::timer('PROCESS');
+bdump($controller);
 
 // RUN!
 $app = $controller::getInstance()->setData($data)->process();

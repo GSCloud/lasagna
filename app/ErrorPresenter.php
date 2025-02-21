@@ -53,7 +53,7 @@ class ErrorPresenter extends APresenter
         401 => "You are not unauthorized 👾",
         402 => "Payment is required 🤑",
         403 => "Access is forbidden ⛔️",
-        404 => "Not found! 😵",
+        404 => "Not found 😵",
         405 => "Method is not allowed 🤒",
         406 => "Not acceptable 🤒",
         409 => "Conflict 😒",
@@ -63,7 +63,7 @@ class ErrorPresenter extends APresenter
         416 => "Requested range not satisfiable 🙅",
         417 => "Expectation failed 🙅",
         420 => "Enhance your calm ⌛️",
-        429 => "You are banned for 30 minutes 🤯",
+        429 => "Enhance your calm ⌛️",
         500 => "Internal server error 👾",
         503 => "Service is currently unavailable 👾",
         600 => "This is an unsupported browser 🎠",
@@ -78,9 +78,13 @@ class ErrorPresenter extends APresenter
      */
     public function process($err = null)
     {
-        $this->setHeaderHtml();
+        // Model
+        if (!\is_array($data = $this->getData())) {
+            return $this;
+        }
 
-        // get the error code as a parameter or from the URL
+        $this->setHeaderHtml()->dataExpander($data);
+        
         $code = 404;
         if (\is_int($err)) {
             $code = $err;
@@ -94,37 +98,33 @@ class ErrorPresenter extends APresenter
             }
         }
 
-        // check code validity
+        // check validity
         if (!isset(self::CODESET[$code])) {
             $code = 404;
         }
         $error = self::CODESET[$code];
 
-        // set HTTP error code
+        // HTTP error code
         header("HTTP/1.1 {$code} {$error}");
 
-        // find error image extension
-        $img = "error.png";
+        // find error image
+        $image = "error.png";
         if (\file_exists(WWW . "/img/{$code}.png")) {
-            $img = "{$code}.png";
+            $image = "{$code}.png";
         } elseif (\file_exists(WWW . "/img/{$code}.jpg")) {
-            $img = "{$code}.jpg";
+            $image = "{$code}.jpg";
         } elseif (\file_exists(WWW . "/img/{$code}.webp")) {
-            $img = "{$code}.webp";
+            $image = "{$code}.webp";
         }
 
-        // HTML5 template
-        $template = '<!DOCTYPE html><html><head><meta charset="utf-8">';
-        $template .= '<meta http-equiv="x-ua-compatible" content="IE=edge"><body>';
-        $template .= "<center><h1><br>🤔 Error {$code}</h1>";
-        $template .= '<h2>' . self::MESSAGE[$code] . '</h2>';
-        $template .= '<h2><center><a rel=nofollow '
-            . 'style="color:red;text-decoration:none" href="/?nonce='
-            . $this->getNonce()
-            . '">click here to go the main page ↻</a></center></h2>';
-        $template .= "<img style='border:10px solid #000;' height='100%'"
-            . " alt='$error' "
-            . "src='https://cdn.gscloud.cz/img/$img'></center></body></html>";
-        return $this->setData("output", $this->renderHTML($template));
+        // render error template
+        $template = "error";
+        $message = self::MESSAGE[$code];
+        $data['code'] = $code;
+        $data['error'] = $error;
+        $data['image'] = $image;
+        $data['message'] = $message;
+        $output = $this->setData($data)->renderHTML($template);
+        return $this->setData('output', $output);
     }
 }
