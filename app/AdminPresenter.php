@@ -1254,6 +1254,10 @@ class AdminPresenter extends APresenter
                 'type' => 'type_token',
                 'class' => 'purple lighten-4'
             ],
+            'limiter' => [
+                'type' => 'type_limiter',
+                'class' => 'amber lighten-4'
+            ],
         ];
 
         $class = '';
