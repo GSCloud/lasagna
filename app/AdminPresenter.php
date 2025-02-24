@@ -108,9 +108,6 @@ class AdminPresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
-        // rate limiting
-        $this->checkRateLimit();
-
         // Config
         $cfg = $this->getCfg();
         if (!\is_array($cfg)) {
@@ -746,6 +743,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         default:
+            $this->checkRateLimit();
             $this->_unauthorizedAccess();
         }
         return $this;
