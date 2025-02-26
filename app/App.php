@@ -70,7 +70,7 @@ if (isset($_GET['clearall'])) {
     exit;
 }
 
-// inject prebaked base CSV locales (default, admin) into $cfg
+// inject PREBAKED CSV locales (default, admin) into $cfg
 if (array_key_exists('locales', $cfg)) {
     array_unshift($cfg['locales'], 'base.csv');
     unset($cfg['locales']['default']);
@@ -89,6 +89,7 @@ $blocked = (array) ($data['geoblock'] ?? [
     'T1',
 ]);
 $data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
+$data['country_id_' . $country] = true; // DATA: country_id_CS etc.
 if (!LOCALHOST && in_array($country, $blocked)) {
     header('HTTP/1.1 403 Not Found', true, 301);
     exit;
@@ -122,7 +123,7 @@ $data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?:
 $data['VERSION_TIMESTAMP'] = @filemtime(ROOT . DS . 'VERSION') ?: time();
 $data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
 
-// random hash set by administrator after cache purge
+// RANDOM HASH set by the administrator after CACHE PURGE
 $hash = DATA . DS . '_random_cdn_hash';
 if (file_exists($hash) && is_readable($hash)) {
     $hash = @file_get_contents($hash);
@@ -130,7 +131,6 @@ if (file_exists($hash) && is_readable($hash)) {
         $version = trim($hash);
     }
 }
-
 $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
 $data['cdn_trimmed'] = 'cdn-assets' . DS . $version;
 defined('CDN') || define('CDN', $data['CDN']);
@@ -170,10 +170,14 @@ defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'))
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 
-// OFFLINE TEMPLATE
-$file = TEMPLATES . DS . 'offline.mustache';
-if (file_exists($file) && is_readable($file)) {
-    $offline = file_get_contents($file);
+// OFFLINE TEMPLATE resolution
+$offline = TEMPLATES . DS . 'offline.mustache';
+$f2 = TEMPLATES . DS . strtolower('offline' . SS . "{$country}.mustache");
+if (file_exists($f2) && is_readable($f2)) {
+    $offline = $f2;
+}
+if (file_exists($offline) && is_readable($offline)) {
+    $offline = file_get_contents($offline);
     if (is_string($offline)) {
         $offline = preg_replace("/[\n\r\t]/", '', $offline);
         if (is_string($offline)) {
