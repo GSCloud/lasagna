@@ -172,7 +172,7 @@ defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/",
 
 // OFFLINE TEMPLATE resolution
 $offline = TEMPLATES . DS . 'offline.mustache';
-$f2 = TEMPLATES . DS . strtolower('offline' . SS . "{$country}.mustache");
+$f2 = TEMPLATES . DS . strtolower("offline_{$country}.mustache");
 if (file_exists($f2) && is_readable($f2)) {
     $offline = $f2;
 }
