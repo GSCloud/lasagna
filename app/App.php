@@ -89,7 +89,7 @@ $blocked = (array) ($data['geoblock'] ?? [
     'T1',
 ]);
 $data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
-$data['country_id_' . $country] = true; // DATA: country_id_CS etc.
+$data['country_id_' . $country] = true; // country_id_CZ etc.
 if (!LOCALHOST && in_array($country, $blocked)) {
     header('HTTP/1.1 403 Not Found', true, 301);
     exit;
