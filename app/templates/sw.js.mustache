@@ -28,16 +28,19 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-  {{#admin_group_admin}}return; // admin detected{{/admin_group_admin}}
+  {{#admin_group_admin}}return; // admin{{/admin_group_admin}}
+  {{#admin_group_manager}}return; // manager{{/admin_group_manager}}
+  {{#admin_group_editor}}return; // editor{{/admin_group_editor}}
   if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.method !== 'GET') return;
-  if (event.request.url.startsWith('https://accounts.google.com') === true) return;
+  if (event.request.url.startsWith('https://accounts.') === true) return;
   if (event.request.url.startsWith('https://cdn.') === true) return;
   if (event.request.url.endsWith('.flac') === true) return;
   if (event.request.url.endsWith('.mp3') === true) return;
   if (event.request.url.endsWith('.mp4') === true) return;
   if (event.request.url.endsWith('.mkv') === true) return;
   if (event.request.url.endsWith('.webm') === true) return;
+  if (event.request.url.indexOf('/config') !== -1) return;
   if (event.request.url.indexOf('/login') !== -1) return;
   if (event.request.url.indexOf('/logout') !== -1) return;
   if (event.request.url.indexOf('/print/') !== -1) return;
