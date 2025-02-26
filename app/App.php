@@ -172,18 +172,21 @@ defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/",
 
 // OFFLINE TEMPLATE resolution
 $offline = TEMPLATES . DS . 'offline.mustache';
-$f2 = TEMPLATES . DS . strtolower("offline_{$country}.mustache");
-if (file_exists($f2) && is_readable($f2)) {
-    $offline = $f2;
+$offline_local = TEMPLATES . DS . strtolower("offline_{$country}.mustache");
+if (file_exists($offline_local) && is_readable($offline_local)) {
+    $offline = $offline_local;
 }
 if (file_exists($offline) && is_readable($offline)) {
     $offline = file_get_contents($offline);
     if (is_string($offline)) {
         $offline = preg_replace("/[\n\r\t]/", '', $offline);
         if (is_string($offline)) {
-            $offline = preg_replace("/\s+/", ' ', $offline);
-            $data['offline_template'] = $offline;
+            $offline = preg_replace('/> +/', '>', $offline);
         }
+        if (is_string($offline)) {
+            $offline = preg_replace("/\s+/", ' ', $offline);
+        }
+        $data['offline_template'] = $offline;
     }
 }
 
@@ -506,7 +509,7 @@ default:
 }
 
 // PROFILER
-$data['time_data'] = round((float) \Tracy\Debugger::timer('DATA') * 1000, 2);
+$data['time_data'] = round((float) \Tracy\Debugger::timer('DATA') * 1000, 1);
 
 // SINGLETON TEMPLATE
 $data['controller'] = $p = ucfirst(strtolower($presenter[$view]['presenter'])) . 'Presenter'; // phpcs:ignore
@@ -514,7 +517,6 @@ $controller = "\\GSC\\{$p}";
 
 // TIMER START
 \Tracy\Debugger::timer('PROCESS');
-bdump($controller);
 
 // RUN!
 $app = $controller::getInstance()->setData($data)->process();
@@ -523,8 +525,8 @@ $model = $app->getData();
 
 // PROFILER
 $time1 = $model['time_data'];
-$time2 = $model['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 2); // phpcs:ignore
-$time3 = $model['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 2); // phpcs:ignore
+$time2 = $model['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 1); // phpcs:ignore
+$time3 = $model['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
 
 // X-HEADERS
 header('X-Engine: ' . ENGINE);
@@ -543,7 +545,7 @@ if ($limit && is_int($limit)) {
 // OUTPUT
 $output = $model['output'] ?? '';
 
-// TIMINGS
+// TIMING
 $fn = [
     "if(d.getElementById('time1'))d.getElementById('time1').textContent='{$time1}';",
     "if(d.getElementById('time2'))d.getElementById('time2').textContent='{$time2}';",
@@ -551,6 +553,7 @@ $fn = [
     "if(d.getElementById('limit'))d.getElementById('limit').textContent='{$limit}';",
 ];
 
+// OUTPUT + TIMING injection
 foreach (headers_list() as $h) {
     if (strpos($h, 'Content-Type: text/html;') === 0) {
         $output = str_replace(
@@ -559,13 +562,12 @@ foreach (headers_list() as $h) {
                 . $data['csp_nonce']
                 .'">(function(d){'
                 . join("\n", $fn)
-                . '})(document);</script></body>',
+                . "})(document);\n</script>\n</body>",
             $output
         );
         break;
     }
 }
-
 echo $output;
 
 // DEBUGGING
