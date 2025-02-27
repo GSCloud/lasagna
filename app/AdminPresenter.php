@@ -925,9 +925,11 @@ class AdminPresenter extends APresenter
      */
     private function _rebuildNonce()
     {
-        if (file_exists(DATA . DS . self::IDENTITY_NONCE_FILE)) {
-            @unlink(DATA . DS . self::IDENTITY_NONCE_FILE);
-        }
+        $file = DATA . DS . 'identity_nonce.key';
+        $nonce = \hash('sha256', \random_bytes(16) . time());
+        \file_put_contents($file, $nonce);
+        \chmod($file, 0600);
+        \error_log('Identity nonce written to file.');
         \clearstatcache();
         return $this->setIdentity();
     }
