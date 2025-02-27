@@ -929,8 +929,8 @@ class AdminPresenter extends APresenter
         $nonce = \hash('sha256', \random_bytes(16) . time());
         \file_put_contents($file, $nonce);
         \chmod($file, 0600);
-        \error_log('Identity nonce written to file.');
         \clearstatcache();
+        $this->addMessage('New identity nonce written to file.');
         return $this->setIdentity();
     }
 
@@ -943,7 +943,7 @@ class AdminPresenter extends APresenter
     {
         $file = DATA . DS . self::ADMIN_KEY;
         if (file_exists($file)) {
-            @unlink($file);
+            unlink($file);
         }
         return $this->_createAdminKey();
     }
