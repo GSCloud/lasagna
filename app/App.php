@@ -27,14 +27,6 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
 }
 
-$file = DATA . DS . 'identity_nonce.key';
-if (!file_exists($file)) {
-    $nonce = hash('sha256', random_bytes(16) . time());
-    file_put_contents($file, $nonce);
-    chmod($file, 0600);
-    error_log('Identity nonce written to file.');
-}
-
 // BLOCK BAD ROBOTS
 if (isset($cfg['block_robots']) && $cfg['block_robots']) {
     $bots = APP . DS . 'badrobots.txt';
@@ -51,6 +43,15 @@ if (isset($cfg['block_robots']) && $cfg['block_robots']) {
             }
         }
     }
+}
+
+// IDENTITY NONCE
+$file = DATA . DS . 'identity_nonce.key';
+if (!file_exists($file)) {
+    $nonce = hash('sha256', random_bytes(16) . time());
+    file_put_contents($file, $nonce);
+    chmod($file, 0600);
+    error_log('Identity nonce written to file.');
 }
 
 // DEFINE MODEL
