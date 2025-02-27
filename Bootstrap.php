@@ -195,7 +195,12 @@ $cfg = null;
 if (file_exists(CONFIG) && is_readable(CONFIG)) {
     $cfg_content = file_get_contents(CONFIG);
     if ($cfg_content) {
-        $cfg = Neon::decode($cfg_content);
+        try {
+            $cfg = Neon::decode($cfg_content);
+        } catch (\Nette\Neon\Exception $e) {
+            error_log("Error parsing NE-ON file: " . CONFIG);
+            die('FATAL ERROR: '. $e->getMessage());
+        }
     } else {
         $cfg = null;
     }
@@ -209,11 +214,12 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 $arr = Neon::decode($content);
             }
             if (!is_array($arr)) {
-                throw new Exception('INVALID PRIVATE CONFIG');
+                error_log("Error parsing NE-ON file: " . CONFIG_PRIVATE);
+                die('INVALID PRIVATE CONFIG!');
             }
             $cfg = array_replace_recursive($cfg, $arr);
         }
-    } catch (Exception $e) {
+    } catch (\Nette\Neon\Exception $e) {
         die('FATAL ERROR: ' . $e->getMessage());
     }
     try {
@@ -224,17 +230,21 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                     $arr = Neon::decode($content);
                 }
                 if (!is_array($arr)) {
-                    throw new Exception('INVALID DOCKER CONFIG');
+                    error_log("Error parsing NE-ON file: " . CONFIG_DOCKER);
+                    die('INVALID DOCKER CONFIG!');
                 }
                 $cfg = array_replace_recursive($cfg, $arr);
             }
         }
-    } catch (Exception $e) {
+    } catch (\Nette\Neon\Exception $e) {
         die('FATAL ERROR: ' . $e->getMessage());
     }
+} else {
+    error_log('FATAL ERROR: CONFIG file not found!');
+    die('FATAL ERROR: CONFIG file not found!');
 }
 if (!is_array($cfg)) {
-    die('FATAL ERROR: INVALID CONFIG');
+    die('FATAL ERROR: INVALID CONFIG!');
 }
 
 // DEFAULT TIME ZONE

@@ -80,7 +80,7 @@ if (array_key_exists('locales', $cfg)) {
 // backup original $cfg values
 $data['cfg'] = $cfg;
 
-// CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anonymous
+// CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anon.
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
     'BY',
@@ -89,7 +89,7 @@ $blocked = (array) ($data['geoblock'] ?? [
     'T1',
 ]);
 $data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
-$data['country_id_' . $country] = true; // country_id_CZ etc.
+$data["country_id_{$country}"] = true; // country_id_CZ etc.
 if (!LOCALHOST && in_array($country, $blocked)) {
     header('HTTP/1.1 403 Not Found', true, 301);
     exit;
@@ -334,19 +334,25 @@ array_push($routes, 'router.neon'); // main router
 $data['router_files'] = $routes;
 
 // ROUTING TABLES
-foreach ($routes as $r) {
-    $r = APP . DS . $r;
-    if (($content = @file_get_contents($r)) === false) {
+foreach ($routes as $routeFileName) {
+    $route = APP . DS . $routeFileName;
+    if (($content = file_get_contents($route)) === false) {
         if (ob_get_level()) {
             @ob_end_clean();
         }
         header('HTTP/1.1 500 Internal Server Error');
-        echo "<h1>Server Error</h1><h2>Routing table:</h2><h3>{$r}</h3>";
+        echo "<h1>Server Error</h1><h2>Routing table:</h2><h3>{$routeFileName}</h3>";
+        error_log("Error loading routing file: " . $route);
         exit;
     }
-    $next = @Neon::decode($content);
-    if (is_array($next)) {
-        $router = array_replace_recursive($router, $next);
+    try {
+        $next = Neon::decode($content);
+        if (is_array($next)) {
+            $router = array_replace_recursive($router, $next);
+        }
+    } catch (\Nette\Neon\Exception $e) {
+        error_log("Error parsing NE-ON file: " . $e->getMessage());
+        die("Error parsing NE-ON file: " . $e->getMessage());
     }
 }
 
