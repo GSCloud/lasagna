@@ -637,23 +637,9 @@ abstract class APresenter
             'name' => '',
         ];
         $file = DATA . DS . self::IDENTITY_NONCE_FILE; // nonce file
-        if (!\file_exists($file)) {
-            try {
-                $nonce = \hash('sha256', \random_bytes(1024) . \time());
-                if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-                    $this->addCritical('Write nonce file failed!');
-                    $this->setLocation('/err/500');
-                }
-                @\chmod($file, 0660);
-                $this->addMessage('ADMIN: Nonce file created.');
-            } catch (\Exception $e) {
-                $this->addCritical("Create nonce file failed! Exception:\n" . $e->getMessage()); // phpcs:ignore
-                $this->setLocation('/err/500');
-            }
-        }
-        if (!$nonce = @\file_get_contents($file)) {
-            $this->addCritical('Read nonce file failed!');
-            $this->setLocation('/err/500');
+        if (!$nonce = \file_get_contents($file)) {
+            error_log('Read nonce file failed!');
+            die('Read nonce file failed!');
         }
         $i['nonce'] = \substr(\trim($nonce), 0, 16);
         // check all keys
@@ -715,17 +701,13 @@ abstract class APresenter
         if ($id && $email && $name) {
             return $this->identity;
         }
+
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (!\file_exists($file)) {
-            // set empty identity
-            $this->setIdentity();
-            return $this->identity;
-        }
         if (!$nonce = \file_get_contents($file)) {
-            $this->addCritical('Cannot read nonce file!');
-            $this->setLocation('/err/500');
+            die('Error reading nonce file!');
         }
         $nonce = \substr(\trim($nonce), 0, 16);
+
         $i = [
             'avatar' => '',
             'country' => '',
@@ -734,47 +716,44 @@ abstract class APresenter
             'ip' => '',
             'name' => '',
         ];
-        do {
-            if (isset($_GET['identity'])) {
-                $tls = '';
-                if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-                    $tls = 's';
-                }
-                $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']);
-                $this->setLocation(
-                    "http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
-                );
+        if (isset($_GET['identity'])) {
+            $tls = '';
+            if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+                $tls = 's';
             }
-            if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
-                // COOKIE identity
-                $x = 0;
-                $q = \json_decode(
-                    $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
-                );
-                if (!\is_array($q)) {
+            $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']);
+            $this->setLocation(
+                "http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
+            );
+        }
+        if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
+            // COOKIE identity
+            $x = 0;
+            $q = \json_decode(
+                $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
+            );
+            if (!\is_array($q)) {
+                $x++;
+            } else {
+                if (!\array_key_exists('email', $q)) {
                     $x++;
-                } else {
-                    if (!\array_key_exists('email', $q)) {
-                        $x++;
-                    }
-                    if (!\array_key_exists('id', $q)) {
-                        $x++;
-                    }
-                    if (!\array_key_exists('nonce', $q)) {
-                        $x++;
-                    }
                 }
-                if ($x) {
-                    $this->logout(); // something is terribly wrong!!!
+                if (!\array_key_exists('id', $q)) {
+                    $x++;
                 }
-                if ($q['nonce'] == $nonce) { // compare nonces
-                    $this->identity = $q; // set identity
-                    break;
+                if (!\array_key_exists('nonce', $q)) {
+                    $x++;
                 }
             }
-            $this->setIdentity($i); // set empty identity
-            break;
-        } while (true);
+            if ($x) {
+                die('Something is terribly wrong!!!');
+            }
+            if ($q['nonce'] === $nonce) { // compare nonces
+                $this->identity = $q;
+                return $this->identity;
+            }
+        }
+        $this->setIdentity($i); // set empty identity
         return $this->identity;
     }
 

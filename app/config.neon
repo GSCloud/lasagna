@@ -1,8 +1,8 @@
 ### LASAGNA
 # @author Fred Brooker <git@gscloud.cz>
 
-#dbg: TRUE
-dbg: FALSE
+dbg: TRUE
+#dbg: FALSE
 
 # core
 app: lasagna
