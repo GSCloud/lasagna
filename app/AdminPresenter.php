@@ -930,7 +930,6 @@ class AdminPresenter extends APresenter
         \file_put_contents($file, $nonce);
         \chmod($file, 0600);
         \clearstatcache();
-        $this->addMessage('New identity nonce written to file.');
         return $this->setIdentity();
     }
 

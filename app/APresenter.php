@@ -638,14 +638,14 @@ abstract class APresenter
             'name' => '',
         ];
 
-        $file = DATA . DS . self::IDENTITY_NONCE_FILE; // nonce file
+        $file = DATA . DS . self::IDENTITY_NONCE_FILE;
         if (!$nonce = \file_get_contents($file)) {
             error_log('Read nonce file failed!');
             die('Read nonce file failed!');
         }
         $i['nonce'] = \substr(\trim($nonce), 0, 16);
 
-        // check all keys
+        // check all relevant keys
         if (\array_key_exists('avatar', $identity)) {
             $i['avatar'] = (string) $identity['avatar'];
         }
@@ -675,7 +675,6 @@ abstract class APresenter
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
-            // encrypted cookie
             $this->setCookie($app, \json_encode($out));
         } else {
             $this->clearCookie($app);
@@ -700,7 +699,6 @@ abstract class APresenter
             ];
         }
 
-        // check current identity
         $id = $this->identity['id'] ?? null;
         $email = $this->identity['email'] ?? null;
         $name = $this->identity['name'] ?? null;
@@ -710,10 +708,12 @@ abstract class APresenter
 
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
         if (!$nonce = \file_get_contents($file)) {
+            error_log('Error reading nonce file!');
             die('Error reading nonce file!');
         }
         $nonce = \substr(\trim($nonce), 0, 16);
 
+        // identity structure
         $i = [
             'avatar' => '',
             'country' => '',
@@ -737,9 +737,7 @@ abstract class APresenter
         // COOKIE identity
         if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
             $x = 0;
-            $q = \json_decode(
-                $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
-            );
+            $q = \json_decode($this->getCookie($this->getCfg('app') ?? 'app')?? '', true); // phpcs:ignore
             if (!\is_array($q)) {
                 $x++;
             } else {
@@ -753,17 +751,19 @@ abstract class APresenter
                     $x++;
                 }
             }
+
             if ($x) {
-                $this->setIdentity($i); // set empty identity
+                // set default identity when errors
+                $this->setIdentity($i);
                 return $this->identity;
-                //die('Something is terribly wrong!!!');
             }
-            if ($q['nonce'] === $nonce) { // compare nonces
-                $this->identity = $q;
+            if ($q['nonce'] === $nonce) {
+                $this->setIdentity($q);
                 return $this->identity;
             }
         }
-        $this->setIdentity($i); // set empty identity
+        // set default identity
+        $this->setIdentity($i);
         return $this->identity;
     }
 
