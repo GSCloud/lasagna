@@ -35,10 +35,6 @@ GetXMLSitemap:
   path: /sitemap.xml
   presenter: core
 
-GetRSSXML:
-  path: /rss.xml
-  presenter: core
-
 GetServiceWorker:
   path: /sw.js
   presenter: core

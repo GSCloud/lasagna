@@ -628,6 +628,7 @@ abstract class APresenter
         if (!\is_array($identity)) {
             $identity = [];
         }
+
         $i = [
             'avatar' => '',
             'country' => '',
@@ -636,12 +637,14 @@ abstract class APresenter
             'ip' => '',
             'name' => '',
         ];
+
         $file = DATA . DS . self::IDENTITY_NONCE_FILE; // nonce file
         if (!$nonce = \file_get_contents($file)) {
             error_log('Read nonce file failed!');
             die('Read nonce file failed!');
         }
         $i['nonce'] = \substr(\trim($nonce), 0, 16);
+
         // check all keys
         if (\array_key_exists('avatar', $identity)) {
             $i['avatar'] = (string) $identity['avatar'];
@@ -655,9 +658,11 @@ abstract class APresenter
         if (\array_key_exists('name', $identity)) {
             $i['name'] = (string) $identity['name'];
         }
+
         // set other values
         $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         $i['ip'] = $this->getIP();
+
         // shuffle keys
         $out = [];
         $keys = \array_keys($i);
@@ -665,6 +670,7 @@ abstract class APresenter
         foreach ($keys as $k) {
             $out[$k] = $i[$k];
         }
+
         // set new identity
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
@@ -716,6 +722,7 @@ abstract class APresenter
             'ip' => '',
             'name' => '',
         ];
+
         if (isset($_GET['identity'])) {
             $tls = '';
             if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
@@ -726,8 +733,9 @@ abstract class APresenter
                 "http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
             );
         }
+
+        // COOKIE identity
         if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
-            // COOKIE identity
             $x = 0;
             $q = \json_decode(
                 $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
@@ -746,7 +754,9 @@ abstract class APresenter
                 }
             }
             if ($x) {
-                die('Something is terribly wrong!!!');
+                $this->setIdentity($i); // set empty identity
+                return $this->identity;
+                //die('Something is terribly wrong!!!');
             }
             if ($q['nonce'] === $nonce) { // compare nonces
                 $this->identity = $q;
