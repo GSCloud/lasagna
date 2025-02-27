@@ -231,6 +231,7 @@ ifeq ($(origin TAG), undefined)
 	$(error "TAG is not defined")
 endif
 	@echo "volumes: ${BOLD}app/config_private.neon${RESET}\n"
+	@echo "docker run -d --rm --name ${NAME} -p ${PORT}:80 ${TAG}\n"
 	@docker run -d --rm --name ${NAME} -p ${PORT}:80 -v "$$(pwd)/app/config_private.neon":/var/www/app/config_private.neon ${TAG}
 	@echo "\n🚀 http://localhost:${PORT}\n"
 
