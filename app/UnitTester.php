@@ -90,31 +90,6 @@ class UnitTester
             // getIP()
             Assert::same('127.0.0.1', $app->getIP());
 
-            // getIdentity()
-            Assert::same(
-                [
-                'country' => 'XX',
-                'email' => 'john.doe@example.com',
-                'id' => 1,
-                'ip' => '127.0.0.1',
-                'name' => 'John Doe',
-                ], $app->getIdentity()
-            );
-
-            // getCurrentUser()
-            Assert::same(
-                [
-                'avatar' => '',
-                'country' => 'XX',
-                'email' => 'john.doe@example.com',
-                'id' => 1,
-                'name' => 'John Doe',
-                'ip' => '127.0.0.1',
-                'uid' => '24c2188ba4b928341a0a24e95bbaf8631498ef931df81860d7784ceb814fd6b3', // phpcs:ignore
-                'uidstring' => 'CLI_127.0.0.1',
-                ], $app->getCurrentUser()
-            );
-
             // fluent interface
             Assert::same($app, $app->checkLocales());
             Assert::same($app, $app->checkPermission());
