@@ -691,11 +691,11 @@ abstract class APresenter
     {
         if (CLI) {
             return [
-                'country' => 'XX',
-                'email' => 'john.doe@example.com',
                 'id' => 1,
                 'ip' => '127.0.0.1',
                 'name' => 'John Doe',
+                'email' => 'john.doe@example.com',
+                'country' => 'XX',
             ];
         }
 
@@ -707,11 +707,16 @@ abstract class APresenter
         }
 
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (!$nonce = \file_get_contents($file)) {
-            error_log('Error reading nonce file!');
-            die('Error reading nonce file!');
+        if (file_exists($file) && is_readable($file)) {
+            if ($nonceContents = @file_get_contents($file) === false) {
+                error_log('Error reading nonce file!');
+                die('Error reading nonce file!');
+            }
+        } else {
+            error_log('Missing nonce file!');
+            die('Missing nonce file!');
         }
-        $nonce = \substr(\trim($nonce), 0, 16);
+        $nonce = substr(trim($nonceContents), 0, 16);
 
         // identity structure
         $i = [

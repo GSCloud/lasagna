@@ -83,7 +83,7 @@ class ErrorPresenter extends APresenter
             return $this;
         }
 
-        $this->setHeaderHtml()->dataExpander($data);
+        $this->setHeaderHtml();
         
         $code = 404;
         if (\is_int($err)) {
