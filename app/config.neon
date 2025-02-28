@@ -10,6 +10,7 @@ canonical_url: "https://lasagna.gscloud.cz/"
 date_default_timezone: "Europe/Prague"
 project: LASAGNA
 secret_cookie_key: secure.key
+identity_nonce_key: identity_nonce.key
 version: v1
 
 # Google OAuth 2.0

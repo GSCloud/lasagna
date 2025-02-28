@@ -1237,6 +1237,10 @@ class AdminPresenter extends APresenter
                 'type' => 'type_file_upload',
                 'class' => 'blue lighten-4'
             ],
+            'halite' => [
+                'type' => 'type_admin',
+                'class' => 'green lighten-4'
+            ],
             'download' => [
                 'type' => 'type_download',
                 'class' => 'grey lighten-2'
@@ -1276,8 +1280,10 @@ class AdminPresenter extends APresenter
         $this->_lastlog = $x[1];
 
         $x[1] = \str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
-        $x[1] = \str_replace('OAuth login', '<b>OAuth login</b>', $x[1]);
         $x[1] = \str_replace('Download', '<b>Download</b>', $x[1]);
+        $x[1] = \str_replace('HALITE', '<b>HALITE</b>', $x[1]);
+        $x[1] = \str_replace('admin', '<b>admin</b>', $x[1]);
+        $x[1] = \str_replace('manager', '<b>manager</b>', $x[1]);
 
         $val = "<tr data-type='{$type}'"
             . " class='logrow {$type} {$class}'"

@@ -31,11 +31,11 @@ foreach ([
 if (isset($cfg['block_robots']) && $cfg['block_robots']) {
     $bots = APP . DS . 'badrobots.txt';
     if (file_exists($bots) && is_readable($bots)) {
-        $blockedUA = @file($bots, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $blockedUA = file($bots, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if (is_array($blockedUA) && isset($_SERVER['HTTP_USER_AGENT'])) {
-            $ua = trim($_SERVER['HTTP_USER_AGENT']);
-            foreach ($blockedUA as $x) {
-                if (stripos($ua, trim($x)) !== false) {
+            $ua = strtolower(trim($_SERVER['HTTP_USER_AGENT']));
+            foreach ($blockedUA as $badBot) {
+                if (strpos($ua, strtolower(trim($badBot))) !== false) {
                     header("HTTP/1.1 403 Forbidden");
                     echo "You are not authorized to access this page.";
                     exit;
@@ -46,48 +46,57 @@ if (isset($cfg['block_robots']) && $cfg['block_robots']) {
 }
 
 // IDENTITY NONCE
-$file = DATA . DS . 'identity_nonce.key';
+$file = DATA . DS . ($cfg['identity_nonce.key'] ?? 'identity_nonce.key');
 if (!file_exists($file)) {
     $nonce = hash('sha256', random_bytes(16) . time());
-    file_put_contents($file, $nonce);
-    chmod($file, 0600);
-    error_log('Identity nonce written to file.');
+    if (file_put_contents($file, $nonce) === false) {
+        error_log('Failed to write identity nonce to file.');
+        die('Failed to write identity nonce to file.');
+    } else {
+        if (!chmod($file, 0600)) {
+            error_log('Failed to set permissions on identity nonce file.');
+            die('Failed to set permissions on identity nonce file.');
+        }
+        error_log('Identity nonce written to file.');
+    }
 }
-
-// DEFINE MODEL
-$cfg = $data = $cfg ?? [];
 
 // CLEAR COOKIES on ?logout
 if (isset($_GET['logout'])) {
-    $cu = $cfg['canonical_url'];
-    $go = $cfg['goauth_origin'];
-    $lgo = $cfg['local_goauth_origin'];
-    $go = LOCALHOST ? $lgo : $cu ?? $go;
+    $canonicalUrl = $cfg['canonical_url'] ?? null;
+    $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
+    $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
+    $redirectUrl = LOCALHOST ? ($canonicalUrl ?? $localGoogleOAuthOrigin) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
+    error_log('Logout triggered from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown')); // phpcs:ignore
     header('Clear-Site-Data: "cookies"');
-    header("Location: {$go}", true, 303);
+    header("Location: " . ($redirectUrl ?? '/'), true, 303);
     exit;
 }
 
 // CLEAR EVERYTHING on ?clearall
 if (isset($_GET['clearall'])) {
-    $cu = $cfg['canonical_url'];
-    $go = $cfg['goauth_origin'];
-    $lgo = $cfg['local_goauth_origin'];
-    $go = LOCALHOST ? $lgo : $cu ?? $go;
+    $canonicalUrl = $cfg['canonical_url'] ?? null;
+    $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
+    $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
+    $redirectUrl = LOCALHOST ? ($canonicalUrl ?? $localGoogleOAuthOrigin) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
+    error_log('Clearall triggered from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown')); // phpcs:ignore
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
-    header("Location: {$go}", true, 303);
+    header("Location: " . ($redirectUrl ?? '/'), true, 303);
     exit;
 }
 
-// inject PREBAKED CSV locales (default, admin) into $cfg
-if (array_key_exists('locales', $cfg)) {
-    array_unshift($cfg['locales'], 'base.csv');
-    unset($cfg['locales']['default']);
-    unset($cfg['locales']['admin']);
-}
+// TIMER START
+\Tracy\Debugger::timer('DATA');
 
-// backup original $cfg values
-$data['cfg'] = $cfg;
+// MODEL
+$cfg = $cfg ?? [];
+
+// LANGUAGE - PREBAKED CSV (default, admin)
+if (isset($cfg['locales'])) {
+    array_unshift($cfg['locales'], 'base.csv');
+}
+$data = $cfg;
+$data['cfg'] = $cfg; // $cfg shallow backup
 
 // CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anon.
 $blocked = (array) ($data['geoblock'] ?? [
@@ -103,9 +112,6 @@ if (!LOCALHOST && in_array($country, $blocked)) {
     header('HTTP/1.1 403 Not Found', true, 301);
     exit;
 }
-
-// TIMER START
-\Tracy\Debugger::timer('DATA');
 
 // + MODEL
 define('ENGINE', 'Tesseract v2.4.5');
