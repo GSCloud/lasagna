@@ -579,7 +579,7 @@ abstract class APresenter
             $name = self::COOKIE_UID;
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
-                if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
+                if (!preg_match('/^[a-f0-9]{16}$/', $uid)) {
                     $this->addError("Invalid UUID cookie.");
                     unset($_COOKIE[$name]);
                 }
@@ -628,7 +628,6 @@ abstract class APresenter
         if (!\is_array($identity)) {
             $identity = [];
         }
-
         $i = [
             'avatar' => '',
             'country' => '',
@@ -637,15 +636,27 @@ abstract class APresenter
             'ip' => '',
             'name' => '',
         ];
-
-        $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (!$nonce = \file_get_contents($file)) {
-            error_log('Read nonce file failed!');
-            die('Read nonce file failed!');
+        $file = DATA . DS . self::IDENTITY_NONCE_FILE; // nonce file
+        if (!\file_exists($file)) {
+            try {
+                $nonce = \hash('sha256', \random_bytes(1024) . \time());
+                if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
+                    $this->addCritical('Write nonce file failed!');
+                    $this->setLocation('/err/500');
+                }
+                @\chmod($file, 0660);
+                $this->addMessage('ADMIN: Nonce file created.');
+            } catch (\Exception $e) {
+                $this->addCritical("Create nonce file failed! Exception:\n" . $e->getMessage()); // phpcs:ignore
+                $this->setLocation('/err/500');
+            }
+        }
+        if (!$nonce = @\file_get_contents($file)) {
+            $this->addCritical('Read nonce file failed!');
+            $this->setLocation('/err/500');
         }
         $i['nonce'] = \substr(\trim($nonce), 0, 16);
-
-        // check all relevant keys
+        // check all keys
         if (\array_key_exists('avatar', $identity)) {
             $i['avatar'] = (string) $identity['avatar'];
         }
@@ -658,11 +669,9 @@ abstract class APresenter
         if (\array_key_exists('name', $identity)) {
             $i['name'] = (string) $identity['name'];
         }
-
         // set other values
         $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         $i['ip'] = $this->getIP();
-
         // shuffle keys
         $out = [];
         $keys = \array_keys($i);
@@ -670,11 +679,11 @@ abstract class APresenter
         foreach ($keys as $k) {
             $out[$k] = $i[$k];
         }
-
         // set new identity
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
+            // encrypted cookie
             $this->setCookie($app, \json_encode($out));
         } else {
             $this->clearCookie($app);
@@ -691,34 +700,32 @@ abstract class APresenter
     {
         if (CLI) {
             return [
+                'country' => 'XX',
+                'email' => 'john.doe@example.com',
                 'id' => 1,
                 'ip' => '127.0.0.1',
                 'name' => 'John Doe',
-                'email' => 'john.doe@example.com',
-                'country' => 'XX',
             ];
         }
 
+        // check current identity
         $id = $this->identity['id'] ?? null;
         $email = $this->identity['email'] ?? null;
         $name = $this->identity['name'] ?? null;
         if ($id && $email && $name) {
             return $this->identity;
         }
-
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (file_exists($file) && is_readable($file)) {
-            if ($nonceContents = @file_get_contents($file) === false) {
-                error_log('Error reading nonce file!');
-                die('Error reading nonce file!');
-            }
-        } else {
-            error_log('Missing nonce file!');
-            die('Missing nonce file!');
+        if (!\file_exists($file)) {
+            // set empty identity
+            $this->setIdentity();
+            return $this->identity;
         }
-        $nonce = substr(trim($nonceContents), 0, 16);
-
-        // identity structure
+        if (!$nonce = \file_get_contents($file)) {
+            $this->addCritical('Cannot read nonce file!');
+            $this->setLocation('/err/500');
+        }
+        $nonce = \substr(\trim($nonce), 0, 16);
         $i = [
             'avatar' => '',
             'country' => '',
@@ -727,48 +734,47 @@ abstract class APresenter
             'ip' => '',
             'name' => '',
         ];
-
-        if (isset($_GET['identity'])) {
-            $tls = '';
-            if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-                $tls = 's';
-            }
-            $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']);
-            $this->setLocation(
-                "http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
-            );
-        }
-
-        // COOKIE identity
-        if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
-            $x = 0;
-            $q = \json_decode($this->getCookie($this->getCfg('app') ?? 'app')?? '', true); // phpcs:ignore
-            if (!\is_array($q)) {
-                $x++;
-            } else {
-                if (!\array_key_exists('email', $q)) {
-                    $x++;
+        do {
+            if (isset($_GET['identity'])) {
+                $tls = '';
+                if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+                    $tls = 's';
                 }
-                if (!\array_key_exists('id', $q)) {
+                $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']);
+                $this->setLocation(
+                    "http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
+                );
+            }
+            if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
+                // COOKIE identity
+                $x = 0;
+                $q = \json_decode(
+                    $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
+                );
+                if (!\is_array($q)) {
                     $x++;
+                } else {
+                    if (!\array_key_exists('email', $q)) {
+                        $x++;
+                    }
+                    if (!\array_key_exists('id', $q)) {
+                        $x++;
+                    }
+                    if (!\array_key_exists('nonce', $q)) {
+                        $x++;
+                    }
                 }
-                if (!\array_key_exists('nonce', $q)) {
-                    $x++;
+                if ($x) {
+                    $this->logout(); // something is terribly wrong!!!
+                }
+                if ($q['nonce'] == $nonce) { // compare nonces
+                    $this->identity = $q; // set identity
+                    break;
                 }
             }
-
-            if ($x) {
-                // set default identity when errors
-                $this->setIdentity($i);
-                return $this->identity;
-            }
-            if ($q['nonce'] === $nonce) {
-                $this->setIdentity($q);
-                return $this->identity;
-            }
-        }
-        // set default identity
-        $this->setIdentity($i);
+            $this->setIdentity($i); // set empty identity
+            break;
+        } while (true);
         return $this->identity;
     }
 

@@ -79,6 +79,11 @@ month_2p_11,MONTHS,November,listopadu,novembra,November
 month_2p_12,MONTHS,December,prosince,decembra,Dezember
 meta_viewport,PARAMS,"width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0"
 gsc_footer_img_size,PARAMS,48,48,48,48
+title,DEMO,DEMO,DEMO,DEMO,DEMO
+main,DEMO,DEMO,DEMO,DEMO,DEMO
+shortcodes,DEMO,DEMO,DEMO,DEMO,DEMO
+nav_czech,DEMO,Česky,Česky,Česky,Česky
+nav_english,DEMO,English,English,English,English
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
 a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER

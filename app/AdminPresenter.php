@@ -1355,6 +1355,7 @@ class AdminPresenter extends APresenter
             'admin: file deleted' => 'file_delete',
             'admin: file(s) uploaded' => 'file_upload',
             'download' => 'download',
+            'halite' => 'system',
             'limiter' => 'limiter',
             'oauth' => 'oauth',
             'remote' => 'remote',
