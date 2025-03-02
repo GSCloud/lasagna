@@ -75,7 +75,7 @@ class LoginPresenter extends APresenter
         $errors = [];
         if (!empty($_GET['error'])) {
             $error = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
-            $this->addError("OAuth: failure. Message:\n" . $error);
+            $this->addError("OAuth failure. Message:\n" . $error);
         } elseif (empty($_GET['code'])) {
             $email = $_GET['login_hint'] ?? $_COOKIE['login_hint'] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : '';
@@ -103,21 +103,24 @@ class LoginPresenter extends APresenter
                 );
                 $this->setIdentity(
                     [
-                        'avatar' => $ownerDetails->getAvatar(),
-                        'email' => $ownerDetails->getEmail(),
                         'id' => $ownerDetails->getId(),
                         'name' => $ownerDetails->getName(),
+                        'email' => $ownerDetails->getEmail(),
+                        'avatar' => $ownerDetails->getAvatar(),
+                        'provider' => 'google',
                     ]
                 );
                 $group = $this->getUserGroup();
-                $this->addMessage("OAuth login. User group: [{$group}]");
+                if (!empty($group)) {
+                    $this->addMessage("OAuth login. User group: [{$group}]");
+                }
                 if ($group === 'admin') {
                     if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
                         \setcookie('tracy-debug', $this->getCfg('DEBUG_COOKIE'));
                     }
                 }
                 $this->clearCookie('oauth2state');
-                if (\strlen($ownerDetails->getEmail())) {
+                if (strlen($ownerDetails->getEmail())) {
                     \setcookie(
                         'login_hint',
                         $ownerDetails->getEmail() ?? '',
@@ -137,9 +140,17 @@ class LoginPresenter extends APresenter
                 $this->setLocation();
 
             } catch (\Exception $e) {
-                $this->addError("OAuth: failure. Message:\n" . $e->getMessage());
+                $err = $e->getMessage();
+                $this->addError("OAuth exception. Message:\n" . $err);
+                ErrorPresenter::getInstance()->process(
+                    [
+                        'code' => 403,
+                        'message' => $err,
+                    ]
+                );
             }
         }
-        $this->setLocation('/err/403');
+        $this->addError("OAuth general error.");
+        ErrorPresenter::getInstance()->process(403);
     }
 }

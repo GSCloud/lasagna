@@ -84,7 +84,7 @@ class CorePresenter extends APresenter
             $this->setHeaderText();
             $file = APP . DS . 'badrobots.txt';
             $bots = [];
-            if (\file_exists($file) && \is_readable($file)) {
+            if (file_exists($file) && is_readable($file)) {
                 $bots = \file(
                     // bad bots
                     APP . DS . 'badrobots.txt',
@@ -114,7 +114,7 @@ class CorePresenter extends APresenter
             $map = [];
             foreach ($presenter as $p) {
                 if (isset($p["sitemap"]) && $p["sitemap"]) {
-                    $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
+                    $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
                 }
             }
             return $this->setData(
@@ -127,7 +127,7 @@ class CorePresenter extends APresenter
             $map = [];
             foreach ($presenter as $p) {
                 if (isset($p["sitemap"]) && $p["sitemap"]) {
-                    $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
+                    $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
                 }
             }
             return $this->setData(
@@ -154,11 +154,12 @@ class CorePresenter extends APresenter
             $this->checkRateLimit();
             $x = 0;
             if (!\is_array($match)) {
+                $this->addError('GetQR: Parameters mismatch.');
                 $this->setLocation('/err/404');
             }
             $scale = 5;
             if ($match && \is_array($match) && isset($match["params"]["size"])) {
-                $size = \trim((string) $match["params"]["size"]);
+                $size = trim((string) $match["params"]["size"]);
                 $size = \strtolower($size);
                 switch ($size) {
                 case "x":
@@ -178,7 +179,7 @@ class CorePresenter extends APresenter
             }
             $text = 'Hello World!';
             if ($match && \is_array($match) && isset($match["params"]["trailing"])) {
-                $text = \trim((string) $match["params"]["trailing"]);
+                $text = trim((string) $match["params"]["trailing"]);
                 $x++;
             }
             if ($x !== 2) {
@@ -222,6 +223,7 @@ class CorePresenter extends APresenter
         case "GetCoreVersion":
             $this->checkRateLimit();
             if (!\is_array($data)) {
+                $this->addError('GetCoreVersion: Data consistency error.');
                 $this->setLocation('/err/404');
             }
             $d = [];
@@ -244,11 +246,11 @@ class CorePresenter extends APresenter
                 return $this->writeJsonData(400, $extras);
             }
             if (isset($match["params"]["profile"])) {
-                $profile = \trim($match["params"]["profile"]);
+                $profile = trim($match["params"]["profile"]);
                 $x++;
             }
             if (isset($match["params"]["hash"])) {
-                $hash = \trim($match["params"]["hash"]);
+                $hash = trim($match["params"]["hash"]);
                 $x++;
             }
             if ($x !== 2) {
@@ -263,9 +265,9 @@ class CorePresenter extends APresenter
             $data = "";
             $time = null;
             $f = DATA . "/summernote_{$profile}_{$hash}.json";
-            if (\file_exists($f)) {
-                $data = @\file_get_contents($f);
-                $time = \filemtime($f);
+            if (file_exists($f)) {
+                $data = @file_get_contents($f);
+                $time = filemtime($f);
             }
             if (!$data) {
                 $data = '';
@@ -334,7 +336,7 @@ class CorePresenter extends APresenter
                         // do not link to path with parameters!
                         "linkit" => !(\strpos($p["path"], "[") ?: false),
                         "method" => \strtoupper($p["method"]),
-                        "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
+                        "path" => trim($p["path"], "/ \t\n\r\0\x0B"),
                         "private" => (bool) $p["private"] ?: false,
                     ];
                 }

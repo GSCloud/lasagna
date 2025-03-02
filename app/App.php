@@ -49,7 +49,7 @@ if (isset($cfg['block_robots']) && $cfg['block_robots']) {
 $file = DATA . DS . ($cfg['identity_nonce.key'] ?? 'identity_nonce.key');
 if (!file_exists($file)) {
     $nonce = hash('sha256', random_bytes(16) . time());
-    if (file_put_contents($file, $nonce, LOCK_EX) === false) {
+    if (@file_put_contents($file, $nonce, LOCK_EX) === false) {
         error_log('Failed to write identity nonce to file.');
         die('Failed to write identity nonce to file.');
     } else {

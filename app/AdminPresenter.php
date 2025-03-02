@@ -339,7 +339,7 @@ class AdminPresenter extends APresenter
             $stubs = \array_filter($stubs);
             foreach ($stubs as $k => $v) {
                 $v = (string) $v;
-                if (\strlen((string) $v) < self::MIN_STUBS_LENGTH) {
+                if (strlen((string) $v) < self::MIN_STUBS_LENGTH) {
                     unset($stubs[$k]);
                     unset($stubs_count[$k]);
                 }
@@ -408,9 +408,9 @@ class AdminPresenter extends APresenter
             $data = [];
             $profile = 'default';
             $f = DATA . DS. "summernote_articles_{$profile}.txt";
-            $perm = FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES;
+            $flags = FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES;
             if (file_exists($f) && is_readable($f)) {
-                $data = \file($f, $perm);
+                $data = \file($f, $flags);
                 if (\is_array($data)) {
                     $data = \array_unique($data, SORT_LOCALE_STRING);
                 } else {
@@ -424,22 +424,22 @@ class AdminPresenter extends APresenter
             $x = 0;
             $profile = 'default';
             if (isset($_POST['data'])) {
-                $data = (string) \trim((string) $_POST['data']);
+                $data = (string) trim((string) $_POST['data']);
                 // remove extra whitespace
                 $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST['data']);
                 $x++;
             }
             if (isset($_POST['path'])) {
-                $path = \trim((string) $_POST['path']);
+                $path = trim((string) $_POST['path']);
                 // URL path
-                if (\strlen($path)) {
+                if (strlen($path)) {
                     $x++;
                 }
             }
             if (isset($_POST['hash'])) {
-                $hash = \trim((string) $_POST['hash']);
+                $hash = trim((string) $_POST['hash']);
                 // SHA 256 hexadecimal
-                if (\strlen($hash) === 64) {
+                if (strlen($hash) === 64) {
                     $x++;
                 }
             }
@@ -463,7 +463,7 @@ class AdminPresenter extends APresenter
             $fb = DATA . DS. "summernote_{$profile}_{$hash}.bak";
             if (file_exists($fr) && is_readable($fr)) {
                 if (copy($fr, $fb) === false) {
-                    $this->addError("ADMIN: Article '{$path}' backup failed.");
+                    $this->addError("ADMIN: Article [{$path}] backup failed.");
                     return $this->writeJsonData(
                         [
                             'code' => 401,
@@ -474,9 +474,9 @@ class AdminPresenter extends APresenter
                 };
             }
             $fp = DATA . DS . "summernote_{$profile}_{$hash}.db";
-            $perm = LOCK_EX | FILE_APPEND;
-            if (file_put_contents($fp, $data_nows . "\n", $perm) === false) {
-                $this->addError("ADMIN: Article '{$path}' history write failed.");
+            $flags = LOCK_EX | FILE_APPEND;
+            if (@file_put_contents($fp, $data_nows . "\n", $flags) === false) {
+                $this->addError("ADMIN: Article [{$path}] history write failed.");
                 return $this->writeJsonData(
                     [
                         'code' => 401,
@@ -486,9 +486,9 @@ class AdminPresenter extends APresenter
                 );
             };
             $fp = DATA . DS . "summernote_{$profile}_{$hash}.json";
-            $perm = LOCK_EX;
-            if (file_put_contents($fp, $data, $perm) === false) {
-                $this->addError("ADMIN: Article '{$path}' write to file failed.");
+            $flags = LOCK_EX;
+            if (@file_put_contents($fp, $data, $flags) === false) {
+                $this->addError("ADMIN: Article [{$path}] write to file failed.");
                 return $this->writeJsonData(
                     [
                         'code' => 500,
@@ -501,10 +501,10 @@ class AdminPresenter extends APresenter
             // save article meta data
             $p = [];
             $f = DATA . DS . "summernote_articles_{$profile}.txt";
-            $perm = FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES;
+            $flags = FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES;
             $p = [];
             if (file_exists($f) && is_readable($f)) {
-                $p = \file($f, $perm);
+                $p = \file($f, $flags);
             }
             if (\is_array($p)) {
                 $p[] = $path;
@@ -514,14 +514,13 @@ class AdminPresenter extends APresenter
             }
             \sort($p, SORT_LOCALE_STRING);
             $p = \array_unique($p, SORT_LOCALE_STRING);
-            file_put_contents($f, \implode("\n", $p), LOCK_EX);
-            $this->addMessage("UPDATE ARTICLE\n{$path}\n{$hash}");
-            return $this->writeJsonData(
-                [
-                    'status' => 'OK',
-                    'hash' => $hash,
-                ], $extras
-            );
+            $flags = LOCK_EX;
+            if (@file_put_contents($f, \implode("\n", $p), $flags) === false) {
+                $this->addError("Updating article [{$path}] hash [{$hash}] failed."); // phpcs:ignore
+                return $this->writeJsonData(500, $extras);
+            }
+            $this->addMessage("Updating article [{$path}] hash [{$hash}] succeeded."); // phpcs:ignore
+            return $this->writeJsonData(['status' => 'OK', 'hash' => $hash], $extras); // phpcs:ignore
     
         case 'GetToken':
             $this->checkPermission('admin,manager,editor');
@@ -763,7 +762,7 @@ class AdminPresenter extends APresenter
             $f = $file['name'];
 
             // Sanitize the filename
-            $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
+            $f = \strtr(trim(\basename($f)), " '\"\\()", '______');
             SF::transliterate($f);
             SF::sanitizeStringLC($f);
             SF::transliterate($f);
@@ -852,8 +851,8 @@ class AdminPresenter extends APresenter
     public function processDelete()
     {
         if (isset($_POST['name'])) {
-            $name = \trim($_POST['name']);
-            $name = \strtr(\trim($name), " '\"\\()", '______');
+            $name = trim($_POST['name']);
+            $name = \strtr(trim($name), " '\"\\()", '______');
             SF::transliterate($name);
             SF::sanitizeStringLC($name);
             SF::transliterate($name);
@@ -927,7 +926,7 @@ class AdminPresenter extends APresenter
     {
         $file = DATA . DS . 'identity_nonce.key';
         $nonce = \hash('sha256', \random_bytes(16) . time());
-        \file_put_contents($file, $nonce);
+        @file_put_contents($file, $nonce);
         \chmod($file, 0600);
         \clearstatcache();
         return $this->setIdentity();
@@ -941,9 +940,7 @@ class AdminPresenter extends APresenter
     private function _rebuildAdminKey()
     {
         $file = DATA . DS . self::ADMIN_KEY;
-        if (file_exists($file)) {
-            unlink($file);
-        }
+        @unlink($file);
         return $this->_createAdminKey();
     }
 
@@ -956,10 +953,11 @@ class AdminPresenter extends APresenter
     {
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         if (!\is_string($key)) {
-            $this->setLocation('/err/500');
+            $this->addCritical('Secure cookie must be a string!');
+            ErrorPresenter::getInstance()->process(500);
         }
         if (\is_string($key)) {
-            $key = \trim($key, '/.');
+            $key = trim($key, '/.');
             if (file_exists(DATA . DS . $key)) {
                 unlink(DATA . DS . $key);
                 clearstatcache();
@@ -993,7 +991,7 @@ class AdminPresenter extends APresenter
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
                 if (LOCALHOST) {
-                    // localhost
+                    // localhost = do nothing :)
                 } else {
                     $cf = $this->getCfg('cf');
                     if (\is_array($cf)) {
@@ -1002,16 +1000,22 @@ class AdminPresenter extends APresenter
                 }
                 $this->checkLocales();
             } finally {
-                @file_put_contents(
-                    DATA . DS . '_random_cdn_hash',
-                    \hash('sha1', $this->getNonce()),
-                    LOCK_EX
-                );
+                if (CLI) {
+                    // do nothing :)
+                } else {
+                    $file = DATA . DS . '_random_cdn_hash';
+                    $hash = \hash('sha1', $this->getNonce());
+                    $flags = LOCK_EX;
+                    @unlink($file);
+                    if (@file_put_contents($file, $hash, $flags) === false) {
+                        \error_log('Could not write to file: [' . $file . '].');
+                    }
+                }
                 \clearstatcache();
                 $lock->release();
             }
         } else {
-            $this->setLocation('/err/429');
+            $this->addError('Could not obtain a CORE-UPDATE file lock.');
         }
         return $this;
     }
@@ -1027,6 +1031,7 @@ class AdminPresenter extends APresenter
             echo "ERROR: Unauthorized access.\n";
             exit(1);
         }
+
         $path = $this->getData('request_path');
         if (!\is_string($path)) {
             $path = '*** not set ***';
@@ -1042,46 +1047,64 @@ class AdminPresenter extends APresenter
      */
     private function _createAdminKey()
     {
-        $f = DATA . DS . self::ADMIN_KEY;
-        if (!file_exists($f)) {
-            $key = \hash('sha256', \random_bytes(32) . \time());
-            if (file_put_contents($f, $key) === false) {
-                $error = error_get_last();
-                $errorMessage = "ADMIN: CREATE KEY - Error writing file:\n"
-                    . ($error ? $error['message'] : 'Unknown error');
-                unlink($f);
-                $this->addError($errorMessage);
-                $this->setLocation('/err/500');
-            } else if (!chmod($f, 0600)) {
-                $error = error_get_last();
-                $errorMessage = "ADMIN: CREATE KEY - Error setting permissions:\n"
-                    . ($error ? $error['message'] : 'Unknown error');
-                unlink($f);
-                $this->addError($errorMessage);
-                $this->setLocation('/err/500');
+        $file = DATA . DS . self::ADMIN_KEY;
+        if (!file_exists($file)) {
+            try {
+                $key = \hash('sha256', random_bytes(32) . time());
+            } catch (\Exception $e) {
+                $this->addError("ADMIN: Error generating random key: " . $e->getMessage()); // phpcs:ignore
+                ErrorPresenter::getInstance()->process(500);
+                return $this;
             }
-            $this->addMessage('ADMIN: Keyfile created.');
+            if (@file_put_contents($file, $key) === false) {
+                $this->_handleFileError($file, "ADMIN: Error writing to admin key file."); // phpcs:ignore
+                unlink($file);
+            } else if (!chmod($file, 0600)) {
+                $this->_handleFileError($file, "ADMIN: Error setting admin key file permissions."); // phpcs:ignore
+                unlink($file);
+            } else {
+                $this->addMessage('ADMIN: Keyfile created.');
+            }
         }
         return $this;
     }
 
     /**
-     * Read the secure admin key or create a new one if there is no key available
+     * Handle file errors
      *
-     * @return mixed admin key / null on error or if cannot be created
+     * @param string $file          the file causing the error
+     * @param string $messagePrefix the prefix for the error message
+     *
+     * @return void
+     */
+    private function _handleFileError($file, $messagePrefix)
+    {
+        $err = error_get_last();
+        $errMessage = ($err ? $err['message'] : 'Unknown error');
+        $message = $messagePrefix . " Message:\n{$errMessage}";
+        $this->addError($message);
+        ErrorPresenter::getInstance()->process(500);
+    }
+
+    /**
+     * Read the secure admin key or try to create a new one in the process
+     *
+     * @return mixed admin key / null on error
      */
     private function _readAdminKey()
     {
-        $f = DATA . DS . self::ADMIN_KEY;
-        if (file_exists($f) && is_readable($f)) {
-            $key = \trim(\file_get_contents($f) ?: '');
-        } else {
+        $file = DATA . DS . self::ADMIN_KEY;
+        if (!is_readable($file)) {
+            $this->addError('ADMIN: Missing or unreadable admin key file.');
             $this->_createAdminKey();
-            $key = \trim(\file_get_contents($f) ?: '');
         }
-        if (\strlen($key) > 0) {
-            return $key;
+        if (is_readable($file)) {
+            $key = trim(file_get_contents($file) ?: '');
+            if (strlen($key) > 0) {
+                return $key;
+            }
         }
+        $this->addError('ADMIN: Invalid admin key file.');
         return null;
     }
 
@@ -1202,7 +1225,7 @@ class AdminPresenter extends APresenter
         $t = \strtotime($x[0]);
         if ($t) {
             $y = \date("Y", $t);
-            if ($y < 2024) {
+            if ($y < 2025) {
                 $val = '';
                 return;
             }
@@ -1245,7 +1268,7 @@ class AdminPresenter extends APresenter
                 'type' => 'type_download',
                 'class' => 'grey lighten-2'
             ],
-            'oauth login:' => [
+            'oauth' => [
                 'type' => 'type_oauth',
                 'class' => 'lime lighten-4'
             ],
@@ -1279,11 +1302,23 @@ class AdminPresenter extends APresenter
         }
         $this->_lastlog = $x[1];
 
-        $x[1] = \str_replace('ADMIN', '<b>ADMIN</b>', $x[1]);
-        $x[1] = \str_replace('Download', '<b>Download</b>', $x[1]);
-        $x[1] = \str_replace('HALITE', '<b>HALITE</b>', $x[1]);
-        $x[1] = \str_replace('admin', '<b>admin</b>', $x[1]);
-        $x[1] = \str_replace('manager', '<b>manager</b>', $x[1]);
+        // make these bold
+        $bolds = [
+            'ADMIN',
+            'Download',
+            'HALITE',
+            'OAuth login',
+            'admin',
+            'manager',
+        ];
+        
+        $x[1] = preg_replace_callback(
+            '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
+            function ($match) {
+                return '<b>' . $match[1] . '</b>';
+            },
+            $x[1]
+        );
 
         $val = "<tr data-type='{$type}'"
             . " class='logrow {$type} {$class}'"
@@ -1334,20 +1369,21 @@ class AdminPresenter extends APresenter
         $t = \strtotime($x[0]);
         if ($t) {
             $y = \date("Y", $t);
-            if ($y < 2024) {
+            if ($y < 2025) {
                 $val = '';
                 return;
             }
             $x[0] = \date("j. n. Y H:i:s", $t);
         }
+
         $x[2] = \str_replace('IP:', '', $x[2]);
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
 
-        $x[1] = \trim($x[1], "\r\n\t");
-        $x[2] = \trim($x[2], "\r\n\t");
-        $x[3] = \trim($x[3], "\r\n\t");
-        $x[4] = \trim($x[4], "\r\n\t");
+        $x[1] = trim($x[1], "\r\n\t");
+        $x[2] = trim($x[2], "\r\n\t");
+        $x[3] = trim($x[3], "\r\n\t");
+        $x[4] = trim($x[4], "\r\n\t");
 
         $type = 'unknown';
         $lookup = [
@@ -1368,6 +1404,8 @@ class AdminPresenter extends APresenter
                 break;
             }
         }
+
+        $x[1] = str_replace('<br>', "\n", $x[1]);
 
         $val = [
             'id' => $key + 1,

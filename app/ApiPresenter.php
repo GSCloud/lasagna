@@ -135,6 +135,7 @@ class ApiPresenter extends APresenter
             return 0;
         }
         if ($val > self::MAX_API_HITS) {
+            $this->addError('API: too many requests. Value > ' . self::MAX_API_HITS);
             $this->setLocation('/err/420');
         }
         try {

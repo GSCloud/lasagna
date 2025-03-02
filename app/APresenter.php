@@ -231,14 +231,14 @@ abstract class APresenter
         $json = \json_encode($logEntry);
         if ($json === false) {
             $err = \json_last_error_msg();
-            \error_log("Error encoding JSON for file: [" . $filePath . '] ' .  $err);
+            \error_log("Error encoding JSON for file [" . $filePath . ']. Message: ' .  $err); // phpcs:ignore
             return;
         }
         $logLine = $json . "\n";
         $flags = FILE_APPEND | LOCK_EX;
-        if (\file_put_contents($filePath, $logLine, $flags) === false) {
+        if (@file_put_contents($filePath, $logLine, $flags) === false) {
             $err = \error_get_last()['message'];
-            \error_log("Error writing to log file: [" . $filePath . '] ' . $err);
+            \error_log("Error writing to log file [" . $filePath . ']. Message: ' . $err); // phpcs:ignore
         }
     }
 
@@ -498,7 +498,7 @@ abstract class APresenter
             return $this;
         }
 
-        $message = \trim($message);
+        $message = trim($message);
         $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
         $date = \date('c');
         $ip = $this->getIP();
@@ -519,7 +519,7 @@ abstract class APresenter
         $file = DATA . DS . self::AUDITLOG_FILE;
         $logline = "$date;$message;{$ip};{$name};{$email}\n";
         $flags = FILE_APPEND | LOCK_EX;
-        if (\file_put_contents($file, $logline, $flags) === false) {
+        if (@file_put_contents($file, $logline, $flags) === false) {
             $this->criticals[] = 'Could not write to the Audit Log file: ' . $file;
         }
         return $this;
@@ -539,6 +539,9 @@ abstract class APresenter
             $this->addAuditMessage($message);
             $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
             \error_log($message, 0);
+            if (CLI) {
+                return $this;
+            }
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'messages.txt');
         }
         return $this;
@@ -555,10 +558,13 @@ abstract class APresenter
     {
         if (\is_string($message) && !empty($message)) {
             $this->errors[] = $message;
-            $message = '* ERROR: ' . $message;
             $this->addAuditMessage($message);
+            $message = '* ERROR: ' . $message;
             $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
             \error_log($message, 0);
+            if (CLI) {
+                return $this;
+            }
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'errors.txt');
         }
         return $this;
@@ -575,10 +581,13 @@ abstract class APresenter
     {
         if (\is_string($message) && !empty($message)) {
             $this->criticals[] = $message;
-            $message = '*** CRITICAL: ' . $message;
             $this->addAuditMessage($message);
+            $message = '*** CRITICAL: ' . $message;
             $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
             \error_log($message, 0);
+            if (CLI) {
+                return $this;
+            }
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'critical_errors.txt');
         }
         return $this;
@@ -596,7 +605,7 @@ abstract class APresenter
         }
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ipList = \explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            $ip = \trim(\end($ipList));
+            $ip = trim(\end($ipList));
             return $ip;
         }
         if (isset($_SERVER['REMOTE_ADDR'])) {
@@ -640,7 +649,7 @@ abstract class APresenter
                     'samesite' => 'Strict',
                 ];
                 if (!setcookie($name, $uid, $cookieOptions)) {
-                    $this->addError("Cannot set UUID cookie.");
+                    $this->addError("Cannot set new UUID cookie.");
                 }
                 $_COOKIE[$name] = $uid;
             }
@@ -685,32 +694,16 @@ abstract class APresenter
         ];
 
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (!\file_exists($file)) {
-            try {
-                $nonce = \hash('sha256', \random_bytes(1024) . \time());
-                if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-                    $err = \error_get_last()['message'];
-                    $this->addCritical("Write nonce file failed! Error:\n" . $err); // phpcs:ignore
-                    ErrorPresenter::getInstance()->process(500);
-                }
-                @\chmod($file, 0600);
-                $this->addMessage('ADMIN: Nonce file created.');
-            } catch (\Exception $e) {
-                $err = $e->getMessage();
-                $this->addCritical("Write nonce file failed! Exception:\n" . $err); // phpcs:ignore
-                ErrorPresenter::getInstance()->process(500);
-            }
-        }
-        if ($nonce = \file_get_contents($file) === false) {
-            $err = \error_get_last()['message'];
-            $this->addCritical("Read nonce file failed! Error:\n" . $err); // phpcs:ignore
+        if ($nonce = @file_get_contents($file) === false) {
+            $this->addCritical("Read nonce file failed. Message:\n" . \error_get_last()['message']); // phpcs:ignore
             ErrorPresenter::getInstance()->process(500);
         }
+        $nonce = \substr(trim($nonce), 0, 16);
 
         // set keys
         $i['ip'] = $this->getIP();
         $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
-        $i['nonce'] = \substr(\trim($nonce), 0, 16);
+        $i['nonce'] = $nonce;
 
         // check other keys
         if (\array_key_exists('id', $identity)) {
@@ -765,7 +758,7 @@ abstract class APresenter
                 'email' => 'john.doe@example.com',
                 'avatar' => '',
                 'country' => 'XX',
-                'provider' => 'CLI',
+                'provider' => 'cli',
             ];
         }
 
@@ -786,18 +779,13 @@ abstract class APresenter
         if ($id && $email && $name) {
             return $this->identity;
         }
+
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (!\file_exists($file) || !\is_readable($file)) {
-            // set empty identity and return
-            $this->setIdentity();
-            return $this->identity;
-        }
-        if ($nonce = \file_get_contents($file) === false) {
-            $err = \error_get_last()['message'];
-            $this->addCritical("Read nonce file failed! Error:\n" . $err); // phpcs:ignore
+        if ($nonce = @file_get_contents($file) === false) {
+            $this->addCritical("Read nonce file failed. Message:\n" . \error_get_last()['message']); // phpcs:ignore
             ErrorPresenter::getInstance()->process(500);
         }
-        $nonce = \substr(\trim($nonce), 0, 16);
+        $nonce = \substr(trim($nonce), 0, 16);
 
         do {
             if (isset($_GET['identity'])) {
@@ -1031,9 +1019,9 @@ abstract class APresenter
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        $key = \trim($key, "/.\\");
+        $key = trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-        if (\file_exists($keyfile) && is_readable($keyfile)) {
+        if (file_exists($keyfile) && is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $this->addError('HALITE: Missing encryption key.');
@@ -1058,10 +1046,10 @@ abstract class APresenter
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        $key = \trim($key, "/.\\");
+        $key = trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
 
-        if (\file_exists($keyfile) && \is_readable($keyfile)) {
+        if (file_exists($keyfile) && is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $enc = KeyFactory::generateEncryptionKey();
@@ -1071,7 +1059,9 @@ abstract class APresenter
                 $this->addMessage('HALITE: Cookie encryption keyfile created.'); // phpcs:ignore
             } else {
                 $this->addCritical('HALITE: Cannot write cookie encryption key!'); // phpcs:ignore
-                ErrorPresenter::getInstance()->process(500);
+                ErrorPresenter::getInstance()->process(
+                    ['code' => 500, 'message' => 'HALITE: unable process cookie encryption'] // phpcs:ignore
+                );
             }
         }
 
@@ -1251,13 +1241,13 @@ abstract class APresenter
             return $this;
         }
 
-        $roles = \explode(',', \trim((string) $rolelist));
+        $roles = \explode(',', trim((string) $rolelist));
         if (\is_array($roles)) {
             $email = $this->getIdentity()['email'] ?? '';
             $groups = $this->getCfg('admin_groups') ?? [];
             foreach ($roles as $role) {
-                $role = \strtolower(\trim($role));
-                if (\strlen($role) && \strlen($email)) {
+                $role = \strtolower(trim($role));
+                if (strlen($role) && strlen($email)) {
                     // check if email is allowed
                     if (\in_array($email, $groups[$role] ?? [], true)) {
                         if ($retbool) {
@@ -1278,7 +1268,9 @@ abstract class APresenter
         if ($retbool) {
             return false;
         }
-        $this->setLocation('/err/401'); // not authorized
+
+        // not authorized
+        $this->setLocation('/err/401');
     }
 
     /**
@@ -1294,7 +1286,7 @@ abstract class APresenter
             return null;
         }
         $mygroup = null;
-        $email = \trim((string) $email);
+        $email = trim((string) $email);
 
         // search all groups for email or asterisk
         foreach ($this->getCfg('admin_groups') ?? [] as $group => $users) {
@@ -1357,8 +1349,8 @@ abstract class APresenter
             return null;
         }
         $locale = [];
-        $language = \trim(\strtoupper((string) $language));
-        $key = \trim(\strtoupper((string) $key));
+        $language = trim(\strtoupper((string) $language));
+        $key = trim(\strtoupper((string) $key));
         $cfg = $this->getCfg();
         $file = \strtolower("{$language}_locale");
         $locale = Cache::read($file, 'default');
@@ -1375,23 +1367,23 @@ abstract class APresenter
                     // 0. read injected prefabricated base CSV file
                     if (\str_ends_with($v, ".csv")) {
                         $csvfile = APP . DS . $v;
-                        if (\file_exists(($csvfile))) {
-                            $csv = @\file_get_contents($csvfile);
+                        if (file_exists(($csvfile))) {
+                            $csv = @file_get_contents($csvfile);
                         }
                     }
 
                     // 1. read from CSV file
-                    if ($csv === false && \file_exists(($csvfile))) {
-                        $csv = @\file_get_contents($csvfile);
-                        if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
+                    if ($csv === false && file_exists(($csvfile))) {
+                        $csv = @file_get_contents($csvfile);
+                        if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                         }
                     }
 
                     // 2. read from CSV file backup
-                    if ($csv === false && \file_exists($csvfilebak)) {
-                        $csv = @\file_get_contents($csvfilebak);
-                        if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
+                    if ($csv === false && file_exists($csvfilebak)) {
+                        $csv = @file_get_contents($csvfilebak);
+                        if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                             continue;
                         } else {
@@ -1427,8 +1419,8 @@ abstract class APresenter
                 $dolar = ['$' => '$'];
                 foreach ((array) $locale as $a => $b) {
                     if (\substr($a, 0, 1) === '$') {
-                        $a = \trim($a, '{}$' . "\x20\t\n\r\0\x0B");
-                        if (!\strlen($a)) {
+                        $a = trim($a, '{}$' . "\x20\t\n\r\0\x0B");
+                        if (!strlen($a)) {
                             continue;
                         }
                         $dolar['$' . $a] = $b;
@@ -1444,7 +1436,9 @@ abstract class APresenter
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
                 $this->addCritical('Corrupted locales: [' . $language . ']');
-                ErrorPresenter::getInstance()->process(500);
+                ErrorPresenter::getInstance()->process(
+                    ['code' => 500, 'message' => 'Corrupted locales!']
+                );
             } else {
                 // second try!
                 $this->checkLocales(true);
@@ -1519,7 +1513,7 @@ abstract class APresenter
                 }
             }
         } catch (\Exception $e) {
-            $this->addError('Cloudflare exception! ' . $e->getMessage);
+            $this->addError("Cloudflare cache purge exception. Message:\n" . $e->getMessage()); // phpcs:ignore
         }
         return $this;
     }
@@ -1535,14 +1529,14 @@ abstract class APresenter
      */
     public function csvPreloader($name, $csvkey, $force = false)
     {
-        $name = \trim((string) $name);
-        $csvkey = \trim((string) $csvkey);
+        $name = trim((string) $name);
+        $csvkey = trim((string) $csvkey);
         $force = (bool) $force;
         $file = \strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
                 $data = false;
-                if (\file_exists(DATA . DS . "{$file}.csv")) {
+                if (file_exists(DATA . DS . "{$file}.csv")) {
                     // CSV file exists
                     $modtime = \filemtime(DATA . DS . "{$file}.csv");
                     if ($modtime + self::CSV_UPDATE_IGNORE > time()) {
@@ -1559,8 +1553,9 @@ abstract class APresenter
                 }
                 if ($force) {
                     if (CLI) {
-                        echo "downloading CSV: [{$name}]\n";
+                        $this->addMessage("downloading CSV: [{$name}]");
                     }
+
                     // full path
                     if (\strpos($csvkey, 'https') === 0) {
                         $remote = $csvkey;
@@ -1576,46 +1571,46 @@ abstract class APresenter
                         }
                     }
                     try {
-                        $data = @\file_get_contents($remote);
+                        $data = @file_get_contents($remote);
                     } catch (\Exception $e) {
                         $data = '';
-                        $this->addError("csvPreloader: Fetching '{$remote}' failed."); // phpcs:ignore
+                        $this->addError("Fetching URL [{$remote}] failed."); // phpcs:ignore
                     }
                 }
                 if (!$data) {
-                    $this->addError("csvPreloader: No data for [{$name}]");
+                    $this->addError("There are no data for [{$name}].");
                     return $this;
                 }
                 if ($data && !\is_string($data)) {
-                    $this->addError("csvPreloader: No data for [{$name}]");
+                    $this->addError("There are no data for [{$name}].");
                     return $this;
                 }
                 if ($data && \strpos($data, '!DOCTYPE html') > 0) {
-                    $this->addError("csvPreloader: Got HTML data from [{$remote}]"); // phpcs:ignore
+                    $this->addError("Fetching URL [{$remote}] got HTML data instead of CSV."); // phpcs:ignore
                     return $this;
                 }
-                if (\strlen($data) >= self::CSV_MIN_SIZE) {
+                if (strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, 'csv');
                     $f1 = DATA . DS . "{$file}.csv";
                     $f2 = DATA . DS . "{$file}.bak";
 
                     // remove old backup
-                    if (\file_exists($f2)) {
+                    if (file_exists($f2)) {
                         if (@\unlink($f2) === false) {
-                            $this->addError("csvPreloader: Delete [{$file}.bak] failed."); // phpcs:ignore
+                            $this->addError("Delete of file [{$file}.bak] failed."); // phpcs:ignore
                         }
                     }
 
                     // move CSV to backup
-                    if (\file_exists($f1)) {
+                    if (file_exists($f1)) {
                         if (@\rename($f1, $f2) === false) {
-                            $this->addError("csvPreloader: Backup of [{$file}.csv] failed."); // phpcs:ignore
+                            $this->addError("Backup of file [{$file}.csv] failed."); // phpcs:ignore
                         }
                     }
 
                     // write new CSV
-                    if (\file_put_contents($f1, $data, LOCK_EX) === false) {
-                        $this->addError("csvPreloader: Save to [{$file}.csv] failed."); // phpcs:ignore
+                    if (@file_put_contents($f1, $data, LOCK_EX) === false) {
+                        $this->addError("Save to file [{$file}.csv] failed."); // phpcs:ignore
                     }
                 }
             }
@@ -1626,8 +1621,8 @@ abstract class APresenter
     /**
      * Pre-load application CSV data
      *
-     * @param string  $key   configuration array (optional)
-     * @param boolean $force load? (optional)
+     * @param string  $key   key to the data array (optional)
+     * @param boolean $force force load when trye (optional)
      * 
      * @return self
      */
@@ -1636,7 +1631,7 @@ abstract class APresenter
         if (empty($key) || !strlen($key)) {
             $key = 'app_data';
         }
-        $key = \strtolower(\trim((string) $key));
+        $key = \strtolower(trim((string) $key));
         $cfg = $this->getCfg();
         if (\array_key_exists($key, $cfg)) {
             foreach ((array) $cfg[$key] as $name => $csvkey) {
@@ -1655,40 +1650,55 @@ abstract class APresenter
      */
     public function readAppData($name)
     {
-        $name = \trim((string) $name);
-        if (empty($name) || !strlen($name)) {
-            return '';
-        }
-        $file = \strtolower($name);
-        if (empty($file)) {
+        if (!\is_string($name)) {
             return null;
         }
+        $name = trim($name);
+        if (empty($name)) {
+            return null;
+        }
+        $file = \strtolower($name);
 
-        if (!$csv = Cache::read($file, 'csv')) {
-            $csv = false;
-            if (\file_exists(DATA . DS . "{$file}.csv")) {
-                $csv = \file_get_contents(DATA . DS . "{$file}.csv");
+        // part 1 = cache
+        if ($csv = Cache::read($file, 'csv')) {
+            return $csv;
+        }
+
+        // part 2 = CSV file
+        $csv = null;
+        if (file_exists(DATA . DS . "{$file}.csv")) {
+            if ($csv = @file_get_contents(DATA . DS . "{$file}.csv") === false) {
+                $csv = null;
+                $this->addError("Reading file [{$file}.csv] failed.");
             }
-            if (\strpos($csv, '!DOCTYPE html') > 0) {
-                $csv = false; // we got HTML document, try backup
+        }
+        if (\is_string($csv) && \stripos($csv, '<!DOCTYPE html') === 0) {
+            // we got HTML document = failure
+            $csv = null;
+            $this->addError("File [{$file}.csv] contains HTML.");
+        }
+        if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
+            Cache::write($file, $csv, 'csv');
+            return $csv;
+        }
+
+        // part 3 = CSV backup file
+        $csv = null;
+        if (file_exists(DATA . DS . "{$file}.bak")) {
+            if ($csv = @file_get_contents(DATA . DS . "{$file}.bak") === false) {
+                $csv = null;
+                $this->addError("Reading backup file [{$file}.bak] failed.");
             }
-            if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
-                Cache::write($file, $csv, 'csv');
-                return $csv;
-            }
-            $csv = false;
-            if (\file_exists(DATA . DS . "{$file}.bak")) {
-                $csv = \file_get_contents(DATA . DS . "{$file}.bak");
-            }
-            if (\strpos($csv, '!DOCTYPE html') > 0) {
-                return null; // we got HTML document = failure
-            }
-            if ($csv !== false || \strlen($csv) >= self::CSV_MIN_SIZE) {
-                \copy(DATA . DS . "{$file}.bak", DATA . DS . "{$file}.csv");
-                Cache::write($file, $csv, 'csv');
-                return $csv;
-            }
-            $csv = null; // failure
+        }
+        if (\is_string($csv) && \stripos($csv, '<!DOCTYPE html') === 0) {
+            // we got HTML document = failure
+            $csv = null;
+            $this->addError("Backup file [{$file}.bak] contains HTML.");
+        }
+        if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
+            // make a copy to the main CSV file
+            \copy(DATA . DS . "{$file}.bak", DATA . DS . "{$file}.csv");
+            Cache::write($file, $csv, 'csv');
         }
         return $csv;
     }
@@ -1863,7 +1873,9 @@ abstract class APresenter
             $data["lang{$language}"] = true;
         } else {
             $this->addCritical('Something is terribly wrong with locales!');
-            ErrorPresenter::getInstance()->process(500);
+            ErrorPresenter::getInstance()->process(
+                ['code' => 500, 'message' => 'Something is terribly wrong with locales!'] // phpcs:ignore
+            );
         }
 
         // get locale if not already present
@@ -1888,7 +1900,7 @@ abstract class APresenter
         // extract request path slug
         if (($pos = \strpos($data['request_path'], $language)) !== false) {
             $data['request_path_slug'] = \substr_replace(
-                $data['request_path'], '', $pos, \strlen($language)
+                $data['request_path'], '', $pos, strlen($language)
             );
         } else {
             $data['request_path_slug'] = $data['request_path'] ?? '';
