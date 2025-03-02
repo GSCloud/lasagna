@@ -505,6 +505,7 @@ abstract class APresenter
         $i = $this->getIdentity();
         $name = $i['name'] ?? '';
         $email = $i['email'] ?? '';
+
         if (empty($name)) {
             try {
                 $name = \gethostbyaddr($ip);
@@ -516,6 +517,7 @@ abstract class APresenter
                 $this->errors[] = 'Could not translate IP address: [' . $ip . '] ' . $e->getMessage(); // phpcs:ignore
             }
         }
+
         $file = DATA . DS . self::AUDITLOG_FILE;
         $logline = "$date;$message;{$ip};{$name};{$email}\n";
         $flags = FILE_APPEND | LOCK_EX;
@@ -537,7 +539,14 @@ abstract class APresenter
         if (\is_string($message) && !empty($message)) {
             $this->messages[] = $message;
             $this->addAuditMessage($message);
-            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
+
+            // get the backtrace
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = $backtrace[0];
+            $file = $caller['file'] ?? 'unknown';
+            $line = $caller['line'] ?? 'unknown';
+
+            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
             \error_log($message, 0);
             if (CLI) {
                 return $this;
@@ -559,8 +568,15 @@ abstract class APresenter
         if (\is_string($message) && !empty($message)) {
             $this->errors[] = $message;
             $this->addAuditMessage($message);
+
+            // get the backtrace
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = $backtrace[0];
+            $file = $caller['file'] ?? 'unknown';
+            $line = $caller['line'] ?? 'unknown';
+
             $message = '* ERROR: ' . $message;
-            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
+            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
             \error_log($message, 0);
             if (CLI) {
                 return $this;
@@ -582,8 +598,15 @@ abstract class APresenter
         if (\is_string($message) && !empty($message)) {
             $this->criticals[] = $message;
             $this->addAuditMessage($message);
+
+            // get the backtrace
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = $backtrace[0];
+            $file = $caller['file'] ?? 'unknown';
+            $line = $caller['line'] ?? 'unknown';
+
             $message = '*** CRITICAL: ' . $message;
-            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - File: ' . __FILE__ . ' - Line: ' . __LINE__; // phpcs:ignore
+            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
             \error_log($message, 0);
             if (CLI) {
                 return $this;
