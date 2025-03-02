@@ -72,22 +72,20 @@ class ErrorPresenter extends APresenter
     /**
      * Controller processor
      *
-     * @param int $err HTTP status code (optional)
+     * @param int $err HTTP status code (optional), or an array of code + message
      * 
      * @return object Controller
      */
     public function process($err = null)
     {
-        // Model
-        if (!\is_array($data = $this->getData())) {
-            return $this;
-        }
-
         $this->setHeaderHtml();
         
         $code = 404;
         if (\is_int($err)) {
             $code = $err;
+        } elseif (\is_array($err)) {
+            $code = (int) ($err["code"] ?? 404);
+            $message = $err["message"] ?? 'Terribly and truly UNKNOWN error 😵';
         } else {
             $match = $this->getMatch();
             if (\is_array($match)) {
@@ -98,16 +96,14 @@ class ErrorPresenter extends APresenter
             }
         }
 
-        // check validity
+        // check error code validity
         if (!isset(self::CODESET[$code])) {
             $code = 404;
         }
         $error = self::CODESET[$code];
-
-        // HTTP error code
         header("HTTP/1.1 {$code} {$error}");
 
-        // find error image
+        // find the error image
         $image = "error.png";
         if (\file_exists(WWW . "/img/{$code}.png")) {
             $image = "{$code}.png";
@@ -118,13 +114,15 @@ class ErrorPresenter extends APresenter
         }
 
         // render error template
-        $template = "error";
-        $message = self::MESSAGE[$code];
+        if (empty($message)) {
+            $message = self::MESSAGE[$code];
+        }
         $data['code'] = $code;
         $data['error'] = $error;
         $data['image'] = $image;
         $data['message'] = $message;
-        $output = $this->setData($data)->renderHTML($template);
-        return $this->setData('output', $output);
+        $template = "error";
+        echo $this->setData($data)->renderHTML($template);
+        exit(0);
     }
 }

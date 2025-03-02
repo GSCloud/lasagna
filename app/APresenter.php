@@ -193,6 +193,14 @@ abstract class APresenter
             \fastcgi_finish_request();
         }
 
+        // save messages and errors
+        $errors = $this->getErrors();
+        $messages = $this->getMessages();
+        $criticals = $this->getCriticals();
+        $this->_logArrayToJson($errors, LOGS . DS . 'errors.json');
+        $this->_logArrayToJson($messages, LOGS . DS . 'messages.json');
+        $this->_logArrayToJson($criticals, LOGS . DS . 'criticals.json');
+
         // preload CSV definitions
         foreach ($this->csv_postload as $key) {
             $this->preloadAppData((string) $key, true);
@@ -200,15 +208,38 @@ abstract class APresenter
 
         // load actual CSV data
         $this->checkLocales((bool) $this->force_csv_check);
-        list($usec, $sec) = \explode(' ', \microtime());
-        defined('TESSERACT_STOP') || define(
-            'TESSERACT_STOP', (
-            (float) $usec + (float) $sec)
-        );
-        $add = '; processing: '
-            . \round(((float) TESSERACT_STOP - (float) TESSERACT_START) * 1000, 2)
-            . ' ms' . '; request_uri: ' . ($_SERVER['REQUEST_URI'] ?? 'N/A');
         exit(0);
+    }
+
+    /**
+     * Logs an array to a JSON file
+     *
+     * @param array  $data     data to be logged
+     * @param string $filePath path to the log file
+     *
+     * @return void
+     */
+    private function _logArrayToJson(array $data, string $filePath): void
+    {
+        if (empty($data)) {
+            return;
+        }
+        $logEntry = [
+            'timestamp' => \date('c'),
+            'data' => $data,
+        ];
+        $json = \json_encode($logEntry);
+        if ($json === false) {
+            $err = \json_last_error_msg();
+            \error_log("Error encoding JSON for file: [" . $filePath . '] ' .  $err);
+            return;
+        }
+        $logLine = $json . "\n";
+        $flags = FILE_APPEND | LOCK_EX;
+        if (\file_put_contents($filePath, $logLine, $flags) === false) {
+            $err = \error_get_last()['message'];
+            \error_log("Error writing to log file: [" . $filePath . '] ' . $err);
+        }
     }
 
     /**
@@ -463,19 +494,33 @@ abstract class APresenter
      */
     public function addAuditMessage($message = null)
     {
-        if (\is_string($message) && !empty($message)) {
-            $message = \trim($message);
-            $message = \str_replace("\n", "<br>", $message);
-            $message = \str_replace("\r", " ", $message);
-            $message = \str_replace("\t", " ", $message);
-            $message = \str_replace(';', ',', $message);
-            $date = \date('c');
-            $i = $this->getIdentity();
-            $file = DATA . DS . self::AUDITLOG_FILE;
-            \file_put_contents(
-                $file, "$date;$message;{$i['ip']};{$i['name']};{$i['email']}\n",
-                FILE_APPEND | LOCK_EX
-            );
+        if (CLI || !is_string($message) || empty(trim($message))) {
+            return $this;
+        }
+
+        $message = \trim($message);
+        $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
+        $date = \date('c');
+        $ip = $this->getIP();
+        $i = $this->getIdentity();
+        $name = $i['name'] ?? '';
+        $email = $i['email'] ?? '';
+        if (empty($name)) {
+            try {
+                $name = \gethostbyaddr($ip);
+                if ($name === $ip) {
+                    $name = '';
+                }
+            } catch (\Exception $e) {
+                $name = '';
+                $this->errors[] = 'Could not translate IP address: [' . $ip . '] ' . $e->getMessage(); // phpcs:ignore
+            }
+        }
+        $file = DATA . DS . self::AUDITLOG_FILE;
+        $logline = "$date;$message;{$ip};{$name};{$email}\n";
+        $flags = FILE_APPEND | LOCK_EX;
+        if (\file_put_contents($file, $logline, $flags) === false) {
+            $this->criticals[] = 'Could not write to the Audit Log file: ' . $file;
         }
         return $this;
     }
@@ -575,11 +620,11 @@ abstract class APresenter
             $this->getIP(),
         ];
 
-        if (!CLI) {
+        if (!CLI) { // enhance NAT support via special cookie
             $name = self::COOKIE_UID;
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
-                if (!preg_match('/^[a-f0-9]{16}$/', $uid)) {
+                if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
                     $this->addError("Invalid UUID cookie.");
                     unset($_COOKIE[$name]);
                 }
@@ -628,50 +673,62 @@ abstract class APresenter
         if (!\is_array($identity)) {
             $identity = [];
         }
+
         $i = [
-            'avatar' => '',
-            'country' => '',
-            'email' => '',
             'id' => 0,
             'ip' => '',
             'name' => '',
+            'email' => '',
+            'avatar' => '',
+            'provider' => '',
+            'country' => '',
         ];
-        $file = DATA . DS . self::IDENTITY_NONCE_FILE; // nonce file
+
+        $file = DATA . DS . self::IDENTITY_NONCE_FILE;
         if (!\file_exists($file)) {
             try {
                 $nonce = \hash('sha256', \random_bytes(1024) . \time());
                 if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-                    $this->addCritical('Write nonce file failed!');
-                    $this->setLocation('/err/500');
+                    $err = \error_get_last()['message'];
+                    $this->addCritical("Write nonce file failed! Error:\n" . $err); // phpcs:ignore
+                    ErrorPresenter::getInstance()->process(500);
                 }
-                @\chmod($file, 0660);
+                @\chmod($file, 0600);
                 $this->addMessage('ADMIN: Nonce file created.');
             } catch (\Exception $e) {
-                $this->addCritical("Create nonce file failed! Exception:\n" . $e->getMessage()); // phpcs:ignore
-                $this->setLocation('/err/500');
+                $err = $e->getMessage();
+                $this->addCritical("Write nonce file failed! Exception:\n" . $err); // phpcs:ignore
+                ErrorPresenter::getInstance()->process(500);
             }
         }
-        if (!$nonce = @\file_get_contents($file)) {
-            $this->addCritical('Read nonce file failed!');
-            $this->setLocation('/err/500');
+        if ($nonce = \file_get_contents($file) === false) {
+            $err = \error_get_last()['message'];
+            $this->addCritical("Read nonce file failed! Error:\n" . $err); // phpcs:ignore
+            ErrorPresenter::getInstance()->process(500);
         }
+
+        // set keys
+        $i['ip'] = $this->getIP();
+        $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         $i['nonce'] = \substr(\trim($nonce), 0, 16);
-        // check all keys
-        if (\array_key_exists('avatar', $identity)) {
-            $i['avatar'] = (string) $identity['avatar'];
-        }
-        if (\array_key_exists('email', $identity)) {
-            $i['email'] = (string) $identity['email'];
-        }
+
+        // check other keys
         if (\array_key_exists('id', $identity)) {
             $i['id'] = (int) $identity['id'];
         }
         if (\array_key_exists('name', $identity)) {
             $i['name'] = (string) $identity['name'];
         }
-        // set other values
-        $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
-        $i['ip'] = $this->getIP();
+        if (\array_key_exists('email', $identity)) {
+            $i['email'] = (string) $identity['email'];
+        }
+        if (\array_key_exists('avatar', $identity)) {
+            $i['avatar'] = (string) $identity['avatar'];
+        }
+        if (\array_key_exists('provider', $identity)) {
+            $i['provider'] = (string) $identity['provider'];
+        }
+
         // shuffle keys
         $out = [];
         $keys = \array_keys($i);
@@ -679,11 +736,13 @@ abstract class APresenter
         foreach ($keys as $k) {
             $out[$k] = $i[$k];
         }
+
         // set new identity
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
+
+        // encrypted cookie
         if ($out['id']) {
-            // encrypted cookie
             $this->setCookie($app, \json_encode($out));
         } else {
             $this->clearCookie($app);
@@ -700,13 +759,25 @@ abstract class APresenter
     {
         if (CLI) {
             return [
-                'country' => 'XX',
-                'email' => 'john.doe@example.com',
                 'id' => 1,
                 'ip' => '127.0.0.1',
                 'name' => 'John Doe',
+                'email' => 'john.doe@example.com',
+                'avatar' => '',
+                'country' => 'XX',
+                'provider' => 'CLI',
             ];
         }
+
+        $i = [
+            'id' => 0,
+            'ip' => '',
+            'name' => '',
+            'email' => '',
+            'avatar' => '',
+            'country' => '',
+            'provider' => '',
+        ];
 
         // check current identity
         $id = $this->identity['id'] ?? null;
@@ -716,24 +787,18 @@ abstract class APresenter
             return $this->identity;
         }
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (!\file_exists($file)) {
-            // set empty identity
+        if (!\file_exists($file) || !\is_readable($file)) {
+            // set empty identity and return
             $this->setIdentity();
             return $this->identity;
         }
-        if (!$nonce = \file_get_contents($file)) {
-            $this->addCritical('Cannot read nonce file!');
-            $this->setLocation('/err/500');
+        if ($nonce = \file_get_contents($file) === false) {
+            $err = \error_get_last()['message'];
+            $this->addCritical("Read nonce file failed! Error:\n" . $err); // phpcs:ignore
+            ErrorPresenter::getInstance()->process(500);
         }
         $nonce = \substr(\trim($nonce), 0, 16);
-        $i = [
-            'avatar' => '',
-            'country' => '',
-            'email' => '',
-            'id' => 0,
-            'ip' => '',
-            'name' => '',
-        ];
+
         do {
             if (isset($_GET['identity'])) {
                 $tls = '';
@@ -765,14 +830,17 @@ abstract class APresenter
                     }
                 }
                 if ($x) {
-                    $this->logout(); // something is terribly wrong!!!
+                    // something is terribly wrong!!!
+                    $this->logout();
                 }
-                if ($q['nonce'] == $nonce) { // compare nonces
+                if ($q['nonce'] === $nonce) {
                     $this->identity = $q; // set identity
                     break;
                 }
             }
-            $this->setIdentity($i); // set empty identity
+
+            // set empty identity
+            $this->setIdentity($i);
             break;
         } while (true);
         return $this->identity;
@@ -985,25 +1053,28 @@ abstract class APresenter
      */
     public function setCookie($name, $data)
     {
-        if (empty($name)) {
+        if (CLI || empty($name) || !\is_string($data)) {
             return $this;
         }
+
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
+
         if (\file_exists($keyfile) && \is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $enc = KeyFactory::generateEncryptionKey();
-            if (is_writable(DATA)) {
+            if (\is_writable(DATA)) {
                 KeyFactory::save($enc, $keyfile);
                 \chmod($keyfile, self::COOKIE_KEY_FILEMODE);
                 $this->addMessage('HALITE: Cookie encryption keyfile created.'); // phpcs:ignore
             } else {
                 $this->addCritical('HALITE: Cannot write cookie encryption key!'); // phpcs:ignore
-                $this->setLocation('/err/500');
+                ErrorPresenter::getInstance()->process(500);
             }
         }
+
         $cookie = new Cookie($enc);
         if (DOMAIN === 'localhost') {
             $httponly = true;
@@ -1014,19 +1085,17 @@ abstract class APresenter
             $samesite = 'lax';
             $secure = true;
         }
-        if (!CLI) {
-            $cookie->store(
-                $name,
-                (string) $data,
-                \time() + self::COOKIE_TTL,
-                '/',
-                DOMAIN,
-                $secure,
-                $httponly,
-                $samesite
-            );
-        }
-        $this->cookies[$name] = (string) $data;
+        $cookie->store(
+            $name,
+            $data,
+            \time() + self::COOKIE_TTL,
+            '/',
+            DOMAIN,
+            $secure,
+            $httponly,
+            $samesite
+        );
+        $this->cookies[$name] = $data;
         return $this;
     }
 
@@ -1374,10 +1443,11 @@ abstract class APresenter
         }
         if ($locale === false || empty($locale)) {
             if ($this->force_csv_check) {
-                $this->addCritical('Corrupted locales!');
-                $this->setLocation('/err/500');
+                $this->addCritical('Corrupted locales: [' . $language . ']');
+                ErrorPresenter::getInstance()->process(500);
             } else {
-                $this->checkLocales(true); // second try!
+                // second try!
+                $this->checkLocales(true);
                 return $this->getLocale($language, $key);
             }
         }
@@ -1770,7 +1840,7 @@ abstract class APresenter
      */
     public function dataExpander(&$data)
     {
-        if (empty($data)) {
+        if (CLI || empty($data)) {
             return $this;
         }
 
@@ -1793,7 +1863,7 @@ abstract class APresenter
             $data["lang{$language}"] = true;
         } else {
             $this->addCritical('Something is terribly wrong with locales!');
-            $this->setLocation('/err/500');
+            ErrorPresenter::getInstance()->process(500);
         }
 
         // get locale if not already present
