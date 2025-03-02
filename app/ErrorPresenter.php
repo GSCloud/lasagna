@@ -101,7 +101,6 @@ class ErrorPresenter extends APresenter
             $code = 404;
         }
         $error = self::CODESET[$code];
-        header("HTTP/1.1 {$code} {$error}");
 
         // find the error image
         $image = "error.png";
@@ -122,7 +121,10 @@ class ErrorPresenter extends APresenter
         $data['image'] = $image;
         $data['message'] = $message;
         $template = "error";
+
+        header("HTTP/1.1 {$code} {$error}");
         echo $this->setData($data)->renderHTML($template);
+
         exit(0);
     }
 }
