@@ -72,10 +72,15 @@ class LoginPresenter extends APresenter
         } finally {
         }
 
-        $errors = [];
         if (!empty($_GET['error'])) {
-            $error = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
-            $this->addError("OAuth failure. Message:\n" . $error);
+            $err = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
+            $this->addError("OAuth failure. Message:\n" . $err);
+            ErrorPresenter::getInstance()->process(
+                [
+                    'code' => 403,
+                    'message' => "OAuth failure. Message:\n" . $err,
+                ]
+            );
         } elseif (empty($_GET['code'])) {
             $email = $_GET['login_hint'] ?? $_COOKIE['login_hint'] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : '';
@@ -91,6 +96,12 @@ class LoginPresenter extends APresenter
         } elseif (empty($_GET['state']) || (!isset($_COOKIE['oauth2state']))
         ) {
             $this->addError('OAuth: Invalid OAuth state.');
+            ErrorPresenter::getInstance()->process(
+                [
+                    'code' => 403,
+                    'message' => 'OAuth: Invalid OAuth state.',
+                ]
+            );
         } else {
             try {
                 $token = $provider->getAccessToken(
@@ -151,6 +162,11 @@ class LoginPresenter extends APresenter
             }
         }
         $this->addError("OAuth general error.");
-        ErrorPresenter::getInstance()->process(403);
+        ErrorPresenter::getInstance()->process(
+            [
+                'code' => 403,
+                'message' => 'OAuth general error.',
+            ]
+        );
     }
 }
