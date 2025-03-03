@@ -39,12 +39,15 @@ class LoginPresenter extends APresenter
 
         $cfg = $this->getCfg();
         if (($cfg['goauth_client_id'] ?? null) === null) {
-            $this->addError('OAuth: Missing [goauth_client_id].');
             $this->setLocation('/err/412');
         }
         if (($cfg['goauth_secret'] ?? null) === null) {
-            $this->addError('OAuth: Missing [goauth_secret].');
             $this->setLocation('/err/412');
+        }
+
+        // check  ID and logout if logged
+        if ($this->getCurrentUser()['id']) {
+            $this->logout();
         }
 
         // save return URL
@@ -101,6 +104,18 @@ class LoginPresenter extends APresenter
                     $token, 
                     ['useOidcMode' => true,]
                 );
+                $this->clearCookie('oauth2state');
+                if (strlen($ownerDetails->getEmail())) {
+                    \setcookie(
+                        'login_hint',
+                        $ownerDetails->getEmail() ?? '',
+                        \time() + 86400 * 31,
+                        '/',
+                        DOMAIN,
+                        true,
+                        true
+                    );
+                }
                 $this->setIdentity(
                     [
                         'id' => $ownerDetails->getId(),
@@ -119,24 +134,14 @@ class LoginPresenter extends APresenter
                         \setcookie('tracy-debug', $this->getCfg('DEBUG_COOKIE'));
                     }
                 }
-                $this->clearCookie('oauth2state');
-                if (strlen($ownerDetails->getEmail())) {
-                    \setcookie(
-                        'login_hint',
-                        $ownerDetails->getEmail() ?? '',
-                        \time() + 86400 * 31,
-                        '/',
-                        DOMAIN,
-                        true,
-                        true
-                    );
-                }
                 if (isset($_COOKIE['returnURL'])) {
                     $url = \urldecode($_COOKIE['returnURL']);
+                    $this->clearCookie('returnURL');
                     if (\strpos($url, '/') === 0) {
                         $this->setLocation($url . '?nonce=' . $this->getNonce());
                     }
                 }
+                $this->clearCookie('returnURL');
                 $this->setLocation();
 
             } catch (\Exception $e) {

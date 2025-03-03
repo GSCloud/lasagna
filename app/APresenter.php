@@ -498,13 +498,13 @@ abstract class APresenter
             return $this;
         }
 
-        $message = trim($message);
-        $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
         $date = \date('c');
         $ip = $this->getIP();
         $i = $this->getIdentity();
         $name = $i['name'] ?? '';
         $email = $i['email'] ?? '';
+        $message = trim($message);
+        $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
 
         if (empty($name)) {
             try {
@@ -551,6 +551,7 @@ abstract class APresenter
             if (CLI) {
                 return $this;
             }
+            $message = str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'messages.txt');
         }
         return $this;
@@ -581,6 +582,7 @@ abstract class APresenter
             if (CLI) {
                 return $this;
             }
+            $message = str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'errors.txt');
         }
         return $this;
@@ -611,6 +613,7 @@ abstract class APresenter
             if (CLI) {
                 return $this;
             }
+            $message = str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'critical_errors.txt');
         }
         return $this;
@@ -663,14 +666,25 @@ abstract class APresenter
             }
             if (!isset($_COOKIE[$name])) {
                 $uid = $this->getNonce();
-                $cookieOptions = [
-                    'expires' => \time() + self::COOKIE_TTL,
-                    'path' => '/',
-                    'domain' => DOMAIN,
-                    'secure' => true,
-                    'httponly' => true,
-                    'samesite' => 'Strict',
-                ];
+                if (LOCALHOST) {
+                    $cookieOptions = [
+                        'expires' => \time() + self::COOKIE_TTL,
+                        'path' => '/',
+                        'domain' => DOMAIN,
+                        'secure' => false,
+                        'httponly' => true,
+                        'samesite' => 'Strict',
+                    ];
+                } else {
+                    $cookieOptions = [
+                        'expires' => \time() + self::COOKIE_TTL,
+                        'path' => '/',
+                        'domain' => DOMAIN,
+                        'secure' => true,
+                        'httponly' => true,
+                        'samesite' => 'Strict',
+                    ];
+                }
                 if (!setcookie($name, $uid, $cookieOptions)) {
                     $this->addError("Cannot set new UUID cookie.");
                 }
@@ -712,16 +726,18 @@ abstract class APresenter
             'name' => '',
             'email' => '',
             'avatar' => '',
-            'provider' => '',
             'country' => '',
+            'provider' => '',
         ];
 
+        // nonce required
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if ($nonce = @file_get_contents($file) === false) {
-            $this->addCritical("Read nonce file failed. Message:\n" . \error_get_last()['message']); // phpcs:ignore
-            ErrorPresenter::getInstance()->process(500);
+        $nonce = @file_get_contents($file);
+        if (!$nonce) {
+            error_log('Cannot read nonce from file.');
+            return $i;
         }
-        $nonce = \substr(trim($nonce), 0, 16);
+        $nonce = substr(trim($nonce), 0, 16);
 
         // set keys
         $i['ip'] = $this->getIP();
@@ -753,12 +769,10 @@ abstract class APresenter
             $out[$k] = $i[$k];
         }
 
-        // set new identity
-        $this->identity = $out;
+        // set identity
         $app = $this->getCfg('app') ?? 'app';
-
-        // encrypted cookie
-        if ($out['id']) {
+        $this->identity = $out;
+        if ($i['id']) {
             $this->setCookie($app, \json_encode($out));
         } else {
             $this->clearCookie($app);
@@ -795,65 +809,46 @@ abstract class APresenter
             'provider' => '',
         ];
 
-        // check current identity
-        $id = $this->identity['id'] ?? null;
-        $email = $this->identity['email'] ?? null;
-        $name = $this->identity['name'] ?? null;
-        if ($id && $email && $name) {
-            return $this->identity;
-        }
-
+        // nonce required
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if ($nonce = @file_get_contents($file) === false) {
-            $this->addCritical("Read nonce file failed. Message:\n" . \error_get_last()['message']); // phpcs:ignore
-            ErrorPresenter::getInstance()->process(500);
+        $nonce = @file_get_contents($file);
+        if (!$nonce) {
+            error_log('Cannot read nonce from file.');
+            return $i;
         }
-        $nonce = \substr(trim($nonce), 0, 16);
+        $nonce = substr(trim($nonce), 0, 16);
 
-        do {
-            if (isset($_GET['identity'])) {
-                $tls = '';
-                if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-                    $tls = 's';
-                }
-                $this->setCookie($this->getCfg('app') ?? 'app', $_GET['identity']);
-                $this->setLocation(
-                    "http{$tls}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"
-                );
+        // COOKIE identity
+        $app = $this->getCfg('app') ?? 'app';
+        if (isset($_COOKIE[$app])) {
+            $content = $this->getCookie($app);
+            $q = \json_decode($content, true);
+            if (!\is_array($q)) {
+                error_log('Cookie identity is not an array.');
+                $this->logout();
             }
-            if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
-                // COOKIE identity
-                $x = 0;
-                $q = \json_decode(
-                    $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
-                );
-                if (!\is_array($q)) {
-                    $x++;
-                } else {
-                    if (!\array_key_exists('email', $q)) {
-                        $x++;
-                    }
-                    if (!\array_key_exists('id', $q)) {
-                        $x++;
-                    }
-                    if (!\array_key_exists('nonce', $q)) {
-                        $x++;
-                    }
-                }
-                if ($x) {
-                    // something is terribly wrong!!!
-                    $this->logout();
-                }
-                if ($q['nonce'] === $nonce) {
-                    $this->identity = $q; // set identity
-                    break;
-                }
+            if (!\array_key_exists('email', $q)) {
+                error_log('Cookie identity has no email.');
+                $this->logout();
             }
+            if (!\array_key_exists('id', $q)) {
+                error_log('Cookie identity has no id.');
+                $this->logout();
+            }
+            if (!\array_key_exists('nonce', $q)) {
+                error_log('Cookie identity has no nonce.');
+                $this->logout();
+            }
+            if ($q['nonce'] !== $nonce) {
+                error_log('Cookie identity nonce is invalid.');
+                $this->logout();
+            }
+            if ($q['nonce'] === $nonce) {
+                $this->identity = $q;
+            }
+        }
 
-            // set empty identity
-            $this->setIdentity($i);
-            break;
-        } while (true);
+        // empty identity
         return $this->identity;
     }
 
@@ -866,14 +861,17 @@ abstract class APresenter
     {
         $u = \array_replace(
             [
-                'avatar' => '',
-                'country' => '',
-                'email' => '',
                 'id' => 0,
                 'name' => '',
+                'email' => '',
+                'avatar' => '',
+                'country' => '',
+                'provider' => '',
             ],
             $this->getIdentity()
         );
+
+        // get UID stuff
         $u['uid'] = $this->getUID();
         $u['uidstring'] = $this->getUIDstring();
         return $u;
@@ -1035,7 +1033,7 @@ abstract class APresenter
     public function getCookie($name)
     {
         if (CLI) {
-            return $this->cookies[$name] ?? null;
+            return null;
         }
         if (empty($name)) {
             return null;
@@ -1047,9 +1045,10 @@ abstract class APresenter
         if (file_exists($keyfile) && is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
-            $this->addError('HALITE: Missing encryption key.');
-            return null;
+            error_log('HALITE: Missing encryption key.');
+            die('HALITE: Missing encryption key.');
         }
+
         $cookie = new Cookie($enc);
         return $cookie->fetch($name);
     }
@@ -1067,6 +1066,7 @@ abstract class APresenter
         if (CLI || empty($name) || !\is_string($data)) {
             return $this;
         }
+        //var_dump($name);var_dump($data);exit;
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         $key = trim($key, "/.\\");
@@ -1089,7 +1089,7 @@ abstract class APresenter
         }
 
         $cookie = new Cookie($enc);
-        if (DOMAIN === 'localhost') {
+        if (LOCALHOST) {
             $httponly = true;
             $samesite = 'lax';
             $secure = false;
@@ -1109,6 +1109,7 @@ abstract class APresenter
             $samesite
         );
         $this->cookies[$name] = $data;
+        $_COOKIE[$name] = $data;
         return $this;
     }
 
@@ -1124,11 +1125,9 @@ abstract class APresenter
         if (empty($name)) {
             return $this;
         }
-        if (($this->cookies[$name] ?? null) || ($_COOKIE[$name] ?? null)) {
-            unset($_COOKIE[$name]);
-            unset($this->cookies[$name]);
-            \setcookie($name, '', time() - 3600, '/');
-        }
+        unset($_COOKIE[$name]);
+        unset($this->cookies[$name]);
+        \setcookie($name, '', time() - 3600, '/');
         return $this;
     }
 
@@ -1163,8 +1162,8 @@ abstract class APresenter
         if (CLI) {
             exit;
         }
-        $nonce = $this->getNonce();
-        $this->setLocation("/?logout&nonce=$nonce");
+
+        $this->setLocation("/?logout&nonce=" . $this->getNonce());
     }
 
     /**
@@ -1938,8 +1937,24 @@ abstract class APresenter
      */
     public function getNonce()
     {
-        $time = (string) \time();
-        $randomBytes = (string) random_int(0, PHP_INT_MAX);
-        return \substr(\hash('sha256', $randomBytes . $time), 0, 16);
+        try {
+            $randomBytes = random_bytes(32);
+            $time = (string) time();
+            $hash = hash('sha256', $randomBytes . $time);
+            return substr($hash, 0, 16);
+        } catch (\Exception $e) {
+            $this->addError("Error generating cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
+            if (function_exists('openssl_random_pseudo_bytes')) {
+                $this->addMessage("Using openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
+                $randomBytes = openssl_random_pseudo_bytes(32);
+                $time = (string) time();
+                $hash = hash('sha256', $randomBytes . $time);
+                return substr($hash, 0, 16);
+            }
+            $this->addCritical("Error generating a general nonce: " . $e->getMessage()); // phpcs:ignore
+            ErrorPresenter::getInstance()->process(
+                ['code' => 500, 'message' => 'Error generating  nonce.']
+            );
+        }
     }
 }
