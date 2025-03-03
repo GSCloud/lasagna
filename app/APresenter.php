@@ -1687,16 +1687,18 @@ abstract class APresenter
         // part 2 = CSV file
         $csv = null;
         if (file_exists(DATA . DS . "{$file}.csv")) {
-            if ($csv = @file_get_contents(DATA . DS . "{$file}.csv") === false) {
+            if (!$csv = @file_get_contents(DATA . DS . "{$file}.csv")) {
                 $csv = null;
                 $this->addError("Reading file [{$file}.csv] failed.");
             }
         }
+
         if (\is_string($csv) && \stripos($csv, '<!DOCTYPE html') === 0) {
             // we got HTML document = failure
             $csv = null;
             $this->addError("File [{$file}.csv] contains HTML.");
         }
+
         if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
             Cache::write($file, $csv, 'csv');
             return $csv;
@@ -1705,7 +1707,7 @@ abstract class APresenter
         // part 3 = CSV backup file
         $csv = null;
         if (file_exists(DATA . DS . "{$file}.bak")) {
-            if ($csv = @file_get_contents(DATA . DS . "{$file}.bak") === false) {
+            if (!$csv = @file_get_contents(DATA . DS . "{$file}.bak")) {
                 $csv = null;
                 $this->addError("Reading backup file [{$file}.bak] failed.");
             }

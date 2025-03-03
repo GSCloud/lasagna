@@ -363,7 +363,7 @@ $data['router_files'] = $routes;
 // ROUTING TABLES
 foreach ($routes as $routeFileName) {
     $route = APP . DS . $routeFileName;
-    if (($content = file_get_contents($route)) === false) {
+    if (!$content = file_get_contents($route)) {
         if (ob_get_level()) {
             @ob_end_clean();
         }
