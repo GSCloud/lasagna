@@ -17,7 +17,6 @@ clearbrowser:
   presenter: core
   assert_httpcode: 303
 
-# core services
 GetWebManifest:
   path: /manifest.json
   assert_json: true
@@ -25,6 +24,11 @@ GetWebManifest:
 
 GetRobotsTxt:
   path: /robots.txt
+  presenter: core
+
+GetRSSXML:
+  path: /rss.xml
+  template: rss.xml
   presenter: core
 
 GetTXTSitemap:
