@@ -551,6 +551,7 @@ abstract class APresenter
             if (CLI) {
                 return $this;
             }
+            $message = str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'messages.txt');
         }
         return $this;
@@ -581,6 +582,7 @@ abstract class APresenter
             if (CLI) {
                 return $this;
             }
+            $message = str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'errors.txt');
         }
         return $this;
@@ -611,6 +613,7 @@ abstract class APresenter
             if (CLI) {
                 return $this;
             }
+            $message = str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'critical_errors.txt');
         }
         return $this;
@@ -716,6 +719,7 @@ abstract class APresenter
             'country' => '',
         ];
 
+        // nonce required
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
         $nonce = @file_get_contents($file);
         if (!$nonce) {
@@ -804,6 +808,7 @@ abstract class APresenter
             return $this->identity;
         }
 
+        // nonce required
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
         $nonce = @file_get_contents($file);
         if (!$nonce) {
@@ -813,37 +818,36 @@ abstract class APresenter
         $nonce = substr(trim($nonce), 0, 16);
 
         // COOKIE identity
-        if (isset($_COOKIE[$this->getCfg('app') ?? 'app'])) {
-            $q = \json_decode(
-                $this->getCookie($this->getCfg('app') ?? 'app')?? '', true
-            );
-            $x = 0;
+        $app = $this->getCfg('app') ?? 'app';
+        if (isset($_COOKIE[$app])) {
+            $content = $this->getCookie($app);
+            $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                $x++;
-            } else {
-                if (!\array_key_exists('email', $q)) {
-                    $x++;
-                }
-                if (!\array_key_exists('id', $q)) {
-                    $x++;
-                }
-                if (!\array_key_exists('nonce', $q)) {
-                    $x++;
-                }
-            }
-            if ($x) {
+                error_log('Cookie identity is not an array.');
                 $this->logout();
             }
-
+            if (!\array_key_exists('email', $q)) {
+                error_log('Cookie identity has no email.');
+                $this->logout();
+            }
+            if (!\array_key_exists('id', $q)) {
+                error_log('Cookie identity has no id.');
+                $this->logout();
+            }
+            if (!\array_key_exists('nonce', $q)) {
+                error_log('Cookie identity has no nonce.');
+                $this->logout();
+            }
+            if ($q['nonce'] !== $nonce) {
+                error_log('Cookie identity nonce is invalid.');
+                $this->logout();
+            }
             if ($q['nonce'] === $nonce) {
-                // set new identity
                 $this->identity = $q;
-                return $this->identity;
             }
         }
 
-        // set empty identity
-        $this->setIdentity($i);
+        // empty identity
         return $this->identity;
     }
 
@@ -856,14 +860,17 @@ abstract class APresenter
     {
         $u = \array_replace(
             [
-                'avatar' => '',
-                'country' => '',
-                'email' => '',
                 'id' => 0,
                 'name' => '',
+                'email' => '',
+                'avatar' => '',
+                'country' => '',
+                'provider' => '',
             ],
             $this->getIdentity()
         );
+
+        // get UID stuff
         $u['uid'] = $this->getUID();
         $u['uidstring'] = $this->getUIDstring();
         return $u;
