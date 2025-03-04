@@ -1,7 +1,10 @@
 # **Tesseract LASAGNA changelog**
 
-**`[BUGFIX]`** `[FEATURE] [IDEA]`  
 ---
+
+`2025-03-04`
+
+* **`1048-FEATURE` hardened security and error logging**
 
 `2025-02-21`  **`v2.4.5`**
 
