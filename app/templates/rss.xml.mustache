@@ -4,6 +4,8 @@
   <title>{{ rss_channel_title }}</title>
   <description>{{ rss_channel_description }}</description>
   <link>{{ rss_channel_link }}</link>
+  <generator>{{ ENGINE }}</generator>
+  {{#lastbuilddate}}<lastBuildDate>{{ lastbuilddate }}</lastBuildDate>{{/lastbuilddate}}
   <atom:link href="{{ rss_channel_link }}/rss.xml" rel="self" type="application/rss+xml" />
 {{#rss_items}}
   <item>

@@ -145,6 +145,11 @@ class CorePresenter extends APresenter
             } else {
                 $map = [];
             }
+            // @phpstan-ignore-next-line
+            if (isset($map['lastbuilddate'])) {
+                $this->setData("lastbuilddate", $map['lastbuilddate']);
+                unset($map['lastbuilddate']);
+            }
             $this->setData("rss_channel_description", $l["meta_description"] ?? "");
             $this->setData("rss_channel_link", $l['$canonical_url'] ?? "");
             $this->setData("rss_channel_title", $l["title"] ?? "");

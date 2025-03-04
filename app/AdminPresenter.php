@@ -375,9 +375,7 @@ class AdminPresenter extends APresenter
             \array_walk($logs, array($this, '_decorateLogs'));
             $data['content'] = $logs;
             $data['repetitions'] = $this->_repetitions;
-            return $this->setData(
-                'output', $this->setData($data)->renderHTML('auditlog')
-            );
+            return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
 
         case 'GetCsvInfo':
             $this->checkPermission('admin,manager,editor');
@@ -1320,13 +1318,18 @@ class AdminPresenter extends APresenter
             $x[1]
         );
 
+        $ipinfo = "href='https://ipinfo.io/{$x[2]}'";
+        if (\strpos($x[2], ':') !== false) {
+            $ipinfo = '';
+        }
+
         $val = "<tr data-type='{$type}'"
             . " class='logrow {$type} {$class}'"
             . ">"
             . "<td class=center><b>" . $this->_logcounter . "</b></td>"
             . "<td class='center c2'>"
             . "{$x[0]}<br>"
-            . "<a target=_blank style='color:#fff' href='https://ipinfo.io/{$x[2]}'>"
+            . "<a target=_blank style='color:#fff' {$ipinfo}>"
             . "<div class='{$class2}'>"
             . "{$x[2]}"
             . "</div></a></td>"
