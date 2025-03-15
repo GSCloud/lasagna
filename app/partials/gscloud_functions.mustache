@@ -439,38 +439,17 @@ async function sha256(message) {
         }
       }
      
+      // mobile logout
       {{#is_admin}}
-      // mobile logout menu
       $('#nav-mobile').append('<br><li><a class="white-text bold right oauth" href="/logout"><i class="fa-solid fa-right-from-bracket red-text"></i>Logout</a></li>');
       {{/is_admin}}
 
-      {{^is_admin}}
-      // mobile login menu
-      {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-      $('#nav-mobile').append('<br><li><a class="login white-text bold right oauth" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key yellow-text"></i>Login</a></li>');
-      {{/goauth_secret}}{{/goauth_client_id}}
-      {{/LOCALHOST}}
-      {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-      $('#nav-mobile').append('<br><li><a class="login white-text bold right oauth" href="{{ goauth_redirect }}"><i class="fa-solid fa-key yellow-text"></i>Login</a></li>');
-      {{/goauth_secret}}{{/goauth_client_id}}
-      {{/LOCALHOST}}
-      {{/is_admin}}
-
-      {{^is_admin}}
-      // desktop login menu
-      {{#LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-      $('.main-header nav.navbar ul').append('<li><a class="login white-text bold right oauth" href="{{ local_goauth_redirect }}"><i class="fa-solid fa-key yellow-text"></i></a></li>');
-      {{/goauth_secret}}{{/goauth_client_id}}
-      {{/LOCALHOST}}
-
-      {{#is_goauth_origin}}
-      {{^LOCALHOST}}{{#goauth_client_id}}{{#goauth_secret}}
-      $('.main-header nav.navbar ul').append('<li><a class="login white-text bold right oauth" href="{{ goauth_redirect }}"><i class="fa-solid fa-key yellow-text"></i></a></li>');
-      {{/goauth_secret}}{{/goauth_client_id}}
-      {{/LOCALHOST}}
-      {{/is_goauth_origin}}
-
-      {{/is_admin}}
+      {{^is_admin}}{{#goauth_client_id}}{{#goauth_secret}}
+      // mobile login
+      $('#nav-mobile').append('<br><li><a class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i>Login</a></li>');
+      // desktop login
+      $('.main-header nav.navbar ul').append('<li><a class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i></a></li>');
+      {{/goauth_secret}}{{/goauth_client_id}}{{/is_admin}}
 
       $(".login").each(function() {
         const currentURL = new URL(window.location.href);
