@@ -2,18 +2,23 @@
 
 ---
 
+`2025-03-15`
+
+* **`1049-FEATURE` hardened security and error logging**  
+  * login possible at **/login** on the main domain
+
 `2025-03-04`
 
 * **`1048-FEATURE` hardened security and error logging**
 
 `2025-02-21`  **`v2.4.5`**
 
-* **`1047-FEATURE` enhanced offline/error pages, error messages**
+* **`1047-FEATURE` enhanced offline/error pages**
 
 `2025-02-19`
 
 * **`1046-FEATURE` no more META keywords**, feature removed  
-* **`1045-FEATURE`** login workflow **returnURL support**  
+* **`1045-FEATURE`** login workflow uses a **returnURL**  
 * **`1044-FEATURE` refactorization of StringFilter** class
 
 `2025-02-17`
