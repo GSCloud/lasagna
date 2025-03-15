@@ -63,7 +63,6 @@ rsync -ahz --progress --delete-after --delay-updates \
   *.json \
   *.md \
   *.php \
-  *.txt \
   app \
   bin \
   cli.sh \
