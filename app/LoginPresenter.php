@@ -70,8 +70,14 @@ class LoginPresenter extends APresenter
             }   
         }
 
-        // check if user is logged in === redirect to the main page
+        // check if user is logged in === redirect to the main/last page
         if (\strlen($this->getCurrentUser()['email'])) {
+            if (isset($_GET['returnURL'])) {
+                $url = $_GET['returnURL'];
+                if (\strpos($url, '/') === 0) {
+                    $this->setLocation($url . '?nonce=' . $this->getNonce());
+                }
+            }
             $this->setLocation();
         }
 
