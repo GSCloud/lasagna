@@ -1,0 +1,141 @@
+<!-- EXTRA ADMIN STYLES -->
+<link href="https://cdn.gscloud.cz/tesseract/css/admin.css" rel="stylesheet">
+
+<style>
+#admin_main hr {border:0;clear:both;margin:0 auto}
+#a_file_manager {padding-top:5px}
+#a_file_manager .btn-small {line-height:25px;height:25px;padding:0 8px 0 8px}
+#data b {font-weight:bold!important}
+#searchbox {text-indent:1rem}
+#uploadimagescount {border-radius:3px;border:1px solid #fff}
+.btn-stubs {margin:1px;font-size:0.8rem!important}
+.btn-stubs:hover {background-color:red!important}
+.card-link {color:#aaf!important}
+.fa-trash {margin-right:1rem}
+.hide-images {display:none}
+.tab>a {color:#fff!important}
+.tabs .indicator {background-color: transparent!important}
+.tabs a.active {border-bottom: 4px solid #fff!important}
+.tabs {overflow: auto;overflow-x: hidden}
+.tabs>li>a>i {margin-right:1rem;font-size:20px}
+.upload-controls {margin:10px}
+.warning {padding:5px}
+.cursordefault {cursor:default!important}
+.cursorpointer {cursor:pointer!important}
+#uploads_extended_info {padding:10px}
+
+/*  group icons */
+.group_icon_admin::before {content:"🫅 ";font-size:1.3rem}
+.group_icon_editor::before {content:"🧑‍💼 ";font-size:1.3rem}
+.group_icon_manager::before {content:"🧙 ";font-size:1.3rem}
+.group_icon_tester::before {content:"👷 ";font-size:1.3rem}
+
+div#data .bl {background:linear-gradient(to bottom, #333, #24202F, #101520);border:2px solid #000;border-radius:3px}
+div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
+</style>
+
+<!-- WRENCH -->
+<span style="position:fixed;left:10px;top:10px;z-index:999999" class="noselect motyle btn white z-depth-5">🛠️</span>
+
+<!-- ADMIN PANEL -->
+<div id="admin_main" class="row center black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
+
+  <!-- CURRENT USER -->
+  <div class="right black" style="z-index:99;position:sticky!important;top:70px;right:0;padding:5px!important;opacity:0.9">
+    <div style="display:inline-block;margin:auto">
+      <b class="group_icon_{{ group }}">{{user.email}}</b>
+      <br>
+      <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
+        data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
+        <i class="fas fa-sign-out-alt"></i></a>
+{{#admin_group_admin}}
+      <a title="Audit Log" target="_blank" ref="nofollow" href="/admin/AuditLog?nonce={{ nonce }}" class="waves-effect blue waves-light btn">
+        <i class="fas fa-list"></i></a>
+{{/admin_group_admin}}
+    </div>
+  </div>
+
+  <!-- EXTERNAL LINKS -->
+  <div class="row center black">
+    {{#external_links}}
+      <a rel="noreferrer noopener" target="_blank" class="btn tooltipped {{#color}}{{color}}{{/color}}{{^color}}green{{/color}} white-text" style="padding:4px;line-height:2em;border-radius:2px"
+        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;
+    {{/external_links}}
+  </div>
+
+  <!-- CUSTOM PANEL -->
+  {{>admin_custom}}
+
+  <!-- TABBED NAVIGATION -->
+  <div id="menutabbed" class="row container noselect">
+    <ul class="tabs grey darken-3 bold">
+      <li class="tab col s3"><a data-id="data" href="#data"><i class="fa-solid small fa-database"></i> {{ l.a_tab_data }}</a></li>
+      <li class="tab col s2"><a data-id="fn" href="#fn"><i class="fa-solid small fa-robot"></i> {{ l.a_tab_fn }}</a></li>
+      <li class="tab col s2"><a data-id="services" href="#services"><i class="fa-solid small fa-screwdriver-wrench"></i> {{ l.a_tab_services }}</a></li>
+      <li class="tab col s2"><a data-id="users" href="#users"><i class="fa-regular small fa-user"></i> {{ l.a_tab_users }}</a></li>
+      <li class="tab col s2"><a data-id="news" href="#news"><i class="fa-solid small fa-circle-info"></i> {{ l.a_tab_changes }} </a></li>
+    </ul>
+  </div>
+
+  <!-- DATA -->
+  {{>admin_tab_data}}
+
+  <!-- FN -->
+  {{>admin_tab_fn}}
+
+  <!-- SERVICES -->
+  {{>admin_tab_services}}
+
+  <!-- USERS -->
+  {{>admin_tab_users}}
+
+  <!-- NEWS -->
+  {{>admin_tab_news}}
+
+  <hr>
+
+  {{ l.a_fcgi }}: <span class=bold>{{#CONST.FCGI_ENABLED}}{{ l.a_on }}{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}{{ l.a_off }}{{/CONST.FCGI_ENABLED}}</span>, &nbsp;
+  {{ l.a_redis }}: <span class=bold>{{#CONST.REDIS_CACHE}}{{ l.a_on }}{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}{{ l.a_off }}{{/CONST.REDIS_CACHE}}</span>
+  
+  <br>
+  
+  {{ l.a_limiter }}: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
+  {{ l.a_ban }}: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
+  
+  <br>
+
+  {{ l.a_model }}: <span class=bold id="time1">?</span> ms &nbsp;
+  {{ l.a_processing }}: <span class=bold id="time2">?</span> ms &nbsp;
+  {{ l.a_total }}: <span class=bold id="time3">?</span> ms
+  
+  <br>
+
+  <!-- UPLOADS -->
+  <div id="a_uploader_progress"></div>
+  <div id="a_file_manager" class="noselect"></div>
+</div>
+
+<script nonce="{{ csp_nonce }}">
+{{>admin_main.js.mustache}}
+{{>admin_summernote.js.mustache}}
+</script>
+
+{{^disable_articles}}
+<!-- Summernote + Codemirror -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/codemirror.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/theme/material-darker.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/addon/display/fullscreen.min.css" rel="stylesheet">
+
+<link href="https://cdn.gscloud.cz/summernote/summernote-lite.min.css" rel="stylesheet">
+
+<script nonce="{{ csp_nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/codemirror.min.js" defer></script>
+<script nonce="{{ csp_nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/mode/xml/xml.min.js" defer></script>
+<script nonce="{{ csp_nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/addon/display/fullscreen.min.js" defer></script>
+
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/summernote-lite.min.js" defer></script>
+{{#langcs}}<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
+{{#langsk}}<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/lang/summernote-sk-SK.min.js" defer></script>{{/langsk}}
+{{/disable_articles}}
+
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/moment-with-locales.min.js" defer></script>
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/zeroupload.min.js" defer></script>

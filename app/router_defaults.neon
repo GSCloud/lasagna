@@ -1,0 +1,47 @@
+# @author Fred Brooker <git@gscloud.cz>
+# router defaults
+
+defaults:
+  # RESTful API
+  api: false  # show on the API page
+  api_info: ""
+  api_description: ""
+  api_example: []
+  api_key: null
+
+  # CI tester
+  assert_httpcode: 200
+  assert_json: false
+  assert_values: []
+
+  # switches
+  allow_key: false
+  cached: false
+  deprecated: false
+  finished: false
+  norobots: false
+  private: false
+  sitemap: false
+  use_key: false
+
+  # API access extras
+  access_key: null
+  encryption_key: null
+
+  # language
+  language: en
+
+  # HTTP methods
+  method: GET  # methods separated by |
+
+  # MVP
+  presenter: home # aka HomePresenter etc.
+  template: index # user: template/index.mustache
+  template_admin: index # admin: template/index.mustache
+  view: home # a route of the last resort
+
+  # routing extras
+  alias: null # route name
+  clone: null # route name to copy from, additional parameters optional
+  country: null # Cloudflare country code specific redirects: array [default, localhost, CZ, XX]
+  redirect: null # full / relative URL

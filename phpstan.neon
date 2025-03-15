@@ -1,0 +1,16 @@
+parameters:
+    level: 9
+    ignoreErrors:
+        - '#If condition is always false#'
+        - '#If condition is always true#'
+        - '#Right side of && is always true#'
+        - '#Negated boolean expression is always true#'
+        - '#Ternary operator condition is always true#'
+        - '#Call to function is_null\(\)#'
+    bootstrapFiles:
+        - phpstan_constants.php
+    dynamicConstantNames:
+        - DEBUG
+        - UPLOAD
+        - CSP
+    treatPhpDocTypesAsCertain: false

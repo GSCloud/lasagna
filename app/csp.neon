@@ -1,0 +1,77 @@
+# @author Fred Brooker <git@gscloud.cz>
+# Content Security Policy
+
+csp: [
+    "Content-Security-Policy: "
+    "report-to"
+    "default;"
+    "report-uri"
+    "https://gscloud.cz;"
+
+    "base-uri"
+    "'self';"
+
+    "default-src"
+    "'self'"
+    "data:"
+    "blob:"
+    "https:;"
+
+    "object-src"
+    "'none';"
+
+    "connect-src"
+    "'self'"
+    "https:;"
+
+    "font-src"
+    "'self'"
+    "data:"
+    "'unsafe-inline'"
+    "cdn.gscloud.cz"
+    "cdn.hmcgames.com"
+    "*.gstatic.com;"
+
+    "script-src"
+    "'self'"
+    "*.googleapis.com"
+    "cdn.gscloud.cz"
+    "cdnjs.cloudflare.com"
+    "challenges.cloudflare.com"
+    "gspace.gscloud.cz"
+    "static.cloudflareinsights.com"
+    "umami.gscloud.cz"
+    "'strict-dynamic'"
+    "'nonce-random';"
+
+    "img-src"
+    "'self'"
+    "data:"
+    "https:;"
+
+    "style-src"
+    "'self'"
+    "'unsafe-inline'"
+    "data:"
+    "https:;"
+
+    "media-src"
+    "'self'"
+    "data:"
+    "https:;"
+
+    "worker-src"
+    "'self';"
+
+    "frame-src"
+    "'self'"
+    "api.soundcloud.com"
+    "w.soundcloud.com"
+    "youtube.com"
+    "www.google.com"
+    "www.youtube.com;"
+    
+    "form-action"
+    "'self'"
+    "https:;"
+]

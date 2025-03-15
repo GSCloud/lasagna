@@ -1,0 +1,28 @@
+# @author Fred Brooker <git@gscloud.cz>
+
+defaults:
+  language: cs
+  home: redir # routing failure
+
+home:
+  path: /
+  country: [
+    default: '/en'
+    localhost: '/cs'
+    CZ: '/cs'
+    XX: '/en'
+  ]
+  assert_httpcode: 303
+
+cs:
+  path: /cs
+  sitemap: true
+
+en:
+  path: /en
+  sitemap: true
+  language: en
+
+# routing failure
+redir:
+  redirect: /

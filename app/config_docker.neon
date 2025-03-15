@@ -1,0 +1,28 @@
+### LASAGNA - DOCKER
+# @author Fred Brooker <git@gscloud.cz>
+
+#dbg: TRUE
+dbg: FALSE
+
+# core
+app: lasagna
+canonical_url: "https://lasagna.gscloud.cz/"
+date_default_timezone: "Europe/Prague"
+project: LASAGNA
+secret_cookie_key: secure.key
+version: v1
+
+# test origin override
+test_origin: "http://localhost:80"
+
+# Google OAuth 2.0
+local_goauth_origin: "http://localhost:9000"
+local_goauth_redirect: "http://localhost:9000/login"
+
+# Redis
+redis: [
+  # disable Redis
+  port: 0
+  #port: 6379
+  timeout: 1
+]

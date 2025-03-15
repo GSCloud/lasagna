@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="no-js" lang="{{ lang }}">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{{>head_pre}}
+
+<title>{{#LOCALHOST}}LOCAL |{{/LOCALHOST}}{{#l.alfa}}{{ l.alfa }}>{{/l.alfa}}{{#l.beta}}{{ l.beta }}>{{/l.beta}} {{ l.title }}</title>
+
+<link rel="dns-prefetch" href="//cdn.gscloud.cz">
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link rel="dns-prefetch" href="//static.cloudflareinsights.com">
+<link rel="dns-prefetch" href="//umami.gscloud.cz">
+
+<link rel="preconnect" href="//cdn.gscloud.cz">
+<link rel="preconnect" href="//cdnjs.cloudflare.com">
+<link rel="preconnect" href="//fonts.googleapis.com">
+<link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="//static.cloudflareinsights.com">
+<link rel="preconnect" href="//umami.gscloud.cz">
+
+<link rel="manifest" href="/manifest.json">
+
+{{#rss_feed}}<link rel="alternate" type="application/rss+xml" title="{{ l.title }} - RSS feed" href="/rss.xml">{{/rss_feed}}
+{{#canonical_url}}<link rel="canonical" href="{{ canonical_url }}{{ request_path }}">{{/canonical_url}}
+
+{{>head_meta}}
+{{>head_favicons}}
+{{>head_umami}}
+{{>head_custom}}
+
+{{>head-css-quirks}}
+
+<link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
+
+{{>head_post}}
+
+<script nonce="{{ csp_nonce }}">
+'use strict';
+
+(function() {
+  var externallyFramed = false;
+  try {
+    externallyFramed = top.location.host != location.host;
+  }
+  catch(err) {
+    externallyFramed = true;
+  }
+  if(externallyFramed) {
+    top.location = location;
+  }
+})();
+
+{{^admin_group_admin}}
+// passive listeners
+!function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={i:n,l:!1,exports:{}};return e[n].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var o={};t.m=e,t.c=o,t.d=function(e,o,n){t.o(e,o)||Object.defineProperty(e,o,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var o=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(o,"a",o),o},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,o){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},r=o(1),u={passive:!0,capture:!1},i=["scroll","wheel","touchstart","touchmove","touchenter","touchend","touchleave","mouseout","mouseleave","mouseup","mousedown","mousemove","mouseenter","mousewheel","mouseover"],s=function(e,t){return void 0!==e?e:-1!==i.indexOf(t)&&u.passive},c=function(e){var t=Object.getOwnPropertyDescriptor(e,"passive");return t&&!0!==t.writable&&void 0===t.set?Object.assign({},e):e};if((0,r.eventListenerOptionsSupported)()){var p=EventTarget.prototype.addEventListener;!function(e){EventTarget.prototype.addEventListener=function(t,o,r){var i="object"===(void 0===r?"undefined":n(r))&&null!==r,p=i?r.capture:r;r=i?c(r):{},r.passive=s(r.passive,t),r.capture=void 0===p?u.capture:p,e.call(this,t,o,r)},EventTarget.prototype.addEventListener._original=e}(p)}},function(e,t,o){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.eventListenerOptionsSupported=function(){var e=!1;try{var t=Object.defineProperty({},"passive",{get:function(){e=!0}});window.addEventListener("test",null,t),window.removeEventListener("test",null,t)}catch(e){}return e}}]);
+{{/admin_group_admin}}
+</script>
+</head>
+<body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
+<noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
+
+{{>body_pre}}
+
+<div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
+  <br>
+  <a id="update-button" rel="nofollow" class="waves-effect blue waves-light btn">{{ l.page_outdated_button }}</a>
+</div>
+<div aria-hidden="true" tabindex="-1" id="offline-message">📵</div>
+<div aria-hidden="true" tabindex="-1" id="movetotop"><i class="fa-solid fa-caret-up noselect white-text"></i></div>
+
+<script nonce="{{ csp_nonce }}">
+// GSC init
+!(function(c,e){a=c.GSC||{};a.init=[];a.names=[];a.AutoInit=function(){for(var a=window.GSC.init,c=window.GSC.names,b=0,d=a.length;b<d;b++)try{a[b](),console.log("fn #"+(b+1)+": "+c[b])}catch(f){}};a.LASAGNA={};a.LASAGNA.core={};a.LASAGNA.core.version="{{ VERSION }}";a.LASAGNA.core.cdn="{{ CDN }}";a.LASAGNA.core.timestamp=~~(Date.now()/1E3);a.LASAGNA.data={};a.LASAGNA.data.version="{{ DATA_VERSION }}";a.LASAGNA.data.timestamp=a.LASAGNA.core.timestamp;c.GSC=a;})(window);
+</script>
+
+{{>gscloud_functions}}
+
+<div id="maincontent" class="{{ design.content }}">
+  {{>container_switcher}}
+</div>
+
+{{>body_resources}}
+{{>body_custom}}
+{{>body_post}}
+
+</body>
+</html>

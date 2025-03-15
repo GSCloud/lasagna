@@ -1,0 +1,5 @@
+{{^LOCALHOST}}
+{{#umami.id}}
+<script nonce="{{ csp_nonce }}" async src="https://umami.gscloud.cz/script.js" data-website-id="{{ umami.id }}"></script>
+{{/umami.id}}
+{{/LOCALHOST}}

@@ -1,0 +1,127 @@
+{{>html_header}}
+
+<div id=content class="container noselect">
+
+  <div class="row center-align">
+    {{>title}}
+    <a
+      target=_blank
+      rel="nofollow"
+      href="https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md"><b><i
+      class="fa-brands fa-square-github"></i>&nbsp;CHANGELOG.md</b></a>
+    <br>
+    <br>
+    <div class="container grey lighten-2 content left-align" style="padding:3rem;border-radius:0.5rem">
+      {{ l.main }}
+    </div>
+    <div class="row"></div>
+    {{ l.shortcodes}}
+    <h4><i class="fa-solid fa-arrow-pointer"></i> Emojis</h4>
+    <div id="emojisdemo" class="bigemoji hover">
+      🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀
+    </div>
+  </div>
+
+</div>
+
+<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/grapheme.min.js" defer></script>
+<script nonce="{{ csp_nonce }}">
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("demo - WebShare API");
+        if (typeof window.WebShareFactory === "function") $("#emojisdemo").append(WebShareFactory(
+          'WebShare API demo!', '', 'DEMO'));
+      });
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("demo - Grapheme Splitter");
+        var splitter = new GraphemeSplitter();
+        var graphemes = splitter.splitGraphemes($("#emojisdemo").text());
+        var arr = graphemes.map(function (x) {
+          return '<span class="ccemojisdemo">' + x + '</span>';
+        });
+        $("#emojisdemo").html(arr.join(''));
+        $(".ccemojisdemo").click(function () {
+          var x = $(this).text();
+          GSC.CopyClipboard(x);
+          M.toast({text: x, classes: "bigemoji"});
+        });
+      });
+
+    }
+  })(window, document);
+</script>
+
+<script nonce="{{ csp_nonce }}">
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+
+      // track element under pointer
+      d.addEventListener('mousemove', e => {
+      w.GSC.elfp = document.elementFromPoint(e.clientX, e.clientY)
+      }, {passive:true});
+
+{{#admin_group_admin}}
+      // prevent context menu
+      w.oncontextmenu = function(e) {
+        if (!w.GSC.touch) return true;
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        // hover the element under pointer on RMB or long-press
+        if (w.GSC.elfp) {
+          $(w.GSC.elfp).mouseover();
+        }
+        return false;
+      };
+{{/admin_group_admin}}
+{{^admin_group_admin}}
+      // prevent context menu
+      w.oncontextmenu = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        // click the element under pointer on RMB or long-press
+        if (w.GSC.elfp) {
+          $(w.GSC.elfp).click();
+        }
+        return false;
+      };
+{{/admin_group_admin}}
+
+      w.GSC.init.push(function () {
+        w.GSC.names.push("zoomer + intro vfx");
+
+        GSC.zoomed = false;
+
+        // easy image zoomer
+        $('.img-container>img').click(function () {
+          if ($(this).hasClass('zoomin')) {
+            $('img.zoomin').removeClass('zoomin');
+            GSC.zoomed = false;
+          } else {
+            $('img.zoomin').removeClass('zoomin');
+            $(this).fadeOut(0).fadeIn(500).addClass('zoomin');
+            GSC.zoomed = true;
+          }
+        });
+
+        // zooom everything out on body click
+        $('body').click(function () {
+          if (GSC.zoomed) {
+            $('img.zoomin').removeClass('zoomin');
+            GSC.zoomed = false;
+          }
+        });
+
+      });
+
+    }
+  })(window, document);
+</script>
+
+<style>.bigemoji{font-size:3rem}</style>
+
+{{>html_footer}}

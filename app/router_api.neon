@@ -1,0 +1,21 @@
+# @author Fred Brooker <git@gscloud.cz>
+
+API1:
+  path: /api
+  api: true
+  api_description: "REST API dashboard"
+  api_info: "This page 🐱"
+  presenter: core
+
+API2:
+  path: /api/v1
+  alias: API1
+
+APIDemo:
+  language: en
+  path: /api/v1/APIDemo
+  api: true
+  api_description: "API demo"
+  api_info: "Result (JSON): array of object records."
+  assert_json: true
+  presenter: api

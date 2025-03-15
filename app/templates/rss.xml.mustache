@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>{{ rss_channel_title }}</title>
+  <description>{{ rss_channel_description }}</description>
+  <link>{{ rss_channel_link }}</link>
+  <generator>{{ ENGINE }}</generator>
+  {{#lastbuilddate}}<lastBuildDate>{{ lastbuilddate }}</lastBuildDate>{{/lastbuilddate}}
+  <atom:link href="{{ rss_channel_link }}/rss.xml" rel="self" type="application/rss+xml" />
+{{#rss_items}}
+  <item>
+    <title>{{ title }}</title>
+    <description>{{ description }}</description>
+    <link>{{ link }}</link>
+    <guid isPermaLink="true">{{ link }}</guid>
+    <pubDate>{{ pubdate }}</pubDate>
+  </item>
+{{/rss_items}}
+</channel>
+</rss>

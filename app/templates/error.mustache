@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>ERROR code: {{ code }}</title>
+</head>
+<body style="text-align:center">
+    <h1>{{ error }}</h1>
+    <h2>{{ message }}</h2>
+    <h3 style="text-align:center">
+        <a
+            rel="noopener nofollow"
+            style="color:red;text-decoration:none"
+            href="/?nonce={{#rndstr}}{{/rndstr}}">
+            <img
+                height=100%
+                style="border:10px solid #000"
+                alt="error {{ code }}"
+                src="https://cdn.gscloud.cz/img/{{ image }}"
+            >
+            <br>
+            <br>
+            click here to go the main page and retry ↻
+        </a>
+    </h3>
+</body>
+</html>

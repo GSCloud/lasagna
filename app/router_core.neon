@@ -1,0 +1,91 @@
+# @author Fred Brooker <git@gscloud.cz>
+# core routes
+
+# browser maintenance
+clearcache:
+  path: /clearcache
+  presenter: core
+  assert_httpcode: 303
+
+clearcookies:
+  path: /clearcookies
+  presenter: core
+  assert_httpcode: 303
+
+clearbrowser:
+  path: /clearbrowser
+  presenter: core
+  assert_httpcode: 303
+
+GetWebManifest:
+  path: /manifest.json
+  assert_json: true
+  presenter: core
+
+GetRobotsTxt:
+  path: /robots.txt
+  presenter: core
+
+GetRSSXML:
+  path: /rss.xml
+  template: rss.xml
+  presenter: core
+
+GetTXTSitemap:
+  path: /sitemap.txt
+  presenter: core
+
+GetXMLSitemap:
+  path: /sitemap.xml
+  presenter: core
+
+GetServiceWorker:
+  path: /sw.js
+  presenter: core
+
+GetError:
+  path: '/err/[i:code]'
+  api: true
+  api_description: "Generate an error page"
+  api_info: "Parameters:\n<b><code></b> - numeric error code\n\nResult: HTML page"
+  method: GET|POST
+  presenter: error
+  api_example: [
+    "err/403"
+    "err/404"
+    "err/500"
+  ]
+
+GetCoreVersion:
+  path: /version/core
+  assert_json: true
+  method: GET|POST
+  presenter: core
+
+GetEnDataVersion:
+  path: /en/version/data
+  assert_json: true
+  language: en
+  method: GET|POST
+  presenter: core
+
+GetCsDataVersion:
+  path: /cs/version/data
+  assert_json: true
+  language: cs
+  method: GET|POST
+  presenter: core
+
+GetSkDataVersion:
+  path: /sk/version/data
+  assert_json: true
+  language: sk
+  method: GET|POST
+  presenter: core
+
+GetDeDataVersion:
+  path: /de/version/data
+  assert_json: true
+  language: de
+  method: GET|POST
+  presenter: core

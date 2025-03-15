@@ -1,0 +1,185 @@
+KEY,SECTION,EN,CS,SK,DE
+klíč,sekce,anglicky,česky,slovensky,německy
+$author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker
+$gsc,$,GS Cloud Ltd.,GS Cloud Ltd.,GS Cloud Ltd.,GS Cloud Ltd.
+$gscloud,$,$gsc,$gsc,$gsc,$gsc
+$year,$,2025,2025,2025,2025
+nojs_placeholder,ALERT,JAVASCRIPT IS DISABLED,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT IST DEAKTIVIERT
+nojs_sorry,ALERT,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
+nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können."
+page_outdated,ALERT,A new version of the application is available.,K dispozici je nová verze aplikace.,K dispozícii je nová verzia aplikácie.,Eine neue Version der Anwendung ist verfügbar.
+page_outdated_button,BUTTON,👷‍♀️ UPDATE,👷‍♀️ AKTUALIZOVAT,👷‍♀️ AKTUALIZOVAŤ,👷‍♀️ AKTUALISIEREN
+share_bluesky,BUTTON,Bluesky,Bluesky,Bluesky,Bluesky
+share_facebook,BUTTON,Facebook,Facebook,Facebook,Facebook
+share_instagram,BUTTON,Instagram,Instagram,Instagram,Instagram
+share_mastodon,BUTTON,Mastodon,Mastodon,Mastodon,Mastodon
+webshare_button,BUTTON,📲 share,📲 sdílet,📲 zdieľať ,📲 Teilen
+day_of_the_week_1,DAYS,Monday,pondělí,pondelok,Montag
+day_of_the_week_2,DAYS,Tuesday,úterý,utorok,Dienstag
+day_of_the_week_3,DAYS,Wednesday,středa,streda,Mittwoch
+day_of_the_week_4,DAYS,Thursday,čtvrtek,štvrtok,Donnerstag
+day_of_the_week_5,DAYS,Friday,pátek,piatok,Freitag
+day_of_the_week_6,DAYS,Saturday,sobota,sobota,Samstag
+day_of_the_week_7,DAYS,Sunday,neděle,nedeľa,Sonntag
+server_error_304,ERROR,Not Modified,Not Modified,Not Modified,Not Modified
+server_error_400,ERROR,Bad Request,Bad Request,Bad Request,Bad Request
+server_error_401,ERROR,Unauthorized,Unauthorized,Unauthorized,Unauthorized
+server_error_403,ERROR,Forbidden,Forbidden,Forbidden,Forbidden
+server_error_404,ERROR,Not Found,Not Found,Not Found,Not Found
+server_error_406,ERROR,Not Acceptable,Not Acceptable,Not Acceptable,Not Acceptable
+server_error_410,ERROR,Gone,Gone,Gone,Gone
+server_error_420,ERROR,Enhance Your Calm,Enhance Your Calm,Enhance Your Calm,Enhance Your Calm
+server_error_429,ERROR,Too Many Requests,Too Many Requests,Too Many Requests,Too Many Requests
+server_error_500,ERROR,Internal Server Error,Internal Server Error,Internal Server Error,Internal Server Error
+server_error_info_304,ERROR,There is no need to retransmit the requested resources.,There is no need to retransmit the requested resources.,There is no need to retransmit the requested resources.,There is no need to retransmit the requested resources.
+server_error_info_400,ERROR,The request cannot be fulfilled due to bad syntax.,The request cannot be fulfilled due to bad syntax.,The request cannot be fulfilled due to bad syntax.,The request cannot be fulfilled due to bad syntax.
+server_error_info_401,ERROR,Missing or invalid authentication token.,Missing or invalid authentication token.,Missing or invalid authentication token.,Missing or invalid authentication token.
+server_error_info_403,ERROR,User is not authorized to perform the operation or the resource is unavailable for some reason.,User is not authorized to perform the operation or the resource is unavailable for some reason.,User is not authorized to perform the operation or the resource is unavailable for some reason.,User is not authorized to perform the operation or the resource is unavailable for some reason.
+server_error_info_404,ERROR,The resource requested could not be found but may be available again in the future.,The resource requested could not be found but may be available again in the future.,The resource requested could not be found but may be available again in the future.,The resource requested could not be found but may be available again in the future.
+server_error_info_406,ERROR,The resource requested is only capable of generating content not acceptable according to the Accept headers sent in the request.,The resource requested is only capable of generating content not acceptable according to the Accept headers sent in the request.,The resource requested is only capable of generating content not acceptable according to the Accept headers sent in the request.,The resource requested is only capable of generating content not acceptable according to the Accept headers sent in the request.
+server_error_info_410,ERROR,The resource requested is no longer available and will not be available again.,The resource requested is no longer available and will not be available again.,The resource requested is no longer available and will not be available again.,The resource requested is no longer available and will not be available again.
+server_error_info_420,ERROR,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.
+server_error_info_429,ERROR,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.
+server_error_info_500,ERROR,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.
+poweredby,FOOTER,"Powered by Hetzner, Google and Cloudflare technology. We don't use 3rd party cookies.","Využívá technologie Hetzner, Google a Cloudflare. Nepoužíváme cookies třetích stran.","Používa technológiu Hetzner, Google a Cloudflare. Nepoužívame cookies tretích strán.","Unterstützt durch Hetzner-, Google- und Cloudflare-Technologie. Wir verwenden keine Cookies von Drittanbietern."
+privacy_policy,FOOTER,Privacy Policy,Zásady ochrany osobních údajů,Zásady ochrany osobných údajov,Datenschutzrichtlinie
+company_eet,INFO,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Nach dem Sales Records Act ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, die erhaltenen Einnahmen online beim Steueramt zu registrieren; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
+author,META,$author,$author,$author,$author
+meta_author,META,$author,$author,$author,$author
+article_author,META,$author,$author,$author,$author
+article_publisher,META,$author,$author,$author,$author
+meta_description,META,$description,$description,$description,$description
+og_description,META,$description,$description,$description,$description
+og_site_name,META,$title,$title,$title,$title
+og_title,META,$title,$title,$title,$title
+og_url,META,$canonical_url,$canonical_url,$canonical_url,$canonical_url
+month_1,MONTHS,January,leden,január,Januar
+month_2,MONTHS,February,únor,február,Februar
+month_3,MONTHS,March,březen,marec,Marsch
+month_4,MONTHS,April,duben,apríl,April
+month_5,MONTHS,May,květen,máj,Mai
+month_6,MONTHS,June,červen,jún,Juni
+month_7,MONTHS,July,červenec,júl,Juli
+month_8,MONTHS,August,srpen,august,August
+month_9,MONTHS,September,září,september,September
+month_10,MONTHS,October,říjen,október,Oktober
+month_11,MONTHS,November,listopad,november,November
+month_12,MONTHS,December,prosinec,december,Dezember
+month_2p_1,MONTHS,January,ledna,januára,Januar
+month_2p_2,MONTHS,February,února,februára,Februar
+month_2p_3,MONTHS,March,března,marca,Marsch
+month_2p_4,MONTHS,April,dubna,apríla,April
+month_2p_5,MONTHS,May,května,mája,Mai
+month_2p_6,MONTHS,June,června,júna,Juni
+month_2p_7,MONTHS,July,července,júla,Juli
+month_2p_8,MONTHS,August,srpna,augusta,August
+month_2p_9,MONTHS,September,září,septembra,September
+month_2p_10,MONTHS,October,října,októbra,Oktober
+month_2p_11,MONTHS,November,listopadu,novembra,November
+month_2p_12,MONTHS,December,prosince,decembra,Dezember
+meta_viewport,PARAMS,"width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0"
+gsc_footer_img_size,PARAMS,48,48,48,48
+title,DEMO,DEMO,DEMO,DEMO,DEMO
+main,DEMO,DEMO,DEMO,DEMO,DEMO
+shortcodes,DEMO,DEMO,DEMO,DEMO,DEMO
+nav_czech,DEMO,Česky,Česky,Česky,Česky
+nav_english,DEMO,English,English,English,English
+a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
+a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
+a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
+a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
+a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
+a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
+a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG
+a_google_search,BUTTON,SEARCH CONSOLE,SEARCH CONSOLE,SEARCH CONSOLE,SUCHKONSOLE
+a_invoices,BUTTON,INVOICES,FAKTURY,FAKTÚRY,RECHNUNGEN
+a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
+a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
+a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,TSCHÜSS 👋
+a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
+a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
+a_show_translations,BUTTON,📍 TRANSLATION SOURCES,📍 ZDROJE PŘEKLADU,📍 PREKLADOVÉ ZDROJE,📍 ÜBERSETZUNGSQUELLEN
+a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
+a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
+a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN
+a_error_general,ERROR,🤯 ERROR!,🤯 CHYBA!,🤯 CHYBA!,🤯 FEHLER!
+a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Beim Hochladen von Dateien ist ein Fehler aufgetreten: Interner Fehler.
+a_upload_filetype,ERROR,😳 This file type is not accepted.,😳 Tento typ souboru není povolen.,😳 Tento typ súboru nie je akceptovaný.,😳 Dieser Dateityp wird nicht akzeptiert.
+a_upload_http,ERROR,😵 Error uploading files: HTTP 403 Forbidden.,😵 Chyba nahrávání: HTTP 403 Forbidden.,😵 Chyba pri nahrávaní súborov: HTTP 403 Zakázané.,😵 Fehler beim Hochladen von Dateien: HTTP 403 Verboten.
+a_upload_maxbytes,ERROR,😵 Total filesize is too big (max. 100 MB).,😵 Obsah je příliš veliký (max. 100 MB).,😵 Celková veľkosť súboru je príliš veľká (max. 100 MB).,😵 Die Gesamtdateigröße ist zu groß (max. 100 MB).
+a_upload_maxfiles,ERROR,😵 Too many files were selected (max. 100).,😵 Vybráno příliš mnoho souborů (max. 100).,😵 Bolo vybratých príliš veľa súborov (max. 100).,😵 Es wurden zu viele Dateien ausgewählt (max. 100).
+a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.
+a_age,INFO,age,stáří,vek,Alter
+a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /de/id/)
+a_articles,INFO,ARTICLES,ČLÁNKY,ČLÁNKY,ARTIKEL
+a_ban,INFO,BAN,BAN,BAN,VERBOT
+a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋 
+a_copy_tit,INFO,copy URL,kopírovat URL,kopírovať URL,URL kopieren
+a_delete_tit,INFO,delete file,smazat soubor,odstrániť súbor,Datei löschen
+a_fcgi,INFO,FCGI,FCGI,FCGI,FCGI
+a_footer_app,INFO,app code,kód appky,kód appky,App-Code
+a_footer_date,INFO,updated,aktualizováno,aktualizované,aktualisiert
+a_limiter,INFO,LIMITER,LIMITER,LIMITER,RATENBEGRENZER
+a_max_file_uploads,INFO,max.&nbsp; files&nbsp;count:,max.&nbsp;počet nahrávaných&nbsp;souborů:,max.&nbsp;počet nahrávaných&nbsp;súborov:,Max.&nbsp;Anzahl der&nbsp;Upload-Dateien:
+a_max_post_size,INFO,max.&nbsp;POST&nbsp;size:,max.&nbsp;POST&nbsp;velikost:,max.&nbsp;POST&nbsp;veľkosť:,Max.&nbsp;POST&nbsp;Größe:
+a_max_upload_size,INFO,max.&nbsp;file&nbsp;size:,max.&nbsp;velikost&nbsp;souboru:,max.&nbsp;veľkosť&nbsp;súboru:,Max.&nbsp;Dateigröße:
+a_model,INFO,model,model,model,Modell
+a_news_info,INFO,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
+a_news_os_info,INFO,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
+a_news_sc_info,INFO,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
+a_off,INFO,OFF,VYP,VYP,AUS
+a_on,INFO,ON,ZAP,ZAP,AN
+a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
+a_processing,INFO,processing,zpracování,spracovanie,Verwechseln
+a_processing_data,INFO,The system is processing data ☕️,Systém zpracovává data ☕️,Systém spracováva údaje ☕️,Das System verarbeitet Daten ☕️
+a_redis,INFO,REDIS,REDIS,REDIS,REDIS
+a_remote_fn_info,INFO,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufrufen einer Remote-Systemfunktion
+a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,REMOTE-FUNKTIONSAUFRUFE
+a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Fernbedienung fn
+a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,OK GESPEICHERT
+a_total,INFO,total,celkem,celkom,Gesamt
+a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnutý.,UPLOAD ist deaktiviert.
+a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
+a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.
+a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
+a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
+a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
+a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
+a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
+a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
+a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken
+a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität und Objekte
+a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
+a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
+a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,na celú obrazovku,Vollbild
+a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte
+a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
+a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
+a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern
+a_tab_changes,TAB,CHANGES,ZMĚNY,ZMENY,ÄNDERUNGEN
+a_tab_data,TAB,DATA,DATA,DATA,DATEN
+a_tab_fn,TAB,FN,FN,FN,FN
+a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
+a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
+a_groups_permissions,TITLE,USERS,UŽIVATELÉ,UŽÍVATELIA,BENUTZER
+a_locales,TITLE,DATA,DATA,DATA,DATEN
+a_services,TITLE,services,SLUŽBY,SLUŽBY,Dienstleistungen
+a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
+a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
+a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
+a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
+a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 Emoji-Panel
+a_files_ttip,TOOLTIP,file manager,správce souborů,správca súborov,Dateimanager
+a_flush_ttip,TOOLTIP,clears all caches,vyprázdní veškerou cache,vyprázdní všetku cache,löscht alle Caches
+a_google_account_ttip,TOOLTIP,Google Account settings,nastavení Google účtu,Nastavenia účtu Google,Google-Kontoeinstellungen
+a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter
+a_google_search_ttip,TOOLTIP,Google Search Console,Google Search konzole,Google Search Console,Google Search Console
+a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Tesseract LASAGNA manuál,Tesseract LASAGNA-Dokumentation
+a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage
+a_login_ttip,TOOLTIP,LOGIN,PŘIHLÁSIT SE,PRIHLÁSIŤ SA,LOGIN
+a_logout_ttip,TOOLTIP,LOGOUT,ODHLÁSIT SE,ODHLÁSIŤ SA,ABMELDEN
+a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
+a_umami_ttip,TOOLTIP,Umami Analytics,Umami Analytika,Umami Analytika,Umami Analytics
+a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje od spoločnosti Google,Daten von Google aktualisieren
+a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads

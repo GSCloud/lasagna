@@ -1,0 +1,65 @@
+<div id="data" class="container">
+  <div class="row center">
+
+    <h4>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h4>
+
+    <div class="bl col s12 l4">
+      <p id="a_update_info"></p>
+    </div>
+
+    <div class="bl col s12 l4">
+      <p style="font-size:12px!important">
+        <a id="showpins" class="waves-effect grey waves-light btn trans_pin hover" style="font-size:15px!important">{{ l.a_show_translations }}</a>
+      </p>
+
+      <div class="row center">
+        <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
+          data-position="top" data-tooltip="{{ l.a_update_ttip }}">
+          <i class="fab fa-google-drive"></i>&nbsp;&nbsp;{{ l.a_update }}</a>
+        <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
+          data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
+          <i class="fa-solid fa-rocket"></i>&nbsp;&nbsp;{{ l.a_flush }}</a>
+      </div>
+    </div>
+
+    <div class="bl col s12 l4">
+      <p>
+        {{^disable_articles}}
+        <div class="white">
+          <label for="ArticleURLSelect">{{ l.a_articles }}</label>
+          <select id="ArticleURLSelect"></select>
+        </div>
+        <a id="a_summernote"
+          data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
+          <i class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
+        <a id="a_article"
+          data-position="top" data-tooltip="{{ l.a_article_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
+          <i class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
+        <br>
+        {{/disable_articles}}
+
+        {{#CONST.UPLOAD}}
+        <a id="a_upload"
+          data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
+        <a id="a_files"
+          data-position="top" data-tooltip="{{ l.a_files_ttip }}"
+          style="margin:5px" class="tooltipped waves-effect brown waves btn"><i class="fa-solid fa-bucket"></i>&nbsp;&nbsp;<span id="files_count"></span></a>
+
+        <div id="uploads_extended_info"></div>
+
+        {{ l.a_max_post_size }}&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>,
+        {{ l.a_max_file_uploads }}&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>,
+        {{ l.a_max_upload_size }}&nbsp;<b>{{ CONST.UPLOAD_MAX_FILESIZE }}</b>
+        {{/CONST.UPLOAD}}
+
+        {{^CONST.UPLOAD}}
+        <b>{{ l.a_upload_disabled }}</b>
+        {{/CONST.UPLOAD}}
+      </p>
+    </div>
+
+  </div>
+</div>

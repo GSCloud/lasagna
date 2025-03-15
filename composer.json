@@ -1,0 +1,45 @@
+{
+    "name": "gscloud/tesseractlasagna",
+    "description": "Tesseract LASAGNA CMS",
+    "require": {
+        "adbario/php-dot-notation": "^3",
+        "altorouter/altorouter": "^2",
+        "cakephp/cache": "^4",
+        "cheprasov/php-redis-client": "^1",
+        "chillerlan/php-qrcode": "^5",
+        "cloudflare/sdk": "^1",
+        "guzzlehttp/guzzle": "^7",
+        "league/climate": "^3",
+        "league/csv": "^9",
+        "league/oauth2-client": "^2",
+        "league/oauth2-google": "^4",
+        "michelf/php-markdown": "^2",
+        "mustache/mustache": "^2",
+        "nette/neon": "^3",
+        "nette/tester": "^2",
+        "nette/utils": "^3",
+        "paragonie/halite": "^4",
+        "paragonie/random_compat": ">=2 <=9.99.100",
+        "php": "^7.4",
+        "phpseclib/phpseclib": "^3",
+        "psr/simple-cache": "^1",
+        "symfony/lock": "^4",
+        "symfony/polyfill-mbstring": "^1",
+        "symfony/polyfill-php80": "^1.31",
+        "tracy/tracy": "^2",
+        "tuupola/base58": "^2"
+    },
+    "autoload": {
+        "psr-4": {
+            "GSC\\": "app/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1"
+    }
+}

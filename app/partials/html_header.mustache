@@ -1,0 +1,16 @@
+<header class="main-header">
+  {{>html_navbar}}
+  {{>html_mobilebar}}
+</header>
+
+{{#admin_group_admin}}
+{{>admin_main}}
+{{/admin_group_admin}}
+
+{{#admin_group_manager}}
+{{>admin_main}}
+{{/admin_group_manager}}
+
+{{#admin_group_editor}}
+{{>admin_main}}
+{{/admin_group_editor}}

@@ -1,0 +1,130 @@
+### LASAGNA
+# @author Fred Brooker <git@gscloud.cz>
+
+#dbg: TRUE
+dbg: FALSE
+
+# core
+app: lasagna
+canonical_url: "https://lasagna.gscloud.cz/"
+date_default_timezone: "Europe/Prague"
+project: LASAGNA
+secret_cookie_key: secure.key
+identity_nonce_key: identity_nonce.key
+version: v1
+
+# Google OAuth 2.0
+goauth_origin: "https://lasagna.gscloud.cz"
+goauth_redirect: "https://lasagna.gscloud.cz/login"
+local_goauth_origin: "http://localhost:8009"
+local_goauth_redirect: "http://localhost:8009/login"
+
+# Google
+google: [
+#  map_query: "Prague,Czechia"
+#  google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
+  google-site-domain-verification: true
+]
+
+# RSS feed
+#rss_feed: true
+
+# Umami Analytics
+umami: [
+  id: "d64aa098-b60c-4c6b-90b1-dc5b6e83c255"
+  share: "https://umami.gscloud.cz/share/Zj4HVPMYhRV69yz6/TESSERACT%20LASAGNA"
+]
+
+# extra cache profiles
+cache_profiles: []
+
+# blocked countries
+geoblock: []
+
+# disable articles feature
+disable_articles: true
+
+# disable version check feature
+#disable_version_check: true
+
+# Redis
+redis: [
+  #database: 0
+  #host: "127.0.0.1"
+  #password: ""
+  #persistent: true
+  #unix_socket: ""
+
+  # to disable REDIS, set port to 0
+  #port: 0
+  port: 6377
+  timeout: 1
+]
+
+# CSS sources
+css_sources: [
+  "https://cdn.gscloud.cz/fontawesome/v6.7.2/css/fontawesome.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v6.7.2/css/brands.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v6.7.2/css/solid.min.css",
+]
+
+# local CSS sources
+css_sources_extra: [
+  "/css/style.css",
+  "/css/lightbox.min.css",
+]
+
+# script sources
+script_sources: [
+  "https://cdn.gscloud.cz/materialize/v1.2.2/js/materialize.min.js",
+]
+
+# local script sources
+script_sources_extra: [
+  "/js/lightbox.min.js",
+  "/js/lightbox.options.js",
+]
+
+# locale CSV
+locales: [
+  lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
+]
+
+# locale Sheets
+lasagna_sheets: [
+  lasagna: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
+]
+
+# application data
+app_data: []
+
+# design
+design: [
+  css_font: []
+  footer_color: "grey darken-4"
+  nav_color: "orange"
+  theme_color: "orange"
+  background_color: "white"
+  content: "white black-text"
+  skin: "white"
+]
+
+# locale overrides
+locale_override: [
+  copyright: "2017-2025"
+]
+
+# Service Worker preload
+swpreload: [
+  "https://cdn.gscloud.cz/tesseract/js/jquery.min.js"
+  "https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css"
+]
+
+# Service Worker preload with CDN hash
+swpreload_cdn: []
+
+# DON'T CACHE patterns
+dontcache: []
+
+# completely block robots? (not only via robots.txt)
+block_robots: true

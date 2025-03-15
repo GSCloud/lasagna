@@ -1,0 +1,45 @@
+<div id="users" class="col s12">
+    <!-- groups -->
+    <div class="container">
+      <h4>{{ l.a_groups_permissions }}</h4>
+      <div class="white-text">
+        <div class="row center">
+
+          {{#admin_groups_masked}}
+          <strong class="group_icon_admin">ADMIN</strong>
+          <div class="container">
+            <div class="orange-text">{{#admin_groups_masked.admin}}{{ . }} {{/admin_groups_masked.admin}}
+              {{^admin_groups_masked.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.admin}}
+            </div>
+          </div>
+          <br>
+
+          <strong class="group_icon_manager">MANAGER</strong>
+          <div class="container">
+            <div class="orange-text">{{#admin_groups_masked.manager}}{{ . }} {{/admin_groups_masked.manager}}
+              {{^admin_groups_masked.manager}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.manager}}
+            </div>
+          </div>
+          <br>
+
+          <strong class="group_icon_editor">EDITOR</strong>
+          <div class="container">
+            <div class="orange-text">{{#admin_groups_masked.editor}}{{ . }} {{/admin_groups_masked.editor}}
+              {{^admin_groups_masked.editor}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.editor}}
+            </div>
+          </div>
+          <br>
+
+          <strong class="group_icon_tester">TESTER</strong>
+          <div class="container">
+            <div class="orange-text">{{#admin_groups_masked.tester}}{{ . }} {{/admin_groups_masked.tester}}
+              {{^admin_groups_masked.tester}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.tester}}
+            </div>
+          </div>
+          <br>
+          {{/admin_groups_masked}}
+
+        </div>
+      </div>
+    </div>
+</div>

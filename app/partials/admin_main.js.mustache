@@ -1,0 +1,667 @@
+(function (w, d, undefined) {
+
+  // logout cookie
+  if (getCookie("logout")) {
+    d.getElementById("admin_main").style.display = "none";
+    setCookie("motyle", "true");
+    delCookie("logout");
+    return;
+  }
+
+  if (w.GSC.init) {
+    w.GSC.data = {} || w.GSC.data;
+
+    // GSC.PingDot()
+    if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
+      if (!el) return;
+      if (status) {
+        status = "green";
+      } else {
+        status = "red";
+      }
+      $(el).html("&#8226;").css({
+        color: status,
+        opacity: 1
+      }).fadeTo("slow", 0);
+    }
+
+    // GSC.GetCsvInfo()
+    if (!w.GSC.GetCsvInfo) w.GSC.GetCsvInfo = function () {
+      if (w.GSC.offline) {
+        return GSC.PingDot("#csv_ping", false);
+      }
+
+      // API: GetCsvInfo
+      $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
+          GSC.PingDot("#csv_ping");
+          var content = "";
+          var now = ~~(Date.now() / 1000);
+          moment.locale("{{ lang }}");
+          for (x in data.data) {
+            var link = x;
+            var csv = data.data[x]["csv"];
+            var lines = data.data[x]["lines"];
+            var sheet = data.data[x]["sheet"];
+            if (!data.data[x]["sheet"]) continue;
+            if (sheet) {
+              link =
+                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px" ' +
+                'class="orange mono white-text bold" href="' +
+                'https://docs.google.com/spreadsheets/d/' +
+                sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
+                x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
+                ' style="font-size:1.2rem;border-radius:2px" class="csv' + x +  ' bold blue white-text mono" ' +
+                'href="https://docs.google.com/spreadsheets/d/e/' +
+                csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
+                lines + '&nbsp;</a>&nbsp;';
+            }
+            content += (link + "&nbsp;<span class=csv" + x + ">" +
+              moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "</span><br>"
+            );
+          }
+          $("#a_update_info").html(content);
+        })
+        .fail(function (e) {
+          if (e.status == 401) location.reload(); // reload when HTTP 401 - Unauthorized
+          if (e.status == 403) location.reload(); // reload when HTTP 403 - Forbidden
+          GSC.PingDot("#csv_ping", false);
+          $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
+        });
+    }
+
+    // GSC.AdminUI()
+    if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+      // fix various CSS styles
+      $("#admin_main div").addClass("a_reset");
+      $("#admin_main h2").addClass("a_reset a_h2");
+      $("#admin_main h4").addClass("a_reset a_h4");
+      $("#admin_main h5").addClass("a_reset a_h5");
+      $("#admin_main p").addClass("a_reset");
+      // remove tooltips for touch display
+      if (w.GSC.touch) {
+        if ($(".tooltipped")) $(".tooltipped").tooltip("destroy");
+      }
+
+      // switch CSS debugger ON/OFF
+      $('#debugger').click(function () {
+        if (getCookie('debug')) {
+          $('#debugger').removeClass('red').addClass('grey');
+          delCookie('debug');
+          location.replace("/?nonce={{ nonce }}");
+        } else {
+          $('#debugger').removeClass('grey').addClass('red');
+          setCookie('debug', 1);
+          location.replace("/?nonce={{ nonce }}");
+        }
+      });
+
+      // show translation pins
+      $(".trans_pin").click(function () {
+        if ($(this).data('on') == '1') {
+          $(this).data('on', 0);    
+          $('#showpins').removeClass('red').addClass('grey');
+          $('.sheetpin').remove();
+        } else {
+          $(this).data('on', 1);
+          $('#showpins').removeClass('grey').addClass('red');
+
+          // inject pins
+          $('*[data-admin-tooltip]').each(function() {
+            $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
+          });
+
+          // pin event handler
+          $('.sheetpin').click(function() {
+            GSC.CopyThisText(this);
+          });
+        }
+      });
+    
+      // editor block
+      $(".summernote").unbind();
+      $(".summernote").click(function () {
+        $(".summernote").unbind("dblclick");
+        GSC.DeploySummernote();
+      });
+
+      // add article
+      $("#a_article").click(function () {
+        var name = prompt('{{ l.a_article_add_prompt }}:').trim();
+        name = name.replace(/['"/\\]/g, '');
+        if (name.length && name != '!') {
+          location.pathname = '{{ lang }}/id/' + name;
+        }
+      });
+
+      // API: GetArticlesInfo
+      $.get("/admin/GetArticlesInfo?" + Date.now(), function (data) {
+        if (data && data.data) {
+          $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
+          for (var i in data.data) {
+            if (typeof data.data[i] === 'function') continue;
+            $('#ArticleURLSelect').append("<option value='" + data.data[i] + "'>" + data.data[i] + "</option>");
+          }
+          // populate form data
+          $('#ArticleURLSelect').formSelect();
+        }
+      });
+    }
+
+
+    // SETUP ADMIN UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("admin UI - bind");
+
+      // SHOW ADMIN UI?
+      if (!getCookie("motyle") || getCookie("motyle") == "false") {
+        $("#admin_main").show(100);
+      }
+
+      // TABBED MENU
+      $('#menutabbed .tabs a').click(function (e) {
+        if (GSC.nolocalstorage) return;
+        let id = $(this).data('id');
+        if (id) localStorage['admintab'] = id;
+      });
+
+      // SELECT LAST TABBED MENU
+      if (!GSC.nolocalstorage) {
+        if (localStorage && localStorage['admintab']) {
+          let id = localStorage['admintab'];
+          $('#menutabbed .tabs').tabs('select', id);
+        }
+      }
+
+      // TOGLE WRENCH
+      $(".motyle").click(function () {
+        $("#admin_main").toggle(200, function () {
+          window.scrollTo(0, 0);
+          setCookie("motyle", $("#admin_main").is(":hidden"));
+        })
+      });
+
+      // ARTICLES URL SELECTOR
+      $("#ArticleURLSelect").change(function () {
+        location.pathname = $('#ArticleURLSelect').val();
+      });
+
+      // REMOTE FUNCTION SELECTOR
+      $("#RemoteFnSelect").change(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#sectok_ping", false);
+        }
+        if (!$("#RemoteFnSelect").val()) return;
+
+        // API: GetToken
+        $.get("/admin/GetToken?" + Date.now(), function (data) {
+          var s = $("#RemoteFnSelect").val();
+          var t = data.data[0];
+          t = t.replace(/[a-zA-Z]*\?/, s + "?");
+          GSC.CopyClipboard(t);
+          GSC.PingDot("#sectok_ping");
+          M.toast({text: "{{ l.a_clipboardcopy }} {{ l.a_remotecode }}: " + s, classes: "normaltoast"});
+        }).fail(function () {
+          $("#a_security_token").val("N/A");
+          GSC.PingDot("#sectok_ping", false);
+          GSC.CopyClipboard("");
+          M.toast({text: "{{ l.a_error_general }}", classes: "normaltoast"});
+        });
+      });
+
+      // UPDATE CSV DATA
+      $("#a_update").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        $("#a_update").attr("disabled", "disabled");
+        setTimeout(function () {
+          $("#a_update").removeAttr("disabled");
+        }, 30E3);
+
+        // API: CoreUpdate
+        $.post("/admin/CoreUpdate");
+        M.toast({text: "{{ l.a_processing_data }}", classes: "normaltoast"});
+      });
+
+      // INVOKE SUMMERNOTE EDITOR
+      $("#a_summernote").click(function () {
+        if (w.GSC.offline) {
+          ({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#psi_ping", false);
+        }
+        GSC.ReadArticles(function () {
+          GSC.DeploySummernote();
+        });
+      });
+
+      // FILE MANAGER
+      $("#a_files").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        if (getCookie("open_filemanager") == 1) {
+          return GSC.CloseFileManager();
+        }
+        GSC.RenderUploadInfo();
+      });
+
+      // GSC.CloseFileManager()
+      if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
+          delCookie("open_filemanager");
+          $("#a_file_manager").hide(50);
+          $("#a_uploader_progress").html('');
+      }
+
+      // GSC.GetUploadsInfo()
+      if (typeof GSC.GetUploadsInfo !== "function") GSC.GetUploadsInfo = function (info) {
+        if (info === undefined) {
+
+          // API: getUploadsInfo
+          $.get("/admin/getUploadsInfo?" + Date.now(), function (data) {
+            if (data && data.data && data.data.reg_count && data.data.reg_size) {
+              var i1 = data.data.reg_count;
+              var i2 = GSC.FormatBytes(data.data.reg_size);
+              var i3 = data.data.dot_count;
+              var i4 = GSC.FormatBytes(data.data.dot_size);
+              $('#files_count').html(i1 + '&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;' + i2);
+              $('#uploads_extended_info').html('<i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + i3 + '&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;' + i4);
+            }
+          });
+        }
+        $('#files_count').text(info);
+      }
+
+      // GSC.RenderUploadInfo()
+      if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
+        $.get("/admin/getUploads?" + Date.now(), function (data) {
+          if (data && data.data && data.data.files) {
+
+            setCookie("open_filemanager", 1);
+
+            var s = '';
+            var t = 0;
+            var printed = 0;
+
+            // search
+            var search = '';
+            if (localStorage.getItem('search')) {
+              var search = localStorage.getItem('search');
+              search = search.replace(/[^a-z0-9_.\-]/gim, '').toLowerCase();
+            }
+
+            // current time and Moment locale
+            var now = ~~(Date.now() / 1000);
+            moment.locale('{{ lang }}');
+
+            var imageson = 'grey darken-3 cursorpointer';
+            var imagesoff = 'orange cursordefault';
+            var cardsize = '150px';
+            var displaystate = 'hide-images';
+
+            if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 1) {
+              imageson = 'orange cursordefault';
+              imagesoff = 'grey darken-3 cursorpointer';
+              cardsize = '300px';
+              displaystate = '';
+            }
+
+            // thumbnails S-M-L sizes
+            var wt = [];
+            wt[160] = 'S';
+            wt[320] = 'M';
+            wt[640] = 'L';
+
+            if (!data.data.count) {
+              s = '';
+              $('#files_count').html('0');
+              data.data.count = 0;
+            } else {
+
+              // stubs
+              var stubs = '';
+              var stubs_rendered = 0;
+              if (data.data.stubs && data.data.stubs_count) {
+                stubs = '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
+                for (var i in data.data.stubs) {
+                  if (typeof data.data.stubs[i] === 'function') continue;
+                  if (data.data.stubs_count[data.data.stubs[i]] < 3) continue;
+
+                  var stubcolor = 'grey darken-3';
+                  if (data.data.stubs[i] === search) stubcolor = 'red';
+
+                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
+                  stubs_rendered++;
+                }
+                if (stubs_rendered > 19) stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
+              }
+
+              // controls + search
+              s += '<div id="stubs" class="row">' + stubs + '</div>';
+              s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-list"></i></div>';
+              s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-solid fa-image"></i></div>';
+              s += '<div id="uploadimagescount" style="cursor:auto!important" class="noselect btn black text-white bold upload-controls right"></div>';
+              s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
+
+              // last upload
+              var lastupload = [];
+              if (localStorage['last_upload']) {
+                lastupload = JSON.parse(localStorage['last_upload']);
+              }
+
+              // process all uploads
+              for (var i in data.data.files) {
+                if (typeof data.data.files[i] === 'function') continue;
+
+                t++;
+                if (t === 1) {
+                  s += '<div class=row>';
+                }
+  
+                var name1 = name = data.data.files[i]["name"];
+                var name2 = name.replace(/\.[^.]+$/, '.webp');
+                var ext = GSC.GetFileExtension(name);
+
+                // process last uploads
+                var labelnew = '';
+                if (lastupload && typeof lastupload === 'object' && lastupload.includes(name)) {
+                  labelnew = '<i class="left yellow-text transparent fa-solid fa-diamond btn-flat btn-floating pulse cursordefault"></i> ';
+                }
+
+                // process search if available
+                if (search && name.indexOf(search) === -1) {
+                  continue;
+                }
+
+                printed++;
+  
+                // ICON
+                var si = '';
+                if (data.data.files[i]["thumbnails"] === null) {
+                  // icon
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align white-text" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
+                } else {
+                  // thumbnail
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" height=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
+                  si += '</a>';
+                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align card-link" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
+                }
+  
+                // AGE + SIZE
+                var saz = '';
+
+                var warn = '';
+                if (data.data.files[i]["size"] > 1024*1024) {
+                  warn = 'bold red warning';
+                }
+
+                saz += '<div class="center">' + labelnew + '<i class="fa-solid fa-clock"></i>&nbsp;&nbsp;';
+                saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
+                saz += '&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;';
+                saz += '<span class="' + warn + '">';
+                saz += GSC.FormatBytes(data.data.files[i]["size"]);
+                saz += '</span>';
+                saz += '</div>';
+  
+                // SML
+                var sml = '';
+                for (var j in data.data.files[i]["thumbnails"]) {
+                  name = data.data.files[i]["thumbnails"][j];
+                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped extrapadding imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">📋' + wt[j] + '</span>&nbsp;&nbsp;';
+                }
+                if (sml.length) {
+                  sml = '<div class="row center extrapadding"><i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + sml + '</div>';
+                }
+  
+                // DELETE + RCB
+                var sd = '';
+                if (data.data.files[i]["thumbnails"] === null) {
+                  sd += '<div class="row">';
+                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
+                  sd += '</div>';
+                }
+                else {
+                  sd += '<div class="row">';
+                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
+                  if (ext != 'webp') {
+                    sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">📋webp</span>';
+                  }
+                  sd += '</div>';
+                }
+
+                // COMPOSITION
+                s += '<div style="margin:0;padding:1rem;height:' + cardsize + ';background-color:#222;border:1px solid #000" id="fig' + t + '" class="left-align bottom col l2 m4 s12 uploaded-card">'
+                s += sd + si + saz + sml;
+                s += '</div>';
+              }
+
+              // close listing
+              if (t) {
+                s += "</div>";
+                GSC.GetUploadsInfo();
+              }
+            }
+            
+            // show file manager
+            if ($("#a_file_manager").html() != "") {
+              $("#a_file_manager").html(s).show();
+            } else {
+              $("#a_file_manager").hide().html(s).show(100);
+            }
+            if (!stubs_rendered) $('.btn-stubs').hide();
+            $('#uploadimagescount').html(printed + '&nbsp;/&nbsp;' + data.data.count);
+
+            // activate new tooltips
+            $('.tooltipped').tooltip();
+            // thumbnail tooltip previews
+            $('.imgthumb').each(function(index) {
+              $(this).tooltip({html: '<img src="' + $(this).data('text') + '">'});
+            });
+
+            // searchbox focus
+            if (localStorage.getItem('searchset')) {
+              $('#searchbox').focus();
+            }
+            localStorage.removeItem('searchset');
+
+            // UPLOAD: disable images
+            $('#uploadimagesko').click(function () {
+              $('.uploaded-image').hide();
+              $('.uploaded-card').css('height', '150px');
+              $('#uploadimagesok').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
+              $('#uploadimagesko').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
+              delCookie("displayimages");
+              localStorage.removeItem("displayimages");
+            });
+
+            // UPLOAD: enable images
+            $('#uploadimagesok').click(function () {
+              $('.uploaded-image').show();
+              $('.uploaded-card').css('height', '300px');
+              $('#uploadimagesok').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
+              $('#uploadimagesko').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
+              setCookie("displayimages", 1);
+              localStorage.setItem("displayimages", 1);
+            });
+
+            // UPLOAD: click search stub
+            $('.btn-stubs').click(function () {
+              localStorage.setItem('search', $(this).data('stub'));
+              GSC.RenderUploadInfo();
+            });
+
+            // UPLOAD: change searchbox
+            $('#searchbox').change(function () {
+              var search = $(this).val();
+              search = search.replace(/[^a-z0-9_.\-]/gim, '').toLowerCase();
+              localStorage.setItem('search', search);
+              localStorage.setItem('searchset', 1);
+              GSC.RenderUploadInfo();
+            });
+
+            // UPLOAD: copy path to clipboard
+            $("#a_file_manager .copydata").click(function () {
+              var x = $(this).data("text");
+              GSC.CopyClipboard(x);
+              M.toast({text: "📋 " + GSC.GetFileName(x), classes: "normaltoast"});
+            });
+            
+            // UPLOAD: delete file
+            $("#a_file_manager .delete").click(function () {
+              if (GSC.deleteconfirmed || confirm("{{ l.a_delete_tit }}?")) {
+                GSC.deleteconfirmed = true;
+                var x = $(this).data("id");
+                var fig = $(this).data("fig");
+                $(this).tooltip('close');
+                $('#fig' + fig).hide(250);
+
+                // API: UploadedFileDelete
+                $.post("/admin/UploadDelete", {
+                  name: x
+                }).done(function (data) {
+                  M.toast({text: "🚮 " + x, classes: "normaltoast"});
+                  GSC.RenderUploadInfo();
+                });
+              }
+            });
+          }
+        });
+      }
+
+      // FLUSH CACHE
+      $("#a_flush").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        GSC.GetCsvInfo = function () {};
+        $("#a_flush").attr("disabled", "disabled");
+
+        // API: FlushCache
+        $.post("/admin/FlushCache");
+        location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}");
+      });
+
+      // LOGOUT
+      $("#a_logout").click(function () {
+        setCookie("logout", 1);
+        $("#admin_main").hide(100);
+        M.toast({text: "{{ l.a_logout_msg }}", classes: "normaltoast"});
+        GSC.offline ? location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}") : location.replace("/logout");
+      });
+
+    });
+
+    // CSV INFO TIMER
+    w.GSC.init.push(function () {
+      w.GSC.names.push("CSV timer");
+      setInterval(function () {
+        GSC.GetCsvInfo();
+      }, 2500);
+      GSC.GetCsvInfo();
+    });
+
+    // SHOW ADMIN UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("show admin UI");
+      GSC.AdminUI();
+
+      $('.tabs').tabs();
+      if (GSC.touch) {
+        $('#menutabbed').removeClass('container');
+      }
+
+      // filemanager state
+      if (getCookie("open_filemanager") == 1) {
+        $("#a_file_manager").hide();
+        GSC.RenderUploadInfo();
+        GSC.GetUploadsInfo();
+      } else {
+        GSC.GetUploadsInfo();
+      }
+    });
+
+    // SETUP ZEROUPLOAD
+    w.GSC.init.push(function () {
+      w.GSC.names.push("ZeroUpload");
+      ZeroUpload.setURL("/admin/Upload");
+      ZeroUpload.setMaxFiles({{ CONST.MAX_FILE_UPLOADS }});
+      ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
+
+      ZeroUpload.on("complete", function (response) {
+        M.toast({text: "{{ l.a_uploading_finished }}", classes: "normaltoast"});
+        var data = JSON.parse(response.data);
+        $("#a_uploader_progress").delay(3000).hide(200);
+        if (data && data.data) {
+          if (!w.GSC.nolocalstorage) {
+            GSC.last_upload = localStorage['last_upload'] = JSON.stringify(data.data);
+          }
+          setCookie("open_filemanager", 1);
+          GSC.RenderUploadInfo();
+          return;
+        }
+      });
+
+      ZeroUpload.on("start", function (files, userData) {
+        M.toast({text: "{{ l.a_uploading }}", classes: "normaltoast"});
+      });
+
+      ZeroUpload.on("error", function (type, message, userData) {
+        var s;
+        switch (type) {
+          case "maxbytes":
+            s = "{{ l.a_upload_maxbytes }}";
+            break;
+          case "unsupported":
+            s = "{{ l.a_upload_unsupported }}";
+            break;
+          case "maxfiles":
+            s = "{{ l.a_upload_maxfiles }}";
+            break;
+          case "filetype":
+            s = "{{ l.a_upload_filetype }}";
+            break;
+          case "http":
+            s = "{{ l.a_upload_http }}";
+            break;
+          default:
+            s = "{{ l.a_upload_ajax }}";
+        }
+        M.toast({text: s, classes: "normaltoast"});
+      });
+
+      ZeroUpload.on("progress", function (progress, userData) {
+        $("#a_uploader_progress").show(200).html(
+          '<h5>{{ l.a_upload_ttip }}</h5><div style="padding:1em"><div class="row">' +
+          '<strong>Progress:</strong> ' + progress.percent + ', ' +
+          progress.elapsedHuman + ' elapsed</div>' +
+          '<div><strong>Sent:</strong> ' + progress.dataSentHuman + ' of ' +
+          progress.dataTotalHuman + ' (' + progress.dataRateHuman + ')</div>' +
+          '<div><strong>Remaining:</strong> ' + progress.remainingTimeHuman + '</div></div>'
+        );
+      });
+
+      // init uploader
+      ZeroUpload.init();
+      ZeroUpload.addDropTarget("body");
+
+      // UI: upload button
+      $("#a_upload").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        $("#a_uploader_progress").html("");
+        ZeroUpload.chooseFiles();
+      });
+    });
+    
+  }
+
+})(window, document);

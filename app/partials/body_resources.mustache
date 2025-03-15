@@ -1,0 +1,57 @@
+{{#script_sources}}
+<script nonce="{{ csp_nonce }}" defer src="{{ . }}"></script>
+{{/script_sources}}
+
+{{#script_sources_extra}}
+<script nonce="{{ csp_nonce }}" defer src="{{ cdn }}{{ . }}"></script>
+{{/script_sources_extra}}
+
+{{#css_sources}}
+<link rel="stylesheet" href="{{ . }}">
+{{/css_sources}}
+
+{{#css_sources_extra}}
+<link rel="stylesheet" href="{{ cdn }}{{ . }}">
+{{/css_sources_extra}}
+
+{{#design}}{{#design.css_font}}
+<link rel="stylesheet" href="{{ . }}">
+{{/design.css_font}}{{/design}}
+
+{{#admin_group_admin}}
+{{#COOKIE.debug}}
+<style>
+* {background-color:rgba(255,0,0,.2)}
+* * {background-color:rgba(0,255,0,.2)}
+* * * {background-color:rgba(0,0,255,.2)}
+* * * * {background-color:rgba(255,0,255,.2)}
+* * * * * {background-color:rgba(0,255,255,.2)}
+* * * * * * {background-color:rgba(255,255,0,.2)}
+* * * * * * * {background-color:rgba(255,0,0,.2)}
+* * * * * * * * {background-color:rgba(0,255,0,.2)}
+* * * * * * * * * {background-color:rgba(0,0,255,.2)}
+</style>
+{{/COOKIE.debug}}
+{{/admin_group_admin}}
+
+<script nonce="{{ csp_nonce }}">
+window.addEventListener("load", function() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js?" + Date.now()).then(function(registration) {
+      console.log("Service Worker registration successful with scope: ", registration.scope);
+    }, function (err) {
+      console.log("Service Worker registration failed: ", err);
+    });
+  } else {
+    console.log("Service Worker is not supported!");
+  }
+  (function ($) {
+    $(function() {
+      M.AutoInit();
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, {edge:'right'});
+      window.GSC.AutoInit();
+    });
+  })(jQuery, window);
+});
+</script>

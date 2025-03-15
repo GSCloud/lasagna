@@ -1,0 +1,96 @@
+//@author Fred Brooker <git@gscloud.cz>
+//@country {{ country }}
+
+'use strict';
+
+var version = '{{ VERSION }}';
+
+var core = [
+  'manifest.json',{{#swpreload}}'{{ . }}', {{/swpreload}}
+  {{#swpreload_cdn}}'{{ cdn }}{{ . }}', {{/swpreload_cdn}}
+  '{{ cdn }}/img/favicon-128.webp',
+  '{{ cdn }}/img/favicon-180.webp',
+  '{{ cdn }}/img/favicon-192.png',
+  '{{ cdn }}/img/favicon-192.webp',
+  '{{ cdn }}/img/favicon-512.png',
+  '{{ cdn }}/img/favicon-512.webp',
+];
+
+var excludedExtensions = ['.deb', '.exe', '.flac', '.mkv', '.mp3', '.mp4', '.webm', '.zip'];
+var excludedPaths = ['/config', '/login', '/logout', '/print/', '?nonce='];
+
+self.addEventListener('install', function (event) {
+  event.waitUntil(
+    caches.open(version + '_core')
+    .then(function (cache) {
+      return cache.addAll(core);
+    })
+    .then(self.skipWaiting())
+  );
+});
+
+self.addEventListener('fetch', function (event) {
+  {{#admin_group_admin}}return; // admin group{{/admin_group_admin}}
+  {{#admin_group_manager}}return; // manager group{{/admin_group_manager}}
+  {{#admin_group_editor}}return; // editor group{{/admin_group_editor}}
+
+  if (event.request.method !== 'GET') return;
+  if (!(event.request.url.indexOf('http') === 0)) return;
+  if (event.request.url.startsWith('https://cdn.') === true) return;
+  if (event.request.url.startsWith('https://accounts.') === true) return;
+
+  if (excludedPaths.some(function(path) {return event.request.url.indexOf(path) !== -1;})) return;
+  if (excludedExtensions.some(function(ext) {return event.request.url.endsWith(ext);})) return;
+
+  // DON'T CACHE patterns
+  {{#dontcache}}if (event.request.url.indexOf('{{.}}') !== -1) return;{{/dontcache}}
+
+  event.respondWith(
+    caches.match(event.request).then(function (cached) {
+      var networked = fetch(event.request)
+        .then(fetchedFromNetwork, unableToResolve)
+        .catch(unableToResolve);
+      return cached || networked;
+
+      function fetchedFromNetwork (response) {
+        var cacheCopy = response.clone();
+        caches.open(version + '_pages')
+          .then(function add(cache) {
+            return cache.put(event.request, cacheCopy);
+          })
+          .then(function () {});
+        return response;
+      }
+
+      function unableToResolve() {
+        return new Response('{{ offline_template }}{{^offline_template}}<body><h1>🚫</h1><h2>internet connection error</h2></body>{{/offline_template}}', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({
+            'Content-Type': 'text/html'
+          })
+        });
+      }
+
+    })
+  );
+
+});
+
+self.addEventListener('activate', function (event) {
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(
+        keys.filter(function (key) {
+          return !key.startsWith(version);
+        })
+        .map(function (key) {
+          return caches.delete(key);
+        })
+      );
+    })
+    .then(function () {
+      console.log('Service Worker active.');
+    })
+  );
+});
