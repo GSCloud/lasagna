@@ -451,6 +451,7 @@ async function sha256(message) {
       $('.main-header nav.navbar ul').append('<li><a class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i></a></li>');
       {{/goauth_secret}}{{/goauth_client_id}}{{/is_admin}}
 
+      // return URL parameter
       $(".login").each(function() {
         const currentURL = new URL(window.location.href);
         const returnPath = currentURL.pathname;
