@@ -120,16 +120,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "4.5.9",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "ee026fee997270e6f1b6e084210cec57570c3990"
+                "reference": "e2ea3de8d1ecbb2cfa04986fba7ad0682b47e013"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/ee026fee997270e6f1b6e084210cec57570c3990",
-                "reference": "ee026fee997270e6f1b6e084210cec57570c3990",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/e2ea3de8d1ecbb2cfa04986fba7ad0682b47e013",
+                "reference": "e2ea3de8d1ecbb2cfa04986fba7ad0682b47e013",
                 "shasum": ""
             },
             "require": {
@@ -169,11 +169,11 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cache"
             },
-            "time": "2024-04-30T09:55:48+00:00"
+            "time": "2024-09-13T16:30:41+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "4.5.9",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
@@ -233,7 +233,7 @@
         },
         {
             "name": "cakephp/utility",
-            "version": "4.5.9",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
@@ -2713,16 +2713,16 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.21",
+            "version": "1.12.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "14276fdef70575106a3392a4ed553c06a984df28"
+                "reference": "29201e7a743a6ab36f91394eab51889a82631428"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/14276fdef70575106a3392a4ed553c06a984df28",
-                "reference": "14276fdef70575106a3392a4ed553c06a984df28",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/29201e7a743a6ab36f91394eab51889a82631428",
+                "reference": "29201e7a743a6ab36f91394eab51889a82631428",
                 "shasum": ""
             },
             "require": {
@@ -2767,7 +2767,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-09T09:24:50+00:00"
+            "time": "2025-03-23T14:57:32+00:00"
         }
     ],
     "aliases": [],
