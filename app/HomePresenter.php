@@ -74,7 +74,7 @@ class HomePresenter extends APresenter
             }
             SF::correctTextSpacing($data['l'][$k], $lang);
         }
-
+    
         // render
         $output = '';
         if ($data) {
@@ -84,6 +84,7 @@ class HomePresenter extends APresenter
                 $presenter[$view]['template']
             );
         }
+
         SF::trimHtmlComment($output);
         return $this->setData('output', $output);
     }
