@@ -2,8 +2,6 @@ AI2Bot
 AhrefsBot
 Ai2Bot-Dolma
 Amazonbot
-Applebot
-Applebot-Extended
 Barkrowler
 Bytespider
 CCBot
@@ -14,8 +12,6 @@ Crawlspace
 DataForSeoBot
 Diffbot
 DotBot
-DuckAssistBot
-FacebookBot
 FriendlyCrawler
 GPTBot
 ICC-Crawler
