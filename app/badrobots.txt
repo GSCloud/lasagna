@@ -18,10 +18,6 @@ DuckAssistBot
 FacebookBot
 FriendlyCrawler
 GPTBot
-Google-Extended
-GoogleOther
-GoogleOther-Image
-GoogleOther-Video
 ICC-Crawler
 ISSCyberRiskCrawler
 ImagesiftBot
