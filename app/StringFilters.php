@@ -1472,7 +1472,7 @@ class StringFilters
             }
         }
         \sort($numbers, SORT_NUMERIC);
-        \sort($strings);
+        \sort($strings, SORT_STRING);
         $arr = \array_merge($numbers, $strings);
     }
 

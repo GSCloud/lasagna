@@ -1405,7 +1405,7 @@ class AdminPresenter extends APresenter
             }
         }
 
-        $x[1] = str_replace('<br>', "\n", $x[1]);
+        $x[1] = str_replace('<br>', " ", $x[1]);
 
         $val = [
             'id' => $key + 1,

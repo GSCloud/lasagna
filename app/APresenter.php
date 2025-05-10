@@ -1186,7 +1186,7 @@ abstract class APresenter
                     $path = '*** not set ***';
                 }
                 Cache::write($ban_rate, $ban_reset, 'ban');
-                $this->addMessage("LIMITER: Ban rate reset to {$ban_reset}. \n'{$path}'"); // phpcs:ignore
+                $this->addMessage("LIMITER: Ban rate reset to {$ban_reset}.\nPath: [{$path}]"); // phpcs:ignore
                 // user is limited
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
@@ -1210,11 +1210,11 @@ abstract class APresenter
             Cache::write($ban_rate, ++$ban_rate_count, 'ban');
             if ($ban_rate_count === \floor(self::BAN_MAXIMUM / 2)) {
                 // half-ban rate reached
-                $this->addMessage("LIMITER: Reached {$ban_rate_count}x ban limit. Path:\n'{$path}'"); // phpcs:ignore
+                $this->addMessage("LIMITER: Reached {$ban_rate_count}x ban limit.\nPath: [{$path}]"); // phpcs:ignore
             }
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
                 // user is banned
-                $this->addMessage("LIMITER: User is banned. Path:\n'{$path}'");
+                $this->addMessage("LIMITER: User is banned.\nPath: [{$path}]");
                 header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
