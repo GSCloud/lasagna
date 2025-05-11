@@ -203,7 +203,7 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(400, $extras);
             }
 
-            $this->addMessage("ADMIN: file deleted\n[{$result}]");
+            $this->addMessage("ADMIN: file deleted:\n[{$result}]");
             return $this->writeJsonData($result, $extras);
 
         case 'getUploadsInfo':
@@ -517,7 +517,7 @@ class AdminPresenter extends APresenter
                 $this->addError("Updating article [{$path}] hash [{$hash}] failed."); // phpcs:ignore
                 return $this->writeJsonData(500, $extras);
             }
-            $this->addMessage("Updating article [{$path}] hash [{$hash}] succeeded."); // phpcs:ignore
+            $this->addMessage("ADMIN: article updated: [{$path}] hash [{$hash}]"); // phpcs:ignore
             return $this->writeJsonData(['status' => 'OK', 'hash' => $hash], $extras); // phpcs:ignore
     
         case 'GetToken':
@@ -1031,7 +1031,7 @@ class AdminPresenter extends APresenter
         if (!\is_string($path)) {
             $path = '*** not set ***';
         }
-        $this->addMessage("ADMIN: Unauthorized access. Path: '{$path}'");
+        $this->addMessage("ADMIN: Unauthorized access.\nPath: [{$path}]");
         $this->setLocation('/err/401');
     }
 
@@ -1390,6 +1390,7 @@ class AdminPresenter extends APresenter
             'admin' => 'admin',
             'admin: file deleted' => 'file_delete',
             'admin: file(s) uploaded' => 'file_upload',
+            'cloudflare' => 'cloudflare',
             'download' => 'download',
             'halite' => 'system',
             'limiter' => 'limiter',

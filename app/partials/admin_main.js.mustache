@@ -377,18 +377,19 @@
 
                 printed++;
   
-                // ICON
                 var si = '';
                 if (data.data.files[i]["thumbnails"] === null) {
-                  // icon
+
+                  // ICON
                   si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
                   si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align white-text" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
-                  // thumbnail
+
+                  // THUMBNAIL
                   si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
-                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" height=128 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" height=128 src="/upload/' + data.data.files[i]['thumbnails'][160] + '">';
                   si += '</a>';
-                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align card-link" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
+                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align card-link" href="/upload/' + name + '">' + name + '</a></div>';
                 }
   
                 // AGE + SIZE
