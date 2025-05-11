@@ -2,6 +2,12 @@
 
 ---
 
+`2025-05-11`
+
+* **`1052-BUGFIX` logging messages** updated  
+* **`1051-BUGFIX` bot definitions** updated  
+* **`1050-FEATURE` changed logic** in administration for **displaying thumbnails** to allow caching
+
 `2025-03-15`
 
 * **`1049-FEATURE` hardened security and error logging**  
@@ -18,7 +24,7 @@
 `2025-02-19`
 
 * **`1046-FEATURE` no more META keywords**, feature removed  
-* **`1045-FEATURE`** login workflow uses a **returnURL**  
+* **`1045-FEATURE`** login workflow uses parameter **returnURL**  
 * **`1044-FEATURE` refactorization of StringFilter** class
 
 `2025-02-17`
