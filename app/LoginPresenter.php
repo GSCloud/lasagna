@@ -39,11 +39,11 @@ class LoginPresenter extends APresenter
 
         $cfg = $this->getCfg();
         if (($cfg['goauth_client_id'] ?? null) === null) {
-            $this->addError('OAuth: Missing [goauth_client_id].');
+            $this->addError('OAuth: missing [goauth_client_id]');
             $this->setLocation('/err/412');
         }
         if (($cfg['goauth_secret'] ?? null) === null) {
-            $this->addError('OAuth: Missing [goauth_secret].');
+            $this->addError('OAuth: missing [goauth_secret]');
             $this->setLocation('/err/412');
         }
 
@@ -108,11 +108,11 @@ class LoginPresenter extends APresenter
 
         if (!empty($_GET['error'])) {
             $err = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
-            $this->addError("OAuth failure. Message:\n" . $err);
+            $this->addError("OAuth: failure.\nMessage: " . $err);
             ErrorPresenter::getInstance()->process(
                 [
                     'code' => 403,
-                    'message' => "OAuth failure. Message:\n" . $err,
+                    'message' => "OAuth failure. Message: " . $err,
                 ]
             );
         } elseif (empty($_GET['code'])) {
@@ -138,11 +138,11 @@ class LoginPresenter extends APresenter
             \header('Location: ' . $authUrl . $hint, true, 303);
             exit;
         } elseif (empty($_GET['state']) || (!isset($_COOKIE['oauth2state'])) || $_GET['state'] !== $_COOKIE['oauth2state']) { // phpcs:ignore
-            $this->addError('OAuth: Invalid OAuth state.');
+            $this->addError('OAuth: invalid OAuth state');
             ErrorPresenter::getInstance()->process(
                 [
                     'code' => 403,
-                    'message' => 'OAuth: Invalid OAuth state.',
+                    'message' => 'OAuth failure: invalid state.',
                 ]
             );
         } else {
@@ -200,7 +200,7 @@ class LoginPresenter extends APresenter
 
             } catch (\Exception $e) {
                 $err = $e->getMessage();
-                $this->addError("OAuth exception. Message:\n" . $err);
+                $this->addError("OAuth: failure.\nException: " . $err);
                 ErrorPresenter::getInstance()->process(
                     [
                         'code' => 403,
@@ -209,7 +209,7 @@ class LoginPresenter extends APresenter
                 );
             }
         }
-        $this->addError("OAuth general error.");
+        $this->addError("OAuth: general error");
         ErrorPresenter::getInstance()->process(
             [
                 'code' => 403,

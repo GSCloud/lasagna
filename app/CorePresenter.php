@@ -159,7 +159,7 @@ class CorePresenter extends APresenter
             $this->checkRateLimit();
             $x = 0;
             if (!\is_array($match)) {
-                $this->addError('GetQR: Parameters mismatch.');
+                $this->addError('GetQR: parameters mismatch');
                 $this->setLocation('/err/404');
             }
             $scale = 5;
@@ -228,7 +228,7 @@ class CorePresenter extends APresenter
         case "GetCoreVersion":
             $this->checkRateLimit();
             if (!\is_array($data)) {
-                $this->addError('GetCoreVersion: Data consistency error.');
+                $this->addError('GetCoreVersion: data consistency error');
                 $this->setLocation('/err/404');
             }
             $d = [];

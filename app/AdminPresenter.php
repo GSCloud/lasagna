@@ -461,7 +461,7 @@ class AdminPresenter extends APresenter
             $fb = DATA . DS. "summernote_{$profile}_{$hash}.bak";
             if (file_exists($fr) && is_readable($fr)) {
                 if (copy($fr, $fb) === false) {
-                    $this->addError("ADMIN: Article [{$path}] backup failed.");
+                    $this->addError("ADMIN: article [{$path}] backup failed");
                     return $this->writeJsonData(
                         [
                             'code' => 401,
@@ -474,7 +474,7 @@ class AdminPresenter extends APresenter
             $fp = DATA . DS . "summernote_{$profile}_{$hash}.db";
             $flags = LOCK_EX | FILE_APPEND;
             if (@file_put_contents($fp, $data_nows . "\n", $flags) === false) {
-                $this->addError("ADMIN: Article [{$path}] history write failed.");
+                $this->addError("ADMIN: article [{$path}] history write failed");
                 return $this->writeJsonData(
                     [
                         'code' => 401,
@@ -486,7 +486,7 @@ class AdminPresenter extends APresenter
             $fp = DATA . DS . "summernote_{$profile}_{$hash}.json";
             $flags = LOCK_EX;
             if (@file_put_contents($fp, $data, $flags) === false) {
-                $this->addError("ADMIN: Article [{$path}] write to file failed.");
+                $this->addError("ADMIN: article [{$path}] write to file failed");
                 return $this->writeJsonData(
                     [
                         'code' => 500,
@@ -514,7 +514,7 @@ class AdminPresenter extends APresenter
             $p = \array_unique($p, SORT_LOCALE_STRING);
             $flags = LOCK_EX;
             if (@file_put_contents($f, \implode("\n", $p), $flags) === false) {
-                $this->addError("Updating article [{$path}] hash [{$hash}] failed."); // phpcs:ignore
+                $this->addError("ADMIN: updating article [{$path}] hash [{$hash}] failed"); // phpcs:ignore
                 return $this->writeJsonData(500, $extras);
             }
             $this->addMessage("ADMIN: article updated: [{$path}] hash [{$hash}]"); // phpcs:ignore
@@ -736,7 +736,7 @@ class AdminPresenter extends APresenter
             $this->addMessage('ADMIN: CORE UPDATE');
             $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
-            $this->flushCache();
+            //$this->flushCache(); // probably should not be her :)
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         default:
@@ -1010,7 +1010,7 @@ class AdminPresenter extends APresenter
                 $lock->release();
             }
         } else {
-            $this->addError('Could not obtain a CORE-UPDATE file lock.');
+            $this->addError('ADMIN: could not obtain a CORE-UPDATE file lock');
         }
         return $this;
     }
@@ -1047,18 +1047,18 @@ class AdminPresenter extends APresenter
             try {
                 $key = \hash('sha256', random_bytes(32) . time());
             } catch (\Exception $e) {
-                $this->addError("ADMIN: Error generating random key: " . $e->getMessage()); // phpcs:ignore
+                $this->addError("ADMIN: error generating random key: " . $e->getMessage()); // phpcs:ignore
                 ErrorPresenter::getInstance()->process(500);
                 return $this;
             }
             if (@file_put_contents($file, $key) === false) {
-                $this->_handleFileError($file, "ADMIN: Error writing to admin key file."); // phpcs:ignore
+                $this->_handleFileError($file, "ADMIN: error writing to admin key file"); // phpcs:ignore
                 unlink($file);
             } else if (!chmod($file, 0600)) {
-                $this->_handleFileError($file, "ADMIN: Error setting admin key file permissions."); // phpcs:ignore
+                $this->_handleFileError($file, "ADMIN: error setting admin key file permissions"); // phpcs:ignore
                 unlink($file);
             } else {
-                $this->addMessage('ADMIN: Keyfile created.');
+                $this->addMessage('ADMIN: keyfile created');
             }
         }
         return $this;
@@ -1090,7 +1090,7 @@ class AdminPresenter extends APresenter
     {
         $file = DATA . DS . self::ADMIN_KEY;
         if (!is_readable($file)) {
-            $this->addError('ADMIN: Missing or unreadable admin key file.');
+            $this->addError('ADMIN: missing or unreadable admin key file');
             $this->_createAdminKey();
         }
         if (is_readable($file)) {
@@ -1099,7 +1099,7 @@ class AdminPresenter extends APresenter
                 return $key;
             }
         }
-        $this->addError('ADMIN: Invalid admin key file.');
+        $this->addError('ADMIN: invalid admin key file');
         return null;
     }
 

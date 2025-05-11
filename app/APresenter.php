@@ -658,7 +658,7 @@ abstract class APresenter
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
                 if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
-                    $this->addError("Invalid UUID cookie.");
+                    $this->addError("COOKIE: invalid UUID cookie");
                     unset($_COOKIE[$name]);
                 }
             }
@@ -1027,7 +1027,7 @@ abstract class APresenter
         if (file_exists($keyfile) && is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
-            $this->addError('HALITE: Missing encryption key.');
+            $this->addError('HALITE: getCookie - missing encryption key');
             return null;
         }
         $cookie = new Cookie($enc);
@@ -1508,23 +1508,26 @@ abstract class APresenter
                 $key = new \Cloudflare\API\Auth\APIKey($email, $apikey);
                 $adapter = new \Cloudflare\API\Adapter\Guzzle($key);
                 $zones = new \Cloudflare\API\Endpoints\Zones($adapter);
+                $myzones = [];
                 if (\is_array($zoneid)) {
                     $myzones = $zoneid;
                 }
                 if (\is_string($zoneid)) {
                     $myzones = [$zoneid];
                 }
+                $c = 0;
                 foreach ($zones->listZones()->result as $zone) {
                     foreach ($myzones as $myzone) {
-                        if ($zone->id == $myzone) {
+                        if ($zone->id === $myzone) {
                             $zones->cachePurgeEverything($zone->id);
-                            $this->addMessage("Cloudflare: zone [{$myzone}] purged."); // phpcs:ignore
+                            $c++;
+                            $this->addMessage("CLOUDFLARE: #{$c} cache for zone [{$myzone}] purged"); // phpcs:ignore
                         }
                     }
                 }
             }
         } catch (\Exception $e) {
-            $this->addError("Cloudflare cache purge exception. Message:\n" . $e->getMessage()); // phpcs:ignore
+            $this->addError("CLOUDFLARE: we got exception.\nMessage: " . $e->getMessage()); // phpcs:ignore
         }
         return $this;
     }
@@ -1585,19 +1588,19 @@ abstract class APresenter
                         $data = @file_get_contents($remote);
                     } catch (\Exception $e) {
                         $data = '';
-                        $this->addError("Fetching URL [{$remote}] failed."); // phpcs:ignore
+                        $this->addError("CSV: fetching URL [{$remote}] failed"); // phpcs:ignore
                     }
                 }
                 if (!$data) {
-                    $this->addError("There are no data for [{$name}].");
+                    $this->addError("CSV: there is no data for [{$name}]");
                     return $this;
                 }
                 if ($data && !\is_string($data)) {
-                    $this->addError("There are no data for [{$name}].");
+                    $this->addError("CSV: there is no data for [{$name}]");
                     return $this;
                 }
                 if ($data && \strpos($data, '!DOCTYPE html') > 0) {
-                    $this->addError("Fetching URL [{$remote}] got HTML data instead of CSV."); // phpcs:ignore
+                    $this->addError("CSV: fetching URL [{$remote}] data contains HTML"); // phpcs:ignore
                     return $this;
                 }
                 if (strlen($data) >= self::CSV_MIN_SIZE) {
@@ -1608,20 +1611,20 @@ abstract class APresenter
                     // remove old backup
                     if (file_exists($f2)) {
                         if (@\unlink($f2) === false) {
-                            $this->addError("Delete of file [{$file}.bak] failed."); // phpcs:ignore
+                            $this->addError("CSV: delete of file [{$file}.bak] failed"); // phpcs:ignore
                         }
                     }
 
                     // move CSV to backup
                     if (file_exists($f1)) {
                         if (@\rename($f1, $f2) === false) {
-                            $this->addError("Backup of file [{$file}.csv] failed."); // phpcs:ignore
+                            $this->addError("CSV: backup of file [{$file}.csv] failed"); // phpcs:ignore
                         }
                     }
 
                     // write new CSV
                     if (@file_put_contents($f1, $data, LOCK_EX) === false) {
-                        $this->addError("Save to file [{$file}.csv] failed."); // phpcs:ignore
+                        $this->addError("CSV: save to file [{$file}.csv] failed"); // phpcs:ignore
                     }
                 }
             }
@@ -1680,14 +1683,14 @@ abstract class APresenter
         if (file_exists(DATA . DS . "{$file}.csv")) {
             if (!$csv = @file_get_contents(DATA . DS . "{$file}.csv")) {
                 $csv = null;
-                $this->addError("Reading file [{$file}.csv] failed.");
+                $this->addError("AppData: reading file [{$file}.csv] failed");
             }
         }
 
         if (\is_string($csv) && \stripos($csv, '<!DOCTYPE html') === 0) {
             // we got HTML document = failure
             $csv = null;
-            $this->addError("File [{$file}.csv] contains HTML.");
+            $this->addError("AppData: file [{$file}.csv] data contains HTML");
         }
 
         if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
@@ -1700,13 +1703,13 @@ abstract class APresenter
         if (file_exists(DATA . DS . "{$file}.bak")) {
             if (!$csv = @file_get_contents(DATA . DS . "{$file}.bak")) {
                 $csv = null;
-                $this->addError("Reading backup file [{$file}.bak] failed.");
+                $this->addError("AppData: reading backup file [{$file}.bak] failed");
             }
         }
         if (\is_string($csv) && \stripos($csv, '<!DOCTYPE html') === 0) {
             // we got HTML document = failure
             $csv = null;
-            $this->addError("Backup file [{$file}.bak] contains HTML.");
+            $this->addError("AppData: backup file [{$file}.bak] contains HTML");
         }
         if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
             // make a copy to the main CSV file

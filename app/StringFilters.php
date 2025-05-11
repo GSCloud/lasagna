@@ -1463,7 +1463,6 @@ class StringFilters
 
         $numbers = [];
         $strings = [];
-
         foreach ($arr as $a) {
             if (\is_numeric($a)) {
                 $numbers[] = $a;
@@ -1472,7 +1471,7 @@ class StringFilters
             }
         }
         \sort($numbers, SORT_NUMERIC);
-        \sort($strings, SORT_STRING);
+        \sort($strings, SORT_LOCALE_STRING);
         $arr = \array_merge($numbers, $strings);
     }
 
@@ -1490,6 +1489,7 @@ class StringFilters
         if (!\is_array($arr)) {
             throw new \InvalidArgumentException('Input must be an array.');
         }
+
         $numbers = [];
         $strings = [];
         foreach ($arr as $a) {
@@ -1500,7 +1500,7 @@ class StringFilters
             }
         }
         \rsort($numbers, SORT_NUMERIC);
-        \rsort($strings);
+        \rsort($strings, SORT_LOCALE_STRING);
         $arr = \array_merge($numbers, $strings);
     }
 
@@ -1519,9 +1519,8 @@ class StringFilters
         if (!\is_string($string) || empty($string)) {
             return;
         }
-
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('shortCodesProcessor: FLAGS!');
+            throw new \InvalidArgumentException('shortCodesProcessor: incorrect flags'); // phpcs:ignore
         }
 
         if (\str_starts_with($string, '[markdown]')) {
