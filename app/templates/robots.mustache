@@ -7,13 +7,14 @@ Disallow: /
 User-agent: *
 Allow: /
 Disallow: /admin
-Disallow: /config
 Disallow: /login
-Disallow: /logout
 
 User-agent: Googlebot
 Allow: /
 Disallow: /admin
-Disallow: /config
 Disallow: /login
-Disallow: /logout
+
+User-agent: SeznamBot
+Request-rate: 1/5s
+Disallow: /admin
+Disallow: /login

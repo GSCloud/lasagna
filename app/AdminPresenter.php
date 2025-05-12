@@ -66,7 +66,7 @@ class AdminPresenter extends APresenter
     private int $_logcounter = 0;
 
     /* @var int max. display logs */
-    const MAX_LOGS = 500;
+    const MAX_LOGS = 1000;
 
     /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
@@ -1219,8 +1219,10 @@ class AdminPresenter extends APresenter
 
         $t = \strtotime($x[0]);
         if ($t) {
-            $y = \date("Y", $t);
-            if ($y < 2025) {
+            $now = \time() + 1;
+            $diff = $now - $t;
+            $days = $diff / 86400;
+            if ($days > 100) {
                 $val = '';
                 return;
             }
@@ -1368,8 +1370,10 @@ class AdminPresenter extends APresenter
 
         $t = \strtotime($x[0]);
         if ($t) {
-            $y = \date("Y", $t);
-            if ($y < 2025) {
+            $now = \time() + 1;
+            $diff = $now - $t;
+            $days = $diff / 86400;
+            if ($days > 100) {
                 $val = '';
                 return;
             }

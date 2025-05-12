@@ -1180,14 +1180,9 @@ abstract class APresenter
         $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
-                $ban_reset = \floor(self::BAN_MAXIMUM / 2);
-                $path = $this->getData('request_path');
-                if (!\is_string($path)) {
-                    $path = '*** not set ***';
-                }
-                Cache::write($ban_rate, $ban_reset, 'ban');
-                $this->addMessage("LIMITER: Ban rate reset to {$ban_reset}.\nPath: [{$path}]"); // phpcs:ignore
                 // user is limited
+                $ban_reset = \floor(self::BAN_MAXIMUM / 2);
+                Cache::write($ban_rate, $ban_reset, 'ban');
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
             }
@@ -1201,20 +1196,24 @@ abstract class APresenter
         Cache::write($rate_limit, ++$rate_limit_count, 'limiter');
 
         if ($rate_limit_count >= (int) $max) {
-            $path = $this->getData('request_path');
-            if (!\is_string($path)) {
-                $path = '*** not set ***';
-            }
             // increment ban
             $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
             Cache::write($ban_rate, ++$ban_rate_count, 'ban');
-            if ($ban_rate_count === \floor(self::BAN_MAXIMUM / 2)) {
-                // half-ban rate reached
-                $this->addMessage("LIMITER: Reached {$ban_rate_count}x ban limit.\nPath: [{$path}]"); // phpcs:ignore
-            }
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
                 // user is banned
-                $this->addMessage("LIMITER: User is banned.\nPath: [{$path}]");
+                $path = $this->getData('request_path');
+                if (!\is_string($path)) {
+                    $path = '*** unknown ***';
+                }
+                $ua = null;
+                if (isset($_SERVER['HTTP_USER_AGENT'])) {
+                    $ua = trim($_SERVER['HTTP_USER_AGENT']);
+                }
+                if ($ua) {
+                    $this->addMessage("LIMITER: User [{$ua}] is banned.\nPath: [{$path}]"); // phpcs:ignore
+                } else {
+                    $this->addMessage("LIMITER: User is banned.\nPath: [{$path}]"); // phpcs:ignore
+                }
                 header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
