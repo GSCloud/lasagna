@@ -1061,9 +1061,9 @@ abstract class APresenter
                 \chmod($keyfile, self::COOKIE_KEY_FILEMODE);
                 $this->addMessage('HALITE: Cookie encryption keyfile created.'); // phpcs:ignore
             } else {
-                $this->addCritical('HALITE: Cannot write cookie encryption key!'); // phpcs:ignore
+                $this->addCritical('HALITE: Cannot write cookie encryption key!!!'); // phpcs:ignore
                 ErrorPresenter::getInstance()->process(
-                    ['code' => 500, 'message' => 'HALITE: unable process cookie encryption'] // phpcs:ignore
+                    ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
                 );
             }
         }
@@ -1447,7 +1447,7 @@ abstract class APresenter
             if ($this->force_csv_check) {
                 $this->addCritical('Corrupted locales: [' . $language . ']');
                 ErrorPresenter::getInstance()->process(
-                    ['code' => 500, 'message' => 'Corrupted locales!']
+                    ['code' => 500, 'message' => 'SYSTEM ERROR: corrupted localization'] // phpcs:ignore
                 );
             } else {
                 // second try!
@@ -1887,9 +1887,9 @@ abstract class APresenter
             ) ?? 'en';
             $data["lang{$language}"] = true;
         } else {
-            $this->addCritical('Something is terribly wrong with locales!');
+            $this->addCritical('Something is terribly wrong with the locales!!!'); // phpcs:ignore
             ErrorPresenter::getInstance()->process(
-                ['code' => 500, 'message' => 'Something is terribly wrong with locales!'] // phpcs:ignore
+                ['code' => 500, 'message' => 'SYSTEM ERROR: corrupted localization'] // phpcs:ignore
             );
         }
 
@@ -1936,7 +1936,7 @@ abstract class APresenter
             $hash = hash('sha256', $randomBytes . $time);
             return substr($hash, 0, 16);
         } catch (\Exception $e) {
-            $this->addError("Error generating cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
+            $this->addError("Error generating the cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
             if (function_exists('openssl_random_pseudo_bytes')) {
                 $this->addMessage("Using openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
                 $randomBytes = openssl_random_pseudo_bytes(32);
@@ -1944,9 +1944,9 @@ abstract class APresenter
                 $hash = hash('sha256', $randomBytes . $time);
                 return substr($hash, 0, 16);
             }
-            $this->addCritical("Error generating a general nonce: " . $e->getMessage()); // phpcs:ignore
+            $this->addCritical("Error generating any system nonce: " . $e->getMessage()); // phpcs:ignore
             ErrorPresenter::getInstance()->process(
-                ['code' => 500, 'message' => 'Error generating  nonce.']
+                ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
             );
         }
     }

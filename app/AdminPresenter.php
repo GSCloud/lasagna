@@ -32,7 +32,13 @@ class AdminPresenter extends APresenter
     /* @var string admin key filename */
     const ADMIN_KEY = 'admin.key';
 
-    /* @var minimum string stubs string length */
+    /* @var int max. display log entries */
+    const MAX_LOG_ENTRIES = 1000;
+
+    /* @var int max. display log days */
+    const VISIBLE_LOG_DAYS = 100;
+
+    /* @var upload name stubs minimum string length */
     const MIN_STUBS_LENGTH = 3;
 
     /* @var string thumbnail prefix */
@@ -64,9 +70,6 @@ class AdminPresenter extends APresenter
 
     /* @var int log counter */
     private int $_logcounter = 0;
-
-    /* @var int max. display logs */
-    const MAX_LOGS = 1000;
 
     /* @var array image handler constants by type */
     const IMAGE_HANDLERS = [
@@ -367,7 +370,7 @@ class AdminPresenter extends APresenter
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
-                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS - 1)) {
+                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOG_ENTRIES - 1)) { // phpcs:ignore
                     $c++;
                 }
                 \pclose($file);
@@ -563,13 +566,13 @@ class AdminPresenter extends APresenter
                     $c = 0;
                     $logs = [];
                     if (\is_resource($file)) {
-                        while (($logs[] = \fgets($file)) && ($c < self::MAX_LOGS - 1)) { // phpcs:ignore
+                        while (($logs[] = \fgets($file)) && ($c < self::MAX_LOG_ENTRIES - 1)) { // phpcs:ignore
                             $c++;
                         }
                         \pclose($file);
                     }
                     \array_walk($logs, array($this, '_decorateLogsExport'));
-                    $this->addMessage("REMOTE FN: AuditLogJSON fetched by [{$user}]"); // phpcs:ignore
+                    $this->addMessage("REMOTE FN: AuditLogJSON fetched [{$user}]"); // phpcs:ignore
                     return $this->writeJsonData($logs, $extras);
                 }
             }
@@ -591,7 +594,7 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->addMessage("REMOTE FN: NEW ADMIN KEY by [{$user}]");
+                    $this->addMessage("REMOTE FN: new admin key [{$user}]");
                     $this->_rebuildAdminKey();
                     return $this->writeJsonData(
                         [
@@ -621,7 +624,7 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->addMessage("REMOTE FN: CACHE FLUSH by [{$user}]");
+                    $this->addMessage("REMOTE FN: cache flush [{$user}]");
                     $this->flushCache();
                     return $this->writeJsonData(
                         [
@@ -651,7 +654,7 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->addMessage("REMOTE FN: CORE UPDATE by [{$user}]");
+                    $this->addMessage("REMOTE FN: core update [{$user}]");
                     $this->setForceCsvCheck();
                     $this->postloadAppData('app_data');
                     $this->flushCache();
@@ -682,7 +685,7 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = \hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->addMessage("REMOTE FN: NEW NONCE by [{$user}]");
+                    $this->addMessage("REMOTE FN: new nonce [{$user}]");
                     $this->_rebuildNonce();
                     return $this->writeJsonData(
                         [
@@ -712,7 +715,7 @@ class AdminPresenter extends APresenter
             if ($role && $user && $token || $this->_isLocalAdmin()) {
                 $code = hash('sha256', $role . $key . $user);
                 if ($code === $token || $this->_isLocalAdmin()) {
-                    $this->addMessage("REMOTE FN: NEW SECURE KEY by [{$user}]");
+                    $this->addMessage("REMOTE FN: new secure key [{$user}]");
                     $this->_rebuildSecureKey();
                     return $this->writeJsonData(
                         [
@@ -736,7 +739,6 @@ class AdminPresenter extends APresenter
             $this->addMessage('ADMIN: CORE UPDATE');
             $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
-            //$this->flushCache(); // probably should not be her :)
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         default:
@@ -949,7 +951,10 @@ class AdminPresenter extends APresenter
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         if (!\is_string($key)) {
             $this->addCritical('Secure cookie must be a string!');
-            ErrorPresenter::getInstance()->process(500);
+            ErrorPresenter::getInstance()->process(
+                ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
+            );
+
         }
         if (\is_string($key)) {
             $key = trim($key, '/.');
@@ -1222,7 +1227,7 @@ class AdminPresenter extends APresenter
             $now = \time() + 1;
             $diff = $now - $t;
             $days = $diff / 86400;
-            if ($days > 100) {
+            if ($days > self::VISIBLE_LOG_DAYS) {
                 $val = '';
                 return;
             }
@@ -1373,7 +1378,7 @@ class AdminPresenter extends APresenter
             $now = \time() + 1;
             $diff = $now - $t;
             $days = $diff / 86400;
-            if ($days > 100) {
+            if ($days > self::VISIBLE_LOG_DAYS) {
                 $val = '';
                 return;
             }

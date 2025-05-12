@@ -2,6 +2,11 @@
 
 ---
 
+`2025-05-12`
+
+* **`1054-FEATURE` admin log UI** has 1000 visible entries or listing goes 100 days into the past  
+* **`1053-BUGFIX` removed console warnings** in Materialize framework at our CDN
+
 `2025-05-11`
 
 * **`1052-BUGFIX` logging messages** updated  
