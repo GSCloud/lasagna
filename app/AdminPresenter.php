@@ -1263,15 +1263,15 @@ class AdminPresenter extends APresenter
                 'class' => 'blue lighten-4'
             ],
             'unauthorized access' => [
-                'type' => 'type_admin',
+                'type' => 'type_unauthorized',
                 'class' => 'orange lighten-4'
             ],
             'cloudflare' => [
-                'type' => 'type_admin',
+                'type' => 'type_cloudflare',
                 'class' => 'indigo lighten-4'
             ],
             'halite' => [
-                'type' => 'type_admin',
+                'type' => 'type_halite',
                 'class' => 'green lighten-4'
             ],
             'download' => [
