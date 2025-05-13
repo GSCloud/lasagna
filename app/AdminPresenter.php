@@ -1248,19 +1248,27 @@ class AdminPresenter extends APresenter
         } else {
             $class2 = 'ipadd';
         }
-
+        
         $lookup = [
             'admin' => [
                 'type' => 'type_admin',
                 'class' => 'green lighten-4'
             ],
-            'admin: file deleted' => [
+            'file deleted' => [
                 'type' => 'type_file_delete',
                 'class' => 'red lighten-4'
             ],
-            'admin: file(s) uploaded' => [
+            'file(s) uploaded' => [
                 'type' => 'type_file_upload',
                 'class' => 'blue lighten-4'
+            ],
+            'unauthorized access' => [
+                'type' => 'type_admin',
+                'class' => 'orange lighten-4'
+            ],
+            'cloudflare' => [
+                'type' => 'type_admin',
+                'class' => 'indigo lighten-4'
             ],
             'halite' => [
                 'type' => 'type_admin',
@@ -1294,7 +1302,6 @@ class AdminPresenter extends APresenter
             if (\stripos($x[1], $keyword) !== false) {
                 $type = $data['type'];
                 $class = $data['class'];
-                break;
             }
         }
 
