@@ -6,12 +6,11 @@ $gscloud,$,$gsc,$gsc,$gsc,$gsc
 $year,$,2025,2025,2025,2025
 nojs_placeholder,ALERT,JAVASCRIPT IS DISABLED,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT IST DEAKTIVIERT
 nojs_sorry,ALERT,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
-nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung verwenden zu können."
+nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung zu verwenden."
 page_outdated,ALERT,A new version of the application is available.,K dispozici je nová verze aplikace.,K dispozícii je nová verzia aplikácie.,Eine neue Version der Anwendung ist verfügbar.
 page_outdated_button,BUTTON,👷‍♀️ UPDATE,👷‍♀️ AKTUALIZOVAT,👷‍♀️ AKTUALIZOVAŤ,👷‍♀️ AKTUALISIEREN
 share_bluesky,BUTTON,Bluesky,Bluesky,Bluesky,Bluesky
 share_facebook,BUTTON,Facebook,Facebook,Facebook,Facebook
-share_instagram,BUTTON,Instagram,Instagram,Instagram,Instagram
 share_mastodon,BUTTON,Mastodon,Mastodon,Mastodon,Mastodon
 webshare_button,BUTTON,📲 share,📲 sdílet,📲 zdieľať ,📲 Teilen
 day_of_the_week_1,DAYS,Monday,pondělí,pondelok,Montag
@@ -43,7 +42,7 @@ server_error_info_429,ERROR,The client is being rate limited.,The client is bein
 server_error_info_500,ERROR,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.
 poweredby,FOOTER,"Powered by Hetzner, Google and Cloudflare technology. We don't use 3rd party cookies.","Využívá technologie Hetzner, Google a Cloudflare. Nepoužíváme cookies třetích stran.","Používa technológiu Hetzner, Google a Cloudflare. Nepoužívame cookies tretích strán.","Unterstützt durch Hetzner-, Google- und Cloudflare-Technologie. Wir verwenden keine Cookies von Drittanbietern."
 privacy_policy,FOOTER,Privacy Policy,Zásady ochrany osobních údajů,Zásady ochrany osobných údajov,Datenschutzrichtlinie
-company_eet,INFO,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Nach dem Sales Records Act ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, die erhaltenen Einnahmen online beim Steueramt zu registrieren; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
+company_eet,INFO,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Gemäß dem Umsatzerfassungsgesetz ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, den erhaltenen Erlös online bei der Steuerverwaltung zu melden; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
 author,META,$author,$author,$author,$author
 meta_author,META,$author,$author,$author,$author
 article_author,META,$author,$author,$author,$author
@@ -82,8 +81,10 @@ gsc_footer_img_size,PARAMS,48,48,48,48
 title,DEMO,DEMO,DEMO,DEMO,DEMO
 main,DEMO,DEMO,DEMO,DEMO,DEMO
 shortcodes,DEMO,DEMO,DEMO,DEMO,DEMO
-nav_czech,DEMO,Česky,Česky,Česky,Česky
-nav_english,DEMO,English,English,English,English
+nav_czech,NAVI,Česky,Česky,Česky,Česky
+nav_slovak,NAVI,Slovensky,Slovensky,Slovensky,Slovensky
+nav_english,NAVI,English,English,English,English
+nav_deutsch,NAVI,Deutsch,Deutsch,Deutsch,Deutsch
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
 a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
@@ -103,9 +104,9 @@ a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
 a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
 a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN
 a_error_general,ERROR,🤯 ERROR!,🤯 CHYBA!,🤯 CHYBA!,🤯 FEHLER!
-a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Beim Hochladen von Dateien ist ein Fehler aufgetreten: Interner Fehler.
+a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Beim Hochladen der Dateien ist ein Fehler aufgetreten: Interner Fehler.
 a_upload_filetype,ERROR,😳 This file type is not accepted.,😳 Tento typ souboru není povolen.,😳 Tento typ súboru nie je akceptovaný.,😳 Dieser Dateityp wird nicht akzeptiert.
-a_upload_http,ERROR,😵 Error uploading files: HTTP 403 Forbidden.,😵 Chyba nahrávání: HTTP 403 Forbidden.,😵 Chyba pri nahrávaní súborov: HTTP 403 Zakázané.,😵 Fehler beim Hochladen von Dateien: HTTP 403 Verboten.
+a_upload_http,ERROR,😵 Error uploading files: HTTP 403 Forbidden.,😵 Chyba nahrávání: HTTP 403 Forbidden.,😵 Chyba pri nahrávaní súborov: HTTP 403 Zakázané.,😵 Fehler beim Hochladen der Dateien: HTTP 403 Verboten.
 a_upload_maxbytes,ERROR,😵 Total filesize is too big (max. 100 MB).,😵 Obsah je příliš veliký (max. 100 MB).,😵 Celková veľkosť súboru je príliš veľká (max. 100 MB).,😵 Die Gesamtdateigröße ist zu groß (max. 100 MB).
 a_upload_maxfiles,ERROR,😵 Too many files were selected (max. 100).,😵 Vybráno příliš mnoho souborů (max. 100).,😵 Bolo vybratých príliš veľa súborov (max. 100).,😵 Es wurden zu viele Dateien ausgewählt (max. 100).
 a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.
@@ -113,7 +114,7 @@ a_age,INFO,age,stáří,vek,Alter
 a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /de/id/)
 a_articles,INFO,ARTICLES,ČLÁNKY,ČLÁNKY,ARTIKEL
 a_ban,INFO,BAN,BAN,BAN,VERBOT
-a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋 
+a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋
 a_copy_tit,INFO,copy URL,kopírovat URL,kopírovať URL,URL kopieren
 a_delete_tit,INFO,delete file,smazat soubor,odstrániť súbor,Datei löschen
 a_fcgi,INFO,FCGI,FCGI,FCGI,FCGI
@@ -133,10 +134,10 @@ a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
 a_processing,INFO,processing,zpracování,spracovanie,Verwechseln
 a_processing_data,INFO,The system is processing data ☕️,Systém zpracovává data ☕️,Systém spracováva údaje ☕️,Das System verarbeitet Daten ☕️
 a_redis,INFO,REDIS,REDIS,REDIS,REDIS
-a_remote_fn_info,INFO,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufrufen einer Remote-Systemfunktion
-a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,REMOTE-FUNKTIONSAUFRUFE
-a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Fernbedienung fn
-a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,OK GESPEICHERT
+a_remote_fn_info,INFO,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufruf einer Remote-Systemfunktion
+a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,FERNFUNKTIONSANRUFE
+a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Remote-Fn
+a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,GESPEICHERT OK
 a_total,INFO,total,celkem,celkom,Gesamt
 a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnutý.,UPLOAD ist deaktiviert.
 a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
@@ -148,15 +149,15 @@ a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
 a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
-a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken
-a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität und Objekte
+a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
+a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität & Objekte
 a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
 a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
 a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,na celú obrazovku,Vollbild
 a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte
 a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
 a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
-a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern
+a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalt speichern
 a_tab_changes,TAB,CHANGES,ZMĚNY,ZMENY,ÄNDERUNGEN
 a_tab_data,TAB,DATA,DATA,DATA,DATEN
 a_tab_fn,TAB,FN,FN,FN,FN
@@ -167,7 +168,7 @@ a_locales,TITLE,DATA,DATA,DATA,DATEN
 a_services,TITLE,services,SLUŽBY,SLUŽBY,Dienstleistungen
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
-a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
+a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Zeilenanzahl)
 a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
 a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 Emoji-Panel
 a_files_ttip,TOOLTIP,file manager,správce souborů,správca súborov,Dateimanager
