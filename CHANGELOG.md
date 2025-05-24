@@ -2,6 +2,11 @@
 
 ---
 
+`2025-05-24`
+
+* **`1056-FEATURE` sharing button to Bluesky**  
+* **`1055-BUGFIX` bot definitions** updated
+
 `2025-05-12`
 
 * **`1054-FEATURE` admin log UI** has 1000 visible entries or listing goes 100 days into the past  
