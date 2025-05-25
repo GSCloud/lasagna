@@ -38,31 +38,26 @@ class HomePresenter extends APresenter
      */
     public function process($param = null)
     {
-        // rate limiting
         $this->checkRateLimit();
-
-        // Model
-        if (!\is_array($data = $this->getData())) {
+        
+        if (!\is_array($data = $this->getData())) { // Model
+            return $this;
+        }
+        
+        if (!\is_string($view = $this->getView())) { // View
             return $this;
         }
 
-        // View
-        if (!\is_string($view = $this->getView())) {
-            return $this;
-        }
-
-        // Presenter
-        if (!\is_array($presenter = $this->getPresenter())) {
+        if (!\is_array($presenter = $this->getPresenter())) { // Presenter
             return $this;
         }
 
         // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);
 
-        // content switching
-        $data[$view . '_menu'] = true;
+        $data[$view . '_menu'] = true; // content switcher
 
-        // process shortcodes, fix HTML and translations
+        // process shortcodes, fix HTML and locales
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($v, '[markdown]')) {
@@ -84,7 +79,6 @@ class HomePresenter extends APresenter
                 $presenter[$view]['template']
             );
         }
-
         SF::trimHtmlComment($output);
         return $this->setData('output', $output);
     }
