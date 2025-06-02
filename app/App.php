@@ -197,7 +197,7 @@ if (DOMAIN === str_replace('https://', '', $cfg['goauth_origin'] ?? '')) {
 
 // BAN/LIMITER times in seconds
 if (!isset($data['ban_secs'])) {
-    $data['ban_secs'] = 1800;
+    $data['ban_secs'] = 3600;
 }
 if (!isset($data['limiter_secs'])) {
     $data['limiter_secs'] = 5;
@@ -223,7 +223,7 @@ $cache_profiles = array_replace(
         'sixhours' => '+6 hours',
         'twelfhours' => '+12 hours',
         'day' => '+24 hours',
-        'ban' => '+30 minutes', // ban time - UUID is blocked
+        'ban' => '+60 minutes', // ban time
         'limiter' => '+5 seconds', // rate limiting interval
         'csv' => '+72 hours', // CSV cold storage
     ], (array) ($cfg['cache_profiles'] ?? [])

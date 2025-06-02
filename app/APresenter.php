@@ -1173,7 +1173,7 @@ abstract class APresenter
         $uuid = $this->getUID();
         $ban_rate = "user_ban_limit_{$uuid}";
         $rate_limit = "user_rate_limit_{$uuid}";
-        $ban_secs = $this->getData['ban_secs'] ?? 1800;
+        $ban_secs = $this->getData['ban_secs'] ?? 3600;
         $limiter_secs = $this->getData['limiter_secs'] ?? 5;
 
         // bans limiting
