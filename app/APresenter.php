@@ -332,7 +332,7 @@ abstract class APresenter
                     $text = preg_replace(
                         '/(https)\:\/\/([a-zA-Z0-9\-\.]+\.'
                         . '[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/',
-                        '<a rel="noopener,nofollow" '
+                        '<a rel="noopener nofollow" '
                         . 'target=_blank href="$0">$2$3</a>',
                         $text
                     );
