@@ -111,19 +111,19 @@ class AdminPresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
-        // Config
+        // CONFIG
         $cfg = $this->getCfg();
         if (!\is_array($cfg)) {
             return $this;
         }
 
-        // Model
+        // MODEL
         $data = $this->getData();
         if (!\is_array($data)) {
             return $this;
         }
 
-        // Match and View
+        // MATCH and VIEW
         $match = $this->getMatch();
         if (\is_array($match)) {
             $view = $match['params']['p'] ?? null;
@@ -134,13 +134,13 @@ class AdminPresenter extends APresenter
             }
         }
 
-        // User
+        // USER
         $u = $this->getCurrentUser();
         if (\is_array($u)) {
             $data['user'] = $u;
         }
 
-        // Group
+        // GROUP
         $g = $this->getUserGroup();
         if (\is_string($g)) {
             $data['admin'] = $g;
@@ -174,7 +174,6 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(410, $extras);
             }
 
-            // process
             $uploads = $this->processUpload();
             $count = \count($uploads);
             $names = \array_map(
@@ -757,7 +756,7 @@ class AdminPresenter extends APresenter
     {
         $uploads = [];
 
-        // Loop through each uploaded file
+        // Loop through uploads
         foreach ($_FILES as $key => &$file) {
             $f = $file['name'];
 
@@ -767,33 +766,33 @@ class AdminPresenter extends APresenter
             SF::sanitizeStringLC($f);
             SF::transliterate($f);
 
-            // skip thumbnails
+            // Skipping ...
             if (\str_starts_with($f, self::THUMB_PREFIX)) {
                 continue;
             }
-            // skip .bak extension
             if (\str_ends_with($f, '.bak')) {
                 continue;
             }
-            // skip .php extension
             if (\str_ends_with($f, '.php')) {
                 continue;
             }
-            // skip .inc extension
             if (\str_ends_with($f, '.inc')) {
                 continue;
             }
-            // skip '.size' file
             if ($f === '.size') {
                 continue;
             }
 
             // Get the file information
             $info = \pathinfo($f);
-
-            // Skip files without a name
             if (\is_array($info) && !$info['filename']) {
                 continue;
+            }
+
+            // Rename .jpeg files
+            if (isset($info['extension']) && strtolower($info['extension']) === 'jpeg') { // phpcs:ignore
+                $f = $info['filename'] . '.jpg';
+                $info = \pathinfo($f);
             }
 
             // Process the uploaded file
@@ -839,6 +838,7 @@ class AdminPresenter extends APresenter
                 }
             }
         }
+
         return $uploads;
     }
 
