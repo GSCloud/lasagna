@@ -2,6 +2,10 @@
 
 ---
 
+`2025-06-14`
+
+* **`1057-FEATURE` .jpeg files automatically renamed to .jpg on upload**
+
 `2025-05-24`
 
 * **`1056-FEATURE` sharing button to Bluesky**  
