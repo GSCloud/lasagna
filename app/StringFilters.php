@@ -28,7 +28,7 @@ use Michelf\MarkdownExtra;
  */
 class StringFilters
 {
-    // GALLERY: max. iterations
+    // max. single short code iterations
     const ITERATIONS = 30;
 
     // SANITIZATION: IMAGE MASK for search
@@ -571,7 +571,6 @@ class StringFilters
                 'Invalid argument: Expected an array.'
             );
         }
-
         foreach ($array as $key => $value) {
             if (!\is_string($key) || !\is_string($value)) {
                 throw new \InvalidArgumentException(
@@ -579,6 +578,7 @@ class StringFilters
                 );
             }
         }
+
         self::$_custom = $array;
     }
 
@@ -598,7 +598,6 @@ class StringFilters
                 'Invalid argument: Expected an array.'
             );
         }
-
         foreach ($array as $key => $value) {
             if (!\is_string($key) || !\is_string($value)) {
                 throw new \InvalidArgumentException(
@@ -606,6 +605,7 @@ class StringFilters
                 );
             }
         }
+
         self::$_custom = \array_merge(
             self::$_custom,
             $array
@@ -883,6 +883,9 @@ class StringFilters
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
         }
     }
 
@@ -924,6 +927,56 @@ class StringFilters
                 . '></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render Figure short code(s)
+     *
+     * @param string $content string containing [figure param description]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderFigureShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderImageShortCode: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading=lazy ' : '';
+        }
+        $counter = 0;
+        $pattern = '#\[figure\s+([^\]]+?)\s+(.*?)\]#is';
+        while (\str_contains($content, '[figure ')) {
+            $counter++;
+            $replace = '<span class="figure-container">'
+                . '<figure><img '
+                . $lazy
+                . 'class=figuresc '
+                . 'src="' . CDN . '/upload/$1.webp" '
+                . "data-counter={$counter} "
+                . 'data-name="$1" '
+                . 'alt="$2"'
+                . '>'
+                . '<figcaption>$2</figcaption>'
+                . '</figure></span>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
             }
         }
     }
@@ -967,6 +1020,9 @@ class StringFilters
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
         }
     }
 
@@ -1009,6 +1065,9 @@ class StringFilters
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
         }
     }
 
@@ -1050,6 +1109,9 @@ class StringFilters
                 . '></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
             }
         }
     }
@@ -1103,6 +1165,9 @@ class StringFilters
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
         }
     }
 
@@ -1150,6 +1215,9 @@ class StringFilters
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
         }
     }
 
@@ -1189,9 +1257,7 @@ class StringFilters
         }
         $counter = 0;
         $pattern = '#\[gallery\s.*?(.*?)\]#is';
-        while (
-            \str_contains($content, '[gallery ') && $counter < self::ITERATIONS
-            ) {
+        while (\str_contains($content, '[gallery ')) {
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
                 $gallery = $m[1];
@@ -1241,6 +1307,9 @@ class StringFilters
                         $replace,
                         $content
                     );
+                }
+                if ($counter === self::ITERATIONS) {
+                    break;
                 }
             }
         }
@@ -1502,6 +1571,7 @@ class StringFilters
         self::renderImageLeftShortCode($string, $flags);
         self::renderImageRightShortCode($string, $flags);
         self::renderImageRespShortCode($string, $flags);
+        self::renderFigureShortCode($string, $flags);
         self::renderGalleryShortCode($string, $flags);
         self::renderYouTubeShortCode($string, $flags);
         self::renderSoundcloudShortCode($string, $flags);
