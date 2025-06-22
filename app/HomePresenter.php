@@ -39,22 +39,18 @@ class HomePresenter extends APresenter
     public function process($param = null)
     {
         $this->checkRateLimit();
-        
         if (!\is_array($data = $this->getData())) { // Model
             return $this;
         }
-        
         if (!\is_string($view = $this->getView())) { // View
             return $this;
         }
-
         if (!\is_array($presenter = $this->getPresenter())) { // Presenter
             return $this;
         }
 
         // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);
-
         $data[$view . '_menu'] = true; // content switcher
 
         // process shortcodes, fix HTML and locales
