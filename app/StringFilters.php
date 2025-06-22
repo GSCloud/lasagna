@@ -18,7 +18,7 @@ use Michelf\MarkdownExtra;
 /**
  * String Filters class
  * 
- * Modify a string content passed by a reference to fix common problems.
+ * Modify string contents passed by a reference to fix common problems.
  * 
  * @category CMS
  * @package  Framework
@@ -28,28 +28,23 @@ use Michelf\MarkdownExtra;
  */
 class StringFilters
 {
-    // string sanitization: IMAGE MASK for search
-    const UPLOAD_SANITIZE = '/[^a-z0-9!@#+\-=.,;_*]+/i';
-
-    // string sanitization: allowed CHARACTERS
-    const STRING_SANITIZE = '/[^a-z0-9\-._]+/i';
-
-    // GALLERY: max. loop iterations
+    // GALLERY: max. iterations
     const ITERATIONS = 30;
 
-    // FLAG: randomize gallery images
+    // SANITIZATION: IMAGE MASK for search
+    const UPLOAD_SANITIZE = '/[^a-z0-9!@#+*=,;\-._]+/i';
+    // SANITIZATION: allowed CHARACTERS
+    const STRING_SANITIZE = '/[^a-z0-9\-._]+/i';
+
+    // FLAGS: randomize galleries
     const GALLERY_RANDOM = 1;
-
-    // FLAG: use lazy loading property
+    // FLAGS: use lazy loading
     const LAZY_LOADING = 2;
-
-    // FLAG: use 160px thumbnails
+    // FLAGS: 160px thumbnails
     const THUMBS_160 = 4;
-
-    // FLAG: use 320px thumbnails
+    // FLAGS: 320px thumbnails
     const THUMBS_320 = 8;
-
-    // FLAG: use 640px thumbnails
+    // FLAGS: 640px thumbnails
     const THUMBS_640 = 16;
 
     // English lowercase characters
@@ -561,7 +556,7 @@ class StringFilters
     private static $_custom = [];
 
     /**
-     * Set custom replacements
+     * Set custom string replacements
      *
      * @param array<string,string> $array associative array of custom replacements
      *
@@ -588,7 +583,7 @@ class StringFilters
     }
 
     /**
-     * Add custom replacements to the existing set
+     * Add custom string replacements
      *
      * @param array<string,string> $array associative array of custom replacements
      *
@@ -631,7 +626,7 @@ class StringFilters
                 array(
                 "\n",
                 "\r\n",
-                ), "<br>", $content
+                ), '<br>', $content
             );
         }
     }
@@ -650,7 +645,7 @@ class StringFilters
                 array(
                 "\n",
                 "\r\n",
-                ), "<br><span class=indentation></span>", $content
+                ), '<br><span class="indentation"></span>', $content
             );
         }
     }
@@ -664,17 +659,16 @@ class StringFilters
      */
     public static function convertEolHyphenToBrDot(&$content)
     {
-        if (!\is_string($content)) {
-            return;
-        }
-        $content = \str_replace(
-            array(
-            "\n- ",
-            "\r\n- ",
-            ), "<br>•&nbsp;", (string) $content
-        );
-        if ((\substr($content, 0, 2) == "- ") || (\substr($content, 0, 2) == "* ")) {
-            $content = "•&nbsp;" . \substr($content, 2);
+        if (\is_string($content)) {
+            $content = \str_replace(
+                array(
+                "\n- ",
+                "\r\n- ",
+                ), '<br>•&nbsp;', $content
+            );
+            if ((\substr($content, 0, 2) == "- ") || (\substr($content, 0, 2) == "* ")) { // phpcs:ignore
+                $content = '•&nbsp;' . \substr($content, 2);
+            }
         }
     }
 
@@ -693,7 +687,7 @@ class StringFilters
                 "\r\n",
                 "\n",
                 "\r",
-                ), "", $content
+                ), '', $content
             );
         }
     }
@@ -707,20 +701,17 @@ class StringFilters
      */
     public static function trimHtmlComment(&$content)
     {
-        if (!\is_string($content)) {
-            return;
-        }
-        $body = "<body";
-        $c = \explode($body, (string) $content, 2);
-        $regex = '/<!--(.|\s)*?-->/';
-        // fix the whole string (there is no <body)
-        if (\count($c) == 1) {
-            $content = \preg_replace($regex, "<!-- :) -->", $content);
-        }
-        // fix only comments inside body
-        if (\count($c) == 2) {
-            $c[1] = \preg_replace($regex, "<!-- :) -->", $c[1]);
-            $content = $c[0] . $body . $c[1];
+        if (\is_string($content)) {
+            $body = "<body";
+            $c = \explode($body, (string) $content, 2);
+            $regex = '/<!--(.|\s)*?-->/';
+            if (\count($c) === 1) { // fix the whole string (= no <body)
+                $content = \preg_replace($regex, "<!-- :) -->", $content);
+            }
+            if (\count($c) === 2) { // fix comments inside body
+                $c[1] = \preg_replace($regex, "<!-- :) -->", $c[1]);
+                $content = $c[0] . $body . $c[1];
+            }
         }
     }
 
@@ -739,8 +730,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+
         if (!\is_string($language)) {
-            $language = "en";
+            $language = 'en';
         }
         $language = \strtolower($language);
         switch ($language) {
@@ -819,7 +811,7 @@ class StringFilters
             $x = \trim($content);
             if (\str_starts_with($x, '[markdown]')) {
                 $x = \substr($x, 10);
-                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra <hr> EOLs
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs <hr>
                 $content = Markdown::defaultTransform($x);
             }
         }
@@ -838,7 +830,7 @@ class StringFilters
             $x = \trim($content);
             if (\str_starts_with($x, '[markdownextra]')) {
                 $x = \substr($x, 15);
-                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra <hr> EOLs
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs <hr>
                 $content = MarkdownExtra::defaultTransform($x);
             }
         }
@@ -863,16 +855,15 @@ class StringFilters
         if (!\is_string($key)) {
             return;
         }
-        $content = \trim($content);
-        $key = \trim($key);
 
+        $key = \trim($key);
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderGoogleMapShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy ' : ''; 
         }
-
         $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
         while (\str_contains($content, '[googlemap ')) {
@@ -910,15 +901,14 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
 
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderImageShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy ' : '';
         }
-
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
         while (\str_contains($content, '[image ')) {
@@ -931,8 +921,7 @@ class StringFilters
                 . "data-counter={$counter} "
                 . 'data-name="$1" '
                 . 'alt="$1"'
-                . '>'
-                . '</span>';
+                . '></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -954,15 +943,14 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $x = \trim($content);
 
+        $x = \trim($content);
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderImageLeftShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy ' : '';
         }
-
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
         while (\str_contains($content, '[imageleft ')) {
@@ -975,8 +963,7 @@ class StringFilters
                 . "data-counter={$counter} "
                 . 'data-name="$1" '
                 . 'alt="$1"'
-                . '>'
-                . '</span>';
+                . '></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -998,15 +985,14 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
 
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderImageRightShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy ' : '';
         }
-
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
         while (\str_contains($content, '[imageright ')) {
@@ -1019,8 +1005,7 @@ class StringFilters
                 . "data-counter={$counter} "
                 . 'data-name="$1" '
                 . 'alt="$1"'
-                . '>'
-                . '</span>';
+                . '></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1042,15 +1027,14 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
 
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderImageRespShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy ' : '';
         }
-
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
         while (\str_contains($content, '[imageresp ')) {
@@ -1063,8 +1047,7 @@ class StringFilters
                 . "data-counter={$counter} "
                 . 'data-name="$1" '
                 . 'alt="$1"'
-                . '>'
-                . '</span>';
+                . '></span>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1086,15 +1069,14 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
 
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \Exception('renderSoundcloudShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy' : '';
         }
-
         $counter = 0;
         $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
         while (\str_contains($content, '[soundcloud ')) {
@@ -1102,8 +1084,7 @@ class StringFilters
             $replace = '<div '
                 . 'class="audio-container center row soundcloud-container" '
                 . "data-counter={$counter} "
-                . '>'
-                . '<iframe '
+                . '><iframe '
                 . $lazy
                 . 'referrerpolicy="no-referrer-when-downgrade" '
                 . 'width="100%" '
@@ -1118,8 +1099,7 @@ class StringFilters
                 . 'https%3A//api.soundcloud.com/tracks/$1&'
                 . 'auto_play=false&hide_related=false&show_comments=true&'
                 . 'show_user=true&show_reposts=false&show_teaser=true&visual=true">'
-                . '</iframe>'
-                . '</div>';
+                . '</iframe></div>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1141,15 +1121,14 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
 
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \Exception('renderYouTubeShortCode: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy' : '';
         }
-
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
         while (\str_contains($content, '[youtube ')) {
@@ -1157,19 +1136,17 @@ class StringFilters
             $replace = '<div '
                 . 'class="video-container center row youtube-container" '
                 . "data-counter={$counter} "
-                . '>'
-                . '<iframe '
+                . '><iframe '
                 . $lazy
                 . 'referrerpolicy="no-referrer-when-downgrade" '
-                . 'width=426 '
-                . 'height=240 '
+                . 'width=480 '
+                . 'height=270 '
                 . 'frameborder=no '
                 . 'style="border:0" '
                 . 'allowfullscreen '
                 . 'controls '
                 . 'src="https://www.youtube.com/embed/$1">'
-                . '</iframe>'
-                . '</div>';
+                . '</iframe></div>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content);
             }
@@ -1191,8 +1168,8 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
 
+        $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \Exception('renderGalleryShortCode: FLAGS!');
         } else {
@@ -1210,7 +1187,6 @@ class StringFilters
                 $size = 640;
             }
         }
-
         $counter = 0;
         $pattern = '#\[gallery\s.*?(.*?)\]#is';
         while (
@@ -1222,8 +1198,6 @@ class StringFilters
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
-
-                // find all images
                 if (\is_array($files)) {
                     if ($shuffle !== false) {
                         \shuffle($files);
@@ -1239,14 +1213,14 @@ class StringFilters
                         );
                         $n = \trim($n, '+-_()[]');
                         $n = \trim(\strtr($n, '+-_()[]', '       '));
-                        $images .=
-                            "<a data-lightbox='{$gallery}' "
+                        $images .= "<a "
+                            . "data-lightbox='{$gallery}' "
+                            . "class='gallery-link' "
                             . 'href="' . CDN . "/upload/{$f}\""
-                            . '>'
-                            . '<img '
+                            . '><img '
                             . "src=\"{$t}\" "
                             . $lazy
-                            . 'class=gallery-img '
+                            . 'class="gallery-img" '
                             . 'data-source="' . CDN . "/upload/{$f}" . '" '
                             . "data-id={$id} "
                             . "data-thumb=\"{$t}\" "
@@ -1296,7 +1270,6 @@ class StringFilters
         // hack to fix Markdown <em> markup
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
-
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
@@ -1341,7 +1314,6 @@ class StringFilters
         if (!UPLOAD) {
             return null;
         }
-
         if (!\is_string($mask)) {
             return null;
         }
@@ -1350,11 +1322,9 @@ class StringFilters
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
         }
-
         if (\is_string($mask) && \is_dir(UPLOAD)) {
             \chdir(UPLOAD);
-            $data = \glob($mask) ?: null;
-            if ($data) {
+            if ($data = \glob($mask) ?: null) {
                 \usort(
                     $data, function ($a, $b) {
                         return \strnatcmp($a, $b);
