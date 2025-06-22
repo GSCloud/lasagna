@@ -2,6 +2,10 @@
 
 ---
 
+`2025-06-22`
+
+* **`1058-FEATURE` \[figure image description\]** short code support
+
 `2025-06-14`
 
 * **`1057-FEATURE` .jpeg files automatically renamed to .jpg on upload**
