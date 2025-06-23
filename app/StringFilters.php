@@ -1261,6 +1261,7 @@ class StringFilters
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
                 $gallery = $m[1];
+                $g = \trim($gallery, '+-_()[]');
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
@@ -1280,7 +1281,7 @@ class StringFilters
                         $n = \trim($n, '+-_()[]');
                         $n = \trim(\strtr($n, '+-_()[]', '       '));
                         $images .= "<a "
-                            . "data-lightbox='{$gallery}' "
+                            . "data-lightbox='{$g}' "
                             . "class='gallery-link' "
                             . 'href="' . CDN . "/upload/{$f}\""
                             . '><img '
@@ -1296,9 +1297,9 @@ class StringFilters
                     }
                 }
                 $replace = "<div "
-                    . "class='row center gallery-container' "
+                    . "class='row center gallery-container gallery-{$g}' "
                     . "data-counter={$counter} "
-                    . "data-gallery=\"{$gallery}\">"
+                    . "data-gallery='{$g}'>"
                     . $images
                     . "</div>";
                 if (\is_string($content)) {
