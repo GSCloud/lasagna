@@ -2,6 +2,10 @@
 
 ---
 
+`2025-06-23`
+
+* **`1059-FEATURE` social icon pack** *(optional)*
+
 `2025-06-22`
 
 * **`1058-FEATURE` \[figure image description\]** short code support
