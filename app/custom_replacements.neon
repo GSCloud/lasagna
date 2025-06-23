@@ -23,7 +23,7 @@
 "soundcloudicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-soundcloud deep-orange-text"></i>&nbsp;&nbsp;'# SouncCloud is vibrant orange
 "spotifyicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-spotify green-text text-darken-4"></i>&nbsp;&nbsp;'# Spotify is dark green
 "steamicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-steam grey-text text-darken-2"></i>&nbsp;&nbsp;'# Steam is a dark grey/anthracite
-"telegramicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-telegram green-text text-darken-4"></i>&nbsp;&nbsp;'# Telegram is dark green
+"telegramicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-telegram blue-text text-lighten-2"></i>&nbsp;&nbsp;'# Telegram is dark green
 "twitchicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-twitch purple-text text-darken-2"></i>&nbsp;&nbsp;'# Twitch is purple
 "webicon ": '&nbsp;&nbsp;<i class="fa-2x fa-solid fa-share-nodes green-text text-darken-2"></i>&nbsp;&nbsp;'
 "whatsappicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-whatsapp green-text text-darken-3"></i>&nbsp;&nbsp;'# WhatsApp is dark green
