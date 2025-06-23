@@ -34,6 +34,7 @@
 </div>
 
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/grapheme.min.js" defer></script>
+
 <script nonce="{{ csp_nonce }}">
   (function (w, d, undefined) {
     if (w.GSC.init) {
@@ -45,7 +46,7 @@
       });
 
       w.GSC.init.push(function () {
-        w.GSC.names.push("demo - Grapheme Splitter");
+        w.GSC.names.push("Grapheme splitter demo");
         var splitter = new GraphemeSplitter();
         var graphemes = splitter.splitGraphemes($("#emojisdemo").text());
         var arr = graphemes.map(function (x) {
