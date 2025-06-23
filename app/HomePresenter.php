@@ -14,6 +14,7 @@ namespace GSC;
 
 use Cake\Cache\Cache;
 use GSC\StringFilters as SF;
+use Nette\Neon\Neon;
 
 /**
  * Home Presenter class
@@ -52,6 +53,18 @@ class HomePresenter extends APresenter
         // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);
         $data[$view . '_menu'] = true; // content switcher
+
+        // add custom replacements from NE-ON file
+        $reps_file = APP . DS . 'custom_replacements.neon';
+        if (file_exists($reps_file) && is_readable($reps_file)) {
+            $reps = file_get_contents($reps_file);
+            if (\is_string($reps)) {
+                $reps = Neon::decode($reps);
+                if (\is_array($reps)) {
+                    SF::addCustomReplacements($reps);
+                }
+            }
+        }
 
         // process shortcodes, fix HTML and locales
         $lang = $data['lang'] ?? 'en';
