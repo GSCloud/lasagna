@@ -19,7 +19,7 @@
 "paypalicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-paypal blue-text text-darken-3"></i>&nbsp;&nbsp;'# PayPal is a specific shade of blue
 "pinteresticon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-pinterest blue-text text-darken-4"></i>&nbsp;&nbsp;'# Pinterest is dark blue
 "redditicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-reddit deep-orange-text text-accent-3"></i>&nbsp;&nbsp;'# Reddit is orange
-"rssicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-rss orange-text text-darken-2"></i>&nbsp;&nbsp;'# RSS is orange
+"rssicon ": '&nbsp;&nbsp;<i class="fa-2x fa-solid fa-rss orange-text text-darken-2"></i>&nbsp;&nbsp;'# RSS is orange
 "soundcloudicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-soundcloud deep-orange-text"></i>&nbsp;&nbsp;'# SouncCloud is vibrant orange
 "spotifyicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-spotify green-text text-darken-4"></i>&nbsp;&nbsp;'# Spotify is dark green
 "steamicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-steam grey-text text-darken-2"></i>&nbsp;&nbsp;'# Steam is a dark grey/anthracite
