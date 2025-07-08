@@ -2,17 +2,22 @@
 
 ---
 
+`2025-07-08`
+
+* **`1061-FEATURE`** documents updated: **README**, **TECHNICAL\_DETAILS\_EN**  
+* **`1060-FEATURE`** new short codes: **\[mastodon id\] \[twitch id\] \[twitchvid id\] \[vimeo id\]** 
+
 `2025-06-23`
 
 * **`1059-FEATURE` social icon pack** *(optional)*
 
 `2025-06-22`
 
-* **`1058-FEATURE` \[figure image description\]** short code support
+* **`1058-FEATURE`** new short code: **\[figure image description\]**
 
 `2025-06-14`
 
-* **`1057-FEATURE` .jpeg files automatically renamed to .jpg on upload**
+* **`1057-FEATURE` .jpeg files automatically renamed** to .jpg on upload
 
 `2025-05-24`
 
