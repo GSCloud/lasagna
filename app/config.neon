@@ -29,7 +29,9 @@ google: [
 # RSS feed
 #rss_feed: true
 
-no_share_mastodon: true
+#no_share_bluesky: true
+#no_share_facebook: true
+#no_share_mastodon: true
 
 # Umami Analytics
 umami: [
