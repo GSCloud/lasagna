@@ -1,376 +1,324 @@
-# Tesseract LASAGNA: PWA MVP Framework and CMS
+# Tesseract LASAGNA v2.5
 
-version: 2.2.0 (2024-04-02)
+# 1\. Rapid PWA Development
 
-## 1. Concept
+Tesseract LASAGNA is a high-performance, contemporary, and modular PHP object-oriented framework designed for the rapid prototyping of Progressive Web Applications (PWAs). It operates efficiently on an Apache 2.4 web server and provides comprehensive control through its command-line interface (CLI). The entire system is built with modularity in mind, ensuring that virtually no component of the framework is mandatory. This design allows for extensive flexibility, enabling parts to be easily replaced, modified, or even configured to utilize entirely different directory structures, adapting seamlessly to diverse project requirements.
 
-**Tesseract LASAGNA** is a fast, modern and modular PHP OOP framework for rapid prototyping of **Progressive Web Apps** (PWA). Tesseract uses *Google Sheets CSV export* as a data input and builds the **Model** from CSV layers (hence the LASAGNA codename).
+## 1.1. Concept
 
-There are **Presenters** used to process the **Model** and to export the result in TEXT, JSON, XML or HTML5 format (or any other custom format). **View** is built as a set of *Mustache templates* and *partials*.
+Tesseract's core functionality revolves around its unique data input mechanism: it leverages **Google Sheets CSV exports** to construct its Model. This layered approach to data input is precisely why the framework is codenamed "LASAGNA."
 
-Tesseract is based on **Composer components**, complex **RESTful API**, incorporates a **command line interface** and **Continuous Integration** testing.
+Once the Model is built, **Presenters** take over, processing this data and transforming it into various output formats, including TEXT, JSON, XML, HTML5, or any other custom format required. The visual representation, or **View**, is flexibly constructed using a collection of **Mustache templates and partials**.
 
-Tesseract uses no database structures, so it is quite easy to implement all types of scaling and integrations. Acccess is based on **OAuth 2.0** and the Halite **encrypted master key**.
+Fundamentally, Tesseract is built upon robust **Composer components**, enabling a sophisticated **RESTful API**. It also features a comprehensive **command-line interface (CLI)** for streamlined operations and incorporates **Continuous Integration (CI) testing** to ensure stability and reliability.
 
-## 2. Installation
+A distinctive architectural choice for Tesseract is its **absence of traditional database structures**. This design simplifies the implementation of various scaling strategies and facilitates seamless integrations with other systems. For user authentication, Tesseract employs **OAuth 2.0**, securing access through an **encrypted "passport" cookie**.
 
-### 2.1 PHP Source
+# 2\. Installation and Updating
 
-Clone the repository <https://github.com/GSCloud/lasagna>
+This section outlines the process for installing and updating Tesseract LASAGNA from its PHP source, along with a note on Docker availability.
 
-`git clone https://github.com/GSCloud/lasagna.git`
+## 2.1. PHP Source
 
-and run:
+To get started with Tesseract LASAGNA from its PHP source, follow these steps:
 
-`cd lasagna; make install`
+**Clone the Repository:** Begin by cloning the official Tesseract LASAGNA repository from GitHub using 
 
-### 2.2 Docker Container
+**`git clone https://github.com/GSCloud/lasagna.git`**
 
-Run container:
+**Initial Installation:** Navigate into the newly created `lasagna` directory and run the `make install` command to set up the core components and dependencies:
 
-`docker run --rm -d --name lasagna -p 9000:80 gscloudcz/tesseract-lasagna:latest`
+**`make install`**
 
-Run updater (downloads CSV from Google):
+**Updating Dependencies:** To update your Tesseract LASAGNA installation and its dependencies, execute the `make update` command from within the `lasagna` directory:
 
-`docker exec lasagna make du`
+**`make update`**
 
-Visit web app:
+**Explore Other Commands:** For a comprehensive list of all available development and testing commands, simply run `make` without any arguments:
 
-`http://localhost:9000/`
+**`make`**
 
-## 3. Update
+You will see a menu similar to this (note that port 9000 is reserved for Docker implementations):
 
-Go to the Lasagna directory and run:
+`👾 Tesseract LASAGNA`
 
-`make update`
+`📦️ TESSERACT: tesseract-lasagna 🔴 tesseract-lasagna port: 9000`
 
-## 4. Basic Functionality
+`» DEVELOPMENT`  
+`install    core installation`  
+`update     update dependencies`  
+`doctor     check installation`
 
-### 4.1 Index
+`icons      update icons`  
+`base       download and build base CSV`  
+`refresh    refresh cloud CSV`  
+`clear      clear temporary files`  
+`sync       sync to the remote host`  
+`docs       convert documentation`
 
-Tesseract starts parsing the **www/index.php** file, that's targeted at the Apache level via **.htaccess** configuration file using *mod_rewrite*. **Index** can contain various constant overrides. **Index** then loads the **Boostrap.php** core file from the root folder.
+`» TESTING`  
+`stan       PHPStan test`  
+`unit       UNIT test`  
+`test       LOCAL integration test`  
+`prod       PRODUCTION integration test`
 
-### 4.2 Bootstrap
+## 2.2. Docker
 
-**Bootstrap** sets the constants and the application environment, **Nette Debugger** is also instantiated on the fly. Bootstrap loads the **App.php** core file from the app folder.
+The official Docker image for Tesseract LASAGNA is not yet publicly available. It is planned for release once the framework reaches its stable version 2.5.0.
 
-### 4.3 App
+# 3\. How It Works
 
-**App** processes the application configuration files (public and private), sets caching mechanisms (optional Redis database support), configures URL routing, emmits CSP headers and sets the **Model** (multi-dimensional array).
+Tesseract LASAGNA operates through a carefully orchestrated flow, starting from the web server's initial request and progressing through several core components to render the final output.
 
-**App** loads the corresponding *presenter* based on the actual URI route. It can also run a *CLI presenter*, if the CLI is detected.
-When the *presenter* returns an updated Model, the output is echoed and final headers are set (including some optional debugging information). Runtime ends here.
+## 3.1. Index
 
-### 4.4 Router
+The journey begins with the `www/index.php` file. This file serves as the primary entry point, directed by Apache's `.htaccess` configuration using `mod_rewrite`. The `index.php` file is responsible for establishing various constant overrides specific to the application's environment before it proceeds to load the essential `Bootstrap.php` core file, located in the root directory.
 
-**Router** is a part of the **App** script and is defined by joining (*array replace recursive*) several routing tables (in NE-ON format) in the **/app** folder.
+## 3.2. Bootstrap
 
-- **router_defaults.neon** - default values (global)
-- **router_core.neon** - core Tesseract funcionality (global)
-- **router_admin.neon** - administrative routes (global)
-- **router_extras.neon** - extra features (optional)
-- **router_api.neon** - API calls go here
-- **router.neon** - all the web app pages
+The `Bootstrap.php` file takes charge of setting critical constants and configuring the application's environment. During this phase, the Nette Debugger is also dynamically instantiated, providing powerful debugging capabilities when needed. Once its initial setup is complete, Bootstrap loads the `App.php` core file from the designated `app` folder, handing over control for further application logic.
 
-### 4.5 Presenter
+## 3.3. App
 
-**Presenter** is a subclass instance based on an *abstract class* **APresenter.php** and defines at least the *process()* method, that is called from the **App**. The *process()* method can either output the resulting data or return it encapsulated inside the Model back to the **App** for rendering.
+The `App.php` component is central to Tesseract's operation. It handles the processing of both public and private application configuration files, sets up the caching mechanisms (with optional support for Redis database integration), and rigorously configures the URL routing. Furthermore, it takes responsibility for emitting Content Security Policy (CSP) headers to enhance security and constructs the foundational Model, which is represented as a multidimensional array.
 
-The instance is created and data processed like this:
+Based on the actual URI route, App dynamically loads the corresponding Presenter. It can also adapt to a command-line interface (CLI) context, launching a CLI-specific Presenter if a CLI environment is detected. Once the Presenter completes its work and returns an updated Model, App echoes the final output and sets any remaining necessary HTTP headers, including optional debugging information. This marks the conclusion of the runtime process for the request.
 
-`$app = $controller::getInstance()->setData($data)->process();`
+## 3.4. Router
 
-Getting the output for enduser:
+The Router functions as an integral part of the App script. Its routing logic is meticulously defined by combining multiple routing tables, formatted in NE-ON (Nette Object Notation), which are located within the `/app` folder. These tables are merged using an array recursive replacement strategy, allowing for flexible and powerful URL management.
 
-`echo $app->getData()["output"] ?? "";`
+## 3.5. Presenter
 
-How to display custom presenter in Lynx terminal using a CLI helper (default = home):
+A Presenter in Tesseract is an instance of a subclass derived from the abstract class `APresenter.php`. Each Presenter must define at least a `process()` method, which is invoked by the App. The `process()` method offers dual capabilities: it can either directly output the resulting data, or it can return the processed data encapsulated within the Model back to the App for final rendering.
 
-`./cli.sh app '$app->show();' | lynx -dump -stdin`
+## 3.6. API
 
-`./cli.sh app '$app->show("home");' | lynx -dump -stdin`
+Tesseract's API is generated dynamically from the framework's internal routing tables, providing a flexible and extensible interface. For a live demonstration of the API in action, you can visit: [https://lasagna.gscloud.cz/api](https://lasagna.gscloud.cz/api)
 
-How to display core module output using a CLI helper (default = PingBack):
+# 4\. Command Line Interface
 
-`./cli.sh app '$app->core();'`
+Tesseract LASAGNA offers comprehensive control and execution capabilities via its powerful Command Line Interface (CLI). Nearly every function within the framework can be managed and operated directly from the command line. For advanced testing scenarios, the CLI even includes a built-in PHP evaluator, allowing you to run PHP code inline (though this feature is strictly for development and should not be used in a production environment).
 
-`./cli.sh app '$app->core("PingBack");'`
+## 4.1. CLI Bootstrap
 
-`./cli.sh app '$app->core("GetTXTSitemap", ["base"=>"https://google.com/"]);'`
+To interact with Tesseract via the CLI, you can use one of the following methods:
 
-`./cli.sh app '$app->core("GetXMLSitemap", ["base"=>"https://google.com/"]);'`
+Using the `cli.sh` wrapper script:
 
-### 4.6 API
+**`./cli.sh <command> [<parameter> ...]`**
 
-**API** is generated from the routing tables on the fly.  
-See the live demo at this URL: <https://lasagna.gscloud.cz/api>
-
-### 4.7 Command Line Interface
-
-#### 4.7.1 Makefile
-
-Run `make` to see the inline documentation.
-
-#### 4.7.2 Bootstrap CLI
-
-`./cli.sh <command> [<parameter> ...]`  
-or  
-`php -f Bootstrap.php <command> [<parameter> ...]`
-
-    app '<code>'    - run inline code
-    clear           - alias for clearall
-    clearall        - clear all temporary files
-    clearcache      - clear cache
-    clearci         - clear CI logs
-    clearlogs       - clear logs
-    cleartemp       - clear temporary files
-    doctor          - check system requirements
-    local           - local CI test
-    prod            - production CI test
-    unit            - run Unit test (TBD)
-
-Examples:
-
-`./cli.sh clear`
-
-`./cli.sh app`
-
-## 5. Filesystem Hierarchy
-
-- **apache/** - Apache configuration example
-- **app/** - Presenters and NE-ON configurations
-- **bin/** - bash scripts for Makefile
-- **ci/** - Continous Integration logs
-- **data/** - private data, encryption keys, CSV imports, etc.
-- **doc/** - phpDocumentor generated documentation
-- **docker/** - files to be inserted into the Docker container
-- **logs/** - system logs
-- **node_modules/** - Node.js modules used by Gulp
-- **temp/** - temporary files, Mustache compiled templates
-- **vendor/** - Composer generated vendor classes
-- **www/** - static assets
-  - **www/cdn-assets/** - repository version hash-links to www/
-  - **www/css/** - CSS classes
-  - **www/docs/** - link to doc/
-  - **www/download/** - downloadable files
-  - **www/epub/** - ePub files
-  - **www/img/** - images
-  - **www/js/** - JavaScript files
-  - **www/partials/** - Mustache partials
-  - **www/summernote/** - Summernote editor
-  - **www/templates/** - Mustache templates
-  - **www/upload/** - uploads via administration panel
-  - **www/webfonts** - fonts
+Directly via PHP:
 
-## 6. Model
+**`php -f Bootstrap.php <command> [<parameter> ...]`**
 
-**Tesseract Model** is a multi-dimensional array.
-You can list the model keys easily like this:
+To view the full list of available commands and their descriptions, simply execute the `cli.sh` script without any parameters:
 
-`./cli.sh app 'dump(array_keys($app->getData()));' | more`
+**`./cli.sh`**
 
-or dump the whole model:
-`./cli.sh app 'dump($app->getData());' | more`
+## 4.2. Examples
 
-Model is supported by two methods: `getData()` and `setData()`.
-Both methods accept the *dot notation*, e.g.:
+Here are a few common examples of CLI commands in action.
 
-`./cli.sh app 'echo $app->getData("router.home.view");'`  
-home
+Clear the application cache:
 
-`./cli.sh app 'echo $app->getData("cfg.project")'`  
-LASAGNA
+**`./cli.sh clearcache`**
 
-## 7. Constants
+Run the main application CLI presenter (e.g., for general tasks):
 
-Tesseract specific constants can be listed by a command:
+**`./cli.sh app`**
 
-`./cli.sh app '$app->showConst()'`
+Execute a demonstration script Hello World:
 
-Constants can be overriden in **www/index.php**, otherwise they are defined in the Boostrap and the App.
+**`./cli.sh demo`**
 
-### 7.1 Bootstrap.php
+# 5\. Filesystem Hierarchy
 
-- **APP** - *application* folder
-- **AUTO_DETECT_LINE_ENDINGS** - Tesseract detects line endings by default
-- **CACHE** - *cache* folder
-- **CLI** - TRUE if running in terminal mode
-- **CONFIG** - *public configuration* file
-- **CONFIG_PRIVATE** - *private configuration* file
-- **CSP** - *CSP HEADERS* configuration file
-- **DATA** - *application data* folder, also *private data* goes here
-- **DEBUG** - TRUE if debugging is enabled
-- **DEFAULT_SOCKET_TIMEOUT** - 30 seconds timeout
-- **DISPLAY_ERRORS** - Tesseract displays errors by default
-- **DOWNLOAD** - *download* folder
-- **DS** - operating system *directory separator*
-- **ENABLE_CSV_CACHE** - enable use of extra *curl_multi CSV cache*
-- **LOCALHOST** - TRUE if running on a *local server*
-- **LOGS** - *log files* folder
-- **PARTIALS** - *Mustache partials* folder
-- **ROOT** - *root* folder
-- **TEMP** - *temporary files* folder
-- **TEMPLATES** - *templates* folder
-- **TESSERACT_END** - execution UNIX time end
-- **TESSERACT_START** - execution UNIX time start
-- **UPLOAD** - *upload* folder
-- **WWW** - *static assets* folder, also the *Apache root*
+Tesseract LASAGNA organizes its components within a clear and logical directory structure. This hierarchy is designed to keep related files together, making the system easy to navigate, understand, and maintain.
 
-### 7.2 App.php
+Below is an overview of the main directories and their contents:
 
-- **CACHEPREFIX** - cache name prefix
-- **DOMAIN** - domain name
-- **SERVER** - server name
-- **PROJECT** - project name (higher level)
-- **APPNAME** - application name (lower level)
-- **MONOLOG** - Monolog log filename
-- **GCP_PROJECTID** - Google Cloud Platform (GCP) project ID
-- **GCP_KEYS** - GCP auth keys JSON base filename (in **app/**)
+* **`apache/`**: Contains example Apache configuration files, useful for setting up your web server environment.  
+* **`app/`**: This directory houses the core application logic, including all Presenters and various configuration files.  
+* **`bin/`**: Stores essential Bash scripts that are utilized by the `Makefile` for automated tasks.  
+* **`ci/`**: Dedicated to logs generated during the Continuous Integration (CI) testing processes.  
+* **`data/`**: A secure location for sensitive or private data, such as encryption keys, raw CSV imports (which form the basis of the Model), and other non-public assets.  
+* **`doc/`**: Contains documentation for the framework, typically generated automatically by tools like phpDocumentor.  
+* **`logs/`**: The designated location for all system-generated logs, crucial for monitoring and debugging.  
+* **`temp/`**: A temporary storage area for various ephemeral files, including compiled Mustache templates.  
+* **`vendor/`**: Manages all third-party libraries and dependencies, automatically generated and managed by Composer.  
+* **`www/`**: This is the web root directory, containing all static assets like images, stylesheets, and JavaScript files that are publicly accessible.
 
-## 8. Administration
+# 6\. Data Model
 
-### 8.1 Authentication
+The heart of Tesseract LASAGNA's data management lies in its **Model**, which is structured as a flexible multi-dimensional array. This design provides a highly adaptable way to store and access application data.
 
-Tesseract login is based solely on the **Google OAuth 2.0** client right now.
+You can easily inspect the Model's structure and content directly from the command line:
 
-When the user logs in, a master key - Halite encrypted cookie is created and set via HTTPS protocol (strict). This cookie is protected from tampering and its parameters can be modified in the administration panel, or remotely via authenticated API calls.
+**List Model Keys:** To get a quick overview of the top-level keys within the Model, use the following command:
 
-\* *the authentication is available only if OAuth parameters are set*
+**`./cli.sh app 'dump(array_keys($app->getData()));' | more`**
 
-There is no database of connections or authenticated users at all. The default login URL is **/login** and the default logout URL is **/logout**.
+**Dump the Entire Model:** For a complete view of all data stored in the Model, including nested structures, you can dump its entire contents:
 
-> *Halite* is a high-level cryptography interface that relies on libsodium for all of its underlying cryptography operations. Halite was created by Paragon Initiative Enterprises as a result of our continued efforts to improve the ecosystem and make cryptography in PHP safer and easier to implement.
+**`./cli.sh app 'dump($app->getData());' | more`**
 
-To display the structure of the unencrypted master key, run the following command:
+The Model's data can be accessed and manipulated using two primary methods: `getData()` and `setData()`. Both methods support a convenient **dot notation**, allowing you to navigate deep within the multi-dimensional array structure with ease.
 
-`./cli.sh app 'dump($app->getIdentity())'`
+**Examples:**
 
-More detailed information can be obtained this way:
+Accessing a specific router view:
 
-`./cli.sh app 'dump($app->getCurrentUser())'`
+**`./cli.sh app 'echo $app->getData("router.home.view");'`**
 
-*Note: These commands always return the string "XX" for the country code, because this information is obtained from the Cloudflare header itself.*
+This command would output:  
+**home**
 
-### 8.2 Permissions
+Retrieving a project configuration value:
 
-Tesseract has built-in three basic permission levels, that can be easily extended.
+**`./cli.sh app 'echo $app->getData("cfg.project")'`**
 
-Core levels are:
+This command would output:  
+**LASAGNA**
 
-1) **admin** - superuser,
-2) **editor** - can refresh data and edit articles,
-3) **tester** - no elevated permissions,
-4) **authenticated user** - rights the same as level 3, and
-5) **unauthenticated user** - unknown identity.
+## 6.1. Constants
 
-### 8.3 Remote Calls
+Tesseract LASAGNA utilizes a set of framework-specific constants that define crucial aspects of its operation. You can list all defined constants by running this command:
 
-Remote calls are handled by the *AdminPresenter*, administrator can generate the corresponding URIs in the administration panel.
+**`./cli.sh app '$app->showConst()'`**
 
-- **CoreUpdateRemote** - download CSV files and rebuild the data cache
-- **FlushCacheRemote** - flush all caches
-- **RebuildAdminKeyRemote** - recreate random admin key (authentication of remote calls)
-- **RebuildNonceRemote** - recreate random nonce (identity nonce)
-- **RebuildSecureKeyRemote** - recreate random secure key (cookie encryption)
+These constants are primarily defined within the `Bootstrap.php` and `App.php` files. For advanced customization, Tesseract allows you to override these constants directly within the `www/index.php` file, providing a flexible way to tailor the framework to specific project needs.
 
-*Automation on localhost* is possible by using the **admin key** as a **`?key=`** parameter in a curl call.  
-The key is readable for root or www-data group:
+# 7\. Administration
 
-`cat data/admin.key`
+Tesseract LASAGNA incorporates a streamlined administration system designed for security and flexibility, particularly in how it handles user authentication and remote operations.
 
-## 9. Core Features
+## 7.1. Authentication
 
-### 9.1 Versioning
+Currently, Tesseract's user access relies exclusively on **Google OAuth 2.0 client authentication**. This robust standard ensures a secure login process.
 
-All static assets are automatically versioned by using a git version hash. This hash is used to generate a symbolic link in the **www/cdn-assets** folder.
+Upon successful user login, a highly secure "master key" is generated. This key is then used to create an **encrypted cookie** using the **Halite cryptography library**, which is set exclusively via the HTTPS protocol (strict). This cookie is meticulously protected against tampering, and its parameters can be managed either through the administration panel or remotely via authenticated API calls, offering significant control and flexibility.
 
-The symbolic link looks like this:
+**Important Warning:** Authentication functionality is only enabled and available when the necessary OAuth parameters have been properly configured within the `config_private.neon` file.
 
-`./cli.sh app 'echo $app->getData("cdn")'`  
-/cdn-assets/4790592b350262b8e1960a96a097de0af1828532
+Significantly, Tesseract maintains **no database of connections or authenticated users**. Its stateless design contributes to its scalability and simplicity. The default URL for user login is `/login`, and for logging out, it's `/logout`.
 
-and can be used to version the assets in Mustache template like this:  
-`<image src="{{cdn}}/img/logo.png">`
+**Halite** is a high-level cryptographic interface that relies on the robust `libsodium` library for all its underlying operations. Developed by Paragon Initiative Enterprises, Halite aims to make cryptographic implementations in PHP safer and more straightforward.
 
-### 9.2 Web Pages
+To inspect the structure of the unencrypted master key, you can run the following command via the CLI:
 
-TBD
+**`./cli.sh app 'dump($app->getIdentity())'`**
 
-### 9.3 Translations
+For more detailed information about the currently logged-in user's identity, use this command:
 
-TBD
+**`./cli.sh app 'dump($app->getCurrentUser())'`**
 
-### 9.4 PWA Manifest
+*Note: These commands will always return "XX" for the country code, as this specific information is retrieved from the Cloudflare header, not stored internally by Tesseract.*
 
-TBD
+## 7.2. Permissions
 
-### 9.5 Service Worker
+Tesseract LASAGNA comes with three fundamental built-in permission levels, which can be easily extended to suit more complex authorization needs. These predefined levels include:
 
-TBD
+* **admin** (also known as superuser): Possesses full administrative privileges.  
+* **manager:** Offers a broad set of management capabilities.  
+* **editor:** Authorized to refresh data and edit articles.  
+* **tester:** Has no elevated permissions, typically used for testing purposes without affecting core data.  
+* **authenticated user:** Any user successfully logged in via OAuth, with basic access.  
+* **unauthenticated user:** Represents an unknown identity, having guest-level access.
 
-### 9.6 Icons
+## 7.3. Remote Calls
 
-TBD
+Remote calls within Tesseract are managed by the `AdminPresenter`. Administrators have the capability to generate the necessary URIs for these calls directly within the administration panel.
 
-### 9.7 Fonts
+For automation tasks on a localhost environment, remote calls can be authenticated by including the `admin.key` content as a `?key=` parameter in a `curl` call. The `admin.key` file contains the required key and is readable by users belonging to the `root` or `www-data` system groups.
 
-TBD
+You can view the key's content using:
 
-### 9.8 Sitemaps
+**`cat data/admin.key`**
 
-Tesseract generates TXT and XML sitemaps based on the routing tables.
+# 8\. Core Features
 
-<https://lasagna.gscloud.cz/sitemap.txt>
+Tesseract LASAGNA is built with a strong emphasis on performance, maintainability, and, crucially, security. This section details some of the key features that underpin the framework's robust operation.
 
-<https://lasagna.gscloud.cz/sitemap.xml>
+## 8.1. Security
 
-### 9.9 CSP Headers
+Security is a paramount concern within Tesseract, with several built-in mechanisms designed to protect the application and its users.
 
-You can define headers for *Content Security Policy* in **app/csp.neon** file.
+### 8.1.1. Robots Blocking
 
-## 10. Extra Features
+The framework incorporates measures to identify and block malicious or unwanted web crawlers and bots, safeguarding resources and ensuring fair access for legitimate traffic. (Details on implementation, e.g., using `robots.txt` or specific HTTP checks, can be added here later).
 
-### 10.1 Articles
+### 8.1.2. GEO Blocking
 
-TBD
+Leveraging Cloudflare's capabilities, Tesseract can implement geographical blocking, restricting access to the application from specific regions to enhance security or comply with regional regulations. (More details on how this is configured, e.g., Cloudflare Workers or settings, could be added).
 
-### 10.2 QR Images
+### 8.1.3. CSP Headers
 
-The route goes as **qr/[s|m|l|x:size]/[******:trailing]**.  
-Hello World example: <https://lasagna.gscloud.cz/qr/s/Hello%20World>
+To mitigate cross-site scripting (XSS) and other content injection attacks, Tesseract allows for the definition of Content Security Policy (CSP) headers. These headers can be configured within the `app/csp.neon` file, providing granular control over resource loading. The system also supports Nonce (Number Used Once) for further strengthening CSP by ensuring that only whitelisted scripts can execute.
 
-### 10.3 EPUB Reader
+### 8.1.4. Rate Limiter
 
-TBD
+To prevent abuse and brute-force attacks, Tesseract includes a rate limiting mechanism directly within its Presenters. This feature helps control the frequency of requests from individual users or IP addresses, enhancing the stability and security of the application.
 
-### 10.4 Pingback Monitoring
+## 8.2. DevOps
 
-Pingback service posts some detailed information about the state of the server.  
-See the live demo at this URL: <https://lasagna.gscloud.cz/pingback>
+Tesseract LASAGNA is designed with DevOps practices in mind, offering tools for code quality, performance analysis, and debugging.
 
-### 10.5 Data Exports
+### 8.2.1. PHPStan
 
-Article data can be exported based on the article language (CS), profile (default) and page ID (use 'home' for the homepage).
+Code quality is ensured through integration with **PHPStan**, a static analysis tool. Developers can run comprehensive checks on the codebase using the `make stan` command:
 
-<https://lasagna.gscloud.cz/cs/exportHTML/default/home>
+**`make stan`**
 
-<https://lasagna.gscloud.cz/cs/exportHTML/default/id/demo>
+### 8.2.2. Profiler
 
-### 10.6 Android App Extras
+For performance monitoring and optimization, Tesseract provides profiling capabilities. Developers can inspect various runtime metrics by examining custom HTTP headers that expose execution times for different stages of the request, or by utilizing the integrated Nette Debugger.
 
-TBD
+Example custom headers that can be used for profiling:
 
-## 11. What's next?
+`X-Country: $country`  
+`X-Time-Data: $time1 ms`  
+`X-Time-Process: $time2 ms`  
+`X-Time-Run: $time3 ms`
 
-### 11.1 CURRENT: Known Bugs
+### 8.2.3. Debugging
 
-- **adbario/php-dot-notation** package contains PHP 8.1 deprecation bugs that can be fixed by overwriting the **vendor/adbario/php-dot-notation/src/Dot.php** file with **app/Dot.php** temporary fix
+Comprehensive debugging features are available for logged-in administrators, provided they are enabled in the `config.neon` file. Tesseract integrates **Nette Tracy**, a powerful and highly visual debugging tool, to assist in identifying and resolving issues efficiently.
 
-### 11.2 FUTURE: TODO Implementations
+## 8.3. Caching
 
-- **Multi-site** - multiple sites support (partially ready)
-- **Dark Mode** - set UI in the dark
-- **Tesseract Configurator** - web based configuration UI
-- **Links Manager** - Links manager UI
-- **SEO Manager** - SEO manager UI
-- **Administration UI** - administration UI reborn
+Tesseract LASAGNA employs a robust caching strategy to enhance application performance. It utilizes the flexible **CakePHP cache infrastructure**, with a preference for **Redis** when available. In scenarios where Redis is not configured or accessible, the system gracefully falls back to a **file-based caching mechanism** to ensure continued optimization.
+
+## 8.4. Assets Versioning
+
+To ensure that users always receive the latest versions of static assets (like images, CSS, and JavaScript) and to prevent browser caching issues during deployments, Tesseract automatically implements **asset versioning**. This is achieved by using a unique virtual hash that is mapped through an Apache directive.
+
+The generated symbolic link for versioned assets can be seen by running:
+
+**`./cli.sh app 'echo $app->getData("cdn")'`**
+
+This command would output something similar to:
+
+**`/cdn-assets/4790592b350262b8e1960a96a097de0af1828532`**
+
+This versioned path can then be seamlessly integrated into Mustache templates, ensuring correct asset delivery:
+
+**`<image src="{{ cdn }}/img/logo.png">`**
+
+# 9\. Extras
+
+Tesseract LASAGNA includes several convenient extra features to simplify common development tasks.
+
+## 9.1. QR Images
+
+The framework offers a built-in capability to generate QR code images dynamically via a dedicated route. This functionality allows for easy creation of QR codes of various sizes directly from URLs.
+
+The route structure for generating QR codes is:
+
+**`qr/[s|m|l|x:size]/[**:trailing]`**
+
+For instance, to generate a QR code for "Hello World" in a small size, you can use the following URL:   
+[**https://lasagna.gscloud.cz/qr/s/Hello%20World**](https://lasagna.gscloud.cz/qr/s/Hello%20World)  
+
+
+[image1]: <data:image/png;base64,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>

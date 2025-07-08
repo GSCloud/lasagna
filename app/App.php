@@ -534,7 +534,6 @@ $time2 = $model['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS'
 $time3 = $model['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
 
 // X-HEADERS
-header('X-Engine: ' . ENGINE);
 header("X-Country: $country");
 header("X-Time-Data: $time1 ms");
 header("X-Time-Process: $time2 ms");

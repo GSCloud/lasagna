@@ -181,7 +181,6 @@ class StringFilters
         " °Ra " => " °Ra ",
         " °Ré " => " °Ré ",
         " °Rø " => " °Rø ",
-
         
         " h " => "&nbsp;h ",
         " h, " => "&nbsp;h, ",
@@ -210,13 +209,15 @@ class StringFilters
         " EUR " => " EUR&nbsp;",
         " USD " => " USD&nbsp;",
 
+        " deja vu " => " déjà&nbsp;vu ",
+        " voila " => " voilà ",
+
         " id: " => " id:&nbsp;",
         " ID: " => " ID:&nbsp;",
         " Inc." => "&nbsp;Inc.",
         " INC." => "&nbsp;Inc.",
         " Ltd." => "&nbsp;Ltd.",
         " LTD." => "&nbsp;Ltd.",
-        " X " => "&nbsp;X ",
 
         " % " => "&nbsp;% ",
         " ‰ " => "&nbsp;‰",
@@ -857,12 +858,13 @@ class StringFilters
         }
 
         $key = \trim($key);
+
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderGoogleMapShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderGoogleMapSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : ''; 
+            $lazy = $lazy ? 'loading="lazy" ' : ''; 
         }
         $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
@@ -873,15 +875,15 @@ class StringFilters
                 . 'referrerpolicy="no-referrer-when-downgrade" '
                 . 'width="100%" '
                 . 'height="400" '
-                . 'scrolling=no '
-                . 'frameborder=no '
-                . 'style="border:0" '
+                . 'scrolling="no" '
+                . 'frameborder="0" '
+                . 'style="border:0;" '
                 . 'allowfullscreen '
                 . "data-counter={$counter} "
                 . 'src="https://www.google.com/maps/embed/v1/place?key='
                 . $key . '&q=$1"></iframe>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -907,10 +909,10 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderImageShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderImageSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
@@ -926,7 +928,7 @@ class StringFilters
                 . 'alt="$1"'
                 . '></span>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -952,10 +954,10 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderImageShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderImageSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[figure\s+([^\]]+?)\s+(.*?)\]#is';
@@ -973,7 +975,7 @@ class StringFilters
                 . '<figcaption>$2</figcaption>'
                 . '</figure></span>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -997,12 +999,12 @@ class StringFilters
             return;
         }
 
-        $x = \trim($content);
+        $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderImageLeftShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderImageLeftSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
@@ -1018,7 +1020,7 @@ class StringFilters
                 . 'alt="$1"'
                 . '></span>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -1044,10 +1046,10 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderImageRightShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderImageRightSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
@@ -1063,7 +1065,7 @@ class StringFilters
                 . 'alt="$1"'
                 . '></span>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -1089,10 +1091,10 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderImageRespShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderImageRespSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
@@ -1108,7 +1110,7 @@ class StringFilters
                 . 'alt="$1"'
                 . '></span>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -1134,13 +1136,13 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \Exception('renderSoundcloudShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderSoundcloudSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
-        $pattern = '#\[soundcloud\s.*?(.*?)\]#is';
+        $pattern = '#\[soundcloud\s+([^\]]+)\]#is';
         while (\str_contains($content, '[soundcloud ')) {
             $counter++;
             $replace = '<div '
@@ -1150,20 +1152,18 @@ class StringFilters
                 . $lazy
                 . 'referrerpolicy="no-referrer-when-downgrade" '
                 . 'width="100%" '
-                . 'height=300 '
-                . 'scrolling=no '
-                . 'frameborder=no '
-                . 'style="border:0" '
+                . 'height="300" '
+                . 'scrolling="no" '
+                . 'frameborder="0" '
+                . 'style="border:0;" '
                 . 'allowfullscreen '
-                . 'controls '
-                . "data-counter={$counter} "
                 . 'src="https://w.soundcloud.com/player/?url='
                 . 'https%3A//api.soundcloud.com/tracks/$1&'
                 . 'auto_play=false&hide_related=false&show_comments=true&'
                 . 'show_user=true&show_reposts=false&show_teaser=true&visual=true">'
                 . '</iframe></div>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -1189,10 +1189,10 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \Exception('renderYouTubeShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderYouTubeSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy' : '';
+            $lazy = $lazy ? 'loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
@@ -1204,16 +1204,224 @@ class StringFilters
                 . '><iframe '
                 . $lazy
                 . 'referrerpolicy="no-referrer-when-downgrade" '
-                . 'width=480 '
-                . 'height=270 '
-                . 'frameborder=no '
-                . 'style="border:0" '
+                . 'width="480" '
+                . 'height="270" '
+                . 'frameborder="0" '
+                . 'scrolling="no" '
+                . 'style="border:0;" '
+                . 'allow="autoplay; fullscreen; picture-in-picture" '
                 . 'allowfullscreen '
                 . 'controls '
                 . 'src="https://www.youtube.com/embed/$1">'
                 . '</iframe></div>';
             if (\is_string($content)) {
-                $content = \preg_replace($pattern, $replace, $content);
+                $content = \preg_replace($pattern, $replace, $content, 1);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render Vimeo short code(s)
+     *
+     * @param string $content string containing [vimeo param]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderVimeoShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderVimeoSC: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading="lazy" ' : '';
+        }
+        $counter = 0;
+        $pattern = '#\[vimeo\s.*?(.*?)\]#is';
+        while (\str_contains($content, '[vimeo ')) {
+            $counter++;
+            $replace = '<div '
+                . 'class="video-container center row vimeo-container" '
+                . "data-counter={$counter} "
+                . '><iframe '
+                . $lazy
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width="640" '
+                . 'height="360" '
+                . 'frameborder="0" '
+                . 'scrolling="no" '
+                . 'style="border:0;" '
+                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allowfullscreen '
+                . 'src="https://player.vimeo.com/video/$1">'
+                . '</iframe></div>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content, 1);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render Twitch (channel) short code(s)
+     *
+     * @param string $content string containing [twitch param]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderTwitchShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderTwitchSC: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading="lazy" ' : '';
+        }
+        $counter = 0;
+        $pattern = '#\[twitch\s.*?(.*?)\]#is';
+        while (\str_contains($content, '[twitch ')) {
+            $counter++;
+            $replace = '<div '
+                . 'class="video-container center row twitch-container" '
+                . "data-counter={$counter} "
+                . '><iframe '
+                . $lazy
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width="480" '
+                . 'height="270" '
+                . 'frameborder="0" '
+                . 'scrolling="no" '
+                . 'style="border:0;" '
+                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allowfullscreen '
+                . 'src="https://player.twitch.tv/?channel=$1&parent='
+                . DOMAIN
+                . '&autoplay=false">'
+                . '</iframe></div>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content, 1);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render Twitch (video) short code(s)
+     *
+     * @param string $content string containing [twitchvid param]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderTwitchvidShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderTwitchvidSC: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading="lazy" ' : '';
+        }
+        $counter = 0;
+        $pattern = '#\[twitchvid\s.*?(.*?)\]#is';
+        while (\str_contains($content, '[twitchvid ')) {
+            $counter++;
+            $replace = '<div '
+                . 'class="video-container center row twitchvid-container" '
+                . "data-counter={$counter} "
+                . '><iframe '
+                . $lazy
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width="480" '
+                . 'height="270" '
+                . 'frameborder="0" '
+                . 'scrolling="no" '
+                . 'style="border:0;" '
+                . 'allowfullscreen '
+                . 'controls '
+                . 'src="https://player.twitch.tv/?video=$1&parent='
+                . DOMAIN
+                . '&autoplay=false">'
+                . '</iframe></div>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content, 1);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render Mastodon (post) short code(s)
+     *
+     * @param string $content string containing [mastodon param]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderMastodonShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderMastodonSC: FLAGS!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? 'loading="lazy" ' : '';
+        }
+        $counter = 0;
+        $pattern = '#\[mastodon\s+(https?:\/\/[^\s]+)\]#is';
+        while (\str_contains($content, '[mastodon ')) {
+            $counter++;
+            $replace = '<div '
+                . 'class="social-container center row mastodon-container" '
+                . "data-counter={$counter} "
+                . '><iframe '
+                . $lazy
+                . 'referrerpolicy="no-referrer-when-downgrade" '
+                . 'width="400" '
+                . 'height="auto" '
+                . 'frameborder="0" '
+                . 'scrolling="no" '
+                . 'style="border:0;max-width:100%;" '
+                . 'src="$1/embed">'
+                . '</iframe></div>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content, 1);
             }
             if ($counter === self::ITERATIONS) {
                 break;
@@ -1239,7 +1447,7 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \Exception('renderGalleryShortCode: FLAGS!');
+            throw new \InvalidArgumentException('renderGallerySC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? 'loading=lazy ' : ''; 
@@ -1574,7 +1782,11 @@ class StringFilters
         self::renderImageRespShortCode($string, $flags);
         self::renderFigureShortCode($string, $flags);
         self::renderGalleryShortCode($string, $flags);
+        self::renderMastodonShortCode($string, $flags);
         self::renderYouTubeShortCode($string, $flags);
+        self::renderVimeoShortCode($string, $flags);
+        self::renderTwitchShortCode($string, $flags);
+        self::renderTwitchvidShortCode($string, $flags);
         self::renderSoundcloudShortCode($string, $flags);
     }
 }
