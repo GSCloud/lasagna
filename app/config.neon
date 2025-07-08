@@ -26,9 +26,10 @@ google: [
   google-site-domain-verification: true
 ]
 
-# RSS feed
+# RSS feed enable switch: true/false [default: disabled]
 #rss_feed: true
 
+# Share Buttons disable switches: true/false [default: enabled]
 #no_share_bluesky: true
 #no_share_facebook: true
 #no_share_mastodon: true
