@@ -66,9 +66,11 @@ csp: [
     "frame-src"
     "'self'"
     "api.soundcloud.com"
+    "player.twitch.tv"
+    "player.vimeo.com"
     "w.soundcloud.com"
-    "youtube.com"
     "www.google.com"
+    "youtube.com"
     "www.youtube.com;"
     
     "form-action"
