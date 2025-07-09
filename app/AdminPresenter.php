@@ -374,7 +374,25 @@ class AdminPresenter extends APresenter
                 }
                 \pclose($file);
             }
-            \array_walk($logs, array($this, '_decorateLogs'));
+            \array_walk($logs, array($this, '_decorateAuditLogs'));
+            $data['content'] = $logs;
+            $data['repetitions'] = $this->_repetitions;
+            return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
+
+        case 'BlockLog':
+            $this->checkPermission('admin');
+            $this->setHeaderHTML();
+            $filename = DATA . DS . self::AUDITLOG_FILE;
+            $file = \popen("tac {$filename}", 'r');
+            $c = 0;
+            $logs = [];
+            if (\is_resource($file)) {
+                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOG_ENTRIES - 1)) { // phpcs:ignore
+                    $c++;
+                }
+                \pclose($file);
+            }
+            \array_walk($logs, array($this, '_decorateBlockLogs'));
             $data['content'] = $logs;
             $data['repetitions'] = $this->_repetitions;
             return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
@@ -1191,14 +1209,14 @@ class AdminPresenter extends APresenter
     }
 
     /**
-     * Decorate log entries by reference
+     * Decorate AuditLog entries by reference
      *
      * @param string $val log line
      * @param int    $key array index
      * 
      * @return void
      */
-    private function _decorateLogs(&$val, $key)
+    private function _decorateAuditLogs(&$val, $key)
     {
         if (\stripos($val, 'exception') !== false) {
             $val = '';
@@ -1212,11 +1230,14 @@ class AdminPresenter extends APresenter
             $val = '';
             return;
         }
+
         $x = \explode(';', $val);
         if (!\is_array($x)) {
+            $val = '';
             return;
         }
         if (\count($x) < 5) {
+            $val = '';
             return;
         }
 
@@ -1290,6 +1311,10 @@ class AdminPresenter extends APresenter
                 'type' => 'type_token',
                 'class' => 'purple lighten-4'
             ],
+            'blocked' => [
+                'type' => 'type_limiter',
+                'class' => 'amber lighten-4'
+            ],
             'limiter' => [
                 'type' => 'type_limiter',
                 'class' => 'amber lighten-4'
@@ -1303,6 +1328,11 @@ class AdminPresenter extends APresenter
                 $type = $data['type'];
                 $class = $data['class'];
             }
+        }
+
+        if ($type ===  'type_limiter') {
+            $val = '';
+            return;
         }
 
         if ($x[1] === $this->_lastlog) {
@@ -1319,6 +1349,175 @@ class AdminPresenter extends APresenter
             'OAuth login',
             'admin',
             'manager',
+            'purged',
+        ];
+        
+        $x[1] = preg_replace_callback(
+            '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
+            function ($match) {
+                return '<b>' . $match[1] . '</b>';
+            },
+            $x[1]
+        );
+
+        $ipinfo = "href='https://ipinfo.io/{$x[2]}'";
+        if (\strpos($x[2], ':') !== false) {
+            $ipinfo = '';
+        }
+
+        $val = "<tr data-type='{$type}'"
+            . " class='logrow {$type} {$class}'"
+            . ">"
+            . "<td class=center><b>" . $this->_logcounter . "</b></td>"
+            . "<td class='center c2'>"
+            . "{$x[0]}<br>"
+            . "<a target=_blank style='color:#fff' {$ipinfo}>"
+            . "<div class='{$class2}'>"
+            . "{$x[2]}"
+            . "</div></a></td>"
+            . "<td class='center truncate'><b>{$x[3]}</b><br>{$x[4]}</td>"
+            . "<td>{$x[1]}</td>"
+            . "</tr>";
+    }
+
+    /**
+     * Decorate BlockLog entries by reference
+     *
+     * @param string $val log line
+     * @param int    $key array index
+     * 
+     * @return void
+     */
+    private function _decorateBlockLogs(&$val, $key)
+    {
+        if (\stripos($val, 'exception') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Origin Time-out') !== false) {
+            $val = '';
+            return;
+        }
+        if (\stripos($val, 'Bad Gateway') !== false) {
+            $val = '';
+            return;
+        }
+
+        $x = \explode(';', $val);
+        if (!\is_array($x)) {
+            $val = '';
+            return;
+        }
+        if (\count($x) < 5) {
+            $val = '';
+            return;
+        }
+
+        $this->_logcounter++;
+
+        $t = \strtotime($x[0]);
+        if ($t) {
+            $now = \time() + 1;
+            $diff = $now - $t;
+            $days = $diff / 86400;
+            if ($days > self::VISIBLE_LOG_DAYS) {
+                $val = '';
+                return;
+            }
+            $t = \date("<b>j.\tn.\tY</b>\nH:i:s", $t);
+            $t = \str_replace("\t", '&nbsp;', $t);
+            $t = \str_replace("\n", '<br>', $t);
+            $x[0] = $t;
+        }
+
+        $x[2] = \str_replace('IP:', '', $x[2]);
+        $x[3] = \str_replace('NAME:', '', $x[3]);
+        $x[4] = \str_replace('EMAIL:', '', $x[4]);
+
+        $class = $class2 = '';
+        if (\strpos($x[2], ':') !== false) {
+            $x[2] = \str_replace(':', ':&#173;', $x[2]);
+            $class2 = 'ipadd ipv6';
+        } else {
+            $class2 = 'ipadd';
+        }
+        
+        $lookup = [
+            'admin' => [
+                'type' => 'type_admin',
+                'class' => 'green lighten-4'
+            ],
+            'file deleted' => [
+                'type' => 'type_file_delete',
+                'class' => 'red lighten-4'
+            ],
+            'file(s) uploaded' => [
+                'type' => 'type_file_upload',
+                'class' => 'blue lighten-4'
+            ],
+            'unauthorized access' => [
+                'type' => 'type_unauthorized',
+                'class' => 'orange lighten-4'
+            ],
+            'cloudflare' => [
+                'type' => 'type_cloudflare',
+                'class' => 'indigo lighten-4'
+            ],
+            'halite' => [
+                'type' => 'type_halite',
+                'class' => 'green lighten-4'
+            ],
+            'download' => [
+                'type' => 'type_download',
+                'class' => 'grey lighten-2'
+            ],
+            'oauth' => [
+                'type' => 'type_oauth',
+                'class' => 'lime lighten-4'
+            ],
+            'remote' => [
+                'type' => 'type_remote',
+                'class' => 'orange lighten-4'
+            ],
+            'token' => [
+                'type' => 'type_token',
+                'class' => 'purple lighten-4'
+            ],
+            'blocked' => [
+                'type' => 'type_limiter',
+                'class' => 'amber lighten-4'
+            ],
+            'limiter' => [
+                'type' => 'type_limiter',
+                'class' => 'amber lighten-4'
+            ],
+        ];
+
+        $class = '';
+        $type = 'type_unknown';
+        foreach ($lookup as $keyword => $data) {
+            if (\stripos($x[1], $keyword) !== false) {
+                $type = $data['type'];
+                $class = $data['class'];
+            }
+        }
+
+        if ($type !==  'type_limiter') {
+            $val = '';
+            return;
+        }
+
+        if ($x[1] === $this->_lastlog) {
+            $this->_repetitions++;
+            $class = 'reps hide';
+        }
+        $this->_lastlog = $x[1];
+
+        // make these bold
+        $bolds = [
+            'banned',
+            'blocked',
+            'download blocked',
         ];
         
         $x[1] = preg_replace_callback(
