@@ -36,7 +36,7 @@ class AdminPresenter extends APresenter
     const MAX_LOG_ENTRIES = 1000;
 
     /* @var int max. display log days */
-    const VISIBLE_LOG_DAYS = 100;
+    const VISIBLE_LOG_DAYS = 5*30;
 
     /* @var upload name stubs minimum string length */
     const MIN_STUBS_LENGTH = 3;
@@ -1230,7 +1230,6 @@ class AdminPresenter extends APresenter
             $val = '';
             return;
         }
-
         $x = \explode(';', $val);
         if (!\is_array($x)) {
             $val = '';
@@ -1270,6 +1269,8 @@ class AdminPresenter extends APresenter
             $class2 = 'ipadd';
         }
         
+        $class = '';
+        $type = 'type_unknown';
         $lookup = [
             'admin' => [
                 'type' => 'type_admin',
@@ -1313,23 +1314,19 @@ class AdminPresenter extends APresenter
             ],
             'blocked' => [
                 'type' => 'type_limiter',
-                'class' => 'amber lighten-4'
+                'class' => ''
             ],
             'limiter' => [
                 'type' => 'type_limiter',
-                'class' => 'amber lighten-4'
+                'class' => ''
             ],
         ];
-
-        $class = '';
-        $type = 'type_unknown';
         foreach ($lookup as $keyword => $data) {
             if (\stripos($x[1], $keyword) !== false) {
                 $type = $data['type'];
                 $class = $data['class'];
             }
         }
-
         if ($type ===  'type_limiter') {
             $val = '';
             return;
@@ -1348,10 +1345,10 @@ class AdminPresenter extends APresenter
             'HALITE',
             'OAuth login',
             'admin',
+            'cache',
             'manager',
             'purged',
         ];
-        
         $x[1] = preg_replace_callback(
             '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
             function ($match) {
@@ -1402,7 +1399,6 @@ class AdminPresenter extends APresenter
             $val = '';
             return;
         }
-
         $x = \explode(';', $val);
         if (!\is_array($x)) {
             $val = '';
@@ -1442,66 +1438,24 @@ class AdminPresenter extends APresenter
             $class2 = 'ipadd';
         }
         
+        $class = '';
+        $type = 'type_unknown';
         $lookup = [
-            'admin' => [
-                'type' => 'type_admin',
-                'class' => 'green lighten-4'
-            ],
-            'file deleted' => [
-                'type' => 'type_file_delete',
-                'class' => 'red lighten-4'
-            ],
-            'file(s) uploaded' => [
-                'type' => 'type_file_upload',
-                'class' => 'blue lighten-4'
-            ],
-            'unauthorized access' => [
-                'type' => 'type_unauthorized',
-                'class' => 'orange lighten-4'
-            ],
-            'cloudflare' => [
-                'type' => 'type_cloudflare',
-                'class' => 'indigo lighten-4'
-            ],
-            'halite' => [
-                'type' => 'type_halite',
-                'class' => 'green lighten-4'
-            ],
-            'download' => [
-                'type' => 'type_download',
-                'class' => 'grey lighten-2'
-            ],
-            'oauth' => [
-                'type' => 'type_oauth',
-                'class' => 'lime lighten-4'
-            ],
-            'remote' => [
-                'type' => 'type_remote',
-                'class' => 'orange lighten-4'
-            ],
-            'token' => [
-                'type' => 'type_token',
-                'class' => 'purple lighten-4'
-            ],
             'blocked' => [
                 'type' => 'type_limiter',
-                'class' => 'amber lighten-4'
+                'class' => 'orange lighten-4'
             ],
             'limiter' => [
                 'type' => 'type_limiter',
                 'class' => 'amber lighten-4'
             ],
         ];
-
-        $class = '';
-        $type = 'type_unknown';
         foreach ($lookup as $keyword => $data) {
             if (\stripos($x[1], $keyword) !== false) {
                 $type = $data['type'];
                 $class = $data['class'];
             }
         }
-
         if ($type !==  'type_limiter') {
             $val = '';
             return;
@@ -1519,7 +1473,6 @@ class AdminPresenter extends APresenter
             'blocked',
             'download blocked',
         ];
-        
         $x[1] = preg_replace_callback(
             '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
             function ($match) {
