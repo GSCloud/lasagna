@@ -165,7 +165,9 @@ a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
 a_groups_permissions,TITLE,USERS,UŽIVATELÉ,UŽÍVATELIA,BENUTZER
 a_locales,TITLE,DATA,DATA,DATA,DATEN
-a_services,TITLE,services,SLUŽBY,SLUŽBY,Dienstleistungen
+a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
+a_oss,TITLE,OPEN SOURCE references,OPEN SOURCE reference,OPEN SOURCE referencie,OPEN SOURCE Referenzen
+a_shortcodes,TITLE,SHORTCODES info,SHORTCODES informace,SHORTCODES informácie,KURZCODES Informationen
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Zeilenanzahl)
@@ -184,3 +186,5 @@ a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-E
 a_umami_ttip,TOOLTIP,Umami Analytics,Umami Analytika,Umami Analytika,Umami Analytics
 a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje od spoločnosti Google,Daten von Google aktualisieren
 a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads
+a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
+a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll

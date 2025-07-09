@@ -172,9 +172,9 @@
         }
       }
 
-      // TOGLE WRENCH
-      $(".motyle").click(function () {
-        $("#admin_main").toggle(200, function () {
+      // TOGLE ADMIN PANEL
+      $(".admin_panel_switch").click(function () {
+        $("#admin_main").toggle(100, function () {
           window.scrollTo(0, 0);
           setCookie("motyle", $("#admin_main").is(":hidden"));
         })

@@ -35,7 +35,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 </style>
 
 <!-- CONTROL PANEL ON/OFF -->
-<span style="position:fixed;left:2px;top:2px;z-index:999999" class="noselect motyle transparent hover white">
+<span style="position:fixed;left:2px;top:2px;z-index:999999" class="noselect admin_panel_switch transparent hover white">
   <img
     src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp"
     class="responsive-img notap"
@@ -54,12 +54,29 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
     <div style="display:inline-block;margin:auto">
       <b class="group_icon_{{ group }}">{{user.email}}</b>
       <br>
-      <a title="{{ l.a_logout_ttip }}" id="a_logout" class="tooltipped waves-effect green waves-light btn"
-        data-position="top" data-tooltip="{{ l.a_logout_ttip }}">
-        <i class="fas fa-sign-out-alt"></i></a>
+      <a
+        id="a_logout"
+        class="tooltipped waves-effect green waves-light btn"
+        data-position="left"
+        data-tooltip="{{ l.a_logout_ttip }}"
+        ><i class="fas fa-sign-out-alt"></i></a>
 {{#admin_group_admin}}
-      <a title="Audit Log" target="_blank" ref="nofollow" href="/admin/AuditLog?nonce={{ nonce }}" class="waves-effect blue waves-light btn">
-        <i class="fas fa-list"></i></a>
+      <a
+        href="/admin/AuditLog?nonce={{ nonce }}"
+        class="tooltipped waves-effect blue waves-light btn"
+        target="_blank"
+        ref="nofollow"
+        data-tooltip="{{ l.a_auditlog_ttip  }}"
+        data-position="left"
+        ><i class="fas fa-list"></i></a>
+      <a
+        href="/admin/BlockLog?nonce={{ nonce }}"
+        class="tooltipped waves-effect red waves-light btn"
+        target="_blank"
+        ref="nofollow"
+        data-tooltip="{{ l.a_blocklog_ttip  }}"
+        data-position="left"
+        ><i class="fas fa-list"></i></a>
 {{/admin_group_admin}}
     </div>
   </div>
