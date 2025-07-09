@@ -1,5 +1,9 @@
 {{^LOCALHOST}}
 {{#umami.id}}
-<script nonce="{{ csp_nonce }}" async src="https://umami.gscloud.cz/script.js" data-website-id="{{ umami.id }}"></script>
+<script
+    src="{{ umami.script }}{{^umami.script}}https://umami.gscloud.cz/script.js{{/umami.script}}"
+    nonce="{{ csp_nonce }}"
+    async
+    data-website-id="{{ umami.id }}"></script>
 {{/umami.id}}
 {{/LOCALHOST}}
