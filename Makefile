@@ -91,19 +91,8 @@ else
 endif
 
 docs:
-	@-mv "$(DOWNLOADS)/Downloads/README.md" . 2>/dev/null
 	@-mv "$(DOWNLOADS)/CHANGELOG.md" . 2>/dev/null
 	@sed -i -e 's/`~~\*\*/`**/g' -e 's/\* \*\*~~/* ~~**/g' -e 's/ `\*\*/`**/g' CHANGELOG.md
-ifneq ($(strip $(has_docker)),)
-	@find . -maxdepth 1 -iname "*.md" -exec echo "converting {} to ADOC" \; -exec docker run --rm -v "$$(pwd)":/data pandoc/core -f markdown -t asciidoc -i "{}" -o "{}.adoc" \;
-	@find . -maxdepth 1 -iname "*.adoc" -exec echo "converting {} to PDF" \; -exec docker run --rm -v "$$(pwd)":/documents/ asciidoctor/docker-asciidoctor asciidoctor-pdf -a allow-uri-read -a icons=font -a icon-set=fas -d book "{}" \;
-	@find . -maxdepth 1 -iname "*.adoc" -delete
-ifneq ($(strip $(has_rename)),)
-	@rename -f 's/\.md\././' *.md.*
-endif
-else
-	@$(error "ERROR: Missing docker command")
-endif
 
 update:
 	@./bin/update.sh
