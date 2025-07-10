@@ -22,23 +22,27 @@ This section outlines the process for installing and updating Tesseract LASAGNA 
 
 ## 2.1. PHP Source
 
-To get started with Tesseract LASAGNA from its PHP source, follow these steps:
+To get started with Tesseract LASAGNA from its PHP source, follow these steps.
 
-**Clone the Repository:** Begin by cloning the official Tesseract LASAGNA repository from GitHub using 
+**Clone the Repository:** Begin by cloning the official Tesseract LASAGNA repository from GitHub using:
 
-**`git clone https://github.com/GSCloud/lasagna.git`**
+| git clone https://github.com/GSCloud/lasagna.git |
+| :---- |
 
 **Initial Installation:** Navigate into the newly created `lasagna` directory and run the `make install` command to set up the core components and dependencies:
 
-**`make install`**
+| make install |
+| :---- |
 
-**Updating Dependencies:** To update your Tesseract LASAGNA installation and its dependencies, execute the `make update` command from within the `lasagna` directory:
+**Updating Dependencies:** To update your Tesseract LASAGNA installation and its dependencies, execute the `update` command from within the `lasagna` directory:
 
-**`make update`**
+| make update |
+| :---- |
 
 **Explore Other Commands:** For a comprehensive list of all available development and testing commands, simply run `make` without any arguments:
 
-**`make`**
+| make |
+| :---- |
 
 You will see a menu similar to this (note that port 9000 is reserved for Docker implementations):
 
@@ -108,15 +112,18 @@ To interact with Tesseract via the CLI, you can use one of the following methods
 
 Using the `cli.sh` wrapper script:
 
-**`./cli.sh <command> [<parameter> ...]`**
+| ./cli.sh \<command\> \[\<parameter\> ...\] |
+| :---- |
 
 Directly via PHP:
 
-**`php -f Bootstrap.php <command> [<parameter> ...]`**
+| php \-f Bootstrap.php \<command\> \[\<parameter\> ...\] |
+| :---- |
 
 To view the full list of available commands and their descriptions, simply execute the `cli.sh` script without any parameters:
 
-**`./cli.sh`**
+| ./cli.sh |
+| :---- |
 
 ## 4.2. Examples
 
@@ -124,15 +131,18 @@ Here are a few common examples of CLI commands in action.
 
 Clear the application cache:
 
-**`./cli.sh clearcache`**
+| ./cli.sh clearcache |
+| :---- |
 
-Run the main application CLI presenter (e.g., for general tasks):
+Run the main application presenter:
 
-**`./cli.sh app`**
+| ./cli.sh app |
+| :---- |
 
 Execute a demonstration script Hello World:
 
-**`./cli.sh demo`**
+| ./cli.sh demo |
+| :---- |
 
 # 5\. Filesystem Hierarchy
 
@@ -159,11 +169,13 @@ You can easily inspect the Model's structure and content directly from the comma
 
 **List Model Keys:** To get a quick overview of the top-level keys within the Model, use the following command:
 
-**`./cli.sh app 'dump(array_keys($app->getData()));' | more`**
+| ./cli.sh app 'dump(array\_keys($app-\>getData()))' | more |
+| :---- |
 
 **Dump the Entire Model:** For a complete view of all data stored in the Model, including nested structures, you can dump its entire contents:
 
-**`./cli.sh app 'dump($app->getData());' | more`**
+| ./cli.sh app 'dump($app-\>getData())' | more |
+| :---- |
 
 The Model's data can be accessed and manipulated using two primary methods: `getData()` and `setData()`. Both methods support a convenient **dot notation**, allowing you to navigate deep within the multi-dimensional array structure with ease.
 
@@ -171,23 +183,30 @@ The Model's data can be accessed and manipulated using two primary methods: `get
 
 Accessing a specific router view:
 
-**`./cli.sh app 'echo $app->getData("router.home.view");'`**
+| ./cli.sh app 'echo $app-\>getData("router.home.view")' |
+| :---- |
 
-This command would output:  
-**home**
+This command would output:
+
+| home |
+| :---- |
 
 Retrieving a project configuration value:
 
-**`./cli.sh app 'echo $app->getData("cfg.project")'`**
+| ./cli.sh app 'echo $app-\>getData("cfg.project")' |
+| :---- |
 
-This command would output:  
-**LASAGNA**
+This command would output:
+
+| LASAGNA |
+| :---- |
 
 ## 6.1. Constants
 
 Tesseract LASAGNA utilizes a set of framework-specific constants that define crucial aspects of its operation. You can list all defined constants by running this command:
 
-**`./cli.sh app '$app->showConst()'`**
+| ./cli.sh app '$app-\>showConst()' |
+| :---- |
 
 These constants are primarily defined within the `Bootstrap.php` and `App.php` files. For advanced customization, Tesseract allows you to override these constants directly within the `www/index.php` file, providing a flexible way to tailor the framework to specific project needs.
 
@@ -199,29 +218,31 @@ Tesseract LASAGNA incorporates a streamlined administration system designed for 
 
 Currently, Tesseract's user access relies exclusively on **Google OAuth 2.0 client authentication**. This robust standard ensures a secure login process.
 
-Upon successful user login, a highly secure "master key" is generated. This key is then used to create an **encrypted cookie** using the **Halite cryptography library**, which is set exclusively via the HTTPS protocol (strict). This cookie is meticulously protected against tampering, and its parameters can be managed either through the administration panel or remotely via authenticated API calls, offering significant control and flexibility.
+Upon first successful user login, a highly secure "master key" is generated. This key is then used to create an **encrypted cookie** using the **Halite cryptography library**, which is set exclusively via the HTTPS protocol (strict). This cookie is meticulously protected against tampering, and its parameters can be managed either through the administration panel or remotely via authenticated API calls, offering significant control and flexibility.
 
-**Important Warning:** Authentication functionality is only enabled and available when the necessary OAuth parameters have been properly configured within the `config_private.neon` file.
+**❗️Important Warning:** Authentication functionality is only enabled and available when the necessary OAuth parameters have been properly configured within the `config_private.neon` file.
 
 Significantly, Tesseract maintains **no database of connections or authenticated users**. Its stateless design contributes to its scalability and simplicity. The default URL for user login is `/login`, and for logging out, it's `/logout`.
 
-**Halite** is a high-level cryptographic interface that relies on the robust `libsodium` library for all its underlying operations. Developed by Paragon Initiative Enterprises, Halite aims to make cryptographic implementations in PHP safer and more straightforward.
+[**Halite**](https://paragonie.com/project/halite) is a high-level cryptographic interface that relies on the robust `libsodium` library for all its underlying operations. Developed by [Paragon Initiative Enterprises](https://paragonie.com/), Halite aims to make cryptographic implementations in PHP safer and more straightforward.
 
 To inspect the structure of the unencrypted master key, you can run the following command via the CLI:
 
-**`./cli.sh app 'dump($app->getIdentity())'`**
+| ./cli.sh app 'dump($app-\>getIdentity())' |
+| :---- |
 
 For more detailed information about the currently logged-in user's identity, use this command:
 
-**`./cli.sh app 'dump($app->getCurrentUser())'`**
+| ./cli.sh app 'dump($app-\>getCurrentUser())' |
+| :---- |
 
-*Note: These commands will always return "XX" for the country code, as this specific information is retrieved from the Cloudflare header, not stored internally by Tesseract.*
+*Note: These commands will always return "XX" for the country code, as this specific information is retrieved from the Cloudflare header*
 
 ## 7.2. Permissions
 
 Tesseract LASAGNA comes with three fundamental built-in permission levels, which can be easily extended to suit more complex authorization needs. These predefined levels include:
 
-* **admin** (also known as superuser): Possesses full administrative privileges.  
+* **admin**: Possesses full administrative privileges.  
 * **manager:** Offers a broad set of management capabilities.  
 * **editor:** Authorized to refresh data and edit articles.  
 * **tester:** Has no elevated permissions, typically used for testing purposes without affecting core data.  
@@ -236,7 +257,8 @@ For automation tasks on a localhost environment, remote calls can be authenticat
 
 You can view the key's content using:
 
-**`cat data/admin.key`**
+| cat data/admin.key |
+| :---- |
 
 # 8\. Core Features
 
@@ -268,20 +290,19 @@ Tesseract LASAGNA is designed with DevOps practices in mind, offering tools for 
 
 ### 8.2.1. PHPStan
 
-Code quality is ensured through integration with **PHPStan**, a static analysis tool. Developers can run comprehensive checks on the codebase using the `make stan` command:
+Code quality is ensured through integration with **PHPStan**, a static analysis tool. Developers can run comprehensive checks on the codebase using the command:
 
-**`make stan`**
+| make stan |
+| :---- |
 
 ### 8.2.2. Profiler
 
 For performance monitoring and optimization, Tesseract provides profiling capabilities. Developers can inspect various runtime metrics by examining custom HTTP headers that expose execution times for different stages of the request, or by utilizing the integrated Nette Debugger.
 
-Example custom headers that can be used for profiling:
+Custom headers used for profiling:
 
-`X-Country: $country`  
-`X-Time-Data: $time1 ms`  
-`X-Time-Process: $time2 ms`  
-`X-Time-Run: $time3 ms`
+| X-Time-Data: $time1 msX-Time-Process: $time2 msX-Time-Run: $time3 ms |
+| :---- |
 
 ### 8.2.3. Debugging
 
@@ -297,15 +318,18 @@ To ensure that users always receive the latest versions of static assets (like i
 
 The generated symbolic link for versioned assets can be seen by running:
 
-**`./cli.sh app 'echo $app->getData("cdn")'`**
+| ./cli.sh app 'echo $app-\>getData("cdn")' |
+| :---- |
 
 This command would output something similar to:
 
-**`/cdn-assets/4790592b350262b8e1960a96a097de0af1828532`**
+| /cdn-assets/4790592b350262b8e1960a96a097de0af1828532 |
+| :---- |
 
 This versioned path can then be seamlessly integrated into Mustache templates, ensuring correct asset delivery:
 
-**`<image src="{{ cdn }}/img/logo.png">`**
+| \<image src="{{ cdn }}/img/logo.png"\> |
+| :---- |
 
 # 9\. Extras
 
@@ -317,9 +341,10 @@ The framework offers a built-in capability to generate QR code images dynamicall
 
 The route structure for generating QR codes is:
 
-**`qr/[s|m|l|x:size]/[**:trailing]`**
+| /qr/\[s|m|l|x:size\]/\[\*\*:trailing\] |
+| :---- |
 
-For instance, to generate a QR code for "Hello World" in a small size, you can use the following URL:   
+For instance, to generate a QR code for "*Hello World*" in a small size, you can use the following URL:   
 [**https://lasagna.gscloud.cz/qr/s/Hello%20World**](https://lasagna.gscloud.cz/qr/s/Hello%20World)  
 
 

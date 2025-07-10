@@ -1443,11 +1443,11 @@ class AdminPresenter extends APresenter
         $lookup = [
             'banned' => [
                 'type' => 'type_limiter',
-                'class' => 'orange lighten-4'
+                'class' => 'lighten-4'
             ],
             'blocked' => [
                 'type' => 'type_limiter',
-                'class' => 'red lighten-4'
+                'class' => 'red lighten-3'
             ],
         ];
         foreach ($lookup as $keyword => $data) {
