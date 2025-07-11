@@ -24,7 +24,7 @@
 .cursorpointer {cursor:pointer!important}
 #uploads_extended_info {padding:10px}
 
-/*  group icons */
+/*  GROUP ICONS */
 .group_icon_admin::before {content:"🫅 ";font-size:1.3rem}
 .group_icon_editor::before {content:"🧑‍💼 ";font-size:1.3rem}
 .group_icon_manager::before {content:"🧙 ";font-size:1.3rem}
@@ -56,14 +56,14 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
       <br>
       <a
         id="a_logout"
-        class="tooltipped waves-effect green waves-light btn"
+        class="tooltipped waves-effect waves-light green btn"
         data-position="left"
         data-tooltip="{{ l.a_logout_ttip }}"
         ><i class="fas fa-sign-out-alt"></i></a>
 {{#admin_group_admin}}
       <a
         href="/admin/AuditLog?nonce={{ nonce }}"
-        class="tooltipped waves-effect blue waves-light btn"
+        class="tooltipped waves-effect waves-light blue btn"
         target="_blank"
         ref="nofollow"
         data-tooltip="{{ l.a_auditlog_ttip  }}"
@@ -71,7 +71,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         ><i class="fas fa-list"></i></a>
       <a
         href="/admin/BlockLog?nonce={{ nonce }}"
-        class="tooltipped waves-effect red waves-light btn"
+        class="tooltipped waves-effect waves-light red btn"
         target="_blank"
         ref="nofollow"
         data-tooltip="{{ l.a_blocklog_ttip  }}"
@@ -84,8 +84,15 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <!-- EXTERNAL LINKS -->
   <div class="row center black">
     {{#external_links}}
-      <a rel="noreferrer noopener" target="_blank" class="btn tooltipped {{#color}}{{color}}{{/color}}{{^color}}green{{/color}} white-text" style="padding:4px;line-height:2em;border-radius:2px"
-        data-position="top" data-tooltip="{{ title }}" href="{{ link }}"><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;
+      <a
+        href="{{ link }}"
+        target="_blank"
+        rel="noreferrer noopener"
+        class="btn tooltipped waves-effect {{#color}}{{color}}{{/color}}{{^color}}waves-green{{/color}} white-text"
+        style="padding:4px;line-height:2em;border-radius:2px"
+        data-position="top"
+        data-tooltip="{{ title }}"
+        ><i class="fa-solid fa-arrow-up-right-from-square"></i><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;
     {{/external_links}}
   </div>
 

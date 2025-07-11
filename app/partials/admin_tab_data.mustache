@@ -13,12 +13,22 @@
       </p>
 
       <div class="row center">
-        <a id="a_update" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
-          data-position="top" data-tooltip="{{ l.a_update_ttip }}">
-          <i class="fab fa-google-drive"></i>&nbsp;&nbsp;{{ l.a_update }}</a>
-        <a id="a_flush" style="margin:5px;" class="tooltipped waves-effect green waves-light btn"
-          data-position="top" data-tooltip="{{ l.a_flush_ttip }}">
-          <i class="fa-solid fa-rocket"></i>&nbsp;&nbsp;{{ l.a_flush }}</a>
+        <a
+          id="a_update"
+          class="tooltipped waves-effect waves-light green btn"
+          style="margin:5px;"
+          data-position="top"
+          data-tooltip="{{ l.a_update_ttip }}"
+          ><i
+          class="fab fa-google-drive"></i>&nbsp;&nbsp;{{ l.a_update }}</a>
+        <a
+          id="a_flush"
+          class="tooltipped waves-effect waves-light green btn"
+          style="margin:5px;"
+          data-position="top"
+          data-tooltip="{{ l.a_flush_ttip }}"
+          ><i
+          class="fa-solid fa-rocket"></i>&nbsp;&nbsp;{{ l.a_flush }}</a>
       </div>
     </div>
 
@@ -29,24 +39,42 @@
           <label for="ArticleURLSelect">{{ l.a_articles }}</label>
           <select id="ArticleURLSelect"></select>
         </div>
-        <a id="a_summernote"
-          data-position="top" data-tooltip="{{ l.a_summernote_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
-          <i class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
-        <a id="a_article"
-          data-position="top" data-tooltip="{{ l.a_article_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect green waves-light btn">
-          <i class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
+        <a
+          id="a_summernote"
+          class="tooltipped waves-effect waves-light green btn"
+          style="margin:5px"
+          data-position="top"
+          data-tooltip="{{ l.a_summernote_ttip }}"
+          ><i
+          class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
+        <a
+          id="a_article"
+          class="tooltipped waves-effect waves-light green btn"
+          style="margin:5px"
+          data-position="top"
+          data-tooltip="{{ l.a_article_ttip }}"
+          ><i
+          class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
         <br>
         {{/disable_articles}}
 
         {{#CONST.UPLOAD}}
-        <a id="a_upload"
-          data-position="top" data-tooltip="{{ l.a_upload_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect green waves btn"><i class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
-        <a id="a_files"
-          data-position="top" data-tooltip="{{ l.a_files_ttip }}"
-          style="margin:5px" class="tooltipped waves-effect brown waves btn"><i class="fa-solid fa-bucket"></i>&nbsp;&nbsp;<span id="files_count"></span></a>
+        <a
+          id="a_upload"
+          class="tooltipped waves-effect waves-light green btn"
+          style="margin:5px"
+          data-position="top"
+          data-tooltip="{{ l.a_upload_ttip }}"
+          ><i
+          class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
+        <a
+          id="a_files"
+          class="tooltipped waves-effect waves-light brown btn"
+          style="margin:5px"
+          data-position="top"
+          data-tooltip="{{ l.a_files_ttip }}"
+          ><i
+          class="fa-solid fa-bucket"></i>&nbsp;&nbsp;<span id="files_count"></span></a>
 
         <div id="uploads_extended_info"></div>
 
