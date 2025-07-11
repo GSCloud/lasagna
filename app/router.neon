@@ -10,6 +10,8 @@ home:
     default: '/en'
     localhost: '/cs'
     CZ: '/cs'
+    SK: '/sk'
+    DE: '/de'
     XX: '/en'
   ]
   assert_httpcode: 303
@@ -22,6 +24,16 @@ en:
   path: /en
   sitemap: true
   language: en
+
+sk:
+  path: /sk
+  sitemap: true
+  language: sk
+
+de:
+  path: /de
+  sitemap: true
+  language: de
 
 # routing failure
 redir:

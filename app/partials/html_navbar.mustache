@@ -6,14 +6,20 @@
         href="/{{#langcs}}cs{{/langcs}}{{#langen}}en{{/langen}}">{{ l.title }}</a>
       <ul class="right hide-on-med-and-down">
         <li>
-          <a class="sethlcs {{#langcs}}{{ design.nav_color }} darken-4{{/langcs}} text-lighten-4"
-          {{^langcs}}href="/cs"{{/langcs}}
-          ><b>{{ l.nav_czech }}</b></a>
+          <a class="sethlen {{#langen}}{{ design.nav_color }} darken-4{{/langen}} text-lighten-4" 
+          {{^langen}}href="/en"{{/langen}}><b>{{ l.nav_en }}</b></a>
         </li>
         <li>
-          <a class="sethlen {{#langen}}{{ design.nav_color }} darken-4{{/langen}} text-lighten-4" 
-          {{^langen}}href="/en"{{/langen}}
-          ><b>{{ l.nav_english }}</b></a>
+          <a class="sethlcs {{#langcs}}{{ design.nav_color }} darken-4{{/langcs}} text-lighten-4"
+          {{^langcs}}href="/cs"{{/langcs}}><b>{{ l.nav_cz }}</b></a>
+        </li>
+        <li>
+          <a class="sethlcs {{#langsk}}{{ design.nav_color }} darken-4{{/langsk}} text-lighten-4"
+          {{^langsk}}href="/sk"{{/langsk}}><b>{{ l.nav_sk }}</b></a>
+        </li>
+        <li>
+          <a class="sethlcs {{#langde}}{{ design.nav_color }} darken-4{{/langde}} text-lighten-4"
+          {{^langde}}href="/de"{{/langde}}><b>{{ l.nav_de }}</b></a>
         </li>
       </ul>
     </div>
