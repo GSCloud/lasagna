@@ -182,6 +182,9 @@ class StringFilters
         " °Ré " => " °Ré ",
         " °Rø " => " °Rø ",
         
+        " & " => " &amp;&nbsp;",
+        " &amp; " => " &amp;&nbsp;",
+
         " h " => "&nbsp;h ",
         " h, " => "&nbsp;h, ",
         " h. " => "&nbsp;h. ",
@@ -206,11 +209,18 @@ class StringFilters
         " sec. " => "&nbsp;sec. ",
         
         " CZK " => " CZK&nbsp;",
-        " EUR " => " EUR&nbsp;",
+        " EUR " => "&nbsp;&euro;",
+        " GBP " => "&nbsp;&pound;",
         " USD " => " USD&nbsp;",
 
         " deja vu " => " déjà&nbsp;vu ",
+        " facade " => " façade ",
+        " naive " => " naïve ",
         " voila " => " voilà ",
+
+        " (c) " => " &copy; ",
+        " (r) " => " &reg; ",
+        " (tm) " => " &trade; ",
 
         " id: " => " id:&nbsp;",
         " ID: " => " ID:&nbsp;",
@@ -258,7 +268,6 @@ class StringFilters
         " Ms " => " Ms&nbsp;",
         " Ms. " => " Ms.&nbsp;",
         " PM" => "&nbsp;PM",
-        " a " => " a&nbsp;",
         " an " => " an&nbsp;",
         " pcs " => "&nbsp;pcs ",
         " pcs)" => "&nbsp;pcs)",
