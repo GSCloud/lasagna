@@ -86,6 +86,7 @@ nav_slovak,NAVI,Slovensky,Slovensky,Slovensky,Slovensky
 nav_english,NAVI,English,English,English,English
 nav_deutsch,NAVI,Deutsch,Deutsch,Deutsch,Deutsch
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
+a_manual,BUTTON,MANUAL,MANUÁL,MANUÁL,HANDBUCH
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
 a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
@@ -149,7 +150,7 @@ a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
 a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
-a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
+a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken
 a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität & Objekte
 a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
 a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
