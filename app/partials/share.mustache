@@ -5,16 +5,16 @@
     target="_blank"><i class="fa-solid fa-share-nodes"></i>&nbsp;<i class="fa-brands fa-mastodon"></i>&nbsp;{{ l.share_mastodon }}</a>
 {{/no_share_mastodon}}
 
-{{^no_share_facebook}}
-<a
-    class="waves-effect waves-light btn-small share green white-text"
-    href="https://www.facebook.com/sharer/sharer.php?u={{ canonical_url }}{{ request_path }}"
-    target="_blank"><i class="fa-solid fa-share-nodes"></i>&nbsp;<i class="fa-brands fa-facebook"></i>&nbsp;{{ l.share_facebook }}</a>
-{{/no_share_facebook}}
-
 {{^no_share_bluesky}}
 <a
     class="waves-effect waves-light btn-small share green white-text"
     href="https://bsky.app/intent/compose?text={{ l.og_title }}%20{{ canonical_url }}{{ request_path }}"
     target="_blank"><i class="fa-solid fa-share-nodes"></i>&nbsp;<i class="fa-brands fa-bluesky"></i>&nbsp;{{ l.share_bluesky }}</a>
 {{/no_share_bluesky}}
+
+{{^no_share_facebook}}
+<a
+    class="waves-effect waves-light btn-small share green white-text"
+    href="https://www.facebook.com/sharer/sharer.php?u={{ canonical_url }}{{ request_path }}"
+    target="_blank"><i class="fa-solid fa-share-nodes"></i>&nbsp;<i class="fa-brands fa-facebook"></i>&nbsp;{{ l.share_facebook }}</a>
+{{/no_share_facebook}}

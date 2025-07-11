@@ -1,6 +1,6 @@
 {{>html_header}}
 
-<div id=content class="container noselect">
+<div id=content class="">
 
   <div class="row center-align">
     {{>title}}
@@ -14,23 +14,34 @@
       target=_blank
       rel="nofollow"
       href="https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md"><b><i
-      class="fa-brands fa-square-github"></i>&nbsp;CHANGELOG.md</b></a>
+      class="fa-brands fa-square-github"></i>&nbsp;CHANGELOG</b></a>
+    &nbsp;&nbsp;
+    <a
+      target=_blank
+      rel="nofollow"
+      href="https://github.com/GSCloud/lasagna/blob/master/TECHNICAL_DETAILS_EN.md"><b><i
+      class="fa-brands fa-square-github"></i>&nbsp;TECHNICAL DETAILS</b></a>
     <br>
     <br>
 
-    <div class="container grey lighten-2 content left-align" style="padding:3rem;border-radius:0.5rem">
-      {{ l.main }}
+    <div class="container grey lighten-3 content left-align" style="padding:3rem;border-radius:0.5rem">
+      {{ l.readme }}
     </div>
+
     <div class="row customicons">
       {{ l.custom_icons }}
     </div>
+
+    <h3><i class="fa-solid fa-arrow-pointer"></i> Shortcodes</h3>
     <div class="row left-align container">
       {{ l.shortcodes_pre }}
     </div>
-    <div class="row shortcodes">
+
+    <div class="container row shortcodes">
       {{ l.shortcodes }}
     </div>
-    <h4><i class="fa-solid fa-arrow-pointer"></i> Emojis</h4>
+
+    <h3><i class="fa-solid fa-arrow-pointer"></i> Emojis</h3>
     <div id="emojisdemo" class="bigemoji hover">🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀</div>
   </div>
 
