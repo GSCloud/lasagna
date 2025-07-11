@@ -93,6 +93,7 @@ endif
 docs:
 	@-mv "$(DOWNLOADS)/CHANGELOG.md" . 2>/dev/null
 	@sed -i -e 's/`~~\*\*/`**/g' -e 's/\* \*\*~~/* ~~**/g' -e 's/ `\*\*/`**/g' CHANGELOG.md
+	@echo 'Done.'
 
 update:
 	@./bin/update.sh

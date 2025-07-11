@@ -98,9 +98,10 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.4.5');
+define('ENGINE', 'Tesseract v2.4.6');
 $data['ENGINE'] = ENGINE;
-$data['codemirror'] = '6.65.7'; // CodeMirror version to load in the admin interface
+// version to load in the admin UI: https://cdnjs.com/libraries/codemirror 
+$data['codemirror'] = '6.65.7';
 
 // Base58 encoder
 $base58 = new \Tuupola\Base58;

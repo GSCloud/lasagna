@@ -2,6 +2,10 @@
 
 ---
 
+`2025-07-11`  **`v2.4.6`**
+
+* **`1062-FEATURE` UI cleanup**, AuditLog filtered out to **AUDIT and BLOCK logs**, some **extra SF replacements**, **TECHNICAL DETAILS** available in the UI, bug fixing
+
 `2025-07-08`
 
 * **`1061-FEATURE`** documents updated: **README**, **TECHNICAL\_DETAILS\_EN**  
@@ -145,7 +149,7 @@
 * **`1011-FEATURE`** [changelog](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) added to the admin panel  
 * **`1010-BUGFIX`** **Lightbox2** [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
 * ~~**`1009-IDEA`** **remember active admin tab**~~  
-* **`1008-IDEA`** **migrate Materialize framework** to the newest [v2.2.1](https://github.com/materializecss/materialize/releases/tag/v2.2.1)  
+* **`1008-IDEA` migrate Materialize framework to the newest [v2.2.2](https://github.com/materializecss/materialize/releases/tag/v2.2.2)**  
   * note: [https://github.com/materializecss/materialize/pull/49](https://github.com/materializecss/materialize/pull/49)
 
 `2025-01-02`
