@@ -1304,6 +1304,10 @@ class AdminPresenter extends APresenter
                 'type' => 'type_oauth',
                 'class' => 'lime lighten-4'
             ],
+            'invalid OAuth state' => [
+                'type' => 'type_oauth',
+                'class' => 'red lighten-3'
+            ],
             'remote' => [
                 'type' => 'type_remote',
                 'class' => 'orange lighten-4'
@@ -1311,6 +1315,10 @@ class AdminPresenter extends APresenter
             'token' => [
                 'type' => 'type_token',
                 'class' => 'purple lighten-4'
+            ],
+            'Unauthorized access.' => [
+                'type' => 'type_limiter',
+                'class' => ''
             ],
             'blocked' => [
                 'type' => 'type_limiter',
@@ -1441,13 +1449,17 @@ class AdminPresenter extends APresenter
         $class = '';
         $type = 'type_unknown';
         $lookup = [
+            'Unauthorized access.' => [
+                'type' => 'type_limiter',
+                'class' => 'red lighten-3'
+            ],
             'banned' => [
                 'type' => 'type_limiter',
                 'class' => 'lighten-4'
             ],
             'blocked' => [
                 'type' => 'type_limiter',
-                'class' => 'red lighten-3'
+                'class' => 'orange lighten-3'
             ],
         ];
         foreach ($lookup as $keyword => $data) {
@@ -1472,6 +1484,7 @@ class AdminPresenter extends APresenter
             'banned',
             'blocked',
             'download blocked',
+            'Unauthorized access',
         ];
         $x[1] = preg_replace_callback(
             '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
