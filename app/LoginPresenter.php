@@ -86,7 +86,7 @@ class LoginPresenter extends APresenter
             \setcookie(
                 'returnURL',
                 $_GET['returnURL'],
-                \time() + 30,
+                \time() + 60,
                 '/',
                 DOMAIN,
                 !LOCALHOST,
@@ -128,7 +128,7 @@ class LoginPresenter extends APresenter
             \setcookie(
                 'oauth2state',
                 $provider->getState(),
-                \time() + 30,
+                \time() + 60,
                 '/',
                 DOMAIN,
                 !LOCALHOST,
@@ -172,7 +172,10 @@ class LoginPresenter extends APresenter
 
                 if ($group === 'admin') {
                     if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
-                        \setcookie('tracy-debug', $this->getCfg('DEBUG_COOKIE'));
+                        \setcookie(
+                            'tracy-debug',
+                            $this->getCfg('DEBUG_COOKIE')
+                        );
                     }
                 }
 
@@ -182,7 +185,7 @@ class LoginPresenter extends APresenter
                     \setcookie(
                         'login_hint',
                         $ownerDetails->getEmail() ?? '',
-                        \time() + 86400 * 31,
+                        \time() + 86400 * 30,
                         '/',
                         DOMAIN,
                         !LOCALHOST,
