@@ -44,13 +44,11 @@ class CorePresenter extends APresenter
         if (!\is_array($data)) {
             return $this;
         }
-
         // View
         $view = $this->getView();
         if (!$view) {
             return $this;
         }
-
         // Presenter
         $presenter = $this->getPresenter();
         if (!\is_array($presenter)) {
@@ -59,7 +57,6 @@ class CorePresenter extends APresenter
         
         // API parameters
         $match = $this->getMatch();
-
         $extras = [
             "name" => "Tesseract Core REST API",
             "fn" => $view,
@@ -301,9 +298,9 @@ class CorePresenter extends APresenter
 
         switch ($view) {
         case "GetEnDataVersion":
+        case "GetDeDataVersion":
         case "GetCsDataVersion":
         case "GetSkDataVersion":
-        case "GetDeDataVersion":
             $d = [];
             $d["LASAGNA"]["data"]["language"] = $language;
             $d["LASAGNA"]["data"]["version"] = $hash;
@@ -376,9 +373,9 @@ class CorePresenter extends APresenter
             $lang,
             [
                 "en",
+                "de",
                 "cs",
                 "sk",
-                //"de",
             ]
         )
         ) {

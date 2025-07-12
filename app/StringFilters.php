@@ -277,6 +277,13 @@ class StringFilters
     /**
      * @var array<string,string>
      */
+    private static $_deutsch = [
+    ];
+
+    // phpcs:ignore
+    /**
+     * @var array<string,string>
+     */
     private static $_czech = [
         " DIČ: " => " DIČ:&nbsp;",
         " IČ: " => " IČ:&nbsp;",
@@ -731,7 +738,7 @@ class StringFilters
      * Correct the text spacing in passed content for various languages.
      *
      * @param string $content  content by reference
-     * @param string $language (optional: "cs", "sk", default "en" - for now)
+     * @param string $language (optional: "cs", "sk", "de", "en" = default)
      * 
      * @return void
      */
@@ -744,13 +751,15 @@ class StringFilters
         if (!\is_string($language)) {
             $language = 'en';
         }
-        $language = \strtolower($language);
-        switch ($language) {
+        switch (\trim(\strtolower($language))) {
         case "cs":
             $content = self::correctTextSpacingCs($content);
             break;
         case "sk":
             $content = self::correctTextSpacingSk($content);
+            break;
+        case "de":
+            $content = self::correctTextSpacingDe($content);
             break;
         default:
             $content = self::correctTextSpacingEn($content);
@@ -771,6 +780,23 @@ class StringFilters
         }
 
         $merged = \array_merge(self::$_custom, self::$_common, self::$_english);
+        return \str_replace(\array_keys($merged), $merged, $content);
+    }
+
+    /**
+     * Correct text spacing for Deutsch
+     *
+     * @param string $content string
+     * 
+     * @return string
+     */
+    public static function correctTextSpacingDe($content)
+    {
+        if (!\is_string($content)) {
+            return $content;
+        }
+
+        $merged = \array_merge(self::$_custom, self::$_common, self::$_deutsch);
         return \str_replace(\array_keys($merged), $merged, $content);
     }
 
@@ -821,7 +847,8 @@ class StringFilters
             $x = \trim($content);
             if (\str_starts_with($x, '[markdown]')) {
                 $x = \substr($x, 10);
-                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs <hr>
+                // add extra EOLs for <hr>
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x);
                 $content = Markdown::defaultTransform($x);
             }
         }
@@ -840,7 +867,8 @@ class StringFilters
             $x = \trim($content);
             if (\str_starts_with($x, '[markdownextra]')) {
                 $x = \substr($x, 15);
-                $x = \str_replace("\n---\n", "\n\n---\n\n", $x); // extra EOLs <hr>
+                // add extra EOLs for <hr>
+                $x = \str_replace("\n---\n", "\n\n---\n\n", $x);
                 $content = MarkdownExtra::defaultTransform($x);
             }
         }
@@ -887,7 +915,7 @@ class StringFilters
                 . 'scrolling="no" '
                 . 'frameborder="0" '
                 . 'style="border:0;" '
-                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allow="fullscreen" '
                 . "data-counter={$counter} "
                 . 'src="https://www.google.com/maps/embed/v1/place?key='
                 . $key . '&q=$1"></iframe>';
@@ -1165,7 +1193,7 @@ class StringFilters
                 . 'scrolling="no" '
                 . 'frameborder="0" '
                 . 'style="border:0;" '
-                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allow="autoplay;fullscreen;picture-in-picture" '
                 . 'src="https://w.soundcloud.com/player/?url='
                 . 'https%3A//api.soundcloud.com/tracks/$1&'
                 . 'auto_play=false&hide_related=false&show_comments=true&'
@@ -1218,7 +1246,7 @@ class StringFilters
                 . 'scrolling="no" '
                 . 'frameborder="0" '
                 . 'style="border:0;" '
-                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allow="autoplay;fullscreen;picture-in-picture" '
                 . 'controls '
                 . 'src="https://www.youtube.com/embed/$1">'
                 . '</iframe></div>';
@@ -1269,7 +1297,7 @@ class StringFilters
                 . 'scrolling="no" '
                 . 'frameborder="0" '
                 . 'style="border:0;" '
-                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allow="autoplay;fullscreen;picture-in-picture" '
                 . 'src="https://player.vimeo.com/video/$1">'
                 . '</iframe></div>';
             if (\is_string($content)) {
@@ -1319,7 +1347,7 @@ class StringFilters
                 . 'scrolling="no" '
                 . 'frameborder="0" '
                 . 'style="border:0;" '
-                . 'allow="autoplay; fullscreen; picture-in-picture" '
+                . 'allow="autoplay;fullscreen;picture-in-picture" '
                 . 'src="https://player.twitch.tv/?channel=$1&parent='
                 . DOMAIN
                 . '&autoplay=false">'
@@ -1371,8 +1399,8 @@ class StringFilters
                 . 'scrolling="no" '
                 . 'frameborder="0" '
                 . 'style="border:0;" '
-                . 'allow="autoplay; fullscreen; picture-in-picture" '
                 . 'controls '
+                . 'allow="autoplay;fullscreen;picture-in-picture" '
                 . 'src="https://player.twitch.tv/?video=$1&parent='
                 . DOMAIN
                 . '&autoplay=false">'

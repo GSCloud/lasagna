@@ -69,6 +69,13 @@ GetEnDataVersion:
   method: GET|POST
   presenter: core
 
+GetDeDataVersion:
+  path: /de/version/data
+  assert_json: true
+  language: de
+  method: GET|POST
+  presenter: core
+
 GetCsDataVersion:
   path: /cs/version/data
   assert_json: true
@@ -80,12 +87,5 @@ GetSkDataVersion:
   path: /sk/version/data
   assert_json: true
   language: sk
-  method: GET|POST
-  presenter: core
-
-GetDeDataVersion:
-  path: /de/version/data
-  assert_json: true
-  language: de
   method: GET|POST
   presenter: core
