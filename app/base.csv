@@ -100,7 +100,7 @@ a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
 a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,TSCHÜSS 👋
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
-a_show_translations,BUTTON,📍 TRANSLATION SOURCES,📍 ZDROJE PŘEKLADU,📍 PREKLADOVÉ ZDROJE,📍 ÜBERSETZUNGSQUELLEN
+a_show_translations,BUTTON,📍,📍,📍,📍
 a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
 a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
 a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN
@@ -150,7 +150,7 @@ a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
 a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
-a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Essen & Trinken
+a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
 a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität & Objekte
 a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
 a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
