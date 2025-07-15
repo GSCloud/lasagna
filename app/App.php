@@ -419,6 +419,15 @@ $data['router'] = $router;
 
 // CLI
 if (CLI) {
+    if (function_exists('pcntl_signal')) {
+        declare(ticks=1); // required for signal handling to work
+        pcntl_signal(
+            SIGINT, function () {
+                echo "\n\033[31mScript terminated by user (Ctrl+C).\033[0m\n";
+                exit(1);
+            }
+        );
+    }
     if (ob_get_level()) {
         @ob_end_clean();
     }
