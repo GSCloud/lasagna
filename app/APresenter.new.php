@@ -1939,19 +1939,19 @@ abstract class APresenter
     {
         try {
             $randomBytes = random_bytes(32);
-            $time = (string) time();
-            $hash = hash('sha256', $randomBytes . $time);
-            return substr($hash, 0, 16);
+            $time = (string) \time();
+            $hash = \hash('sha256', $randomBytes . $time);
+            return \substr($hash, 0, 16);
         } catch (\Exception $e) {
             $this->addError("Error generating cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
             if (function_exists('openssl_random_pseudo_bytes')) {
                 $this->addMessage("Using openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
                 $randomBytes = openssl_random_pseudo_bytes(32);
-                $time = (string) time();
-                $hash = hash('sha256', $randomBytes . $time);
-                return substr($hash, 0, 16);
+                $time = (string) \time();
+                $hash = \hash('sha256', $randomBytes . $time);
+                return \substr($hash, 0, 16);
             }
-            $this->addCritical("Error generating a general nonce: " . $e->getMessage()); // phpcs:ignore
+            $this->addCritical("Error generating nonce: " . $e->getMessage());
             ErrorPresenter::getInstance()->process(
                 ['code' => 500, 'message' => 'Error generating  nonce.']
             );

@@ -30,9 +30,9 @@ google: [
 #rss_feed: true
 
 # Share Buttons disable switches: true/false [default: enabled]
-#no_share_bluesky: true
-#no_share_facebook: true
-#no_share_mastodon: true
+#disable_share_bluesky: true
+#disable_share_facebook: true
+#disable_share_mastodon: true
 
 # Umami Analytics
 umami: [

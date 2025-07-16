@@ -1542,16 +1542,16 @@
         },
         {
             "name": "paragonie/halite",
-            "version": "v4.8.0",
+            "version": "v4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/halite.git",
-                "reference": "7596d5cb25154092b524c34cb9ce2201db612ffc"
+                "reference": "e6be0592f8810f2d512c577fe071b14937733685"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/halite/zipball/7596d5cb25154092b524c34cb9ce2201db612ffc",
-                "reference": "7596d5cb25154092b524c34cb9ce2201db612ffc",
+                "url": "https://api.github.com/repos/paragonie/halite/zipball/e6be0592f8810f2d512c577fe071b14937733685",
+                "reference": "e6be0592f8810f2d512c577fe071b14937733685",
                 "shasum": ""
             },
             "require": {
@@ -1606,9 +1606,9 @@
             "support": {
                 "docs": "https://github.com/paragonie/halite/tree/master/doc",
                 "issues": "https://github.com/paragonie/halite/issues",
-                "source": "https://github.com/paragonie/halite/tree/v4.8.0"
+                "source": "https://github.com/paragonie/halite/tree/v4.9.0"
             },
-            "time": "2021-04-18T19:24:56+00:00"
+            "time": "2025-07-15T17:21:42+00:00"
         },
         {
             "name": "paragonie/hidden-string",
