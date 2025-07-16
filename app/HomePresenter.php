@@ -71,14 +71,26 @@ class HomePresenter extends APresenter
         foreach ($data['l'] ??=[] as $k => $v) {
             if (\str_starts_with($v, '[markdown]')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
+                if (!LOCALHOST
+                    && \str_contains($data['l'][$k], '[googlemap ')
+                    && ($key = $this->getData('google.mapsapi_key'))
+                ) {
+                    SF::renderGoogleMapShortCode($data['l'][$k], $key, 0);
+                }
             } elseif (\str_starts_with($v, '[markdownextra]')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
+                if (!LOCALHOST
+                    && \str_contains($data['l'][$k], '[googlemap ')
+                    && ($key = $this->getData('google.mapsapi_key'))
+                ) {
+                    SF::renderGoogleMapShortCode($data['l'][$k], $key, 0);
+                }
             } else {
                 SF::convertEolToBrNbsp($data['l'][$k]);
             }
             SF::correctTextSpacing($data['l'][$k], $lang);
         }
-    
+
         // render
         $output = '';
         if ($data) {

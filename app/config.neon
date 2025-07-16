@@ -1,8 +1,12 @@
-### LASAGNA
+### TESSERACT   LASAGNA
 # @author Fred Brooker <git@gscloud.cz>
 
 #dbg: TRUE
 dbg: FALSE
+
+#DEBUG_MAX_DEPTH: 0
+#DEBUG_MAX_ITEMS: 0
+#DEBUG_MAX_LENGTH: 0
 
 # core
 app: lasagna
@@ -29,7 +33,7 @@ google: [
 # RSS feed enable switch: true/false [default: disabled]
 #rss_feed: true
 
-# Share Buttons disable switches: true/false [default: enabled]
+# disable switches for Share Buttons: true/false [default: enabled]
 #disable_share_bluesky: true
 #disable_share_facebook: true
 #disable_share_mastodon: true

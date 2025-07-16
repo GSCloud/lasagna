@@ -274,8 +274,10 @@ if (DEBUG === true) {
     // https://www.php.net/manual/en/errorfunc.constants.php
     Debugger::$logDirectory = LOGS;
     Debugger::$logSeverity = 15;
+    Debugger::$dumpTheme = (string) ($cfg['DEBUG_DUMP_THEME'] ?? 'dark');
     Debugger::$maxDepth = (int) ($cfg['DEBUG_MAX_DEPTH'] ?? 10);
-    Debugger::$maxLength = (int) ($cfg['DEBUG_MAX_LENGTH'] ?? 5000);
+    Debugger::$maxItems = (int) ($cfg['DEBUG_MAX_ITEMS'] ?? 1000);
+    Debugger::$maxLength = (int) ($cfg['DEBUG_MAX_LENGTH'] ?? 500);
     Debugger::$scream = (bool) ($cfg['DEBUG_SCREAM'] ?? true);
     Debugger::$showBar = (bool) ($cfg['DEBUG_SHOW_BAR'] ?? true);
     Debugger::$showFireLogger = (bool) ($cfg['DEBUG_SHOW_FIRELOGGER'] ?? false);
