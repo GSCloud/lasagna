@@ -1912,22 +1912,34 @@ abstract class APresenter
         foreach ($l ?? [] as $k => $v) {
             if (\str_starts_with($k, 'cfg.')) {
                 if (\str_starts_with($v, '[neon]')) {
-                    $v = substr($v, 6);
-                    $v = Neon::decode($v);
+                    try {
+                        $v = Neon::decode(substr($v, 6));
+                    } catch (\Throwable $e) {
+                        $v = null;
+                        bdump($e);
+                    }
                 }
                 bdump($v);
             }
             if (\str_starts_with($k, 'usr.')) {
                 if (\str_starts_with($v, '[neon]')) {
-                    $v = substr($v, 6);
-                    $v = Neon::decode($v);
+                    try {
+                        $v = Neon::decode(substr($v, 6));
+                    } catch (\Throwable $e) {
+                        $v = null;
+                        bdump($e);
+                    }
                 }
                 bdump($v);
             }
             if (\str_starts_with($k, 'add.')) {
                 if (\str_starts_with($v, '[neon]')) {
-                    $v = substr($v, 6);
-                    $v = Neon::decode($v);
+                    try {
+                        $v = Neon::decode(substr($v, 6));
+                    } catch (\Throwable $e) {
+                        $v = null;
+                        bdump($e);
+                    }
                 }
                 bdump($v);
             }
