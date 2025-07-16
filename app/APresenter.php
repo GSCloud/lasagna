@@ -15,6 +15,7 @@ namespace GSC;
 use Cake\Cache\Cache;
 use League\Csv\Reader;
 use League\Csv\Statement;
+use Nette\Neon\Neon;
 use ParagonIE\Halite\Cookie;
 use ParagonIE\Halite\KeyFactory;
 
@@ -1905,6 +1906,31 @@ abstract class APresenter
                 }
             }
             $data['l'] = $l;
+        }
+
+        // process cfg, usr, add keys
+        foreach ($l ?? [] as $k => $v) {
+            if (\str_starts_with($k, 'cfg.')) {
+                if (\str_starts_with($v, '[neon]')) {
+                    $v = substr($v, 6);
+                    $v = Neon::decode($v);
+                }
+                bdump($v);
+            }
+            if (\str_starts_with($k, 'usr.')) {
+                if (\str_starts_with($v, '[neon]')) {
+                    $v = substr($v, 6);
+                    $v = Neon::decode($v);
+                }
+                bdump($v);
+            }
+            if (\str_starts_with($k, 'add.')) {
+                if (\str_starts_with($v, '[neon]')) {
+                    $v = substr($v, 6);
+                    $v = Neon::decode($v);
+                }
+                bdump($v);
+            }
         }
 
         // compute data hash

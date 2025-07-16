@@ -15,6 +15,7 @@ namespace GSC;
 use Cake\Cache\Cache;
 use League\Csv\Reader;
 use League\Csv\Statement;
+use Nette\Neon\Neon;
 use ParagonIE\Halite\Cookie;
 use ParagonIE\Halite\KeyFactory;
 
@@ -1864,14 +1865,15 @@ abstract class APresenter
     }
 
     /**
-     * Data model expander
+     * Model expander
      *
-     * @param array $data mModel by reference
+     * @param array $data Model by reference
      * 
      * @return self
      */
     public function dataExpander(&$data)
     {
+        bdump($data);
         if (CLI || empty($data)) {
             return $this;
         }
@@ -1908,10 +1910,17 @@ abstract class APresenter
                 $l = $this->getLocale('en');
                 if (\is_null($l)) {
                     $l = [];
-                    $l['title'] = 'ERROR! NO ENGLISH LOCALE';
+                    $l['title'] = 'ERROR: NO ENGLISH LOCALE!';
                 }
             }
             $data['l'] = $l;
+        }
+
+        // process cfg, usr, add keys
+        foreach ($l ?? [] as $k => $v) {
+            if (\starts_with('cfg.', $k)) {
+                bdump($v);
+            }
         }
 
         // compute data hash
@@ -1927,6 +1936,7 @@ abstract class APresenter
         } else {
             $data['request_path_slug'] = $data['request_path'] ?? '';
         }
+
         return $this;
     }
 
