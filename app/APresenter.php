@@ -1915,14 +1915,15 @@ abstract class APresenter
         $reps = 0;
         $dot = new \Adbar\Dot($data);
         foreach ($l ?? [] as $k => $v) {
-            // replace key if exists
+
+            // CFG: replace key if exists
             if (\str_starts_with($k, 'cfg.')) {
                 $kk = $k;
-                $k = substr($k, 4);
+                $k = \substr($k, 4);
                 if (\str_starts_with($v, '[neon]')) {
                     try {
-                        substr($v, 0, self::NEON_DECODE_LIMIT);
-                        $v = Neon::decode(substr($v, 6));
+                        \substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
                         bdump($e, $kk);
                         continue;
@@ -1934,14 +1935,15 @@ abstract class APresenter
                 }
                 continue;
             }
-            // set key
+
+            // USR: set key
             if (\str_starts_with($k, 'usr.')) {
                 $kk = $k;
-                $k = substr($k, 4);
+                $k = \substr($k, 4);
                 if (\str_starts_with($v, '[neon]')) {
                     try {
-                        substr($v, 0, self::NEON_DECODE_LIMIT);
-                        $v = Neon::decode(substr($v, 6));
+                        \substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
                         bdump($e, $kk);
                         continue;
@@ -1951,21 +1953,23 @@ abstract class APresenter
                 $reps++;
                 continue;
             }
-            // delete key
+
+            // DEL: delete key
             if (\str_starts_with($k, 'del.')) {
-                $k = substr($k, 4);
+                $k = \substr($k, 4);
                 $dot->delete($k);
                 $reps++;
                 continue;
             }
+
             // array join if key exists
             if (\str_starts_with($k, 'add.')) {
                 $kk = $k;
-                $k = substr($k, 4);
+                $k = \substr($k, 4);
                 if (\str_starts_with($v, '[neon]')) {
                     try {
-                        substr($v, 0, self::NEON_DECODE_LIMIT);
-                        $v = Neon::decode(substr($v, 6));
+                        \substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
                         bdump($e, $kk);
                         continue;
@@ -1977,7 +1981,9 @@ abstract class APresenter
                 }
             }
         }
-        if ($reps) { // get model if there were any operations
+
+        // get model if there were any operations
+        if ($reps) {
             $data = $dot->all();
             bdump($reps, 'MODEL REPS');
         }
@@ -2009,7 +2015,7 @@ abstract class APresenter
             $randomBytes = random_bytes(32);
             $time = (string) time();
             $hash = hash('sha256', $randomBytes . $time);
-            return substr($hash, 0, 16);
+            return \substr($hash, 0, 16);
         } catch (\Exception $e) {
             $this->addError("Error generating the cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
             if (function_exists('openssl_random_pseudo_bytes')) {
@@ -2017,7 +2023,7 @@ abstract class APresenter
                 $randomBytes = openssl_random_pseudo_bytes(32);
                 $time = (string) time();
                 $hash = hash('sha256', $randomBytes . $time);
-                return substr($hash, 0, 16);
+                return \substr($hash, 0, 16);
             }
             $this->addCritical("Error generating any system nonce: " . $e->getMessage()); // phpcs:ignore
             ErrorPresenter::getInstance()->process(
