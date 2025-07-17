@@ -30,6 +30,9 @@ use ParagonIE\Halite\KeyFactory;
  */
 abstract class APresenter
 {
+    /* @var integer max string length to decode by NE-ON */
+    const NEON_DECODE_LIMIT = 4096;
+
     /* @var integer octal file mode for logs */
     const LOG_FILEMODE = 0664;
 
@@ -1866,7 +1869,7 @@ abstract class APresenter
      */
     public function dataExpander(&$data)
     {
-        if (CLI || empty($data)) {
+        if (empty($data) || !is_array($data)) {
             return $this;
         }
 
@@ -1908,41 +1911,85 @@ abstract class APresenter
             $data['l'] = $l;
         }
 
-        // process cfg, usr, add keys
+        // process [cfg, usr, add, del] keys
+        $reps = 0;
+        $dot = new \Adbar\Dot($data);
         foreach ($l ?? [] as $k => $v) {
+            // replace key if exists
             if (\str_starts_with($k, 'cfg.')) {
+                $kk = $k;
+                $k = substr($k, 4);
                 if (\str_starts_with($v, '[neon]')) {
                     try {
+                        substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(substr($v, 6));
                     } catch (\Throwable $e) {
-                        $v = null;
-                        bdump($e);
+                        bdump($e, $kk);
+                        continue;
                     }
                 }
-                bdump($v);
+                if ($dot->has($k)) {
+                    $dot->set($k, $v);
+                    $reps++;
+                }
+                continue;
             }
+            // set key
             if (\str_starts_with($k, 'usr.')) {
+                $kk = $k;
+                $k = substr($k, 4);
                 if (\str_starts_with($v, '[neon]')) {
                     try {
+                        substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(substr($v, 6));
                     } catch (\Throwable $e) {
-                        $v = null;
-                        bdump($e);
+                        bdump($e, $kk);
+                        continue;
                     }
                 }
-                bdump($v);
+                $dot->delete($k)->add($k, $v);
+                $reps++;
+                continue;
             }
+            // delete key
+            if (\str_starts_with($k, 'del.')) {
+                $kk = $k;
+                $k = substr($k, 4);
+                if (\str_starts_with($v, '[neon]')) {
+                    try {
+                        substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = Neon::decode(substr($v, 6));
+                    } catch (\Throwable $e) {
+                        bdump($e, $kk);
+                        continue;
+                    }
+                }
+                $dot->delete($k);
+                $reps++;
+                continue;
+            }
+            // array join if key exists
             if (\str_starts_with($k, 'add.')) {
+                $kk = $k;
+                $k = substr($k, 4);
                 if (\str_starts_with($v, '[neon]')) {
                     try {
+                        substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(substr($v, 6));
                     } catch (\Throwable $e) {
-                        $v = null;
-                        bdump($e);
+                        bdump($e, $kk);
+                        continue;
                     }
                 }
-                bdump($v);
+                if ($dot->get($k) && \is_array($dot->get($k))) {
+                    $dot->set($k, \array_merge_recursive($dot->get($k), $v));
+                    $reps++;
+                }
             }
+        }
+        if ($reps) { // get model if there were any operations
+            $data = $dot->all();
+            bdump($reps, 'MODEL REPS');
         }
 
         // compute data hash
