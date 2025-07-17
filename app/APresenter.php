@@ -1953,17 +1953,7 @@ abstract class APresenter
             }
             // delete key
             if (\str_starts_with($k, 'del.')) {
-                $kk = $k;
                 $k = substr($k, 4);
-                if (\str_starts_with($v, '[neon]')) {
-                    try {
-                        substr($v, 0, self::NEON_DECODE_LIMIT);
-                        $v = Neon::decode(substr($v, 6));
-                    } catch (\Throwable $e) {
-                        bdump($e, $kk);
-                        continue;
-                    }
-                }
                 $dot->delete($k);
                 $reps++;
                 continue;
