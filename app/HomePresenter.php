@@ -57,11 +57,17 @@ class HomePresenter extends APresenter
         // add custom replacements from NE-ON file
         $reps_file = APP . DS . 'custom_replacements.neon';
         if (\file_exists($reps_file) && \is_readable($reps_file)) {
-            $reps = \file_get_contents($reps_file);
-            if (\is_string($reps)) {
-                $reps = Neon::decode($reps);
-                if (\is_array($reps)) {
-                    SF::addCustomReplacements($reps);
+            if ($reps = \file_get_contents($reps_file)) {
+                if (\is_string($reps)) {
+                    try {
+                        $reps = \substr($reps, 0, self::NEON_DECODE_LIMIT);
+                        $reps = Neon::decode($reps);
+                    } catch (\Throwable $e) {
+                        bdump($e, 'CUSTOM REPLACEMENTS');
+                    }
+                    if (\is_array($reps)) {
+                        SF::addCustomReplacements($reps);
+                    }
                 }
             }
         }
