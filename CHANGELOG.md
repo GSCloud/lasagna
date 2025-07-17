@@ -2,6 +2,19 @@
 
 ---
 
+`2025-07-17`
+
+* **`1065-FEATURE` support for cfg./usr./add./del. Sheet keys** to alter the web Model
+
+`2025-07-16`
+
+* **`1064-BUGFIX`** added **Tracy configuration**:  
+  * Debugger::$maxItems \= (int) ($cfg\['DEBUG\_MAX\_ITEMS'\] ?? 1000);
+
+`2025-07-15`
+
+* **`1063-BUGFIX`** added **CLI handling of Ctrl+C**
+
 `2025-07-11`  **`v2.4.6`**
 
 * **`1062-FEATURE` UI cleanup**, AuditLog filtered out to **AUDIT and BLOCK logs**, some **extra SF replacements**, **TECHNICAL DETAILS** available in the UI, bug fixing
@@ -25,7 +38,7 @@
 
 `2025-05-24`
 
-* **`1056-FEATURE` sharing button to Bluesky**  
+* **`1056-FEATURE` sharing button to Bluesky, separate disable tags** for sharing buttons  
 * **`1055-BUGFIX` bot definitions** updated
 
 `2025-05-12`
