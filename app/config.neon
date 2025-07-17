@@ -1,8 +1,8 @@
 ### TESSERACT   LASAGNA
 # @author Fred Brooker <git@gscloud.cz>
 
-dbg: TRUE
-#dbg: FALSE
+#dbg: TRUE
+dbg: FALSE
 
 #DEBUG_MAX_DEPTH: 0
 #DEBUG_MAX_ITEMS: 0
