@@ -1873,15 +1873,6 @@ abstract class APresenter
             return $this;
         }
 
-        // user and group
-        $data["is_admin"] = false;
-        $data['user'] = $user = $this->getCurrentUser();
-        $data['group'] = $data['admin'] = $group = $this->getUserGroup();
-        if ($group) {
-            $data["admin_group_{$group}"] = true;
-            $data["is_admin"] = true;
-        }
-
         // language
         $presenter = $this->getPresenter();
         $view = $this->getView();
@@ -1916,7 +1907,6 @@ abstract class APresenter
         $dot = new \Adbar\Dot($data);
         foreach ($l ?? [] as $k => $v) {
             $kk = $k;
-
             // CFG: replace key if exists
             if (\str_starts_with($k, 'cfg.')) {
                 $k = \substr($k, 4);
@@ -1938,7 +1928,6 @@ abstract class APresenter
                 }
                 continue;
             }
-
             // USR: set key
             if (\str_starts_with($k, 'usr.')) {
                 $k = \substr($k, 4);
@@ -1958,7 +1947,6 @@ abstract class APresenter
                 $reps++;
                 continue;
             }
-
             // DEL: delete key
             if (\str_starts_with($k, 'del.')) {
                 $k = \substr($k, 4);
@@ -1969,7 +1957,6 @@ abstract class APresenter
                 $reps++;
                 continue;
             }
-
             // array join if key exists
             if (\str_starts_with($k, 'add.')) {
                 $k = \substr($k, 4);
@@ -1986,18 +1973,63 @@ abstract class APresenter
                     }
                 }
                 if ($dot->has($k) && \is_array($dot->get($k))) {
-                    $dot->set($k, \array_merge_recursive($dot->get($k), $v));
+                    if (\is_array($v)) {
+                        if (!\count($v)) {
+                            // skip empty arrays
+                            continue;
+                        }
+                        $dot->set($k, \array_merge_recursive($dot->get($k), $v));
+                    } elseif (\is_string($v)) {
+                        if (!\strlen($v)) {
+                            // skip empty strings
+                            continue;
+                        }
+                        $a = $dot->get($k);
+                        $a[] = $v;
+                        $dot->set($k, $a);
+                    } elseif (\is_numeric($v)) {
+                        $a = $dot->get($k);
+                        $a[] = $v;
+                        $dot->set($k, $a);
+                    }
                     $reps++;
                 }
             }
         }
-        // get model if there were operations
+
+        // UPDATE MODEL
         if ($reps) {
-            $data = $dot->all();
-            bdump($reps, 'MODEL FIXES');
+            $this->data = $data = $dot->all();
+            bdump($reps, 'MODEL FIXED');
         }
 
-        // compute data hash
+        // USERS AND GROUPS
+        $data["is_admin"] = false;
+        $data['user'] = $user = $this->getCurrentUser();
+        $data['group'] = $data['admin'] = $group = $this->getUserGroup();
+        if ($group) {
+            $data["admin_group_{$group}"] = true;
+            $data["is_admin"] = true;
+        }
+
+        // MASKED ADMIN GROUPS
+        $data['admin_groups_masked'] = $data['admin_groups'] ?? [];
+        \array_walk_recursive(
+            $data['admin_groups_masked'], function (&$e) {
+                $p = explode('@', $e);
+                $l = $p[0] ?: '';
+                $d = $p[1] ?: '';
+                if (strlen($l) > 3) {
+                    $l = substr($l, 0, 4) . '*';
+                }
+                if (strlen($d) > 4) {
+                    $d = substr($d, 0, 5) . '*';
+                }
+                $e = "{$l}@{$d}";
+            }
+        );
+
+        // COMPUTE DATA HASH
         if ($l) {
             $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l));
         }
