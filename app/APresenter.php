@@ -1911,15 +1911,18 @@ abstract class APresenter
             $data['l'] = $l;
         }
 
-        // process [cfg, usr, add, del] keys
+        // process special keys: [cfg.*, usr.*, add.*, del.*]
         $reps = 0;
         $dot = new \Adbar\Dot($data);
         foreach ($l ?? [] as $k => $v) {
+            $kk = $k;
 
             // CFG: replace key if exists
             if (\str_starts_with($k, 'cfg.')) {
-                $kk = $k;
                 $k = \substr($k, 4);
+                if (!\strlen($k)) {
+                    continue;
+                }
                 if (\str_starts_with($v, '[neon]')) {
                     try {
                         \substr($v, 0, self::NEON_DECODE_LIMIT);
@@ -1938,8 +1941,10 @@ abstract class APresenter
 
             // USR: set key
             if (\str_starts_with($k, 'usr.')) {
-                $kk = $k;
                 $k = \substr($k, 4);
+                if (!\strlen($k)) {
+                    continue;
+                }
                 if (\str_starts_with($v, '[neon]')) {
                     try {
                         \substr($v, 0, self::NEON_DECODE_LIMIT);
@@ -1957,6 +1962,9 @@ abstract class APresenter
             // DEL: delete key
             if (\str_starts_with($k, 'del.')) {
                 $k = \substr($k, 4);
+                if (!\strlen($k)) {
+                    continue;
+                }
                 $dot->delete($k);
                 $reps++;
                 continue;
@@ -1964,8 +1972,10 @@ abstract class APresenter
 
             // array join if key exists
             if (\str_starts_with($k, 'add.')) {
-                $kk = $k;
                 $k = \substr($k, 4);
+                if (!\strlen($k)) {
+                    continue;
+                }
                 if (\str_starts_with($v, '[neon]')) {
                     try {
                         \substr($v, 0, self::NEON_DECODE_LIMIT);
@@ -1975,17 +1985,16 @@ abstract class APresenter
                         continue;
                     }
                 }
-                if ($dot->get($k) && \is_array($dot->get($k))) {
+                if ($dot->has($k) && \is_array($dot->get($k))) {
                     $dot->set($k, \array_merge_recursive($dot->get($k), $v));
                     $reps++;
                 }
             }
         }
-
-        // get model if there were any operations
+        // get model if there were operations
         if ($reps) {
             $data = $dot->all();
-            bdump($reps, 'MODEL REPS');
+            bdump($reps, 'MODEL FIXES');
         }
 
         // compute data hash
