@@ -1869,7 +1869,7 @@ abstract class APresenter
      */
     public function dataExpander(&$data)
     {
-        if (empty($data) || !is_array($data)) {
+        if (empty($data) || !\is_array($data)) {
             return $this;
         }
 
@@ -1882,7 +1882,7 @@ abstract class APresenter
             ) ?? 'en';
             $data["lang{$language}"] = true;
         } else {
-            $this->addCritical('Something is terribly wrong with the locales!!!'); // phpcs:ignore
+            $this->addCritical('SYSTEM ERROR: something is terribly wrong with locales!'); // phpcs:ignore
             ErrorPresenter::getInstance()->process(
                 ['code' => 500, 'message' => 'SYSTEM ERROR: corrupted localization'] // phpcs:ignore
             );
@@ -1907,6 +1907,7 @@ abstract class APresenter
         $dot = new \Adbar\Dot($data);
         foreach ($l ?? [] as $k => $v) {
             $kk = $k;
+
             // CFG: replace key if exists
             if (\str_starts_with($k, 'cfg.')) {
                 $k = \substr($k, 4);
@@ -1928,6 +1929,7 @@ abstract class APresenter
                 }
                 continue;
             }
+
             // USR: set key
             if (\str_starts_with($k, 'usr.')) {
                 $k = \substr($k, 4);
@@ -1947,6 +1949,7 @@ abstract class APresenter
                 $reps++;
                 continue;
             }
+
             // DEL: delete key
             if (\str_starts_with($k, 'del.')) {
                 $k = \substr($k, 4);
@@ -1957,7 +1960,8 @@ abstract class APresenter
                 $reps++;
                 continue;
             }
-            // array join if key exists
+
+            //  ADD: add to array
             if (\str_starts_with($k, 'add.')) {
                 $k = \substr($k, 4);
                 if (!\strlen($k)) {
@@ -1997,7 +2001,7 @@ abstract class APresenter
             }
         }
 
-        // UPDATE MODEL
+        // update model
         if ($reps) {
             $this->data = $data = $dot->all();
             bdump($reps, 'MODEL FIXED');
@@ -2016,28 +2020,30 @@ abstract class APresenter
         $data['admin_groups_masked'] = $data['admin_groups'] ?? [];
         \array_walk_recursive(
             $data['admin_groups_masked'], function (&$e) {
-                $p = explode('@', $e);
-                $l = $p[0] ?: '';
-                $d = $p[1] ?: '';
-                if (strlen($l) > 3) {
-                    $l = substr($l, 0, 4) . '*';
+                if (\is_string($e) && \strpos($e, '@') > 0) {
+                    $p = \explode('@', $e);
+                    $l = $p[0] ?: '';
+                    $d = $p[1] ?: '';
+                    if (\strlen($l) > 3) {
+                        $l = \substr($l, 0, 4) . '*';
+                    }
+                    if (\strlen($d) > 4) {
+                        $d = \substr($d, 0, 5) . '*';
+                    }
+                    $e = "{$l}@{$d}";
                 }
-                if (strlen($d) > 4) {
-                    $d = substr($d, 0, 5) . '*';
-                }
-                $e = "{$l}@{$d}";
             }
         );
 
-        // COMPUTE DATA HASH
+        // compute DATA HASH
         if ($l) {
             $data['DATA_VERSION'] = \hash('sha256', (string) \json_encode($l));
         }
 
-        // extract request path slug
+        // extract REQUEST PATH SLUG
         if (($pos = \strpos($data['request_path'], $language)) !== false) {
             $data['request_path_slug'] = \substr_replace(
-                $data['request_path'], '', $pos, strlen($language)
+                $data['request_path'], '', $pos, \strlen($language)
             );
         } else {
             $data['request_path_slug'] = $data['request_path'] ?? '';
