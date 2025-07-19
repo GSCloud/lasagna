@@ -1,15 +1,35 @@
 {{>html_header}}
 
+{{#shortcodes_menu}}
 <div id=content class="">
-
   <div class="row center-align">
     {{>title}}
     <br>
-
     {{>share}}
-    <br>
-    <br>
+    <br><br>
+    <div class="row customicons">
+      {{ l.custom_icons }}
+    </div>
+    <h3><i class="fa-regular fa-heart"></i> Shortcodes</h3>
+    <div class="row left-align container">
+      {{ l.shortcodes_pre }}
+    </div>
+    <div class="container row shortcodes">
+      {{ l.shortcodes }}
+    </div>
+    <h3><i class="fa-solid fa-arrow-pointer"></i> Emojis</h3>
+    <div id="emojisdemo" class="bigemoji hover">🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀</div>
+  </div>
+</div>
+{{/shortcodes_menu}}
 
+{{^shortcodes_menu}}
+<div id=content class="">
+  <div class="row center-align">
+    {{>title}}
+    <br>
+    {{>share}}
+    <br><br>
     <a
       target=_blank
       rel="nofollow"
@@ -21,40 +41,21 @@
       rel="nofollow"
       href="https://docs.google.com/viewer?url=https://raw.githubusercontent.com/GSCloud/lasagna/master/TECHNICAL_DETAILS_EN.md.pdf"><b><i
       class="fa-brands fa-square-github"></i>&nbsp;TECHNICAL DETAILS (PDF)</b></a>
-
     <br><hr><br>
-
     <a
       target=_blank
       rel="nofollow"
       href="https://docs.google.com/spreadsheets/d/1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI/edit?usp=sharing"><b><i
       class="fa-solid fa-table"></i>&nbsp;Google Sheet (Model)</b></a>
-
     <br><br>
-
     <div class="container grey lighten-3 content left-align" style="padding:3rem;border-radius:0.5rem">
       {{ l.readme }}
     </div>
-    <div class="row customicons">
-      {{ l.custom_icons }}
-    </div>
-
-    <h3><i class="fa-regular fa-heart"></i> Shortcodes</h3>
-    <div class="row left-align container">
-      {{ l.shortcodes_pre }}
-    </div>
-    <div class="container row shortcodes">
-      {{ l.shortcodes }}
-    </div>
-
-    <h3><i class="fa-solid fa-arrow-pointer"></i> Emojis</h3>
-    <div id="emojisdemo" class="bigemoji hover">🌱🌲🌳🌴🌵🌶🌷🌸🌹🌺🌻🌼🌽🌾🌿🍀</div>
   </div>
-
 </div>
+{{/shortcodes_menu}}
 
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/grapheme.min.js" defer></script>
-
 <script nonce="{{ csp_nonce }}">
   (function (w, d, undefined) {
     if (w.GSC.init) {

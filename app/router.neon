@@ -16,14 +16,19 @@ home:
   ]
   assert_httpcode: 303
 
-cs:
-  path: /cs
-  sitemap: true
-
 en:
   path: /en
   sitemap: true
   language: en
+
+shortcodes:
+  path: /shortcodes
+  sitemap: true
+  language: en
+
+cs:
+  path: /cs
+  sitemap: true
 
 sk:
   path: /sk

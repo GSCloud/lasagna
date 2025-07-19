@@ -3,23 +3,32 @@
     <div class="nav-wrapper {{ design.nav_color }}" role="navigation">
       <a href="#" data-target="nav-mobile" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
       <a id="logo-container" class="brand-logo truncate center"
-        href="/{{#langcs}}cs{{/langcs}}{{#langen}}en{{/langen}}">{{ l.title }}</a>
+        href="/{{#langcs}}cs{{/langcs}}{{#langsk}}sk{{/langsk}}{{#langen}}en{{/langen}}{{#langde}}de{{/langde}}">{{ l.title }}</a>
       <ul class="right hide-on-med-and-down">
         <li>
-          <a class="sethlen {{#langen}}{{ design.nav_color }} darken-4{{/langen}} text-lighten-4" 
-          {{^langen}}href="/en"{{/langen}}><b>{{ l.nav_en }}</b></a>
+          <a class="navbarmenu {{#shortcodes_menu}}{{ design.nav_color }} darken-4{{/shortcodes_menu}} text-lighten-4" 
+          {{^shortcodes_menu}}href="/shortcodes"{{/shortcodes_menu}}>
+            <b>ShortCodes</b></a>
         </li>
         <li>
-          <a class="sethlcs {{#langcs}}{{ design.nav_color }} darken-4{{/langcs}} text-lighten-4"
-          {{^langcs}}href="/cs"{{/langcs}}><b>{{ l.nav_cz }}</b></a>
+          <a class="navbarmenu {{#langen}}{{ design.nav_color }} darken-4{{/langen}} text-lighten-4" 
+          {{^langen}}href="/en"{{/langen}}>
+            <b>{{ l.nav_en }}</b></a>
         </li>
         <li>
-          <a class="sethlcs {{#langsk}}{{ design.nav_color }} darken-4{{/langsk}} text-lighten-4"
-          {{^langsk}}href="/sk"{{/langsk}}><b>{{ l.nav_sk }}</b></a>
+          <a class="navbarmenu {{#langcs}}{{ design.nav_color }} darken-4{{/langcs}} text-lighten-4"
+          {{^langcs}}href="/cs"{{/langcs}}>
+            <b>{{ l.nav_cz }}</b></a>
         </li>
         <li>
-          <a class="sethlcs {{#langde}}{{ design.nav_color }} darken-4{{/langde}} text-lighten-4"
-          {{^langde}}href="/de"{{/langde}}><b>{{ l.nav_de }}</b></a>
+          <a class="navbarmenu {{#langsk}}{{ design.nav_color }} darken-4{{/langsk}} text-lighten-4"
+          {{^langsk}}href="/sk"{{/langsk}}>
+            <b>{{ l.nav_sk }}</b></a>
+        </li>
+        <li>
+          <a class="navbarmenu {{#langde}}{{ design.nav_color }} darken-4{{/langde}} text-lighten-4"
+          {{^langde}}href="/de"{{/langde}}>
+            <b>{{ l.nav_de }}</b></a>
         </li>
       </ul>
     </div>
