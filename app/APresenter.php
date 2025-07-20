@@ -444,12 +444,15 @@ abstract class APresenter
     public function setData($data = null, $value = null)
     {
         if (\is_array($data)) {
-             // $data = new model, replace it
+             // new model, replace it
             $this->data = (array) $data;
         } else {
             // $data = key index
             $key = $data;
             if (\is_string($key) && !empty($key)) {
+                if (\str_starts_with($key, 'cfg.')) {
+                    throw new \Exception('FATAL ERROR: trying to modify cfg data');
+                }
                 $dot = new \Adbar\Dot($this->data);
                 $dot->set($key, $value);
                 $this->data = (array) $dot->all();
@@ -1905,6 +1908,7 @@ abstract class APresenter
         // process special keys: [cfg.*, usr.*, add.*, del.*]
         $reps = 0;
         $dot = new \Adbar\Dot($data);
+        $dot->set('model.changes', []);
         foreach ($l ?? [] as $k => $v) {
             $kk = $k;
 
@@ -1925,6 +1929,7 @@ abstract class APresenter
                 }
                 if ($dot->has($k)) {
                     $dot->set($k, $v);
+                    $dot->merge('model.changes', $kk);
                     $reps++;
                 }
                 continue;
@@ -1946,6 +1951,7 @@ abstract class APresenter
                     }
                 }
                 $dot->delete($k)->add($k, $v);
+                $dot->merge('model.changes', $kk);
                 $reps++;
                 continue;
             }
@@ -1957,6 +1963,7 @@ abstract class APresenter
                     continue;
                 }
                 $dot->delete($k);
+                $dot->merge('model.changes', $kk);
                 $reps++;
                 continue;
             }
@@ -1983,6 +1990,7 @@ abstract class APresenter
                             continue;
                         }
                         $dot->set($k, \array_merge_recursive($dot->get($k), $v));
+                        $dot->merge('model.changes', $kk);
                     } elseif (\is_string($v)) {
                         if (!\strlen($v)) {
                             // skip empty strings
@@ -1991,20 +1999,21 @@ abstract class APresenter
                         $a = $dot->get($k);
                         $a[] = $v;
                         $dot->set($k, $a);
+                        $dot->merge('model.changes', $kk);
                     } elseif (\is_numeric($v)) {
                         $a = $dot->get($k);
                         $a[] = $v;
                         $dot->set($k, $a);
+                        $dot->merge('model.changes', $kk);
                     }
                     $reps++;
                 }
             }
         }
-
         // update model
         if ($reps) {
             $this->data = $data = $dot->all();
-            bdump($reps, 'MODEL updated');
+            bdump($reps, 'MODEL updates');
         }
 
         // USERS AND GROUPS
