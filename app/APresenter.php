@@ -1365,16 +1365,17 @@ abstract class APresenter
         if (!\is_array($this->getCfg('locales'))) {
             return null;
         }
-        $locale = [];
+        $cfg = $this->getCfg();
         $language = trim(\strtoupper((string) $language));
         $key = trim(\strtoupper((string) $key));
-        $cfg = $this->getCfg();
         $file = \strtolower("{$language}_locale");
+        
+        $locale = [];
         $locale = Cache::read($file, 'default');
         if ($locale === false || empty($locale)) {
             if (\array_key_exists('locales', $cfg)) {
-                $locale = [];
 
+                $locale = [];
                 foreach ((array) $cfg['locales'] as $k => $v) {
                     $csv = false;
                     $subfile = \strtolower($k);

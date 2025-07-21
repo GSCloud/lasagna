@@ -97,6 +97,8 @@ class HomePresenter extends APresenter
             SF::correctTextSpacing($data['l'][$k], $lang);
         }
 
+        //dump($data['design']);
+
         // render
         $output = '';
         if ($data) {
