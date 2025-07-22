@@ -83,6 +83,11 @@ $data = $cfg;
 $data['cfg'] = $cfg; // $cfg shallow backup
 
 // CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anon.
+$data['cf_ray'] = $_SERVER['Cf-Ray'] ?? null;
+$data['cf_worker'] = $_SERVER['CF-Worker'] ?? null;
+$data['cf_cache_status'] = $_SERVER['Cf-Cache-Status'] ?? null;
+$data['cf_country'] = $data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
+$data["country_id_{$country}"] = true; // country_id_UK etc.
 $blocked = (array) ($data['geoblock'] ?? [
     // default blocked countries
     'BY',
@@ -90,10 +95,9 @@ $blocked = (array) ($data['geoblock'] ?? [
     'RU',
     'T1',
 ]);
-$data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
-$data["country_id_{$country}"] = true; // country_id_CZ etc.
 if (!LOCALHOST && in_array($country, $blocked)) {
-    header('HTTP/1.1 403 Not Found', true, 301);
+    error_log("Country [{$country}] forbidden and blocked all requests.");
+    header('HTTP/1.1 403 Forbidden');
     exit;
 }
 
@@ -126,9 +130,10 @@ $data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '
 // RANDOM HASH set by the administrator after CACHE PURGE
 $hash = DATA . DS . '_random_cdn_hash';
 if (file_exists($hash) && is_readable($hash)) {
-    $hash = @file_get_contents($hash);
-    if ($hash) {
+    if ($hash = file_get_contents($hash)) {
         $version = trim($hash);
+    } else {
+        $version = hash('sha256', random_bytes(16) . (string) time());
     }
 }
 $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
@@ -572,8 +577,8 @@ if (DEBUG) {
     // protect private information
     $model['cf'] = '[protected]';
     $model['goauth_secret'] = '[protected]';
-    bdump($app->getIdentity(), 'identity');
-    bdump($model, 'model');
+    bdump($app->getIdentity(), 'IDENTITY');
+    bdump($model, 'MODEL');
 }
 
 exit(0);
