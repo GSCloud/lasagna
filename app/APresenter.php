@@ -1885,6 +1885,16 @@ abstract class APresenter
             return $this;
         }
 
+        // CLI: get English
+        if (CLI) {
+            $data['lang'] = $language = 'en';
+            $data["lang{$language}"] = true;
+            if (\is_array($l = $this->getLocale($language))) {
+                $data['l'] = $l;
+            }
+            return $this;
+        }
+
         // language
         $presenter = $this->getPresenter();
         $view = $this->getView();
