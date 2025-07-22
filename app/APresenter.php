@@ -1269,7 +1269,7 @@ abstract class APresenter
         $roles = \explode(',', trim((string) $rolelist));
         if (\is_array($roles)) {
             $email = $this->getIdentity()['email'] ?? '';
-            $groups = $this->getCfg('admin_groups') ?? [];
+            $groups = $this->getData('admin_groups') ?? [];
             foreach ($roles as $role) {
                 $role = \strtolower(trim($role));
                 if (strlen($role) && strlen($email)) {
@@ -1311,15 +1311,15 @@ abstract class APresenter
             return null;
         }
         $mygroup = null;
-        $email = trim((string) $email);
+        $email = \trim((string) $email);
 
         // search all groups for email or asterisk
-        foreach ($this->getCfg('admin_groups') ?? [] as $group => $users) {
-            if (in_array($email, $users, true)) {
+        foreach ($this->getData('admin_groups') ?? [] as $group => $users) {
+            if (\in_array($email, $users, true)) {
                 $mygroup = $group;
                 break;
             }
-            if (in_array('*', $users, true)) {
+            if (\in_array('*', $users, true)) {
                 $mygroup = $group;
                 continue;
             }
@@ -2031,8 +2031,9 @@ abstract class APresenter
         }
         // update model
         if ($reps) {
+            $dot->set('model.x_count', $reps);
+            bdump($reps, 'MODEL X');
             $this->data = $data = $dot->all();
-            bdump($reps, 'MODEL updates');
         }
 
         // USERS AND GROUPS
@@ -2043,6 +2044,7 @@ abstract class APresenter
             $data["admin_group_{$group}"] = true;
             $data["is_admin"] = true;
         }
+        $this->data = $data;
 
         // MASKED ADMIN GROUPS
         $data['admin_groups_masked'] = $data['admin_groups'] ?? [];

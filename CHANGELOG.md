@@ -2,9 +2,13 @@
 
 ---
 
+`2025-07-22`
+
+* **`1066-BUGFIX`** various bugfixes and UI enhancements
+
 `2025-07-17`
 
-* **`1065-FEATURE` support for cfg./usr./add./del. Sheet keys** to alter the web Model
+* **`1065-FEATURE` Sheet support** for **cfg./usr./add./del. keys** to alter the Model
 
 `2025-07-16`
 
@@ -15,7 +19,7 @@
 
 * **`1063-BUGFIX`** added **CLI handling of Ctrl+C**
 
-`2025-07-11`  **`v2.4.6`**
+`2025-07-11`  **`v2.4.6 `**
 
 * **`1062-FEATURE` UI cleanup**, AuditLog filtered out to **AUDIT and BLOCK logs**, some **extra SF replacements**, **TECHNICAL DETAILS** available in the UI, bug fixing
 
@@ -61,7 +65,7 @@
 
 * **`1048-FEATURE` hardened security and error logging**
 
-`2025-02-21`  **`v2.4.5`**
+`2025-02-21`  **`v2.4.5 `**
 
 * **`1047-FEATURE` enhanced offline/error pages**
 
@@ -122,14 +126,14 @@
 * **`1026-FEATURE`** support for **external link** CSS icons  
 * **`1025-BUGFIX`** **reverting back** to **jQuery v3.7.1**, **`1022-BUGFIX`** was a **failure in Summernote**
 
-`2025-01-11`  **`v2.4.4`**
+`2025-01-11`  **`v2.4.4 `**
 
 * **`1024-FEATURE`** **admin panel enhancements**  
 * **`1023-BUGFIX`** switching from **jQuery.parseJSON()** to **JSON.parse()**
 
 `2025-01-10`
 
-* ~~**`1022-BUGFIX`** testing **jQuery** [v4.0.0 beta](https://blog.jquery.com/2024/02/06/jquery-4-0-0-beta/)~~
+* **~~`1022-BUGFIX`~~** testing **jQuery** [v4.0.0 beta](https://blog.jquery.com/2024/02/06/jquery-4-0-0-beta/)~~
 
 `2025-01-09`
 
@@ -161,14 +165,14 @@
 * **`1012-BUGFIX`** migrate **Materialize framework** to [v1.2.2](https://github.com/materializecss/materialize/releases/tag/1.2.2)  
 * **`1011-FEATURE`** [changelog](https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md) added to the admin panel  
 * **`1010-BUGFIX`** **Lightbox2** [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
-* ~~**`1009-IDEA`** **remember active admin tab**~~  
+* **~~`1009-IDEA`~~** **remember active admin tab**~~  
 * **`1008-IDEA` migrate Materialize framework to the newest [v2.2.2](https://github.com/materializecss/materialize/releases/tag/v2.2.2)**  
   * note: [https://github.com/materializecss/materialize/pull/49](https://github.com/materializecss/materialize/pull/49)
 
 `2025-01-02`
 
-* ~~**`1007-IDEA`** **add visual labels** for latest files uploaded~~  
-* ~~**`1006-IDEA`** show **total uploads sizes** \+ counts in admin panel~~
+* **~~`1007-IDEA`~~** **add visual labels** for latest files uploaded~~  
+* **~~`1006-IDEA`~~** show **total uploads sizes** \+ counts in admin panel~~
 
 `2024-12-28`
 

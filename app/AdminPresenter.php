@@ -122,6 +122,7 @@ class AdminPresenter extends APresenter
         if (!\is_array($data)) {
             return $this;
         }
+        $this->dataExpander($data);
 
         // MATCH and VIEW
         $match = $this->getMatch();
