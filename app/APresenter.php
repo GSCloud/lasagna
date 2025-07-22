@@ -634,7 +634,7 @@ abstract class APresenter
         if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
             $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
             if ($ip && \filter_var($ip, \FILTER_VALIDATE_IP)) {
-                return $_SERVER['HTTP_CF_CONNECTING_IP'];
+                return $ip;
             }
         }
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -647,7 +647,7 @@ abstract class APresenter
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $ip = $_SERVER['REMOTE_ADDR'];
             if ($ip && \filter_var($ip, \FILTER_VALIDATE_IP)) {
-                return $_SERVER['REMOTE_ADDR'];
+                return $ip;
             }
         }
         return '127.0.0.1';
@@ -656,7 +656,7 @@ abstract class APresenter
     /**
      * Get Universal ID string
      *
-     * @return string Universal ID string
+     * @return string UID string
      */
     public function getUIDstring()
     {
@@ -697,9 +697,9 @@ abstract class APresenter
     }
 
     /**
-     * Get Universal ID (hash)
+     * Get Universal ID hash
      *
-     * @return string SHA-256 hash
+     * @return string UID hash
      */
     public function getUID()
     {
@@ -2098,46 +2098,47 @@ abstract class APresenter
     }
 
     /**
-     * Generate or retrieve an identity nonce
+     * Get / generate identity nonce
      *
      * @return string identity nonce
      */
     public function getIdentityNonce()
     {
         $file = DATA . DS . self::IDENTITY_NONCE_FILE;
-        if (is_readable($file)) {
-            $nonce = @file_get_contents($file);
-            if ($nonce !== false) {
-                return $nonce;
-            }
-        }
-        if (!file_exists($file)) {
-            try {
-                $randomBytes = \random_bytes(32);
-                $time = (string) time();
-                $nonce = hash('sha256', $randomBytes . $time);
-            } catch (\Exception $e) {
-                error_log("Error generating cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
-                if (function_exists('openssl_random_pseudo_bytes')) {
-                    $randomBytes = openssl_random_pseudo_bytes(32);
-                    $time = (string) time();
-                    $nonce = hash('sha256', $randomBytes . $time);
-                    error_log("Using less secure openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
+        if (\file_exists($file) && \is_readable($file)) {
+            if ($nonce = \file_get_contents($file)) {
+                if (\preg_match('/^[a-f0-9]{64}$/', $nonce)) {
+                    return $nonce;
                 } else {
-                    error_log("Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage()); // phpcs:ignore
-                    die("Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage()); // phpcs:ignore
+                    \error_log("Invalid format for existing identity nonce.");
                 }
             }
-            if (@file_put_contents($file, $nonce, LOCK_EX) === false) {
-                error_log('Failed to write identity nonce to file.');
-                die('Failed to write identity nonce to file.');
+        }
+        try {
+            $randomBytes = \random_bytes(32);
+            $time = (string) \time();
+            $nonce = \hash('sha256', $randomBytes . $time);
+        } catch (\Throwable $e) {
+            \error_log("Error generating cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
+            if (\function_exists('openssl_random_pseudo_bytes')) {
+                $randomBytes = \openssl_random_pseudo_bytes(32);
+                $time = (string) \time();
+                $nonce = \hash('sha256', $randomBytes . $time);
+                \error_log("Using less secure openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
+            } else {
+                \error_log("Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage()); // phpcs:ignore
+                throw new \RuntimeException("Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage()); // phpcs:ignore
             }
-            if (!chmod($file, 0644)) {
-                error_log('Failed to set permissions on identity nonce file.'); // phpcs:ignore
-                die('Failed to set permissions on identity nonce file.');
-            }
-            error_log('Identity nonce written to file.');
+        }
+        if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
+            \error_log('Failed to write identity nonce to file.');
+            throw new \Exception("Failed to write identity nonce to file.");
+        }
+        if (\chmod($file, 0644) === false) {
+            \error_log('Failed to set permissions on identity nonce file.'); // phpcs:ignore
+            throw new \Exception("Failed to set permissions on identity nonce file."); // phpcs:ignore
         }
         return $nonce;
     }
+
 }
