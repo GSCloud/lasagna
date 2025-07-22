@@ -48,6 +48,7 @@ umami: [
 cache_profiles: []
 
 # blocked countries
+# see https://developers.cloudflare.com/fundamentals/reference/http-headers/#cf-ipcountry
 geoblock: []
 
 # disable articles feature
@@ -94,14 +95,14 @@ script_sources_extra: [
   "/js/lightbox.options.js",
 ]
 
-# locale CSV
-locales: [
-  lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
-]
-
 # locale Sheets
 lasagna_sheets: [
   lasagna: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
+]
+
+# locale CSV
+locales: [
+  lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
 ]
 
 # application data
