@@ -1469,6 +1469,7 @@ class AdminPresenter extends APresenter
                 $class = $data['class'];
             }
         }
+
         switch ($type) {
         case 'type_access':
         case 'type_ban':
