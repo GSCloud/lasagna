@@ -4,6 +4,131 @@ $author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker
 $gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud Ltd.
 $gscloud,$,$gsc,$gsc,$gsc,$gsc
 $year,$,2025,2025,2025,2025
+$design_light_red,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""red""
+theme_color: ""red""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""red""
+theme_color: ""red""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""red""
+theme_color: ""red""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""red""
+theme_color: ""red""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_pink,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""pink""
+theme_color: ""pink""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""pink""
+theme_color: ""pink""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""pink""
+theme_color: ""pink""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""pink""
+theme_color: ""pink""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_purple,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""purple""
+theme_color: ""purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""purple""
+theme_color: ""purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""purple""
+theme_color: ""purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""purple""
+theme_color: ""purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_deeppurple,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""deep-purple""
+theme_color: ""deep-purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""deep-purple""
+theme_color: ""deep-purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""deep-purple""
+theme_color: ""deep-purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""deep-purple""
+theme_color: ""deep-purple""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_indigo,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""indigo""
+theme_color: ""indigo""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""indigo""
+theme_color: ""indigo""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""indigo""
+theme_color: ""indigo""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""indigo""
+theme_color: ""indigo""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
 $design_light_blue,$TPL,"[neon][
 footer_color: ""grey darken-4""
 nav_color: ""blue""
@@ -26,6 +151,81 @@ skin: ""white""]","[neon][
 footer_color: ""grey darken-4""
 nav_color: ""blue""
 theme_color: ""blue""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_lightblue,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-blue""
+theme_color: ""light-blue""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-blue""
+theme_color: ""light-blue""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-blue""
+theme_color: ""light-blue""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-blue""
+theme_color: ""light-blue""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_cyan,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""cyan""
+theme_color: ""cyan""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""cyan""
+theme_color: ""cyan""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""cyan""
+theme_color: ""cyan""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""cyan""
+theme_color: ""cyan""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_teal,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""teal""
+theme_color: ""teal""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""teal""
+theme_color: ""teal""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""teal""
+theme_color: ""teal""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""teal""
+theme_color: ""teal""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]"
@@ -54,6 +254,106 @@ theme_color: ""green""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]"
+$design_light_lightgreen,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-green""
+theme_color: ""light-green""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-green""
+theme_color: ""light-green""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-green""
+theme_color: ""light-green""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""light-green""
+theme_color: ""light-green""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_lime,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""lime""
+theme_color: ""lime""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""lime""
+theme_color: ""lime""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""lime""
+theme_color: ""lime""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""lime""
+theme_color: ""lime""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_yellow,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""yellow""
+theme_color: ""yellow""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""yellow""
+theme_color: ""yellow""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""yellow""
+theme_color: ""yellow""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""yellow""
+theme_color: ""yellow""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_amber,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""amber""
+theme_color: ""amber""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""amber""
+theme_color: ""amber""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""amber""
+theme_color: ""amber""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""amber""
+theme_color: ""amber""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
 $design_light_orange,$TPL,"[neon][
 footer_color: ""grey darken-4""
 nav_color: ""orange""
@@ -79,28 +379,103 @@ theme_color: ""orange""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]"
-$design_light_red,$TPL,"[neon][
+$design_light_deeporange,$TPL,"[neon][
 footer_color: ""grey darken-4""
-nav_color: ""red""
-theme_color: ""red""
+nav_color: ""deep-orange""
+theme_color: ""deep-orange""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]","[neon][
 footer_color: ""grey darken-4""
-nav_color: ""red""
-theme_color: ""red""
+nav_color: ""deep-orange""
+theme_color: ""deep-orange""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]","[neon][
 footer_color: ""grey darken-4""
-nav_color: ""red""
-theme_color: ""red""
+nav_color: ""deep-orange""
+theme_color: ""deep-orange""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]","[neon][
 footer_color: ""grey darken-4""
-nav_color: ""red""
-theme_color: ""red""
+nav_color: ""deep-orange""
+theme_color: ""deep-orange""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_brown,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""brown""
+theme_color: ""brown""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""brown""
+theme_color: ""brown""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""brown""
+theme_color: ""brown""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""brown""
+theme_color: ""brown""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_grey,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""grey""
+theme_color: ""grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""grey""
+theme_color: ""grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""grey""
+theme_color: ""grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""grey""
+theme_color: ""grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]"
+$design_light_bluegrey,$TPL,"[neon][
+footer_color: ""grey darken-4""
+nav_color: ""blue-grey""
+theme_color: ""blue-grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""blue-grey""
+theme_color: ""blue-grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""blue-grey""
+theme_color: ""blue-grey""
+background_color: ""white""
+content: ""white black-text""
+skin: ""white""]","[neon][
+footer_color: ""grey darken-4""
+nav_color: ""blue-grey""
+theme_color: ""blue-grey""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]"
@@ -179,8 +554,8 @@ month_2p_12,MONTHS,December,prosince,decembra,Dezember
 meta_viewport,PARAMS,"width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0","width=device-width, initial-scale=1.0"
 gsc_footer_img_size,PARAMS,48,48,48,48
 title,DEMO,DEMO,DEMO,DEMO,DEMO
-main,DEMO,DEMO,DEMO,DEMO,DEMO
-shortcodes,DEMO,DEMO,DEMO,DEMO,DEMO
+main,DEMO,TESSERACT LASAGNA DEMO,TESSERACT LASAGNA DEMO,TESSERACT LASAGNA DEMO,TESSERACT LASAGNA DEMO
+shortcodes,DEMO,SHORTCODES,SHORTCODES,SHORTCODES,SHORTCODES
 nav_czech,NAVI,Česky,Česky,Česky,Česky
 nav_slovak,NAVI,Slovensky,Slovensky,Slovensky,Slovensky
 nav_english,NAVI,English,English,English,English
@@ -247,7 +622,7 @@ a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
 a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
 a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
 a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Legacy,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
 a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
