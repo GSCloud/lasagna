@@ -35,9 +35,17 @@ class LoginPresenter extends APresenter
         if (\ob_get_level()) {
             @\ob_end_clean();
         }
-        $this->checkRateLimit()->setHeaderHtml();
 
-        $cfg = $this->getCfg();
+        $this->checkRateLimit()->setHeaderHtml();
+        if (!\is_array($data = $this->getData())) { // Model
+            return $this;
+        }
+        $this->dataExpander($data);
+
+        if (!\is_array($cfg = $this->getCfg())) { // Config
+            return $this;
+        }
+
         if (($cfg['goauth_client_id'] ?? null) === null) {
             $this->addError('OAuth: missing [goauth_client_id]');
             $this->setLocation('/err/412');
@@ -49,9 +57,9 @@ class LoginPresenter extends APresenter
 
         // check if we are on the right origin
         $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // phpcs:ignore
-        $scheme = parse_url($currentUrl, PHP_URL_SCHEME);
-        $host = parse_url($currentUrl, PHP_URL_HOST);
-        $port = parse_url($currentUrl, PHP_URL_PORT);
+        $scheme = \parse_url($currentUrl, PHP_URL_SCHEME);
+        $host = \parse_url($currentUrl, PHP_URL_HOST);
+        $port = \parse_url($currentUrl, PHP_URL_PORT);
         $currentOrigin = $scheme . "://" . $host;
 
         if ($port) {
@@ -60,12 +68,12 @@ class LoginPresenter extends APresenter
 
         if (LOCALHOST) {
             if ($currentOrigin !== $cfg['local_goauth_origin']) {
-                header("Location: " . $cfg['local_goauth_redirect']);
+                \header("Location: " . $cfg['local_goauth_redirect']);
                 exit;
             }
         } else {
             if ($currentOrigin !== $cfg['goauth_origin']) {
-                header("Location: " . $cfg['goauth_redirect']);
+                \header("Location: " . $cfg['goauth_redirect']);
                 exit;
             }   
         }
@@ -169,7 +177,6 @@ class LoginPresenter extends APresenter
                 if (!empty($group)) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
                 }
-
                 if ($group === 'admin') {
                     if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
                         \setcookie(
@@ -181,7 +188,7 @@ class LoginPresenter extends APresenter
 
                 $this->clearCookie('oauth2state');
 
-                if (strlen($ownerDetails->getEmail())) {
+                if (\strlen($ownerDetails->getEmail())) {
                     \setcookie(
                         'login_hint',
                         $ownerDetails->getEmail() ?? '',

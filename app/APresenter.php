@@ -87,7 +87,7 @@ abstract class APresenter
     /* @var string audit log filename */
     const AUDITLOG_FILE = 'AuditLog.txt';
 
-    /* @var integer octal file mode for Audit Log */
+    /* @var integer octal file mode for AuditLog */
     const AUDITLOG_FILEMODE = 0644;
 
     /* @var array data model */
@@ -492,7 +492,7 @@ abstract class APresenter
     }
 
     /**
-     * Add audit message to the Audit Log
+     * Add audit message to the AuditLog
      *
      * @param string $message Message string
      * 
@@ -504,7 +504,7 @@ abstract class APresenter
             return $this;
         }
 
-        $message = trim($message);
+        $message = \trim($message);
         $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
         $date = \date('c');
         $ip = $this->getIP();
@@ -525,10 +525,10 @@ abstract class APresenter
         }
 
         $file = DATA . DS . self::AUDITLOG_FILE;
-        $logline = "$date;$message;{$ip};{$name};{$email}\n";
         $flags = FILE_APPEND | LOCK_EX;
-        if (@file_put_contents($file, $logline, $flags) === false) {
-            $this->criticals[] = 'Could not write to the Audit Log file: ' . $file;
+        $logline = "$date;$message;{$ip};{$name};{$email}\n";
+        if (\file_put_contents($file, $logline, $flags) === false) {
+            $this->criticals[] = 'Could not write to the AuditLog file: ' . $file;
         }
         return $this;
     }
@@ -547,17 +547,17 @@ abstract class APresenter
             $this->addAuditMessage($message);
 
             // get the backtrace
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $caller = $backtrace[0];
             $file = $caller['file'] ?? 'unknown';
             $line = $caller['line'] ?? 'unknown';
 
-            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
+            $message = \date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
             \error_log($message, 0);
             if (CLI) {
                 return $this;
             }
-            $message = str_replace("\n", ' ', $message);
+            $message = \str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'messages.txt');
         }
         return $this;
@@ -577,18 +577,18 @@ abstract class APresenter
             $this->addAuditMessage($message);
 
             // get the backtrace
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $caller = $backtrace[0];
             $file = $caller['file'] ?? 'unknown';
             $line = $caller['line'] ?? 'unknown';
 
             $message = '* ERROR: ' . $message;
-            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
+            $message = \date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
             \error_log($message, 0);
             if (CLI) {
                 return $this;
             }
-            $message = str_replace("\n", ' ', $message);
+            $message = \str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'errors.txt');
         }
         return $this;
@@ -607,18 +607,18 @@ abstract class APresenter
             $this->criticals[] = $message;
 
             // get the backtrace
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $caller = $backtrace[0];
             $file = $caller['file'] ?? 'unknown';
             $line = $caller['line'] ?? 'unknown';
 
             $message = '*** CRITICAL: ' . $message;
-            $message = date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
+            $message = \date('Y-m-d H:i:s') . ' ' . $message . ' - file: ' . $file . ' - line: ' . $line; // phpcs:ignore
             \error_log($message, 0);
             if (CLI) {
                 return $this;
             }
-            $message = str_replace("\n", ' ', $message);
+            $message = \str_replace("\n", ' ', $message);
             \error_log($message . PHP_EOL, 3, LOGS . DS . 'critical_errors.txt');
         }
         return $this;
@@ -672,7 +672,7 @@ abstract class APresenter
             $uid = $this->getNonce();
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
-                if (!preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
+                if (!\preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
                     $this->addError("COOKIE: invalid UUID cookie");
                     unset($_COOKIE[$name]);
                 }
@@ -821,23 +821,23 @@ abstract class APresenter
             $content = $this->getCookie($app);
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                error_log('Cookie identity is not an array.');
+                \error_log('Cookie identity is not an array.');
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                error_log('Cookie identity has no email.');
+                \error_log('Cookie identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                error_log('Cookie identity has no id.');
+                \error_log('Cookie identity has no id.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                error_log('Cookie identity has no nonce.');
+                \error_log('Cookie identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                error_log('Cookie identity nonce is invalid.');
+                \error_log('Cookie identity nonce is invalid.');
                 $this->logout();
             }
             if ($q['nonce'] === $nonce) {
