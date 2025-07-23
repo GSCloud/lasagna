@@ -1451,15 +1451,15 @@ class AdminPresenter extends APresenter
         $type = 'type_unknown';
         $lookup = [
             'Unauthorized access.' => [
-                'type' => 'type_limiter',
+                'type' => 'type_access',
                 'class' => 'red lighten-3'
             ],
             'banned' => [
-                'type' => 'type_limiter',
+                'type' => 'type_ban',
                 'class' => 'lighten-4'
             ],
             'blocked' => [
-                'type' => 'type_limiter',
+                'type' => 'type_block',
                 'class' => 'orange lighten-3'
             ],
         ];
