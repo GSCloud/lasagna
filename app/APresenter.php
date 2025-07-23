@@ -1202,7 +1202,7 @@ abstract class APresenter
                 $this->setLocation('/err/429');
             }
             // user is banned
-            header('Retry-After: ' . $ban_secs);
+            \header('Retry-After: ' . $ban_secs);
             $this->setLocation('/err/429');
         }
 
@@ -1220,20 +1220,14 @@ abstract class APresenter
                 if (!\is_string($path)) {
                     $path = '*** unknown ***';
                 }
-                $ua = null;
-                if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                    $ua = trim($_SERVER['HTTP_USER_AGENT']);
-                }
-                if ($ua) {
-                    $this->addMessage("LIMITER: User [{$ua}] is banned.\nPath: [{$path}]"); // phpcs:ignore
-                } else {
-                    $this->addMessage("LIMITER: User is banned.\nPath: [{$path}]"); // phpcs:ignore
-                }
-                header('Retry-After: ' . $ban_secs);
+                $ua = \trim($_SERVER['HTTP_USER_AGENT'] ?? '');
+                $ua = $ua ? "User [{$ua}]" : "User";
+                $this->addMessage("LIMITER: {$ua} is banned.\nPath: [{$path}]"); // phpcs:ignore
+                \header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
             // user is limited
-            header('Retry-After: ' . $limiter_secs);
+            \header('Retry-After: ' . $limiter_secs);
             $this->setLocation('/err/429');
         }
         return $this;
