@@ -121,7 +121,7 @@ design: [
 
 # locale overrides
 locale_override: [
-  copyright: "2017-2025"
+#  copyright: "2017-2025"
 ]
 
 # Service Worker preload

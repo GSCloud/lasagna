@@ -1445,8 +1445,8 @@ abstract class APresenter
                 $dolar = ['$' => '$'];
                 foreach ((array) $locale as $a => $b) {
                     if (\substr($a, 0, 1) === '$') {
-                        $a = trim($a, '{}$' . "\x20\t\n\r\0\x0B");
-                        if (!strlen($a)) {
+                        $a = \trim($a, '{}$' . "\x20\t\n\r\0\x0B");
+                        if (!\strlen($a)) {
                             continue;
                         }
                         $dolar['$' . $a] = $b;
@@ -2082,35 +2082,21 @@ abstract class APresenter
     }
 
     /**
-     * Nonce string generator
+     * Get simple nonce (16 bytes)
      *
-     * @return string 16 chars nonce
+     * @return string nonce
      */
     public function getNonce()
     {
-        try {
-            $randomBytes = random_bytes(32);
-            $time = (string) time();
-            $hash = hash('sha256', $randomBytes . $time);
-            return \substr($hash, 0, 16);
-        } catch (\Exception $e) {
-            $this->addError("Error generating the cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
-            if (function_exists('openssl_random_pseudo_bytes')) {
-                $this->addMessage("Using openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
-                $randomBytes = openssl_random_pseudo_bytes(32);
-                $time = (string) time();
-                $hash = hash('sha256', $randomBytes . $time);
-                return \substr($hash, 0, 16);
-            }
-            $this->addCritical("Error generating any system nonce: " . $e->getMessage()); // phpcs:ignore
-            ErrorPresenter::getInstance()->process(
-                ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
-            );
-        }
+        $randomPart = \uniqid('', true);
+        $time = (string) \microtime(true);
+        $seed = $randomPart . $time . \mt_rand();
+        $hash = \md5($seed);
+        return \substr($hash, 0, 16);
     }
 
     /**
-     * Get / generate identity nonce
+     * Get / generate identity nonce (256 bits)
      *
      * @return string identity nonce
      */
@@ -2128,13 +2114,13 @@ abstract class APresenter
         }
         try {
             $randomBytes = \random_bytes(32);
-            $time = (string) \time();
+            $time = (string) \microtime(true);
             $nonce = \hash('sha256', $randomBytes . $time);
         } catch (\Throwable $e) {
             \error_log("Error generating cryptographically secure nonce: " . $e->getMessage()); // phpcs:ignore
             if (\function_exists('openssl_random_pseudo_bytes')) {
                 $randomBytes = \openssl_random_pseudo_bytes(32);
-                $time = (string) \time();
+                $time = (string) \microtime(true);
                 $nonce = \hash('sha256', $randomBytes . $time);
                 \error_log("Using less secure openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
             } else {

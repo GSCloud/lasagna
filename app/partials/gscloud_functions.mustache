@@ -441,14 +441,14 @@ async function sha256(message) {
      
       // mobile logout
       {{#is_admin}}
-      $('#nav-mobile').append('<br><li><a rel="noindex nofollow" class="white-text bold right oauth" href="/logout"><i class="fa-solid fa-right-from-bracket red-text"></i>Logout</a></li>');
+      $('#nav-mobile').append('<br><li><a rel="noindex nofollow" data-umami-event="logout" class="white-text bold right oauth" href="/logout"><i class="fa-solid fa-right-from-bracket red-text"></i>Logout</a></li>');
       {{/is_admin}}
 
       {{^is_admin}}{{#goauth_client_id}}{{#goauth_secret}}
       // mobile login
-      $('#nav-mobile').append('<br><li><a rel="noindex nofollow" class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i>Login</a></li>');
+      $('#nav-mobile').append('<br><li><a rel="noindex nofollow" data-umami-event="login" class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i>Login</a></li>');
       // desktop login
-      $('.main-header nav.navbar ul').append('<li><a rel="noindex nofollow" class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i></a></li>');
+      $('.main-header nav.navbar ul').append('<li><a rel="noindex nofollow" data-umami-event="login" class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i></a></li>');
       {{/goauth_secret}}{{/goauth_client_id}}{{/is_admin}}
 
       // return URL parameter

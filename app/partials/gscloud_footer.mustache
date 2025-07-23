@@ -1,19 +1,22 @@
 <div id="gscmodal" class="modal a_reset" style="color:#000!important">
   <div class="modal-content center">
-    <p style="color:#000!important;font-family:Arial!important;font-size:1.3em">{{ ENGINE }} build&nbsp;{{ REVISIONS }}</p>
+    <p style="color:#000!important;font-family:Arial!important;font-size:1.3em"><b>{{ ENGINE }}</b> build&nbsp;{{ REVISIONS }}</p>
     <div class="container row center">
       <div class="col s12">
-        <a rel="noindex nofollow" href="/login" class="login oauth">
-          <img class="img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}" title="{{ l.a_login }}">
+        <a
+          rel="noindex nofollow"
+          class="login oauth"
+          data-umami-event="login"
+          href="/login"><img class="img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}">
         </a>
       </div>
       <div class="col m6 s12 mono">
         <p>{{ l.a_footer_app }}<br>
-        {{ VERSION_SHORT }}</p>
+        <b>{{ VERSION_SHORT }}</b></p>
       </div>
       <div class="col m6 s12 mono">
         <p>{{ l.a_footer_date }}<br>
-        {{ VERSION_DATE }}</p>
+        <b>{{ VERSION_DATE }}</b></p>
       </div>
     </div>
   </div>
@@ -23,17 +26,52 @@
   <div class="row center">
   <br>
   <span style="font-size:1.2rem">{{ l.poweredby }}</span><br><br>
-  <a rel="noopener" target="_blank" class="white-text" href="https://gscloud.cz/{{ lang }}">⛅️&nbsp;{{ l.$gsc }}</a>
-    &nbsp;&nbsp;<a rel="noopener" target="_blank" class="white-text"
+  <a
+    target="_blank"
+    rel="nofollow noopener"
+    class="white-text"
+    title="{{ l.$gsc }}"
+    href="https://gscloud.cz/{{ lang }}">⛅️&nbsp;{{ l.$gsc }}</a>
+  &nbsp;&nbsp;<a
+    target="_blank"
+    rel="nofollow noopener"
+    class="white-text"
     href="https://gscloud.cz/privacy-policy.pdf">🕵&nbsp;{{ l.privacy_policy }}</a>
-    &nbsp;&nbsp;<a rel="noopener" target="_blank" class="white-text" href="/GDPR.pdf">🇪🇺&nbsp;GDPR</a>
-    &nbsp;&nbsp;<a rel="noopener" target="_blank" class="white-text" 
-    href="mailto:{{ l.support_email }}{{^l.support_email}}support@gscloud.cz{{/l.support_email}}">🆘&nbsp;{{ l.support_email }}{{^l.support_email}}support@gscloud.cz{{/l.support_email}}</a><br>
-    <a rel="noopener" target="_blank" class="white-text" title="GitHub"
-    href="https://github.com/GSCloud/lasagna"><i class="fa-brands fa-github blue-text"></i>&nbsp;GitHub</a>
-    &nbsp;&nbsp;<a rel=nofollow class="white-text" href="/api"><i class="fa-solid fa-network-wired purple-text"></i>&nbsp;API</a>
-    &nbsp;&nbsp;<a rel=nofollow class="white-text" href="https://status.gscloud.cz"><i class="fa-solid fa-signal green-text"></i>&nbsp;status</a><br>
-    <a rel="me" target="_blank" class="white-text" href="{{ l.copyright_link }}{{^l.copyright_link}}https://hmcgames.com/fred{{/l.copyright_link}}">{{ l.author }}</a>&nbsp;{{ l.copyright }}{{^l.copyright}}2017-2025{{/l.copyright}}<br>
+    &nbsp;&nbsp;<a
+      target="_blank"
+      rel="nofollow noopener"
+      class="white-text"
+      title="GDPR"
+      href="/GDPR.pdf">🇪🇺&nbsp;GDPR</a>
+    &nbsp;&nbsp;<a
+      target="_blank"
+      rel="nofollow noopener"
+      class="white-text" 
+      title="SOS"
+      href="mailto:{{ l.support_email }}{{^l.support_email}}support@gscloud.cz{{/l.support_email}}">🆘&nbsp;{{ l.support_email }}{{^l.support_email}}support@gscloud.cz{{/l.support_email}}</a><br>
+    <a
+      target="_blank"
+      rel="nofollow noopener"
+      class="white-text"
+      title="GitHub"
+      href="https://github.com/GSCloud/lasagna"><i class="fa-brands fa-github blue-text"></i>&nbsp;GitHub</a>
+    &nbsp;&nbsp;<a
+      target="_blank"
+      rel="nofollow noopener"
+      class="white-text"
+      href="/api"><i class="fa-solid fa-network-wired purple-text"></i>&nbsp;API</a>
+    &nbsp;&nbsp;<a
+      target="_blank"
+      rel="nofollow noopener"
+      class="white-text"
+      title="Status Page"
+      href="https://status.gscloud.cz"><i class="fa-solid fa-signal green-text"></i>&nbsp;status</a><br>
+    <a
+      target="_blank"
+      rel="me nofollow"
+      class="white-text"
+      title="{{ l.author }}"
+      href="{{ l.copyright_link }}{{^l.copyright_link}}https://hmcgames.com/fred{{/l.copyright_link}}">{{ l.author }}</a>&nbsp;{{ l.copyright }}{{^l.copyright}}2017-{{ l.$year }}{{/l.copyright}}<br>
     <div class="row center">
       <a
         rel="nofollow noreferrer"
