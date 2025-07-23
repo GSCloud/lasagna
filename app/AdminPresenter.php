@@ -1469,7 +1469,12 @@ class AdminPresenter extends APresenter
                 $class = $data['class'];
             }
         }
-        if ($type !== 'type_access' || $type !== 'type_ban' || $type !== 'type_block') { // phpcs:ignore
+        switch ($type) {
+        case 'type_access':
+        case 'type_ban':
+        case 'type_block':
+            break;
+        default:
             $val = '';
             return;
         }
