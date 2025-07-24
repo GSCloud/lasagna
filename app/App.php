@@ -501,7 +501,7 @@ default:
         try {
             $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
         }
-        catch (Throwable $e) {
+        catch (\Throwable $e) {
             $csp = null;
             error_log("Error parsing NE-ON file: " . $e->getMessage());
         }
@@ -514,7 +514,6 @@ default:
                     implode(' ', (array) $csp['csp'])
                 )
             );
-            //header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), vr=(), ar=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=(), fullscreen=(self), picture-in-picture=(self)'); // phpcs:ignore
             header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=(), fullscreen=(self), picture-in-picture=(self)'); // phpcs:ignore
         }
     }
