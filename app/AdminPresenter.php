@@ -552,7 +552,8 @@ class AdminPresenter extends APresenter
                     $h = \hash('sha256', $role . $user . \time());
                     $h = \substr($h, 0, 8);
                     $code = $data['base']
-                        . 'admin/FNXXXRemote?role='
+                        . $this->getCfg('admin')
+                        . '/FNXXXRemote?role='
                         . $role
                         . '&user='
                         . $h
