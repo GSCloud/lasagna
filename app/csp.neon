@@ -25,9 +25,9 @@ csp: [
     "https:;"
 
     "font-src"
+    #"'unsafe-inline'"
     "'self'"
     "data:"
-    "'unsafe-inline'"
     "cdn.gscloud.cz"
     "cdn.hmcgames.com"
     "*.gstatic.com;"
@@ -50,9 +50,9 @@ csp: [
     "https:;"
 
     "style-src"
+    #"data:"
     "'self'"
     "'unsafe-inline'"
-    "data:"
     "https:;"
 
     "media-src"

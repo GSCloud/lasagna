@@ -492,12 +492,19 @@ if ($router[$view]['country'] ?? false) {
     }
 }
 
-// CSP HEADERS
+// POLICIES
+$csp = null;
 $data['csp_nonce'] = '';
 switch ($presenter[$view]['template']) {
 default:
     if (CSP && file_exists(CSP) && is_readable(CSP)) {
-        $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
+        try {
+            $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
+        }
+        catch (Throwable $e) {
+            $csp = null;
+            error_log("Error parsing NE-ON file: " . $e->getMessage());
+        }
         if (is_array($csp)) {
             $cspn = $data['csp_nonce'] = sha1(random_bytes(8));
             header(
@@ -507,6 +514,8 @@ default:
                     implode(' ', (array) $csp['csp'])
                 )
             );
+            //header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), vr=(), ar=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=(), fullscreen=(self), picture-in-picture=(self)'); // phpcs:ignore
+            header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=(), fullscreen=(self), picture-in-picture=(self)'); // phpcs:ignore
         }
     }
 }
