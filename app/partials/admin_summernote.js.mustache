@@ -28,7 +28,7 @@
         });
 
         // API: UpdateArticles (POST - save all articles data)
-        $.post("/admin/UpdateArticles", {
+        $.post("/{{ cfg.admin }}/UpdateArticles", {
           hash: "{{ request_path_hash }}",
           path: location.pathname,
           data: JSON.stringify(data)

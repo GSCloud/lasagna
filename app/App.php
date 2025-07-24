@@ -75,7 +75,7 @@ if (isset($_GET['clearall'])) {
 // MODEL
 $cfg = $cfg ?? [];
 
-// LANGUAGE - PREBAKED CSV (default, admin)
+// LANGUAGE - PREBAKED CSV
 if (isset($cfg['locales'])) {
     array_unshift($cfg['locales'], 'base.csv');
 }
@@ -107,7 +107,7 @@ $data['ENGINE'] = ENGINE;
 // version to load in the admin UI: https://cdnjs.com/libraries/codemirror 
 $data['codemirror'] = '6.65.7';
 
-// Base58 encoder
+// load Base58 encoder
 $base58 = new \Tuupola\Base58;
 
 $data['ARGC'] = $argc ?? 0;
@@ -140,6 +140,7 @@ $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
 $data['cdn_trimmed'] = 'cdn-assets' . DS . $version;
 defined('CDN') || define('CDN', $data['CDN']);
 
+// fix Apple
 $isSafari = false;
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
@@ -149,9 +150,7 @@ $data['isSafari'] = $isSafari;
 
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 define('HOST', $host);
-
 $data['base'] = $data['BASE'] = $host ? (($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/") : ''; // phpcs:ignore
-
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
 if (!$requestUri) {
     $requestUri = '';
@@ -167,6 +166,7 @@ $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
 $data['nonce'] = $data['NONCE'] = $nonce = substr(hash('sha256', random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
 $data['LOCALHOST'] = (bool) LOCALHOST;
 
+// canonical URI
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
 defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . hash('sha256', $x) . SS);
 
@@ -304,6 +304,14 @@ defined('REDIS_CACHE') || define('REDIS_CACHE', false);
 // + MODEL
 $data['cache_profiles'] = $cache_profiles;
 
+// ADMIN ENDPOINT
+$admin = $data['admin'] ?? 'admin';
+if (is_dir(WWW . DS . $admin)) {
+    throw new \Exception('Administration endpoint exists as a web folder!');
+}
+$data['admin'] = $admin;
+$data['cfg']['admin'] = $admin;
+
 // ROUTING CONFIGURATION
 $router = [];
 $routes = $cfg['routers'] ?? [];
@@ -316,12 +324,13 @@ if ($routers = glob('router_*.neon')) {
         }
     }
 }
-array_push($routes, 'router.neon'); // main router
+// main router
+array_push($routes, 'router.neon');
 
 // + MODEL
 $data['router_files'] = $routes;
 
-// ROUTING TABLES
+// load and parse ROUTING TABLES
 foreach ($routes as $routeFileName) {
     $route = APP . DS . $routeFileName;
     if (!$content = file_get_contents($route)) {
@@ -329,8 +338,8 @@ foreach ($routes as $routeFileName) {
             @ob_end_clean();
         }
         header('HTTP/1.1 500 Internal Server Error');
-        echo "<h1>Server Error</h1><h2>Routing table:</h2><h3>{$routeFileName}</h3>";
-        error_log("Error loading routing file: " . $route);
+        echo "<h1>Server Error</h1><h2>Routing Table</h2><h3>{$routeFileName}</h3>";
+        error_log("Error loading routes from file: " . $route);
         exit;
     }
     try {
@@ -339,8 +348,8 @@ foreach ($routes as $routeFileName) {
             $router = array_replace_recursive($router, $next);
         }
     } catch (\Nette\Neon\Exception $e) {
-        error_log("Error parsing NE-ON file: " . $e->getMessage());
-        die("Error parsing NE-ON file: " . $e->getMessage());
+        error_log("Error parsing router file: " . $e->getMessage());
+        die("Error parsing router file: " . $e->getMessage());
     }
 }
 
@@ -390,8 +399,9 @@ foreach ($presenter as $k => $v) {
     if (!isset($v['path'])) {
         continue;
     }
+    $v['path'] = str_replace('/admin/', "/{$admin}/", $v['path']);
     if ($v['path'] === '/') {
-        if ($data['request_path_hash'] == '') {
+        if ($data['request_path_hash'] === '') {
             // set homepage hash to default language
             $data['request_path_hash'] = hash('sha256', $v['language']);
         }
@@ -506,11 +516,11 @@ default:
             error_log("Error parsing NE-ON file: " . $e->getMessage());
         }
         if (is_array($csp)) {
-            $cspn = $data['csp_nonce'] = sha1(random_bytes(8));
+            $csp_nonce = $data['csp_nonce'] = sha1(random_bytes(8));
             header(
                 str_replace(
                     'nonce-random',
-                    'nonce-' . $cspn,
+                    'nonce-' . $csp_nonce,
                     implode(' ', (array) $csp['csp'])
                 )
             );

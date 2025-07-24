@@ -32,7 +32,7 @@
       }
 
       // API: GetCsvInfo
-      $.get("/admin/GetCsvInfo?" + Date.now(), function (data) {
+      $.get("/{{ cfg.admin }}/GetCsvInfo?" + Date.now(), function (data) {
           GSC.PingDot("#csv_ping");
           var content = "";
           var now = ~~(Date.now() / 1000);
@@ -134,7 +134,7 @@
       });
 
       // API: GetArticlesInfo
-      $.get("/admin/GetArticlesInfo?" + Date.now(), function (data) {
+      $.get("/{{ cfg.admin }}/GetArticlesInfo?" + Date.now(), function (data) {
         if (data && data.data) {
           $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
           for (var i in data.data) {
@@ -194,7 +194,7 @@
         if (!$("#RemoteFnSelect").val()) return;
 
         // API: GetToken
-        $.get("/admin/GetToken?" + Date.now(), function (data) {
+        $.get("/{{ cfg.admin }}/GetToken?" + Date.now(), function (data) {
           var s = $("#RemoteFnSelect").val();
           var t = data.data[0];
           t = t.replace(/[a-zA-Z]*\?/, s + "?");
@@ -221,7 +221,7 @@
         }, 30E3);
 
         // API: CoreUpdate
-        $.post("/admin/CoreUpdate");
+        $.post("/{{ cfg.admin }}/CoreUpdate");
         M.toast({text: "{{ l.a_processing_data }}", classes: "normaltoast"});
       });
 
@@ -260,7 +260,7 @@
         if (info === undefined) {
 
           // API: getUploadsInfo
-          $.get("/admin/getUploadsInfo?" + Date.now(), function (data) {
+          $.get("/{{ cfg.admin }}/getUploadsInfo?" + Date.now(), function (data) {
             if (data && data.data && data.data.reg_count && data.data.reg_size) {
               var i1 = data.data.reg_count;
               var i2 = GSC.FormatBytes(data.data.reg_size);
@@ -276,7 +276,7 @@
 
       // GSC.RenderUploadInfo()
       if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
-        $.get("/admin/getUploads?" + Date.now(), function (data) {
+        $.get("/{{ cfg.admin }}/getUploads?" + Date.now(), function (data) {
           if (data && data.data && data.data.files) {
 
             setCookie("open_filemanager", 1);
@@ -523,7 +523,7 @@
                 $('#fig' + fig).hide(250);
 
                 // API: UploadedFileDelete
-                $.post("/admin/UploadDelete", {
+                $.post("/{{ cfg.admin }}/UploadDelete", {
                   name: x
                 }).done(function (data) {
                   M.toast({text: "🚮 " + x, classes: "normaltoast"});
@@ -545,7 +545,7 @@
         $("#a_flush").attr("disabled", "disabled");
 
         // API: FlushCache
-        $.post("/admin/FlushCache");
+        $.post("/{{ cfg.admin }}/FlushCache");
         location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}");
       });
 
@@ -591,7 +591,7 @@
     // SETUP ZEROUPLOAD
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
-      ZeroUpload.setURL("/admin/Upload");
+      ZeroUpload.setURL("/{{ cfg.admin }}/Upload");
       ZeroUpload.setMaxFiles({{ CONST.MAX_FILE_UPLOADS }});
       ZeroUpload.setMaxBytes(100 * 1024 * 1024); // 100 MB
 

@@ -62,7 +62,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         ><i class="fas fa-sign-out-alt"></i></a>
 {{#admin_group_admin}}
       <a
-        href="/admin/AuditLog?nonce={{ nonce }}"
+        href="/{{ cfg.admin }}/AuditLog?nonce={{ nonce }}"
         class="tooltipped waves-effect waves-light blue btn"
         target="_blank"
         ref="nofollow"
@@ -70,7 +70,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         data-position="left"
         ><i class="fas fa-list"></i></a>
       <a
-        href="/admin/BlockLog?nonce={{ nonce }}"
+        href="/{{ cfg.admin }}/BlockLog?nonce={{ nonce }}"
         class="tooltipped waves-effect waves-light red btn"
         target="_blank"
         ref="nofollow"

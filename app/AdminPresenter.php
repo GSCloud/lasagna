@@ -122,6 +122,7 @@ class AdminPresenter extends APresenter
         if (!\is_array($data)) {
             return $this;
         }
+        // expand Model
         $this->dataExpander($data);
 
         // MATCH and VIEW
@@ -136,12 +137,14 @@ class AdminPresenter extends APresenter
         }
 
         // USER
+        $data['user'] = null;
         $u = $this->getCurrentUser();
         if (\is_array($u)) {
             $data['user'] = $u;
         }
 
         // GROUP
+        $data['admin'] = null;
         $g = $this->getUserGroup();
         if (\is_string($g)) {
             $data['admin'] = $g;
@@ -164,12 +167,10 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'Upload':
             $this->checkPermission('admin,manager,editor');
-
             // Check if the upload directory is set
             if (\is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
-
             // Check if the upload directory exists and is writable
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);

@@ -16,7 +16,11 @@ info "Version: $VERSION Revisions: $REVISIONS"
 rm -rf logs/* temp/*
 
 command -v composer >/dev/null 2>&1 || fail "PHP composer is not installed!"
+
 composer update --no-plugins --no-scripts
+if [[ "$?" -eq "2" ]]; then exit 2; fi
+
+composer dump-autoload --optimize
 if [[ "$?" -eq "2" ]]; then exit 2; fi
 
 git commit -am "automatic update"
