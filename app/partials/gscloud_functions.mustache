@@ -440,16 +440,18 @@ async function sha256(message) {
       }
      
       // mobile logout
-      {{#is_admin}}
-      $('#nav-mobile').append('<br><li><a rel="noindex nofollow" data-umami-event="logout" class="white-text bold right oauth" href="/logout"><i class="fa-solid fa-right-from-bracket red-text"></i>Logout</a></li>');
-      {{/is_admin}}
-
-      {{^is_admin}}{{#goauth_client_id}}{{#goauth_secret}}
+      {{#is_logged}}
+      $('#nav-mobile').append('<br><li><a rel="noindex nofollow" data-umami-event="logout" class="white-text bold right oauth" href="/logout"><i class="fa-solid fa-right-from-bracket yellow-text"></i>Logout</a></li>');
+      $('.main-header nav.navbar ul').append('<li><a rel="noindex nofollow" data-umami-event="logout" class="logout white-text bold right oauth" href="/logout"><i class="fa-solid fa-right-from-bracket yellow-text"></i></a></li>');
+      {{/is_logged}}
+      {{^is_logged}}
+      {{#goauth_client_id}}{{#goauth_secret}}
       // mobile login
       $('#nav-mobile').append('<br><li><a rel="noindex nofollow" data-umami-event="login" class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i>Login</a></li>');
       // desktop login
       $('.main-header nav.navbar ul').append('<li><a rel="noindex nofollow" data-umami-event="login" class="login white-text bold right oauth" href="/login"><i class="fa-solid fa-key yellow-text"></i></a></li>');
-      {{/goauth_secret}}{{/goauth_client_id}}{{/is_admin}}
+      {{/goauth_secret}}{{/goauth_client_id}}
+      {{/is_logged}}
 
       // return URL parameter
       $(".login").each(function() {

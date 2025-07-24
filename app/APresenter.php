@@ -852,7 +852,7 @@ abstract class APresenter
     /**
      * Get current user
      *
-     * @return array current user data
+     * @return array user data
      */
     public function getCurrentUser()
     {
@@ -2032,11 +2032,15 @@ abstract class APresenter
 
         // USERS AND GROUPS
         $data["is_admin"] = false;
+        $data["is_logged"] = false;
         $data['user'] = $user = $this->getCurrentUser();
         $data['group'] = $data['admin'] = $group = $this->getUserGroup();
         if ($group) {
             $data["admin_group_{$group}"] = true;
             $data["is_admin"] = true;
+        }
+        if ($user && $user['id']) {
+            $data["is_logged"] = true;
         }
         $this->data = $data;
 
