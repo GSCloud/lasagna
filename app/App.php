@@ -306,12 +306,13 @@ $data['cache_profiles'] = $cache_profiles;
 
 // ADMIN ENDPOINT
 $admin = $data['admin'] ?? 'admin';
+$admin = substr($admin, 0, 32);
 $admin = trim($admin, '/');
 if ($admin === '') {
     $admin = 'admin';
 }
 if (is_dir(WWW . DS . $admin)) {
-    throw new \Exception("Administration endpoint [{$admin}] already exists as a web folder!"); // phpcs:ignore
+    throw new \Exception("Admin endpoint [{$admin}] already exists as a web folder!"); // phpcs:ignore
 }
 $data['admin'] = $admin;
 $data['cfg']['admin'] = $admin;

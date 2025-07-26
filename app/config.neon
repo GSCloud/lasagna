@@ -16,7 +16,7 @@ project: LASAGNA
 secret_cookie_key: secure.key
 identity_nonce_key: identity_nonce.key
 version: v1 # is it used anywhere??
-admin: 'eijkhfrvhsegfvoh' # administration endpoint stub
+admin: 'ewiufyveuwigfyveiur' # administration endpoint stub
 
 # Google OAuth 2.0
 goauth_origin: "https://lasagna.gscloud.cz"

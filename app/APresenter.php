@@ -2100,13 +2100,14 @@ abstract class APresenter
      */
     public function getIdentityNonce()
     {
-        $file = DATA . DS . self::IDENTITY_NONCE_FILE;
+        $file = $this->getCfg('identity_nonce_file') ?? self::IDENTITY_NONCE_FILE;
+        $file = DATA . DS . $file;
         if (\file_exists($file) && \is_readable($file)) {
             if ($nonce = \file_get_contents($file)) {
                 if (\preg_match('/^[a-f0-9]{64}$/', $nonce)) {
                     return $nonce;
                 } else {
-                    \error_log("Invalid format for existing identity nonce.");
+                    \error_log("Invalid format in existing identity nonce.");
                 }
             }
         }
@@ -2120,19 +2121,21 @@ abstract class APresenter
                 $randomBytes = \openssl_random_pseudo_bytes(32);
                 $time = (string) \microtime(true);
                 $nonce = \hash('sha256', $randomBytes . $time);
-                \error_log("Using less secure openssl_random_pseudo_bytes to generate nonce."); // phpcs:ignore
             } else {
-                \error_log("Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage()); // phpcs:ignore
-                throw new \RuntimeException("Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage()); // phpcs:ignore
+                $x = "Error generating identity nonce through openssl_random_pseudo_bytes: " . $e->getMessage(); // phpcs:ignore
+                \error_log($x);
+                throw new \RuntimeException($x);
             }
         }
         if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-            \error_log('Failed to write identity nonce to file.');
-            throw new \Exception("Failed to write identity nonce to file.");
+            $x = 'Failed to write identity nonce to file.';
+            \error_log($x);
+            throw new \Exception($x);
         }
         if (\chmod($file, 0644) === false) {
-            \error_log('Failed to set permissions on identity nonce file.'); // phpcs:ignore
-            throw new \Exception("Failed to set permissions on identity nonce file."); // phpcs:ignore
+            $x = 'Failed to set permissions on identity nonce file.';
+            \error_log($x);
+            throw new \Exception($x);
         }
         return $nonce;
     }
