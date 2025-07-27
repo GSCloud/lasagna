@@ -100,11 +100,7 @@ class HomePresenter extends APresenter
         // render
         $output = '';
         if ($data) {
-            $output = $this->setData(
-                $data
-            )->renderHTML(
-                $presenter[$view]['template']
-            );
+            $output = $this->setData($data)->renderHTML($presenter[$view]['template']); // phpcs:ignore
         }
         SF::trimHtmlComment($output);
         return $this->setData('output', $output);
