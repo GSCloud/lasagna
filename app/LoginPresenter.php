@@ -83,7 +83,7 @@ class LoginPresenter extends APresenter
             if (isset($_GET['returnURL'])) {
                 $url = $_GET['returnURL'];
                 if (\strpos($url, '/') === 0) {
-                    $this->setLocation($url . '?nonce=' . $this->getNonce());
+                    $this->setLocation($url . '?' . $this->getNonce());
                 }
             }
             $this->setLocation();
@@ -203,7 +203,7 @@ class LoginPresenter extends APresenter
                 if (isset($_COOKIE['returnURL'])) {
                     $url = \urldecode($_COOKIE['returnURL']);
                     if (\strpos($url, '/') === 0) {
-                        $this->setLocation($url . '?nonce=' . $this->getNonce());
+                        $this->setLocation($url . '?' . $this->getNonce());
                     }
                 }
                 $this->setLocation();

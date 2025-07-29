@@ -40,19 +40,19 @@ class HomePresenter extends APresenter
     public function process($param = null)
     {
         $this->checkRateLimit();
-        if (!\is_array($data = $this->getData())) { // Model
+        if (!\is_array($data = $this->getData())) {
             return $this;
         }
-        if (!\is_string($view = $this->getView())) { // View
+        if (!\is_string($view = $this->getView())) {
             return $this;
         }
-        if (!\is_array($presenter = $this->getPresenter())) { // Presenter
+        if (!\is_array($presenter = $this->getPresenter())) {
             return $this;
         }
-
-        // HTML header + expand Model
         $this->setHeaderHtml()->dataExpander($data);
-        $data[$view . '_menu'] = true; // content switcher
+
+        // content switching
+        $data[$view . '_menu'] = true;
 
         // add custom replacements from NE-ON file
         $reps_file = APP . DS . 'custom_replacements.neon';
@@ -93,6 +93,12 @@ class HomePresenter extends APresenter
                 }
             } else {
                 SF::convertEolToBrNbsp($data['l'][$k]);
+            }
+            if (\str_starts_with($k, 'meta_')) {
+                continue;
+            }
+            if (\str_starts_with($k, 'og_')) {
+                continue;
             }
             SF::correctTextSpacing($data['l'][$k], $lang);
         }

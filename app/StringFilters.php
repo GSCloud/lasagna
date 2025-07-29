@@ -649,7 +649,26 @@ class StringFilters
     }
 
     /**
-     * Convert EOLs to breakline + non-breakable space (adjustable by CSS rules)
+     * Convert EOLs to space
+     *
+     * @param string $content string content by reference
+     * 
+     * @return void
+     */
+    public static function convertEolToSpace(&$content)
+    {
+        if (\is_string($content)) {
+            $content = \str_replace(
+                array(
+                "\n",
+                "\r\n",
+                ), ' ', $content
+            );
+        }
+    }
+
+    /**
+     * Convert EOLs to breakline + non-breaking space (adjustable by CSS rules)
      *
      * @param string $content string content by reference
      * 

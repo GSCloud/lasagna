@@ -16,8 +16,8 @@ var core = [
   '{{ cdn }}/img/favicon-512.webp',
 ];
 
-var excludedExtensions = ['.deb', '.exe', '.flac', '.mkv', '.mp3', '.mp4', '.webm', '.zip'];
-var excludedPaths = ['/config', '/login', '/logout', '/print/', '?nonce='];
+var excludedExtensions = ['.deb', '.exe', '.flac', '.mkv', '.mp3', '.mp4', '.webm', '.zip', '.lha', '.dmg', '.iso', '.ogg'];
+var excludedPaths = ['/login', '/logout', '/print/', '?'];
 
 self.addEventListener('install', function (event) {
   event.waitUntil(
@@ -38,7 +38,6 @@ self.addEventListener('fetch', function (event) {
   if (!(event.request.url.indexOf('http') === 0)) return;
   if (event.request.url.startsWith('https://cdn.') === true) return;
   if (event.request.url.startsWith('https://accounts.') === true) return;
-
   if (excludedPaths.some(function(path) {return event.request.url.indexOf(path) !== -1;})) return;
   if (excludedExtensions.some(function(ext) {return event.request.url.endsWith(ext);})) return;
 

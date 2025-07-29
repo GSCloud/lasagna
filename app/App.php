@@ -121,19 +121,17 @@ $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
 $data['PHP_VERSION'] = PHP_VERSION;
 $data['DATA_VERSION'] = null;
-$data['VERSION'] = $version = trim(@file_get_contents(ROOT . DS . 'VERSION') ?: '');
+$data['VERSION'] = $version = trim(file_get_contents(ROOT . DS . 'VERSION') ?: '');
 $data['VERSION_SHORT'] = $base58->encode(base_convert(substr($version, 0, 6), 16, 10)); // phpcs:ignore
 $data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time()); // phpcs:ignore
 $data['VERSION_TIMESTAMP'] = @filemtime(ROOT . DS . 'VERSION') ?: time();
-$data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
+$data['REVISIONS'] = (int) trim(file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
 
 // RANDOM HASH set by the administrator after CACHE PURGE
 $hash = DATA . DS . '_random_cdn_hash';
 if (file_exists($hash) && is_readable($hash)) {
     if ($hash = file_get_contents($hash)) {
         $version = trim($hash);
-    } else {
-        $version = hash('sha256', random_bytes(16) . (string) time());
     }
 }
 $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
@@ -163,12 +161,12 @@ if (!$rqp) {
 $rqp = trim($rqp, '/');
 $data['request_path'] = $rqp;
 $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
-$data['nonce'] = $data['NONCE'] = $nonce = substr(hash('sha256', random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
+$data['nonce'] = $data['NONCE'] = $nonce = substr(md5(random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
 $data['LOCALHOST'] = (bool) LOCALHOST;
 
 // canonical URI
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
-defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . hash('sha256', $x) . SS);
+defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
 
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
@@ -472,8 +470,8 @@ if ($router[$view]['redirect'] ?? false) {
 if ($router[$view]['country'] ?? false) {
     $nonce = '';
     if (isset($_GET['nonce'])) {
-        $rand = substr(hash('sha256', random_bytes(8) . (string) time()), 0, 16);
-        $nonce = "?nonce={$rand}";
+        $rand = substr(md5(random_bytes(8) . (string) time()), 0, 4);
+        $nonce = "?{$rand}";
     }
     if (!LOCALHOST && array_key_exists($country, $router[$view]['country'])) {
         if (ob_get_level()) {
@@ -521,7 +519,7 @@ default:
             error_log("Error parsing NE-ON file: " . $e->getMessage());
         }
         if (is_array($csp)) {
-            $csp_nonce = $data['csp_nonce'] = sha1(random_bytes(8));
+            $csp_nonce = $data['csp_nonce'] = md5(random_bytes(8));
             header(
                 str_replace(
                     'nonce-random',

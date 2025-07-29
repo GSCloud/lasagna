@@ -300,9 +300,9 @@ abstract class APresenter
     }
 
     /**
-     * Render HTML content from given template
+     * Render HTML content from given template (string or filename)
      *
-     * @param string $template Template name
+     * @param string $template template
      * 
      * @return string HTML output
      */
@@ -311,55 +311,56 @@ abstract class APresenter
         if (\is_null($template)) {
             $template = 'index';
         }
+
         // $type: string = 0, template = 1
-        $type = (file_exists(TEMPLATES . DS . "{$template}.mustache")) ? 1 : 0;
+        $type = (\file_exists(TEMPLATES . DS . "{$template}.mustache")) ? 1 : 0;
+
         $renderer = new \Mustache_Engine(
-            array(
-            'template_class_prefix' => PROJECT . SS,
-            'cache' => TEMP,
-            'cache_file_mode' => 0666,
-            'cache_lambda_templates' => true,
-            'loader' => $type ? new \Mustache_Loader_FilesystemLoader(TEMPLATES)
-                : new \Mustache_Loader_StringLoader,
-            'partials_loader' => new \Mustache_Loader_FilesystemLoader(PARTIALS),
-            'helpers' => [
-                'timestamp' => function () {
-                    return (string) time();
+            [
+                'template_class_prefix' => PROJECT . SS,
+                'cache' => TEMP,
+                'cache_file_mode' => 0666,
+                'cache_lambda_templates' => true,
+                'loader' => $type ? new \Mustache_Loader_FilesystemLoader(TEMPLATES)
+                    : new \Mustache_Loader_StringLoader,
+                'partials_loader' => new \Mustache_Loader_FilesystemLoader(PARTIALS),
+                'helpers' => [
+                    'timestamp' => function () {
+                        return (string) time();
+                    },
+                    'rndstr' => function () {
+                        return $this->getNonce();
+                    },
+                    'convert_hyperlinks' => function (
+                        $source, \Mustache_LambdaHelper $lambdaHelper
+                    ) {
+                        $text = $lambdaHelper->render($source);
+                        $text = preg_replace(
+                            '/(https)\:\/\/([a-zA-Z0-9\-\.]+\.'
+                            . '[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/',
+                            '<a rel="noopener nofollow" '
+                            . 'target=_blank href="$0">$2$3</a>',
+                            $text
+                        );
+                        return (string) $text;
+                    },
+                    'shuffle_lines' => function (
+                        $source, \Mustache_LambdaHelper $lambdaHelper
+                    ) {
+                        $text = $lambdaHelper->render($source);
+                        $arr = explode("\n", $text);
+                        shuffle($arr);
+                        $text = join("\n", $arr);
+                        return (string) $text;
+                    },
+                ],
+                'charset' => 'UTF-8',
+                'escape' => function ($value) {
+                    return $value;
                 },
-                'rndstr' => function () {
-                    return $this->getNonce();
-                },
-                'convert_hyperlinks' => function (
-                    $source, \Mustache_LambdaHelper $lambdaHelper
-                ) {
-                    $text = $lambdaHelper->render($source);
-                    $text = preg_replace(
-                        '/(https)\:\/\/([a-zA-Z0-9\-\.]+\.'
-                        . '[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/',
-                        '<a rel="noopener nofollow" '
-                        . 'target=_blank href="$0">$2$3</a>',
-                        $text
-                    );
-                    return (string) $text;
-                },
-                'shuffle_lines' => function (
-                    $source, \Mustache_LambdaHelper $lambdaHelper
-                ) {
-                    $text = $lambdaHelper->render($source);
-                    $arr = explode("\n", $text);
-                    shuffle($arr);
-                    $text = join("\n", $arr);
-                    return (string) $text;
-                },
-            ],
-            'charset' => 'UTF-8',
-            'escape' => function ($value) {
-                return $value;
-            },
-            )
+            ]
         );
-        return $type ? $renderer->loadTemplate($template)->render($this->getData())
-            : $renderer->render($template, $this->getData());
+        return $type ? $renderer->loadTemplate($template)->render($this->getData()) : $renderer->render($template, $this->getData()); // phpcs:ignore
     }
 
     /**
@@ -729,13 +730,10 @@ abstract class APresenter
             'country' => '',
         ];
 
-        // nonce required
-        $nonce = $this->getIdentityNonce();
-
         // set keys
         $i['ip'] = $this->getIP();
+        $i['nonce'] = $this->getIdentityNonce();
         $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
-        $i['nonce'] = $nonce;
 
         // check other keys
         if (\array_key_exists('id', $identity)) {
@@ -812,40 +810,36 @@ abstract class APresenter
             return $this->identity;
         }
 
-        // nonce required
         $nonce = $this->getIdentityNonce();
-
-        // COOKIE identity
         $app = $this->getCfg('app') ?? 'app';
+
         if (isset($_COOKIE[$app])) {
             $content = $this->getCookie($app);
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                \error_log('Cookie identity is not an array.');
+                \error_log('Identity is not an array.');
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                \error_log('Cookie identity has no email.');
+                \error_log('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                \error_log('Cookie identity has no id.');
+                \error_log('Identity has no id.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                \error_log('Cookie identity has no nonce.');
+                \error_log('Identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                \error_log('Cookie identity nonce is invalid.');
+                \error_log('Identity nonce is invalid.');
                 $this->logout();
             }
             if ($q['nonce'] === $nonce) {
                 $this->identity = $q;
             }
         }
-
-        // empty identity
         return $this->identity;
     }
 
@@ -1150,7 +1144,7 @@ abstract class APresenter
         }
         $code = (int) $code;
         if (empty($location)) {
-            $location = '/?nonce=' . $this->getNonce();
+            $location = '/?' . $this->getNonce();
         }
         \header("Location: $location", true, ($code > 300) ? $code : 303);
         exit;
@@ -1166,8 +1160,7 @@ abstract class APresenter
         if (CLI) {
             exit;
         }
-        $nonce = $this->getNonce();
-        $this->setLocation("/?logout&nonce=$nonce");
+        $this->setLocation('/?logout&' . $this->getNonce());
     }
 
     /**

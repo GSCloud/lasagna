@@ -87,11 +87,11 @@
         if (getCookie('debug')) {
           $('#debugger').removeClass('red').addClass('grey');
           delCookie('debug');
-          location.replace("/?nonce={{ nonce }}");
+          location.replace("/?{{ nonce }}");
         } else {
           $('#debugger').removeClass('grey').addClass('red');
           setCookie('debug', 1);
-          location.replace("/?nonce={{ nonce }}");
+          location.replace("/?{{ nonce }}");
         }
       });
 
@@ -546,7 +546,7 @@
 
         // API: FlushCache
         $.post("/{{ cfg.admin }}/FlushCache");
-        location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}");
+        location.replace(location.href.split('?')[0] + "?{{ nonce }}");
       });
 
       // LOGOUT
@@ -554,7 +554,7 @@
         setCookie("logout", 1);
         $("#admin_main").hide(100);
         M.toast({text: "{{ l.a_logout_msg }}", classes: "normaltoast"});
-        GSC.offline ? location.replace(location.href.split('?')[0] + "?nonce={{ nonce }}") : location.replace("/logout");
+        GSC.offline ? location.replace(location.href.split('?')[0] + "?{{ nonce }}") : location.replace("/logout");
       });
 
     });
