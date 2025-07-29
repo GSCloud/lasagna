@@ -87,11 +87,11 @@
         if (getCookie('debug')) {
           $('#debugger').removeClass('red').addClass('grey');
           delCookie('debug');
-          location.replace("/?{{ nonce }}");
+          location.replace(location.href.split('?')[0] + "?{{ nonce }}");
         } else {
           $('#debugger').removeClass('grey').addClass('red');
           setCookie('debug', 1);
-          location.replace("/?{{ nonce }}");
+          location.replace(location.href.split('?')[0] + "?{{ nonce }}");
         }
       });
 
