@@ -61,9 +61,9 @@ if (isset($_GET['logout'])) {
 
 // CLEAR EVERYTHING on ?clearall
 if (isset($_GET['clearall'])) {
-    $canonicalUrl = $cfg['canonical_url'] ?? '';
-    $googleOAuthOrigin = $cfg['goauth_origin'] ?? '';
-    $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? '';
+    $canonicalUrl = $cfg['canonical_url'] ?? null;
+    $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
+    $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
     $nonce = substr(md5(random_bytes(4) . (string) time()), 0, 4);
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
     $redirectUrl = trim($redirectUrl, '/');
