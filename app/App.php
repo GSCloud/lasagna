@@ -50,22 +50,26 @@ if (isset($_GET['logout'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
+    $nonce = substr(md5(random_bytes(4) . (string) time()), 0, 4);
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
-    error_log('Logout triggered from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown')); // phpcs:ignore
+    $redirectUrl = trim($redirectUrl, '/');
+    $redirectUrl .= "/?{$nonce}";
     header('Clear-Site-Data: "cookies"');
-    header("Location: " . ($redirectUrl ?? '/'), true, 303);
+    header("Location: {$redirectUrl}", true, 303);
     exit;
 }
 
 // CLEAR EVERYTHING on ?clearall
 if (isset($_GET['clearall'])) {
-    $canonicalUrl = $cfg['canonical_url'] ?? null;
-    $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
-    $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
+    $canonicalUrl = $cfg['canonical_url'] ?? '';
+    $googleOAuthOrigin = $cfg['goauth_origin'] ?? '';
+    $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? '';
+    $nonce = substr(md5(random_bytes(4) . (string) time()), 0, 4);
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
-    error_log('Clearall triggered from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown')); // phpcs:ignore
+    $redirectUrl = trim($redirectUrl, '/');
+    $redirectUrl .= "/?{$nonce}";
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
-    header("Location: " . ($redirectUrl ?? '/'), true, 303);
+    header("Location: {$redirectUrl}", true, 303);
     exit;
 }
 

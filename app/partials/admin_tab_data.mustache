@@ -1,5 +1,5 @@
 <div id="data" class="container">
-  <div class="row center">
+  <div class="row">
 
     <h4>{{ l.a_locales }}&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h4>
 
@@ -20,7 +20,7 @@
           data-position="top"
           data-tooltip="{{ l.a_update_ttip }}"
           ><i
-          class="fab fa-google-drive"></i>&nbsp;&nbsp;{{ l.a_update }}</a>
+            class="fab fa-google-drive"></i>&nbsp;&nbsp;{{ l.a_update }}</a>
         <a
           id="a_flush"
           class="tooltipped waves-effect waves-light green btn"
@@ -28,11 +28,11 @@
           data-position="top"
           data-tooltip="{{ l.a_flush_ttip }}"
           ><i
-          class="fa-solid fa-rocket"></i>&nbsp;&nbsp;{{ l.a_flush }}</a>
+            class="fa-solid fa-rocket"></i>&nbsp;&nbsp;{{ l.a_flush }}</a>
       </div>
     </div>
 
-    <div class="bl col s12 l4">
+    <div class="center bl col s12 l4">
       <p>
         {{^disable_articles}}
         <div class="white">
@@ -46,7 +46,7 @@
           data-position="top"
           data-tooltip="{{ l.a_summernote_ttip }}"
           ><i
-          class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
+            class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
         <a
           id="a_article"
           class="tooltipped waves-effect waves-light green btn"
@@ -54,7 +54,7 @@
           data-position="top"
           data-tooltip="{{ l.a_article_ttip }}"
           ><i
-          class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
+            class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
         <br>
         {{/disable_articles}}
 
@@ -66,7 +66,7 @@
           data-position="top"
           data-tooltip="{{ l.a_upload_ttip }}"
           ><i
-          class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
+            class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
         <a
           id="a_files"
           class="tooltipped waves-effect waves-light brown btn"
@@ -74,9 +74,9 @@
           data-position="top"
           data-tooltip="{{ l.a_files_ttip }}"
           ><i
-          class="fa-solid fa-bucket"></i>&nbsp;&nbsp;<span id="files_count"></span></a>
+            class="fa-solid fa-bucket"></i>&nbsp;&nbsp;<span id="files_count"></span></a>
 
-        <div id="uploads_extended_info"></div>
+        <div id="uploads_extended_info" class="center"></div>
 
         {{ l.a_max_post_size }}&nbsp;<b>{{ CONST.POST_MAX_SIZE }}</b>,
         {{ l.a_max_file_uploads }}&nbsp;<b>{{ CONST.MAX_FILE_UPLOADS }}</b>,

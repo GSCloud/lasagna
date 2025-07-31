@@ -47,7 +47,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 </span>
 
 <!-- ADMIN PANEL -->
-<div id="admin_main" class="row center black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
+<div id="admin_main" class="row black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
 
   <!-- CURRENT USER -->
   <div class="right black" style="z-index:99;position:sticky!important;top:60px;right:0;padding:5px!important;opacity:0.8">
@@ -112,36 +112,29 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 
   <!-- DATA -->
   {{>admin_tab_data}}
-
   <!-- FN -->
   {{>admin_tab_fn}}
-
   <!-- SERVICES -->
   {{>admin_tab_services}}
-
   <!-- USERS -->
   {{>admin_tab_users}}
-
   <!-- NEWS -->
   {{>admin_tab_news}}
 
   <hr>
 
-  {{ l.a_fcgi }}: <span class=bold>{{#CONST.FCGI_ENABLED}}{{ l.a_on }}{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}{{ l.a_off }}{{/CONST.FCGI_ENABLED}}</span>, &nbsp;
-  {{ l.a_redis }}: <span class=bold>{{#CONST.REDIS_CACHE}}{{ l.a_on }}{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}{{ l.a_off }}{{/CONST.REDIS_CACHE}}</span>
-  
-  <br>
-  
-  {{ l.a_limiter }}: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
-  {{ l.a_ban }}: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
-  
-  <br>
-
-  {{ l.a_model }}: <span class=bold id="time1">?</span> ms &nbsp;
-  {{ l.a_processing }}: <span class=bold id="time2">?</span> ms &nbsp;
-  {{ l.a_total }}: <span class=bold id="time3">?</span> ms
-  
-  <br>
+  <div class="row center">
+    {{ l.a_fcgi }}: <span class=bold>{{#CONST.FCGI_ENABLED}}{{ l.a_on }}{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}{{ l.a_off }}{{/CONST.FCGI_ENABLED}}</span>, &nbsp;
+    {{ l.a_redis }}: <span class=bold>{{#CONST.REDIS_CACHE}}{{ l.a_on }}{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}{{ l.a_off }}{{/CONST.REDIS_CACHE}}</span>
+    <br>
+    {{ l.a_limiter }}: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
+    {{ l.a_ban }}: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
+    <br>
+    {{ l.a_model }}: <span class=bold id="time1">?</span> ms &nbsp;
+    {{ l.a_processing }}: <span class=bold id="time2">?</span> ms &nbsp;
+    {{ l.a_total }}: <span class=bold id="time3">?</span> ms
+    <br>
+  </div>
 
   <!-- UPLOADS -->
   <div id="a_uploader_progress"></div>

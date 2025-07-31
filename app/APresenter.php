@@ -1160,7 +1160,7 @@ abstract class APresenter
         if (CLI) {
             exit;
         }
-        $this->setLocation('/?logout&' . $this->getNonce());
+        $this->setLocation('/?logout');
     }
 
     /**

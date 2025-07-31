@@ -1,9 +1,11 @@
-<div id="users" class="col s12">
+<div id="users" class="row container">
+
+    <h4>{{ l.a_groups_permissions }}</h4>
+
     <!-- groups -->
     <div class="container">
-      <h4>{{ l.a_groups_permissions }}</h4>
       <div class="white-text">
-        <div class="row center">
+        <div class="row">
 
           {{#admin_groups_masked}}
           <strong class="group_icon_admin">ADMIN</strong>

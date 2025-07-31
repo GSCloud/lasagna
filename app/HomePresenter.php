@@ -40,12 +40,15 @@ class HomePresenter extends APresenter
     public function process($param = null)
     {
         $this->checkRateLimit();
+
         if (!\is_array($data = $this->getData())) {
             return $this;
         }
+
         if (!\is_string($view = $this->getView())) {
             return $this;
         }
+
         if (!\is_array($presenter = $this->getPresenter())) {
             return $this;
         }

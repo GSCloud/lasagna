@@ -3,7 +3,7 @@
   // logout cookie
   if (getCookie("logout")) {
     d.getElementById("admin_main").style.display = "none";
-    setCookie("motyle", "true");
+    setCookie("adminpanel", "true");
     delCookie("logout");
     return;
   }
@@ -45,18 +45,18 @@
             if (!data.data[x]["sheet"]) continue;
             if (sheet) {
               link =
-                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px" ' +
+                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px;padding:3px;" ' +
                 'class="orange mono white-text bold" href="' +
                 'https://docs.google.com/spreadsheets/d/' +
-                sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;' +
+                sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;&nbsp;' +
                 x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
-                ' style="font-size:1.2rem;border-radius:2px" class="csv' + x +  ' bold blue white-text mono" ' +
+                ' style="font-size:1.2rem;border-radius:2px;padding:3px;" class="csv' + x +  ' bold blue white-text mono" ' +
                 'href="https://docs.google.com/spreadsheets/d/e/' +
-                csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;' +
+                csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;&nbsp;' +
                 lines + '&nbsp;</a>&nbsp;';
             }
-            content += (link + "&nbsp;<span class=csv" + x + ">" +
-              moment.duration(Math.abs(~~((now - data.data[x]["timestamp"]))), "seconds").humanize() + "</span><br>"
+            content += (link + '&nbsp;&nbsp;<i class="material-icons grey-text tiny">access_time</i>&nbsp;&nbsp;<span class=csv' +
+              x + '>' + moment.duration(Math.abs(~~((now - data.data[x]['timestamp']))), 'seconds').humanize() + '</span><br>'
             );
           }
           $("#a_update_info").html(content);
@@ -153,7 +153,7 @@
       w.GSC.names.push("admin UI - bind");
 
       // SHOW ADMIN UI?
-      if (!getCookie("motyle") || getCookie("motyle") == "false") {
+      if (!getCookie("adminpanel") || getCookie("adminpanel") == "false") {
         $("#admin_main").show(100);
       }
 
@@ -176,7 +176,7 @@
       $(".admin_panel_switch").click(function () {
         $("#admin_main").toggle(100, function () {
           window.scrollTo(0, 0);
-          setCookie("motyle", $("#admin_main").is(":hidden"));
+          setCookie("adminpanel", $("#admin_main").is(":hidden"));
         })
       });
 
@@ -551,10 +551,14 @@
 
       // LOGOUT
       $("#a_logout").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
         setCookie("logout", 1);
-        $("#admin_main").hide(100);
+        $("#admin_main").hide(200);
         M.toast({text: "{{ l.a_logout_msg }}", classes: "normaltoast"});
-        GSC.offline ? location.replace(location.href.split('?')[0] + "?{{ nonce }}") : location.replace("/logout");
+        location.replace(location.href.split('?')[0] + "?{{ nonce }}");
       });
 
     });

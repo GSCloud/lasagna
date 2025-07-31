@@ -1,31 +1,58 @@
-<div id="services" class="col s12">
+<div id="services" class="row container">
 
   <h4>{{ l.a_services }}</h4>
 
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://myaccount.google.com/dashboard">
-    <i class="fa-solid fa-key"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_account }}</a>
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_google_password_ttip }}" href="https://passwords.google.com">
-    <i class="fa-solid fa-unlock"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_password }}</a>
+  <a
+    target="_blank"
+    rel="nofollow noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_google_account_ttip }}"
+    href="https://myaccount.google.com/dashboard">
+    <i class="fa-solid fa-key"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;&nbsp;{{ l.a_google_account }}</a>
+  <a
+    target="_blank"
+    rel="nofollow noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_google_password_ttip }}"
+    href="https://passwords.google.com">
+    <i class="fa-solid fa-unlock"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;&nbsp;{{ l.a_google_password }}</a>
 
   {{#google.google-site-verification}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
+  <a
+    target="_blank"
+    rel="nofollow noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_google_search_ttip }}"
     href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
-    <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
+    <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;&nbsp;{{ l.a_google_search }}</a>
   {{/google.google-site-verification}}
 
   {{#google.google-site-domain-verification}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_google_search_ttip }}"
+  <a
+    target="_blank"
+    rel="nofollow noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_google_search_ttip }}"
     href="https://search.google.com/search-console?resource_id={{ canonical_url }}">
-    <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;{{ l.a_google_search }}</a>
+    <i class="fa-brands fa-searchengin"></i><sup><i style="font-size:8px!important" class="fa-brands fa-google"></i></sup>&nbsp;&nbsp;{{ l.a_google_search }}</a>
   {{/google.google-site-domain-verification}}
 
   {{#umami.id}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
+  <a
+    target="_blank"
+    rel="noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_umami_ttip }}"
     href="https://umami.gscloud.cz/websites/{{ umami.id }}">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
       <g data-name="Layer 2">
@@ -34,11 +61,16 @@
           <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
         </g>
       </g>
-    </svg>&nbsp;{{ l.a_umami_ttip }}&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
+    </svg>&nbsp;&nbsp;{{ l.a_umami_ttip }}&nbsp;&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-screwdriver-wrench"></i></sup>
   </a>
   {{#umami.share}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_umami_ttip }}"
+  <a
+    target="_blank"
+    rel="noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_umami_ttip }}"
     href="{{ umami.share }}">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 428 389.11">
       <g data-name="Layer 2">
@@ -47,31 +79,29 @@
           <path d="M413 134.11H15.29a15 15 0 0 0-15 15v15.3C.12 168 0 171.52 0 175.11c0 118.19 95.81 214 214 214 116.4 0 211.1-92.94 213.93-208.67 0-.44.07-.88.07-1.33v-30a15 15 0 0 0-15-15z"></path>
         </g>
       </g>
-    </svg>&nbsp;{{ l.a_umami_ttip }}&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
+    </svg>&nbsp;&nbsp;{{ l.a_umami_ttip }}&nbsp;&nbsp;<sup><i style="font-size:10px!important" class="fa-solid fa-eye"></i></sup>
   </a>
   {{/umami.share}}
   {{/umami.id}}
 
-  {{#langen}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_accounting_ttip }}" href="https://accounting.gscloud.cz">
-    <i class="fa-solid fa-file-invoice"></i>&nbsp;{{ l.a_invoices }}</a>
-  {{/langen}}
-  {{#langcs}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
-    <i class="fa-solid fa-file-invoice"></i>&nbsp;{{ l.a_invoices }}</a>
-  {{/langcs}}
-  {{#langsk}}
-  <a style="margin:2px!important;" class="tooltipped waves-effect waves-light blue btn bold" target="_blank" rel="noopener"
-    data-position="top" data-tooltip="{{ l.a_google_account_ttip }}" href="https://fakturace.gscloud.cz">
-    <i class="fa-solid fa-file-invoice"></i>&nbsp;{{ l.a_invoices }}</a>
-  {{/langsk}}
+  <a
+    target="_blank"
+    rel="noopener"
+    style="margin:2px!important;"
+    class="tooltipped waves-effect waves-light blue btn bold"
+    data-position="top"
+    data-tooltip="{{ l.a_google_account_ttip }}"
+    href="https://fakturace.gscloud.cz"
+    ><i class="fa-solid fa-file-invoice"></i>&nbsp;&nbsp;{{ l.a_invoices }}</a>
 
-  <a id="debugger" style="margin:2px!important;" class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}" data-position="top"
-    data-tooltip="{{ l.a_debugger_ttip }}"><i class="fa-solid fa-bug"></i>&nbsp;{{ l.a_debugger }}</a>
+  <a
+    id="debugger"
+    style="margin:2px!important;"
+    class="right btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}"
+    data-position="top"
+    data-tooltip="{{ l.a_debugger_ttip }}"
+    ><i class="fa-solid fa-bug"></i>&nbsp;&nbsp;{{ l.a_debugger }}</a>
 
-  <br>
-  <br>
+  <br><br>
 
 </div>
