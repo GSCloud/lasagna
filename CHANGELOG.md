@@ -2,6 +2,18 @@
 
 ---
 
+`2025-07-31`
+
+* **`1066-BUGFIX`** various bugfixes and UI enhancements
+
+`2025-07-28`
+
+* **`1068-FEATURE` StringFilter** method: *`SF::convertEolToSpace()`*
+
+`2025-07-25`
+
+* **`1067-FEATURE`** virtual **/admin endpoint**, can be set to any random string
+
 `2025-07-22`
 
 * **`1066-BUGFIX`** various bugfixes and UI enhancements
@@ -73,12 +85,12 @@
 
 * **`1046-FEATURE` no more META keywords**, feature removed  
 * **`1045-FEATURE`** login workflow uses parameter **returnURL**  
-* **`1044-FEATURE` refactorization of StringFilter** class
+* **`1044-FEATURE` StringFilter class refactorization**
 
 `2025-02-17`
 
 * **`1043-FEATURE < 1009-IDEA`** **remember active admin tab**  
-* **`1042-FEATURE`** **StringFilter functions**:  
+* **`1042-FEATURE`** **StringFilter methods**:  
   * *`SF::shortCodesProcessor()`* \- process all codes excl. `[googlemap]`  
   * *`SF::sort()`* \- sort array containing both numeric and textual values  
   * *`SF::rsort()`* \- sort array containing both numeric and textual values, reversed  
