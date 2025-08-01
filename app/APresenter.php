@@ -106,10 +106,10 @@ abstract class APresenter
     public $identity = [];
 
     /* @var boolean force check locales in desctructor */
-    public $force_csv_check = false;
+    private $_force_csv_check = false;
 
     /* @var array CSV Keys */
-    public $csv_postload = [];
+    private $_csv_postload = [];
 
     /* @var array cookies */
     public $cookies = [];
@@ -206,12 +206,12 @@ abstract class APresenter
         $this->_logArrayToJson($criticals, LOGS . DS . 'criticals.json');
 
         // preload CSV definitions
-        foreach ($this->csv_postload as $key) {
+        foreach ($this->_csv_postload as $key) {
             $this->preloadAppData((string) $key, true);
         }
 
         // load actual CSV data
-        $this->checkLocales((bool) $this->force_csv_check);
+        $this->checkLocales((bool) $this->_force_csv_check);
         exit(0);
     }
 
@@ -1142,11 +1142,15 @@ abstract class APresenter
         if (CLI) {
             exit;
         }
+
         $code = (int) $code;
+        $location = (string) $location;
+        $location = \trim($location);
         if (empty($location)) {
-            $location = '/?' . $this->getNonce();
+            \header('Location: /?' . $this->getNonce(), true, 303);
+            exit;
         }
-        \header("Location: $location", true, ($code > 300) ? $code : 303);
+        \header("Location: {$location}", true, ($code > 300) ? $code : 303);
         exit;
     }
 
@@ -1160,6 +1164,7 @@ abstract class APresenter
         if (CLI) {
             exit;
         }
+
         $this->setLocation('/?logout');
     }
 
@@ -1178,6 +1183,7 @@ abstract class APresenter
         if (!\is_numeric($max)) {
             return $this;
         }
+
         $uuid = $this->getUID();
         $ban_rate = "user_ban_limit_{$uuid}";
         $rate_limit = "user_rate_limit_{$uuid}";
@@ -1236,43 +1242,44 @@ abstract class APresenter
         if (CLI) {
             return null;
         }
+
         return Cache::read("user_rate_limit_{$this->getUID()}", 'limiter');
     }
 
     /**
      * Check if current user has access rights
      *
-     * @param mixed $rolelist roles separated by comma (optional)
+     * @param mixed $rolelist roles separated by commas (optional)
      * @param bool  $retbool  return the status as boolean? (optional)
      * 
-     * @return self
+     * @return mixed
      */
     public function checkPermission($rolelist = 'admin', $retbool = false)
     {
         if (CLI || empty($rolelist)) {
             return $this;
         }
+        $email = $this->getIdentity()['email'] ?? null;
+        if (!$email) {
+            return $retbool ? false : $this;
+        }
+        $groups = $this->getData('admin_groups') ?? null;
+        if (!$groups) {
+            return $retbool ? false : $this;
+        }
 
-        $roles = \explode(',', trim((string) $rolelist));
+        $roles = \explode(',', \trim((string) $rolelist));
         if (\is_array($roles)) {
-            $email = $this->getIdentity()['email'] ?? '';
-            $groups = $this->getData('admin_groups') ?? [];
             foreach ($roles as $role) {
-                $role = \strtolower(trim($role));
-                if (strlen($role) && strlen($email)) {
+                $role = \strtolower(\trim($role));
+                if (\strlen($role) && \strlen($email)) {
                     // check if email is allowed
                     if (\in_array($email, $groups[$role] ?? [], true)) {
-                        if ($retbool) {
-                            return true;
-                        }
-                        return $this;
+                        return $retbool ? true : $this;
                     }
-                    // check if any users is allowed
+                    // check if any logged user is allowed
                     if (\in_array('*', $groups[$role] ?? [], true)) {
-                        if ($retbool) {
-                            return true;
-                        }
-                        return $this;
+                        return $retbool ? true : $this;
                     }
                 }
             }
@@ -1280,8 +1287,7 @@ abstract class APresenter
         if ($retbool) {
             return false;
         }
-
-        // not authorized
+        // ERROR 401: not authorized
         $this->setLocation('/err/401');
     }
 
@@ -1293,13 +1299,16 @@ abstract class APresenter
     public function getUserGroup()
     {
         $id = $this->getIdentity()['id'] ?? null;
-        $email = $this->getIdentity()['email'] ?? null;
         if (!$id) {
             return null;
         }
+        $email = $this->getIdentity()['email'] ?? null;
+        if (!$email) {
+            return null;
+        }
+        
         $mygroup = null;
         $email = \trim((string) $email);
-
         // search all groups for email or asterisk
         foreach ($this->getData('admin_groups') ?? [] as $group => $users) {
             if (\in_array($email, $users, true)) {
@@ -1321,12 +1330,12 @@ abstract class APresenter
      */
     public function setForceCsvCheck()
     {
-        $this->force_csv_check = true;
+        $this->_force_csv_check = true;
         return $this;
     }
 
     /**
-     * Post-load CSV data
+     * Add post-load CSV data
      *
      * @param mixed $key string / array to be merged
      * 
@@ -1336,11 +1345,11 @@ abstract class APresenter
     {
         if (!empty($key)) {
             if (\is_string($key)) {
-                $this->csv_postload[] = (string) $key;
+                $this->_csv_postload[] = $key;
                 return $this;
             }
             if (\is_array($key)) {
-                $this->csv_postload = array_merge($this->csv_postload, $key);
+                $this->_csv_postload = \array_merge($this->_csv_postload, $key);
                 return $this;
             }
         }
@@ -1357,12 +1366,16 @@ abstract class APresenter
      */
     public function getLocale($language, $key = 'KEY')
     {
-        if (!\is_array($this->getCfg('locales'))) {
-            return null;
-        }
         $cfg = $this->getCfg();
-        $language = trim(\strtoupper((string) $language));
-        $key = trim(\strtoupper((string) $key));
+        if (!\is_array($cfg)) {
+            return [];
+        }
+        if (!\is_array($this->getCfg('locales'))) {
+            return [];
+        }
+
+        $language = \trim(\strtoupper((string) $language));
+        $key = \trim(\strtoupper((string) $key));
         $file = \strtolower("{$language}_locale");
         
         $locale = [];
@@ -1380,23 +1393,23 @@ abstract class APresenter
                     // 0. read injected prefabricated base CSV file
                     if (\str_ends_with($v, ".csv")) {
                         $csvfile = APP . DS . $v;
-                        if (file_exists(($csvfile))) {
-                            $csv = @file_get_contents($csvfile);
+                        if (\file_exists(($csvfile))) {
+                            $csv = \file_get_contents($csvfile);
                         }
                     }
 
                     // 1. read from CSV file
                     if ($csv === false && file_exists(($csvfile))) {
-                        $csv = @file_get_contents($csvfile);
-                        if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
+                        $csv = \file_get_contents($csvfile);
+                        if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                         }
                     }
 
                     // 2. read from CSV file backup
-                    if ($csv === false && file_exists($csvfilebak)) {
-                        $csv = @file_get_contents($csvfilebak);
-                        if ($csv === false || strlen($csv) < self::CSV_MIN_SIZE) {
+                    if ($csv === false && \file_exists($csvfilebak)) {
+                        $csv = \file_get_contents($csvfilebak);
+                        if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                             continue;
                         } else {
@@ -1447,7 +1460,7 @@ abstract class APresenter
             }
         }
         if ($locale === false || empty($locale)) {
-            if ($this->force_csv_check) {
+            if ($this->_force_csv_check) {
                 $this->addCritical('Corrupted locales: [' . $language . ']');
                 ErrorPresenter::getInstance()->process(
                     ['code' => 500, 'message' => 'SYSTEM ERROR: corrupted localization'] // phpcs:ignore

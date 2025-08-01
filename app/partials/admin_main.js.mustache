@@ -45,12 +45,12 @@
             if (!data.data[x]["sheet"]) continue;
             if (sheet) {
               link =
-                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px;padding:3px;" ' +
+                '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px;padding:3px;margin:2px;" ' +
                 'class="orange mono white-text bold" href="' +
                 'https://docs.google.com/spreadsheets/d/' +
                 sheet + '/edit#gid=0">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;&nbsp;' +
                 x + '&nbsp;</a>&nbsp;&nbsp;&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
-                ' style="font-size:1.2rem;border-radius:2px;padding:3px;" class="csv' + x +  ' bold blue white-text mono" ' +
+                ' style="font-size:1.2rem;border-radius:2px;padding:3px;margin:2px;" class="csv' + x +  ' bold blue white-text mono" ' +
                 'href="https://docs.google.com/spreadsheets/d/e/' +
                 csv + '/pub?gid=0&single=true&output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;&nbsp;' +
                 lines + '&nbsp;</a>&nbsp;';

@@ -622,7 +622,7 @@ a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
 a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
 a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
 a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Legacy,Vermächtnis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
 a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
@@ -635,14 +635,14 @@ a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
 a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
 a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalt speichern
 a_tab_changes,TAB,CHANGES,ZMĚNY,ZMENY,ÄNDERUNGEN
-a_tab_data,TAB,DATA,DATA,DATA,DATEN
-a_tab_fn,TAB,FN,FN,FN,FN
+a_tab_data,TAB,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
+a_tab_fn,TAB,REMOTE fn(),VZDÁLENÉ fn(),VZDIALENÉ fn(),FERNBEDIENUNGSFUNKTIONEN fn()
 a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
-a_groups_permissions,TITLE,USERS,UŽIVATELÉ,UŽÍVATELIA,BENUTZER
-a_locales,TITLE,DATA,DATA,DATA,DATEN
+a_groups_permissions,TITLE,USERS & PERMISSIONS,UŽIVATELÉ & OPRÁVNĚNÍ,POUŽÍVATELIA & POVOLENIA,BENUTZER & BERECHTIGUNGEN
+a_locales,TITLE,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
 a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
-a_oss,TITLE,OPEN SOURCE references,OPEN SOURCE reference,OPEN SOURCE referencie,OPEN SOURCE Referenzen
+a_oss,TITLE,OPEN SOURCE REFERENCES,OPEN SOURCE REFERENCE,OPEN SOURCE REFERENCIE,OPEN SOURCE REFERENZEN
 a_shortcodes,TITLE,SHORTCODES info,SHORTCODES informace,SHORTCODES informácie,KURZCODES Informationen
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER

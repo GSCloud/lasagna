@@ -206,7 +206,7 @@ class LoginPresenter extends APresenter
                         $this->setLocation($url . '?' . $this->getNonce());
                     }
                 }
-                $this->setLocation();
+                $this->setLocation('/?' . $this->getNonce());
 
             } catch (\Exception $e) {
                 $err = $e->getMessage();
