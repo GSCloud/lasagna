@@ -50,10 +50,7 @@ if (isset($_GET['logout'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
-    $nonce = substr(md5(random_bytes(4) . (string) time()), 0, 4);
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
-    $redirectUrl = trim($redirectUrl, '/');
-    $redirectUrl .= "/?{$nonce}";
     header('Clear-Site-Data: "cookies"');
     header("Location: {$redirectUrl}", true, 303);
     exit;
@@ -64,10 +61,7 @@ if (isset($_GET['clearall'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
-    $nonce = substr(md5(random_bytes(4) . (string) time()), 0, 4);
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
-    $redirectUrl = trim($redirectUrl, '/');
-    $redirectUrl .= "/?{$nonce}";
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
     header("Location: {$redirectUrl}", true, 303);
     exit;
@@ -90,17 +84,21 @@ $data['cfg'] = $cfg; // $cfg shallow backup
 $data['cf_ray'] = $_SERVER['Cf-Ray'] ?? null;
 $data['cf_worker'] = $_SERVER['CF-Worker'] ?? null;
 $data['cf_cache_status'] = $_SERVER['Cf-Cache-Status'] ?? null;
-$data['cf_country'] = $data['country'] = $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));  // phpcs:ignore
+$country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
+$data['cf_country'] = $data['country'] = $country;
 $data["country_id_{$country}"] = true; // country_id_UK etc.
-$blocked = (array) ($data['geoblock'] ?? [
-    // default blocked countries
+$blocked = (array) ($data['geoblock'] ?? [ // default blocked countries
+    'AF',
     'BY',
     'IR',
+    'KP',
     'RU',
-    'T1',
+    'SY',
+    'T1', // TOR network
 ]);
+
 if (!LOCALHOST && in_array($country, $blocked)) {
-    error_log("Country [{$country}] forbidden and blocked all requests.");
+    error_log("Country [{$country}] forbidden and all requests blocked.");
     header('HTTP/1.1 403 Forbidden');
     exit;
 }
@@ -108,8 +106,11 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 // + MODEL
 define('ENGINE', 'Tesseract v2.4.6');
 $data['ENGINE'] = ENGINE;
-// version to load in the admin UI: https://cdnjs.com/libraries/codemirror 
+
+// version to load: https://cdnjs.com/libraries/codemirror 
 $data['codemirror'] = '6.65.7';
+// version to load: https://cdn.gscloud.cz/summernote/
+$data['summernote'] = 'v0.8.18';
 
 // load Base58 encoder
 $base58 = new \Tuupola\Base58;
@@ -531,7 +532,7 @@ default:
                     implode(' ', (array) $csp['csp'])
                 )
             );
-            header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=(), fullscreen=(self), picture-in-picture=(self)'); // phpcs:ignore
+            header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=()'); // phpcs:ignore
         }
     }
 }
@@ -546,7 +547,7 @@ $controller = "\\GSC\\{$p}";
 // TIMER START
 \Tracy\Debugger::timer('PROCESS');
 
-// RUN!
+// RUN
 $app = $controller::getInstance()->setData($data)->process();
 // ... AND GET DATA BACK
 $model = $app->getData();
@@ -555,19 +556,17 @@ $model = $app->getData();
 $time1 = $model['time_data'];
 $time2 = $model['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 1); // phpcs:ignore
 $time3 = $model['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
+$limit = $app->getRateLimit();
+if (!$limit || !is_int($limit)) {
+    $limit = 1;
+}
 
 // X-HEADERS
 header("X-Country: $country");
 header("X-Time-Data: $time1 ms");
 header("X-Time-Process: $time2 ms");
 header("X-Time-Run: $time3 ms");
-
-$limit = $app->getRateLimit();
-if ($limit && is_int($limit)) {
-    header("X-Rate-Limit: $limit");
-} else {
-    $limit = 1;
-}
+header("X-Rate-Limit: $limit");
 
 // OUTPUT
 $output = $model['output'] ?? '';
@@ -580,7 +579,7 @@ $fn = [
     "if(d.getElementById('limit'))d.getElementById('limit').textContent='{$limit}';",
 ];
 
-// OUTPUT + TIMING injection
+// OUTPUT TIMING injection
 foreach (headers_list() as $h) {
     if (strpos($h, 'Content-Type: text/html;') === 0) {
         $output = str_replace(
@@ -595,6 +594,7 @@ foreach (headers_list() as $h) {
         break;
     }
 }
+
 echo $output;
 
 // DEBUGGING
