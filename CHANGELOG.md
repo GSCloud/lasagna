@@ -2,9 +2,13 @@
 
 ---
 
+`2025-08-01`
+
+* **`1070-FEATURE` FontAwesome 7.0.0**
+
 `2025-07-31`
 
-* **`1066-BUGFIX`** various bugfixes and UI enhancements
+* **`1069-BUGFIX`** various **bugfixes** and UI enhancements
 
 `2025-07-28`
 
