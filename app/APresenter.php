@@ -326,16 +326,16 @@ abstract class APresenter
                 'partials_loader' => new \Mustache_Loader_FilesystemLoader(PARTIALS),
                 'helpers' => [
                     'timestamp' => function () {
-                        return (string) time();
+                        return (string) \time();
                     },
                     'rndstr' => function () {
-                        return $this->getNonce();
+                        return \substr(\md5((string) \microtime(true)), 0, 4);
                     },
                     'convert_hyperlinks' => function (
                         $source, \Mustache_LambdaHelper $lambdaHelper
                     ) {
                         $text = $lambdaHelper->render($source);
-                        $text = preg_replace(
+                        $text = \preg_replace(
                             '/(https)\:\/\/([a-zA-Z0-9\-\.]+\.'
                             . '[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/',
                             '<a rel="noopener nofollow" '

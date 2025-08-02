@@ -51,8 +51,13 @@ if (isset($_GET['logout'])) {
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
+    $redirectUrl = trim($redirectUrl, '/');
+    $nonce = substr(md5((string) \microtime(true)), 0, 4);
     header('Clear-Site-Data: "cookies"');
-    header("Location: {$redirectUrl}", true, 303);
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+    header("Location: {$redirectUrl}/?{$nonce}", true, 303);
     exit;
 }
 
@@ -62,8 +67,13 @@ if (isset($_GET['clearall'])) {
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
     $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
+    $redirectUrl = trim($redirectUrl, '/');
+    $nonce = substr(md5((string) \microtime(true)), 0, 4);
     header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
-    header("Location: {$redirectUrl}", true, 303);
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+    header("Location: {$redirectUrl}/?{$nonce}", true, 303);
     exit;
 }
 
