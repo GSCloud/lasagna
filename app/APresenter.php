@@ -348,9 +348,9 @@ abstract class APresenter
                         $source, \Mustache_LambdaHelper $lambdaHelper
                     ) {
                         $text = $lambdaHelper->render($source);
-                        $arr = explode("\n", $text);
-                        shuffle($arr);
-                        $text = join("\n", $arr);
+                        $arr = \explode("\n", $text);
+                        \shuffle($arr);
+                        $text = \join("\n", $arr);
                         return (string) $text;
                     },
                 ],
