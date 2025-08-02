@@ -1,5 +1,5 @@
 <!-- EXTRA ADMIN STYLES -->
-<link href="https://cdn.gscloud.cz/tesseract/css/admin.css?v4" rel="stylesheet">
+<link href="https://cdn.gscloud.cz/tesseract/css/admin.css?v10" rel="stylesheet">
 
 <style>
 #admin_main hr {border:0;clear:both;margin:0 auto}
@@ -33,6 +33,18 @@
 
 div#data .bl {background:linear-gradient(to bottom, #333, #24202F, #101520);border:2px solid #000;border-radius:3px}
 div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
+
+.identity-box {
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  padding: 10px!important;
+  border-radius: 3px;
+  position: sticky!important;
+  z-index: 99;
+  top: 60px;
+  right: 0;
+}
+
 </style>
 
 <!-- CONTROL PANEL ON/OFF -->
@@ -51,7 +63,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 <div id="admin_main" class="row black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
 
   <!-- CURRENT USER -->
-  <div class="right black" style="z-index:99;position:sticky!important;top:60px;right:0;padding:5px!important;opacity:0.8">
+  <div class="right identity-box">
     <div style="display:inline-block;margin:auto">
       <b class="group_icon_{{ group }}">{{user.email}}</b>
       <br>
