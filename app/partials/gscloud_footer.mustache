@@ -1,6 +1,6 @@
 <div id="gscmodal" class="modal a_reset noprint" style="color:#000!important">
-  <div class="modal-content center">
-    <p style="color:#000!important;font-family:Arial!important;font-size:1.3em"><b>{{ ENGINE }}</b> build&nbsp;{{ REVISIONS }}</p>
+  <div style="color:#000!important;font-family:Arial!important" class="modal-content center">
+    <p style="font-size:1.3em"><b>{{ ENGINE }}</b> build&nbsp;{{ REVISIONS }}</p>
     <div class="container row center">
       {{#is_logged}}
       <div class="col s12">
@@ -22,13 +22,11 @@
         </a>
       </div>
       {{/is_logged}}
-      <div class="col m6 s12 mono">
-        <p>{{ l.a_footer_app }}<br>
-        <b>{{ VERSION_SHORT }}</b></p>
+      <div class="col m6 s12">
+        <p>{{ l.a_footer_app }}<br><b class="mono">{{ VERSION_SHORT }}</b></p>
       </div>
-      <div class="col m6 s12 mono">
-        <p>{{ l.a_footer_date }}<br>
-        <b>{{ VERSION_DATE }}</b></p>
+      <div class="col m6 s12">
+        <p>{{ l.a_footer_date }}<br><b class="mono">{{ VERSION_DATE }}</b></p>
       </div>
     </div>
   </div>
