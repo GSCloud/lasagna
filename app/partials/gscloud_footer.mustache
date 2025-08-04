@@ -120,9 +120,10 @@
       w.GSC.init.push(function () {
         w.GSC.names.push("GSC login");
         $(".login-button").on("click", function () {
+          const uri = $(this).attr('href');
           $(this).prop('disabled', true).addClass('gsc-fade-blur-out').attr('href', '');
           setTimeout(function () {
-            location.replace('/login')
+            location.replace(uri)
           }, 300)
           return false;
         });
