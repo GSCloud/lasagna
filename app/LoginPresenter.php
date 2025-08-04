@@ -36,57 +36,44 @@ class LoginPresenter extends APresenter
             @\ob_end_clean();
         }
 
-        $this->checkRateLimit()->setHeaderHtml();
-        if (!\is_array($data = $this->getData())) { // Model
-            return $this;
+        if (!\is_array($data = $this->getData())) {
+            $err = 'Model: invalid data';
+            $this->addCritical($err);
+            ErrorPresenter::getInstance()->process(['code' => 500, 'message' => $err]); // phpcs:ignore
         }
-        $this->dataExpander($data);
-
-        if (!\is_array($cfg = $this->getCfg())) { // Config
-            return $this;
+        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
+        if (!\is_array($cfg = $this->getCfg())) {
+            $err = 'Cfg: invalid data';
+            $this->addCritical($err);
+            ErrorPresenter::getInstance()->process(['code' => 500, 'message' => $err]); // phpcs:ignore
         }
-
-        if (($cfg['goauth_client_id'] ?? null) === null) {
-            $this->addError('OAuth: missing [goauth_client_id]');
-            $this->setLocation('/err/412');
-        }
-        if (($cfg['goauth_secret'] ?? null) === null) {
-            $this->addError('OAuth: missing [goauth_secret]');
+        if (!($cfg['goauth_client_id'] ?? null) || !($cfg['goauth_secret'] ?? null)) { // phpcs:ignore
+            $this->addError('OAuth: missing [goauth_client_id] or [goauth_secret]');
             $this->setLocation('/err/412');
         }
 
         // check if we are on the right origin
-        $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // phpcs:ignore
-        $scheme = \parse_url($currentUrl, PHP_URL_SCHEME);
-        $host = \parse_url($currentUrl, PHP_URL_HOST);
-        $port = \parse_url($currentUrl, PHP_URL_PORT);
-        $currentOrigin = $scheme . "://" . $host;
-
-        if ($port) {
-            $currentOrigin .= ":" . $port;
+        $currentOrigin = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}";
+        $expectedOrigin = LOCALHOST ? $cfg['local_goauth_origin'] : $cfg['goauth_origin']; // phpcs:ignore
+        $redirectUrl = LOCALHOST ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect']; // phpcs:ignore
+        $ret = null;
+        if (!empty($_GET['returnURL'])) {
+            $ret = $_GET['returnURL'];
+        }
+        if ($currentOrigin !== $expectedOrigin) {
+            $this->setLocation($ret ? "{$redirectUrl}?returnURL={$ret}" : $redirectUrl); // phpcs:ignore
         }
 
-        if (LOCALHOST) {
-            if ($currentOrigin !== $cfg['local_goauth_origin']) {
-                \header("Location: " . $cfg['local_goauth_redirect']);
-                exit;
+        // check if user is logged in, if so redirect to the last/main page
+        $user = $this->getCurrentUser();
+        $email = $user ? $user['email'] : null;
+        if (\strlen($email)) {
+            $returnUrl = \urldecode($_GET['returnURL'] ?? '/');
+            $url = '/';
+            if (\strpos($returnUrl, '/') === 0) {
+                $url = $returnUrl;
             }
-        } else {
-            if ($currentOrigin !== $cfg['goauth_origin']) {
-                \header("Location: " . $cfg['goauth_redirect']);
-                exit;
-            }   
-        }
-
-        // check if user is logged in === redirect to the main/last page
-        if (\strlen($this->getCurrentUser()['email'])) {
-            if (isset($_GET['returnURL'])) {
-                $url = $_GET['returnURL'];
-                if (\strpos($url, '/') === 0) {
-                    $this->setLocation($url . '?nonce=' . $this->getNonce());
-                }
-            }
-            $this->setLocation('/?nonce=' . $this->getNonce());
+            $this->setLocation("{$url}?nonce=" . $this->getNonce());
         }
 
         // save return URL
@@ -94,35 +81,35 @@ class LoginPresenter extends APresenter
             \setcookie(
                 'returnURL',
                 $_GET['returnURL'],
-                \time() + 60,
-                '/',
-                DOMAIN,
-                !LOCALHOST,
-                true
+                [
+                    'expires' => \time() + 60,
+                    'path' => '/',
+                    'domain' => DOMAIN,
+                    'secure' => !LOCALHOST,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]
             );
-        }
-        
+        }        
+
         try {
             $provider = new \League\OAuth2\Client\Provider\Google(
                 [
-                'clientId' => $cfg['goauth_client_id'],
-                'clientSecret' => $cfg['goauth_secret'],
-                'redirectUri' => (LOCALHOST === true)
-                    ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect'],
+                    'clientId' => $cfg['goauth_client_id'],
+                    'clientSecret' => $cfg['goauth_secret'],
+                    'redirectUri' => LOCALHOST ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect'], // phpcs:ignore
                 ]
             );
-        } finally {
+        } catch (\Throwable $e) {
+            $err = "OAuth: failure. Exception: " . $e->getMessage();
+            $this->addError($err);
+            ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
         }
-
         if (!empty($_GET['error'])) {
             $err = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
-            $this->addError("OAuth: failure.\nMessage: " . $err);
-            ErrorPresenter::getInstance()->process(
-                [
-                    'code' => 403,
-                    'message' => "OAuth failure. Message: " . $err,
-                ]
-            );
+            $err = "OAuth: failure.\nMessage: $err";
+            $this->addError($err);
+            ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
         } elseif (empty($_GET['code'])) {
             $email = $_GET['login_hint'] ?? $_COOKIE['login_hint'] ?? null;
             $hint = $email ? \strtolower("&login_hint={$email}") : '';
@@ -132,38 +119,29 @@ class LoginPresenter extends APresenter
                     'response_type' => 'code',
                 ]
             );
-
             \setcookie(
                 'oauth2state',
                 $provider->getState(),
-                \time() + 60,
-                '/',
-                DOMAIN,
-                !LOCALHOST,
-                true
+                [
+                    'expires' => \time() + 60,
+                    'path' => '/',
+                    'domain' => DOMAIN,
+                    'secure' => !LOCALHOST,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]
             );
-
             \header('Location: ' . $authUrl . $hint, true, 303);
             exit;
         } elseif (empty($_GET['state']) || (!isset($_COOKIE['oauth2state'])) || $_GET['state'] !== $_COOKIE['oauth2state']) { // phpcs:ignore
-            $this->addError('OAuth: invalid OAuth state');
-            ErrorPresenter::getInstance()->process(
-                [
-                    'code' => 403,
-                    'message' => 'OAuth failure: invalid state.',
-                ]
-            );
+            $err = 'OAuth: invalid OAuth state';
+            $this->addError($err);
+            ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
         } else {
             try {
-                $token = $provider->getAccessToken(
-                    'authorization_code',
-                    ['code' => $_GET['code']]
-                );
-                $ownerDetails = $provider->getResourceOwner(
-                    $token, 
-                    ['useOidcMode' => true,]
-                );
-                $this->setIdentity(
+                $token = $provider->getAccessToken('authorization_code', ['code' => $_GET['code']]); // phpcs:ignore
+                $ownerDetails = $provider->getResourceOwner($token, ['useOidcMode' => true]); // phpcs:ignore
+                $this->clearCookie('oauth2state')->setIdentity(
                     [
                         'id' => $ownerDetails->getId(),
                         'name' => $ownerDetails->getName(),
@@ -172,59 +150,43 @@ class LoginPresenter extends APresenter
                         'provider' => 'google',
                     ]
                 );
-
-                $group = $this->getUserGroup();
-                if (!empty($group)) {
+                if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
-                }
-                if ($group === 'admin') {
-                    if (\is_string($this->getCfg('DEBUG_COOKIE'))) {
-                        \setcookie(
-                            'tracy-debug',
-                            $this->getCfg('DEBUG_COOKIE')
-                        );
+                    if ($group === 'admin') {
+                        if (\is_string($dbg = $this->getCfg('DEBUG_COOKIE'))) {
+                            \setcookie('tracy-debug', $dbg);
+                        }
                     }
                 }
-
-                $this->clearCookie('oauth2state');
-
-                if (\strlen($ownerDetails->getEmail())) {
+                if (\strlen($email = $ownerDetails->getEmail())) {
                     \setcookie(
                         'login_hint',
-                        $ownerDetails->getEmail() ?? '',
-                        \time() + 86400 * 30,
-                        '/',
-                        DOMAIN,
-                        !LOCALHOST,
-                        true
+                        $email,
+                        [
+                            'expires' => \time() + 86400 * 30,
+                            'path' => '/',
+                            'domain' => DOMAIN,
+                            'secure' => !LOCALHOST,
+                            'httponly' => true,
+                            'samesite' => 'Lax'
+                        ]
                     );
                 }
-
-                if (isset($_COOKIE['returnURL'])) {
-                    $url = \urldecode($_COOKIE['returnURL']);
-                    if (\strpos($url, '/') === 0) {
-                        $this->setLocation($url . '?nonce=' . $this->getNonce());
-                    }
+                $returnUrl = \urldecode($_COOKIE['returnURL'] ?? '/');
+                $url = '/';
+                if (\strpos($returnUrl, '/') === 0) {
+                    $url = $returnUrl;
                 }
-                $this->setLocation('/?nonce=' . $this->getNonce());
-
-            } catch (\Exception $e) {
-                $err = $e->getMessage();
-                $this->addError("OAuth: failure.\nException: " . $err);
-                ErrorPresenter::getInstance()->process(
-                    [
-                        'code' => 403,
-                        'message' => $err,
-                    ]
-                );
+                $this->setLocation("{$url}?nonce=" . $this->getNonce());
+            } catch (\Throwable $e) {
+                $err = "OAuth: failure. Exception: " . $e->getMessage();
+                $this->addError($err);
+                ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
             }
         }
-        $this->addError("OAuth: general error");
-        ErrorPresenter::getInstance()->process(
-            [
-                'code' => 403,
-                'message' => 'OAuth general error.',
-            ]
-        );
+        /* should not happend */
+        $err = "OAuth: general error";
+        $this->addError($err);
+        ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]);
     }
 }
