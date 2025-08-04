@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{{#LOCALHOST}}LOCAL |{{/LOCALHOST}}{{#l.alfa}}{{ l.alfa }}>{{/l.alfa}}{{#l.beta}}{{ l.beta }}>{{/l.beta}} {{ l.title }}</title>
 
 {{>head_pre}}
-
-<title>{{#LOCALHOST}}LOCAL |{{/LOCALHOST}}{{#l.alfa}}{{ l.alfa }}>{{/l.alfa}}{{#l.beta}}{{ l.beta }}>{{/l.beta}} {{ l.title }}</title>
 
 <link rel="dns-prefetch" href="//cdn.gscloud.cz">
 <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -14,14 +13,12 @@
 <link rel="dns-prefetch" href="//fonts.gstatic.com">
 <link rel="dns-prefetch" href="//static.cloudflareinsights.com">
 <link rel="dns-prefetch" href="//umami.gscloud.cz">
-
 <link rel="preconnect" href="//cdn.gscloud.cz">
 <link rel="preconnect" href="//cdnjs.cloudflare.com">
 <link rel="preconnect" href="//fonts.googleapis.com">
 <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="//static.cloudflareinsights.com">
 <link rel="preconnect" href="//umami.gscloud.cz">
-
 <link rel="manifest" href="/manifest.json">
 
 {{#rss_feed}}<link rel="alternate" type="application/rss+xml" title="{{ l.title }} - RSS feed" href="/rss.xml">{{/rss_feed}}
@@ -31,7 +28,6 @@
 {{>head_favicons}}
 {{>head_umami}}
 {{>head_custom}}
-
 {{>head-css-quirks}}
 
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
@@ -62,9 +58,9 @@
 </script>
 </head>
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
-<noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
-
 {{>body_pre}}
+
+<noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
 
 <div class="black-text white" tabindex="-1" style="text-align:center;font-weight:bold" id="update-message">{{ l.page_outdated }}
   <br>

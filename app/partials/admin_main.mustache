@@ -1,5 +1,5 @@
 <!-- EXTRA ADMIN STYLES -->
-<link href="https://cdn.gscloud.cz/tesseract/css/admin.css?v10" rel="stylesheet">
+<link href="https://cdn.gscloud.cz/tesseract/css/admin.css" rel="stylesheet">
 
 <style>
 #admin_main hr {border:0;clear:both;margin:0 auto}
@@ -47,7 +47,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 
 </style>
 
-<!-- CONTROL PANEL ON/OFF -->
+<!-- CONTROL PANEL SWITCH -->
 <span style="position:fixed;left:2px;top:2px;z-index:999999" class="noselect admin_panel_switch transparent hover white">
   <img
     src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp"
@@ -65,8 +65,9 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <!-- CURRENT USER -->
   <div class="right identity-box">
     <div style="display:inline-block;margin:auto">
-      <b class="group_icon_{{ group }}">{{user.email}}</b>
-      <br>
+      <div class="nowrap">
+        <b class="group_icon_{{ group }}">{{user.email}}</b>
+      </div>
       <a
         class="tooltipped waves-effect waves-light green btn"
         data-position="left"
@@ -105,7 +106,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         style="padding:4px;line-height:2em;border-radius:2px"
         data-position="top"
         data-tooltip="{{ title }}"
-        ><i class="fa-solid fa-arrow-up-right-from-square"></i><b>&nbsp;{{ name }}&nbsp;</b></a>&nbsp;
+        ><i class="fa-solid fa-arrow-up-right-from-square"></i><b>&nbsp;&nbsp;{{ name }}&nbsp;</b></a>
     {{/external_links}}
   </div>
 
@@ -125,12 +126,16 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 
   <!-- DATA -->
   {{>admin_tab_data}}
+
   <!-- FN -->
   {{>admin_tab_fn}}
+
   <!-- SERVICES -->
   {{>admin_tab_services}}
+
   <!-- USERS -->
   {{>admin_tab_users}}
+
   <!-- NEWS -->
   {{>admin_tab_news}}
 
