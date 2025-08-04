@@ -83,10 +83,10 @@ class LoginPresenter extends APresenter
             if (isset($_GET['returnURL'])) {
                 $url = $_GET['returnURL'];
                 if (\strpos($url, '/') === 0) {
-                    $this->setLocation($url . '?' . $this->getNonce());
+                    $this->setLocation($url . '?nonce=' . $this->getNonce());
                 }
             }
-            $this->setLocation();
+            $this->setLocation('/?nonce=' . $this->getNonce());
         }
 
         // save return URL
@@ -203,10 +203,10 @@ class LoginPresenter extends APresenter
                 if (isset($_COOKIE['returnURL'])) {
                     $url = \urldecode($_COOKIE['returnURL']);
                     if (\strpos($url, '/') === 0) {
-                        $this->setLocation($url . '?' . $this->getNonce());
+                        $this->setLocation($url . '?nonce=' . $this->getNonce());
                     }
                 }
-                $this->setLocation('/?' . $this->getNonce());
+                $this->setLocation('/?nonce=' . $this->getNonce());
 
             } catch (\Exception $e) {
                 $err = $e->getMessage();

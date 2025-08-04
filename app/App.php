@@ -485,7 +485,7 @@ if ($router[$view]['redirect'] ?? false) {
 if ($router[$view]['country'] ?? false) {
     $nonce = '';
     if (isset($_GET['nonce'])) {
-        $rand = substr(md5(random_bytes(8) . (string) time()), 0, 4);
+        $rand = substr(md5(random_bytes(4) . (string) time()), 0, 4);
         $nonce = "?{$rand}";
     }
     if (!LOCALHOST && array_key_exists($country, $router[$view]['country'])) {

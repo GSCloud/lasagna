@@ -6,7 +6,7 @@
       <div class="col s12">
         <a
           rel="noindex nofollow"
-          class="logout oauth btn blue gsc-blurbutton"
+          class="logout-button logout oauth btn blue gsc-blurbutton"
           data-umami-event="logout"
           href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;{{ l.a_logout }}
         </a>
@@ -16,9 +16,9 @@
       <div class="col s12">
         <a
           rel="noindex nofollow"
-          class="login oauth gsc-blurbutton"
+          class="login-button login oauth gsc-blurbutton"
           data-umami-event="login"
-          href="/login"><img class="gscloginimage img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}">
+          href="/login"><img class="img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}">
         </a>
       </div>
       {{/is_logged}}
@@ -116,9 +116,10 @@
 <script nonce="{{ csp_nonce }}">
   (function (w, d, undefined) {
     if (w.GSC.init) {
+
       w.GSC.init.push(function () {
-        w.GSC.names.push("GSC login blur");
-        $(".gsc-blurbutton").on("click", function () {
+        w.GSC.names.push("GSC login");
+        $(".login-button").on("click", function () {
           $(this).prop('disabled', true).addClass('gsc-fade-blur-out').attr('href', '');
           setTimeout(function () {
             location.replace('/login')
@@ -126,9 +127,10 @@
           return false;
         });
       });
+
       w.GSC.init.push(function () {
-        w.GSC.names.push("GSC logout blur");
-        $(".gsc-blurbutton").on("click", function () {
+        w.GSC.names.push("GSC logout");
+        $(".logout-button").on("click", function () {
           $(this).prop('disabled', true).addClass('gsc-fade-blur-out').attr('href', '');
           setTimeout(function () {
             location.replace('/logout')
@@ -136,6 +138,7 @@
           return false;
         });
       });
+
     }
   })(window, document);
 </script>
