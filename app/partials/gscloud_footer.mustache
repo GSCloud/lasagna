@@ -6,7 +6,7 @@
       <div class="col s12">
         <a
           rel="noindex nofollow"
-          class="logout oauth btn blue"
+          class="logout oauth btn blue gsclogoutbutton"
           data-umami-event="logout"
           href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;{{ l.a_logout }}
         </a>
@@ -16,9 +16,9 @@
       <div class="col s12">
         <a
           rel="noindex nofollow"
-          class="login oauth"
+          class="login oauth gscloginbutton"
           data-umami-event="login"
-          href="/login"><img class="img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}">
+          href="/login"><img class="gscloginimage img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}">
         </a>
       </div>
       {{/is_logged}}
@@ -112,3 +112,46 @@
     </div>
   </div>
 </div>
+
+<script nonce="{{ csp_nonce }}">
+  (function (w, d, undefined) {
+    if (w.GSC.init) {
+      w.GSC.init.push(function () {
+        w.GSC.names.push("GSC login blur");
+        $(".gscloginbutton").on("click", function () {
+          $(this).prop('disabled', true);
+          $(".gscloginimage").addClass('gscfade-blur-out');
+          $(this).attr('href', '');
+          setTimeout(function () {
+            location.replace('/login')
+          }, 300)
+          return false;
+        });
+      });
+      w.GSC.init.push(function () {
+        w.GSC.names.push("GSC logout blur");
+        $(".gsclogoutbutton").on("click", function () {
+          $(this).prop('disabled', true);
+          $(this).addClass('gscfade-blur-out');
+          $(this).attr('href', '');
+          setTimeout(function () {
+            location.replace('/logout')
+          }, 300)
+          return false;
+        });
+      });
+    }
+  })(window, document);
+</script>
+
+<style>
+.gscloginimage, .gsclogoutbutton {
+  transition: filter 500ms ease-in, opacity 500ms ease-in;
+  filter: blur(0) grayscale(0);
+  opacity: 1;
+}
+.gscfade-blur-out {
+  filter: blur(30px) grayscale(1);
+  opacity: 0;
+}
+</style>
