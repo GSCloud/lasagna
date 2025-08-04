@@ -6,7 +6,7 @@
       <div class="col s12">
         <a
           rel="noindex nofollow"
-          class="logout oauth btn blue gsclogoutbutton"
+          class="logout oauth btn blue gsc-blurbutton"
           data-umami-event="logout"
           href="/logout"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;{{ l.a_logout }}
         </a>
@@ -16,7 +16,7 @@
       <div class="col s12">
         <a
           rel="noindex nofollow"
-          class="login oauth gscloginbutton"
+          class="login oauth gsc-blurbutton"
           data-umami-event="login"
           href="/login"><img class="gscloginimage img-responsive" src="{{ cdn }}/img/google_signin.png" width=192 alt="{{ l.a_login }}">
         </a>
@@ -118,10 +118,8 @@
     if (w.GSC.init) {
       w.GSC.init.push(function () {
         w.GSC.names.push("GSC login blur");
-        $(".gscloginbutton").on("click", function () {
-          $(this).prop('disabled', true);
-          $(".gscloginimage").addClass('gscfade-blur-out');
-          $(this).attr('href', '');
+        $(".gsc-blurbutton").on("click", function () {
+          $(this).prop('disabled', true).addClass('gsc-fade-blur-out').attr('href', '');
           setTimeout(function () {
             location.replace('/login')
           }, 300)
@@ -130,10 +128,8 @@
       });
       w.GSC.init.push(function () {
         w.GSC.names.push("GSC logout blur");
-        $(".gsclogoutbutton").on("click", function () {
-          $(this).prop('disabled', true);
-          $(this).addClass('gscfade-blur-out');
-          $(this).attr('href', '');
+        $(".gsc-blurbutton").on("click", function () {
+          $(this).prop('disabled', true).addClass('gsc-fade-blur-out').attr('href', '');
           setTimeout(function () {
             location.replace('/logout')
           }, 300)
@@ -145,12 +141,12 @@
 </script>
 
 <style>
-.gscloginimage, .gsclogoutbutton {
+.gsc-blurbutton {
   transition: filter 500ms ease-in, opacity 500ms ease-in;
   filter: blur(0) grayscale(0);
   opacity: 1;
 }
-.gscfade-blur-out {
+.gsc-fade-blur-out {
   filter: blur(30px) grayscale(1);
   opacity: 0;
 }
