@@ -1,9 +1,10 @@
 (function (w, d, undefined) {
 
-  // logout cookie
+  // logout cookie found
   if (getCookie("logout")) {
+    $('#admin_main').hide();
     delCookie("logout");
-    d.getElementById("admin_main").style.display = "none";
+    location.replace('/logout');
     return;
   }
 
@@ -151,15 +152,15 @@
       });
     }
 
-
     // SETUP ADMIN UI
     w.GSC.init.push(function () {
       w.GSC.names.push("admin UI - bind");
 
       // SHOW ADMIN UI?
       const adminPanelState = localStorage.getItem('adminpanel');
-      if (adminPanelState !== null) {
+      if (adminPanelState === null || adminPanelState === 'true') {
         $("#admin_main").show(100);
+        localStorage.setItem('adminpanel', true);
       }
 
       // TABBED MENU
@@ -177,17 +178,13 @@
         }
       }
 
-      // TOGLE ADMIN PANEL
+      // TOGGLE ADMIN PANEL
       $(".admin_panel_switch").click(function () {
         $("#admin_main").toggle(100, function () {
           window.scrollTo(0, 0);
-          const adminPanelState = localStorage.getItem('adminpanel');
-          if (adminPanelState) {
-            localStorage.removeItem('adminpanel');
-          } else {
-            localStorage['adminpanel'] = 1;
-          }
-        })
+          const isPanelVisible = $("#admin_main").is(":visible");
+          localStorage.setItem('adminpanel', isPanelVisible);
+        });
       });
 
       // ARTICLES URL SELECTOR
