@@ -1011,7 +1011,9 @@ class AdminPresenter extends APresenter
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
-                $this->cloudflarePurgeCacheCurl($this->getCfg('cf'));
+                if (\is_array($cf = $this->getCfg('cf'))) {
+                    $this->cloudflarePurgeCacheCurl($cf);
+                }
                 $this->checkLocales();
             } finally {
                 if (CLI) {
