@@ -527,7 +527,7 @@ switch ($presenter[$view]['template']) {
 default:
     if (CSP && file_exists(CSP) && is_readable(CSP)) {
         try {
-            $csp = @Neon::decode(@file_get_contents(CSP) ?: '');
+            $csp = Neon::decode(@file_get_contents(CSP) ?: '');
         }
         catch (\Throwable $e) {
             $csp = null;
@@ -542,7 +542,14 @@ default:
                     implode(' ', (array) $csp['csp'])
                 )
             );
-            header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=()'); // phpcs:ignore
+
+            // PERMISSIONS
+            if (isset($data['csp_permissions']) && is_string($data['csp_permissions'])) { // phpcs:ignore
+                header($data['csp_permissions']);
+            } else {
+                header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=()'); // phpcs:ignore
+            }
+                
         }
     }
 }
@@ -559,13 +566,12 @@ $controller = "\\GSC\\{$p}";
 
 // RUN
 $app = $controller::getInstance()->setData($data)->process();
-// ... AND GET DATA BACK
-$model = $app->getData();
+$data = $app->getData();
 
 // PROFILER
-$time1 = $model['time_data'];
-$time2 = $model['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 1); // phpcs:ignore
-$time3 = $model['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
+$time1 = $data['time_data'];
+$time2 = $data['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 1); // phpcs:ignore
+$time3 = $data['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
 $limit = $app->getRateLimit();
 if (!$limit || !is_int($limit)) {
     $limit = 1;
@@ -579,7 +585,7 @@ header("X-Time-Run: $time3 ms");
 header("X-Rate-Limit: $limit");
 
 // OUTPUT
-$output = $model['output'] ?? '';
+$output = $data['output'] ?? '';
 
 // TIMING
 $fn = [
@@ -589,7 +595,7 @@ $fn = [
     "if(d.getElementById('limit'))d.getElementById('limit').textContent='{$limit}';",
 ];
 
-// OUTPUT TIMING injection
+// TIMING injection
 foreach (headers_list() as $h) {
     if (strpos($h, 'Content-Type: text/html;') === 0) {
         $output = str_replace(
@@ -610,10 +616,10 @@ echo $output;
 // DEBUGGING
 if (DEBUG) {
     // protect private information
-    $model['cf'] = '[protected]';
-    $model['goauth_secret'] = '[protected]';
+    $data['cf'] = '[protected]';
+    $data['goauth_secret'] = '[protected]';
     bdump($app->getIdentity(), 'IDENTITY');
-    bdump($model, 'MODEL');
+    bdump($data, 'MODEL');
 }
 
 exit(0);

@@ -1541,8 +1541,72 @@ abstract class APresenter
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->addError("CLOUDFLARE: we got exception.\nMessage: " . $e->getMessage()); // phpcs:ignore
+        }
+        return $this;
+    }
+
+    /**
+     * Purge Cloudflare cache using cURL
+     *
+     * @param array $cf Cloudflare authentication array
+     *
+     * @return self
+     */
+    public function cloudflarePurgeCacheCurl($cf)
+    {
+        if (CLI || LOCALHOST) {
+            return $this;
+        }
+        if (!\is_array($cf)) {
+            return $this;
+        }
+
+        $email = $cf['email'] ?? null;
+        $apikey = $cf['apikey'] ?? null;
+        $zoneid = $cf['zoneid'] ?? null;
+        if (!$email || !$apikey || !$zoneid) {
+            $this->addError("CLOUDFLARE: Missing configuration data.");
+            return $this;
+        }
+        $myzones = [];
+        if (\is_array($zoneid)) {
+            $myzones = $zoneid;
+        } elseif (\is_string($zoneid)) {
+            $myzones = [$zoneid];
+        } else {
+            $this->addError("CLOUDFLARE: Invalid zoneID format.");
+            return $this;
+        }
+        $c = 0;
+        foreach ($myzones as $zone) {
+            $url = "https://api.cloudflare.com/client/v4/zones/{$zone}/purge_cache";
+            $headers = [
+                "X-Auth-Email: {$email}",
+                "X-Auth-Key: {$apikey}",
+                'Content-Type: application/json',
+            ];
+            $data = \json_encode(['purge_everything' => true]);
+
+            $ch = \curl_init();
+            \curl_setopt($ch, CURLOPT_URL, $url);
+            \curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+            \curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            \curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = \curl_exec($ch);
+            $httpcode = \curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            \curl_close($ch);
+            $result = \json_decode($response, true);
+
+            $c++;
+            if ($httpcode === 200 && $result['success'] === true) {
+                $this->addMessage("CLOUDFLARE: #{$c} cache for zoneID [{$zone}] purged successfully."); // phpcs:ignore
+            } else {
+                $err = $result['errors'][0]['message'] ?? 'Unknown error: ' . $response; // phpcs:ignore
+                $this->addError("CLOUDFLARE: Failed to purge cache for zone [{$zone}]. HTTP Code: {$httpcode}. Error: {$err}"); // phpcs:ignore
+            }
         }
         return $this;
     }
