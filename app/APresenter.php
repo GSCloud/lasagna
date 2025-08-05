@@ -1502,52 +1502,6 @@ abstract class APresenter
     }
 
     /**
-     * Purge Cloudflare cache
-     *
-     * @param array $cf Cloudflare authentication array
-     * 
-     * @return self
-     */
-    public function cloudflarePurgeCache($cf)
-    {
-        if (!\is_array($cf)) {
-            return $this;
-        }
-
-        $email = $cf['email'] ?? null;
-        $apikey = $cf['apikey'] ?? null;
-        $zoneid = $cf['zoneid'] ?? null;
-
-        try {
-            if ($email && $apikey && $zoneid) {
-                $key = new \Cloudflare\API\Auth\APIKey($email, $apikey);
-                $adapter = new \Cloudflare\API\Adapter\Guzzle($key);
-                $zones = new \Cloudflare\API\Endpoints\Zones($adapter);
-                $myzones = [];
-                if (\is_array($zoneid)) {
-                    $myzones = $zoneid;
-                }
-                if (\is_string($zoneid)) {
-                    $myzones = [$zoneid];
-                }
-                $c = 0;
-                foreach ($zones->listZones()->result as $zone) {
-                    foreach ($myzones as $myzone) {
-                        if ($zone->id === $myzone) {
-                            $zones->cachePurgeEverything($zone->id);
-                            $c++;
-                            $this->addMessage("CLOUDFLARE: #{$c} cache for zone [{$myzone}] purged"); // phpcs:ignore
-                        }
-                    }
-                }
-            }
-        } catch (\Throwable $e) {
-            $this->addError("CLOUDFLARE: we got exception.\nMessage: " . $e->getMessage()); // phpcs:ignore
-        }
-        return $this;
-    }
-
-    /**
      * Purge Cloudflare cache using cURL
      *
      * @param array $cf Cloudflare authentication array

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ee7035aad8db92d7cbdb996126a57a9",
+    "content-hash": "857e289e32555708e2173d9c0aff3e4f",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -494,54 +494,6 @@
                 }
             ],
             "time": "2024-07-17T01:04:28+00:00"
-        },
-        {
-            "name": "cloudflare/sdk",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cloudflare/cloudflare-php.git",
-                "reference": "2d3f198773e865b5de2357d7bdbc52bdf42e8f97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cloudflare/cloudflare-php/zipball/2d3f198773e865b5de2357d7bdbc52bdf42e8f97",
-                "reference": "2d3f198773e865b5de2357d7bdbc52bdf42e8f97",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^7.0.1",
-                "php": ">=7.2.5",
-                "psr/http-message": "~1.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.6",
-                "phpmd/phpmd": "@stable",
-                "phpunit/phpunit": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Cloudflare\\API\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Junade Ali",
-                    "email": "junade@cloudflare.com"
-                }
-            ],
-            "description": "PHP binding for v4 of the Cloudflare Client API.",
-            "support": {
-                "issues": "https://github.com/cloudflare/cloudflare-php/issues",
-                "source": "https://github.com/cloudflare/cloudflare-php/tree/1.4.0"
-            },
-            "time": "2024-12-17T23:18:20+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2017,16 +1969,16 @@
         },
         {
             "name": "psr/http-message",
-            "version": "1.1",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
-                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
                 "shasum": ""
             },
             "require": {
@@ -2035,7 +1987,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -2050,7 +2002,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for HTTP messages",
@@ -2064,9 +2016,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-message/tree/1.1"
+                "source": "https://github.com/php-fig/http-message/tree/2.0"
             },
-            "time": "2023-04-04T09:50:52+00:00"
+            "time": "2023-04-04T09:54:51+00:00"
         },
         {
             "name": "psr/log",

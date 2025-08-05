@@ -7,7 +7,6 @@
         "cakephp/cache": "^4",
         "cheprasov/php-redis-client": "^1",
         "chillerlan/php-qrcode": "^5",
-        "cloudflare/sdk": "^1",
         "guzzlehttp/guzzle": "^7",
         "league/climate": "^3",
         "league/csv": "^9",
