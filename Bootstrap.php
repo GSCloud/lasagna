@@ -210,12 +210,12 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
             }
             if (!is_array($arr)) {
                 error_log("Error parsing NE-ON file: " . CONFIG_PRIVATE);
-                die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE . ': '. $e->getMessage()); // phpcs:ignore
+                die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE); // phpcs:ignore
             }
             $cfg = array_replace_recursive($cfg, $arr);
         }
     } catch (\Nette\Neon\Exception $e) {
-        die('FATAL ERROR in NE-ON: ' . $e->getMessage());
+        die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE . ': '. $e->getMessage()); // phpcs:ignore
     }
     try {
         if (!file_exists(ROOT . DS . '.env')) {
