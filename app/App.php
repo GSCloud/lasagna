@@ -325,7 +325,9 @@ if ($admin === '') {
     $admin = 'admin';
 }
 if (is_dir(WWW . DS . $admin)) {
-    throw new \Exception("Admin endpoint [{$admin}] already exists as a web folder!"); // phpcs:ignore
+    $err = "Admin end-point [{$admin}] already exists as a web folder!";
+    error_log($err);
+    throw new \Exception($err);
 }
 $data['admin'] = $admin;
 $data['cfg']['admin'] = $admin;

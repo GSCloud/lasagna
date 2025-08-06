@@ -57,17 +57,20 @@ abstract class APresenter
     /* @var integer cookie TTL in seconds */
     const COOKIE_TTL = 86400 * 31;
 
+    /* @var string CloudFlare API URL */
+    const CLOUDFLARE_API = 'https://api.cloudflare.com/client/v4/';
+
     /* @var string Google Sheet export URL prefix */
     const GS_CSV_PREFIX = 'https://docs.google.com/spreadsheets/d/e/';
+
+    /* @var string Google Sheet URL prefix */
+    const GS_SHEET_PREFIX = 'https://docs.google.com/spreadsheets/d/';
 
     /* @var string Google Sheet export to CSV URL postfix */
     const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
 
     /* @var string Google Sheet export to TSV URL postfix */
     const GS_TSV_POSTFIX = '/pub?gid=0&single=true&output=tsv';
-
-    /* @var string Google Sheet URL prefix */
-    const GS_SHEET_PREFIX = 'https://docs.google.com/spreadsheets/d/';
 
     /* @var string Google Sheet edit URL postfix */
     const GS_SHEET_POSTFIX = '/edit#gid=0';
@@ -133,12 +136,12 @@ abstract class APresenter
      */
     private function __construct()
     {
-        $class = get_called_class();
-        if (array_key_exists($class, self::$instances)) {
+        $class = \get_called_class();
+        if (\array_key_exists($class, self::$instances)) {
             // throw an exception if class is already instantiated
-            throw new \Exception(
-                "FATAL ERROR: instance of class [{$class}] already exists"
-            );
+            $err = "FATAL ERROR: instance of class [{$class}] already exists";
+            \error_log($err);
+            throw new \Exception($err);
         }
     }
 
@@ -452,7 +455,9 @@ abstract class APresenter
             $key = $data;
             if (\is_string($key) && !empty($key)) {
                 if (\str_starts_with($key, 'cfg.')) {
-                    throw new \Exception('FATAL ERROR: trying to modify cfg data');
+                    $err = 'FATAL ERROR: trying to modify cfg data';
+                    \error_log($err);
+                    throw new \Exception($err);
                 }
                 $dot = new \Adbar\Dot($this->data);
                 $dot->set($key, $value);
@@ -519,7 +524,7 @@ abstract class APresenter
                 if ($name === $ip) {
                     $name = '';
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $name = '';
                 $this->errors[] = 'Could not translate IP address: [' . $ip . '] ' . $e->getMessage(); // phpcs:ignore
             }
@@ -655,46 +660,95 @@ abstract class APresenter
     }
 
     /**
+     * Get browser fingerprint
+     *
+     * @return string hash
+     */
+    function getBrowserFingerprint(): string
+    {
+        $parts = [];
+        $parts[] = CLI ? 'CLI' : 'WEB';
+
+        if (!CLI) {
+            $parts[] = $_SERVER['HTTP_ACCEPT'] ?? 'N/A_ACCEPT';
+            $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
+            $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
+            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
+            $parts[] = $_SERVER['HTTP_CONNECTION'] ?? 'N/A_CONNECTION';
+            $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
+            $parts[] = $_SERVER['HTTP_DNT'] ?? 'N/A_DNT';
+            $parts[] = $_SERVER['HTTP_SEC_CH_UA'] ?? 'N/A_CH_UA';
+            $parts[] = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ?? 'N/A_CH_UA_PLATFORM';
+            $parts[] = $_SERVER['HTTP_SEC_CH_UA_MOBILE'] ?? 'N/A_CH_UA_MOBILE';
+            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+        }
+
+        $parts = \array_filter($parts);
+        $s = \implode(SS, $parts);
+        $s = \str_replace(' ', SS, $s);
+        $s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
+        return \hash('sha256', $s);
+    }
+
+    /**
      * Get Universal ID string
      *
      * @return string UID string
      */
     public function getUIDstring()
     {
-        $parts = [
-            CLI ? 'CLI' : '',
-            CLI ? '' : $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A',
-            CLI ? '' : $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A',
-            CLI ? '' : $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
-            $this->getIP(),
-        ];
+        $parts = [];
+        $parts[] = CLI ? 'CLI' : 'WEB';
+
+        if (!CLI) {
+            $parts[] = $_SERVER['HTTP_ACCEPT'] ?? 'N/A_ACCEPT';
+            $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
+            $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
+            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
+            $parts[] = $_SERVER['HTTP_CONNECTION'] ?? 'N/A_CONNECTION';
+            $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
+            $parts[] = $_SERVER['HTTP_DNT'] ?? 'N/A_DNT';
+            $parts[] = $_SERVER['HTTP_SEC_CH_UA'] ?? 'N/A_CH_UA';
+            $parts[] = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ?? 'N/A_CH_UA_PLATFORM';
+            $parts[] = $_SERVER['HTTP_SEC_CH_UA_MOBILE'] ?? 'N/A_CH_UA_MOBILE';
+            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+        }
+        $parts[] = $this->getIP();
+
         if (!CLI) {
             $name = self::COOKIE_UID;
             $uid = $this->getNonce();
             if (isset($_COOKIE[$name])) {
                 $uid = $_COOKIE[$name];
                 if (!\preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
-                    $this->addError("COOKIE: invalid UUID cookie");
+                    $this->addError("COOKIE: invalid UID cookie");
                     unset($_COOKIE[$name]);
                 }
             }
-            if (!isset($_COOKIE[$name])) {
+            if (!\array_key_exists($name, $_COOKIE)) {
                 \setcookie(
                     $name,
                     $uid,
-                    \time() + self::COOKIE_TTL,
-                    '/',
-                    DOMAIN,
-                    !LOCALHOST,
-                    true
+                    [
+                        'expires' => \time() + self::COOKIE_TTL,
+                        'path' => '/',
+                        'domain' => DOMAIN,
+                        'secure' => !LOCALHOST,
+                        'httponly' => true,
+                        'samesite' => 'Lax',
+                    ]
                 );
                 $_COOKIE[$name] = $uid;
             }
             $parts[] = $uid;
-            \header('X-UID: ' . $uid);
+            \header("X-UID: {$uid}");
         }
+
         $parts = \array_filter($parts);
-        return \preg_replace('/__/', SS, \strtr(\implode(SS, $parts), ' ', SS));
+        $s = \implode(SS, $parts);
+        $s = \str_replace(' ', SS, $s);
+        $s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
+        return $s;
     }
 
     /**
@@ -883,7 +937,9 @@ abstract class APresenter
         if (\is_string($key)) {
             return $this->getData("cfg.{$key}");
         }
-        throw new \Exception('FATAL ERROR: invalid get parameter');
+        $err = 'FATAL ERROR: invalid get parameter';
+        \error_log($err);
+        throw new \Exception($err);
     }
 
     /**
@@ -1430,7 +1486,7 @@ abstract class APresenter
                         foreach ($records->fetchColumn($language) as $x) {
                             $values[] = $x;
                         }
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         continue;
                     }
                     $locale = \array_replace(
@@ -1535,7 +1591,7 @@ abstract class APresenter
         }
         $c = 0;
         foreach ($myzones as $zone) {
-            $url = "https://api.cloudflare.com/client/v4/zones/{$zone}/purge_cache";
+            $url = self::CLOUDFLARE_API . "zones/{$zone}/purge_cache";
             $headers = [
                 "X-Auth-Email: {$email}",
                 "X-Auth-Key: {$apikey}",
@@ -1576,14 +1632,14 @@ abstract class APresenter
      */
     public function csvPreloader($name, $csvkey, $force = false)
     {
-        $name = trim((string) $name);
-        $csvkey = trim((string) $csvkey);
+        $name = \trim((string) $name);
+        $csvkey = \trim((string) $csvkey);
         $force = (bool) $force;
         $file = \strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
                 $data = false;
-                if (file_exists(DATA . DS . "{$file}.csv")) {
+                if (\file_exists(DATA . DS . "{$file}.csv")) {
                     // CSV file exists
                     $modtime = \filemtime(DATA . DS . "{$file}.csv");
                     if ($modtime + self::CSV_UPDATE_IGNORE > time()) {
@@ -1619,7 +1675,7 @@ abstract class APresenter
                     }
                     try {
                         $data = @file_get_contents($remote);
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $data = '';
                         $this->addError("CSV: fetching URL [{$remote}] failed"); // phpcs:ignore
                     }
@@ -2152,14 +2208,14 @@ abstract class APresenter
             }
         }
         if (\file_put_contents($file, $nonce, LOCK_EX) === false) {
-            $x = 'Failed to write identity nonce to file.';
-            \error_log($x);
-            throw new \Exception($x);
+            $err = 'Failed to write identity nonce to file.';
+            \error_log($err);
+            throw new \Exception($err);
         }
         if (\chmod($file, 0644) === false) {
-            $x = 'Failed to set permissions on identity nonce file.';
-            \error_log($x);
-            throw new \Exception($x);
+            $err = 'Failed to set permissions on identity nonce file.';
+            \error_log($err);
+            throw new \Exception($err);
         }
         return $nonce;
     }

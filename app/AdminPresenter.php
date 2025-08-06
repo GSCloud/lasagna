@@ -1067,7 +1067,7 @@ class AdminPresenter extends APresenter
         if (!file_exists($file)) {
             try {
                 $key = \hash('sha256', random_bytes(32) . time());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->addError("ADMIN: error generating random key: " . $e->getMessage()); // phpcs:ignore
                 ErrorPresenter::getInstance()->process(500);
                 return $this;
@@ -1621,7 +1621,7 @@ class AdminPresenter extends APresenter
             $csv = Reader::createFromPath($f, 'r');
             $csv->setHeaderOffset(0);
             return \count($csv) - 1;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return -1;
         }
     }
