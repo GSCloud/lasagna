@@ -561,7 +561,6 @@ nav_slovak,NAVI,Slovensky,Slovensky,Slovensky,Slovensky
 nav_english,NAVI,English,English,English,English
 nav_deutsch,NAVI,Deutsch,Deutsch,Deutsch,Deutsch
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
-a_manual,BUTTON,MANUAL,MANUÁL,MANUÁL,HANDBUCH
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
 a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
@@ -573,6 +572,7 @@ a_invoices,BUTTON,INVOICES,FAKTURY,FAKTÚRY,RECHNUNGEN
 a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
 a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
 a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,TSCHÜSS 👋
+a_manual,BUTTON,MANUAL,MANUÁL,MANUÁL,HANDBUCH
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
 a_show_translations,BUTTON,📍,📍,📍,📍
@@ -601,24 +601,26 @@ a_max_file_uploads,INFO,max.&nbsp; files&nbsp;count:,max.&nbsp;počet nahrávan�
 a_max_post_size,INFO,max.&nbsp;POST&nbsp;size:,max.&nbsp;POST&nbsp;velikost:,max.&nbsp;POST&nbsp;veľkosť:,Max.&nbsp;POST&nbsp;Größe:
 a_max_upload_size,INFO,max.&nbsp;file&nbsp;size:,max.&nbsp;velikost&nbsp;souboru:,max.&nbsp;veľkosť&nbsp;súboru:,Max.&nbsp;Dateigröße:
 a_model,INFO,model,model,model,Modell
-a_news_info,INFO,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
-a_news_os_info,INFO,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
-a_news_sc_info,INFO,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
 a_off,INFO,OFF,VYP,VYP,AUS
 a_on,INFO,ON,ZAP,ZAP,AN
 a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
 a_processing,INFO,processing,zpracování,spracovanie,Verwechseln
 a_processing_data,INFO,The system is processing data ☕️,Systém zpracovává data ☕️,Systém spracováva údaje ☕️,Das System verarbeitet Daten ☕️
 a_redis,INFO,REDIS,REDIS,REDIS,REDIS
-a_remote_fn_info,INFO,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufruf einer Remote-Systemfunktion
 a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,FERNFUNKTIONSANRUFE
-a_remotecode,INFO,remote fn,vzdálená funkce,vzdialená funkcia,Remote-Fn
 a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,GESPEICHERT OK
 a_total,INFO,total,celkem,celkom,Gesamt
 a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnutý.,UPLOAD ist deaktiviert.
 a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
 a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.
 a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
+a_data_info,SUBPAR,"fetch remote data, manage uploads and articles","načítání vzdálených dat, správa nahrávání a článků","načítavať vzdialené dáta, spravovať nahrávania a články","Remote-Daten abrufen, Uploads und Artikel verwalten"
+a_groups_info,SUBPAR,user lists and their permissions,seznamy uživatelů a jejich oprávnění,zoznamy používateľov a ich povolenia,Benutzerlisten und ihre Berechtigungen
+a_news_info,SUBPAR,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
+a_news_os_info,SUBPAR,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
+a_news_sc_info,SUBPAR,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
+a_remote_fn_info,SUBPAR,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufruf einer Remote-Systemfunktion
+a_services_info,SUBPAR,external services,externí služby,externé služby,externe Dienste
 a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
 a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
 a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
@@ -641,10 +643,12 @@ a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
 a_groups_permissions,TITLE,USERS & PERMISSIONS,UŽIVATELÉ & OPRÁVNĚNÍ,POUŽÍVATELIA & POVOLENIA,BENUTZER & BERECHTIGUNGEN
 a_locales,TITLE,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
-a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_oss,TITLE,OPEN SOURCE REFERENCES,OPEN SOURCE REFERENCE,OPEN SOURCE REFERENCIE,OPEN SOURCE REFERENZEN
+a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_shortcodes,TITLE,SHORTCODES info,SHORTCODES informace,SHORTCODES informácie,KURZCODES Informationen
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
+a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
+a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll
 a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Zeilenanzahl)
 a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
@@ -662,5 +666,3 @@ a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-E
 a_umami_ttip,TOOLTIP,Umami Analytics,Umami Analytika,Umami Analytika,Umami Analytics
 a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje od spoločnosti Google,Daten von Google aktualisieren
 a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads
-a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
-a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll
