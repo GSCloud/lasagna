@@ -210,7 +210,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
             }
             if (!is_array($arr)) {
                 error_log("Error parsing NE-ON file: " . CONFIG_PRIVATE);
-                die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE); // phpcs:ignore
+                die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE);
             }
             $cfg = array_replace_recursive($cfg, $arr);
         }
