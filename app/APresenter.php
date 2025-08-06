@@ -670,16 +670,10 @@ abstract class APresenter
         $parts[] = CLI ? 'CLI' : 'WEB';
 
         if (!CLI) {
-            $parts[] = $_SERVER['HTTP_ACCEPT'] ?? 'N/A_ACCEPT';
             $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
             $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
             $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
-            $parts[] = $_SERVER['HTTP_CONNECTION'] ?? 'N/A_CONNECTION';
             $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
-            $parts[] = $_SERVER['HTTP_DNT'] ?? 'N/A_DNT';
-            $parts[] = $_SERVER['HTTP_SEC_CH_UA'] ?? 'N/A_CH_UA';
-            $parts[] = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ?? 'N/A_CH_UA_PLATFORM';
-            $parts[] = $_SERVER['HTTP_SEC_CH_UA_MOBILE'] ?? 'N/A_CH_UA_MOBILE';
             $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         }
 
@@ -701,16 +695,10 @@ abstract class APresenter
         $parts[] = CLI ? 'CLI' : 'WEB';
 
         if (!CLI) {
-            $parts[] = $_SERVER['HTTP_ACCEPT'] ?? 'N/A_ACCEPT';
             $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
             $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
             $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
-            $parts[] = $_SERVER['HTTP_CONNECTION'] ?? 'N/A_CONNECTION';
             $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
-            $parts[] = $_SERVER['HTTP_DNT'] ?? 'N/A_DNT';
-            $parts[] = $_SERVER['HTTP_SEC_CH_UA'] ?? 'N/A_CH_UA';
-            $parts[] = $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ?? 'N/A_CH_UA_PLATFORM';
-            $parts[] = $_SERVER['HTTP_SEC_CH_UA_MOBILE'] ?? 'N/A_CH_UA_MOBILE';
             $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         }
         $parts[] = $this->getIP();
@@ -803,14 +791,10 @@ abstract class APresenter
         // set new identity
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
-
-        // set passport
         if ($out['id']) {
             $out = \json_encode($out);
-            $this->addMessage($out);
             $this->setCookie($app, $out);
         } else {
-            $this->addMessage('no ID set');
             $this->clearCookie($app);
         }
         return $this;
@@ -854,42 +838,35 @@ abstract class APresenter
             $content = $this->getCookie($app);
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                die('Identity is not an array.');                
                 $this->addMessage('Identity is not an array.');                
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                die('Identity has no email.');
                 $this->addMessage('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                die('Identity has no id.');
                 $this->addMessage('Identity has no id.');
                 $this->logout();
             }
             if (!\array_key_exists('fingerprint', $q)) {
-                die('Identity has no fingerprint.');
                 $this->addMessage('Identity has no fingerprint.');
                 $this->logout();
             }
             if ($q['fingerprint'] !== $fingerprint) {
-                die('Identity fingerprint is invalid.');
                 $this->addMessage('Identity fingerprint is invalid.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                die('Identity has no nonce.');
                 $this->addMessage('Identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                die('Identity nonce is invalid.');
                 $this->addMessage('Identity nonce is invalid.');
                 $this->logout();
             }
+            // update current identity
             if ($q['nonce'] === $nonce) {
-                // update current identity
                 $this->identity = $q;
             }
         }
@@ -1152,7 +1129,6 @@ abstract class APresenter
             $httponly,
             $samesite
         );
-        $this->addMessage('secure cookie stored');
         $this->cookies[$name] = $data;
         return $this;
     }
@@ -1175,11 +1151,14 @@ abstract class APresenter
             \setcookie(
                 $name,
                 '',
-                time() - 3600,
-                '/',
-                DOMAIN,
-                !LOCALHOST,
-                true
+                [
+                    'expires' => time() - 3600,
+                    'path' => '/',
+                    'domain' => DOMAIN,
+                    'secure' => !LOCALHOST,
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]
             );
         }
         return $this;
