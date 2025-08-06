@@ -194,7 +194,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
             $cfg = Neon::decode($cfg_content);
         } catch (\Nette\Neon\Exception $e) {
             error_log("Error parsing NE-ON file: " . CONFIG);
-            die('FATAL ERROR: '. $e->getMessage());
+            die('FATAL ERROR in NE-ON: ' . CONFIG . ': '. $e->getMessage());
         }
     } else {
         $cfg = null;
@@ -210,12 +210,12 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
             }
             if (!is_array($arr)) {
                 error_log("Error parsing NE-ON file: " . CONFIG_PRIVATE);
-                die('INVALID PRIVATE CONFIG!');
+                die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE . ': '. $e->getMessage()); // phpcs:ignore
             }
             $cfg = array_replace_recursive($cfg, $arr);
         }
     } catch (\Nette\Neon\Exception $e) {
-        die('FATAL ERROR: ' . $e->getMessage());
+        die('FATAL ERROR in NE-ON: ' . $e->getMessage());
     }
     try {
         if (!file_exists(ROOT . DS . '.env')) {
@@ -226,7 +226,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 }
                 if (!is_array($arr)) {
                     error_log("Error parsing NE-ON file: " . CONFIG_DOCKER);
-                    die('INVALID DOCKER CONFIG!');
+                    die('FATAL ERROR in NE-ON: ' . CONFIG_DOCKER . ' invalid docker config.'); // phpcs:ignore
                 }
                 $cfg = array_replace_recursive($cfg, $arr);
             }
