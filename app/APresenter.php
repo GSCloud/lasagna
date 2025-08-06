@@ -776,37 +776,23 @@ abstract class APresenter
 
         $i = [
             'id' => 0,
-            'ip' => '',
+            'ip' => $this->getIP(),
             'name' => '',
             'email' => '',
             'avatar' => '',
             'provider' => '',
-            'country' => '',
+            'fingerprint' => $this->getBrowserFingerprint(),
+            'nonce' => $this->getIdentityNonce(),
+            'timestamp' => \time(),
         ];
 
-        // set keys
-        $i['ip'] = $this->getIP();
-        $i['nonce'] = $this->getIdentityNonce();
-        $i['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+        $i['id'] = $identity['id'] ?? null;
+        $i['name'] = $identity['name'] ?? null;
+        $i['email'] = $identity['email'] ?? null;
+        $i['avatar'] = $identity['avatar'] ?? null;
+        $i['provider'] = $identity['provider'] ?? null;
 
-        // check other keys
-        if (\array_key_exists('id', $identity)) {
-            $i['id'] = (int) $identity['id'];
-        }
-        if (\array_key_exists('name', $identity)) {
-            $i['name'] = (string) $identity['name'];
-        }
-        if (\array_key_exists('email', $identity)) {
-            $i['email'] = (string) $identity['email'];
-        }
-        if (\array_key_exists('avatar', $identity)) {
-            $i['avatar'] = (string) $identity['avatar'];
-        }
-        if (\array_key_exists('provider', $identity)) {
-            $i['provider'] = (string) $identity['provider'];
-        }
-
-        // shuffle keys
+        // shuffle
         $out = [];
         $keys = \array_keys($i);
         \shuffle($keys);
@@ -818,10 +804,13 @@ abstract class APresenter
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
 
-        // encrypted cookie
+        // set passport
         if ($out['id']) {
-            $this->setCookie($app, \json_encode($out));
+            $out = \json_encode($out);
+            $this->addMessage($out);
+            $this->setCookie($app, $out);
         } else {
+            $this->addMessage('no ID set');
             $this->clearCookie($app);
         }
         return $this;
@@ -840,23 +829,16 @@ abstract class APresenter
                 'ip' => '127.0.0.1',
                 'name' => 'John Doe',
                 'email' => 'john.doe@example.com',
-                'avatar' => '',
+                'avatar' => null,
                 'country' => 'XX',
                 'provider' => 'cli',
+                'fingerprint' => $this->getBrowserFingerprint(),
+                'nonce' => $this->getIdentityNonce(),
+                'timestamp' => \time(),
             ];
         }
 
-        $i = [
-            'id' => 0,
-            'ip' => '',
-            'name' => '',
-            'email' => '',
-            'avatar' => '',
-            'country' => '',
-            'provider' => '',
-        ];
-
-        // check current identity
+        // brifely check current identity
         $id = $this->identity['id'] ?? null;
         $email = $this->identity['email'] ?? null;
         $name = $this->identity['name'] ?? null;
@@ -864,33 +846,50 @@ abstract class APresenter
             return $this->identity;
         }
 
-        $nonce = $this->getIdentityNonce();
         $app = $this->getCfg('app') ?? 'app';
+        $nonce = $this->getIdentityNonce();
+        $fingerprint = $this->getBrowserFingerprint();
 
         if (isset($_COOKIE[$app])) {
             $content = $this->getCookie($app);
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                \error_log('Identity is not an array.');
+                die('Identity is not an array.');                
+                $this->addMessage('Identity is not an array.');                
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                \error_log('Identity has no email.');
+                die('Identity has no email.');
+                $this->addMessage('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                \error_log('Identity has no id.');
+                die('Identity has no id.');
+                $this->addMessage('Identity has no id.');
+                $this->logout();
+            }
+            if (!\array_key_exists('fingerprint', $q)) {
+                die('Identity has no fingerprint.');
+                $this->addMessage('Identity has no fingerprint.');
+                $this->logout();
+            }
+            if ($q['fingerprint'] !== $fingerprint) {
+                die('Identity fingerprint is invalid.');
+                $this->addMessage('Identity fingerprint is invalid.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                \error_log('Identity has no nonce.');
+                die('Identity has no nonce.');
+                $this->addMessage('Identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                \error_log('Identity nonce is invalid.');
+                die('Identity nonce is invalid.');
+                $this->addMessage('Identity nonce is invalid.');
                 $this->logout();
             }
             if ($q['nonce'] === $nonce) {
+                // update current identity
                 $this->identity = $q;
             }
         }
@@ -1114,7 +1113,7 @@ abstract class APresenter
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        $key = trim($key, "/.\\");
+        $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
 
         if (file_exists($keyfile) && is_readable($keyfile)) {
@@ -1153,6 +1152,7 @@ abstract class APresenter
             $httponly,
             $samesite
         );
+        $this->addMessage('secure cookie stored');
         $this->cookies[$name] = $data;
         return $this;
     }
