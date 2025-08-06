@@ -243,7 +243,7 @@ abstract class APresenter
         }
         $logLine = $json . "\n";
         $flags = FILE_APPEND | LOCK_EX;
-        if (@file_put_contents($filePath, $logLine, $flags) === false) {
+        if (\file_put_contents($filePath, $logLine, $flags) === false) {
             $err = \error_get_last()['message'];
             \error_log("Error writing to log file [" . $filePath . ']. Message: ' . $err); // phpcs:ignore
         }
@@ -850,31 +850,31 @@ abstract class APresenter
             $content = $this->getCookie($app);
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                $this->addMessage('Identity is not an array.');                
+                $this->addError('Identity is not an array.');                
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                $this->addMessage('Identity has no email.');
+                $this->addError('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                $this->addMessage('Identity has no id.');
+                $this->addError('Identity has no id.');
                 $this->logout();
             }
             if (!\array_key_exists('fingerprint', $q)) {
-                $this->addMessage('Identity has no fingerprint.');
+                $this->addError('Identity has no fingerprint.');
                 $this->logout();
             }
             if ($q['fingerprint'] !== $fingerprint) {
-                $this->addMessage('Identity fingerprint is invalid.');
+                $this->addError('Identity fingerprint is invalid.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                $this->addMessage('Identity has no nonce.');
+                $this->addError('Identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                $this->addMessage('Identity nonce is invalid.');
+                $this->addError('Identity nonce is invalid.');
                 $this->logout();
             }
             // update current identity
@@ -1649,7 +1649,6 @@ abstract class APresenter
                     if (CLI) {
                         $this->addMessage("downloading CSV: [{$name}]");
                     }
-
                     // full path
                     if (\strpos($csvkey, 'https') === 0) {
                         $remote = $csvkey;
@@ -1665,7 +1664,7 @@ abstract class APresenter
                         }
                     }
                     try {
-                        $data = @file_get_contents($remote);
+                        $data = \file_get_contents($remote);
                     } catch (\Throwable $e) {
                         $data = '';
                         $this->addError("CSV: fetching URL [{$remote}] failed"); // phpcs:ignore
@@ -1683,27 +1682,24 @@ abstract class APresenter
                     $this->addError("CSV: fetching URL [{$remote}] data contains HTML"); // phpcs:ignore
                     return $this;
                 }
-                if (strlen($data) >= self::CSV_MIN_SIZE) {
+                if (\strlen($data) >= self::CSV_MIN_SIZE) {
                     Cache::write($file, $data, 'csv');
                     $f1 = DATA . DS . "{$file}.csv";
                     $f2 = DATA . DS . "{$file}.bak";
-
                     // remove old backup
-                    if (file_exists($f2)) {
-                        if (@\unlink($f2) === false) {
+                    if (\file_exists($f2)) {
+                        if (\unlink($f2) === false) {
                             $this->addError("CSV: delete of file [{$file}.bak] failed"); // phpcs:ignore
                         }
                     }
-
                     // move CSV to backup
-                    if (file_exists($f1)) {
-                        if (@\rename($f1, $f2) === false) {
+                    if (\file_exists($f1)) {
+                        if (\rename($f1, $f2) === false) {
                             $this->addError("CSV: backup of file [{$file}.csv] failed"); // phpcs:ignore
                         }
                     }
-
                     // write new CSV
-                    if (@file_put_contents($f1, $data, LOCK_EX) === false) {
+                    if (\file_put_contents($f1, $data, LOCK_EX) === false) {
                         $this->addError("CSV: save to file [{$file}.csv] failed"); // phpcs:ignore
                     }
                 }
@@ -1747,7 +1743,7 @@ abstract class APresenter
         if (!\is_string($name)) {
             return null;
         }
-        $name = trim($name);
+        $name = \trim($name);
         if (empty($name)) {
             return null;
         }
@@ -1760,8 +1756,8 @@ abstract class APresenter
 
         // part 2 = CSV file
         $csv = null;
-        if (file_exists(DATA . DS . "{$file}.csv")) {
-            if (!$csv = @file_get_contents(DATA . DS . "{$file}.csv")) {
+        if (\file_exists(DATA . DS . "{$file}.csv")) {
+            if (!$csv = \file_get_contents(DATA . DS . "{$file}.csv")) {
                 $csv = null;
                 $this->addError("AppData: reading file [{$file}.csv] failed");
             }
@@ -1773,15 +1769,15 @@ abstract class APresenter
             $this->addError("AppData: file [{$file}.csv] data contains HTML");
         }
 
-        if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
+        if (\is_string($csv) && \strlen($csv) >= self::CSV_MIN_SIZE) {
             Cache::write($file, $csv, 'csv');
             return $csv;
         }
 
         // part 3 = CSV backup file
         $csv = null;
-        if (file_exists(DATA . DS . "{$file}.bak")) {
-            if (!$csv = @file_get_contents(DATA . DS . "{$file}.bak")) {
+        if (\file_exists(DATA . DS . "{$file}.bak")) {
+            if (!$csv = \file_get_contents(DATA . DS . "{$file}.bak")) {
                 $csv = null;
                 $this->addError("AppData: reading backup file [{$file}.bak] failed");
             }
@@ -1791,7 +1787,7 @@ abstract class APresenter
             $csv = null;
             $this->addError("AppData: backup file [{$file}.bak] contains HTML");
         }
-        if (\is_string($csv) && strlen($csv) >= self::CSV_MIN_SIZE) {
+        if (\is_string($csv) && \strlen($csv) >= self::CSV_MIN_SIZE) {
             // make a copy to the main CSV file
             \copy(DATA . DS . "{$file}.bak", DATA . DS . "{$file}.csv");
             Cache::write($file, $csv, 'csv');
