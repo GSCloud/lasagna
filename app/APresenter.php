@@ -794,6 +794,18 @@ abstract class APresenter
         if ($out['id']) {
             $out = \json_encode($out);
             $this->setCookie($app, $out);
+            \setcookie(
+                'ENGINE',
+                ENGINE,
+                [
+                    'expires' => \time() + self::COOKIE_TTL,
+                    'path' => '/',
+                    'domain' => DOMAIN,
+                    'secure' => !LOCALHOST,
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ]
+            );
         } else {
             $this->clearCookie($app);
         }
