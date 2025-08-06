@@ -29,7 +29,7 @@ class ApiPresenter extends APresenter
     const API_CACHE = "minute";
     const ACCESS_TIME_LIMIT = 3599;
     const MAX_API_HITS = 1000;
-    const USE_CACHE = false;
+    const USE_CACHE = true;
 
     /**
      * Main controller
@@ -42,23 +42,17 @@ class ApiPresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-
-        $data = $this->getData();
-        if (!\is_array($data)) {
+        if (!\is_array($data = $this->getData())) {
             return $this;
         }
-
-        $cfg = $this->getCfg();
-        if (!\is_array($cfg)) {
+        if (!\is_string($view = $this->getView())) {
             return $this;
         }
-
+        if (!\is_array($presenter = $this->getPresenter())) {
+            return $this;
+        }
+        $this->setHeaderHtml();
         $match = $this->getMatch();
-
-        $view = $this->getView();
-        if (!\is_string($view)) {
-            return $this;
-        }
 
         // API usage
         $api_usage = $this->accessLimiter();
@@ -90,12 +84,8 @@ class ApiPresenter extends APresenter
                     return $this->writeJsonData($data, $extras);
                 }
             }
-
-            // model
             $data = [];
-            $data[] = "Hello World!";
-
-            // always save model to cache
+            $data['example'] = "Hello World!";
             Cache::write($view, $data, self::API_CACHE);
             return $this->writeJsonData($data, $extras);
 
