@@ -23,7 +23,6 @@ define('WWW', ROOT . DS . 'www');
 define('CONFIG', APP . DS . 'config.neon');
 define('CONFIG_PRIVATE', APP . DS . 'config_private.neon');
 define('CONFIG_DOCKER', APP . DS . 'config_docker.neon');
-define('CONFIG_GUI', DATA . DS . 'config_gui.json');
 
 define('CSP', APP . DS . 'csp.neon');
 define('TEMPLATES', APP . DS . 'templates');

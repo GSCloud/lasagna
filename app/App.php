@@ -118,10 +118,12 @@ define('ENGINE', 'Tesseract v2.4.6');
 $data['ENGINE'] = ENGINE;
 
 // CHECK OLD ENGINE
-if (isset($_COOKIE[$data['app'] ?? 'app'])) {
-    if (!isset($_COOKIE['ENGINE']) || $_COOKIE['ENGINE'] !== ENGINE) {
-        header('Location: /?logout');
-        exit;
+if (!CLI) {
+    if (isset($_COOKIE[$data['app'] ?? 'app'])) {
+        if (!isset($_COOKIE['ENGINE']) || $_COOKIE['ENGINE'] !== ENGINE) {
+            header('Location: /?logout');
+            exit;
+        }
     }
 }
 

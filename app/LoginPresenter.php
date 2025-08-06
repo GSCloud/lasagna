@@ -84,7 +84,7 @@ class LoginPresenter extends APresenter
                 [
                     'expires' => \time() + 60,
                     'path' => '/',
-                    'domain' => DOMAIN,
+                    'domain' => '',
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax'
@@ -125,7 +125,7 @@ class LoginPresenter extends APresenter
                 [
                     'expires' => \time() + 60,
                     'path' => '/',
-                    'domain' => DOMAIN,
+                    'domain' => '',
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax'
@@ -154,7 +154,15 @@ class LoginPresenter extends APresenter
                     $this->addMessage("OAuth login. User group: [{$group}]");
                     if ($group === 'admin') {
                         if (\is_string($dbg = $this->getCfg('DEBUG_COOKIE'))) {
-                            \setcookie('tracy-debug', $dbg);
+                            $params = [
+                                'expires' => 0, // session cookie
+                                'path' => '/',
+                                'domain' => '',
+                                'secure' => !LOCALHOST,
+                                'httponly' => true,
+                                'samesite' => 'Lax'
+                            ];
+                            \setcookie('tracy-debug', $dbg, $params);
                         }
                     }
                 }
@@ -165,7 +173,7 @@ class LoginPresenter extends APresenter
                         [
                             'expires' => \time() + 86400 * 30,
                             'path' => '/',
-                            'domain' => DOMAIN,
+                            'domain' => '',
                             'secure' => !LOCALHOST,
                             'httponly' => true,
                             'samesite' => 'Lax'

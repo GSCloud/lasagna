@@ -262,13 +262,18 @@ abstract class APresenter
         // SANITY CHECK
         foreach ([
             'APP',
+            'CACHE',
             'CONFIG',
             'DATA',
             'DS',
+            'DS',
+            'PARTIALS',
             'ROOT',
             'SS',
+            'TEMPLATES',
+            'WWW',
         ] as $x) {
-            defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
+            defined($x) || die("FATAL ERROR: const '{$x}' not defined"); 
         }
         $class = get_called_class();
         if (array_key_exists($class, self::$instances) === false) {
@@ -290,13 +295,18 @@ abstract class APresenter
         // SANITY CHECK
         foreach ([
             'APP',
+            'CACHE',
             'CONFIG',
             'DATA',
             'DS',
+            'DS',
+            'PARTIALS',
             'ROOT',
             'SS',
+            'TEMPLATES',
+            'WWW',
         ] as $x) {
-            defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
+            defined($x) || die("FATAL ERROR: const '{$x}' not defined");
         }
         $class = get_called_class();
         return new $class();
@@ -309,10 +319,14 @@ abstract class APresenter
      * 
      * @return string HTML output
      */
-    public function renderHTML($template = null)
+    public function renderHTML($template = null): string
     {
         if (\is_null($template)) {
-            $template = 'index';
+            if (\file_exists(TEMPLATES . DS . "index.mustache")) {
+                $template = 'index';
+            } else {
+                throw new \Exception("Missing index.mustache template.");
+            }
         }
 
         // $type: string = 0, template = 1
@@ -769,6 +783,7 @@ abstract class APresenter
             'email' => '',
             'avatar' => '',
             'provider' => '',
+            'custom' => '',
             'fingerprint' => $this->getBrowserFingerprint(),
             'nonce' => $this->getIdentityNonce(),
             'timestamp' => \time(),
@@ -828,9 +843,6 @@ abstract class APresenter
                 'avatar' => null,
                 'country' => 'XX',
                 'provider' => 'cli',
-                'fingerprint' => $this->getBrowserFingerprint(),
-                'nonce' => $this->getIdentityNonce(),
-                'timestamp' => \time(),
             ];
         }
 

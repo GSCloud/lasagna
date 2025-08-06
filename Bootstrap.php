@@ -111,11 +111,6 @@ defined('CONFIG_DOCKER') || define(
     'CONFIG_DOCKER', APP . DS . 'config_docker.neon'
 );
 
-// GUI based configuration file, not mandatory
-defined('CONFIG_GUI') || define(
-    'CONFIG_GUI', DATA . DS . 'config_gui.json'
-);
-
 // CSP definition file, used in App.php, not mandatory
 $d = 'CSP';
 $x = APP . DS . 'csp.neon';
