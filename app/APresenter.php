@@ -266,7 +266,6 @@ abstract class APresenter
             'CONFIG',
             'DATA',
             'DS',
-            'DS',
             'PARTIALS',
             'ROOT',
             'SS',
@@ -275,8 +274,8 @@ abstract class APresenter
         ] as $x) {
             defined($x) || die("FATAL ERROR: const '{$x}' not defined"); 
         }
-        $class = get_called_class();
-        if (array_key_exists($class, self::$instances) === false) {
+        $class = \get_called_class();
+        if (\array_key_exists($class, self::$instances) === false) {
             self::$instances[$class] = new $class();
         }
         return self::$instances[$class];
@@ -299,7 +298,6 @@ abstract class APresenter
             'CONFIG',
             'DATA',
             'DS',
-            'DS',
             'PARTIALS',
             'ROOT',
             'SS',
@@ -308,7 +306,7 @@ abstract class APresenter
         ] as $x) {
             defined($x) || die("FATAL ERROR: const '{$x}' not defined");
         }
-        $class = get_called_class();
+        $class = \get_called_class();
         return new $class();
     }
 
@@ -520,7 +518,7 @@ abstract class APresenter
      */
     public function addAuditMessage($message = null)
     {
-        if (CLI || !is_string($message) || empty(trim($message))) {
+        if (CLI || !\is_string($message) || empty(trim($message))) {
             return $this;
         }
 
@@ -690,7 +688,6 @@ abstract class APresenter
             $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
             $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         }
-
         $parts = \array_filter($parts);
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
@@ -754,7 +751,7 @@ abstract class APresenter
     }
 
     /**
-     * Get Universal ID hash
+     * Get Universal ID hash from UID string
      *
      * @return string UID hash
      */
@@ -764,9 +761,9 @@ abstract class APresenter
     }
 
     /**
-     * Set user identity
+     * Set user identity (UI)
      *
-     * @param array $identity Identity array
+     * @param array $identity identity array
      * 
      * @return self
      */
@@ -783,7 +780,7 @@ abstract class APresenter
             'email' => '',
             'avatar' => '',
             'provider' => '',
-            'custom' => '',
+            'custom' => null,
             'fingerprint' => $this->getBrowserFingerprint(),
             'nonce' => $this->getIdentityNonce(),
             'timestamp' => \time(),
@@ -828,9 +825,9 @@ abstract class APresenter
     }
 
     /**
-     * Get user identity
+     * Get user identity (UI)
      *
-     * @return array Identity array
+     * @return array identity array
      */
     public function getIdentity()
     {
@@ -841,6 +838,7 @@ abstract class APresenter
                 'name' => 'John Doe',
                 'email' => 'john.doe@example.com',
                 'avatar' => null,
+                'custom' => null,
                 'country' => 'XX',
                 'provider' => 'cli',
             ];

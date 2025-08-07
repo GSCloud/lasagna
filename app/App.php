@@ -17,12 +17,13 @@ use Nette\Neon\Neon;
 
 // SANITY CHECK
 foreach ([
-    'APP',
-    'CONFIG',
-    'DATA',
     'DS',
-    'ROOT',
     'SS',
+    'ROOT',
+    'APP',
+    'CACHE',
+    'DATA',
+    'CONFIG',
 ] as $x) {
     defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
 }
