@@ -88,17 +88,32 @@
       }
 
       // switch CSS debugger ON/OFF
-      $('#debugger').click(function () {
+      $('#cssdebugger').click(function () {
         if (getCookie('debug')) {
-          $('#debugger').removeClass('red').addClass('grey');
+          $('#cssdebugger').removeClass('red').addClass('grey');
           delCookie('debug');
           location.replace(location.href.split('?')[0] + "?{{ nonce }}");
         } else {
-          $('#debugger').removeClass('grey').addClass('red');
+          $('#cssdebugger').removeClass('grey').addClass('red');
           setCookie('debug', 1);
           location.replace(location.href.split('?')[0] + "?{{ nonce }}");
         }
       });
+
+{{#admin_group_admin}}
+      // switch PHP debugger ON/OFF
+      $('#phpdebugger').click(function () {
+        if (getCookie('tracy-debug')) {
+          $('#phpdebugger').removeClass('red').addClass('grey');
+          delCookie('tracy-debug');
+          location.replace(location.href.split('?')[0] + "?{{ nonce }}");
+        } else {
+          $('#phpdebugger').removeClass('grey').addClass('red');
+          setCookie('tracy-debug', '{{ DEBUG_COOKIE }}');
+          location.replace(location.href.split('?')[0] + "?{{ nonce }}");
+        }
+      });
+{{/admin_group_admin}}
 
       // show translation pins
       $(".trans_pin").click(function () {

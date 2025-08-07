@@ -562,7 +562,7 @@ nav_english,NAVI,English,English,English,English
 nav_deutsch,NAVI,Deutsch,Deutsch,Deutsch,Deutsch
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
-a_debugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
+a_cssdebugger,BUTTON,DEBUGGER,DEBUGGER,DEBUGGER,DEBUGGER
 a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
 a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
 a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
@@ -573,6 +573,7 @@ a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
 a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
 a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,TSCHÜSS 👋
 a_manual,BUTTON,MANUAL,MANUÁL,MANUÁL,HANDBUCH
+a_phpdebugger,BUTTON,DEBUGGER,DEBUGGER,DEBUGGER,DEBUGGER
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
 a_show_translations,BUTTON,📍,📍,📍,📍
@@ -615,6 +616,7 @@ a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hoch
 a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.
 a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
 a_data_info,SUBPAR,"fetch remote data, manage uploads and articles","načítání vzdálených dat, správa nahrávání a článků","načítavať vzdialené dáta, spravovať nahrávania a články","Remote-Daten abrufen, Uploads und Artikel verwalten"
+a_dev_info,SUBPAR,special development functions,speciální vývojové funkce,špeciálne vývojové funkcie,spezielle Entwicklungsfunktionen
 a_groups_info,SUBPAR,user lists and their permissions,seznamy uživatelů a jejich oprávnění,zoznamy používateľov a ich povolenia,Benutzerlisten und ihre Berechtigungen
 a_news_info,SUBPAR,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
 a_news_os_info,SUBPAR,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
@@ -624,7 +626,7 @@ a_services_info,SUBPAR,external services,externí služby,externé služby,exter
 a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
 a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
 a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Legacy,Vermächtnis
 a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
 a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
@@ -636,11 +638,13 @@ a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte
 a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
 a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
 a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalt speichern
-a_tab_changes,TAB,CHANGES,ZMĚNY,ZMENY,ÄNDERUNGEN
+a_tab_changes,TAB,INFORMATION,INFORMACE,INFORMÁCIE,INFORMATION
 a_tab_data,TAB,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
+a_tab_dev,TAB,DEV,DEV,DEV,DEV
 a_tab_fn,TAB,REMOTE fn(),VZDÁLENÉ fn(),VZDIALENÉ fn(),FERNBEDIENUNGSFUNKTIONEN fn()
 a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
+a_dev,TITLE,DEVELOPER,VÝVOJÁŘ,VÝVOJÁR,ENTWICKLER
 a_groups_permissions,TITLE,USERS & PERMISSIONS,UŽIVATELÉ & OPRÁVNĚNÍ,POUŽÍVATELIA & POVOLENIA,BENUTZER & BERECHTIGUNGEN
 a_locales,TITLE,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
 a_oss,TITLE,OPEN SOURCE REFERENCES,OPEN SOURCE REFERENCE,OPEN SOURCE REFERENCIE,OPEN SOURCE REFERENZEN
@@ -649,7 +653,7 @@ a_shortcodes,TITLE,SHORTCODES info,SHORTCODES informace,SHORTCODES informácie,K
 a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
 a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll
-a_debugger_ttip,TOOLTIP,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS-DEBUGGER
+a_debugger_ttip,TOOLTIP,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Zeilenanzahl)
 a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
 a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 Emoji-Panel

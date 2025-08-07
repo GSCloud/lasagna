@@ -1,37 +1,39 @@
-<div id="fn" class="container">
+<div id="fn" class="row">
+  <div class="container">
 
-  <h4><i class="fa-solid fa-robot"></i>&nbsp;&nbsp;{{ l.a_tab_fn }}</h4>
-  <p>{{ l.a_remote_fn_info }}</p>
+    <h4><i class="fa-solid fa-robot"></i>&nbsp;&nbsp;{{ l.a_tab_fn }}</h4>
+    <p>{{ l.a_remote_fn_info }}</p>
 
-  <div class="row extrapadding">
-    <div class="grey col s12 l8">
-      <label for="RemoteFnSelect">{{ l.a_remotefns }}</label>
-      <select id="RemoteFnSelect">
-      {{#admin_group_admin}}
-        <option value="" disabled selected>&hellip;</option>
-        <option value="CoreUpdateRemote">🍃 Refresh CSV Data</option>
-        <option value="FlushCacheRemote">🍃 Flush All Caches</option>
-        <option value="AuditLogJSONRemote">📄 get Audit Log in JSON format</option>
-        <option value="" disabled>&hellip;</option>
-        <option value="RebuildNonceRemote">🔑 Rebuild Auth Nonce</option>
-        <option value="RebuildSecureKeyRemote">🔑 Rebuild Auth Cookie Secure Key</option>
-        <option value="RebuildAdminKeyRemote">⚠️ Rebuild Admin Secure Key</option>
-      {{/admin_group_admin}}
-      {{#admin_group_manager}}
-        <option value="" disabled selected>&hellip;</option>
-        <option value="CoreUpdateRemote">🍃 Refresh CSV Data</option>
-        <option value="FlushCacheRemote">🍃 Flush All Caches</option>
-        <option value="" disabled>&hellip;</option>
-        <option value="RebuildNonceRemote">🔑 Rebuild Auth Nonce</option>
-        <option value="RebuildSecureKeyRemote">🔑 Rebuild Auth Cookie Secure Key</option>
-      {{/admin_group_manager}}
-      {{#admin_group_editor}}
-        <option value="" disabled selected>&hellip;</option>
-        <option value="CoreUpdateRemote">🍃 Refresh CSV Data</option>
-        <option value="FlushCacheRemote">🍃 Flush All Caches</option>
-      {{/admin_group_editor}}
-      </select>
+    <div class="row extrapadding">
+      <div class="grey col s12 l8">
+        <label for="RemoteFnSelect">{{ l.a_remotefns }}</label>
+        <select id="RemoteFnSelect">
+        {{#admin_group_admin}}
+          <option value="" disabled selected>&hellip;</option>
+          <option value="CoreUpdateRemote">🍃 Refresh CSV Data</option>
+          <option value="FlushCacheRemote">🍃 Flush All Caches</option>
+          <option value="AuditLogJSONRemote">📄 get Audit Log in JSON format</option>
+          <option value="" disabled>&hellip;</option>
+          <option value="RebuildNonceRemote">🔑 Rebuild Auth Nonce</option>
+          <option value="RebuildSecureKeyRemote">🔑 Rebuild Auth Cookie Secure Key</option>
+          <option value="RebuildAdminKeyRemote">⚠️ Rebuild Admin Secure Key</option>
+        {{/admin_group_admin}}
+        {{#admin_group_manager}}
+          <option value="" disabled selected>&hellip;</option>
+          <option value="CoreUpdateRemote">🍃 Refresh CSV Data</option>
+          <option value="FlushCacheRemote">🍃 Flush All Caches</option>
+          <option value="" disabled>&hellip;</option>
+          <option value="RebuildNonceRemote">🔑 Rebuild Auth Nonce</option>
+          <option value="RebuildSecureKeyRemote">🔑 Rebuild Auth Cookie Secure Key</option>
+        {{/admin_group_manager}}
+        {{#admin_group_editor}}
+          <option value="" disabled selected>&hellip;</option>
+          <option value="CoreUpdateRemote">🍃 Refresh CSV Data</option>
+          <option value="FlushCacheRemote">🍃 Flush All Caches</option>
+        {{/admin_group_editor}}
+        </select>
+      </div>
     </div>
-  </div>
 
+  </div>
 </div>

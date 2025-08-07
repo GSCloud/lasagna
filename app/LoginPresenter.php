@@ -159,7 +159,7 @@ class LoginPresenter extends APresenter
                                 'path' => '/',
                                 'domain' => '',
                                 'secure' => !LOCALHOST,
-                                'httponly' => true,
+                                'httponly' => false,
                                 'samesite' => 'Lax'
                             ];
                             \setcookie('tracy-debug', $dbg, $params);
