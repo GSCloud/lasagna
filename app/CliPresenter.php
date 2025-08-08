@@ -55,8 +55,7 @@ class CliPresenter extends APresenter
     {
         $p = \trim($p);
         if (empty($p) || !\strlen($p)) {
-            // no presenter
-            die("FATAL ERROR: No presenter is set!\n");
+            die("FATAL ERROR: No presenter is set\n");
         }
 
         $data = $this->getData();
@@ -85,8 +84,9 @@ class CliPresenter extends APresenter
     {
         $v = \trim($v);
         if (empty($v) || !\strlen($v)) { // no view
-            die("FATAL ERROR: No view is set!\n");
+            die("FATAL ERROR: No view is set\n");
         }
+
         $data = $this->getData();
         $this->dataExpander($data);
         $router = $this->getRouter();
@@ -114,7 +114,7 @@ class CliPresenter extends APresenter
                 return !(\stripos($key, "sodium") === 0);
             }, ARRAY_FILTER_USE_KEY
         );
-        \dump($arr);
+        dump($arr);
         return $this;
     }
 
@@ -211,7 +211,6 @@ class CliPresenter extends APresenter
     {
         $cli = new CLImate;
         $module = \trim($module);
-
         switch ($module) {
         case "refresh":
             $this->setForceCsvCheck();
@@ -230,9 +229,9 @@ class CliPresenter extends APresenter
                 Cache::clear("{$k}_file");
                 echo '.';
             }
-            \array_map('unlink', glob(CACHE . DS . "*.php") ?: []);
-            \array_map('unlink', glob(CACHE . DS . "*.tmp") ?: []);
-            \array_map('unlink', glob(CACHE . DS . CACHEPREFIX . "*") ?: []);
+            \array_map('unlink', \glob(CACHE . DS . "*.php") ?: []);
+            \array_map('unlink', \glob(CACHE . DS . "*.tmp") ?: []);
+            \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . "*") ?: []);
             \clearstatcache();
             $data = $this->getData();
             $admin = AdminPresenter::getInstance()->setData($data);

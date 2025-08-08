@@ -43,15 +43,16 @@ class ApiPresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         if (!\is_array($data = $this->getData())) {
-            return $this;
+            return $this->setData('output', 'Error in Model.');
         }
-        if (!\is_string($view = $this->getView())) {
-            return $this;
+        if (!$view = $this->getView()) {
+            return $this->setData('output', 'Error in View.');
         }
         if (!\is_array($presenter = $this->getPresenter())) {
-            return $this;
+            return $this->setData('output', 'Error in Presenter.');
         }
         $this->setHeaderHtml();
+
         $match = $this->getMatch();
 
         // API usage
@@ -75,7 +76,6 @@ class ApiPresenter extends APresenter
 
         // API calls
         switch ($view) {
-
         case "APIDemo":
             if (self::USE_CACHE) {
                 $data = Cache::read($view, self::API_CACHE);

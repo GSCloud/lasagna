@@ -25,7 +25,7 @@ foreach ([
     'DATA',
     'CONFIG',
 ] as $x) {
-    defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed!");
+    defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed");
 }
 
 // BLOCK BAD ROBOTS
@@ -173,7 +173,7 @@ if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
 $data['isSafari'] = $isSafari;
 
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
-define('HOST', $host);
+defined('HOST') || define('HOST', $host);
 $data['base'] = $data['BASE'] = $host ? (($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/") : ''; // phpcs:ignore
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
 if (!$requestUri) {
@@ -336,7 +336,7 @@ if ($admin === '') {
     $admin = 'admin';
 }
 if (is_dir(WWW . DS . $admin)) {
-    $err = "Admin end-point [{$admin}] already exists as a web folder!";
+    $err = "Administration end-point [{$admin}] already exists as a web folder";
     error_log($err);
     throw new \Exception($err);
 }

@@ -42,7 +42,7 @@ ini_set(
 );
 ini_set(
     'default_socket_timeout',
-    defined('DEFAULT_SOCKET_TIMEOUT') ? DEFAULT_SOCKET_TIMEOUT : '15'
+    defined('DEFAULT_SOCKET_TIMEOUT') ? DEFAULT_SOCKET_TIMEOUT : '10'
 );
 ini_set(
     'display_errors',
@@ -93,7 +93,7 @@ if (defined($d) && is_dir($d) && is_readable($d) && is_writable($d)) {
 // DATA directory, can use the system temp
 $d = 'DATA';
 $x = ROOT . DS . 'data';
-if (defined($d) && is_dir($x) && is_readable($x) && is_writable($x)) {
+if (defined($d) && is_dir($d) && is_readable($d) && is_writable($d)) {
 } else {
     if (is_dir($x) && is_readable($x) && is_writable($x)) {
         define($d, $x);
@@ -209,6 +209,11 @@ if (defined($d) && is_readable($d) && is_writable($d)) {
 
 // running from CLI?
 defined('CLI') || define('CLI', (bool) (PHP_SAPI === 'cli'));
+if (CLI) {
+    defined('HOST') || define('HOST', null);
+    defined('SERVER') || define('SERVER', null);
+    defined('DOMAIN') || define('DOMAIN', null);
+}
 
 // running on localhost?
 defined('LOCALHOST') || define(
@@ -233,7 +238,9 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
         $cfg = null;
     }
     if (!is_array($cfg)) {
-        die('FATAL ERROR: INVALID CONFIG');
+        $err = 'FATAL ERROR: INVALID CONFIG';
+        error_log($err);
+        die($err);
     }
     try {
         if (file_exists(CONFIG_PRIVATE) && is_readable(CONFIG_PRIVATE)) {
@@ -259,7 +266,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 }
                 if (!is_array($arr)) {
                     error_log("Error parsing NE-ON file: " . CONFIG_DOCKER);
-                    die('FATAL ERROR in NE-ON: ' . CONFIG_DOCKER . ' invalid docker config.'); // phpcs:ignore
+                    die('FATAL ERROR in NE-ON: ' . CONFIG_DOCKER . ' invalid docker config'); // phpcs:ignore
                 }
                 $cfg = array_replace_recursive($cfg, $arr);
             }
@@ -268,11 +275,14 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
         die('FATAL ERROR: ' . $e->getMessage());
     }
 } else {
-    error_log('FATAL ERROR: CONFIG file not found!');
-    die('FATAL ERROR: CONFIG file not found!');
+    $err = 'FATAL ERROR: CONFIG file not found';
+    error_log($err);
+    die($err);
 }
 if (!is_array($cfg)) {
-    die('FATAL ERROR: INVALID CONFIG!');
+    $err = 'FATAL ERROR: INVALID CONFIG';
+    error_log($err);
+    die($err);
 }
 
 // DEFAULT TIME ZONE
@@ -300,7 +310,7 @@ defined('DEBUG') || define('DEBUG', (bool) ($cfg['dbg'] ?? false));
 if (DEBUG === true) {
     // https://api.nette.org/tracy/master/Tracy.html
     // https://www.php.net/manual/en/errorfunc.constants.php
-    Debugger::$logDirectory = LOGS;
+    Debugger::$logDirectory = LOGS ?? null;
     Debugger::$logSeverity = 15;
     Debugger::$dumpTheme = (string) ($cfg['DEBUG_DUMP_THEME'] ?? 'dark');
     Debugger::$maxDepth = (int) ($cfg['DEBUG_MAX_DEPTH'] ?? 10);

@@ -779,10 +779,10 @@ abstract class APresenter
             'name' => '',
             'email' => '',
             'avatar' => '',
-            'provider' => '',
             'custom' => null,
-            'fingerprint' => $this->getBrowserFingerprint(),
+            'provider' => '',
             'nonce' => $this->getIdentityNonce(),
+            'fingerprint' => $this->getBrowserFingerprint(),
             'timestamp' => \time(),
         ];
 
@@ -790,6 +790,7 @@ abstract class APresenter
         $i['name'] = $identity['name'] ?? null;
         $i['email'] = $identity['email'] ?? null;
         $i['avatar'] = $identity['avatar'] ?? null;
+        $i['custom'] = $identity['custom'] ?? null;
         $i['provider'] = $identity['provider'] ?? null;
 
         // shuffle
@@ -800,12 +801,11 @@ abstract class APresenter
             $out[$k] = $i[$k];
         }
 
-        // set new identity
+        // set identity
         $this->identity = $out;
         $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
-            $out = \json_encode($out);
-            $this->setCookie($app, $out);
+            $this->setCookie($app, \json_encode($out));
             \setcookie(
                 'ENGINE',
                 ENGINE,
@@ -820,6 +820,7 @@ abstract class APresenter
             );
         } else {
             $this->clearCookie($app);
+            $this->clearCookie('ENGINE');
         }
         return $this;
     }
@@ -839,25 +840,29 @@ abstract class APresenter
                 'email' => 'john.doe@example.com',
                 'avatar' => null,
                 'custom' => null,
-                'country' => 'XX',
+                'country' => null,
                 'provider' => 'cli',
             ];
         }
 
-        // brifely check current identity
+        // check current identity
         $id = $this->identity['id'] ?? null;
-        $email = $this->identity['email'] ?? null;
         $name = $this->identity['name'] ?? null;
-        if ($id && $email && $name) {
+        $email = $this->identity['email'] ?? null;
+        if ($id && $name && $email) {
             return $this->identity;
         }
 
+        // extract the cookie
         $app = $this->getCfg('app') ?? 'app';
         $nonce = $this->getIdentityNonce();
         $fingerprint = $this->getBrowserFingerprint();
 
         if (isset($_COOKIE[$app])) {
             $content = $this->getCookie($app);
+            if (!\is_string($content)) {
+                return $this->identity;
+            }
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
                 $this->addError('Identity is not an array.');                
@@ -887,12 +892,33 @@ abstract class APresenter
                 $this->addError('Identity nonce is invalid.');
                 $this->logout();
             }
-            // update current identity
-            if ($q['nonce'] === $nonce) {
-                $this->identity = $q;
-            }
+            $this->identity = $q;
         }
         return $this->identity;
+    }
+
+    /**
+     * Set custom identity data and save it
+     *
+     * @param mixed $data custom data
+     * 
+     * @return self
+     */
+    public function setCustomIdentityData($data = null)
+    {
+        $this->identity['custom'] = $data;
+        $this->setIdentity($this->identity);
+        return $this;
+    }
+
+    /**
+     * Get custom identity data
+     *
+     * @return mixed custom data
+     */
+    public function getCustomIdentityData(): mixed
+    {
+        return $this->identity['custom'] ?? null;
     }
 
     /**
@@ -913,8 +939,6 @@ abstract class APresenter
             ],
             $this->getIdentity()
         );
-
-        // get UID stuff
         $u['uid'] = $this->getUID();
         $u['uidstring'] = $this->getUIDstring();
         return $u;
@@ -925,7 +949,7 @@ abstract class APresenter
      *
      * @param string $key Index to configuration data / void
      * 
-     * @return mixed Configuration data by index / whole array
+     * @return mixed configuration data by index / whole array
      */
     public function getCfg($key = null)
     {
@@ -935,7 +959,7 @@ abstract class APresenter
         if (\is_string($key)) {
             return $this->getData("cfg.{$key}");
         }
-        $err = 'FATAL ERROR: invalid get parameter';
+        $err = 'FATAL ERROR: invalid getCfg parameter';
         \error_log($err);
         throw new \Exception($err);
     }
@@ -1085,9 +1109,9 @@ abstract class APresenter
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        $key = trim($key, "/.\\");
+        $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-        if (file_exists($keyfile) && is_readable($keyfile)) {
+        if (\file_exists($keyfile) && \is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $this->addError('HALITE: getCookie - missing encryption key');
@@ -1115,7 +1139,7 @@ abstract class APresenter
         $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
 
-        if (file_exists($keyfile) && is_readable($keyfile)) {
+        if (\file_exists($keyfile) && \is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
             $enc = KeyFactory::generateEncryptionKey();
@@ -1169,19 +1193,19 @@ abstract class APresenter
         }
 
         if (isset($_COOKIE[$name])) {
-            unset($_COOKIE[$name]);
             \setcookie(
                 $name,
                 '',
                 [
-                    'expires' => time() - 3600,
+                    'expires' => \time() - 3600,
                     'path' => '/',
                     'domain' => DOMAIN,
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax'
-                ]
+                    ]
             );
+            unset($_COOKIE[$name]);
         }
         return $this;
     }
@@ -1728,10 +1752,10 @@ abstract class APresenter
      */
     public function preloadAppData($key = 'app_data', $force = false)
     {
-        if (empty($key) || !strlen($key)) {
+        if (empty($key) || !\strlen($key)) {
             $key = 'app_data';
         }
-        $key = \strtolower(trim((string) $key));
+        $key = \strtolower(\trim((string) $key));
         $cfg = $this->getCfg();
         if (\array_key_exists($key, $cfg)) {
             foreach ((array) $cfg[$key] as $name => $csvkey) {
@@ -1820,7 +1844,7 @@ abstract class APresenter
         $time = \time();
         $out = [
             'timestamp' => $time,
-            'timestamp_RFC2822' => date(\DATE_RFC2822, $time),
+            'timestamp_RFC2822' => \date(\DATE_RFC2822, $time),
             'version' => (string) ($this->getCfg('version') ?? 'v1'),
             'engine' => ENGINE,
             'domain' => DOMAIN,
