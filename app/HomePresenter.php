@@ -43,7 +43,7 @@ class HomePresenter extends APresenter
         if (!\is_array($data = $this->getData())) {
             return $this->setData('output', 'Error in Model.');
         }
-        if (!$view = $this->getView()) {
+        if (!\is_string($view = $this->getView())) {
             return $this->setData('output', 'Error in View.');
         }
         if (!\is_array($presenter = $this->getPresenter())) {
