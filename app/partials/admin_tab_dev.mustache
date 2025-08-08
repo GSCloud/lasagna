@@ -7,20 +7,26 @@
     <a
       id="cssdebugger"
       style="margin:2px!important;"
-      class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}grey{{/COOKIE.debug}}"
-      data-position="top"
+      class="btn waves-light tooltipped white-text {{#COOKIE.debug}}red{{/COOKIE.debug}}{{^COOKIE.debug}}blue{{/COOKIE.debug}}"
+      data-position="bottom"
       data-tooltip="{{ l.a_debugger_ttip }}"
-      ><i class="fa-brands fa-css"></i>&nbsp;<i class="fa-solid fa-bug"></i>&nbsp;{{ l.a_cssdebugger }}</a>
-
+      ><i class="fa-brands fa-css"></i>&nbsp;<sup><i style="font-size:8px!important" class="fa-solid fa-bug"></i></sup>&nbsp;&nbsp;{{ l.a_cssdebugger }}</a>
     {{#dbg}}
     {{#admin_group_admin}}
     <a
       id="phpdebugger"
       style="margin:2px!important;"
-      class="btn waves-light tooltipped white-text {{#COOKIE.tracy-debug}}red{{/COOKIE.tracy-debug}}{{^COOKIE.tracy-debug}}grey{{/COOKIE.tracy-debug}}"
-      data-position="top"
+      class="btn waves-light tooltipped white-text {{#COOKIE.tracy-debug}}red{{/COOKIE.tracy-debug}}{{^COOKIE.tracy-debug}}blue{{/COOKIE.tracy-debug}}"
+      data-position="bottom"
       data-tooltip="{{ l.a_debugger_ttip }}"
-      ><i class="fa-brands fa-php"></i>&nbsp;<i class="fa-solid fa-bug"></i>&nbsp;{{ l.a_phpdebugger }}</a>
+      ><i class="fa-brands fa-php"></i>&nbsp;<sup><i style="font-size:8px!important" class="fa-solid fa-bug"></i></sup>&nbsp;&nbsp;{{ l.a_phpdebugger }}</a>
+    <a
+      id="cfsecurity"
+      style="margin:2px!important;"
+      class="btn waves-light tooltipped white-text disabled"
+      data-position="top"
+      data-tooltip="{{ l.a_cfsecure_ttip }}"
+      ><i class="fa-brands fa-cloudflare"></i>&nbsp;&nbsp;SECURE</a>
     {{/admin_group_admin}}
     {{/dbg}}
 

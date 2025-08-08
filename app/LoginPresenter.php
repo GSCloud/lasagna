@@ -152,19 +152,6 @@ class LoginPresenter extends APresenter
                 );
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
-                    if ($group === 'admin') {
-                        if (\is_string($dbg = $this->getCfg('DEBUG_COOKIE'))) {
-                            $params = [
-                                'expires' => 0, // session cookie
-                                'path' => '/',
-                                'domain' => '',
-                                'secure' => !LOCALHOST,
-                                'httponly' => false,
-                                'samesite' => 'Lax'
-                            ];
-                            \setcookie('tracy-debug', $dbg, $params);
-                        }
-                    }
                 }
                 if (\strlen($email = $ownerDetails->getEmail())) {
                     \setcookie(

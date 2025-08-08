@@ -75,20 +75,20 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         ><i class="fas fa-sign-out-alt"></i></a>
 {{#admin_group_admin}}
       <a
-        href="/{{ cfg.admin }}/AuditLog?{{ nonce }}"
-        class="tooltipped waves-effect waves-light blue btn"
         target="_blank"
         ref="nofollow"
+        class="tooltipped waves-effect waves-light blue btn"
         data-tooltip="{{ l.a_auditlog_ttip  }}"
         data-position="left"
+        href="/{{ cfg.admin }}/AuditLog?{{ nonce }}"
         ><i class="fas fa-list"></i></a>
       <a
-        href="/{{ cfg.admin }}/BlockLog?{{ nonce }}"
-        class="tooltipped waves-effect waves-light red btn"
         target="_blank"
         ref="nofollow"
+        class="tooltipped waves-effect waves-light red btn"
         data-tooltip="{{ l.a_blocklog_ttip  }}"
         data-position="left"
+        href="/{{ cfg.admin }}/BlockLog?{{ nonce }}"
         ><i class="fas fa-list"></i></a>
 {{/admin_group_admin}}
     </div>
