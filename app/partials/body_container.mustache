@@ -40,25 +40,35 @@
     <div class="center">
       {{>webshare}}
     </div>
-    <br><br>
     <a
-      target=_blank
-      rel="nofollow"
-      href="https://github.com/GSCloud/lasagna/blob/master/CHANGELOG.md"><b><i
-      class="fa-brands fa-square-github"></i>&nbsp;CHANGELOG (markdown)</b></a>
-    &nbsp;&nbsp;
+      target="_blank"
+      rel="noopener nofollow"
+      class="waves-effect btn white-text nowrap"
+      data-umami-event="changelog"
+      href="https://docs.google.com/viewer?url=https://raw.githubusercontent.com/GSCloud/lasagna/master/CHANGELOG.md.pdf">
+      <i aria-label="GitHub" class="fa-brands fa-square-github"></i>&nbsp;&nbsp;<b>{{ l.a_changelog }}</b></a>
     <a
-      target=_blank
-      rel="nofollow"
-      href="https://docs.google.com/viewer?url=https://raw.githubusercontent.com/GSCloud/lasagna/master/TECHNICAL_DETAILS_EN.md.pdf"><b><i
-      class="fa-brands fa-square-github"></i>&nbsp;TECHNICAL DETAILS (PDF)</b></a>
+      target="_blank"
+      rel="noopener nofollow"
+      class="waves-effect btn white-text nowrap"
+      data-umami-event="manual"
+      href="https://docs.google.com/viewer?url=https://raw.githubusercontent.com/GSCloud/lasagna/master/TECHNICAL_DETAILS_EN.md.pdf">
+      <i aria-label="GitHub" class="fa-brands fa-square-github"></i>&nbsp;&nbsp;<b>{{ l.a_manual }}</b></a>
+    <a
+      target="_blank"
+      rel="noopener nofollow"
+      class="waves-effect btn white-text nowrap"
+      data-umami-event="LASAGNA defaults"
+      href="https://docs.google.com/spreadsheets/d/1z2a5X7HVR9To7FvxMfRm_6ZxHeTVljUO8BjjMkI3phI/edit?usp=sharing">
+      <i aria-label="Google Sheet" class="fa-solid fa-table-cells"></i>&nbsp;&nbsp;<b>LASAGNA&nbsp;DEFAULTS</b></a>
+    <a
+      target="_blank"
+      rel="noopener nofollow"
+      class="waves-effect btn white-text nowrap"
+      data-umami-event="LASAGNA admin"
+      href="https://docs.google.com/spreadsheets/d/1iwJNAuvHQtNOgxQfQK5TYtROzCwFOBFGeo7Vj-7_48Q/edit?usp=sharing">
+      <i aria-label="Google Sheet" class="fa-solid fa-table-cells"></i>&nbsp;&nbsp;<b>LASAGNA&nbsp;ADMIN</b></a>
     <br><hr><br>
-    <a
-      target=_blank
-      rel="nofollow"
-      href="https://docs.google.com/spreadsheets/d/1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI/edit?usp=sharing"><b><i
-      class="fa-solid fa-table"></i>&nbsp;Google Sheet (Model)</b></a>
-    <br><br>
     <div class="container grey lighten-3 content left-align" style="padding:3rem;border-radius:0.5rem">
       {{ l.readme }}
     </div>
