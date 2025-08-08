@@ -41,13 +41,13 @@ class HomePresenter extends APresenter
     {
         $this->checkRateLimit();
         if (!\is_array($data = $this->getData())) {
-            return $this;
+            return $this->setData('output', 'Error in Model.');
         }
-        if (!\is_string($view = $this->getView())) {
-            return $this;
+        if (!$view = $this->getView()) {
+            return $this->setData('output', 'Error in View.');
         }
         if (!\is_array($presenter = $this->getPresenter())) {
-            return $this;
+            return $this->setData('output', 'Error in Presenter.');
         }
         $this->setHeaderHtml()->dataExpander($data);
 
@@ -67,9 +67,17 @@ class HomePresenter extends APresenter
             }
         }
 
-        // process shortcodes, fix HTML and locales
+        // locales transformation
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
+            // skip title, og_* and meta_* data
+            if ($k === 'title'
+                || \str_starts_with($k, 'meta_')
+                || \str_starts_with($k, 'og_')
+            ) {
+                continue;
+            }
+            // process Markdown shortcodes
             if (\str_starts_with($v, '[markdown]')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
                 if (!LOCALHOST
