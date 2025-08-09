@@ -2,6 +2,9 @@
 
 ---
 
+`2025-08-09`  **`v2.4.7`**  
+**`1073-BUGFIX`** various **bugfixes** and UI enhancements
+
 `2025-08-07`
 
 * **`1072-FEATURE`** new **DEV tab**
