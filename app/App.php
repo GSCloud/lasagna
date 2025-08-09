@@ -115,7 +115,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.4.6');
+define('ENGINE', 'Tesseract v2.4.7');
 $data['ENGINE'] = ENGINE;
 
 // CHECK OLD ENGINE

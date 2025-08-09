@@ -106,7 +106,7 @@ abstract class APresenter
     public $criticals = [];
 
     /* @var array user identity */
-    public $identity = [];
+    private $_identity = [];
 
     /* @var boolean force check locales in desctructor */
     private $_force_csv_check = false;
@@ -802,7 +802,7 @@ abstract class APresenter
         }
 
         // set identity
-        $this->identity = $out;
+        $this->_identity = $out;
         $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
             $this->setCookie($app, \json_encode($out));
@@ -846,11 +846,11 @@ abstract class APresenter
         }
 
         // check current identity
-        $id = $this->identity['id'] ?? null;
-        $name = $this->identity['name'] ?? null;
-        $email = $this->identity['email'] ?? null;
+        $id = $this->_identity['id'] ?? null;
+        $name = $this->_identity['name'] ?? null;
+        $email = $this->_identity['email'] ?? null;
         if ($id && $name && $email) {
-            return $this->identity;
+            return $this->_identity;
         }
 
         // extract the cookie
@@ -861,7 +861,7 @@ abstract class APresenter
         if (isset($_COOKIE[$app])) {
             $content = $this->getCookie($app);
             if (!\is_string($content)) {
-                return $this->identity;
+                return $this->_identity;
             }
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
@@ -892,9 +892,9 @@ abstract class APresenter
                 $this->addError('Identity nonce is invalid.');
                 $this->logout();
             }
-            $this->identity = $q;
+            $this->_identity = $q;
         }
-        return $this->identity;
+        return $this->_identity;
     }
 
     /**
@@ -906,8 +906,8 @@ abstract class APresenter
      */
     public function setCustomIdentityData($data = null)
     {
-        $this->identity['custom'] = $data;
-        $this->setIdentity($this->identity);
+        $this->_identity['custom'] = $data;
+        $this->setIdentity($this->_identity);
         return $this;
     }
 
@@ -918,7 +918,7 @@ abstract class APresenter
      */
     public function getCustomIdentityData(): mixed
     {
-        return $this->identity['custom'] ?? null;
+        return $this->_identity['custom'] ?? null;
     }
 
     /**
@@ -1849,7 +1849,9 @@ abstract class APresenter
             'engine' => ENGINE,
             'domain' => DOMAIN,
         ];
-        switch (\json_last_error()) { // last decoding error
+
+        // last decoding error
+        switch (\json_last_error()) {
         case JSON_ERROR_NONE:
             $code = 200;
             $msg = 'OK';
@@ -1890,9 +1892,12 @@ abstract class APresenter
         if (is_int($data)) {
             $code = $data;
             $data = null;
-            $h = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
             $m = null;
+
             switch ($code) {
+            case 200:
+                $m = 'OK';
+                break;
             case 304:
                 $m = 'Not Modified';
                 break;
@@ -1942,29 +1947,20 @@ abstract class APresenter
                 $msg = 'Unknown Error';
             }
             if ($m) {
-                $msg = "$m.";
-                \header("$h $code $m"); // set corresponding HTTP header
+                $msg = $m; // set to message too
+                $header = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
+                \header("{$header} {$code} {$m}");
             }
         }
         $this->setHeaderJson();
         $out['message'] = $msg;
-        $out['processing_time'] = \round(
-            (\microtime(true) - TESSERACT_START) * 1000, 2
-        ) . ' ms';
-
-        // merge headers
+        $out['processing_time'] = \round((\microtime(true) - TESSERACT_START) * 1000, 2) . ' ms'; // phpcs:ignore
         $out = \array_merge_recursive($out, $headers);
-
-        // set data model
         $out['data'] = $data ?? null;
-
-        // process extra switches
         if (\is_null($switches)) {
-            return $this->setData('output', \json_encode($out, JSON_PRETTY_PRINT));
+            $switches = JSON_PRETTY_PRINT;
         }
-        return $this->setData(
-            'output', \json_encode($out, JSON_PRETTY_PRINT | $switches)
-        );
+        return $this->setData('output', \json_encode($out, JSON_PRETTY_PRINT | $switches)); // phpcs:ignore
     }
 
     /**

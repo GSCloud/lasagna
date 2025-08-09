@@ -52,7 +52,6 @@ class ApiPresenter extends APresenter
             return $this->setData('output', 'Error in Presenter.');
         }
         $this->setHeaderHtml();
-
         $match = $this->getMatch();
 
         // API usage
