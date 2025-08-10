@@ -83,7 +83,7 @@ class CliPresenter extends APresenter
     public function showCore($v = "Home", $arg = null)
     {
         $v = \trim($v);
-        if (empty($v) || !\strlen($v)) { // no view
+        if (empty($v) || !\strlen($v)) {
             die("FATAL ERROR: No view is set\n");
         }
 

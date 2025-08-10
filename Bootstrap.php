@@ -24,7 +24,7 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 // string separator
 defined('SS') || define('SS', '_');
 
-// root = current working directory
+// current working directory
 defined('ROOT') || define('ROOT', __DIR__);
 
 // CLI SAPI external include (optional)
@@ -70,7 +70,7 @@ if (defined($d) && is_dir($d) && is_readable($d)) {
     if (is_dir($x) && is_readable($x)) {
         define($d, $x);
     } else {
-        die('Could not read the APP directory: ' . $x);
+        die('Could not set APP directory: ' . $x);
     }
 }
 
@@ -85,7 +85,7 @@ if (defined($d) && is_dir($d) && is_readable($d) && is_writable($d)) {
         define($d, '/tmp');
         if (is_dir($d) && is_readable($d) && is_writable($d)) {
         } else {
-            die('Could not set the CACHE directory: ' . $d);
+            die('Could not set CACHE directory: ' . $d);
         }
     }
 }
@@ -101,7 +101,7 @@ if (defined($d) && is_dir($d) && is_readable($d) && is_writable($d)) {
         define($d, '/tmp');
         if (is_dir($d) && is_readable($d) && is_writable($d)) {
         } else {
-            die('Could not set the DATA directory: ' . $d);
+            die('Could not set DATA directory: ' . $d);
         }
     }
 }
@@ -202,7 +202,7 @@ if (defined($d) && is_readable($d) && is_writable($d)) {
         define($d, '/tmp');
         if (is_dir($d) && is_readable($d) && is_writable($d)) {
         } else {
-            die('Could not set the TEMP directory: ' . $d);
+            die('Could not set TEMP directory: ' . $d);
         }
     }
 }
@@ -232,7 +232,7 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
             $cfg = Neon::decode($cfg_content);
         } catch (\Nette\Neon\Exception $e) {
             error_log("Error parsing NE-ON file: " . CONFIG);
-            die('FATAL ERROR in NE-ON: ' . CONFIG . ': '. $e->getMessage());
+            die('FATAL ERROR in: ' . CONFIG . ': '. $e->getMessage());
         }
     } else {
         $cfg = null;
@@ -249,13 +249,14 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                 $arr = Neon::decode($content);
             }
             if (!is_array($arr)) {
-                error_log("Error parsing NE-ON file: " . CONFIG_PRIVATE);
-                die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE);
+                $err = 'FATAL ERROR: Error parsing: ' . CONFIG_PRIVATE;
+                error_log($err);
+                die($err);
             }
             $cfg = array_replace_recursive($cfg, $arr);
         }
     } catch (\Nette\Neon\Exception $e) {
-        die('FATAL ERROR in NE-ON: ' . CONFIG_PRIVATE . ': '. $e->getMessage()); // phpcs:ignore
+        die('FATAL ERROR in: ' . CONFIG_PRIVATE . ': '. $e->getMessage()); // phpcs:ignore
     }
     try {
         if (!file_exists(ROOT . DS . '.env')) {
@@ -265,8 +266,9 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
                     $arr = Neon::decode($content);
                 }
                 if (!is_array($arr)) {
-                    error_log("Error parsing NE-ON file: " . CONFIG_DOCKER);
-                    die('FATAL ERROR in NE-ON: ' . CONFIG_DOCKER . ' invalid docker config'); // phpcs:ignore
+                    $err = 'FATAL ERROR: Error parsing: ' . CONFIG_DOCKER;
+                    error_log($err);
+                    die($err);
                 }
                 $cfg = array_replace_recursive($cfg, $arr);
             }

@@ -25,7 +25,7 @@ foreach ([
     'DATA',
     'CONFIG',
 ] as $x) {
-    defined($x) || die("FATAL ERROR: sanity check - const '{$x}' failed");
+    defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
 }
 
 // BLOCK BAD ROBOTS
@@ -379,8 +379,9 @@ foreach ($routes as $routeFileName) {
             $router = array_replace_recursive($router, $next);
         }
     } catch (\Nette\Neon\Exception $e) {
-        error_log("Error parsing router file: " . $e->getMessage());
-        die("Error parsing router file: " . $e->getMessage());
+        $err = "Error parsing router file: " . $e->getMessage();
+        error_log($err);
+        die($err);
     }
 }
 

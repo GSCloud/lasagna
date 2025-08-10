@@ -272,7 +272,7 @@ abstract class APresenter
             'TEMPLATES',
             'WWW',
         ] as $x) {
-            defined($x) || die("FATAL ERROR: const '{$x}' not defined"); 
+            defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
         }
         $class = \get_called_class();
         if (\array_key_exists($class, self::$instances) === false) {
@@ -304,7 +304,7 @@ abstract class APresenter
             'TEMPLATES',
             'WWW',
         ] as $x) {
-            defined($x) || die("FATAL ERROR: const '{$x}' not defined");
+            defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
         }
         $class = \get_called_class();
         return new $class();
