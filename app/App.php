@@ -189,12 +189,11 @@ $data['summernote'] = 'v0.8.18';
 $base58 = new \Tuupola\Base58;
 
 /**
- * Rekurzivně aplikuje htmlspecialchars na všechny řetězcové hodnoty v poli.
- * Tato funkce je globální a může se volat odkudkoliv.
+ * Recursive htmlspeciachars fixer
  *
- * @param array $data Vstupní pole.
+ * @param array<string|int|float|null|array> $data array
  *
- * @return array Pole s aplikovanou funkcí htmlspecialchars.
+ * @return array<string|int|float|null|array>
  */
 function safeHtmlspecialchars(array $data): array
 {
