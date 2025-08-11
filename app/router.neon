@@ -21,11 +21,6 @@ en:
   sitemap: true
   language: en
 
-shortcodes:
-  path: /shortcodes
-  sitemap: true
-  language: en
-
 cs:
   path: /cs
   sitemap: true
@@ -39,6 +34,11 @@ de:
   path: /de
   sitemap: true
   language: de
+
+shortcodes:
+  path: /shortcodes
+  sitemap: true
+  language: en
 
 # routing failure
 redir:
