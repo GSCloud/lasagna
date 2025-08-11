@@ -111,8 +111,6 @@ class LoginPresenter extends APresenter
             $this->addError($err);
             ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
         } elseif (empty($_GET['code'])) {
-            $email = $_GET['login_hint'] ?? $_COOKIE['login_hint'] ?? null;
-            $hint = $email ? \strtolower("&login_hint={$email}") : '';
             $authUrl = $provider->getAuthorizationUrl(
                 [
                     'prompt' => 'select_account',
@@ -131,7 +129,7 @@ class LoginPresenter extends APresenter
                     'samesite' => 'Lax'
                 ]
             );
-            \header('Location: ' . $authUrl . $hint, true, 303);
+            \header("Location: {$authUrl}", true, 303);
             exit;
         } elseif (empty($_GET['state']) || (!isset($_COOKIE['oauth2state'])) || $_GET['state'] !== $_COOKIE['oauth2state']) { // phpcs:ignore
             $err = 'OAuth: invalid OAuth state';
@@ -141,34 +139,17 @@ class LoginPresenter extends APresenter
             try {
                 $token = $provider->getAccessToken('authorization_code', ['code' => $_GET['code']]); // phpcs:ignore
                 $ownerDetails = $provider->getResourceOwner($token, ['useOidcMode' => true]); // phpcs:ignore
-                $this->clearCookie('oauth2state')->setIdentity(
-                    [
-                        'id' => $ownerDetails->getId(),
-                        'name' => $ownerDetails->getName(),
-                        'email' => $ownerDetails->getEmail(),
-                        'avatar' => $ownerDetails->getAvatar(),
-                        "country" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null,
-                        "region" => $_SERVER['HTTP_CF_IPREGION'] ?? null,
-                        "city" => $_SERVER['HTTP_CF_CITY'] ?? null,
-                        'provider' => 'google',
-                    ]
-                );
+                $i = [
+                    'id' => $ownerDetails->getId(),
+                    'name' => $ownerDetails->getName(),
+                    'email' => $ownerDetails->getEmail(),
+                    'avatar' => $ownerDetails->getAvatar(),
+                    'provider' => 'google',
+                ];
+                $this->clearCookie('oauth2state');
+                $this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
-                }
-                if (\strlen($email = $ownerDetails->getEmail())) {
-                    \setcookie(
-                        'login_hint',
-                        $email,
-                        [
-                            'expires' => \time() + 86400 * 30,
-                            'path' => '/',
-                            'domain' => '',
-                            'secure' => !LOCALHOST,
-                            'httponly' => true,
-                            'samesite' => 'Lax'
-                        ]
-                    );
                 }
                 $returnUrl = \urldecode($_COOKIE['returnURL'] ?? '/');
                 $url = '/';

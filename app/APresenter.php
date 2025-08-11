@@ -97,13 +97,13 @@ abstract class APresenter
     public $data = [];
 
     /* @var array messages */
-    public $messages = [];
+    private $_messages = [];
 
     /* @var array errors */
-    public $errors = [];
+    private $_errors = [];
 
     /* @var array critical Errors */
-    public $criticals = [];
+    private $_criticals = [];
 
     /* @var array user identity */
     private $_identity = [];
@@ -389,7 +389,7 @@ abstract class APresenter
     {
         $dot = new \Adbar\Dot((array) $this->data);
 
-        // global engine constants
+        // ENGINE CONSTANTS
         $dot->set(
             [
                 'CONST.APP' => APP,
@@ -415,7 +415,6 @@ abstract class APresenter
                 'CONST.TEMPLATES' => TEMPLATES,
                 'CONST.UPLOAD' => UPLOAD,
                 'CONST.WWW' => WWW,
-
                 // PHP ini constants
                 'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
                 'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
@@ -423,7 +422,7 @@ abstract class APresenter
             ]
         );
 
-        // class constants
+        // CLASS CONSTANTS
         $dot->set(
             [
                 'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
@@ -486,7 +485,7 @@ abstract class APresenter
      */
     public function getMessages()
     {
-        return (array) $this->messages;
+        return (array) $this->_messages;
     }
 
     /**
@@ -496,7 +495,7 @@ abstract class APresenter
      */
     public function getErrors()
     {
-        return (array) $this->errors;
+        return (array) $this->_errors;
     }
 
     /**
@@ -506,7 +505,7 @@ abstract class APresenter
      */
     public function getCriticals()
     {
-        return (array) $this->criticals;
+        return (array) $this->_criticals;
     }
 
     /**
@@ -518,7 +517,7 @@ abstract class APresenter
      */
     public function addAuditMessage($message = null)
     {
-        if (CLI || !\is_string($message) || empty(trim($message))) {
+        if (!\is_string($message) || empty(trim($message))) {
             return $this;
         }
 
@@ -538,7 +537,7 @@ abstract class APresenter
                 }
             } catch (\Throwable $e) {
                 $name = '';
-                $this->errors[] = 'Could not translate IP address: [' . $ip . '] ' . $e->getMessage(); // phpcs:ignore
+                $this->_errors[] = 'Could not translate IP address: [' . $ip . '] ' . $e->getMessage(); // phpcs:ignore
             }
         }
 
@@ -546,7 +545,7 @@ abstract class APresenter
         $flags = FILE_APPEND | LOCK_EX;
         $logline = "$date;$message;{$ip};{$name};{$email}\n";
         if (\file_put_contents($file, $logline, $flags) === false) {
-            $this->criticals[] = 'Could not write to the AuditLog file: ' . $file;
+            $this->_criticals[] = 'Could not write to the AuditLog file: ' . $file;
         }
         return $this;
     }
@@ -554,14 +553,17 @@ abstract class APresenter
     /**
      * Add info message
      *
-     * @param string $message message string
+     * @param mixed $message message string
      * 
      * @return self
      */
     public function addMessage($message = null)
     {
+        if (\is_array($message) && !empty($message)) {
+            $message = \json_encode($message);
+        }
         if (\is_string($message) && !empty($message)) {
-            $this->messages[] = $message;
+            $this->_messages[] = $message;
             $this->addAuditMessage($message);
 
             // get the backtrace
@@ -590,8 +592,11 @@ abstract class APresenter
      */
     public function addError($message = null)
     {
+        if (\is_array($message) && !empty($message)) {
+            $message = \json_encode($message);
+        }
         if (\is_string($message) && !empty($message)) {
-            $this->errors[] = $message;
+            $this->_errors[] = $message;
             $this->addAuditMessage($message);
 
             // get the backtrace
@@ -621,8 +626,11 @@ abstract class APresenter
      */
     public function addCritical($message = null)
     {
+        if (\is_array($message) && !empty($message)) {
+            $message = \json_encode($message);
+        }
         if (\is_string($message) && !empty($message)) {
-            $this->criticals[] = $message;
+            $this->_criticals[] = $message;
 
             // get the backtrace
             $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
@@ -680,7 +688,6 @@ abstract class APresenter
     {
         $parts = [];
         $parts[] = CLI ? 'CLI' : 'WEB';
-
         if (!CLI) {
             $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
             $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
@@ -704,17 +711,13 @@ abstract class APresenter
     {
         $parts = [];
         $parts[] = CLI ? 'CLI' : 'WEB';
-
+        $parts[] = $this->getIP();
         if (!CLI) {
             $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
             $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
             $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
             $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
             $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
-        }
-        $parts[] = $this->getIP();
-
-        if (!CLI) {
             $name = self::COOKIE_UID;
             $uid = $this->getNonce();
             if (isset($_COOKIE[$name])) {
@@ -742,7 +745,6 @@ abstract class APresenter
             $parts[] = $uid;
             \header("X-UID: {$uid}");
         }
-
         $parts = \array_filter($parts);
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
@@ -774,24 +776,18 @@ abstract class APresenter
         }
 
         $i = [
-            'id' => 0,
+            'id' => $identity['id'] ?? null,
+            'name' => $identity['name'] ?? null,
+            'email' => $identity['email'] ?? null,
+            'avatar' => $identity['avatar'] ?? null,
+            'custom' => $identity['custom'] ?? null,
+            'provider' => $identity['provider'] ?? null,
             'ip' => $this->getIP(),
-            'name' => '',
-            'email' => '',
-            'avatar' => '',
-            'custom' => null,
-            'provider' => '',
             'nonce' => $this->getIdentityNonce(),
             'fingerprint' => $this->getBrowserFingerprint(),
             'timestamp' => \time(),
         ];
-
-        $i['id'] = $identity['id'] ?? null;
-        $i['name'] = $identity['name'] ?? null;
-        $i['email'] = $identity['email'] ?? null;
-        $i['avatar'] = $identity['avatar'] ?? null;
-        $i['custom'] = $identity['custom'] ?? null;
-        $i['provider'] = $identity['provider'] ?? null;
+        $this->addMessage(["setIdentity" => $i]);
 
         // shuffle
         $out = [];
@@ -806,18 +802,6 @@ abstract class APresenter
         $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
             $this->setCookie($app, \json_encode($out));
-            \setcookie(
-                'ENGINE',
-                ENGINE,
-                [
-                    'expires' => \time() + self::COOKIE_TTL,
-                    'path' => '/',
-                    'domain' => DOMAIN,
-                    'secure' => !LOCALHOST,
-                    'httponly' => true,
-                    'samesite' => 'Lax',
-                ]
-            );
         } else {
             $this->clearCookie($app);
             $this->clearCookie('ENGINE');
@@ -838,9 +822,6 @@ abstract class APresenter
                 'ip' => '127.0.0.1',
                 'name' => 'John Doe',
                 'email' => 'john.doe@example.com',
-                'avatar' => null,
-                'custom' => null,
-                'country' => null,
                 'provider' => 'cli',
             ];
         }
@@ -850,6 +831,7 @@ abstract class APresenter
         $name = $this->_identity['name'] ?? null;
         $email = $this->_identity['email'] ?? null;
         if ($id && $name && $email) {
+            \ksort($this->_identity);
             return $this->_identity;
         }
 
@@ -861,19 +843,23 @@ abstract class APresenter
         if (isset($_COOKIE[$app])) {
             $content = $this->getCookie($app);
             if (!\is_string($content)) {
-                return $this->_identity;
+                $this->logout();
             }
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
                 $this->addError('Identity is not an array.');                
                 $this->logout();
             }
-            if (!\array_key_exists('email', $q)) {
-                $this->addError('Identity has no email.');
-                $this->logout();
-            }
             if (!\array_key_exists('id', $q)) {
                 $this->addError('Identity has no id.');
+                $this->logout();
+            }
+            if (!\array_key_exists('name', $q)) {
+                $this->addError('Identity has no name.');
+                $this->logout();
+            }
+            if (!\array_key_exists('email', $q)) {
+                $this->addError('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('fingerprint', $q)) {
@@ -894,6 +880,7 @@ abstract class APresenter
             }
             $this->_identity = $q;
         }
+        \ksort($this->_identity);
         return $this->_identity;
     }
 
@@ -934,8 +921,6 @@ abstract class APresenter
                 'name' => '',
                 'email' => '',
                 'avatar' => '',
-                'custom' => null,
-                'provider' => '',
             ],
             $this->getIdentity()
         );
@@ -1146,9 +1131,9 @@ abstract class APresenter
             if (\is_writable(DATA)) {
                 KeyFactory::save($enc, $keyfile);
                 \chmod($keyfile, self::COOKIE_KEY_FILEMODE);
-                $this->addMessage('HALITE: Cookie encryption keyfile created.'); // phpcs:ignore
+                $this->addMessage('HALITE: cookie encryption keyfile created'); // phpcs:ignore
             } else {
-                $this->addCritical('HALITE: Cannot write cookie encryption key!!!'); // phpcs:ignore
+                $this->addCritical('HALITE: cannot write cookie encryption key'); // phpcs:ignore
                 ErrorPresenter::getInstance()->process(
                     ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
                 );
@@ -1246,7 +1231,21 @@ abstract class APresenter
             exit;
         }
 
-        $this->setLocation('/?logout');
+        $redirectUrl = '';
+        if (\is_array($cfg = $this->getCfg())) {
+            $canonicalUrl = $cfg['canonical_url'] ?? null;
+            $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
+            $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
+            $redirectUrl = LOCALHOST ? ($localGoogleOAuthOrigin ?? $canonicalUrl) : ($canonicalUrl ?? $googleOAuthOrigin); // phpcs:ignore
+            $redirectUrl = \trim($redirectUrl, '/');
+        }
+        $nonce = \substr(\md5((string) \microtime(true)), 0, 4);
+        header('Clear-Site-Data: "cookies"');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+        header("Location: {$redirectUrl}/?nonce={$nonce}", true, 303);
+        exit;
     }
 
     /**

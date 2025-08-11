@@ -35,10 +35,10 @@ class LogoutPresenter extends APresenter
         if (\ob_get_level()) {
             @\ob_end_clean();
         }
-        if (!\stristr($_SERVER["HTTP_USER_AGENT"], 'curl')) {
+        if (!\stristr($_SERVER["HTTP_USER_AGENT"] ?? '', 'curl')) {
             \sleep(1);
         }
         $this->logout();
-        exit(0);
+        exit;
     }
 }

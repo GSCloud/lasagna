@@ -72,9 +72,10 @@ class ApiPresenter extends APresenter
             "cached" => (bool) self::USE_CACHE,
             "cache_time_limit" => $data["cache_profiles"][self::API_CACHE],
             "country" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null,
-            "region" => $_SERVER['HTTP_CF_IPREGION'] ?? null,
-            "city" => $_SERVER['HTTP_CF_CITY'] ?? null,
+            "region" => $_SERVER['HTTP_CF_REGION'] ?? null,
+            "city" => $_SERVER['HTTP_CF_IPCITY'] ?? null,
             "uuid" => $this->getUID(),
+            "ip" => $this->getIP(),
         ];
 
         // API calls

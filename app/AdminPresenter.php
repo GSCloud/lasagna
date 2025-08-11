@@ -36,7 +36,7 @@ class AdminPresenter extends APresenter
     const MAX_LOG_ENTRIES = 1000;
 
     /* @var int max. display log days */
-    const VISIBLE_LOG_DAYS = 5*30;
+    const VISIBLE_LOG_DAYS = 5*31;
 
     /* @var upload name stubs minimum string length */
     const MIN_STUBS_LENGTH = 3;
@@ -110,19 +110,12 @@ class AdminPresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-
-        // CONFIG
-        $cfg = $this->getCfg();
-        if (!\is_array($cfg)) {
-            return $this;
+        if (!\is_array($cfg = $this->getCfg())) {
+            return $this->setData('output', 'FATAL ERROR in Cfg.');
         }
-
-        // MODEL
-        $data = $this->getData();
-        if (!\is_array($data)) {
-            return $this;
+        if (!\is_array($data = $this->getData())) {
+            return $this->setData('output', 'FATAL ERROR in Model.');
         }
-        // expand Model
         $this->dataExpander($data);
 
         // MATCH and VIEW
@@ -130,20 +123,13 @@ class AdminPresenter extends APresenter
         if (\is_array($match)) {
             $view = $match['params']['p'] ?? null;
         } else {
-            $view = $this->getView();
-            if (!$view) {
+            if (!$view = $this->getView()) {
                 return $this;
             }
         }
 
-        // USER
-        $data['user'] = null;
-        $u = $this->getCurrentUser();
-        if (\is_array($u)) {
-            $data['user'] = $u;
-        }
-
-        // GROUP
+        // USER && GROUP
+        $data['user'] = $this->getCurrentUser();
         $data['admin'] = null;
         $g = $this->getUserGroup();
         if (\is_string($g)) {
@@ -157,6 +143,9 @@ class AdminPresenter extends APresenter
             "endpoint" => \explode('?', $_SERVER['REQUEST_URI'])[0],
             "api_quota" => "unlimited",
             "cached" => false,
+            "country" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null,
+            "region" => $_SERVER['HTTP_CF_IPREGION'] ?? null,
+            "city" => $_SERVER['HTTP_CF_CITY'] ?? null,
             "uuid" => $this->getUID(),
             "ip" => $this->getIP(),
             // override: ?key= parameter
@@ -167,76 +156,75 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'Upload':
             $this->checkPermission('admin,manager,editor');
-            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
-                return $this->writeJsonData(410, $extras);
-            }
-            if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
+            if (!defined('UPLOAD')
+                || \is_null(UPLOAD)
+                || !\is_dir(UPLOAD)
+                || !\is_writable(UPLOAD)
+            ) {
                 return $this->writeJsonData(410, $extras);
             }
 
             $uploads = $this->processUpload();
+            if (empty($uploads)) {
+                return $this->writeJsonData(400, $extras);
+            }
             $count = \count($uploads);
-            $names = \array_map(
-                function ($value) {
-                    return "[$value] ";
-                }, $uploads
+            $names = \implode(
+                ', ', \array_map(
+                    function ($value) {
+                        return "[$value]";
+                    }, $uploads
+                )
             );
-            $names = \implode($names);
-
-            $this->addMessage("ADMIN: file(s) uploaded: {$count}x\n{$names}");
+            $message = ($count === 1)
+                ? "ADMIN: file uploaded\n{$names}"
+                : "ADMIN: {$count} files uploaded\n{$names}";
+            $this->addMessage($message);
             return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
             $this->checkPermission('admin,manager,editor');
-            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
-                return $this->writeJsonData(410, $extras);
-            }
-            if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
+            if (!defined('UPLOAD')
+                || \is_null(UPLOAD)
+                || !\is_dir(UPLOAD)
+                || !\is_writable(UPLOAD)
+            ) {
                 return $this->writeJsonData(410, $extras);
             }
 
-            // process
-            $result = $this->processDelete();
-
-            if (\is_numeric($result)) {
-                return $this->writeJsonData($result, $extras);
-            }
-            if (!$result) {
+            if (!\is_numeric($result = $this->processDelete())) {
                 return $this->writeJsonData(400, $extras);
             }
-
-            $this->addMessage("ADMIN: file deleted:\n[{$result}]");
+            $this->addMessage("ADMIN: file deleted\n[{$result}]");
             return $this->writeJsonData($result, $extras);
 
         case 'getUploadsInfo':
             $this->checkPermission('admin,manager,editor');
-            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
-                return $this->writeJsonData(410, $extras);
-            }
-            if (!\is_dir(UPLOAD) || !is_readable(UPLOAD)) {
+            if (!defined('UPLOAD')
+                || \is_null(UPLOAD)
+                || !\is_dir(UPLOAD)
+                || !\is_readable(UPLOAD)
+            ) {
                 return $this->writeJsonData(410, $extras);
             }
 
             $size = $dotsize = $count = $dotcount = 0;
-            $files = \scandir(UPLOAD);
-            if ($files) {
-                foreach ($files as $name) {
-                    if ($name != "." && $name != "..") {
-                        $path = UPLOAD . DS . $name;
-                        if (\is_file($path)) {
-                            $size += \filesize($path);
-                            $count++;
-                            if (\str_starts_with($name, '.')) {
-                                $dotsize += \filesize($path);
-                                $dotcount++;
-                            }
+            if (!$files = \scandir(UPLOAD)) {
+                return $this->writeJsonData(500, $extras);
+            }
+            foreach ($files as $name) {
+                if ($name != "." && $name != "..") {
+                    $path = UPLOAD . DS . $name;
+                    if (\is_file($path)) {
+                        $size += \filesize($path);
+                        $count++;
+                        if (\str_starts_with($name, '.')) {
+                            $dotsize += \filesize($path);
+                            $dotcount++;
                         }
                     }
                 }
-            } else {
-                return $this->writeJsonData(500, $extras);
             }
-
             return $this->writeJsonData(
                 [
                     'count' => $count,
@@ -251,10 +239,11 @@ class AdminPresenter extends APresenter
         
         case 'getUploads':
             $this->checkPermission('admin,manager,editor');
-            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
-                return $this->writeJsonData(410, $extras);
-            }
-            if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
+            if (!defined('UPLOAD')
+                || \is_null(UPLOAD)
+                || !\is_dir(UPLOAD)
+                || !\is_writable(UPLOAD)
+            ) {
                 return $this->writeJsonData(410, $extras);
             }
 
@@ -262,7 +251,6 @@ class AdminPresenter extends APresenter
             $stubs = [];
             $stubs_count = [];
             $uniques = [];
-
             if ($handle = \opendir(UPLOAD)) {
                 while (false !== ($f = \readdir($handle))) {
                     if (($f != '.') && ($f != '..')) {
@@ -365,16 +353,21 @@ class AdminPresenter extends APresenter
             $this->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . self::AUDITLOG_FILE;
+            if (file_exists($filename) && !is_readable($filename)) {
+                $err = 'AuditLog is unreadable.';
+                \error_log($err);
+                return $this->setData('output', $err);
+            }
             $file = \popen("tac {$filename}", 'r');
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
-                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOG_ENTRIES - 1)) { // phpcs:ignore
+                while (($logs[] = \fgets($file)) && $c < self::MAX_LOG_ENTRIES) {
                     $c++;
                 }
                 \pclose($file);
             }
-            \array_walk($logs, array($this, '_decorateAuditLogs'));
+            \array_walk($logs, [$this, '_decorateAuditLogs']);
             $data['content'] = $logs;
             $data['repetitions'] = $this->_repetitions;
             return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
@@ -383,11 +376,16 @@ class AdminPresenter extends APresenter
             $this->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . self::AUDITLOG_FILE;
+            if (file_exists($filename) && !is_readable($filename)) {
+                $err = 'AuditLog is unreadable.';
+                \error_log($err);
+                return $this->setData('output', $err);
+            }
             $file = \popen("tac {$filename}", 'r');
             $c = 0;
             $logs = [];
             if (\is_resource($file)) {
-                while (($logs[] = \fgets($file)) && ($c < self::MAX_LOG_ENTRIES - 1)) { // phpcs:ignore
+                while (($logs[] = \fgets($file)) && $c < self::MAX_LOG_ENTRIES) {
                     $c++;
                 }
                 \pclose($file);
@@ -545,6 +543,7 @@ class AdminPresenter extends APresenter
             if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
+
             if ($user = $this->getCurrentUser()['id'] ?? null) {
                 if ($role = $this->getUserGroup()) {
                     $h = \hash('sha256', $role . $user . \time());
@@ -557,7 +556,7 @@ class AdminPresenter extends APresenter
                         . $h
                         . '&token='
                         . \hash('sha256', $role . $key . $h);
-                    $this->addMessage("ADMIN: NEW TOKEN as [{$role}] for [{$h}]");
+                    $this->addMessage("ADMIN: new TOKEN as [{$role}] for [{$h}]");
                     return $this->writeJsonData($code, $extras);
                 }
             }
@@ -1025,10 +1024,10 @@ class AdminPresenter extends APresenter
                     // do nothing :)
                 } else {
                     $file = DATA . DS . '_random_cdn_hash';
+                    \file_exists($file) && \unlink($file);
                     $hash = \hash('sha1', $this->getNonce());
                     $flags = LOCK_EX;
-                    @unlink($file);
-                    if (@file_put_contents($file, $hash, $flags) === false) {
+                    if (\file_put_contents($file, $hash, $flags) === false) {
                         \error_log('Could not write to file: [' . $file . '].');
                     }
                 }

@@ -30,6 +30,24 @@ foreach ([
     defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
 }
 
+// BLOCK BAD ROBOTS
+if (isset($cfg['block_robots']) && $cfg['block_robots']) {
+    $bots = APP . DS . 'badrobots.txt';
+    if (file_exists($bots) && is_readable($bots)) {
+        $blockedUA = file($bots, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (is_array($blockedUA) && isset($_SERVER['HTTP_USER_AGENT'])) {
+            $ua = strtolower(trim($_SERVER['HTTP_USER_AGENT']));
+            foreach ($blockedUA as $badBot) {
+                if (strpos($ua, strtolower(trim($badBot))) !== false) {
+                    header("HTTP/1.1 403 Forbidden");
+                    echo "You are not authorized to access this page.";
+                    exit;
+                }
+            }
+        }
+    }
+}
+
 // CSP definition file, not mandatory
 $d = 'CSP';
 $x = APP . DS . 'csp.neon';
@@ -90,26 +108,8 @@ if (defined($d) && is_readable($d) && is_writable($d)) {
     }
 }
 
-// BLOCK BAD ROBOTS
-if (isset($cfg['block_robots']) && $cfg['block_robots']) {
-    $bots = APP . DS . 'badrobots.txt';
-    if (file_exists($bots) && is_readable($bots)) {
-        $blockedUA = file($bots, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        if (is_array($blockedUA) && isset($_SERVER['HTTP_USER_AGENT'])) {
-            $ua = strtolower(trim($_SERVER['HTTP_USER_AGENT']));
-            foreach ($blockedUA as $badBot) {
-                if (strpos($ua, strtolower(trim($badBot))) !== false) {
-                    header("HTTP/1.1 403 Forbidden");
-                    echo "You are not authorized to access this page.";
-                    exit;
-                }
-            }
-        }
-    }
-}
-
-// CLEAR COOKIES on ?logout
-if (isset($_GET['logout'])) {
+// LOGOUT
+if (isset($_GET['?logout'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
@@ -180,29 +180,45 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 define('ENGINE', 'Tesseract v2.4.7');
 $data['ENGINE'] = ENGINE;
 
-// CHECK OLD ENGINE
-if (!CLI) {
-    if (isset($_COOKIE[$data['app'] ?? 'app'])) {
-        if (!isset($_COOKIE['ENGINE']) || $_COOKIE['ENGINE'] !== ENGINE) {
-            header('Location: /?logout');
-            exit;
-        }
-    }
-}
-
 // version to load: https://cdnjs.com/libraries/codemirror 
 $data['codemirror'] = '6.65.7';
 // version to load: https://cdn.gscloud.cz/summernote/
 $data['summernote'] = 'v0.8.18';
 
-// load Base58 encoder
+// Base58 encoder
 $base58 = new \Tuupola\Base58;
 
+/**
+ * Rekurzivně aplikuje htmlspecialchars na všechny řetězcové hodnoty v poli.
+ * Tato funkce je globální a může se volat odkudkoliv.
+ *
+ * @param array $data Vstupní pole.
+ *
+ * @return array Pole s aplikovanou funkcí htmlspecialchars.
+ */
+function safeHtmlspecialchars(array $data): array
+{
+    $result = [];
+    foreach ($data as $key => $value) {
+        // Kontrola, zda je hodnota pole, aby se mohla zavolat rekurze.
+        if (is_array($value)) {
+            $result[$key] = safeHtmlspecialchars($value);
+        } else {
+            // Aplikace htmlspecialchars na řetězce.
+            $result[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
+        }
+    }
+    return $result;
+}
+
+// Příklad použití opravené rekurzivní metody na superglobální proměnné
+// Takhle je kód robustní a nezpůsobí pád při vnořených polích.
 $data['ARGC'] = $argc ?? 0;
 $data['ARGV'] = $argv ?? [];
-$data['GET'] = array_map('htmlspecialchars', $_GET);
-$data['POST'] = array_map('htmlspecialchars', $_POST);
-$data['COOKIE'] = array_map('htmlspecialchars', $_COOKIE);
+$data['GET'] = safeHtmlspecialchars($_GET);
+$data['POST'] = safeHtmlspecialchars($_POST);
+$data['COOKIE'] = safeHtmlspecialchars($_COOKIE);
+$data['SERVER'] = safeHtmlspecialchars($_SERVER);
 
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
 $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
@@ -260,6 +276,26 @@ defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
+
+// CHECK OLD ENGINE
+if (!CLI) {
+    $cookie_options = [
+        'expires' => time() - 86400,
+        'path' => '/',
+        'domain' => DOMAIN,
+        'secure' => !LOCALHOST,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ];
+    if (isset($_COOKIE['ENGINE']) && $_COOKIE['ENGINE'] !== ENGINE) {
+        setcookie('ENGINE', '', $cookie_options);
+        setcookie($cfg['app'] ?? 'app', '', $cookie_options);
+        header('Location: /?logout');
+        exit;
+    }
+    $cookie_options['expires'] = time() + 2592000;
+    setcookie('ENGINE', ENGINE, $cookie_options);
+}
 
 // OFFLINE TEMPLATE resolution
 $offline = TEMPLATES . DS . 'offline.mustache';
@@ -365,10 +401,15 @@ foreach ($cache_profiles as $k => $v) {
 
 // REDIS TEST
 if (Cache::enabled()) {
-    if ($cfg['redis']['port'] ?? null) {
-        $redis_test = 'redis_test';
+    $ttl = 30;
+    $test_file = TEMP . DS . ($cfg['app'] ?? 'app') . '_redis_test';
+    if (file_exists($test_file) && (time() - filemtime($test_file) < $ttl)) {
+        defined('REDIS_CACHE') || define('REDIS_CACHE', true);
+    }
+    if (!defined('REDIS_CACHE)') && ($cfg['redis']['port'] ?? null)) {
+        $redis_test_key = 'redis_test_key';
         Cache::setConfig(
-            $redis_test,
+            'redis_test',
             [
                 'className' => 'Cake\Cache\Engine\RedisEngine',
                 'database' => $cfg['redis']['database'] ?? 0,
@@ -381,8 +422,13 @@ if (Cache::enabled()) {
                 'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
             ]
         );
-        Cache::write($redis_test, 42, $redis_test);
-        define('REDIS_CACHE', Cache::read($redis_test, $redis_test) === 42);
+        Cache::write($redis_test_key, 42, 'redis_test');
+        if (!defined('REDIS_CACHE')) {
+            if (Cache::read($redis_test_key, 'redis_test') === 42) {
+                define('REDIS_CACHE', true);
+                touch($test_file);
+            }
+        }
     }
 }
 defined('REDIS_CACHE') || define('REDIS_CACHE', false);
