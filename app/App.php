@@ -740,6 +740,7 @@ foreach (headers_list() as $h) {
     }
 }
 
+// OUTPUT
 echo $output;
 
 // DEBUGGING
