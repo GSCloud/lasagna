@@ -202,7 +202,8 @@ function safeHtmlspecialchars(array $data): array
         if (is_array($value)) {
             $result[$key] = safeHtmlspecialchars($value);
         } else {
-            $result[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
+            $string_value = (is_string($value)) ? $value : (string) $value;
+            $result[$key] = htmlspecialchars($string_value, ENT_QUOTES | ENT_HTML5);
         }
     }
     return $result;
