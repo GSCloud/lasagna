@@ -147,6 +147,9 @@ class LoginPresenter extends APresenter
                         'name' => $ownerDetails->getName(),
                         'email' => $ownerDetails->getEmail(),
                         'avatar' => $ownerDetails->getAvatar(),
+                        "country" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null,
+                        "region" => $_SERVER['HTTP_CF_IPREGION'] ?? null,
+                        "city" => $_SERVER['HTTP_CF_CITY'] ?? null,
                         'provider' => 'google',
                     ]
                 );

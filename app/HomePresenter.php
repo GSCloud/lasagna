@@ -41,13 +41,13 @@ class HomePresenter extends APresenter
     {
         $this->checkRateLimit();
         if (!\is_array($data = $this->getData())) {
-            return $this->setData('output', 'Error in Model.');
+            return $this->setData('output', 'FATAL ERROR in Model.');
         }
         if (!\is_string($view = $this->getView())) {
-            return $this->setData('output', 'Error in View.');
+            return $this->setData('output', 'FATAL ERROR in View.');
         }
         if (!\is_array($presenter = $this->getPresenter())) {
-            return $this->setData('output', 'Error in Presenter.');
+            return $this->setData('output', 'FATAL ERROR in Presenter.');
         }
         $this->setHeaderHtml()->dataExpander($data);
 

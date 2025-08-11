@@ -17,15 +17,77 @@ use Nette\Neon\Neon;
 
 // SANITY CHECK
 foreach ([
-    'DS',
-    'SS',
-    'ROOT',
     'APP',
     'CACHE',
-    'DATA',
     'CONFIG',
+    'DATA',
+    'DS',
+    'LOGS',
+    'ROOT',
+    'SS',
+    'TEMP',
 ] as $x) {
     defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
+}
+
+// CSP definition file, not mandatory
+$d = 'CSP';
+$x = APP . DS . 'csp.neon';
+if (defined($d) && is_readable($d)) {
+} else {
+    if (file_exists($x) && is_readable($x)) {
+        define($d, $x);
+    } else {
+        define($d, null);
+    }
+}
+
+// Mustache templates, not mandatory
+$d = 'TEMPLATES';
+$x = APP . DS . 'templates';
+if (defined($d) && is_readable($d)) {
+} else {
+    if (is_dir($x) && is_readable($x)) {
+        define($d, $x);
+    } else {
+        define($d, null);
+    }
+}
+
+// Mustache partials, not mandatory
+$d = 'PARTIALS';
+$x = APP . DS . 'partials';
+if (defined($d) && is_readable($d)) {
+} else {
+    if (is_dir($x) && is_readable($x)) {
+        define($d, $x);
+    } else {
+        define($d, null);
+    }
+}
+
+// DOWNLOAD storage, not mandatory
+$d = 'DOWNLOAD';
+$x = WWW . DS . 'download';
+if (defined($d) && is_readable($d)) {
+} else {
+    if (is_dir($x) && is_readable($x)) {
+        define($d, $x);
+    } else {
+        define($d, null);
+    }
+}
+
+// UPLOAD storage = files uploaded by users, not mandatory
+$d = 'UPLOAD';
+$x = WWW . DS . 'upload';
+if (defined($d) && is_readable($d) && is_writable($d)) {
+} else {
+    if (is_dir($x) && is_readable($x) && is_writable($x)) {
+        define($d, $x);
+    } else {
+        define($d, null);
+    }
 }
 
 // BLOCK BAD ROBOTS

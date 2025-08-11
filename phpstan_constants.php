@@ -24,13 +24,14 @@ define('CONFIG', APP . DS . 'config.neon');
 define('CONFIG_PRIVATE', APP . DS . 'config_private.neon');
 define('CONFIG_DOCKER', APP . DS . 'config_docker.neon');
 
-define('CSP', APP . DS . 'csp.neon');
-define('TEMPLATES', APP . DS . 'templates');
-define('PARTIALS', APP . DS . 'partials');
-define('DOWNLOAD', WWW . DS . 'download');
-define('UPLOAD', WWW . DS . 'upload');
 define('LOGS', ROOT . DS . 'logs');
+define('PARTIALS', APP . DS . 'partials');
 define('TEMP', ROOT . DS . 'temp');
+define('TEMPLATES', APP . DS . 'templates');
+
+//define('CSP', APP . DS . 'csp.neon');
+//define('DOWNLOAD', WWW . DS . 'download');
+//define('UPLOAD', WWW . DS . 'upload');
 
 define('CLI', (bool) (PHP_SAPI == 'cli'));
 define('DEBUG', true);

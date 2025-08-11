@@ -43,20 +43,21 @@ class ApiPresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         if (!\is_array($data = $this->getData())) {
-            return $this->setData('output', 'Error in Model.');
+            return $this->setData('output', 'FATAL ERROR in Model.');
         }
         if (!\is_string($view = $this->getView())) {
-            return $this->setData('output', 'Error in View.');
+            return $this->setData('output', 'FATAL ERROR in View.');
         }
         if (!\is_array($presenter = $this->getPresenter())) {
-            return $this->setData('output', 'Error in Presenter.');
+            return $this->setData('output', 'FATAL ERROR in Presenter.');
         }
-        $this->setHeaderHtml();
+        $this->setHeaderHtml()->dataExpander($data);
+
+        // API parameters
         $match = $this->getMatch();
 
         // API usage
-        $api_usage = $this->accessLimiter();
-        if (!\is_int($api_usage)) {
+        if (!\is_int($api_usage = $this->accessLimiter())) {
             $api_usage = 0;
         }
 
@@ -70,6 +71,9 @@ class ApiPresenter extends APresenter
             "access_time_limit" => (int) self::ACCESS_TIME_LIMIT,
             "cached" => (bool) self::USE_CACHE,
             "cache_time_limit" => $data["cache_profiles"][self::API_CACHE],
+            "country" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null,
+            "region" => $_SERVER['HTTP_CF_IPREGION'] ?? null,
+            "city" => $_SERVER['HTTP_CF_CITY'] ?? null,
             "uuid" => $this->getUID(),
         ];
 

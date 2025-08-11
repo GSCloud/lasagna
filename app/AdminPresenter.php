@@ -167,11 +167,9 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'Upload':
             $this->checkPermission('admin,manager,editor');
-            // Check if the upload directory is set
-            if (\is_null(UPLOAD)) {
+            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
-            // Check if the upload directory exists and is writable
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
@@ -190,7 +188,7 @@ class AdminPresenter extends APresenter
 
         case 'UploadDelete':
             $this->checkPermission('admin,manager,editor');
-            if (\is_null(UPLOAD)) {
+            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
@@ -212,7 +210,7 @@ class AdminPresenter extends APresenter
 
         case 'getUploadsInfo':
             $this->checkPermission('admin,manager,editor');
-            if (\is_null(UPLOAD)) {
+            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !is_readable(UPLOAD)) {
@@ -253,7 +251,7 @@ class AdminPresenter extends APresenter
         
         case 'getUploads':
             $this->checkPermission('admin,manager,editor');
-            if (\is_null(UPLOAD)) {
+            if (!defined('UPLOAD') || \is_null(UPLOAD)) {
                 return $this->writeJsonData(410, $extras);
             }
             if (!\is_dir(UPLOAD) || !\is_writable(UPLOAD)) {
@@ -775,8 +773,11 @@ class AdminPresenter extends APresenter
      */
     public function processUpload()
     {
-        $uploads = [];
+        if (!defined('UPLOAD') || \is_null(UPLOAD)) {
+            throw new \Exception("Constant UPLOAD is not defined");
+        }
 
+        $uploads = [];
         // Loop through uploads
         foreach ($_FILES as $key => &$file) {
             $f = $file['name'];
@@ -871,6 +872,10 @@ class AdminPresenter extends APresenter
      */
     public function processDelete()
     {
+        if (!defined('UPLOAD') || \is_null(UPLOAD)) {
+            throw new \Exception("Constant UPLOAD is not defined");
+        }
+
         if (isset($_POST['name'])) {
             $name = trim($_POST['name']);
             $name = \strtr(trim($name), " '\"\\()", '______');

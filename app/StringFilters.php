@@ -1587,10 +1587,9 @@ class StringFilters
      */
     public static function findImagesByMask($mask = null, $format = 'webp')
     {
-        if (!UPLOAD) {
+        if (!defined('UPLOAD') || !UPLOAD) {
             return null;
         }
-
         if (!\is_string($mask)) {
             return null;
         }
@@ -1642,7 +1641,7 @@ class StringFilters
      */
     public static function findFilesByMask($mask = null)
     {
-        if (!UPLOAD) {
+        if (!defined('UPLOAD') || !UPLOAD) {
             return null;
         }
         if (!\is_string($mask)) {

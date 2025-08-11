@@ -934,7 +934,7 @@ abstract class APresenter
                 'name' => '',
                 'email' => '',
                 'avatar' => '',
-                'country' => '',
+                'custom' => null,
                 'provider' => '',
             ],
             $this->getIdentity()
