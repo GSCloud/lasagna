@@ -400,7 +400,7 @@ foreach ($cache_profiles as $k => $v) {
 }
 
 // REDIS TEST
-if (Cache::enabled()) {
+if (Cache::enabled() && !CLI) {
     $ttl = 30;
     $test_file = TEMP . DS . ($cfg['app'] ?? 'app') . '_redis_test';
     if (file_exists($test_file) && (time() - filemtime($test_file) < $ttl)) {
@@ -426,7 +426,7 @@ if (Cache::enabled()) {
         if (!defined('REDIS_CACHE')) {
             if (Cache::read($redis_test_key, 'redis_test') === 42) {
                 define('REDIS_CACHE', true);
-                touch($test_file);
+                @touch($test_file);
             }
         }
     }
