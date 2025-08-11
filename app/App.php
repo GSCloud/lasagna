@@ -189,11 +189,11 @@ $data['summernote'] = 'v0.8.18';
 $base58 = new \Tuupola\Base58;
 
 /**
- * Recursive htmlspeciachars fixer
+ * Apply htmlspecialchars recursively
  *
- * @param array<string|int|float|null|array> $data array
+ * @param array<string,mixed> $data array
  *
- * @return array<string|int|float|null|array>
+ * @return array<string,mixed>
  */
 function safeHtmlspecialchars(array $data): array
 {
@@ -202,8 +202,12 @@ function safeHtmlspecialchars(array $data): array
         if (is_array($value)) {
             $result[$key] = safeHtmlspecialchars($value);
         } else {
-            $string_value = (is_string($value)) ? $value : (string) $value;
-            $result[$key] = htmlspecialchars($string_value, ENT_QUOTES | ENT_HTML5);
+            if (!is_string($value)) {
+                $value = '';
+            } else {
+                $value = $value;
+            }
+            $result[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
         }
     }
     return $result;
