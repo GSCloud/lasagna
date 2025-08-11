@@ -400,30 +400,36 @@ foreach ($cache_profiles as $k => $v) {
 }
 
 // REDIS TEST
-if (Cache::enabled() && !CLI) {
-    $ttl = 30;
-    $test_file = TEMP . DS . ($cfg['app'] ?? 'app') . '_redis_test';
-    if (file_exists($test_file) && (time() - filemtime($test_file) < $ttl)) {
-        defined('REDIS_CACHE') || define('REDIS_CACHE', true);
-    }
-    if (!defined('REDIS_CACHE)') && ($cfg['redis']['port'] ?? null)) {
-        $redis_test_key = 'redis_test_key';
-        Cache::setConfig(
-            'redis_test',
-            [
-                'className' => 'Cake\Cache\Engine\RedisEngine',
-                'database' => $cfg['redis']['database'] ?? 0,
-                'duration' => '+5 seconds',
-                'host' => $cfg['redis']['host'] ?? '127.0.0.1',
-                'password' => $cfg['redis']['password'] ?? '',
-                'port' => (int) $cfg['redis']['port'],
-                'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
-                'timeout' => (int) ($cfg['redis']['timeout'] ?? 1),
-                'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
-            ]
-        );
-        Cache::write($redis_test_key, 42, 'redis_test');
-        if (!defined('REDIS_CACHE')) {
+if (Cache::enabled()) {
+    Cache::setConfig(
+        'redis_test',
+        [
+            'className' => 'Cake\Cache\Engine\RedisEngine',
+            'database' => $cfg['redis']['database'] ?? 0,
+            'duration' => '+5 seconds',
+            'host' => $cfg['redis']['host'] ?? '127.0.0.1',
+            'password' => $cfg['redis']['password'] ?? '',
+            'port' => (int) $cfg['redis']['port'],
+            'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
+            'timeout' => (int) ($cfg['redis']['timeout'] ?? 1),
+            'unix_socket' => $cfg['redis']['unix_socket'] ?? '',
+        ]
+    );
+    if (CLI) {
+        if (!defined('REDIS_CACHE)') && ($cfg['redis']['port'] ?? null)) {
+            $redis_test_key = 'redis_test_key';
+            Cache::write($redis_test_key, 42, 'redis_test');
+            define('REDIS_CACHE', Cache::read($redis_test_key, 'redis_test') === 42);
+        }
+    } else {
+        $ttl = 30;
+        $test_file = TEMP . DS . ($cfg['app'] ?? 'app') . '_redis_test';
+        if (file_exists($test_file) && (time() - filemtime($test_file) < $ttl)) {
+            defined('REDIS_CACHE') || define('REDIS_CACHE', true);
+        }
+        if (!defined('REDIS_CACHE)') && ($cfg['redis']['port'] ?? null)) {
+            $redis_test_key = 'redis_test_key';
+            Cache::write($redis_test_key, 42, 'redis_test');
             if (Cache::read($redis_test_key, 'redis_test') === 42) {
                 define('REDIS_CACHE', true);
                 @touch($test_file);
