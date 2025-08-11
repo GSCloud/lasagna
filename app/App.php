@@ -199,19 +199,15 @@ function safeHtmlspecialchars(array $data): array
 {
     $result = [];
     foreach ($data as $key => $value) {
-        // Kontrola, zda je hodnota pole, aby se mohla zavolat rekurze.
         if (is_array($value)) {
             $result[$key] = safeHtmlspecialchars($value);
         } else {
-            // Aplikace htmlspecialchars na řetězce.
             $result[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
         }
     }
     return $result;
 }
 
-// Příklad použití opravené rekurzivní metody na superglobální proměnné
-// Takhle je kód robustní a nezpůsobí pád při vnořených polích.
 $data['ARGC'] = $argc ?? 0;
 $data['ARGV'] = $argv ?? [];
 $data['GET'] = safeHtmlspecialchars($_GET);
