@@ -431,8 +431,9 @@ if (Cache::enabled()) {
             $redis_test_key = 'redis_test_key';
             Cache::write($redis_test_key, 42, 'redis_test');
             if (Cache::read($redis_test_key, 'redis_test') === 42) {
-                define('REDIS_CACHE', true);
+                defined('REDIS_CACHE') || define('REDIS_CACHE', true);
                 @touch($test_file);
+                @chmod($test_file, 0666);
             }
         }
     }
