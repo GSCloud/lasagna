@@ -28,22 +28,27 @@ use Michelf\MarkdownExtra;
  */
 class StringFilters
 {
-    // max. single short code iterations
+    // max. a single short code iterations
     const ITERATIONS = 30;
 
     // SANITIZATION: IMAGE MASK for search
     const UPLOAD_SANITIZE = '/[^a-z0-9!@#+*=,;\-._]+/i';
+
     // SANITIZATION: allowed CHARACTERS
     const STRING_SANITIZE = '/[^a-z0-9\-._]+/i';
 
     // FLAGS: randomize galleries
     const GALLERY_RANDOM = 1;
+
     // FLAGS: use lazy loading
     const LAZY_LOADING = 2;
+
     // FLAGS: 160px thumbnails
     const THUMBS_160 = 4;
+
     // FLAGS: 320px thumbnails
     const THUMBS_320 = 8;
+
     // FLAGS: 640px thumbnails
     const THUMBS_640 = 16;
 
@@ -164,7 +169,6 @@ class StringFilters
         " ;-)" => "&nbsp;😉",
         " 3:-)" => "&nbsp;😎",
         " O:-)" => "&nbsp;😇",
-
         " :-|" => "&nbsp;😐",
         " :-O" => "&nbsp;😮",
         " :-(" => "&nbsp;😟",
@@ -208,9 +212,10 @@ class StringFilters
         " s. " => "&nbsp;s. ",
         " sec. " => "&nbsp;sec. ",
         
+        // Currencies with non-breaking spaces
+        " EUR " => "&nbsp;€",
+        " GBP " => "&nbsp;£",
         " CZK " => " CZK&nbsp;",
-        " EUR " => "&nbsp;&euro;",
-        " GBP " => "&nbsp;&pound;",
         " USD " => " USD&nbsp;",
 
         " deja vu " => " déjà&nbsp;vu ",
@@ -223,11 +228,12 @@ class StringFilters
         " (tm) " => " &trade; ",
 
         " id: " => " id:&nbsp;",
+        " Id: " => " Id:&nbsp;",
         " ID: " => " ID:&nbsp;",
-        " Inc." => "&nbsp;Inc.",
-        " INC." => "&nbsp;Inc.",
-        " Ltd." => "&nbsp;Ltd.",
-        " LTD." => "&nbsp;Ltd.",
+        " Inc. " => "&nbsp;Inc. ",
+        " INC. " => "&nbsp;Inc. ",
+        " Ltd. " => "&nbsp;Ltd. ",
+        " LTD. " => "&nbsp;Ltd. ",
 
         " % " => "&nbsp;% ",
         " ‰ " => "&nbsp;‰",
@@ -247,19 +253,32 @@ class StringFilters
      * @var array<string,string>
      */
     private static $_english = [
+        // Contractions with proper apostrophe
         " He's " => " He&rsquo;s ",
         " It's " => " It&rsquo;s ",
         " She's " => " She&rsquo;s ",
-        " The " => " The&nbsp;",
         " he's " => " he&rsquo;s ",
         " it's " => " it&rsquo;s ",
         " she's " => " she&rsquo;s ",
-        " the " => " the&nbsp;",
+
+        " don't " => " don&rsquo;t ",
+        " isn't " => " isn&rsquo;t ",
+        " aren't " => " aren&rsquo;t ",
+        " didn't " => " didn&rsquo;t ",
+        " wasn't " => " wasn&rsquo;t ",
+        " weren't " => " weren&rsquo;t ",
 
         " A " => " A&nbsp;",
+        " AM " => "&nbsp;AM ",
         " An " => " An&nbsp;",
-        " AM" => "&nbsp;AM",
+        " Chap. " => " Chap.&nbsp;",
+        " Co. " => " Co.&nbsp;",
+        " Dr. " => " Dr.&nbsp;",
+        " Fig. " => " Fig.&nbsp;",
         " I " => " I&nbsp;",
+        " Inc. " => "&nbsp;Inc. ",
+        " Jr. " => " Jr.&nbsp;",
+        " Ltd. " => "&nbsp;Ltd. ",
         " Miss " => " Miss&nbsp;",
         " Mr " => " Mr&nbsp;",
         " Mr. " => " Mr.&nbsp;",
@@ -267,10 +286,27 @@ class StringFilters
         " Mrs. " => " Mrs.&nbsp;",
         " Ms " => " Ms&nbsp;",
         " Ms. " => " Ms.&nbsp;",
-        " PM" => "&nbsp;PM",
+        " No. " => " No.&nbsp;",
+        " PM " => "&nbsp;PM ",
+        " Sr. " => " Sr.&nbsp;",
+        " The " => " The&nbsp;",
+        " Vol. " => " Vol.&nbsp;",
+        " a.m. " => "&nbsp;a.m. ",
+        " a " => " a&nbsp;",
         " an " => " an&nbsp;",
+        " approx. " => " approx.&nbsp;",
+        " c/o " => " c/o&nbsp;",
+        " w/o " => " w/o&nbsp;",
+        " e.g. " => " e.g.&nbsp;",
+        " etc. " => " etc.&nbsp;",
+        " i.e. " => " i.e.&nbsp;",
+        " p. " => " p.&nbsp;",
+        " p.m. " => "&nbsp;p.m. ",
         " pcs " => "&nbsp;pcs ",
         " pcs)" => "&nbsp;pcs)",
+        " pp. " => " pp.&nbsp;",
+        " the " => " the&nbsp;",
+        " vs. " => " vs.&nbsp;",
     ];
 
     // phpcs:ignore
@@ -322,6 +358,7 @@ class StringFilters
         " přibl. " => " přibl.&nbsp;",
         " s.r.o." => "&nbsp;s.r.o.",
         " spol. " => "&nbsp;spol.&nbsp;",
+        " str. " => " str.&nbsp;",
         " tj. " => "tj.&nbsp;",
         " tzn. " => " tzn.&nbsp;",
         " tzv. " => " tzv.&nbsp;",
@@ -393,6 +430,7 @@ class StringFilters
         " po " => " po&nbsp;",
         " s.r.o." => "&nbsp;s.r.o.",
         " spol. " => "&nbsp;spol.&nbsp;",
+        " str. " => " str.&nbsp;",
         " tj. " => "tj.&nbsp;",
         " tzn. " => " tzn.&nbsp;",
         " tzv. " => " tzv.&nbsp;",

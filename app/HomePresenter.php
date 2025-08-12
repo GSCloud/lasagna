@@ -67,6 +67,19 @@ class HomePresenter extends APresenter
             }
         }
 
+        // add custom replacements from data cell
+        $reps_data = $data['custom_replacements'] ?? null;
+        if (\is_string($reps_data) && \str_starts_with($reps_data, '[neon]')) {
+            try {
+                $reps = Neon::decode(\substr($reps_data, 6));
+                if (\is_array($reps) && !empty($reps)) {
+                    SF::addCustomReplacements($reps);
+                }
+            } catch (\Throwable $e) {
+                $this->addError($e);
+            }
+        }
+
         // locales transformation
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
