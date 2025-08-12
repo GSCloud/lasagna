@@ -2,12 +2,23 @@
 
 ---
 
+`2025-08-12`
+
+* **`1076-FEATURE`** add “**custom replacements**” from a Sheet data cell  
+  * *`usr.custom_replacements`*  
+* **`1075-FEATURE` StringFilter**  
+  * **`[gallery <mask> [<random|order>]]`**  
+  * sorting parameter, optional  
+  * overrides program defaults  
+  * const PROCESSOR\_FLAGS \= SF::GALLERY\_RANDOM | SF::LAZY\_LOADING;  
+* **`1074-BUGFIX` bugfixes and UI enhancements**
+
 `2025-08-09`  **`v2.4.7`**  
-**`1073-BUGFIX`** various **bugfixes** and UI enhancements
+**`1073-BUGFIX` bugfixes and UI enhancements**
 
 `2025-08-07`
 
-* **`1072-FEATURE`** new **DEV tab**
+* **`1072-FEATURE`** new admin panel **DEV tab**
 
 `2025-08-06`
 
@@ -15,27 +26,36 @@
 
 `2025-08-01`
 
-* **`1070-FEATURE` FontAwesome 7.0.0**
+* **`1070-FEATURE`** upgrade to **FontAwesome 7.0.0**
 
 `2025-07-31`
 
-* **`1069-BUGFIX`** various **bugfixes** and UI enhancements
+* **`1069-BUGFIX` bugfixes and UI enhancements**
 
 `2025-07-28`
 
-* **`1068-FEATURE` StringFilter** method: *`SF::convertEolToSpace()`*
+* **`1068-FEATURE`** new **StringFilter** method  
+  * *`SF::convertEolToSpace()`*
 
 `2025-07-25`
 
-* **`1067-FEATURE`** virtual **/admin endpoint**, can be set to any random string
+* **`1067-FEATURE`** virtual **/admin endpoint**  
+  * Model key: **`admin`**  
+  * default: **admin**  
+  * max. length: **32 chars**  
+  * can be set to any random string
 
 `2025-07-22`
 
-* **`1066-BUGFIX`** various bugfixes and UI enhancements
+* **`1066-BUGFIX` bugfixes and UI enhancements**
 
 `2025-07-17`
 
-* **`1065-FEATURE` Sheet support** for **cfg./usr./add./del. keys** to alter the Model
+* **`1065-FEATURE`** new eXtra **support** in Sheet data cells to alter the Model aka **MODELX**  
+  * **`cfg.key`** \- modify the Model key if the original exists  
+  * **`usr.key`** \- set the Model key  
+  * **`add.key`** \- add a string or merge arrays if the original key exists  
+  * **`del.key`** \- delete the Model key
 
 `2025-07-16`
 
@@ -44,24 +64,29 @@
 
 `2025-07-15`
 
-* **`1063-BUGFIX`** added **CLI handling of Ctrl+C**
+* **`1063-BUGFIX`** added **CLI Signal handling** (Ctrl+C)
 
 `2025-07-11`  **`v2.4.6`**
 
-* **`1062-FEATURE` UI cleanup**, AuditLog filtered out to **AUDIT and BLOCK logs**, some **extra SF replacements**, **TECHNICAL DETAILS** available in the UI, bug fixing
+* **`1062-FEATURE` UI cleanup**, AuditLog filtered to separate **AUDIT and BLOCK logs**, some **extra SF replacements**, **TECHNICAL DETAILS** available in the UI, bug fixing…
 
 `2025-07-08`
 
 * **`1061-FEATURE`** documents updated: **README**, **TECHNICAL\_DETAILS\_EN**  
-* **`1060-FEATURE`** new short codes: **\[mastodon id\] \[twitch id\] \[twitchvid id\] \[vimeo id\]** 
+* **`1060-FEATURE`** new short codes  
+  * **`[mastodon id]`** \- Mastodon post (domains must be added to CSP\!)  
+  * **`[twitch id]`** \- Twitch channell  
+  * **`[twitchvid id]`** \- Twitch video  
+  * **`[vimeo id]`** \- Vimeo video
 
 `2025-06-23`
 
-* **`1059-FEATURE` social icon pack** *(optional)*
+* **`1059-FEATURE` social icons pack** via “**custom replacements**” *(optional)*
 
 `2025-06-22`
 
-* **`1058-FEATURE`** new short code: **\[figure image description\]**
+* **`1058-FEATURE`** new short code  
+  * **`[figure image description]`** \- figure with a description
 
 `2025-06-14`
 
@@ -69,12 +94,18 @@
 
 `2025-05-24`
 
-* **`1056-FEATURE` sharing button to Bluesky, separate disable tags** for sharing buttons  
+* **`1056-FEATURE` sharing button for Bluesky**  
+  * separate **disable switches** for all sharing buttons  
+  * *\#disable\_share\_bluesky: true*  
+  * *\#disable\_share\_facebook: true*  
+  * *\#disable\_share\_mastodon: true*  
 * **`1055-BUGFIX` bot definitions** updated
 
 `2025-05-12`
 
-* **`1054-FEATURE` admin log UI** has 1000 visible entries or listing goes 100 days into the past  
+* **`1054-FEATURE` AuditLog UI** has 1000 visible entries or listing goes 150 days into the past  
+  *    const MAX\_LOG\_ENTRIES \= 1000;  
+  *    const VISIBLE\_LOG\_DAYS \= 5\*31;  
 * **`1053-BUGFIX` removed console warnings** in Materialize framework at our CDN
 
 `2025-05-11`
@@ -86,7 +117,8 @@
 `2025-03-15`
 
 * **`1049-FEATURE` hardened security and error logging**  
-  * login possible at **/login** on the main domain
+  * login possible at **/login** on the main domain  
+  * checks if the user is already logged in
 
 `2025-03-04`
 
@@ -98,9 +130,9 @@
 
 `2025-02-19`
 
-* **`1046-FEATURE` no more META keywords**, feature removed  
+* **`1046-FEATURE` no more META keywords**, feature removed (Google just ignores it)  
 * **`1045-FEATURE`** login workflow uses parameter **returnURL**  
-* **`1044-FEATURE` StringFilter class refactorization**
+* **`1044-FEATURE` StringFilter refactorization**
 
 `2025-02-17`
 
@@ -131,7 +163,8 @@
 
 `2025-02-07`
 
-* **`1034-FEATURE`** **StringFilter** shortcode: **`[googlemap <location>]`**  
+* **`1034-FEATURE`** **StringFilter** shortcode  
+  * **`[googlemap <location>]`**  
   * location should be a “*plus glued string*”, e.g. `prague+castle+czechia`  
   * *SF::renderGoogleMapShortCode()*  
 * **`1033-BUGFIX`** improved **StringFilters** input validation and **replacement pairs**  
@@ -151,7 +184,7 @@
 `2025-01-13`
 
 * **`1026-FEATURE`** support for **external link** CSS icons  
-* **`1025-BUGFIX`** **reverting back** to **jQuery v3.7.1**, **`1022-BUGFIX`** was a **failure in Summernote**
+* **`1025-BUGFIX`** **reverting back to jQuery v3.7.1, 1022-BUGFIX was a failure**
 
 `2025-01-11`  **`v2.4.4`**
 
@@ -164,14 +197,13 @@
 
 `2025-01-09`
 
-* **`1021-FEATURE`** **right-click** and **long-press** on touch devices possible event handling in JavaScript  
-* **`1020-BUGFIX`** **masked email addresses** @ admin panel to enhance security  
-  * reported by *@Krusty*
+* **`1021-FEATURE`** **right-click** and **long-press** touch devices event handling in JavaScript  
+* **`1020-BUGFIX`** **masking email addresses** in the admin panel
 
 `2025-01-08`
 
 * **`1019-FEATURE`** **admin** logout/Auditlog **block** is sticky to the right top  
-* **`1018-BUGFIX`** extra **constants** hardening in **Bootstrap.php**
+* **`1018-BUGFIX`** **constants** hardening in **Bootstrap.php**
 
 `2025-01-07`
 
@@ -180,7 +212,7 @@
 `2025-01-06`
 
 * **`1016-FEATURE`** **admin panel enhancements**  
-* **`1015-BUGFIX`** show “displayed / total” **counts in the file manager**  
+* **`1015-BUGFIX`** **file manager** counts “`displayed / total`”  
 * **`1014-BUGFIX`** **natural sort order** for generated image galleries
 
 `2025-01-05`
@@ -204,17 +236,17 @@
 `2024-12-28`
 
 * **`1005-BUGFIX`** **regression** in a new CDN hash after global cache flush  
-* **`1004-FEATURE`** **StringFilters** CZ/SK replacements update
+* **`1004-FEATURE`** **StringFilters** replacements update
 
 `2024-12-27`
 
-* **`1003-BUGFIX`** **admin panel core timings** info JS console errors
+* **`1003-BUGFIX`** **admin panel shows core timings**
 
 `2024-12-26`
 
-* **`1002-BUGFIX`** **thumbnails creation in WebP** output format (were in the original format)
+* **`1002-BUGFIX`** fixed **thumbnails creation in WebP** format
 
 `2024-12-23`
 
-* **`1001-FEATURE`** **changelog**
+* **`1001-FEATURE`** **changelog started** (the best idea ever)
 

@@ -54,7 +54,7 @@ class HomePresenter extends APresenter
         // content switching
         $data[$view . '_menu'] = true;
 
-        // add custom replacements from NE-ON file
+        // add "custom replacements" from a file
         $reps_file = APP . DS . 'custom_replacements.neon';
         if (\file_exists($reps_file) && \is_readable($reps_file)) {
             try {
@@ -66,7 +66,7 @@ class HomePresenter extends APresenter
                 $this->addError($e);
             }
         }
-        // add custom replacements from a data cell
+        // add "custom replacements" from a Sheet data cell - usr.custom_replacements
         if (\is_array($reps = $data['custom_replacements'])) {
             SF::addCustomReplacements($reps);
         }

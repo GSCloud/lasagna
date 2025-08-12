@@ -63,7 +63,7 @@ endif
 	@echo "${BOLD}refresh${RESET}\t refresh cloud CSV"
 	@echo "${BOLD}clear${RESET}\t clear temporary files"
 	@echo "${BOLD}sync${RESET}\t sync to the remote host"
-	@echo "${BOLD}docs${RESET}\t convert documentation"
+	@echo "${BOLD}docs${RESET}\t fix CHANGELOG.md"
 	@echo ""
 	@echo "${L}» TESTING${RESET}"
 	@echo "${BOLD}stan${RESET}\t PHPStan test"
@@ -91,7 +91,6 @@ else
 endif
 
 docs:
-	@-mv "$(DOWNLOADS)/CHANGELOG.md" . 2>/dev/null
 	@sed -i -e 's/`~~\*\*/`**/g' -e 's/\* \*\*~~/* ~~**/g' -e 's/ `\*\*/`**/g' CHANGELOG.md
 	@echo 'Done.'
 
