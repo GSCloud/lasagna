@@ -62,7 +62,7 @@ class StringFilters
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
     ];
 
-    // English uppercase characters
+    // English UPPERCASE characters
     // phpcs:ignore
     /**
      * @var array<string>
@@ -84,7 +84,7 @@ class StringFilters
         'z', 'ž'
     ];
 
-    // Czech uppercase characters
+    // Czech UPPERCASE characters
     // // phpcs:ignore
     /**
      * @var array<string>
@@ -108,7 +108,7 @@ class StringFilters
         'x', 'y', 'ý', 'z', 'ž',
     ];
 
-    // Slovak uppercase characters
+    // Slovak UPPERCASE characters
     // phpcs:ignore
     /**
      * @var array<string>
@@ -611,7 +611,7 @@ class StringFilters
     private static $_custom = [];
 
     /**
-     * Set custom string replacements
+     * Set custom string replacements, can set an empty array
      *
      * @param array<string,string> $array associative array of custom replacements
      *
@@ -623,8 +623,12 @@ class StringFilters
     {
         if (!\is_array($array)) {
             throw new \InvalidArgumentException(
-                'Invalid argument: Expected an array.'
+                'Invalid argument: expected an array.'
             );
+        }
+        if (empty($array)) {
+            self::$_custom = [];
+            return;
         }
         foreach ($array as $key => $value) {
             if (!\is_string($key) || !\is_string($value)) {
@@ -633,7 +637,6 @@ class StringFilters
                 );
             }
         }
-
         self::$_custom = $array;
     }
 
@@ -650,8 +653,11 @@ class StringFilters
     {
         if (!\is_array($array)) {
             throw new \InvalidArgumentException(
-                'Invalid argument: Expected an array.'
+                'Invalid argument: expected an array.'
             );
+        }
+        if (empty($array)) {
+            return;
         }
         foreach ($array as $key => $value) {
             if (!\is_string($key) || !\is_string($value)) {
@@ -660,7 +666,6 @@ class StringFilters
                 );
             }
         }
-
         self::$_custom = \array_merge(
             self::$_custom,
             $array
@@ -681,7 +686,9 @@ class StringFilters
                 array(
                 "\n",
                 "\r\n",
-                ), '<br>', $content
+                ),
+                '<br>',
+                $content
             );
         }
     }
@@ -700,7 +707,9 @@ class StringFilters
                 array(
                 "\n",
                 "\r\n",
-                ), ' ', $content
+                ),
+                ' ',
+                $content
             );
         }
     }
@@ -719,7 +728,9 @@ class StringFilters
                 array(
                 "\n",
                 "\r\n",
-                ), '<br><span class="indentation"></span>', $content
+                ),
+                '<br><span class="indentation"></span>',
+                $content
             );
         }
     }
@@ -738,9 +749,11 @@ class StringFilters
                 array(
                 "\n- ",
                 "\r\n- ",
-                ), '<br>•&nbsp;', $content
+                ),
+                '<br>•&nbsp;',
+                $content
             );
-            if ((\substr($content, 0, 2) == "- ") || (\substr($content, 0, 2) == "* ")) { // phpcs:ignore
+            if ((\substr($content, 0, 2) === "- ") || (\substr($content, 0, 2) === "* ")) { // phpcs:ignore
                 $content = '•&nbsp;' . \substr($content, 2);
             }
         }
@@ -761,7 +774,9 @@ class StringFilters
                 "\r\n",
                 "\n",
                 "\r",
-                ), '', $content
+                ),
+                '',
+                $content
             );
         }
     }
@@ -779,10 +794,12 @@ class StringFilters
             $body = "<body";
             $c = \explode($body, (string) $content, 2);
             $regex = '/<!--(.|\s)*?-->/';
-            if (\count($c) === 1) { // fix the whole string (= no <body)
+            if (\count($c) === 1) {
+                // fix the whole string (= no <body)
                 $content = \preg_replace($regex, "<!-- :) -->", $content);
             }
-            if (\count($c) === 2) { // fix comments inside body
+            if (\count($c) === 2) {
+                // fix comments inside body
                 $c[1] = \preg_replace($regex, "<!-- :) -->", $c[1]);
                 $content = $c[0] . $body . $c[1];
             }
@@ -806,9 +823,9 @@ class StringFilters
         }
 
         if (!\is_string($language)) {
-            $language = 'en';
+            $language = 'en'; // default language
         }
-        switch (\trim(\strtolower($language))) {
+        switch (\trim(\strtolower(substr($language, 0, 2)))) {
         case "cs":
             $content = self::correctTextSpacingCs($content);
             break;
@@ -952,13 +969,12 @@ class StringFilters
         }
 
         $key = \trim($key);
-
         $content = \trim($content);
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderGoogleMapSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : ''; 
+            $lazy = $lazy ? ' loading="lazy" ' : ''; 
         }
         $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
@@ -1006,7 +1022,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderImageSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
@@ -1051,7 +1067,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderImageSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[figure\s+([^\]]+?)\s+(.*?)\]#is';
@@ -1098,7 +1114,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderImageLeftSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
@@ -1143,7 +1159,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderImageRightSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
@@ -1188,7 +1204,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderImageRespSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
@@ -1222,7 +1238,7 @@ class StringFilters
      * 
      * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderSoundcloudShortCode(&$content, $flags = null)
+    public static function renderSoundCloudShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
@@ -1233,7 +1249,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderSoundcloudSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[soundcloud\s+([^\]]+)\]#is';
@@ -1286,7 +1302,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderYouTubeSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
@@ -1337,7 +1353,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderVimeoSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[vimeo\s.*?(.*?)\]#is';
@@ -1376,7 +1392,7 @@ class StringFilters
      * 
      * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderTwitchShortCode(&$content, $flags = null)
+    public static function renderTwitchChannellShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
@@ -1387,7 +1403,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderTwitchSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[twitch\s.*?(.*?)\]#is';
@@ -1428,7 +1444,7 @@ class StringFilters
      * 
      * @throws \InvalidArgumentException for incorrect flags
      */
-    public static function renderTwitchvidShortCode(&$content, $flags = null)
+    public static function renderTwitchVidShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
             return;
@@ -1439,7 +1455,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderTwitchvidSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[twitchvid\s.*?(.*?)\]#is';
@@ -1492,7 +1508,7 @@ class StringFilters
             throw new \InvalidArgumentException('renderMastodonSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading="lazy" ' : '';
+            $lazy = $lazy ? ' loading="lazy" ' : '';
         }
         $counter = 0;
         $pattern = '#\[mastodon\s+(https?:\/\/[^\s]+)\]#is';
@@ -1538,11 +1554,11 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderGallerySC: FLAGS!');
+            throw new \InvalidArgumentException('Incorrect SC flag!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? 'loading=lazy ' : ''; 
-            $shuffle = (bool) ($flags & self::GALLERY_RANDOM);
+            $lazy = $lazy ? ' loading=lazy ' : ''; 
+            $shuffle_global = (bool) ($flags & self::GALLERY_RANDOM);
             $size = 160;
             if ($flags & self::THUMBS_160) {
                 $size = 160;
@@ -1555,17 +1571,30 @@ class StringFilters
             }
         }
         $counter = 0;
-        $pattern = '#\[gallery\s.*?(.*?)\]#is';
+        $pattern = '#\[gallery\s(.*?)\s*?\]#is';
         while (\str_contains($content, '[gallery ')) {
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
-                $gallery = $m[1];
-                $g = \trim($gallery, '+-_()[]');
+                $full_param_string = $m[1];
+                $params = \preg_split('/\s+/', $full_param_string);
+                $order_param = null;
+                $mask = $params[0];
+                if (\count($params) > 1) {
+                    $order_param = \strtolower($params[1]);
+                }
+                $gallery = $mask;
+                $gname = \trim($gallery, '+-_()[]');
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
+                $shuffle = $shuffle_global;
                 if (\is_array($files)) {
-                    if ($shuffle !== false) {
+                    if ($order_param === 'random') {
+                        $shuffle = true;
+                    } elseif ($order_param === 'order') {
+                        $shuffle = false;
+                    }
+                    if ($shuffle) {
                         \shuffle($files);
                     }
                     $id = 0;
@@ -1580,7 +1609,7 @@ class StringFilters
                         $n = \trim($n, '+-_()[]');
                         $n = \trim(\strtr($n, '+-_()[]', '       '));
                         $images .= "<a "
-                            . "data-lightbox='{$g}' "
+                            . "data-lightbox='{$gname}' "
                             . "class='gallery-link' "
                             . 'href="' . CDN . "/upload/{$f}\""
                             . '><img '
@@ -1595,18 +1624,16 @@ class StringFilters
                             . '></a>';
                     }
                 }
+                $shuffle = $shuffle ? "true" : "false";
                 $replace = "<div "
-                    . "class='row center gallery-container gallery-{$g}' "
+                    . "class='row center gallery-container gallery-{$gname}' "
+                    . "data-shuffle={$shuffle} "
                     . "data-counter={$counter} "
-                    . "data-gallery='{$g}'>"
+                    . "data-gallery='{$gname}'>"
                     . $images
                     . "</div>";
                 if (\is_string($content)) {
-                    $content = \str_replace(
-                        "[gallery {$gallery}]",
-                        $replace,
-                        $content
-                    );
+                    $content = \preg_replace($pattern, $replace, $content, 1);
                 }
                 if ($counter === self::ITERATIONS) {
                     break;
@@ -1866,6 +1893,9 @@ class StringFilters
         } elseif (\str_starts_with($string, '[markdownextra]')) {
             self::renderMarkdownExtra($string);
         }
+
+        // render all short codes
+        // TBD: add a bit map for enabled short codes
         self::renderImageShortCode($string, $flags);
         self::renderImageLeftShortCode($string, $flags);
         self::renderImageRightShortCode($string, $flags);
@@ -1875,8 +1905,8 @@ class StringFilters
         self::renderMastodonShortCode($string, $flags);
         self::renderYouTubeShortCode($string, $flags);
         self::renderVimeoShortCode($string, $flags);
-        self::renderTwitchShortCode($string, $flags);
-        self::renderTwitchvidShortCode($string, $flags);
-        self::renderSoundcloudShortCode($string, $flags);
+        self::renderTwitchChannellShortCode($string, $flags);
+        self::renderTwitchVidShortCode($string, $flags);
+        self::renderSoundCloudShortCode($string, $flags);
     }
 }

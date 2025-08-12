@@ -59,25 +59,16 @@ class HomePresenter extends APresenter
         if (\file_exists($reps_file) && \is_readable($reps_file)) {
             try {
                 $reps = Neon::decode(\file_get_contents($reps_file) ?: '');
-                if (\is_array($reps) && !empty($reps)) {
+                if (\is_array($reps)) {
                     SF::addCustomReplacements($reps);
                 }
             } catch (\Throwable $e) {
                 $this->addError($e);
             }
         }
-
-        // add custom replacements from data cell
-        $reps_data = $data['custom_replacements'] ?? null;
-        if (\is_string($reps_data) && \str_starts_with($reps_data, '[neon]')) {
-            try {
-                $reps = Neon::decode(\substr($reps_data, 6));
-                if (\is_array($reps) && !empty($reps)) {
-                    SF::addCustomReplacements($reps);
-                }
-            } catch (\Throwable $e) {
-                $this->addError($e);
-            }
+        // add custom replacements from a data cell
+        if (\is_array($reps = $data['custom_replacements'])) {
+            SF::addCustomReplacements($reps);
         }
 
         // locales transformation
