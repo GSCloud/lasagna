@@ -1539,7 +1539,7 @@ class StringFilters
     /**
      * Render gallery short code(s)
      *
-     * @param string $content string containing [gallery param]
+     * @param string $content string containing [gallery mask [order|random]]
      * @param mixed  $flags   flags
      * 
      * @return void
@@ -1572,18 +1572,21 @@ class StringFilters
         }
         $counter = 0;
         $pattern = '#\[gallery\s(.*?)\s*?\]#is';
-        while (\str_contains($content, '[gallery ')) {
+        while (\is_string($content) && \str_contains($content, '[gallery ')) {
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
-                $full_param_string = $m[1];
+                $mask = $full_param_string = $m[1];
                 $params = \preg_split('/\s+/', $full_param_string);
                 $order_param = null;
-                $mask = $params[0];
-                if (\count($params) > 1) {
-                    $order_param = \strtolower($params[1]);
+                if (\is_array($params) && \count($params)) {
+                    $mask = $params[0];
+                    if (\count($params) > 1) {
+                        $order_param = \strtolower($params[1]);
+                    }
                 }
                 $gallery = $mask;
                 $gname = \trim($gallery, '+-_()[]');
+                $gname = \strtr($gallery, '+-_()[]', '      ');
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
@@ -1626,7 +1629,7 @@ class StringFilters
                 }
                 $shuffle = $shuffle ? "true" : "false";
                 $replace = "<div "
-                    . "class='row center gallery-container gallery-{$gname}' "
+                    . "class='row center gallery-container gallery-{$mask}' "
                     . "data-shuffle={$shuffle} "
                     . "data-counter={$counter} "
                     . "data-gallery='{$gname}'>"
