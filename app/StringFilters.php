@@ -1610,7 +1610,7 @@ class StringFilters
                             ), PATHINFO_FILENAME
                         );
                         $n = \trim($n, '+-_()[]');
-                        $n = \trim(\strtr($n, '+-_()[]', '       '));
+                        $n = \trim(\strtr($n, '_', ' '));
                         $images .= "<a "
                             . "data-lightbox='{$gname}' "
                             . "class='gallery-link' "
