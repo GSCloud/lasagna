@@ -401,22 +401,18 @@ class AdminPresenter extends APresenter
         case 'GetCsvInfo':
             $this->_checkPermission('admin,manager,editor', $extras);
             $csv_info = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
-            // enhance the CSV array with information
             foreach ($csv_info as $k => $v) {
-                if (!$k || !$v) {
-                    continue;
-                }
-                if (file_exists(DATA . DS . "{$k}.csv")
-                    && is_readable(DATA . DS . "{$k}.csv")
-                ) {
-                    $csv_info[$k] = [
-                        'csv' => $v,
-                        'lines' => $this->_getCSVFileLines(DATA . DS . "{$k}.csv"),
-                        'sheet' => $cfg['lasagna_sheets'][$k] ?? null,
-                        'timestamp' => \filemtime(DATA . DS . "{$k}.csv"),
-                    ];
-                    if ($csv_info[$k]['lines'] === -1) {
-                        unset($csv_info[$k]);
+                if ($k && $v) {
+                    if (file_exists(DATA . DS . "{$k}.csv") && is_readable(DATA . DS . "{$k}.csv")) { // phpcs:ignore
+                        $csv_info[$k] = [
+                            'csv' => $v,
+                            'lines' => $this->_getCSVFileLines(DATA . DS . "{$k}.csv"), // phpcs:ignore
+                            'sheet' => $cfg['lasagna_sheets'][$k] ?? null,
+                            'timestamp' => \filemtime(DATA . DS . "{$k}.csv"),
+                        ];
+                        if ($csv_info[$k]['lines'] === -1) {
+                            unset($csv_info[$k]);
+                        }
                     }
                 }
             }
@@ -1643,7 +1639,7 @@ class AdminPresenter extends APresenter
      * Get number of CSV lines in a file
      *
      * @param string $f filename
-     * 
+     *
      * @return int number of lines / -1 on error
      */
     private function _getCSVFileLines($f)
@@ -1652,9 +1648,13 @@ class AdminPresenter extends APresenter
             if (!file_exists($f)) {
                 return -1;
             }
+            $count = 0;
             $csv = Reader::createFromPath($f, 'r');
             $csv->setHeaderOffset(0);
-            return \count($csv) - 1;
+            foreach ($csv->getRecords() as $record) {
+                $count++;
+            }
+            return $count - 1;
         } catch (\Throwable $e) {
             return -1;
         }
