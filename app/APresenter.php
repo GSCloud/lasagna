@@ -842,6 +842,7 @@ abstract class APresenter
 
         if (isset($_COOKIE[$app])) {
             $content = $this->getCookie($app);
+            $GLOBALS['halite_crash_flag'] = false;
             if (!\is_string($content)) {
                 $this->logout();
             }
@@ -1086,24 +1087,36 @@ abstract class APresenter
      */
     public function getCookie($name)
     {
-        if (CLI) {
-            return $this->cookies[$name] ?? null;
-        }
-        if (empty($name)) {
+        if (CLI && empty($name)) {
             return null;
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-        if (\file_exists($keyfile) && \is_readable($keyfile)) {
-            $enc = KeyFactory::loadEncryptionKey($keyfile);
-        } else {
-            $this->addError('HALITE: getCookie - missing encryption key');
+        try {
+            if (\file_exists($keyfile) && \is_readable($keyfile)) {
+                $cookie = new Cookie(KeyFactory::loadEncryptionKey($keyfile));
+                try {
+                    $GLOBALS['halite_crash_flag'] = true;
+                    return $cookie->fetch($name);
+                } catch (\Throwable $e) {
+                    $err = "HALITE: error reading/decrypting cookie '{$name}': ";
+                    $this->addError($err . $e->getMessage());
+                    \setcookie($name, '', \time() - 3600, '/');
+                    return null;
+                }
+            } else {
+                $this->addError('HALITE: missing encryption key');
+                \setcookie($name, '', \time() - 3600, '/');
+                return null;
+            }
+        } catch (\Throwable $e) {
+            $err = "HALITE: error setting KeyFactory decryption";
+            $this->addError($err . $e->getMessage());
+            \setcookie($name, '', \time() - 3600, '/');
             return null;
         }
-        $cookie = new Cookie($enc);
-        return $cookie->fetch($name);
     }
 
     /**
@@ -1339,13 +1352,21 @@ abstract class APresenter
         if (CLI || empty($rolelist)) {
             return $this;
         }
-        $email = $this->getIdentity()['email'] ?? null;
-        if (!$email) {
-            return $retbool ? false : $this;
+
+        if (!$email = $this->getIdentity()['email'] ?? null) {
+            if ($retbool) {
+                return false;
+            }
+            // ERROR 401: not authorized
+            $this->setLocation('/err/401');
         }
         $groups = $this->getData('admin_groups') ?? null;
         if (!$groups) {
-            return $retbool ? false : $this;
+            if ($retbool) {
+                return false;
+            }
+            // ERROR 401: not authorized
+            $this->setLocation('/err/401');
         }
 
         $roles = \explode(',', \trim((string) $rolelist));

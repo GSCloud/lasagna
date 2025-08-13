@@ -334,6 +334,7 @@
 
             // thumbnails S-M-L sizes
             var wt = [];
+            wt[80] = 'XS';
             wt[160] = 'S';
             wt[320] = 'M';
             wt[640] = 'L';
@@ -363,7 +364,7 @@
               }
 
               // controls + search
-              s += '<div id="stubs" class="row">' + stubs + '</div>';
+              s += '<div id="stubs" class="row center">' + stubs + '</div>';
               s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-list"></i></div>';
               s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-solid fa-image"></i></div>';
               s += '<div id="uploadimagescount" style="cursor:auto!important" class="noselect btn black text-white bold upload-controls right"></div>';
@@ -614,7 +615,7 @@
       ZeroUpload.on("complete", function (response) {
         M.toast({text: "{{ l.a_uploading_finished }}", classes: "normaltoast"});
         var data = JSON.parse(response.data);
-        $("#a_uploader_progress").delay(3000).hide(200);
+        $("#a_uploader_progress").delay(5000).hide(200);
         if (data && data.data) {
           if (!w.GSC.nolocalstorage) {
             GSC.last_upload = localStorage['last_upload'] = JSON.stringify(data.data);
@@ -626,6 +627,7 @@
       });
 
       ZeroUpload.on("start", function (files, userData) {
+        $("#a_uploader_progress").removeClass('hide').html('');
         M.toast({text: "{{ l.a_uploading }}", classes: "normaltoast"});
       });
 
@@ -674,7 +676,7 @@
           M.toast({text: "📶 offline", classes: "normaltoast"});
           return GSC.PingDot("#csv_ping", false);
         }
-        $("#a_uploader_progress").html("");
+        $("#a_uploader_progress").html('');
         ZeroUpload.chooseFiles();
       });
     });

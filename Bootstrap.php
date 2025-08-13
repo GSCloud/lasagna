@@ -35,11 +35,6 @@ if (PHP_SAPI === 'cli') {
     }
 }
 
-// PHP INI
-ini_set(
-    'auto_detect_line_endings',
-    defined('AUTO_DETECT_LINE_ENDINGS') ? AUTO_DETECT_LINE_ENDINGS : 'true'
-);
 ini_set(
     'default_socket_timeout',
     defined('DEFAULT_SOCKET_TIMEOUT') ? DEFAULT_SOCKET_TIMEOUT : '15'
@@ -48,7 +43,6 @@ ini_set(
     'display_errors',
     defined('DISPLAY_ERRORS') ? DISPLAY_ERRORS : 'true'
 );
-
 ob_start();
 error_reporting(E_ALL);
 
@@ -268,6 +262,7 @@ if (DEBUG === true) {
     Debugger::$showFireLogger = (bool) ($cfg['DEBUG_SHOW_FIRELOGGER'] ?? false);
     Debugger::$showLocation = (bool) ($cfg['DEBUG_SHOW_LOCATION'] ?? false);
     Debugger::$strictMode = (bool) ($cfg['DEBUG_STRICT_MODE'] ?? true);
+    Debugger::$keysToHide = (array) ($cfg['DEBUG_KEYS_TO_HIDE'] ?? ['apikey', 'goauth_secret']); // phpcs:ignore
 
     // debug cookie name: tracy-debug
     if ($cfg['DEBUG_COOKIE'] ?? null) {
@@ -283,6 +278,27 @@ if (DEBUG === true) {
         );
     }
 }
+
+/**
+ * Crash handler using semaphores
+ *
+ * @return void
+ */
+function crashHandler(): void
+{
+    if (CLI) {
+        return;
+    }
+
+    if (isset($GLOBALS['halite_crash_flag']) && $GLOBALS['halite_crash_flag']) {
+        $GLOBALS['halite_crash_flag'] = false;
+        error_log('FATAL ERROR: Halite crash detected - cookie deleted', 0);
+        setcookie($GLOBALS['cfg']['app'] ?? 'app', '', time() - 3600, '/');
+        error_clear_last();
+        return;
+    }
+}
+register_shutdown_function('crashHandler');
 
 Debugger::timer('RUN');
 require_once APP . DS . 'App.php';

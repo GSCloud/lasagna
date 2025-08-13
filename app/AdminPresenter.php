@@ -49,12 +49,12 @@ class AdminPresenter extends APresenter
 
     /* @var array thumbnails width to create */
     const THUMBS_CREATE_WIDTH = [
-        160, 320, 640
+        80, 160, 320, 640
     ];
 
     /* @var array thumbnails width to delete */
     const THUMBS_DELETE_WIDTH = [
-        160, 320, 640
+        80, 160, 320, 640
     ];
 
     /* @var array thumbnail extensions to delete */
@@ -143,9 +143,6 @@ class AdminPresenter extends APresenter
             "endpoint" => \explode('?', $_SERVER['REQUEST_URI'])[0],
             "api_quota" => "unlimited",
             "cached" => false,
-            "country" => $_SERVER['HTTP_CF_IPCOUNTRY'] ?? null,
-            "region" => $_SERVER['HTTP_CF_IPREGION'] ?? null,
-            "city" => $_SERVER['HTTP_CF_CITY'] ?? null,
             "uuid" => $this->getUID(),
             "ip" => $this->getIP(),
             // override: ?key= parameter
@@ -155,7 +152,7 @@ class AdminPresenter extends APresenter
         // API calls
         switch ($view) {
         case 'Upload':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -183,7 +180,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -192,14 +189,20 @@ class AdminPresenter extends APresenter
                 return $this->writeJsonData(410, $extras);
             }
 
-            if (!\is_numeric($result = $this->processDelete())) {
-                return $this->writeJsonData(400, $extras);
+            try {
+                $result = $this->processDelete();
+                if (\is_string($result)) {
+                    $this->addMessage("ADMIN: file deleted\n[{$result}]");
+                    return $this->writeJsonData($result, $extras);
+                }
+            } catch (\Throwable $e) {
+                $err = "UploadDelete: " . $e->getMessage();
+                $this->addError($err);
             }
-            $this->addMessage("ADMIN: file deleted\n[{$result}]");
-            return $this->writeJsonData($result, $extras);
+            return $this->writeJsonData(400, $extras);
 
         case 'getUploadsInfo':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -238,7 +241,7 @@ class AdminPresenter extends APresenter
             );
         
         case 'getUploads':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -396,7 +399,7 @@ class AdminPresenter extends APresenter
             return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
 
         case 'GetCsvInfo':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             $csv_info = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
             // enhance the CSV array with information
             foreach ($csv_info as $k => $v) {
@@ -420,7 +423,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData($csv_info, $extras);
 
         case 'GetArticlesInfo':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             $data = [];
             $profile = 'default';
             $f = DATA . DS. "summernote_articles_{$profile}.txt";
@@ -436,7 +439,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData($data, $extras);
 
         case 'UpdateArticles':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             $x = 0;
             $profile = 'default';
             if (isset($_POST['data'])) {
@@ -539,7 +542,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK', 'hash' => $hash], $extras); // phpcs:ignore
     
         case 'GetToken':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
@@ -746,13 +749,13 @@ class AdminPresenter extends APresenter
             $this->_unauthorizedAccess();
 
         case 'FlushCache':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             $this->addMessage('ADMIN: FLUSH CACHE');
             $this->flushCache();
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'CoreUpdate':
-            $this->checkPermission('admin,manager,editor');
+            $this->_checkPermission('admin,manager,editor', $extras);
             $this->addMessage('ADMIN: CORE UPDATE');
             $this->setForceCsvCheck();
             $this->postloadAppData('app_data');
@@ -772,16 +775,26 @@ class AdminPresenter extends APresenter
      */
     public function processUpload()
     {
-        if (!defined('UPLOAD') || \is_null(UPLOAD)) {
-            throw new \Exception("Constant UPLOAD is not defined");
+        if (!defined('UPLOAD')
+            || \is_null(UPLOAD)
+            || !\is_dir(UPLOAD)
+            || !\is_writable(UPLOAD)
+        ) {
+            throw new \Exception("Invalid request.");
         }
 
         $uploads = [];
         // Loop through uploads
         foreach ($_FILES as $key => &$file) {
-            $f = $file['name'];
-
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                continue;
+            }
+            if ($file['size'] === 0) {
+                continue;
+            }
+            
             // Sanitize the filename
+            $f = $file['name'];
             $f = \strtr(trim(\basename($f)), " '\"\\()", '______');
             SF::transliterate($f);
             SF::sanitizeStringLC($f);
@@ -794,13 +807,31 @@ class AdminPresenter extends APresenter
             if (\str_ends_with($f, '.bak')) {
                 continue;
             }
-            if (\str_ends_with($f, '.php')) {
+            if (\str_ends_with($f, '.htm')) {
+                continue;
+            }
+            if (\str_ends_with($f, '.html')) {
                 continue;
             }
             if (\str_ends_with($f, '.inc')) {
                 continue;
             }
+            if (\str_ends_with($f, '.lock')) {
+                continue;
+            }
+            if (\str_ends_with($f, '.php')) {
+                continue;
+            }
             if ($f === '.size') {
+                continue;
+            }
+            if ($f === '.DS_Store') {
+                continue;
+            }
+            if ($f === 'Thumbs.db') {
+                continue;
+            }
+            if ($f === '.htaccess') {
                 continue;
             }
 
@@ -859,67 +890,66 @@ class AdminPresenter extends APresenter
                 }
             }
         }
-
         return $uploads;
     }
 
     /**
      * Process the deletion of a file and its associated thumbnails
      *
-     * @return string|int return the sanitized filename if deletion was successful
-     *                    or an HTTP status code (400 or 405) if an error occurred
+     * @return string return the sanitized filename if deletion was successful
      */
     public function processDelete()
     {
-        if (!defined('UPLOAD') || \is_null(UPLOAD)) {
-            throw new \Exception("Constant UPLOAD is not defined");
+        if (!defined('UPLOAD')
+            || \is_null(UPLOAD)
+            || !\is_dir(UPLOAD)
+            || !\is_writable(UPLOAD)
+        ) {
+            throw new \Exception("Invalid request.");
         }
 
         if (isset($_POST['name'])) {
-            $name = trim($_POST['name']);
+            $name = \trim($_POST['name']);
             $name = \strtr(trim($name), " '\"\\()", '______');
             SF::transliterate($name);
             SF::sanitizeStringLC($name);
             SF::transliterate($name);
             if ($name) {
                 $name = \preg_replace('/^\.\.\//', '', $name);
+                if (empty($name)) {
+                    throw new \Exception("Invalid filename.");
+                }
+                if ($name === '.size') {
+                    throw new \Exception("Reserved filename: [{$name}]");
+                }
             }
-            if (!\is_string($name)) {
-                return 400;
-            }
-            if ($name === '.size') {
-                return 405;
-            }
-
-            $info = \pathinfo($name);
-            if (\is_array($info)) {
-                $fn = $info['filename'];
-
-                // delete thumbnails
-                foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
-                    foreach (self::THUMBS_DELETE_WIDTH as $w) {
-                        $file = UPLOAD . DS
-                            . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
-                            . $fn . $x;
+            if (\is_string($name)) {
+                $info = \pathinfo($name);
+                if (\is_array($info)) {
+                    $fn = $info['filename'];
+                    // delete thumbnails
+                    foreach (self::THUMBS_DELETE_EXTENSIONS as $x) {
+                        foreach (self::THUMBS_DELETE_WIDTH as $w) {
+                            $file = UPLOAD . DS . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX . $fn . $x; // phpcs:ignore
+                            if (file_exists($file)) {
+                                @unlink($file);
+                            }
+                        }
+                        $file = UPLOAD . DS . $fn . $x;
                         if (file_exists($file)) {
                             @unlink($file);
                         }
                     }
-                    $file = UPLOAD . DS . $fn . $x;
-                    if (file_exists($file)) {
-                        @unlink($file);
-                    }
                 }
+                // delete origin
+                $file = UPLOAD . DS . $name;
+                if (file_exists($file)) {
+                    @unlink($file);
+                }
+                return $name;
             }
-
-            // delete origin
-            $file = UPLOAD . DS . $name;
-            if (file_exists($file)) {
-                @unlink($file);
-            }
-            return $name;
         }
-        return 400;
+        throw new \Exception("Invalid request.");
     }
 
     /**
@@ -1628,5 +1658,21 @@ class AdminPresenter extends APresenter
         } catch (\Throwable $e) {
             return -1;
         }
+    }
+
+    /**
+     * Check if current user has access rights, proxied for API usage
+     *
+     * @param mixed        $list   roles separated by commas
+     * @param array<mixed> $extras extra headers for writing JSON
+     * 
+     * @return mixed
+     */
+    private function _checkPermission($list, $extras)
+    {
+        if (\is_string($list) && \is_array($extras) && $this->checkPermission($list, true)) { // phpcs:ignore
+            return;
+        }
+        return $this->writeJsonData(401, $extras ?? []);
     }
 }
