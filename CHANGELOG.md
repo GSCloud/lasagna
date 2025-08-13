@@ -2,6 +2,13 @@
 
 ---
 
+`2025-08-13`
+
+* **`1078-FEATURE` 80px XS thumbnail** (for new uploads only)  
+* **`1077-BUGFIX` bugfixes and UI enhancements**  
+  * Halite cookie crash handler  
+  * hardened file uploader
+
 `2025-08-12`
 
 * **`1076-FEATURE`** add “**custom replacements**” from a Sheet data cell  
