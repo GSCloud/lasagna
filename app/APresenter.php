@@ -845,7 +845,7 @@ abstract class APresenter
             $GLOBALS[HALITE_CRASH_FLAG] = true;
             \set_time_limit(1);
             $content = $this->getCookie($app);
-            \set_time_limit(\ini_get('max_execution_time'));
+            \set_time_limit(30);
             $GLOBALS[HALITE_CRASH_FLAG] = false;
             if (!\is_string($content)) {
                 $this->logout();

@@ -38,19 +38,22 @@ class CiTester
         \Tracy\Debugger::timer("CITEST");
 
         $cfg = (array) $cfg;
-        if (!$cfg['project']) {
+        if (!$project = $cfg['project'] ?? null) {
             $climate->out("<red>ERROR: missing project definition\n\007");
             exit(-1);
         }
-        if (!$cfg['app']) {
+        if (!$app = $cfg['app'] ?? null) {
             $climate->out("<red>ERROR: missing app definition\n\007");
             exit(-1);
         }
-
-        $presenter = (array) $presenter;
-        $type = (string) $type;
+        if (!\is_string($project) || !\is_string($app)) {
+            $climate->out("<red>Bad project or app name.\n\007");
+            exit(-1);
+        }
 
         $api_key = "";
+        $presenter = (array) $presenter;
+        $type = (string) $type;
         if (\is_array($cfg) && \array_key_exists("ci_tester", $cfg)
             && \is_string($cfg["ci_tester"]["api_key"])
         ) {
@@ -71,13 +74,13 @@ class CiTester
         }
 
         if (!\strlen($t)) {
-            $climate->out("<bold><green>{$cfg['project']}: {$cfg['app']} {$case}");
+            $climate->out("<bold><green>{$project}: {$app} {$case}");
             $climate->out("<red>ERROR: missing target URI!\n\007");
             exit(-1);
         }
 
         $climate->out(
-            "\n<bold><green>{$cfg['project']}: {$cfg['app']} {$case}\n"
+            "\n<bold><green>{$project}: {$app} {$case}\n"
         );
 
         $i = 0;
