@@ -38,8 +38,18 @@ class CiTester
         \Tracy\Debugger::timer("CITEST");
 
         $cfg = (array) $cfg;
+        if (!$cfg['project']) {
+            $climate->out("<red>ERROR: missing project definition\n\007");
+            exit(-1);
+        }
+        if (!$cfg['app']) {
+            $climate->out("<red>ERROR: missing app definition\n\007");
+            exit(-1);
+        }
+
         $presenter = (array) $presenter;
         $type = (string) $type;
+
         $api_key = "";
         if (\is_array($cfg) && \array_key_exists("ci_tester", $cfg)
             && \is_string($cfg["ci_tester"]["api_key"])
@@ -51,30 +61,19 @@ class CiTester
         case "local":
         case "testlocal":
             $case = "local";
-            $target = $cfg["test_origin"] ?? $cfg["local_goauth_origin"] ?? "";
+            $t = $cfg["test_origin"] ?? $cfg["local_goauth_origin"] ?? "";
             break;
-
         case "prod":
         case "testprod":
         default:
             $case = "production";
-            $target = $cfg["goauth_origin"] ?? "";
+            $t = $cfg["goauth_origin"] ?? "";
         }
 
-        if (!$cfg['project']) {
-            $climate->out("<red>ERROR: missing project definition\n\007");
-            exit(99);
-        }
-
-        if (!$cfg['app']) {
-            $climate->out("<red>ERROR: missing app definition\n\007");
-            exit(99);
-        }
-
-        if (!strlen($target)) {
+        if (!\strlen($t)) {
             $climate->out("<bold><green>{$cfg['project']}: {$cfg['app']} {$case}");
             $climate->out("<red>ERROR: missing target URI!\n\007");
-            exit(99);
+            exit(-1);
         }
 
         $climate->out(
@@ -84,40 +83,52 @@ class CiTester
         $i = 0;
         $pages = [];
         $redirects = [];
+        $nt = '*** no testing';
         if (\is_array($presenter)) {
+
+            $hasPath = array_filter(
+                $presenter, function ($item) {
+                    return isset($item['path']);
+                }
+            );
+            $noPath = array_filter(
+                $presenter, function ($item) {
+                    return !isset($item['path']);
+                }
+            );
+            uasort(
+                $hasPath, function ($a, $b) {
+                    return $a['path'] <=> $b['path'];
+                }
+            );
+            $presenter = array_merge($noPath, $hasPath);
+
             foreach ($presenter as $p) {
                 if (!isset($p['path'])) {
                     continue;
                 }
                 $pp = $p['path'];
                 if (\strpos($p["path"], "[") !== false) {
-                    $climate->out("<bold><blue>{$target}{$pp}</blue></bold>");
+                    $climate->out("<bold><blue>{$t}{$pp}</blue></bold> {$nt}");
                     continue;
                 }
                 if (\strpos($p["path"], "*") !== false) {
-                    $climate->out("<bold><blue>{$target}{$pp}</blue></bold>");
+                    $climate->out("<bold><blue>{$t}{$pp}</blue></bold> {$nt}");
                     continue;
                 }
                 if ($p["no_testing"] === true) {
-                    $climate->out("<bold><cyan>{$target}{$pp}</cyan></bold>");
+                    $climate->out("<bold><cyan>{$t}{$pp}</cyan></bold> {$nt}");
                     continue;
                 }
                 if ($p["redirect"] ?? false) {
-                    $redirects[$i]["path"] = $p["path"];
-                    $redirects[$i]["site"] = $target;
-                    $redirects[$i]["assert_httpcode"] = 303;
-                    if (\stripos($p["redirect"], "http") === false) {
-                        $redirects[$i]["url"] = $target . $p["path"];
-                    } else {
-                        $redirects[$i]["url"] = $p["redirect"];
-                    }
+                    $climate->out("<bold><magenta>{$t}{$pp}</magenta></bold> {$nt}");
                 } else {
-                    $pages[$i]["path"] = $pp;
-                    $pages[$i]["site"] = $target;
                     $pages[$i]["assert_httpcode"] = $p["assert_httpcode"];
                     $pages[$i]["assert_json"] = $p["assert_json"];
                     $pages[$i]["assert_values"] = $p["assert_values"];
-                    $pages[$i]["url"] = $target . $p["path"];
+                    $pages[$i]["path"] = $pp;
+                    $pages[$i]["site"] = $t;
+                    $pages[$i]["url"] = $t . $p["path"];
                 }
                 $i++;
             }
@@ -164,8 +175,8 @@ class CiTester
         $errors = 0;
         foreach ($pages_reworked as $x) {
             $bad = 0;
-            $f1 = \date("Y-m-d") . \strtr("_{$target}", '\/:.', '____');
-            $f2 = \date("Y-m-d") . \strtr("_{$target}_{$x['path']}", '\/:.', '____');
+            $f1 = \date("Y-m-d") . \strtr("_{$t}", '\/:.', '____');
+            $f2 = \date("Y-m-d") . \strtr("_{$t}_{$x['path']}", '\/:.', '____');
             $u1 = "<bold>{$x['site']}{$x['path']}</bold>";
             $u2 = "{$x['site']}{$x['path']}";
 
@@ -174,7 +185,7 @@ class CiTester
             if (!$m) {
                 continue;
             }
-            @\file_put_contents(ROOT . "/ci/{$f2}.curl.txt", $m);
+            \file_put_contents(ROOT . "/ci/{$f2}.curl.txt", $m);
             \curl_multi_remove_handle($multi, $ch[$i]);
 
             // separate headers and content
@@ -237,7 +248,7 @@ class CiTester
                     . " <blue>$jsformat</blue>"
                     . " <blue>$jscode</blue>"
                 );
-                @\file_put_contents(
+                \file_put_contents(
                     ROOT . "/ci/tests_{$f1}.assert.txt",
                     "{$u2};"
                     . "size:{$length};"
@@ -261,7 +272,7 @@ class CiTester
                     . " $jscode"
                     . "</red>\007"
                 );
-                @\file_put_contents(
+                \file_put_contents(
                     ROOT . "/ci/errors_{$f1}.assert.txt",
                     "{$u2};"
                     . "size:{$length};"
