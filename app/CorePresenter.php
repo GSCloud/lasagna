@@ -407,7 +407,7 @@ class CorePresenter extends APresenter
         $this->setLocation();
     }
     /**
-     * Clears the browser's cache, cookies, and storage.
+     * Clears the browser cache, cookies, and storage.
      *
      * @return void
      */

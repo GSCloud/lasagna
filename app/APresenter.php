@@ -841,8 +841,12 @@ abstract class APresenter
         $fingerprint = $this->getBrowserFingerprint();
 
         if (isset($_COOKIE[$app])) {
+            // crash fix implementation
+            $GLOBALS[HALITE_CRASH_FLAG] = true;
+            \set_time_limit(1);
             $content = $this->getCookie($app);
-            $GLOBALS['halite_crash_flag'] = false;
+            \set_time_limit(\ini_get('max_execution_time'));
+            $GLOBALS[HALITE_CRASH_FLAG] = false;
             if (!\is_string($content)) {
                 $this->logout();
             }
@@ -1098,7 +1102,6 @@ abstract class APresenter
             if (\file_exists($keyfile) && \is_readable($keyfile)) {
                 $cookie = new Cookie(KeyFactory::loadEncryptionKey($keyfile));
                 try {
-                    $GLOBALS['halite_crash_flag'] = true;
                     return $cookie->fetch($name);
                 } catch (\Throwable $e) {
                     $err = "HALITE: error reading/decrypting cookie '{$name}': ";

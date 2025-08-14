@@ -13,6 +13,7 @@ defaults:
   assert_httpcode: 200
   assert_json: false
   assert_values: []
+  no_testing: false
 
   # switches
   allow_key: false

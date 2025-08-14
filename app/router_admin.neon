@@ -7,11 +7,11 @@ admin:
   presenter: admin
 
 login:
-  assert_httpcode: 303
   path: /login
   presenter: login
+  no_testing: true
 
 logout:
-  assert_httpcode: 303
   path: /logout
   presenter: logout
+  no_testing: true

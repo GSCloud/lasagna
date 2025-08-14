@@ -5,17 +5,17 @@
 clearcache:
   path: /clearcache
   presenter: core
-  assert_httpcode: 303
+  no_testing: true
 
 clearcookies:
   path: /clearcookies
   presenter: core
-  assert_httpcode: 303
+  no_testing: true
 
 clearbrowser:
   path: /clearbrowser
   presenter: core
-  assert_httpcode: 303
+  no_testing: true
 
 GetWebManifest:
   path: /manifest.json

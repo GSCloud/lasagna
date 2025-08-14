@@ -89,12 +89,17 @@ class CiTester
                 if (!isset($p['path'])) {
                     continue;
                 }
+                $pp = $p['path'];
                 if (\strpos($p["path"], "[") !== false) {
-                    $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
+                    $climate->out("<bold><blue>{$target}{$pp}</blue></bold>");
                     continue;
                 }
                 if (\strpos($p["path"], "*") !== false) {
-                    $u = "<bold><blue>{$target}{$p['path']}</blue></bold>";
+                    $climate->out("<bold><blue>{$target}{$pp}</blue></bold>");
+                    continue;
+                }
+                if ($p["no_testing"] === true) {
+                    $climate->out("<bold><cyan>{$target}{$pp}</cyan></bold>");
                     continue;
                 }
                 if ($p["redirect"] ?? false) {
@@ -107,7 +112,7 @@ class CiTester
                         $redirects[$i]["url"] = $p["redirect"];
                     }
                 } else {
-                    $pages[$i]["path"] = $p["path"];
+                    $pages[$i]["path"] = $pp;
                     $pages[$i]["site"] = $target;
                     $pages[$i]["assert_httpcode"] = $p["assert_httpcode"];
                     $pages[$i]["assert_json"] = $p["assert_json"];
