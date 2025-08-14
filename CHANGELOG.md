@@ -2,6 +2,10 @@
 
 ---
 
+`2025-08-14`
+
+* **`1079-FEATURE` CI tester** updated
+
 `2025-08-13`
 
 * **`1078-FEATURE` 80px XS thumbnail** (for new uploads only)  
