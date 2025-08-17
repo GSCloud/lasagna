@@ -1,7 +1,11 @@
-<a class="webshare" aria-hidden="true" data-admin-tooltip="webshare_button" style="display:none;font-size:1.5em;width:100%">{{ l.webshare_button }}</a>
-<script nonce="{{ csp_nonce }}">
+<span
+  class="webshare noselect notap"
+  style="display:none;font-size:2rem;width:100%;margin-bottom:1rem;"
+  aria-hidden="true"
+  data-admin-tooltip="webshare_button"
+  >{{ l.webshare_button }}</span>
 
-  //if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
+<script nonce="{{ csp_nonce }}">
   if (true) {
     if (navigator.share) {
       if (typeof window.WebShare !== "function") window.WebShare = function (text, url, title) {
@@ -38,5 +42,4 @@
       }
     }
   }
-
 </script>
