@@ -85,7 +85,7 @@ class ErrorPresenter extends APresenter
             $code = $err;
         } elseif (\is_array($err)) {
             $code = (int) ($err["code"] ?? 404);
-            $message = $err["message"] ?? 'Terribly and truly UNKNOWN error 😵';
+            $message = $err["message"] ?? 'UNKNOWN error 😵';
         } else {
             $match = $this->getMatch();
             if (\is_array($match)) {
