@@ -28,7 +28,7 @@ use Michelf\MarkdownExtra;
  */
 class StringFilters
 {
-    // max. a single short code iterations
+    // max. single shortcode iterations
     const ITERATIONS = 30;
 
     // SANITIZATION: IMAGE MASK for search
@@ -43,14 +43,17 @@ class StringFilters
     // FLAGS: use lazy loading
     const LAZY_LOADING = 2;
 
+    // FLAGS: 80px thumbnails
+    const THUMBS_80 = 4;
+
     // FLAGS: 160px thumbnails
-    const THUMBS_160 = 4;
+    const THUMBS_160 = 8;
 
     // FLAGS: 320px thumbnails
-    const THUMBS_320 = 8;
+    const THUMBS_320 = 16;
 
     // FLAGS: 640px thumbnails
-    const THUMBS_640 = 16;
+    const THUMBS_640 = 32;
 
     // English lowercase characters
     // phpcs:ignore
@@ -976,6 +979,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : ''; 
         }
+
         $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
         while (\str_contains($content, '[googlemap ')) {
@@ -1024,6 +1028,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
         while (\str_contains($content, '[image ')) {
@@ -1069,6 +1074,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[figure\s+([^\]]+?)\s+(.*?)\]#is';
         while (\str_contains($content, '[figure ')) {
@@ -1116,6 +1122,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
         while (\str_contains($content, '[imageleft ')) {
@@ -1161,6 +1168,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
         while (\str_contains($content, '[imageright ')) {
@@ -1206,6 +1214,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
         while (\str_contains($content, '[imageresp ')) {
@@ -1251,6 +1260,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[soundcloud\s+([^\]]+)\]#is';
         while (\str_contains($content, '[soundcloud ')) {
@@ -1304,6 +1314,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
         while (\str_contains($content, '[youtube ')) {
@@ -1355,6 +1366,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[vimeo\s.*?(.*?)\]#is';
         while (\str_contains($content, '[vimeo ')) {
@@ -1405,6 +1417,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[twitch\s.*?(.*?)\]#is';
         while (\str_contains($content, '[twitch ')) {
@@ -1457,6 +1470,7 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
         $pattern = '#\[twitchvid\s.*?(.*?)\]#is';
         while (\str_contains($content, '[twitchvid ')) {
@@ -1510,8 +1524,9 @@ class StringFilters
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
+
         $counter = 0;
-        $pattern = '#\[mastodon\s+(https?:\/\/[^\s]+)\]#is';
+        $pattern = '#\[mastodon\s+(https:\/\/[^\s]+)\]#is';
         while (\str_contains($content, '[mastodon ')) {
             $counter++;
             $replace = '<div '
@@ -1557,9 +1572,12 @@ class StringFilters
             throw new \InvalidArgumentException('Incorrect SC flag!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
-            $lazy = $lazy ? ' loading=lazy ' : ''; 
+            $lazy = $lazy ? ' loading="lazy" ' : ''; 
             $shuffle_global = (bool) ($flags & self::GALLERY_RANDOM);
             $size = 160;
+            if ($flags & self::THUMBS_80) {
+                $size = 80;
+            }
             if ($flags & self::THUMBS_160) {
                 $size = 160;
             }
@@ -1570,6 +1588,7 @@ class StringFilters
                 $size = 640;
             }
         }
+
         $counter = 0;
         $pattern = '#\[gallery\s(.*?)\s*?\]#is';
         while (\is_string($content) && \str_contains($content, '[gallery ')) {
@@ -1586,7 +1605,7 @@ class StringFilters
                 }
                 $gallery = $mask;
                 $gname = \trim($gallery, '+-_()[]');
-                $gname = \strtr($gallery, '+-_()[]', '      ');
+                $gname = \strtr($gallery, '+-_()[]', '       ');
                 $counter++;
                 $images = '';
                 $files = self::findImagesByMask($gallery);
@@ -1594,11 +1613,9 @@ class StringFilters
                 if (\is_array($files)) {
                     if ($order_param === 'random') {
                         $shuffle = true;
+                        \shuffle($files);
                     } elseif ($order_param === 'order') {
                         $shuffle = false;
-                    }
-                    if ($shuffle) {
-                        \shuffle($files);
                     }
                     $id = 0;
                     foreach ($files as $f) {
@@ -1630,6 +1647,116 @@ class StringFilters
                 $shuffle = $shuffle ? "true" : "false";
                 $replace = "<div "
                     . "class='row center gallery-container gallery-{$mask}' "
+                    . "data-shuffle={$shuffle} "
+                    . "data-counter={$counter} "
+                    . "data-gallery='{$gname}'>"
+                    . $images
+                    . "</div>";
+                if (\is_string($content)) {
+                    $content = \preg_replace($pattern, $replace, $content, 1);
+                }
+                if ($counter === self::ITERATIONS) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Render gallery short code(s) as spans
+     *
+     * @param string $content string containing [galleryspan mask [order|random]]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderGallerySpanShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('Incorrect SC flag!');
+        } else {
+            $lazy = (bool) ($flags & self::LAZY_LOADING);
+            $lazy = $lazy ? ' loading="lazy" ' : ''; 
+            $shuffle_global = (bool) ($flags & self::GALLERY_RANDOM);
+            $size = 160;
+            if ($flags & self::THUMBS_80) {
+                $size = 80;
+            }
+            if ($flags & self::THUMBS_160) {
+                $size = 160;
+            }
+            if ($flags & self::THUMBS_320) {
+                $size = 320;
+            }
+            if ($flags & self::THUMBS_640) {
+                $size = 640;
+            }
+        }
+
+        $counter = 0;
+        $pattern = '#\[galleryspan\s(.*?)\s*?\]#is';
+        while (\is_string($content) && \str_contains($content, '[galleryspan ')) {
+            \preg_match($pattern, $content, $m);
+            if (\is_array($m) && isset($m[1])) {
+                $mask = $full_param_string = $m[1];
+                $params = \preg_split('/\s+/', $full_param_string);
+                $order_param = null;
+                if (\is_array($params) && \count($params)) {
+                    $mask = $params[0];
+                    if (\count($params) > 1) {
+                        $order_param = \strtolower($params[1]);
+                    }
+                }
+                $gallery = $mask;
+                $gname = \trim($gallery, '+-_()[]');
+                $gname = \strtr($gallery, '+-_()[]', '       ');
+                $counter++;
+                $images = '';
+                $files = self::findImagesByMask($gallery);
+                $shuffle = $shuffle_global;
+                if (\is_array($files)) {
+                    if ($order_param === 'random') {
+                        $shuffle = true;
+                        \shuffle($files);
+                    } elseif ($order_param === 'order') {
+                        $shuffle = false;
+                    }
+                    $id = 0;
+                    foreach ($files as $f) {
+                        $id++;
+                        $t = CDN . "/upload/.thumb_{$size}px_{$f}";
+                        $n = \pathinfo(
+                            \strtoupper(
+                                \str_ireplace($gallery, '', $f)
+                            ), PATHINFO_FILENAME
+                        );
+                        $n = \trim($n, '+-_()[]');
+                        $n = \trim(\strtr($n, '_', ' '));
+                        $images .= "<span "
+                            . "class='galleryspan' "
+                            . 'href="' . CDN . "/upload/{$f}\""
+                            . '><img '
+                            . "src=\"{$t}\" "
+                            . $lazy
+                            . 'class="galleryspan-img" '
+                            . 'data-source="' . CDN . "/upload/{$f}" . '" '
+                            . "data-id={$id} "
+                            . "data-thumb=\"{$t}\" "
+                            . "data-tooltip=\"{$n}\" "
+                            . "alt=\"{$id}. {$gallery} [{$n}]\" "
+                            . '></span>';
+                    }
+                }
+                $shuffle = $shuffle ? "true" : "false";
+                $replace = "<div "
+                    . "class='row center galleryspan-container gallery-{$mask}' "
                     . "data-shuffle={$shuffle} "
                     . "data-counter={$counter} "
                     . "data-gallery='{$gname}'>"
@@ -1897,14 +2024,15 @@ class StringFilters
             self::renderMarkdownExtra($string);
         }
 
-        // render all short codes
-        // TBD: add a bit map for enabled short codes
+        // render all shortcodes
+        // TBD: bit map for enabled shortcodes
         self::renderImageShortCode($string, $flags);
         self::renderImageLeftShortCode($string, $flags);
         self::renderImageRightShortCode($string, $flags);
         self::renderImageRespShortCode($string, $flags);
         self::renderFigureShortCode($string, $flags);
         self::renderGalleryShortCode($string, $flags);
+        self::renderGallerySpanShortCode($string, $flags);
         self::renderMastodonShortCode($string, $flags);
         self::renderYouTubeShortCode($string, $flags);
         self::renderVimeoShortCode($string, $flags);

@@ -2,26 +2,36 @@
 
 ---
 
+`2025-08-22`
+
+* **`1083-FEATURE`** new **StringFilter:**  
+  * **`[galleryspan <mask> [<random|order>]]`**  
+* **`1082-FEATURE`** better **PIN switch colors**  
+* **`1081-FEATURE`** new **MODEL-X expansion button**  
+* **`1080-FEATURE`** custom **progress bar parameters**:  
+  * `design.progress_bar_color: "#48f"`  
+  * `design.progress_bar_size: "8px"`  
+  * `design.progress_bar_background: "#ccc"`  
+  * `design.progress_bar_transition: “width 0.3s ease-in-out”`
+
 `2025-08-14`
 
 * **`1079-FEATURE` CI tester** updated
 
 `2025-08-13`
 
-* **`1078-FEATURE` 80px XS thumbnail** (for new uploads only)  
+* **`1078-FEATURE` 80px XS thumbnails** (new uploads only)  
 * **`1077-BUGFIX` bugfixes and UI enhancements**  
   * Halite cookie crash handler  
   * hardened file uploader
 
 `2025-08-12`
 
-* **`1076-FEATURE`** add “**custom replacements**” from a Sheet data cell  
+* **`1076-FEATURE`** “**custom replacements**” from a Sheet data cell  
   * *`usr.custom_replacements`*  
-* **`1075-FEATURE` StringFilter**  
+* **`1075-FEATURE`** new **StringFilter parameters:**  
   * **`[gallery <mask> [<random|order>]]`**  
-  * sorting parameter, optional  
-  * overrides program defaults  
-  * const PROCESSOR\_FLAGS \= SF::GALLERY\_RANDOM | SF::LAZY\_LOADING;  
+  * sorting parameter, optional, overrides program defaults  
 * **`1074-BUGFIX` bugfixes and UI enhancements**
 
 `2025-08-09`  **`v2.4.7`**  
@@ -45,7 +55,7 @@
 
 `2025-07-28`
 
-* **`1068-FEATURE`** new **StringFilter** method  
+* **`1068-FEATURE`** new **StringFilter** method:  
   * *`SF::convertEolToSpace()`*
 
 `2025-07-25`
@@ -62,7 +72,7 @@
 
 `2025-07-17`
 
-* **`1065-FEATURE`** new eXtra **support** in Sheet data cells to alter the Model aka **MODELX**  
+* **`1065-FEATURE` support** for Sheet data cells to alter the Model \- **MODEL-X:**  
   * **`cfg.key`** \- modify the Model key if the original exists  
   * **`usr.key`** \- set the Model key  
   * **`add.key`** \- add a string or merge arrays if the original key exists  
@@ -84,8 +94,8 @@
 `2025-07-08`
 
 * **`1061-FEATURE`** documents updated: **README**, **TECHNICAL\_DETAILS\_EN**  
-* **`1060-FEATURE`** new short codes  
-  * **`[mastodon id]`** \- Mastodon post (domains must be added to CSP\!)  
+* **`1060-FEATURE`** new **StringFilters:**  
+  * **`[mastodon id]`** \- Mastodon post (domain must be added to CSP\!)  
   * **`[twitch id]`** \- Twitch channell  
   * **`[twitchvid id]`** \- Twitch video  
   * **`[vimeo id]`** \- Vimeo video
@@ -148,8 +158,9 @@
 `2025-02-17`
 
 * **`1043-FEATURE < 1009-IDEA`** **remember active admin tab**  
-* **`1042-FEATURE`** **StringFilter methods**:  
-  * *`SF::shortCodesProcessor()`* \- process all codes excl. `[googlemap]`  
+* **`1042-FEATURE`** new **StringFilter methods**:  
+  * *`SF::shortCodesProcessor()`* \- process all shortcodes  
+    * excluding `[googlemap]` as it needs API key  
   * *`SF::sort()`* \- sort array containing both numeric and textual values  
   * *`SF::rsort()`* \- sort array containing both numeric and textual values, reversed  
 * **`1041-FEATURE`** **translations update**

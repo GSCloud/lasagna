@@ -1,7 +1,7 @@
 <script nonce="{{ csp_nonce }}">
 'use strict';
 
-// CREATE LUID
+// CREATE LOCAL STORAGE UID
 var luid = null;
 try {
   luid = crypto.randomUUID();
@@ -21,7 +21,8 @@ try {
   }
 } catch (e) {
   nolocalstorage = true;
-  console.log('WARNING: localStorage is blocked');
+  console.log('WARNING: localStorage is blocked!');
+  console.log(e);
 }
 
 // COMPUTE SHA-256 HASH

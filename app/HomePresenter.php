@@ -28,7 +28,7 @@ use Nette\Neon\Neon;
 class HomePresenter extends APresenter
 {
     // short codes processor flags
-    const PROCESSOR_FLAGS = SF::GALLERY_RANDOM | SF::LAZY_LOADING;
+    const PROCESSOR_FLAGS = SF::GALLERY_RANDOM | SF::LAZY_LOADING | SF::THUMBS_160;
 
     /**
      * Controller processor

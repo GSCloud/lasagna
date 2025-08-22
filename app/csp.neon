@@ -25,7 +25,6 @@ csp: [
     "https:;"
 
     "font-src"
-    #"'unsafe-inline'"
     "'self'"
     "data:"
     "cdn.gscloud.cz"
@@ -50,7 +49,6 @@ csp: [
     "https:;"
 
     "style-src"
-    #"data:"
     "'self'"
     "'unsafe-inline'"
     "https:;"

@@ -100,6 +100,12 @@
         }
       });
 
+      // show MODEL-X
+      $('#modelx-switch').click(function () {
+          $('#modelx').removeClass('hide').show();
+          $('#modelx-switch').hide();
+      });
+
 {{#dbg}}
 {{#admin_group_admin}}
       // switch PHP debugger ON/OFF
@@ -121,11 +127,11 @@
       $(".trans_pin").click(function () {
         if ($(this).data('on') == '1') {
           $(this).data('on', 0);    
-          $('#showpins').removeClass('red').addClass('grey');
+          $('#showpins').removeClass('white').addClass('grey darken-3');
           $('.sheetpin').remove();
         } else {
           $(this).data('on', 1);
-          $('#showpins').removeClass('grey').addClass('red');
+          $('#showpins').removeClass('grey darken-3').addClass('white');
 
           // inject pins
           $('*[data-admin-tooltip]').each(function() {

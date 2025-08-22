@@ -12,7 +12,7 @@
       <div class="row center" style="margin:10px 0 10px 0;">
         <a
           id="showpins"
-          class="waves-effect grey waves-light btn trans_pin hover"
+          class="waves-effect grey darken-3 waves-light btn trans_pin hover"
           style="margin:5px;font-size:15px!important">{{ l.a_show_translations }}</a>
         <a
           id="a_update"
@@ -90,7 +90,10 @@
       </p>
     </div>
 
-    {{#model.x_count}}<b>MODEL X ({{ model.x_count }})</b>: {{#model.changes}}<b>{{.}}</b> {{/model.changes}}{{/model.x_count}}
+    {{#model.x_count}}
+    <b>MODEL-X ({{ model.x_count }})</b><span id="modelx-switch" class="btn black"><i class="fa-regular fa-square-plus"></i></span>
+    <div id="modelx" class="hide">{{#model.changes}}<b>{{.}}</b> {{/model.changes}}</div>
+    {{/model.x_count}}
 
   </div>
 </div>

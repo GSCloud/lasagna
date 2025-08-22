@@ -124,7 +124,6 @@ class ErrorPresenter extends APresenter
 
         header("HTTP/1.1 {$code} {$error}");
         echo $this->setData($data)->renderHTML($template);
-
         exit(0);
     }
 }

@@ -44,7 +44,6 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
 .normaltoast {font-size:1rem!important;}
 .noscript {font-size:1rem!important;padding:0.5rem!important;}
 .noselect {-webkit-user-select:none;-ms-user-select:none;user-select:none;}
-.progress-container {width:100%;height:8px;background:#ccc;position:fixed;bottom:0;z-index:9999999}.progress-bar{height:8px;background: #4caf50;width:0%;}
 .hover {cursor: pointer;}
 .mono {font-face: monospace;font-family: monospace;}
 .nowrap {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -56,6 +55,20 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
   -moz-tap-highlight-color: transparent;
   -ms-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
+}
+.progress-container {
+  width: 100%;
+  height: {{#design.progress_bar_size}}{{ design.progress_bar_size }}{{/design.progress_bar_size}}{{^design.progress_bar_size}} 8px {{/design.progress_bar_size}};
+  background: {{#design.progress_bar_background}}{{ design.progress_bar_background }}{{/design.progress_bar_background}}{{^design.progress_bar_background}} #ccc {{/design.progress_bar_background}};
+  position: fixed;
+  bottom: 0;
+  z-index:9999999;
+}
+.progress-bar {
+  width: 0;
+  height: {{#design.progress_bar_size}}{{ design.progress_bar_size }}{{/design.progress_bar_size}}{{^design.progress_bar_size}} 8px {{/design.progress_bar_size}};
+  background: {{#design.progress_bar_color}}{{ design.progress_bar_color }}{{/design.progress_bar_color}}{{^design.progress_bar_color}} #4caf50 {{/design.progress_bar_color}};
+  transition: {{#design.progress_bar_transition}}{{ design.progress_bar_transition }}{{/design.progress_bar_transition}}{{^design.progress_bar_transition}} width 0.1s ease-in-out {{/design.progress_bar_transition}};
 }
 
 @media print {.noprint {display: none !important;}}
