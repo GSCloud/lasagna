@@ -41,9 +41,11 @@ class LoginPresenter extends APresenter
             $this->addCritical($err);
             ErrorPresenter::getInstance()->process(['code' => 500, 'message' => $err]); // phpcs:ignore
         }
-        $this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
+        //$this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
+        $this->checkRateLimit()->dataExpander($data);
+
         if (!\is_array($cfg = $this->getCfg())) {
-            $err = 'Cfg: invalid data';
+            $err = 'Config: invalid data';
             $this->addCritical($err);
             ErrorPresenter::getInstance()->process(['code' => 500, 'message' => $err]); // phpcs:ignore
         }
@@ -56,6 +58,7 @@ class LoginPresenter extends APresenter
         $currentOrigin = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}";
         $expectedOrigin = LOCALHOST ? $cfg['local_goauth_origin'] : $cfg['goauth_origin']; // phpcs:ignore
         $redirectUrl = LOCALHOST ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect']; // phpcs:ignore
+
         $ret = null;
         if (!empty($_GET['returnURL'])) {
             $ret = $_GET['returnURL'];
@@ -65,9 +68,7 @@ class LoginPresenter extends APresenter
         }
 
         // check if user is logged in, if so redirect to the last/main page
-        $user = $this->getCurrentUser();
-        $email = $user ? $user['email'] : null;
-        if (\strlen($email)) {
+        if (\strlen($this->getCurrentUser()['email'])) {
             $returnUrl = \urldecode($_GET['returnURL'] ?? '/');
             $url = '/';
             if (\strpos($returnUrl, '/') === 0) {
