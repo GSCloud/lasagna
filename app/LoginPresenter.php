@@ -54,16 +54,15 @@ class LoginPresenter extends APresenter
             $this->setLocation('/err/412');
         }
 
-        // check if we are on the right origin
+        // check if we are on the correct origin
         $currentOrigin = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}";
         $expectedOrigin = LOCALHOST ? $cfg['local_goauth_origin'] : $cfg['goauth_origin']; // phpcs:ignore
-        $redirectUrl = LOCALHOST ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect']; // phpcs:ignore
-
-        $ret = null;
-        if (!empty($_GET['returnURL'])) {
-            $ret = $_GET['returnURL'];
-        }
         if ($currentOrigin !== $expectedOrigin) {
+            $redirectUrl = LOCALHOST ? $cfg['local_goauth_redirect'] : $cfg['goauth_redirect']; // phpcs:ignore
+            $ret = null;
+            if (!empty($_GET['returnURL'])) {
+                $ret = $_GET['returnURL'];
+            }
             $this->setLocation($ret ? "{$redirectUrl}?returnURL={$ret}" : $redirectUrl); // phpcs:ignore
         }
 
