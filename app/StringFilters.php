@@ -1613,9 +1613,11 @@ class StringFilters
                 if (\is_array($files)) {
                     if ($order_param === 'random') {
                         $shuffle = true;
-                        \shuffle($files);
                     } elseif ($order_param === 'order') {
                         $shuffle = false;
+                    }
+                    if ($shuffle) {
+                        \shuffle($files);
                     }
                     $id = 0;
                     foreach ($files as $f) {
@@ -1724,9 +1726,11 @@ class StringFilters
                 if (\is_array($files)) {
                     if ($order_param === 'random') {
                         $shuffle = true;
-                        \shuffle($files);
                     } elseif ($order_param === 'order') {
                         $shuffle = false;
+                    }
+                    if ($shuffle) {
+                        \shuffle($files);
                     }
                     $id = 0;
                     foreach ($files as $f) {
