@@ -68,6 +68,7 @@ abstract class APresenter
 
     /* @var string Google Sheet export to CSV URL postfix */
     const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
+    //const GS_CSV_POSTFIX = '/pub?output=csv';
 
     /* @var string Google Sheet export to TSV URL postfix */
     const GS_TSV_POSTFIX = '/pub?gid=0&single=true&output=tsv';
@@ -544,7 +545,7 @@ abstract class APresenter
         $file = DATA . DS . self::AUDITLOG_FILE;
         $flags = FILE_APPEND | LOCK_EX;
         $logline = "$date;$message;{$ip};{$name};{$email}\n";
-        if (\file_put_contents($file, $logline, $flags) === false) {
+        if (@\file_put_contents($file, $logline, $flags) === false) {
             $this->_criticals[] = 'Could not write to the AuditLog file: ' . $file;
         }
         return $this;
@@ -1686,7 +1687,7 @@ abstract class APresenter
         $file = \strtolower($name);
         if ($name && $csvkey) {
             if (Cache::read($file, 'csv') === false || $force === true) {
-                $data = false;
+                $data = null;
                 if (\file_exists(DATA . DS . "{$file}.csv")) {
                     // CSV file exists
                     $modtime = \filemtime(DATA . DS . "{$file}.csv");
@@ -1720,15 +1721,10 @@ abstract class APresenter
                                 . $csvkey . self::GS_CSV_POSTFIX;
                         }
                     }
-                    try {
-                        $data = @\file_get_contents($remote) ?: '';
-                    } catch (\Throwable $e) {
-                        $data = '';
-                        $this->addError("CSV: fetching URL [{$remote}] failed"); // phpcs:ignore
-                    }
+                    $data = @\file_get_contents($remote) ?: null;
                 }
                 if (!$data) {
-                    $this->addError("CSV: there is no data for [{$name}]");
+                    $this->addError("CSV: there is no data for [{$name}] at: {$remote}"); // phpcs:ignore
                     return $this;
                 }
                 if ($data && !\is_string($data)) {
