@@ -1721,7 +1721,7 @@ abstract class APresenter
                         }
                     }
                     try {
-                        $data = \file_get_contents($remote);
+                        $data = @\file_get_contents($remote) ?: '';
                     } catch (\Throwable $e) {
                         $data = '';
                         $this->addError("CSV: fetching URL [{$remote}] failed"); // phpcs:ignore
