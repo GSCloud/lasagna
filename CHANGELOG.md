@@ -2,6 +2,10 @@
 
 ---
 
+`2025-08-25`
+
+* **`1084-BUGFIX` regression fix** in randomized galleries and global switch
+
 `2025-08-22`
 
 * **`1083-FEATURE`** new **StringFilter:**  
