@@ -740,20 +740,7 @@ abstract class APresenter
                         'samesite' => 'Lax',
                     ]
                 );
-                \setcookie(
-                    'ENGINE',
-                    ENGINE,
-                    [
-                        'expires' => \time() + self::COOKIE_TTL,
-                        'path' => '/',
-                        'domain' => DOMAIN,
-                        'secure' => !LOCALHOST,
-                        'httponly' => true,
-                        'samesite' => 'Lax',
-                    ]
-                );
                 $_COOKIE[$name] = $uid;
-                $_COOKIE['ENGINE'] = ENGINE;
             }
             $parts[] = $uid;
             \header("X-UID: {$uid}");
