@@ -46,9 +46,9 @@ class LoginPresenter extends APresenter
                 'httponly' => true,
                 'samesite' => 'Lax',
             ];
-            setcookie(APPNAME, '', $cookie_options);
-            setcookie('ENGINE', '', $cookie_options);
-            header('Location: /?');
+            \setcookie(APPNAME, '', $cookie_options);
+            \setcookie('ENGINE', '', $cookie_options);
+            \header('Location: /login', true, 303);
             exit;
         }
 
@@ -171,7 +171,7 @@ class LoginPresenter extends APresenter
                     'httponly' => true,
                     'samesite' => 'Lax',
                 ];
-                setcookie('ENGINE', ENGINE, $cookie_options);
+                \setcookie('ENGINE', ENGINE, $cookie_options);
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
                 }
