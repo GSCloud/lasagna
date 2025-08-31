@@ -276,26 +276,6 @@ defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/",
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
 defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
 
-// CHECK ENGINE
-if (!CLI) {
-    if (isset($_COOKIE['ENGINE']) && $_COOKIE['ENGINE'] !== ENGINE) {
-        $cookie_options = [
-            'expires' => time() - 86400,
-            'path' => '/',
-            'domain' => DOMAIN,
-            'secure' => !LOCALHOST,
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ];
-        setcookie(APPNAME, '', $cookie_options);
-        setcookie('ENGINE', '', $cookie_options);
-        header('Location: /?');
-        exit;
-    }
-    $cookie_options['expires'] = time() + 2592000;
-    setcookie('ENGINE', ENGINE, $cookie_options);
-}
-
 // OFFLINE TEMPLATE resolution
 $offline = TEMPLATES . DS . 'offline.mustache';
 $offline_local = TEMPLATES . DS . strtolower("offline_{$country}.mustache");
