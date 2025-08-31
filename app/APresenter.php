@@ -115,9 +115,6 @@ abstract class APresenter
     /* @var array CSV Keys */
     private $_csv_postload = [];
 
-    /* @var array cookies */
-    public $cookies = [];
-
     /* @var array singleton instances */
     public static $instances = [];
 
@@ -394,6 +391,7 @@ abstract class APresenter
         $dot->set(
             [
                 'CONST.APP' => APP,
+                'CONST.APPNAME' => APPNAME,
                 'CONST.CACHE' => CACHE,
                 'CONST.CACHEPREFIX' => CACHEPREFIX,
                 'CONST.CLI' => CLI,
@@ -416,6 +414,7 @@ abstract class APresenter
                 'CONST.TEMPLATES' => TEMPLATES,
                 'CONST.UPLOAD' => UPLOAD,
                 'CONST.WWW' => WWW,
+
                 // PHP ini constants
                 'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
                 'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
@@ -800,12 +799,11 @@ abstract class APresenter
 
         // set identity
         $this->_identity = $out;
-        $app = $this->getCfg('app') ?? 'app';
         if ($out['id']) {
-            $this->setCookie($app, \json_encode($out));
+            $this->setCookie(APPNAME, \json_encode($out));
         } else {
-            $this->clearCookie($app);
             $this->clearCookie('ENGINE');
+            $this->clearCookie(APPNAME);
         }
         return $this;
     }
@@ -837,15 +835,14 @@ abstract class APresenter
         }
 
         // extract the cookie
-        $app = $this->getCfg('app') ?? 'app';
         $nonce = $this->getIdentityNonce();
         $fingerprint = $this->getBrowserFingerprint();
 
-        if (isset($_COOKIE[$app])) {
+        if (isset($_COOKIE[APPNAME])) {
             // crash fix implementation
             $GLOBALS[HALITE_CRASH_FLAG] = true;
             \set_time_limit(1);
-            $content = $this->getCookie($app);
+            $content = $this->getCookie(APPNAME);
             \set_time_limit(30);
             $GLOBALS[HALITE_CRASH_FLAG] = false;
             if (!\is_string($content)) {
@@ -1133,14 +1130,13 @@ abstract class APresenter
      */
     public function setCookie($name, $data)
     {
-        if (CLI || empty($name) || !\is_string($data)) {
+        if (CLI || empty($name) || !\is_string($name) || !\is_string($data)) {
             return $this;
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         $key = \trim($key, "/.\\");
         $keyfile = DATA . DS . $key;
-
         if (\file_exists($keyfile) && \is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
         } else {
@@ -1152,32 +1148,25 @@ abstract class APresenter
             } else {
                 $this->addCritical('HALITE: cannot write cookie encryption key'); // phpcs:ignore
                 ErrorPresenter::getInstance()->process(
-                    ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
+                    [
+                        'code' => 500,
+                        'message' => 'SYSTEM ERROR: unable to setup the encryption'
+                    ]
                 );
             }
         }
 
         $cookie = new Cookie($enc);
-        if (DOMAIN === 'localhost') {
-            $httponly = true;
-            $samesite = 'lax';
-            $secure = false;
-        } else {
-            $httponly = true;
-            $samesite = 'lax';
-            $secure = true;
-        }
         $cookie->store(
             $name,
             $data,
             \time() + self::COOKIE_TTL,
             '/',
             DOMAIN,
-            $secure,
-            $httponly,
-            $samesite
+            !LOCALHOST,
+            true,
+            'Lax'
         );
-        $this->cookies[$name] = $data;
         return $this;
     }
 

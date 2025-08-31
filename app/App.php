@@ -177,7 +177,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.4.7');
+define('ENGINE', 'Tesseract v2.4.8');
 $data['ENGINE'] = ENGINE;
 
 // version to load: https://cdnjs.com/libraries/codemirror 
@@ -279,18 +279,18 @@ defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/",
 
 // CHECK OLD ENGINE
 if (!CLI) {
-    $cookie_options = [
-        'expires' => time() - 86400,
-        'path' => '/',
-        'domain' => DOMAIN,
-        'secure' => !LOCALHOST,
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ];
     if (isset($_COOKIE['ENGINE']) && $_COOKIE['ENGINE'] !== ENGINE) {
+        $cookie_options = [
+            'expires' => time() - 86400,
+            'path' => '/',
+            'domain' => DOMAIN,
+            'secure' => !LOCALHOST,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ];
+        setcookie(APPNAME, '', $cookie_options);
         setcookie('ENGINE', '', $cookie_options);
-        setcookie($cfg['app'] ?? 'app', '', $cookie_options);
-        header('Location: /?logout');
+        header('Location: /?');
         exit;
     }
     $cookie_options['expires'] = time() + 2592000;
@@ -423,7 +423,7 @@ if (Cache::enabled()) {
         }
     } else {
         $ttl = 30;
-        $test_file = TEMP . DS . ($cfg['app'] ?? 'app') . '_redis_test';
+        $test_file = TEMP . DS . APPNAME . '_redis_test';
         if (file_exists($test_file) && (time() - filemtime($test_file) < $ttl)) {
             defined('REDIS_CACHE') || define('REDIS_CACHE', true);
         }
