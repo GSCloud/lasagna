@@ -242,7 +242,7 @@ $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
 $data['cdn_trimmed'] = 'cdn-assets' . DS . $version;
 defined('CDN') || define('CDN', $data['CDN']);
 
-// fix Apple
+// Apple Safari detection
 $isSafari = false;
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
@@ -266,18 +266,17 @@ $rqp = trim($rqp, '/');
 $data['request_path'] = $rqp;
 $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
 $data['nonce'] = $data['NONCE'] = $nonce = substr(md5(random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
-$data['LOCALHOST'] = (bool) LOCALHOST;
-
-// canonical URI
-$x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
-defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
+$data['LOCALHOST'] = LOCALHOST;
 
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 
-// CHECK OLD ENGINE
+$x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
+defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
+
+// CHECK ENGINE
 if (!CLI) {
     if (isset($_COOKIE['ENGINE']) && $_COOKIE['ENGINE'] !== ENGINE) {
         $cookie_options = [
