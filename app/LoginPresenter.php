@@ -36,12 +36,27 @@ class LoginPresenter extends APresenter
             @\ob_end_clean();
         }
 
+        // CHECK ENGINE
+        if (isset($_COOKIE['ENGINE']) && $_COOKIE['ENGINE'] !== ENGINE) {
+            $cookie_options = [
+                'expires' => time() - 86400,
+                'path' => '/',
+                'domain' => DOMAIN,
+                'secure' => !LOCALHOST,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ];
+            setcookie(APPNAME, '', $cookie_options);
+            setcookie('ENGINE', '', $cookie_options);
+            header('Location: /?');
+            exit;
+        }
+
         if (!\is_array($data = $this->getData())) {
             $err = 'Model: invalid data';
             $this->addCritical($err);
             ErrorPresenter::getInstance()->process(['code' => 500, 'message' => $err]); // phpcs:ignore
         }
-        //$this->checkRateLimit()->setHeaderHtml()->dataExpander($data);
         $this->checkRateLimit()->dataExpander($data);
 
         if (!\is_array($cfg = $this->getCfg())) {
@@ -148,6 +163,15 @@ class LoginPresenter extends APresenter
                 ];
                 $this->clearCookie('oauth2state');
                 $this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
+                $cookie_options = [
+                    'expires' => \time() + 2592000,
+                    'path' => '/',
+                    'domain' => DOMAIN,
+                    'secure' => !LOCALHOST,
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ];
+                setcookie('ENGINE', ENGINE, $cookie_options);
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
                 }

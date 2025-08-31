@@ -802,7 +802,6 @@ abstract class APresenter
         if ($out['id']) {
             $this->setCookie(APPNAME, \json_encode($out));
         } else {
-            $this->clearCookie('ENGINE');
             $this->clearCookie(APPNAME);
         }
         return $this;

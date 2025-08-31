@@ -242,7 +242,7 @@ $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
 $data['cdn_trimmed'] = 'cdn-assets' . DS . $version;
 defined('CDN') || define('CDN', $data['CDN']);
 
-// Apple Safari detection
+// Apple Safari
 $isSafari = false;
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
@@ -275,19 +275,6 @@ defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/",
 
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
 defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
-
-// CLEAR ENGINE COOKIE
-if (!CLI) {
-    $cookie_options = [
-        'expires' => time() - 86400,
-        'path' => '/',
-        'domain' => DOMAIN,
-        'secure' => !LOCALHOST,
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ];
-    setcookie('ENGINE', '', $cookie_options);
-}
 
 // OFFLINE TEMPLATE resolution
 $offline = TEMPLATES . DS . 'offline.mustache';
