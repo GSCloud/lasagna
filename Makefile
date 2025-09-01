@@ -87,7 +87,7 @@ ifneq ($(strip $(has_wget)),)
 	@cat $(BASE) | wc -l
 	@./cli.sh clearcache
 else
-	$(error "ERROR: Missing wget command")
+	$(error "ERROR: Missing wget command!")
 endif
 
 docs:
@@ -139,7 +139,9 @@ icons:
 
 stan:
 ifneq ($(strip $(has_phpstan)),)
-	@vendor/bin/phpstan -l9 analyse -c phpstan.neon www/index.php Bootstrap.php \
+	@vendor/bin/phpstan -l9 analyse -c phpstan.neon \
+		www/index.php \
+		Bootstrap.php \
 		app/App.php \
 		app/AdminPresenter.php \
 		app/ArticlePresenter.php \

@@ -202,11 +202,7 @@ function safeHtmlspecialchars(array $data): array
         if (is_array($value)) {
             $result[$key] = safeHtmlspecialchars($value);
         } else {
-            if (!is_string($value)) {
-                $value = '';
-            } else {
-                $value = $value;
-            }
+            $value = is_string($value) ? $value : '';
             $result[$key] = htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
         }
     }
@@ -219,7 +215,6 @@ $data['GET'] = safeHtmlspecialchars($_GET);
 $data['POST'] = safeHtmlspecialchars($_POST);
 $data['COOKIE'] = safeHtmlspecialchars($_COOKIE);
 $data['SERVER'] = safeHtmlspecialchars($_SERVER);
-
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
 $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
@@ -265,7 +260,7 @@ if (!$rqp) {
 $rqp = trim($rqp, '/');
 $data['request_path'] = $rqp;
 $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
-$data['nonce'] = $data['NONCE'] = $nonce = substr(md5(random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
+$data['nonce'] = $data['NONCE'] = substr(md5(random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
 $data['LOCALHOST'] = LOCALHOST;
 
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
@@ -332,7 +327,7 @@ $cache_profiles = array_replace(
         'day' => '+24 hours',
         'ban' => '+60 minutes', // ban time
         'limiter' => '+5 seconds', // rate limiting interval
-        'csv' => '+72 hours', // CSV cold storage
+        'csv' => '+72 hours', // CSV 3 days cold storage
     ], (array) ($cfg['cache_profiles'] ?? [])
 );
 
