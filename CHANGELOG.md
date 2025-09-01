@@ -2,9 +2,13 @@
 
 ---
 
+`2025-09-01`  **`v2.4.8`**
+
+* **`1084-BUGFIX` bugfixes and UI enhancements**
+
 `2025-08-25`
 
-* **`1084-BUGFIX` regression fix** in randomized galleries and global switch
+* **`1084-BUGFIX` regression fix** in randomized galleries \+ global switch
 
 `2025-08-22`
 
