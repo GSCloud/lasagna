@@ -4,7 +4,7 @@
 
 `2025-09-01`  **`v2.4.8`**
 
-* **`1084-BUGFIX` bugfixes and UI enhancements**
+* **`1085-BUGFIX` bugfixes and UI enhancements**
 
 `2025-08-25`
 
