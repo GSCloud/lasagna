@@ -2,11 +2,11 @@
 'use strict';
 
 // CREATE LOCAL STORAGE UID
-var luid = null;
+var uuid = null;
 try {
-  luid = crypto.randomUUID();
+  uuid = crypto.randomUUID();
 } catch (e) {
-  luid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,
+  uuid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,
       c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
@@ -15,9 +15,10 @@ try {
 var nolocalstorage = false;
 try {
   if (localStorage) {
-    if (!localStorage['luid'] || localStorage['luid'].length !== 36) {
-      localStorage['luid'] = luid;
+    if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
+      localStorage['uuid'] = uuid;
     }
+    localStorage.removeItem('luid');
   }
 } catch (e) {
   nolocalstorage = true;
@@ -136,8 +137,8 @@ async function sha256(message) {
     GSC.data = {};
     GSC.nolocalstorage = false;
     if (nolocalstorage) {
-      GSC.localStorage = [];
       GSC.nolocalstorage = true;
+      GSC.localStorage = [];
     }
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.islogged = {{#admin}}true{{/admin}}{{^admin}}false{{/admin}};

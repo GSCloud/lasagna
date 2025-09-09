@@ -1,12 +1,11 @@
 (function (w, d, undefined) {
 
-  // logout cookie found
-  if (getCookie("logout")) {
-    $('#admin_main').hide();
-    delCookie("logout");
-    location.replace('/logout');
-    return;
-  }
+  const bc = new BroadcastChannel("auth_channel");
+
+  // logout event
+  bc.addEventListener('message', ({ data}) => {
+    if(data === 'logout') window.location.reload();
+  });
 
   if (w.GSC.init) {
     w.GSC.data = {} || w.GSC.data;
@@ -76,6 +75,7 @@
 
     // GSC.AdminUI()
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
+
       // fix various CSS styles
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
@@ -104,6 +104,11 @@
       $('#modelx-switch').click(function () {
           $('#modelx').removeClass('hide').show();
           $('#modelx-switch').hide();
+      });
+
+      // press logout
+      $('#logout').click(function () {
+        bc.postMessage('logout');
       });
 
 {{#dbg}}
