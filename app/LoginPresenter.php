@@ -58,7 +58,6 @@ class LoginPresenter extends APresenter
             ErrorPresenter::getInstance()->process(['code' => 500, 'message' => $err]); // phpcs:ignore
         }
         $this->checkRateLimit()->dataExpander($data);
-
         if (!\is_array($cfg = $this->getCfg())) {
             $err = 'Config: invalid data';
             $this->addCritical($err);
@@ -81,7 +80,7 @@ class LoginPresenter extends APresenter
             $this->setLocation($ret ? "{$redirectUrl}?returnURL={$ret}" : $redirectUrl); // phpcs:ignore
         }
 
-        // check if user is logged in, if so redirect to the last/main page
+        // if user is logged in, redirect to the last/main page
         if ($this->getCurrentUser()['id']) {
             $url = '/';
             $returnUrl = $_GET['returnURL'] ?? '/';
@@ -97,7 +96,7 @@ class LoginPresenter extends APresenter
                 'returnURL',
                 $_GET['returnURL'],
                 [
-                    'expires' => \time() + 60,
+                    'expires' => \time() + 120,
                     'path' => '/',
                     'domain' => '',
                     'secure' => !LOCALHOST,
