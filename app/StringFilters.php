@@ -1676,6 +1676,7 @@ class StringFilters
      */
     public static function renderGallerySpanShortCode(&$content, $flags = null)
     {
+
         if (!\is_string($content)) {
             return;
         }
@@ -1792,15 +1793,17 @@ class StringFilters
         if (!\is_string($mask)) {
             return null;
         }
-
+        
         // mask cleaning
         $mask = \trim($mask);
         $mask = \strtolower($mask);
-
-        // hack to fix mask for extraneous Markdown <em> markup
+        
+        // fix mask for Markdown <em>
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
-
+        // tilde replacement
+        $mask = \str_replace('~', '*', $mask);
+        
         // mask sanitization
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
