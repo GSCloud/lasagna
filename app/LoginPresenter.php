@@ -161,7 +161,7 @@ class LoginPresenter extends APresenter
                     'provider' => 'google',
                 ];
                 $this->clearCookie('oauth2state');
-                //$this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
+                $this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
                 $cookie_options = [
                     'expires' => \time() + 2592000,
                     'path' => '/',
