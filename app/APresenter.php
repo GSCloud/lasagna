@@ -780,7 +780,6 @@ abstract class APresenter
             'name' => $identity['name'] ?? null,
             'email' => $identity['email'] ?? null,
             'avatar' => $identity['avatar'] ?? null,
-            'custom' => $identity['custom'] ?? null,
             'provider' => $identity['provider'] ?? null,
             'ip' => $this->getIP(),
             'nonce' => $this->getIdentityNonce(),
@@ -884,30 +883,6 @@ abstract class APresenter
         }
         \ksort($this->_identity);
         return $this->_identity;
-    }
-
-    /**
-     * Set custom identity data and save it
-     *
-     * @param mixed $data custom data
-     * 
-     * @return self
-     */
-    public function setCustomIdentityData($data = null)
-    {
-        $this->_identity['custom'] = $data;
-        $this->setIdentity($this->_identity);
-        return $this;
-    }
-
-    /**
-     * Get custom identity data
-     *
-     * @return mixed custom data
-     */
-    public function getCustomIdentityData(): mixed
-    {
-        return $this->_identity['custom'] ?? null;
     }
 
     /**
