@@ -116,24 +116,36 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <!-- TABBED NAVIGATION -->
   <div id="menutabbed" class="row container noselect">
     <ul class="tabs grey darken-3 bold">
+    {{^disable_data_admin}}
       <li class="tab col s2">
         <a data-id="data" href="#data"><i class="fa-solid small fa-database"></i><span class="hide-on-small-only"> {{ l.a_tab_data }}</span></a>
       </li>
+    {{/disable_data_admin}}
+    {{^disable_fn_admin}}
       <li class="tab col s2">
         <a data-id="fn" href="#fn"><i class="fa-solid small fa-robot"></i><span class="hide-on-small-only"> {{ l.a_tab_fn }}</span></a>
       </li>
+    {{/disable_fn_admin}}
+    {{^disable_services_admin}}
       <li class="tab col s2">
         <a data-id="services" href="#services"><i class="fa-solid small fa-screwdriver-wrench"></i><span class="hide-on-small-only"> {{ l.a_tab_services }}</span></a>
       </li>
+    {{/disable_services_admin}}
+    {{^disable_users_admin}}
       <li class="tab col s2">
         <a data-id="users" href="#users"><i class="fa-regular small fa-user"></i><span class="hide-on-small-only"> {{ l.a_tab_users }}</span></a>
       </li>
+    {{/disable_users_admin}}
+    {{^disable_dev_admin}}
       <li class="tab col s2">
         <a data-id="dev" href="#dev"><i class="fa-solid fa-user-secret"></i><span class="hide-on-small-only"> {{ l.a_tab_dev }}</span></a>
       </li>
+    {{/disable_dev_admin}}
+    {{^disable_news_admin}}
       <li class="tab col s2">
         <a data-id="news" href="#news"><i class="fa-solid small fa-circle-info"></i><span class="hide-on-small-only"> {{ l.a_tab_changes }}</span></a>
       </li>
+    {{/disable_news_admin}}
     </ul>
   </div>
 

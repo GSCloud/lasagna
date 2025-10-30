@@ -1832,6 +1832,7 @@ class StringFilters
             $format = 'webp';
         }
 
+        // glob search
         if (\is_string($mask)) {
             \chdir(UPLOAD);
             $data = \glob($mask . ".{$format}") ?: null;
@@ -1848,7 +1849,7 @@ class StringFilters
     }
 
     /**
-     * Find uploaded files by mask
+     * Find uploaded files by a mask
      *
      * @param string $mask file mask
      * 
@@ -1856,18 +1857,24 @@ class StringFilters
      */
     public static function findFilesByMask($mask = null)
     {
-        if (!defined('UPLOAD') || !UPLOAD) {
+        if (!defined('UPLOAD') || !UPLOAD || !\is_dir(UPLOAD)) {
             return null;
         }
         if (!\is_string($mask)) {
             return null;
         }
 
+        // mask sanitization
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
         }
-        if (\is_string($mask) && \is_dir(UPLOAD)) {
+        if (!\is_string($mask)) {
+            return null;
+        }
+
+        // glob search
+        if (\is_string($mask)) {
             \chdir(UPLOAD);
             if ($data = \glob($mask) ?: null) {
                 \usort(
@@ -1892,6 +1899,11 @@ class StringFilters
     {
         if (\is_string($string)) {
             $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
+            if ($string && \is_string($string)) {
+                $string = \preg_replace('/_+/', '_', $string);
+                $string = \trim($string, '_');
+                $string = \trim($string);
+            }
         }
     }
 
@@ -1910,6 +1922,8 @@ class StringFilters
                 if ($string && \is_string($string)) {
                     $string = \strtolower($string);
                     $string = \preg_replace('/_+/', '_', $string);
+                    $string = \trim($string, '_');
+                    $string = \trim($string);
                 }
             }
         }
@@ -2045,7 +2059,6 @@ class StringFilters
         }
 
         // render all shortcodes
-        // TBD: bit map for enabled shortcodes
         self::renderImageShortCode($string, $flags);
         self::renderImageLeftShortCode($string, $flags);
         self::renderImageRightShortCode($string, $flags);

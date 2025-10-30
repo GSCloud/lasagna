@@ -34,10 +34,18 @@ google: [
 # RSS feed enable switch: true/false [default: disabled]
 #rss_feed: true
 
-# disable switches for Share Buttons: true/false [default: enabled]
+# DISABLE SWITCHES FOR SHARE BUTTONS: TRUE/FALSE [DEFAULT: ENABLED]
 #disable_share_bluesky: true
 #disable_share_facebook: true
 #disable_share_mastodon: true
+
+# DISABLE ADMIN PANEL SECTIONS: TRUE/FALSE [DEFAULT: ENABLED] (1 section MUST be enabled)
+#disable_data_admin: true
+#disable_fn_admin: true
+#disable_services_admin: true
+#disable_users_admin: true
+#disable_dev_admin: true
+#disable_news_admin: true
 
 # Umami Analytics
 umami: [
