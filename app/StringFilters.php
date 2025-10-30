@@ -1786,39 +1786,55 @@ class StringFilters
      */
     public static function findImagesByMask($mask = null, $format = 'webp')
     {
-        if (!defined('UPLOAD') || !UPLOAD) {
+        if (!defined('UPLOAD') || !UPLOAD || !\is_dir(UPLOAD)) {
             return null;
         }
         if (!\is_string($mask)) {
             return null;
         }
 
+        // mask cleaning
         $mask = \trim($mask);
         $mask = \strtolower($mask);
 
-        // hack to fix Markdown <em> markup
+        // hack to fix mask for extraneous Markdown <em> markup
         $mask = \str_replace('<em>', '_', $mask);
         $mask = \str_replace('</em>', '_', $mask);
+
+        // mask sanitization
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
         }
-
         if (!\is_string($mask)) {
             return null;
         }
 
+        // backwards compatibility - masks always end with '*'
+        if (!\str_contains($mask, '*')) {
+            $mask .= '*';
+        }
+
+        // format sanitization
         $format = \strtolower($format);
+        $allowed_extensions = ['.webp', '.png', '.jpg', '.jpeg', '.gif'];
+        $has_known_extension = false;
+        foreach ($allowed_extensions as $ext) {
+            if (\str_ends_with($mask, $ext)) {
+                $has_known_extension = true;
+                break;
+            }
+        }
         if (!\is_string($format) || !\strlen($format)) {
             $format = 'webp';
         }
-        if (!\in_array($format, ['gif', 'jpg', 'png', 'webp'])) {
+        if ($has_known_extension) {
             $format = 'webp';
         }
 
-        if (\is_string($mask) && \is_dir(UPLOAD)) {
+        if (\is_string($mask)) {
             \chdir(UPLOAD);
-            $data = \glob($mask . '*.' . $format) ?: null;
+            $data = \glob($mask . ".{$format}") ?: null;
             if ($data) {
                 \usort(
                     $data, function ($a, $b) {
