@@ -1901,8 +1901,10 @@ class StringFilters
             $string = \preg_replace(self::STRING_SANITIZE, '_', \trim($string));
             if ($string && \is_string($string)) {
                 $string = \preg_replace('/_+/', '_', $string);
-                $string = \trim($string, '_');
-                $string = \trim($string);
+                if ($string && \is_string($string)) {
+                    $string = \trim($string, '_');
+                    $string = \trim($string);
+                }
             }
         }
     }
@@ -1922,8 +1924,10 @@ class StringFilters
                 if ($string && \is_string($string)) {
                     $string = \strtolower($string);
                     $string = \preg_replace('/_+/', '_', $string);
-                    $string = \trim($string, '_');
-                    $string = \trim($string);
+                    if ($string && \is_string($string)) {
+                        $string = \trim($string, '_');
+                        $string = \trim($string);
+                    }
                 }
             }
         }
