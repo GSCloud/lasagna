@@ -2,6 +2,15 @@
 
 ---
 
+`2025-10-30`
+
+* **`1088-FEATURE`** support for **admin tabs** selective turn off  
+* **`1087-BUGFIX` support for \~ as \*** in shortcut masks like **\[gallery some\~thing\~\]**
+
+`2025-09-09`
+
+* **`1086-BUGFIX` multi-tab logout** via Broadcast Channel
+
 `2025-09-01`  **`v2.4.8`**
 
 * **`1085-BUGFIX` bugfixes and UI enhancements**
