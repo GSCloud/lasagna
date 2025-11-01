@@ -177,7 +177,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.4.8');
+define('ENGINE', 'Tesseract v2.4.9');
 $data['ENGINE'] = ENGINE;
 
 // version to load: https://cdnjs.com/libraries/codemirror 
