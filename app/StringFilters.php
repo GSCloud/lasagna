@@ -55,6 +55,34 @@ class StringFilters
     // FLAGS: 640px thumbnails
     const THUMBS_640 = 32;
 
+    // FLAGS: 1280px thumbnails
+    const THUMBS_1280 = 64;
+
+    // shortcodes for tokenization
+    const ALL_SHORTCODES = [
+        'figure',
+        'gallery',
+        'galleryspan',
+        'googlemap',
+        'image',
+        'imageleft',
+        'imageresp',
+        'imageright',
+        'mastodon',
+        'soundcloud',
+        'twitch',
+        'twitchvid',
+        'vimeo',
+        'youtube',
+    ];
+
+    // shortcodes cache during tokenization
+    // phpcs:ignore
+    /**
+     * @var array<string><string>
+     */
+    private static array $_shortCodeCache = [];
+
     // English lowercase characters
     // phpcs:ignore
     /**
@@ -1797,14 +1825,6 @@ class StringFilters
         // mask cleaning
         $mask = \trim($mask);
         $mask = \strtolower($mask);
-        
-        // fix mask for Markdown <em>
-        $mask = \str_replace('<em>', '_', $mask);
-        $mask = \str_replace('</em>', '_', $mask);
-        // tilde replacement
-        $mask = \str_replace('~', '*', $mask);
-        
-        // mask sanitization
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
@@ -1813,8 +1833,8 @@ class StringFilters
             return null;
         }
 
-        // backwards compatibility - masks always end with '*'
-        if (!\str_contains($mask, '*')) {
+        // mask always ends with '*'
+        if (!\str_ends_with($mask, '*')) {
             $mask .= '*';
         }
 
@@ -2041,9 +2061,9 @@ class StringFilters
     }
 
     /**
-     * Process short codes in a string (also process Markdown if starting with it)
+     * Process shortcodes in a string
      *
-     * @param string $string input string containing short codes by reference
+     * @param string $string input string containing shortcodes by reference
      * @param mixed  $flags  flags
      *
      * @return void
@@ -2059,13 +2079,27 @@ class StringFilters
             throw new \InvalidArgumentException('shortCodesProcessor: incorrect flags'); // phpcs:ignore
         }
 
+        // tokenize shortcodes
+        self::tokenize($string);
+
+        $md = false;
         if (\str_starts_with($string, '[markdown]')) {
             self::renderMarkdown($string);
+            $md = true;
         } elseif (\str_starts_with($string, '[markdownextra]')) {
             self::renderMarkdownExtra($string);
+            $md = true;
         }
 
-        // render all shortcodes
+        // detokenize shortcodes
+        self::detokenize($string);
+
+        if (!$md) {
+            // process shortcodes only for Markdown content!
+            return;
+        }
+
+        // render shortcodes
         self::renderImageShortCode($string, $flags);
         self::renderImageLeftShortCode($string, $flags);
         self::renderImageRightShortCode($string, $flags);
@@ -2080,4 +2114,57 @@ class StringFilters
         self::renderTwitchVidShortCode($string, $flags);
         self::renderSoundCloudShortCode($string, $flags);
     }
+
+    /**
+     * Extract shortcodes and replace them with unique tokens (~sc#~)
+     *
+     * @param string $string input string containing shortcodes by reference
+     * 
+     * @return void
+     */
+    public static function tokenize(&$string): void
+    {
+        self::$_shortCodeCache = [];
+        $names = \implode('|', self::ALL_SHORTCODES);
+        $pattern = '/\[(' . $names . ')(\s[^\]]*)?\]/Usi';
+
+        if (\preg_match_all($pattern, $string, $matches)) {
+            $tokens = [];
+            $replacements = [];
+            $i = 1;
+            foreach ($matches[0] as $match) {
+                if (\preg_match('/^\[(\w+)/', $match, $name_match)) {
+                    $shortcode_name = $name_match[1];
+                    $lower_name = \strtolower($shortcode_name);
+                    $normalized_match = \str_replace('[' . $shortcode_name, '[' . $lower_name, $match); // phpcs:ignore
+                } else {
+                    $normalized_match = $match;
+                }
+                $token = '~sc' . $i++ . '~';
+                self::$_shortCodeCache[$token] = $match;
+                $tokens[] = $match;
+                $replacements[] = $token;
+            }
+            $string = \str_replace($tokens, $replacements, $string);
+        }
+        //\bdump(self::$_shortCodeCache);
+    }
+
+    /**
+     * Replace all shortcode tokens (~sc#~) with the original content
+     *
+     * @param string $string input string containing shortcode tokens by reference
+     * 
+     * @return void
+     */
+    public static function detokenize(&$string): void
+    {
+        if (empty(self::$_shortCodeCache)) {
+            return;
+        }
+
+        $string = \str_replace(\array_keys(self::$_shortCodeCache), \array_values(self::$_shortCodeCache), $string); // phpcs:ignore
+        self::$_shortCodeCache = [];
+    }
+
 }

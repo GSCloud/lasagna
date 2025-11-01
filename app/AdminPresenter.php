@@ -49,12 +49,12 @@ class AdminPresenter extends APresenter
 
     /* @var array thumbnails width to create */
     const THUMBS_CREATE_WIDTH = [
-        80, 160, 320, 640
+        80, 160, 320, 640, 1280
     ];
 
     /* @var array thumbnails width to delete */
     const THUMBS_DELETE_WIDTH = [
-        80, 160, 320, 640
+        80, 160, 320, 640, 1280
     ];
 
     /* @var array thumbnail extensions to delete */
