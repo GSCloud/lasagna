@@ -2,10 +2,10 @@
 
 ---
 
-`2025-10-30`
+`2025-11-01`  **`v2.4.9`**
 
-* **`1088-FEATURE`** support for **admin tabs** selective turn off  
-* **`1087-BUGFIX` support for \~ as \*** in shortcut masks like **\[gallery some\~thing\~\]**
+* **`1088-FEATURE`** support for **admin tabs** selective turn off (at least one tab must stay active)  
+* **`1087-BUGFIX` support for \*** in shortcode masks like **\[gallery some\*thing\]**, new **tokenizer/detokenizer** of shortcodes
 
 `2025-09-09`
 
