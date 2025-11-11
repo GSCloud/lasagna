@@ -698,7 +698,9 @@ abstract class APresenter
         $parts = \array_filter($parts);
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
-        //$s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
+        while (\strpos($s, SS . SS) !== false) {
+            $s = \str_replace(SS . SS, SS, $s);
+        }
         return \hash('sha256', $s);
     }
 
