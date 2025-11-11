@@ -1829,7 +1829,8 @@ class StringFilters
         $lazy_attr = $lazy ? ' loading="lazy" ' : '';
 
         $counter = 0;
-        $pattern = '#\[qrcode\s*(.*?)\]#is';
+        //$pattern = '#\[qrcode\s*(.*?)\]#is';
+        $pattern = '#\[qrcode\s*([^<>"\'\]]*)\]#is';
         while (\str_contains($content, '[qrcode ')) {
             $counter++;
             $replace = '<div '
@@ -1838,7 +1839,7 @@ class StringFilters
                     . '<img '
                     . $lazy_attr
                     . 'class="qrcode-sc" '
-                    . 'src="$1" '
+                    . 'src="/qr/m/$1" '
                     . 'alt="QR"'
                     . '></div>';
             if (\is_string($content)) {
