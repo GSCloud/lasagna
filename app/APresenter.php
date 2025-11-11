@@ -698,7 +698,7 @@ abstract class APresenter
         $parts = \array_filter($parts);
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
-        $s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
+        //$s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
         return \hash('sha256', $s);
     }
 
@@ -725,6 +725,7 @@ abstract class APresenter
                 if (!\preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
                     $this->addError("COOKIE: invalid UID cookie");
                     unset($_COOKIE[$name]);
+                    exit;
                 }
             }
             if (!\array_key_exists($name, $_COOKIE)) {
@@ -837,12 +838,7 @@ abstract class APresenter
         $fingerprint = $this->getBrowserFingerprint();
 
         if (isset($_COOKIE[APPNAME])) {
-            // crash fix implementation
-            $GLOBALS[HALITE_CRASH_FLAG] = true;
-            \set_time_limit(1);
             $content = $this->getCookie(APPNAME);
-            \set_time_limit(30);
-            $GLOBALS[HALITE_CRASH_FLAG] = false;
             if (!\is_string($content)) {
                 $this->logout();
             }
@@ -1074,7 +1070,9 @@ abstract class APresenter
             if (\file_exists($keyfile) && \is_readable($keyfile)) {
                 $cookie = new Cookie(KeyFactory::loadEncryptionKey($keyfile));
                 try {
-                    return $cookie->fetch($name);
+                    $c = $cookie->fetch($name);
+                    \error_log("decrypted cookie: {$c}");
+                    return $c;
                 } catch (\Throwable $e) {
                     $err = "HALITE: error reading/decrypting cookie '{$name}': ";
                     $this->addError($err . $e->getMessage());
@@ -2179,10 +2177,12 @@ abstract class APresenter
      */
     public function getIdentityNonce()
     {
+        \error_log("getting Nonce");
         $file = $this->getCfg('identity_nonce_file') ?? self::IDENTITY_NONCE_FILE;
         $file = DATA . DS . $file;
         if (\file_exists($file) && \is_readable($file)) {
             if ($nonce = \file_get_contents($file)) {
+                //\error_log("Using existing identity nonce: " . $nonce);
                 if (\preg_match('/^[a-f0-9]{64}$/', $nonce)) {
                     return $nonce;
                 } else {
