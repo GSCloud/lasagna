@@ -1806,6 +1806,51 @@ class StringFilters
     }
 
     /**
+     * Render QR short code(s)
+     *
+     * @param string $content string containing [qrcode param]
+     * @param mixed  $flags   flags
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderQRShortCode(&$content, $flags = null)
+    {
+        if (!\is_string($content) || $content === '') {
+            return;
+        }
+
+        if (!\is_integer($flags)) {
+            throw new \InvalidArgumentException('renderQRSC: FLAGS!');
+        }
+        
+        $lazy = (bool) ($flags & self::LAZY_LOADING);
+        $lazy_attr = $lazy ? ' loading="lazy" ' : '';
+
+        $counter = 0;
+        $pattern = '#\[qrcode\s*(.*?)\]#is';
+        while (\str_contains($content, '[qrcode ')) {
+            $counter++;
+            $replace = '<div '
+                    . 'class="qr-container" '
+                    . "data-counter={$counter}>"
+                    . '<img '
+                    . $lazy_attr
+                    . 'class="qrcode-sc" '
+                    . 'src="$1" '
+                    . 'alt="QR"'
+                    . '></div>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content, 1);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
      * Find uploaded images by a mask
      *
      * @param string $mask   file mask
@@ -2100,6 +2145,7 @@ class StringFilters
         }
 
         // render shortcodes
+        self::renderQRShortCode($string, $flags);
         self::renderImageShortCode($string, $flags);
         self::renderImageLeftShortCode($string, $flags);
         self::renderImageRightShortCode($string, $flags);
@@ -2147,7 +2193,6 @@ class StringFilters
             }
             $string = \str_replace($tokens, $replacements, $string);
         }
-        //\bdump(self::$_shortCodeCache);
     }
 
     /**
