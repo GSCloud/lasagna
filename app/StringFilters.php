@@ -69,6 +69,7 @@ class StringFilters
         'imageresp',
         'imageright',
         'mastodon',
+        'qrcode',
         'soundcloud',
         'twitch',
         'twitchvid',
@@ -1829,8 +1830,7 @@ class StringFilters
         $lazy_attr = $lazy ? ' loading="lazy" ' : '';
 
         $counter = 0;
-        //$pattern = '#\[qrcode\s*(.*?)\]#is';
-        $pattern = '#\[qrcode\s*([^<>"\'\]]*)\]#is';
+        $pattern = '#\[qrcode\s*(.*?)\]#is';
         while (\str_contains($content, '[qrcode ')) {
             $counter++;
             $replace = '<div '
@@ -1839,7 +1839,7 @@ class StringFilters
                     . '<img '
                     . $lazy_attr
                     . 'class="qrcode-sc" '
-                    . 'src="/qr/m/$1" '
+                    . 'src="$1" '
                     . 'alt="QR"'
                     . '></div>';
             if (\is_string($content)) {
