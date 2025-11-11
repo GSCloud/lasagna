@@ -2177,17 +2177,11 @@ abstract class APresenter
      */
     public function getIdentityNonce()
     {
-        \error_log("getting Nonce");
         $file = $this->getCfg('identity_nonce_file') ?? self::IDENTITY_NONCE_FILE;
         $file = DATA . DS . $file;
         if (\file_exists($file) && \is_readable($file)) {
             if ($nonce = \file_get_contents($file)) {
-                //\error_log("Using existing identity nonce: " . $nonce);
-                if (\preg_match('/^[a-f0-9]{64}$/', $nonce)) {
-                    return $nonce;
-                } else {
-                    \error_log("Invalid format in existing identity nonce.");
-                }
+                return $nonce;
             }
         }
         try {
