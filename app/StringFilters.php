@@ -29,7 +29,7 @@ use Michelf\MarkdownExtra;
 class StringFilters
 {
     // max. single shortcode iterations
-    const ITERATIONS = 30;
+    const ITERATIONS = 100;
 
     // SANITIZATION: IMAGE MASK for search
     const UPLOAD_SANITIZE = '/[^a-z0-9!@#+*=,;\-._]+/i';
@@ -2131,19 +2131,12 @@ class StringFilters
         $md = false;
         if (\str_starts_with($string, '[markdown]')) {
             self::renderMarkdown($string);
-            $md = true;
         } elseif (\str_starts_with($string, '[markdownextra]')) {
             self::renderMarkdownExtra($string);
-            $md = true;
         }
 
         // detokenize shortcodes
         self::detokenize($string);
-
-        if (!$md) {
-            // process shortcodes only for Markdown content!
-            return;
-        }
 
         // render shortcodes
         self::renderQRShortCode($string, $flags);
