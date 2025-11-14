@@ -34,6 +34,22 @@
 {{/COOKIE.debug}}
 {{/admin_group_admin}}
 
+{{#admin_group_manager}}
+{{#COOKIE.debug}}
+<style>
+* {background-color:rgba(255,0,0,.2)}
+* * {background-color:rgba(0,255,0,.2)}
+* * * {background-color:rgba(0,0,255,.2)}
+* * * * {background-color:rgba(255,0,255,.2)}
+* * * * * {background-color:rgba(0,255,255,.2)}
+* * * * * * {background-color:rgba(255,255,0,.2)}
+* * * * * * * {background-color:rgba(255,0,0,.2)}
+* * * * * * * * {background-color:rgba(0,255,0,.2)}
+* * * * * * * * * {background-color:rgba(0,0,255,.2)}
+</style>
+{{/COOKIE.debug}}
+{{/admin_group_manager}}
+
 <script nonce="{{ csp_nonce }}">
 window.addEventListener("load", function() {
   if ("serviceWorker" in navigator) {

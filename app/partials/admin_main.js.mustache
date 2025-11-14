@@ -356,8 +356,6 @@
               $('#files_count').html('0');
               data.data.count = 0;
             } else {
-
-              // stubs
               var stubs = '';
               var stubs_rendered = 0;
               if (data.data.stubs && data.data.stubs_count) {
@@ -368,7 +366,6 @@
 
                   var stubcolor = 'grey darken-3';
                   if (data.data.stubs[i] === search) stubcolor = 'red';
-
                   stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
                   stubs_rendered++;
                 }
@@ -413,27 +410,25 @@
                 }
 
                 printed++;
+                if (printed > 100) continue;
   
                 var si = '';
                 if (data.data.files[i]["thumbnails"] === null) {
-
                   // ICON
                   si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
                   si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align white-text" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
                 } else {
-
                   // THUMBNAIL
                   si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
-                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" width=120 src="/upload/' + data.data.files[i]['thumbnails'][160] + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" width=120 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
                   si += '</a>';
-                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align card-link" href="/upload/' + name + '">' + name + '</a></div>';
+                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align card-link" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
                 }
   
                 // AGE + SIZE
                 var saz = '';
-
                 var warn = '';
-                if (data.data.files[i]["size"] > 1024*1024) {
+                if (data.data.files[i]["size"] > 2*1024*1024) {
                   warn = 'bold red warning';
                 }
 
@@ -449,10 +444,10 @@
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
-                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped extrapadding imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">📋' + wt[j] + '</span>&nbsp;&nbsp;';
+                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">📋' + wt[j] + '</span>&nbsp;&nbsp;';
                 }
                 if (sml.length) {
-                  sml = '<div class="row center extrapadding"><i class="fa-solid fa-shapes"></i>&nbsp;' + sml + '</div>';
+                  sml = '<div class="row center"><i class="fa-solid fa-shapes"></i>&nbsp;' + sml + '</div>';
                 }
   
                 // DELETE + RCB
