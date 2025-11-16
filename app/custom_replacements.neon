@@ -5,7 +5,6 @@
 "facebookicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-facebook blue-text text-darken-4"></i>&nbsp;&nbsp;'# Facebook is dark blue
 "githubicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-github grey-text text-darken-2"></i>&nbsp;&nbsp;'# GitHub is black/dark grey
 "gitlabicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-gitlab deep-orange-text text-darken-3"></i>&nbsp;&nbsp;'# GitLab is orange
-"googleicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-google red-text text-darken-1"></i>&nbsp;&nbsp;'# Google red is common for the G
 "googleplayicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-google-play light-green-text text-accent-4"></i>&nbsp;&nbsp;'# Google Play is a vibrant green
 "gumroadicon ": '&nbsp;&nbsp;<i class="fa-2x fa-solid fa-store grey-text text-darken-3"></i>&nbsp;&nbsp;' # Gumroad is dark grey
 "instagramicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-instagram pink-text text-accent-2"></i>&nbsp;&nbsp;'# Instagram pink is a good choice
@@ -28,3 +27,10 @@
 "webicon ": '&nbsp;&nbsp;<i class="fa-2x fa-solid fa-share-nodes green-text text-darken-2"></i>&nbsp;&nbsp;'
 "whatsappicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-whatsapp green-text text-darken-3"></i>&nbsp;&nbsp;'# WhatsApp is dark green
 "youtubeicon ": '&nbsp;&nbsp;<i class="fa-2x fa-brands fa-youtube red-text text-darken-4"></i>&nbsp;&nbsp;'# YouTube is dark red
+
+"cloudflareicon": '&nbsp;&nbsp;<i title="Cloudflare" class="fa-solid fa-shield-halved orange-text text-darken-3"></i>&nbsp;' # CLOUDFLARE
+"dockericon": '&nbsp;&nbsp;<i title="Docker" class="fa-brands fa-docker light-blue-text text-darken-4"></i>&nbsp;' # DOCKER
+"googleicon": '&nbsp;&nbsp;<i title="Google" class="fa-brands fa-google red-text text-darken-1"></i>&nbsp;'# GOOGLE
+"gscloudicon": '&nbsp;&nbsp;<i title="GS Cloud" class="fa-solid fa-cloud yellow-text text-lighten-1"></i>&nbsp;' # GSC
+"hetznericon": '&nbsp;&nbsp;<i title="Hetzner" class="fa-solid fa-server deep-purple-text text-lighten-1"></i>&nbsp;' # HETZNER
+"lasagnaicon": '&nbsp;&nbsp;<i title="Tesseract Lasagna" class="fa-solid fa-layer-group yellow-text text-darken-1"></i>&nbsp;' # TESSERACT LASAGNA
