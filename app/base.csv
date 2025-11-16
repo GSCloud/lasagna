@@ -481,7 +481,7 @@ content: ""white black-text""
 skin: ""white""]"
 nojs_placeholder,ALERT,JAVASCRIPT IS DISABLED,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT IST DEAKTIVIERT
 nojs_sorry,ALERT,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
-nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie sollten JavaScript aktivieren, um diese Anwendung zu verwenden."
+nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie müssen JavaScript aktivieren, um diese Anwendung nutzen zu können."
 page_outdated,ALERT,A new version of the application is available.,K dispozici je nová verze aplikace.,K dispozícii je nová verzia aplikácie.,Eine neue Version der Anwendung ist verfügbar.
 page_outdated_button,BUTTON,👷‍♀️ UPDATE,👷‍♀️ AKTUALIZOVAT,👷‍♀️ AKTUALIZOVAŤ,👷‍♀️ AKTUALISIEREN
 share_bluesky,BUTTON,Bluesky,Bluesky,Bluesky,Bluesky
@@ -515,9 +515,9 @@ server_error_info_410,ERROR,The resource requested is no longer available and wi
 server_error_info_420,ERROR,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.
 server_error_info_429,ERROR,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.,The client is being rate limited.
 server_error_info_500,ERROR,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.,Internal server error just happened and was logged.
-poweredby,FOOTER,"Powered by Hetzner, Google and Cloudflare technology. We don't use 3rd party cookies.","Využívá technologie Hetzner, Google a Cloudflare. Nepoužíváme cookies třetích stran.","Používa technológiu Hetzner, Google a Cloudflare. Nepoužívame cookies tretích strán.","Unterstützt durch Hetzner-, Google- und Cloudflare-Technologie. Wir verwenden keine Cookies von Drittanbietern."
+poweredby,FOOTER,"[markdown]Powered by hetznericon Hetzner, googleicon Google and cloudflareicon Cloudflare technology. We don't use 3rd party cookies.","[markdown]Využívá technologie hetznericon Hetzner, googleicon Google a cloudflareicon Cloudflare. Nepoužíváme cookies třetích stran.","[markdown]Vytvorené pomocou technológie od spoločností hetznericon Hetzner, googleicon Google a cloudflareicon Cloudflare. Nepoužívame súbory cookie tretích strán.","[markdown]Diese Technologie wird von hetznericon Hetzner, googleicon Google und cloudflareicon Cloudflare bereitgestellt. Wir verwenden keine Cookies von Drittanbietern."
 privacy_policy,FOOTER,Privacy Policy,Zásady ochrany osobních údajů,Zásady ochrany osobných údajov,Datenschutzrichtlinie
-company_eet,INFO,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Gemäß dem Umsatzerfassungsgesetz ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig ist er verpflichtet, den erhaltenen Erlös online bei der Steuerverwaltung zu melden; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
+company_eet,INFO,"Under the Sales Records Act, the seller is required to issue a receipt to the buyer. At the same time, he is required to register the received revenue with the tax administrator online; in the event of a technical outage, at the latest within 48 hours.",Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je povinen zaevidovat přijatou tržbu u správce daně online; v případě technického výpadku pak nejpozději do 48 hodin.,Podľa zákona o evidencii tržieb je predávajúci povinný vydať potvrdenie pre nakupujúceho. Súčasne je povinný zaregistrovať príjmy u správca dane on-line; v prípade technického výpadku najneskôr do 48 hodín.,"Nach dem Gesetz über Verkaufsaufzeichnungen ist der Verkäufer verpflichtet, dem Käufer eine Quittung auszustellen. Gleichzeitig muss er die erhaltenen Einnahmen dem Finanzamt online melden; im Falle eines technischen Ausfalls spätestens innerhalb von 48 Stunden."
 author,META,$author,$author,$author,$author
 meta_author,META,$author,$author,$author,$author
 article_author,META,$author,$author,$author,$author
@@ -564,14 +564,14 @@ a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCI
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
 a_cssdebugger,BUTTON,DEBUGGER,DEBUGGER,DEBUGGER,DEBUGGER
 a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
-a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,TOKEN ERSTELLEN
+a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,Token erstellen
 a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
-a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESEL,PASSWORTVERWALTUNG
+a_google_password,BUTTON,PASSWORD MANAGEMENT,SPRÁVA HESEL,SPRÁVA HESIEL,PASSWORTVERWALTUNG
 a_google_search,BUTTON,SEARCH CONSOLE,SEARCH CONSOLE,SEARCH CONSOLE,SUCHKONSOLE
 a_invoices,BUTTON,INVOICES,FAKTURY,FAKTÚRY,RECHNUNGEN
-a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSIŤ SA,LOGIN
+a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSENIE,LOGIN
 a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
-a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,ZBOHOM 👋,TSCHÜSS 👋
+a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,DO VIDZENIA 👋,TSCHÜSS 👋
 a_manual,BUTTON,MANUAL,MANUÁL,MANUÁL,HANDBUCH
 a_phpdebugger,BUTTON,DEBUGGER,DEBUGGER,DEBUGGER,DEBUGGER
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
@@ -579,13 +579,13 @@ a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
 a_show_translations,BUTTON,📍,📍,📍,📍
 a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
 a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
-a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZOVAŤ,AKTUALISIEREN
+a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZÁCIA,AKTUALISIEREN
 a_error_general,ERROR,🤯 ERROR!,🤯 CHYBA!,🤯 CHYBA!,🤯 FEHLER!
-a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Beim Hochladen der Dateien ist ein Fehler aufgetreten: Interner Fehler.
+a_upload_ajax,ERROR,💀 Got error when uploading files: Internal Error.,💀 Došlo k chybě při nahrávání: Internal Error.,💀 Pri nahrávaní súborov sa vyskytla chyba: Interná chyba.,💀 Fehler beim Hochladen der Dateien: Interner Fehler.
 a_upload_filetype,ERROR,😳 This file type is not accepted.,😳 Tento typ souboru není povolen.,😳 Tento typ súboru nie je akceptovaný.,😳 Dieser Dateityp wird nicht akzeptiert.
 a_upload_http,ERROR,😵 Error uploading files: HTTP 403 Forbidden.,😵 Chyba nahrávání: HTTP 403 Forbidden.,😵 Chyba pri nahrávaní súborov: HTTP 403 Zakázané.,😵 Fehler beim Hochladen der Dateien: HTTP 403 Verboten.
 a_upload_maxbytes,ERROR,😵 Total filesize is too big (max. 100 MB).,😵 Obsah je příliš veliký (max. 100 MB).,😵 Celková veľkosť súboru je príliš veľká (max. 100 MB).,😵 Die Gesamtdateigröße ist zu groß (max. 100 MB).
-a_upload_maxfiles,ERROR,😵 Too many files were selected (max. 100).,😵 Vybráno příliš mnoho souborů (max. 100).,😵 Bolo vybratých príliš veľa súborov (max. 100).,😵 Es wurden zu viele Dateien ausgewählt (max. 100).
+a_upload_maxfiles,ERROR,😵 Too many files were selected (max. 100).,😵 Vybráno příliš mnoho souborů (max. 100).,😵 Bolo vybraných príliš veľa súborov (max. 100).,😵 Es wurden zu viele Dateien ausgewählt (max. 100).
 a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.
 a_age,INFO,age,stáří,vek,Alter
 a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /de/id/)
@@ -609,32 +609,32 @@ a_processing,INFO,processing,zpracování,spracovanie,Verwechseln
 a_processing_data,INFO,The system is processing data ☕️,Systém zpracovává data ☕️,Systém spracováva údaje ☕️,Das System verarbeitet Daten ☕️
 a_redis,INFO,REDIS,REDIS,REDIS,REDIS
 a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,FERNFUNKTIONSANRUFE
-a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,GESPEICHERT OK
+a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,GESPERRT OK
 a_total,INFO,total,celkem,celkom,Gesamt
 a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnutý.,UPLOAD ist deaktiviert.
 a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
-a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie sa skončilo.,Der Upload ist abgeschlossen.
+a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie bolo dokončené.,Der Upload ist abgeschlossen.
 a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
 a_data_info,SUBPAR,"fetch remote data, manage uploads and articles","načítání vzdálených dat, správa nahrávání a článků","načítavať vzdialené dáta, spravovať nahrávania a články","Remote-Daten abrufen, Uploads und Artikel verwalten"
 a_dev_info,SUBPAR,special development functions,speciální vývojové funkce,špeciálne vývojové funkcie,spezielle Entwicklungsfunktionen
-a_groups_info,SUBPAR,user lists and their permissions,seznamy uživatelů a jejich oprávnění,zoznamy používateľov a ich povolenia,Benutzerlisten und ihre Berechtigungen
+a_groups_info,SUBPAR,user lists and their permissions,seznamy uživatelů a jejich oprávnění,zoznamy používateľov a ich povolenia,Benutzerlisten und deren Berechtigungen
 a_news_info,SUBPAR,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
 a_news_os_info,SUBPAR,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
 a_news_sc_info,SUBPAR,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
-a_remote_fn_info,SUBPAR,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,ermöglicht Ihnen die Generierung eines autorisierten Links zum Aufruf einer Remote-Systemfunktion
-a_services_info,SUBPAR,external services,externí služby,externé služby,externe Dienste
-a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORTE,SCHLIESSEN
-a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (nicht speichern)
-a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emojis,Emojis
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Legacy,Vermächtnis
-a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíci a ľudia,Smileys & Menschen
+a_remote_fn_info,SUBPAR,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,"ermöglicht es Ihnen, einen autorisierten Link zum Aufruf einer Remote-Systemfunktion zu generieren."
+a_services_info,SUBPAR,external services,externí služby,externé služby,externe Dienstleistungen
+a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORENÉ,SCHLIESSEN
+a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (Speichern wird nicht gespeichert)
+a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emoji,Emojis
+a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
+a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíky a ľudia,Smileys & Menschen
 a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
-a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a pitie,Speisen & Getränke
-a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a predmety,Aktivität & Objekte
+a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a nápoje,Essen & Trinken
+a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a objekty,Aktivität & Objekte
 a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
 a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
-a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,na celú obrazovku,Vollbild
-a_summer_history_ttip,SUMMERNOTE,history,historie,histórie,Geschichte
+a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,celá obrazovka,Vollbild
+a_summer_history_ttip,SUMMERNOTE,history,historie,história,Geschichte
 a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
 a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
 a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalt speichern
@@ -654,19 +654,19 @@ a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hin
 a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
 a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll
 a_debugger_ttip,TOOLTIP,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF
-a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Zeilenanzahl)
-a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Sheet
+a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
+a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google-Tabelle
 a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 Emoji-Panel
 a_files_ttip,TOOLTIP,file manager,správce souborů,správca súborov,Dateimanager
-a_flush_ttip,TOOLTIP,clears all caches,vyprázdní veškerou cache,vyprázdní všetku cache,löscht alle Caches
+a_flush_ttip,TOOLTIP,clears all caches,vyprázdní veškerou cache,vyprázdní všetku cache,Löscht alle Caches
 a_google_account_ttip,TOOLTIP,Google Account settings,nastavení Google účtu,Nastavenia účtu Google,Google-Kontoeinstellungen
-a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Google,Google-Passwörter
-a_google_search_ttip,TOOLTIP,Google Search Console,Google Search konzole,Google Search Console,Google Search Console
+a_google_password_ttip,TOOLTIP,Google Passwords,nastavení Google Passwords,Heslá Googlu,Google-Passwörter
+a_google_search_ttip,TOOLTIP,Google Search Console,Google Search konzole,Konzola vyhľadávania Google,Google Search Console
 a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA manuál,Tesseract LASAGNA manuál,Tesseract LASAGNA-Dokumentation
-a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,lokalizačná šablóna,Lokalisierungsvorlage
+a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,šablóna lokalizácie,Lokalisierungsvorlage
 a_login_ttip,TOOLTIP,LOGIN,PŘIHLÁSIT SE,PRIHLÁSIŤ SA,LOGIN
 a_logout_ttip,TOOLTIP,LOGOUT,ODHLÁSIT SE,ODHLÁSIŤ SA,ABMELDEN
 a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
 a_umami_ttip,TOOLTIP,Umami Analytics,Umami Analytika,Umami Analytika,Umami Analytics
-a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje od spoločnosti Google,Daten von Google aktualisieren
-a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Batch-Datei-Uploads
+a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje z Googlu,Daten von Google aktualisieren
+a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Stapel-Datei-Uploads
