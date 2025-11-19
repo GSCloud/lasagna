@@ -1111,7 +1111,7 @@ class StringFilters
             $replace = '<span class="figure-container">'
                 . '<figure><img '
                 . $lazy
-                . 'class=figuresc '
+                . 'class="figuresc responsive-img" '
                 . 'src="' . CDN . '/upload/$1.webp" '
                 . "data-counter={$counter} "
                 . 'data-name="$1" '
