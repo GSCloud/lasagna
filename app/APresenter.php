@@ -67,14 +67,16 @@ abstract class APresenter
     const GS_SHEET_PREFIX = 'https://docs.google.com/spreadsheets/d/';
 
     /* @var string Google Sheet export to CSV URL postfix */
-    const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
-    //const GS_CSV_POSTFIX = '/pub?output=csv';
+    //const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
+    const GS_CSV_POSTFIX = '/pub?output=csv';
 
     /* @var string Google Sheet export to TSV URL postfix */
-    const GS_TSV_POSTFIX = '/pub?gid=0&single=true&output=tsv';
+    //const GS_TSV_POSTFIX = '/pub?gid=0&single=true&output=tsv';
+    const GS_TSV_POSTFIX = '/pub?output=tsv';
 
     /* @var string Google Sheet edit URL postfix */
-    const GS_SHEET_POSTFIX = '/edit#gid=0';
+    //const GS_SHEET_POSTFIX = '/edit#gid=0';
+    const GS_SHEET_POSTFIX = '/edit';
 
     /* @var integer rate limiter - max. hits per cache interval */
     const LIMITER_MAXIMUM = 30;
