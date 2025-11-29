@@ -57,52 +57,52 @@
       rel="nofollow noopener"
       class="white-text" 
       title="SOS"
-      href="mailto:{{ l.support_email }}{{^l.support_email}}support@gscloud.cz{{/l.support_email}}">🆘&nbsp;{{ l.support_email }}{{^l.support_email}}support@gscloud.cz{{/l.support_email}}</a>
-    <br>
+      href="mailto:{{ l.support_email }}{{^l.support_email}}info@gscloud.cz{{/l.support_email}}">🆘&nbsp;{{ l.support_email }}{{^l.support_email}}info@gscloud.cz{{/l.support_email}}</a>
+  <br>
+  <a
+    target="_blank"
+    rel="nofollow noopener"
+    class="white-text"
+    title="GitHub"
+    href="https://github.com/GSCloud/lasagna"><i class="fa-brands fa-github blue-text"></i>&nbsp;GitHub</a>
+  &nbsp;&nbsp;<a
+    target="_blank"
+    rel="nofollow noopener"
+    class="white-text"
+    href="/api"><i class="fa-solid fa-network-wired purple-text"></i>&nbsp;API</a>
+  &nbsp;&nbsp;<a
+    target="_blank"
+    rel="nofollow noopener"
+    class="white-text"
+    title="Status Page"
+    href="https://status.gscloud.cz"><i class="fa-solid fa-signal green-text"></i>&nbsp;status</a>
+  <br>
+
+  {{>footer_extras}}
+
+  <a
+    target="_blank"
+    rel="me nofollow"
+    class="white-text"
+    title="{{ l.author }}"
+    href="{{ l.copyright_link }}{{^l.copyright_link}}https://hmcgames.com/fred{{/l.copyright_link}}">{{ l.author }}</a>&nbsp;{{ l.copyright }}{{^l.copyright}}2017-{{ l.$year }}{{/l.copyright}}
+
+  <br>
+
+  <div class="row center">
     <a
-      target="_blank"
-      rel="nofollow noopener"
-      class="white-text"
-      title="GitHub"
-      href="https://github.com/GSCloud/lasagna"><i class="fa-brands fa-github blue-text"></i>&nbsp;GitHub</a>
-    &nbsp;&nbsp;<a
-      target="_blank"
-      rel="nofollow noopener"
-      class="white-text"
-      href="/api"><i class="fa-solid fa-network-wired purple-text"></i>&nbsp;API</a>
-    &nbsp;&nbsp;<a
-      target="_blank"
-      rel="nofollow noopener"
-      class="white-text"
-      title="Status Page"
-      href="https://status.gscloud.cz"><i class="fa-solid fa-signal green-text"></i>&nbsp;status</a>
-    <br>
-
-    {{>footer_extras}}
-
-    <a
-      target="_blank"
-      rel="me nofollow"
-      class="white-text"
-      title="{{ l.author }}"
-      href="{{ l.copyright_link }}{{^l.copyright_link}}https://hmcgames.com/fred{{/l.copyright_link}}">{{ l.author }}</a>&nbsp;{{ l.copyright }}{{^l.copyright}}2017-{{ l.$year }}{{/l.copyright}}
-    <br>
-
-    <div class="row center">
-      <a
-        rel="nofollow noreferrer"
-        class="modal-trigger"
-        href="#gscmodal"
-        ><img
-          src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp"
-          class="responsive-img notap"
-          style="margin:1em;background-color:#fff;border-radius:15%"
-          title="{{ ENGINE }}"
-          alt="{{ ENGINE }}"
-          width="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}"
-          height="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}">
-      </a>
-    </div>
+      rel="nofollow noreferrer"
+      class="modal-trigger"
+      href="#gscmodal"
+    ><img
+      src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp"
+      class="responsive-img notap"
+      style="margin:1em;background-color:#fff;border-radius:15%"
+      title="{{ ENGINE }}"
+      alt="{{ ENGINE }}"
+      width="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}"
+      height="{{l.gsc_footer_img_size}}{{^l.gsc_footer_img_size}}48{{/l.gsc_footer_img_size}}">
+    </a>
   </div>
 </div>
 
