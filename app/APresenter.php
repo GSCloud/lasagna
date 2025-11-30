@@ -60,22 +60,19 @@ abstract class APresenter
     /* @var string CloudFlare API URL */
     const CLOUDFLARE_API = 'https://api.cloudflare.com/client/v4/';
 
-    /* @var string Google Sheet export URL prefix */
+    /* @var string Google Sheet URL export prefix */
     const GS_CSV_PREFIX = 'https://docs.google.com/spreadsheets/d/e/';
 
     /* @var string Google Sheet URL prefix */
     const GS_SHEET_PREFIX = 'https://docs.google.com/spreadsheets/d/';
 
     /* @var string Google Sheet export to CSV URL postfix */
-    //const GS_CSV_POSTFIX = '/pub?gid=0&single=true&output=csv';
     const GS_CSV_POSTFIX = '/pub?output=csv';
 
     /* @var string Google Sheet export to TSV URL postfix */
-    //const GS_TSV_POSTFIX = '/pub?gid=0&single=true&output=tsv';
     const GS_TSV_POSTFIX = '/pub?output=tsv';
 
-    /* @var string Google Sheet edit URL postfix */
-    //const GS_SHEET_POSTFIX = '/edit#gid=0';
+    /* @var string Google Sheet URL edit postfix */
     const GS_SHEET_POSTFIX = '/edit';
 
     /* @var integer rate limiter - max. hits per cache interval */
