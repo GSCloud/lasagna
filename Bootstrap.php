@@ -261,7 +261,6 @@ if (DEBUG === true) {
     Debugger::$maxLength = (int) ($cfg['DEBUG_MAX_LENGTH'] ?? 500);
     Debugger::$scream = (bool) ($cfg['DEBUG_SCREAM'] ?? true);
     Debugger::$showBar = (bool) ($cfg['DEBUG_SHOW_BAR'] ?? true);
-    Debugger::$showFireLogger = (bool) ($cfg['DEBUG_SHOW_FIRELOGGER'] ?? false);
     Debugger::$showLocation = (bool) ($cfg['DEBUG_SHOW_LOCATION'] ?? false);
     Debugger::$strictMode = (bool) ($cfg['DEBUG_STRICT_MODE'] ?? true);
     Debugger::$keysToHide = (array) ($cfg['DEBUG_KEYS_TO_HIDE'] ?? ['apikey', 'goauth_secret']); // phpcs:ignore

@@ -1011,6 +1011,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[googlemap\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[googlemap ')) {
             $counter++;
             $replace = '<iframe '
@@ -1060,6 +1066,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[image ')) {
             $counter++;
             $replace = '<span class="img-container">'
@@ -1106,6 +1118,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[figure\s+([^\]]+?)\s+(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[figure ')) {
             $counter++;
             $replace = '<span class="figure-container">'
@@ -1154,6 +1172,13 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[imageleft\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+        
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[imageleft ')) {
             $counter++;
             $replace = '<span class="img-left-container">'
@@ -1200,6 +1225,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[imageright\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[imageright ')) {
             $counter++;
             $replace = '<span class="img-right-container">'
@@ -1246,6 +1277,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[imageresp\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[imageresp ')) {
             $counter++;
             $replace = '<span class="img-responsive-container">'
@@ -1292,6 +1329,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[soundcloud\s+([^\]]+)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[soundcloud ')) {
             $counter++;
             $replace = '<div '
@@ -1346,6 +1389,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[youtube\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[youtube ')) {
             $counter++;
             $replace = '<div '
@@ -1398,6 +1447,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[vimeo\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[vimeo ')) {
             $counter++;
             $replace = '<div '
@@ -1449,6 +1504,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[twitch\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[twitch ')) {
             $counter++;
             $replace = '<div '
@@ -1502,6 +1563,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[twitchvid\s.*?(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[twitchvid ')) {
             $counter++;
             $replace = '<div '
@@ -1556,6 +1623,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[mastodon\s+(https:\/\/[^\s]+)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[mastodon ')) {
             $counter++;
             $replace = '<div '
@@ -1620,6 +1693,11 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[gallery\s(.*?)\s*?\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
         while (\is_string($content) && \str_contains($content, '[gallery ')) {
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
@@ -1734,6 +1812,11 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[galleryspan\s(.*?)\s*?\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
         while (\is_string($content) && \str_contains($content, '[galleryspan ')) {
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
@@ -1831,6 +1914,12 @@ class StringFilters
 
         $counter = 0;
         $pattern = '#\[qrcode\s*(.*?)\]#is';
+
+        if (!\is_string($content)) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
         while (\str_contains($content, '[qrcode ')) {
             $counter++;
             $replace = '<div '
