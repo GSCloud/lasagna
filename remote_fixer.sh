@@ -34,8 +34,7 @@ if [ ! -z "$1" ]; then
     fi
 fi
 
-chown $USER:$USER .
-chmod -R 0777 ci data logs temp www/{download,upload} && \
-    chown -R www-data:www-data ci data www/{download,upload} && \
-    find www/ -type f -exec chmod 0644 {} + && \
-    rm -f data/_random_cdn_hash
+chmod -R 0777 ci data logs temp www www/{download,upload}
+chown -R www-data:www-data . www ci data www/{download,upload}
+find www/ -type f -exec chmod 0644 {} +
+rm -f data/_random_cdn_hash

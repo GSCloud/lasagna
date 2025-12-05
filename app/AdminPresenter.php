@@ -156,7 +156,6 @@ class AdminPresenter extends APresenter
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
-                || !\is_writable(UPLOAD)
             ) {
                 return $this->writeJsonData(410, $extras);
             }
@@ -184,7 +183,6 @@ class AdminPresenter extends APresenter
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
-                || !\is_writable(UPLOAD)
             ) {
                 return $this->writeJsonData(410, $extras);
             }
@@ -245,7 +243,6 @@ class AdminPresenter extends APresenter
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
-                || !\is_writable(UPLOAD)
             ) {
                 return $this->writeJsonData(410, $extras);
             }
@@ -774,7 +771,6 @@ class AdminPresenter extends APresenter
         if (!defined('UPLOAD')
             || \is_null(UPLOAD)
             || !\is_dir(UPLOAD)
-            || !\is_writable(UPLOAD)
         ) {
             throw new \Exception("Invalid request.");
         }
@@ -838,7 +834,7 @@ class AdminPresenter extends APresenter
             }
 
             // Rename .jpeg files
-            if (isset($info['extension']) && strtolower($info['extension']) === 'jpeg') { // phpcs:ignore
+            if (isset($info['extension']) && \strtolower($info['extension']) === 'jpeg') { // phpcs:ignore
                 $f = $info['filename'] . '.jpg';
                 $info = \pathinfo($f);
             }
@@ -862,8 +858,8 @@ class AdminPresenter extends APresenter
                             $file = UPLOAD . DS
                                 . self::THUMB_PREFIX . $w . self::THUMB_POSTFIX
                                 . $fn . $x;
-                            if (file_exists($file)) {
-                                @unlink($file);
+                            if (\file_exists($file)) {
+                                @\unlink($file);
                             }
                         }
                     }
@@ -899,7 +895,6 @@ class AdminPresenter extends APresenter
         if (!defined('UPLOAD')
             || \is_null(UPLOAD)
             || !\is_dir(UPLOAD)
-            || !\is_writable(UPLOAD)
         ) {
             throw new \Exception("Invalid request.");
         }

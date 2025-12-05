@@ -29,9 +29,9 @@ define('PARTIALS', APP . DS . 'partials');
 define('TEMP', ROOT . DS . 'temp');
 define('TEMPLATES', APP . DS . 'templates');
 
-//define('CSP', APP . DS . 'csp.neon');
-//define('DOWNLOAD', WWW . DS . 'download');
-//define('UPLOAD', WWW . DS . 'upload');
+define('CSP', APP . DS . 'csp.neon');
+define('DOWNLOAD', WWW . DS . 'download');
+define('UPLOAD', WWW . DS . 'upload');
 
 define('CLI', (bool) (PHP_SAPI == 'cli'));
 define('DEBUG', true);

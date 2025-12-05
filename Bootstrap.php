@@ -35,16 +35,18 @@ if (PHP_SAPI === 'cli') {
     }
 }
 
+ob_start();
+//error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
+
 ini_set(
     'default_socket_timeout',
     defined('DEFAULT_SOCKET_TIMEOUT') ? DEFAULT_SOCKET_TIMEOUT : '15'
 );
 ini_set(
     'display_errors',
-    defined('DISPLAY_ERRORS') ? DISPLAY_ERRORS : 'true'
+    defined('DISPLAY_ERRORS') ? DISPLAY_ERRORS : 'false'
 );
-ob_start();
-error_reporting(E_ALL);
 
 // is FastCGI on?
 if (getenv('FCGI_ROLE') === 'RESPONDER') {
