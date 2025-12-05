@@ -99,9 +99,9 @@ if (defined($d) && is_readable($d)) {
 // UPLOAD storage = files uploaded by users, not mandatory
 $d = 'UPLOAD';
 $x = WWW . DS . 'upload';
-if (defined($d) && is_readable($d) && is_writable($d)) {
+if (defined($d) && is_readable($d)) {
 } else {
-    if (is_dir($x) && is_readable($x) && is_writable($x)) {
+    if (is_dir($x) && is_readable($x)) {
         define($d, $x);
     } else {
         define($d, null);
