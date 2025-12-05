@@ -75,8 +75,7 @@ redis: [
   #unix_socket: ""
 
   # to disable REDIS, set port to 0
-  #port: 0
-  port: 6377
+  port: 6379
   timeout: 1
 ]
 

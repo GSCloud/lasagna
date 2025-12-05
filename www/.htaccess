@@ -9,7 +9,6 @@ AddDefaultCharset utf-8
   RewriteRule .* - [F,L]
   RewriteRule ^index\.php$ - [L]
   RewriteRule ^cdn-assets/[a-z0-9]{40}/(.*)$ $1 [L]
-  #  RewriteCond %{REQUEST_URI} !=/server-status
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.php [L]
@@ -173,7 +172,4 @@ AddDefaultCharset utf-8
   ExpiresByType image/x-icon "access plus 1 week"
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType text/html "access plus 30 seconds"
-#  ExpiresByType video/mp4 "access plus 1 month"
-#  ExpiresByType video/ogg "access plus 1 month"
-#  ExpiresByType video/webm "access plus 1 month"
 </IfModule>
