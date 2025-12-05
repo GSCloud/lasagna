@@ -685,6 +685,7 @@ abstract class APresenter
      */
     function getBrowserFingerprint(): string
     {
+        return 1;
         $parts = [];
         $parts[] = CLI ? 'CLI' : 'WEB';
         if (!CLI) {
@@ -694,13 +695,18 @@ abstract class APresenter
             $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
             $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
         }
-        $parts = \array_filter($parts);
+
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
-        while (\strpos($s, SS . SS) !== false) {
-            $s = \str_replace(SS . SS, SS, $s);
-        }
-        return \hash('sha256', $s);
+        $temp_parts = \explode(SS, $s);
+        $filtered_parts = \array_filter(
+            $temp_parts, 
+            function ($value) {
+                return $value !== '';
+            }
+        );
+        $final_s = \implode(SS, $filtered_parts);
+        return \hash('sha256', $final_s);
     }
 
     /**
