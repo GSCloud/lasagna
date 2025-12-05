@@ -685,7 +685,6 @@ abstract class APresenter
      */
     function getBrowserFingerprint(): string
     {
-        return 1;
         $parts = [];
         $parts[] = CLI ? 'CLI' : 'WEB';
         if (!CLI) {
