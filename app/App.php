@@ -109,7 +109,7 @@ if (defined($d) && is_readable($d)) {
 }
 
 // LOGOUT
-if (isset($_GET['?logout'])) {
+if (isset($_GET['logout'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
     $localGoogleOAuthOrigin = $cfg['local_goauth_origin'] ?? null;
@@ -124,7 +124,7 @@ if (isset($_GET['?logout'])) {
     exit;
 }
 
-// CLEAR EVERYTHING on ?clearall
+// CLEAR EVERYTHING
 if (isset($_GET['clearall'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;

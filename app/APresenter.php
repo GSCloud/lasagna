@@ -685,28 +685,17 @@ abstract class APresenter
      */
     function getBrowserFingerprint(): string
     {
-        return "xoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxoxox";
         $parts = [];
-        $parts[] = CLI ? 'CLI' : 'WEB';
+        $parts[] = CLI ? 'CLI_ENV' : 'WEB_ENV';
         if (!CLI) {
-            $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
-            $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
-            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
-            $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
             $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
+            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING'); // phpcs:ignore
+            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE'); // phpcs:ignore
+            $parts[] = \strtolower($_SERVER['HTTP_HOST'] ?? 'N/A_HOST');
         }
-
         $s = \implode(SS, $parts);
-        $s = \str_replace(' ', SS, $s);
-        $temp_parts = \explode(SS, $s);
-        $filtered_parts = \array_filter(
-            $temp_parts, 
-            function ($value) {
-                return $value !== '';
-            }
-        );
-        $final_s = \implode(SS, $filtered_parts);
-        return \hash('sha256', $final_s);
+        return \hash('sha256', $s);
     }
 
     /**
