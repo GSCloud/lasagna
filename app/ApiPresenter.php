@@ -115,7 +115,7 @@ class ApiPresenter extends APresenter
         }
         $port = $this->getData('redis.port');
         if (!\is_string($port) || !\is_numeric($port)) {
-            $port = 6377;
+            $port = 6379;
         }
         $redis = new RedisClient(
             [
