@@ -2,6 +2,11 @@
 
 ---
 
+`2025-12-10`
+
+* **`1090-BUGFIX` patching system** for fixing dead vendor libraries  
+* **`1089-BUGFIX`** updated **Paragonie Halite** to v5 (should fix 500 errors)
+
 `2025-11-01`  **`v2.4.9`**
 
 * **`1088-FEATURE`** support for **admin tabs** selective turn off (at least one tab must stay active)  
