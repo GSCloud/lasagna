@@ -5,7 +5,7 @@
         "adbario/php-dot-notation": "^3",
         "altorouter/altorouter": "^2",
         "cakephp/cache": "^4",
-        "GSCloud/php-redis-client": "^1",
+        "cheprasov/php-redis-client": "^1",
         "chillerlan/php-qrcode": "^5",
         "guzzlehttp/guzzle": "^7",
         "league/climate": "^3",

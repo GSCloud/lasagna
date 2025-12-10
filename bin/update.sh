@@ -23,5 +23,8 @@ if [[ "$?" -eq "2" ]]; then exit 2; fi
 composer dump-autoload --optimize
 if [[ "$?" -eq "2" ]]; then exit 2; fi
 
+# patches
+cp -R patches/* vendor/
+
 git commit -am "automatic update"
 git push origin master
