@@ -17,7 +17,7 @@
         "nette/neon": "^3",
         "nette/tester": "^2",
         "nette/utils": "^3",
-        "paragonie/halite": "^4",
+        "paragonie/halite": "^5",
         "paragonie/random_compat": ">=2 <=9.99.100",
         "php": "^8.2",
         "phpseclib/phpseclib": "^3",
