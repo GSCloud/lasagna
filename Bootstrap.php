@@ -23,6 +23,15 @@ register_shutdown_function(
             $isTimeout = strpos($error['message'], 'Maximum execution time') !== false; // phpcs:ignore
             $isMemory = strpos($error['message'], 'Allowed memory size') !== false;
             $isInHalite = strpos($error['file'], 'constant_time_encoding') !== false;
+            $logMessage = sprintf(
+                "CRASH: Error (%s) detected in %s on line %d. User Agent: %s",
+                $error['message'],
+                $error['file'],
+                $error['line'],
+                $_SERVER['HTTP_USER_AGENT'] ?? 'N/A'
+            );
+            $logFile = ROOT . DS . 'logs' . DS . 'crash.log';
+            error_log($logMessage . "\n", 3, $logFile);
             if ($isInHalite && ($isTimeout || $isMemory)) {
                 header('Clear-Site-Data: "cookies"');
                 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
@@ -38,14 +47,12 @@ register_shutdown_function(
 // TIMER START
 define('TESSERACT_START', microtime(true));
 
-// directory separator
-defined('DS') || define('DS', DIRECTORY_SEPARATOR);
-
-// string separator
-defined('SS') || define('SS', '_');
-
 // current working directory
 defined('ROOT') || define('ROOT', __DIR__);
+// directory separator
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+// string separator
+defined('SS') || define('SS', '_');
 
 // CLI SAPI external include (optional)
 if (PHP_SAPI === 'cli') {
