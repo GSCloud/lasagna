@@ -88,7 +88,6 @@ class CiTester
         $redirects = [];
         $nt = '*** no testing';
         if (\is_array($presenter)) {
-
             $hasPath = array_filter(
                 $presenter, function ($item) {
                     return isset($item['path']);
@@ -112,11 +111,11 @@ class CiTester
                 }
                 $pp = $p['path'];
                 if (\strpos($p["path"], "[") !== false) {
-                    $climate->out("<bold><blue>{$t}{$pp}</blue></bold> {$nt}");
+                    $climate->out("<bold><blue>{$t}{$pp}</blue></bold> parameterized"); // phpcs:ignore
                     continue;
                 }
                 if (\strpos($p["path"], "*") !== false) {
-                    $climate->out("<bold><blue>{$t}{$pp}</blue></bold> {$nt}");
+                    $climate->out("<bold><blue>{$t}{$pp}</blue></bold> parameterized"); // phpcs:ignore
                     continue;
                 }
                 if ($p["no_testing"] === true) {
@@ -124,7 +123,7 @@ class CiTester
                     continue;
                 }
                 if ($p["redirect"] ?? false) {
-                    $climate->out("<bold><magenta>{$t}{$pp}</magenta></bold> {$nt}");
+                    $climate->out("<bold><magenta>{$t}{$pp}</magenta></bold> redirect"); // phpcs:ignore
                 } else {
                     $pages[$i]["assert_httpcode"] = $p["assert_httpcode"];
                     $pages[$i]["assert_json"] = $p["assert_json"];
