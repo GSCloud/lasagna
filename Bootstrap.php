@@ -36,12 +36,10 @@ if (PHP_SAPI === 'cli') {
 }
 
 ob_start();
-//error_reporting(E_ALL);
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);
-
 ini_set(
     'default_socket_timeout',
-    defined('DEFAULT_SOCKET_TIMEOUT') ? DEFAULT_SOCKET_TIMEOUT : '15'
+    defined('DEFAULT_SOCKET_TIMEOUT') ? DEFAULT_SOCKET_TIMEOUT : '10'
 );
 ini_set(
     'display_errors',
@@ -280,61 +278,7 @@ if (DEBUG === true) {
     }
 }
 
-// constants for better maintainability
-const HALITE_CRASH_FLAG = 'halite_crash_flag';
-const EMERGENCY_LOGOUT_FILE = DATA . DS . 'halite_emergency_logout';
-
-/**
- * Registers a shutdown function to handle application crashes gracefully.
- *
- * @return void
- */
-function registerCrashHandler(): void
-{
-    if (PHP_SAPI === 'cli') {
-        return;
-    }
-
-    register_shutdown_function(
-        function () {
-            if (isset($GLOBALS[HALITE_CRASH_FLAG]) && $GLOBALS[HALITE_CRASH_FLAG]) {
-                touch(EMERGENCY_LOGOUT_FILE);
-                error_log('FATAL ERROR: Halite crash detected');
-            }
-        }
-    );
-}
-
-/**
- * Checks for an emergency logout file and handles the logout process.
- *
- * @return void
- */
-function handleEmergencyLogout(): void
-{
-    if (PHP_SAPI === 'cli') {
-        return;
-    }
-
-    if (file_exists(EMERGENCY_LOGOUT_FILE)) {
-        unlink(EMERGENCY_LOGOUT_FILE);
-        setcookie(
-            $GLOBALS['cfg']['app'] ?? 'app',
-            '',
-            [
-                'expires' => time() - 3600,
-                'path' => '/',
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ]
-        );
-        header('Location: /logout');
-        exit;
-    }
-}
-
-registerCrashHandler();
-handleEmergencyLogout();
-
+// TIMER START
 Debugger::timer('RUN');
+
 require_once APP . DS . 'App.php';

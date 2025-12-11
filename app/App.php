@@ -14,6 +14,7 @@ namespace GSC;
 
 use Cake\Cache\Cache;
 use Nette\Neon\Neon;
+use Tracy\Debugger;
 
 // SANITY CHECK
 foreach ([
@@ -27,7 +28,7 @@ foreach ([
     'SS',
     'TEMP',
 ] as $x) {
-    defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
+    defined($x) || die("FATAL ERROR - sanity check for const: '{$x}'");
 }
 
 // BLOCK BAD ROBOTS
@@ -141,7 +142,7 @@ if (isset($_GET['clearall'])) {
 }
 
 // TIMER START
-\Tracy\Debugger::timer('DATA');
+Debugger::timer('DATA');
 
 // MODEL
 $cfg = $cfg ?? [];
@@ -658,14 +659,14 @@ default:
 }
 
 // PROFILER
-$data['time_data'] = round((float) \Tracy\Debugger::timer('DATA') * 1000, 1);
+$data['time_data'] = round((float) Debugger::timer('DATA') * 1000, 1);
 
 // SINGLETON TEMPLATE
 $data['controller'] = $p = ucfirst(strtolower($presenter[$view]['presenter'])) . 'Presenter'; // phpcs:ignore
 $controller = "\\GSC\\{$p}";
 
 // TIMER START
-\Tracy\Debugger::timer('PROCESS');
+Debugger::timer('PROCESS');
 
 // RUN
 $app = $controller::getInstance()->setData($data)->process();
@@ -673,8 +674,8 @@ $data = $app->getData();
 
 // PROFILER
 $time1 = $data['time_data'];
-$time2 = $data['time_process'] = round((float) \Tracy\Debugger::timer('PROCESS') * 1000, 1); // phpcs:ignore
-$time3 = $data['time_run'] = round((float) \Tracy\Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
+$time2 = $data['time_process'] = round((float) Debugger::timer('PROCESS') * 1000, 1); // phpcs:ignore
+$time3 = $data['time_run'] = round((float) Debugger::timer('RUN') * 1000, 1); // phpcs:ignore
 $limit = $app->getRateLimit();
 if (!$limit || !is_int($limit)) {
     $limit = 1;
