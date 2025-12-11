@@ -374,7 +374,7 @@ foreach ($cache_profiles as $k => $v) {
 }
 
 // REDIS TEST
-if (Cache::enabled()) {
+if (Cache::enabled() && $cfg['redis']['port'] ?? null) {
     Cache::setConfig(
         'redis_test',
         [

@@ -1260,11 +1260,15 @@ abstract class APresenter
         }
 
         // rate limiting
-        $rate_limit_count = Cache::increment($rate_limit, 1, 'limiter');
-        if ($rate_limit_count === false) {
-            Cache::write($rate_limit, 1, 'limiter');
+        $rate_limit_count = Cache::read($rate_limit, 'limiter');
+        if (\is_numeric($rate_limit_count)) {
+            $rate_limit_count++;
+        }
+        if ($rate_limit_count === null) {
             $rate_limit_count = 1;
         }
+        Cache::write($rate_limit, $rate_limit_count, 'limiter');
+        //bdump($rate_limit_count, 'rate_limit_count');
 
         if ($rate_limit_count >= (int) $max) {
             // increment ban
