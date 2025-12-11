@@ -15,6 +15,26 @@ declare (strict_types = 1);
 use Nette\Neon\Neon;
 use Tracy\Debugger;
 
+// emergency crash handler
+register_shutdown_function(
+    function () {
+        $error = error_get_last();
+        if ($error && ($error['type'] === E_ERROR || $error['type'] === E_PARSE)) {
+            $isTimeout = strpos($error['message'], 'Maximum execution time') !== false; // phpcs:ignore
+            $isMemory = strpos($error['message'], 'Allowed memory size') !== false;
+            $isInHalite = strpos($error['file'], 'constant_time_encoding') !== false;
+            if ($isInHalite && ($isTimeout || $isMemory)) {
+                header('Clear-Site-Data: "cookies"');
+                header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
+                header('Pragma: no-cache');
+                header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+                header("Location: /", true, 303);
+                exit;
+            }
+        }
+    }
+);
+
 // TIMER START
 define('TESSERACT_START', microtime(true));
 
