@@ -4,6 +4,7 @@
 
 `2025-12-10`
 
+* **`1091-BUGFIX`** updated **CakePHP Cache Module** to v5  
 * **`1090-BUGFIX` patching system** for fixing dead vendor libraries  
 * **`1089-BUGFIX`** updated **Paragonie Halite** to v5 (should fix 500 errors)
 
