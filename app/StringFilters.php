@@ -1008,10 +1008,10 @@ class StringFilters
         $callback = function (array $matches): string {
             $classes = $matches[1] ?? '';
             $content = $matches[2] ?? '';
-            $classes = \trim($classes);
             $classes = \str_replace(['"', "'"], ' ', $classes);
+            $classes = \trim($classes);
+            $content = \str_ireplace('</span>', ' ', $content);
             $content = \trim($content);
-            $content = \str_ireplace('</span>', '', $content);
             return '<span class="' . $classes . '">' . $content . '</span>';
         };
 
