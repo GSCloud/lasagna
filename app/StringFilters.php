@@ -61,6 +61,7 @@ class StringFilters
     // shortcodes for tokenization
     const ALL_SHORTCODES = [
         'figure',
+        'materialize',
         'gallery',
         'galleryspan',
         'googlemap',
@@ -959,7 +960,7 @@ class StringFilters
             }
         }
     }
-
+    
     /**
      * Render Markdown Extra to HTML
      *
@@ -977,6 +978,46 @@ class StringFilters
                 $x = \str_replace("\n---\n", "\n\n---\n\n", $x);
                 $content = MarkdownExtra::defaultTransform($x);
             }
+        }
+    }
+
+    /**
+     * Render Materialize short code(s) for generic CSS components (e.g., buttons).
+     *
+     * Format: [materialize class1 class2 ...]CONTENT[/materialize]
+     *
+     * @param string $content string containing [materialize ...]
+     * 
+     * @return void
+     */
+    public static function renderMaterializeShortCode(&$content): void
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $pattern = '#\[materialize\s+(.*?)\](.*?)\[\/materialize\]#is';
+
+        /**
+         * Callback for a single instance
+         *
+         * @param array $matches matches
+         * 
+         * @return string HTML <span> code
+         */
+        $callback = function (array $matches): string {
+            $classes = $matches[1] ?? '';
+            $content = $matches[2] ?? '';
+            $classes = \trim($classes);
+            $classes = \str_replace(['"', "'"], ' ', $classes);
+            $content = \trim($content);
+            $content = \str_ireplace('</span>', '', $content);
+            return '<span class="' . $classes . '">' . $content . '</span>';
+        };
+
+        $newContent = \preg_replace_callback($pattern, $callback, $content);
+        if (\is_string($newContent)) {
+            $content = $newContent;
         }
     }
 
@@ -2228,20 +2269,21 @@ class StringFilters
         self::detokenize($string);
 
         // render shortcodes
-        self::renderQRShortCode($string, $flags);
-        self::renderImageShortCode($string, $flags);
-        self::renderImageLeftShortCode($string, $flags);
-        self::renderImageRightShortCode($string, $flags);
-        self::renderImageRespShortCode($string, $flags);
         self::renderFigureShortCode($string, $flags);
         self::renderGalleryShortCode($string, $flags);
         self::renderGallerySpanShortCode($string, $flags);
+        self::renderImageLeftShortCode($string, $flags);
+        self::renderImageRespShortCode($string, $flags);
+        self::renderImageRightShortCode($string, $flags);
+        self::renderImageShortCode($string, $flags);
         self::renderMastodonShortCode($string, $flags);
-        self::renderYouTubeShortCode($string, $flags);
-        self::renderVimeoShortCode($string, $flags);
+        self::renderMaterializeShortCode($string, $flags);
+        self::renderQRShortCode($string, $flags);
+        self::renderSoundCloudShortCode($string, $flags);
         self::renderTwitchChannellShortCode($string, $flags);
         self::renderTwitchVidShortCode($string, $flags);
-        self::renderSoundCloudShortCode($string, $flags);
+        self::renderVimeoShortCode($string, $flags);
+        self::renderYouTubeShortCode($string, $flags);
     }
 
     /**
@@ -2255,7 +2297,14 @@ class StringFilters
     {
         self::$_shortCodeCache = [];
         $names = \implode('|', self::ALL_SHORTCODES);
-        $pattern = '/\[(' . $names . ')(\s[^\]]*)?\]/Usi';
+        //$pattern = '/\[(' . $names . ')(\s[^\]]*)?\]/Usi';
+        $pattern = '/
+            # 1. paired shortcode
+            \[(' . $names . ')(\s[^\]]*)?\](.*?)\[\/\1\]
+            |
+            # 2. unpaired shortcode
+            \[(' . $names . ')(\s[^\]]*)?\]
+        /UsiX';
 
         if (\preg_match_all($pattern, $string, $matches)) {
             $tokens = [];

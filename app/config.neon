@@ -133,7 +133,8 @@ design: [
 
 # locale overrides
 locale_override: [
-#  copyright: "2017-2025"
+  #copyright: "2017-2025"
+  #intro: '[markdown][materialize "red white-text"]Gemini wrote[/materialize] [materialize btn blue bold "white-text]this</span>![/materialize]'
 ]
 
 # Service Worker preload
