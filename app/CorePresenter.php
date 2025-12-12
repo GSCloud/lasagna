@@ -39,21 +39,14 @@ class CorePresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
-        // Model
-        $data = $this->getData();
-        if (!\is_array($data)) {
-            return $this;
+        if (!\is_array($data = $this->getData())) {
+            return $this->setData('output', 'FATAL ERROR in Model.');
         }
         $this->dataExpander($data);
-
-        // View
-        $view = $this->getView();
-        if (!$view) {
+        if (!$view = $this->getView()) {
             return $this;
         }
-        // Presenter
-        $presenter = $this->getPresenter();
-        if (!\is_array($presenter)) {
+        if (!\is_array($presenter = $this->getPresenter())) {
             return $this;
         }
         

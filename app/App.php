@@ -221,7 +221,7 @@ $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
 $data['PHP_VERSION'] = PHP_VERSION;
 $data['DATA_VERSION'] = null;
-$data['VERSION'] = $version = trim(file_get_contents(ROOT . DS . 'VERSION') ?: '');
+$data['VERSION'] = $version = trim(@file_get_contents(ROOT . DS . 'VERSION') ?: 'xoxo'); // phpcs:ignore 
 define('VERSION', $version);
 $data['VERSION_SHORT'] = $base58->encode(base_convert(substr($version, 0, 6), 16, 10)); // phpcs:ignore
 $data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time()); // phpcs:ignore
