@@ -694,8 +694,7 @@ abstract class APresenter
             $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE'); // phpcs:ignore
             $parts[] = \strtolower($_SERVER['HTTP_HOST'] ?? 'N/A_HOST');
         }
-        $s = \implode(SS, $parts);
-        return \hash('sha256', $s);
+        return \hash('sha256', \implode(SS, $parts));
     }
 
     /**
@@ -709,11 +708,11 @@ abstract class APresenter
         $parts[] = CLI ? 'CLI' : 'WEB';
         $parts[] = $this->getIP();
         if (!CLI) {
+            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
             $parts[] = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING';
             $parts[] = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE';
-            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
             $parts[] = $_SERVER['HTTP_HOST'] ?? 'N/A_HOST';
-            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
             $name = self::COOKIE_UID;
             $uid = $this->getNonce();
             if (isset($_COOKIE[$name])) {
@@ -745,7 +744,7 @@ abstract class APresenter
         $parts = \array_filter($parts);
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
-        $s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
+        //$s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
         return $s;
     }
 
@@ -818,6 +817,14 @@ abstract class APresenter
                 'email' => 'john.doe@example.com',
                 'provider' => 'cli',
             ];
+        }
+
+        bdump('!!!');
+
+        // CHECK GOVERNOR
+        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
+            $this->setLocation('/?logout');
         }
 
         // check current identity

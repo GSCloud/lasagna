@@ -222,10 +222,11 @@ $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FO
 $data['PHP_VERSION'] = PHP_VERSION;
 $data['DATA_VERSION'] = null;
 $data['VERSION'] = $version = trim(file_get_contents(ROOT . DS . 'VERSION') ?: '');
+define('VERSION', $version);
 $data['VERSION_SHORT'] = $base58->encode(base_convert(substr($version, 0, 6), 16, 10)); // phpcs:ignore
 $data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time()); // phpcs:ignore
 $data['VERSION_TIMESTAMP'] = @filemtime(ROOT . DS . 'VERSION') ?: time();
-$data['REVISIONS'] = (int) trim(file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
+$data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
 
 // RANDOM HASH set by the administrator after CACHE PURGE
 $hash = DATA . DS . '_random_cdn_hash';

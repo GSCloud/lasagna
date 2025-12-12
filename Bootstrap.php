@@ -15,37 +15,16 @@ declare (strict_types = 1);
 use Nette\Neon\Neon;
 use Tracy\Debugger;
 
-// emergency crash handler
-register_shutdown_function(
-    function () {
-        $error = error_get_last();
-        if ($error && ($error['type'] === E_ERROR || $error['type'] === E_PARSE)) {
-            $isTimeout = strpos($error['message'], 'Maximum execution time') !== false; // phpcs:ignore
-            $isMemory = strpos($error['message'], 'Allowed memory size') !== false;
-            $isInHalite = strpos($error['file'], 'constant_time_encoding') !== false;
-            $logMessage = sprintf(
-                "CRASH: Error (%s) detected in %s on line %d. User Agent: %s",
-                $error['message'],
-                $error['file'],
-                $error['line'],
-                $_SERVER['HTTP_USER_AGENT'] ?? 'N/A'
-            );
-            $logFile = ROOT . DS . 'logs' . DS . 'crash.log';
-            error_log($logMessage . "\n", 3, $logFile);
-            if ($isInHalite && ($isTimeout || $isMemory)) {
-                header('Clear-Site-Data: "cookies"');
-                header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
-                header('Pragma: no-cache');
-                header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
-                header("Location: /", true, 303);
-                exit;
-            }
-        }
-    }
-);
-
 // TIMER START
 define('TESSERACT_START', microtime(true));
+
+// CLI SAPI external include
+if (PHP_SAPI === 'cli') {
+    $req = getenv('CLI_REQ');
+    if ($req && file_exists($req) && is_readable($req)) {
+        include_once $req;
+    }
+}
 
 // current working directory
 defined('ROOT') || define('ROOT', __DIR__);
@@ -54,13 +33,33 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 // string separator
 defined('SS') || define('SS', '_');
 
-// CLI SAPI external include (optional)
-if (PHP_SAPI === 'cli') {
-    $req = getenv('CLI_REQ');
-    if ($req && file_exists($req) && is_readable($req)) {
-        include_once $req;
+// emergency crash handler
+register_shutdown_function(
+    function () {
+        $error = error_get_last();
+        if ($error) {
+            $halite = strpos($error['file'], 'constant_time_encoding') !== false;
+            $memory = strpos($error['message'], 'Allowed memory size') !== false;
+            $logMessage = sprintf(
+                "CRASH: Error (%s) detected in %s on line %d. User Agent: %s",
+                $error['message'],
+                $error['file'],
+                $error['line'],
+                $_SERVER['HTTP_USER_AGENT'] ?? 'N/A'
+            );
+            $logFile = ROOT . DS . 'logs' . DS . 'crash.log';
+            error_log($logMessage . "\n\n", 3, $logFile);
+            if ($halite || $memory) {
+                header('Clear-Site-Data: "cookies"');
+                header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
+                header('Pragma: no-cache');
+                header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+                header('Location: /', true, 303);
+                exit;
+            }
+        }
     }
-}
+);
 
 ob_start();
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_WARNING);

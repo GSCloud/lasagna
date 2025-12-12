@@ -110,6 +110,16 @@ class AdminPresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
+        // CHECK GOVERNOR
+        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
+            $this->setLocation('/?logout');
+        }
+        if (!isset($_COOKIE['GOVERNOR'])) {
+            $this->setLocation('/?logout');
+        }
+
         if (!\is_array($cfg = $this->getCfg())) {
             return $this->setData('output', 'FATAL ERROR in Cfg.');
         }

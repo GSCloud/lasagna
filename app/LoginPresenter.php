@@ -36,20 +36,10 @@ class LoginPresenter extends APresenter
             @\ob_end_clean();
         }
 
-        // CHECK ENGINE
-        if (isset($_COOKIE['ENGINE']) && $_COOKIE['ENGINE'] !== ENGINE) {
-            $cookie_options = [
-                'expires' => time() - 86400,
-                'path' => '/',
-                'domain' => DOMAIN,
-                'secure' => !LOCALHOST,
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ];
-            \setcookie(APPNAME, '', $cookie_options);
-            \setcookie('ENGINE', '', $cookie_options);
-            \header('Location: /login', true, 303);
-            exit;
+        // CHECK GOVERNOR
+        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
+            $this->setLocation('/?logout');
         }
 
         if (!\is_array($data = $this->getData())) {
@@ -161,16 +151,21 @@ class LoginPresenter extends APresenter
                     'provider' => 'google',
                 ];
                 $this->clearCookie('oauth2state');
-                $this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
+
+                // GOVERNOR COOKIE
+                $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
                 $cookie_options = [
-                    'expires' => \time() + 2592000,
+                    'expires' => \time() + 86400 * 31,
                     'path' => '/',
                     'domain' => DOMAIN,
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax',
                 ];
-                \setcookie('ENGINE', ENGINE, $cookie_options);
+                \setcookie('GOVERNOR', $governor, $cookie_options);
+
+                // IDENTITY
+                $this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
                 }
