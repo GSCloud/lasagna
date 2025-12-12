@@ -43,3 +43,5 @@ define('CACHEPREFIX', 'cache_');
 define('DOMAIN', $_SERVER['SERVER_NAME'] ?? 'localhost');
 define('PROJECT', 'LASAGNA');
 define('SERVER', $_SERVER['SERVER_NAME'] ?? 'localhost');
+
+define('VERSION', true);
