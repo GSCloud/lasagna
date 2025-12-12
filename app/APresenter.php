@@ -1319,6 +1319,16 @@ abstract class APresenter
             return $this;
         }
 
+        // CHECK GOVERNOR
+        $allowed = false;
+        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] === $governor)) {
+            $allowed = true;
+        }
+        if ($retbool && !$allowed) {
+            return false;
+        }
+
         if (!$email = $this->getIdentity()['email'] ?? null) {
             if ($retbool) {
                 return false;

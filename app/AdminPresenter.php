@@ -111,15 +111,6 @@ class AdminPresenter extends APresenter
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
-        // CHECK GOVERNOR
-        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
-        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
-            $this->setLocation('/?logout');
-        }
-        if (!isset($_COOKIE['GOVERNOR'])) {
-            $this->setLocation('/?logout');
-        }
-
         if (!\is_array($cfg = $this->getCfg())) {
             return $this->setData('output', 'FATAL ERROR in Cfg.');
         }
@@ -162,6 +153,7 @@ class AdminPresenter extends APresenter
         // API calls
         switch ($view) {
         case 'Upload':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
@@ -189,6 +181,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
@@ -210,6 +203,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(400, $extras);
 
         case 'getUploadsInfo':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
@@ -249,6 +243,7 @@ class AdminPresenter extends APresenter
             );
         
         case 'getUploads':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
@@ -360,6 +355,7 @@ class AdminPresenter extends APresenter
             );
     
         case 'AuditLog':
+            $this->_checkGovernor();
             $this->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . self::AUDITLOG_FILE;
@@ -383,6 +379,7 @@ class AdminPresenter extends APresenter
             return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
 
         case 'BlockLog':
+            $this->_checkGovernor();
             $this->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . self::AUDITLOG_FILE;
@@ -442,6 +439,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData($data, $extras);
 
         case 'UpdateArticles':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             $x = 0;
             $profile = 'default';
@@ -545,6 +543,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK', 'hash' => $hash], $extras); // phpcs:ignore
     
         case 'GetToken':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
@@ -752,12 +751,14 @@ class AdminPresenter extends APresenter
             $this->_unauthorizedAccess();
 
         case 'FlushCache':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             $this->addMessage('ADMIN: FLUSH CACHE');
             $this->flushCache();
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'CoreUpdate':
+            $this->_checkGovernor();
             $this->_checkPermission('admin,manager,editor', $extras);
             $this->addMessage('ADMIN: CORE UPDATE');
             $this->setForceCsvCheck();
@@ -1679,5 +1680,21 @@ class AdminPresenter extends APresenter
             return;
         }
         return $this->writeJsonData(401, $extras ?? []);
+    }
+
+    /**
+     * Check GOVERNOR cookie consistency
+     * 
+     * @return void
+     */
+    private function _checkGovernor()
+    {
+        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
+            $this->setLocation('/?logout');
+        }
+        if (!isset($_COOKIE['GOVERNOR'])) {
+            $this->setLocation('/?logout');
+        }
     }
 }
