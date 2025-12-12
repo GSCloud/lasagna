@@ -1037,7 +1037,7 @@ abstract class APresenter
     }
 
     /**
-     * Get encrypted cookie
+     * Get Halite libSodium encrypted cookie
      *
      * @param string $name cookie name
      * 
