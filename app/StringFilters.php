@@ -60,8 +60,8 @@ class StringFilters
 
     // shortcodes for tokenization
     const ALL_SHORTCODES = [
+        'css',
         'figure',
-        'materialize',
         'gallery',
         'galleryspan',
         'googlemap',
@@ -982,21 +982,21 @@ class StringFilters
     }
 
     /**
-     * Render Materialize short code(s) for generic CSS components (e.g., buttons).
+     * Render CSS short code(s) for generic CSS components (e.g., buttons).
      *
-     * Format: [materialize class1 class2 ...]CONTENT[/materialize]
+     * Format: [css class1 class2 ...]CONTENT[/css]
      *
-     * @param string $content string containing [materialize ...]
+     * @param string $content string containing [css ...]
      * 
      * @return void
      */
-    public static function renderMaterializeShortCode(&$content): void
+    public static function renderCssShortCode(&$content): void
     {
         if (!\is_string($content)) {
             return;
         }
 
-        $pattern = '#\[materialize\s+(.*?)\](.*?)\[\/materialize\]#is';
+        $pattern = '#\[css\s+(.*?)\](.*?)\[\/css\]#is';
 
         /**
          * Callback for a single instance
@@ -2277,7 +2277,7 @@ class StringFilters
         self::renderImageRightShortCode($string, $flags);
         self::renderImageShortCode($string, $flags);
         self::renderMastodonShortCode($string, $flags);
-        self::renderMaterializeShortCode($string, $flags);
+        self::renderCssShortCode($string, $flags);
         self::renderQRShortCode($string, $flags);
         self::renderSoundCloudShortCode($string, $flags);
         self::renderTwitchChannellShortCode($string, $flags);

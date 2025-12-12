@@ -134,7 +134,7 @@ design: [
 # locale overrides
 locale_override: [
   #copyright: "2017-2025"
-  #intro: '[markdown][materialize "red white-text"]Gemini wrote[/materialize] [materialize btn blue bold "white-text]this</span>![/materialize]'
+  #intro: '[markdown][css "red white-text"]Gemini wrote[/css] [css btn blue bold "white-text]this</span>![/css]'
 ]
 
 # Service Worker preload
