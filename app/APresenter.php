@@ -819,14 +819,6 @@ abstract class APresenter
             ];
         }
 
-        bdump('!!!');
-
-        // CHECK GOVERNOR
-        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
-        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
-            $this->setLocation('/?logout');
-        }
-
         // check current identity
         $id = $this->_identity['id'] ?? null;
         $name = $this->_identity['name'] ?? null;
