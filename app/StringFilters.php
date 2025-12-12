@@ -2277,7 +2277,7 @@ class StringFilters
         self::renderImageRightShortCode($string, $flags);
         self::renderImageShortCode($string, $flags);
         self::renderMastodonShortCode($string, $flags);
-        self::renderCssShortCode($string, $flags);
+        self::renderCssShortCode($string);
         self::renderQRShortCode($string, $flags);
         self::renderSoundCloudShortCode($string, $flags);
         self::renderTwitchChannellShortCode($string, $flags);
