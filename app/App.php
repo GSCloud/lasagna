@@ -100,9 +100,9 @@ if (defined($d) && is_readable($d)) {
 // UPLOAD storage = files uploaded by users, not mandatory
 $d = 'UPLOAD';
 $x = WWW . DS . 'upload';
-if (defined($d) && is_readable($d)) {
+if (defined($d) && is_readable($d) && is_writable($d)) {
 } else {
-    if (is_dir($x) && is_readable($x)) {
+    if (is_dir($x) && is_readable($x) && is_writable($x)) {
         define($d, $x);
     } else {
         define($d, null);
@@ -161,7 +161,9 @@ $data['cf_cache_status'] = $_SERVER['Cf-Cache-Status'] ?? null;
 $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
 $data['cf_country'] = $data['country'] = $country;
 $data["country_id_{$country}"] = true; // country_id_UK etc.
-$blocked = (array) ($data['geoblock'] ?? [ // default blocked countries
+
+// DEFAULT BLOCKED COUNTRIES
+$blocked = (array) ($data['geoblock'] ?? [
     'AF',
     'BY',
     'IR',

@@ -744,7 +744,6 @@ abstract class APresenter
         $parts = \array_filter($parts);
         $s = \implode(SS, $parts);
         $s = \str_replace(' ', SS, $s);
-        //$s = \preg_replace('/' . \preg_quote(SS, '/') . '{2,}/', SS, $s);
         return $s;
     }
 
@@ -784,18 +783,10 @@ abstract class APresenter
         ];
         $this->addMessage(["setIdentity" => $i]);
 
-        // shuffle
-        $out = [];
-        $keys = \array_keys($i);
-        \shuffle($keys);
-        foreach ($keys as $k) {
-            $out[$k] = $i[$k];
-        }
-
         // set identity
-        $this->_identity = $out;
-        if ($out['id']) {
-            $this->setCookie(APPNAME, \json_encode($out));
+        $this->_identity = $i;
+        if ($i['id']) {
+            $this->setCookie(APPNAME, \json_encode($i));
         } else {
             $this->clearCookie(APPNAME);
         }
@@ -1088,7 +1079,7 @@ abstract class APresenter
     }
 
     /**
-     * Set encrypted cookie
+     * Set Halite libSodium encrypted cookie
      *
      * @param string $name Cookie name
      * @param string $data Cookie data
@@ -1309,7 +1300,7 @@ abstract class APresenter
      * Check if current user has access rights
      *
      * @param mixed $rolelist roles separated by commas (optional)
-     * @param bool  $retbool  return the status as boolean? (optional)
+     * @param bool  $retbool  return the status as boolean (optional)
      * 
      * @return mixed
      */
@@ -1319,7 +1310,7 @@ abstract class APresenter
             return $this;
         }
 
-        // CHECK GOVERNOR
+        // GOVERNOR cookie
         $allowed = false;
         $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
         if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] === $governor)) {
@@ -2182,7 +2173,7 @@ abstract class APresenter
     }
 
     /**
-     * Get / generate identity nonce (256 bits)
+     * Get / generate secure identity nonce (256 bits)
      *
      * @return string identity nonce
      */

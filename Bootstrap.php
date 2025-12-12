@@ -47,8 +47,9 @@ register_shutdown_function(
                 $error['line'],
                 $_SERVER['HTTP_USER_AGENT'] ?? 'N/A'
             );
+            $timestamp = date('[Y-m-d H:i:s] ');
             $logFile = ROOT . DS . 'logs' . DS . 'crash.log';
-            error_log($logMessage . "\n\n", 3, $logFile);
+            error_log($timestamp . $logMessage . "\n\n", 3, $logFile);
             if ($halite || $memory) {
                 header('Clear-Site-Data: "cookies"');
                 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
