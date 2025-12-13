@@ -102,7 +102,7 @@ class ErrorPresenter extends APresenter
         }
         $error = self::CODESET[$code];
 
-        // find the error image
+        // find error image
         $image = "error.png";
         if (\file_exists(WWW . "/img/{$code}.png")) {
             $image = "{$code}.png";
@@ -112,7 +112,6 @@ class ErrorPresenter extends APresenter
             $image = "{$code}.webp";
         }
 
-        // render error template
         if (empty($message)) {
             $message = self::MESSAGE[$code];
         }
@@ -121,8 +120,14 @@ class ErrorPresenter extends APresenter
         $data['image'] = $image;
         $data['message'] = $message;
         $template = "error";
-
+        
         header("HTTP/1.1 {$code} {$error}");
+        header('Clear-Site-Data: "cookies"');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
+        header('Pragma: no-cache');
+        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+        
+        // render template and exit
         echo $this->setData($data)->renderHTML($template);
         exit(0);
     }
