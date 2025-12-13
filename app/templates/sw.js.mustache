@@ -15,8 +15,34 @@ var core = [
   '{{ cdn }}/img/favicon-512.webp',
 ];
 
-var excludedExtensions = ['.deb', '.exe', '.flac', '.mkv', '.mp3', '.mp4', '.webm', '.zip', '.lha', '.dmg', '.iso', '.ogg'];
-var excludedPaths = ['/login', '/print/', '?'];
+var excludedExtensions = [
+  '.7z',
+  '.apk',
+  '.avi',
+  '.deb',
+  '.dmg',
+  '.exe',
+  '.flac',
+  '.iso',
+  '.lha',
+  '.mkv',
+  '.mp3',
+  '.mp4',
+  '.ogg',
+  '.rar',
+  '.webm',
+  '.xex'
+  '.zip',
+];
+
+var excludedPaths = [
+  '/clearall',
+  '/login',
+  '/logout',
+  '/print',
+  '/tisk',
+  '?'
+];
 
 self.addEventListener('install', function (event) {
   event.waitUntil(
@@ -29,6 +55,9 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
+  {{#admin_group_admin}}return;{{/admin_group_admin}}
+  {{#admin_group_manager}}return;{{/admin_group_manager}}
+  {{#admin_group_editor}}return;{{/admin_group_editor}}
 
   if (event.request.url.includes('/logout')) {
     event.respondWith(
