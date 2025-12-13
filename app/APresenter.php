@@ -580,7 +580,8 @@ abstract class APresenter
         $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
         $date = \date('c');
         $ip = $this->getIP();
-        $i = $this->getIdentity();
+        //$i = $this->getIdentity();
+        $i = $this->_identity;
         $name = $i['name'] ?? '';
         $email = $i['email'] ?? '';
 
@@ -886,35 +887,35 @@ abstract class APresenter
             }
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                $this->addError('Identity is not an array.');                
+                //$this->addError('Identity is not an array.');                
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                $this->addError('Identity has no id.');
+                //$this->addError('Identity has no id.');
                 $this->logout();
             }
             if (!\array_key_exists('name', $q)) {
-                $this->addError('Identity has no name.');
+                //$this->addError('Identity has no name.');
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                $this->addError('Identity has no email.');
+                //$this->addError('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('fingerprint', $q)) {
-                $this->addError('Identity has no fingerprint.');
+                //$this->addError('Identity has no fingerprint.');
                 $this->logout();
             }
             if ($q['fingerprint'] !== $fingerprint) {
-                $this->addError('Identity fingerprint is invalid.');
+                //$this->addError('Identity fingerprint is invalid.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                $this->addError('Identity has no nonce.');
+                //$this->addError('Identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                $this->addError('Identity nonce is invalid.');
+                //$this->addError('Identity nonce is invalid.');
                 $this->logout();
             }
             $this->_identity = $q;
@@ -956,7 +957,7 @@ abstract class APresenter
         if (\is_null($key)) {
             return $this->getData('cfg');
         }
-        if (\is_string($key)) {
+        if (\is_string($key) && !empty($key)) {
             return $this->getData("cfg.{$key}");
         }
         $err = 'FATAL ERROR: invalid getCfg parameter';
@@ -1427,15 +1428,17 @@ abstract class APresenter
      */
     public function getUserGroup()
     {
-        $id = $this->getIdentity()['id'] ?? null;
+        //$id = $this->getIdentity()['id'] ?? null;
+        $id = $this->_identity['id'] ?? null;
         if (!$id) {
             return null;
         }
-        $email = $this->getIdentity()['email'] ?? null;
+        //$email = $this->getIdentity()['email'] ?? null;
+        $email = $this->_identity['email'] ?? null;
         if (!$email) {
             return null;
         }
-        
+
         $mygroup = null;
         $email = \trim((string) $email);
         // search all groups for email or asterisk
