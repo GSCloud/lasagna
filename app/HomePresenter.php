@@ -71,17 +71,17 @@ class HomePresenter extends APresenter
             SF::addCustomReplacements($reps);
         }
 
-        // locales transformation
+        // text transformations
         $lang = $data['lang'] ?? 'en';
         foreach ($data['l'] ??=[] as $k => $v) {
-            // skip title, og_* and meta_* data
+            // skip title, og_* and meta_* keys
             if ($k === 'title'
                 || \str_starts_with($k, 'meta_')
                 || \str_starts_with($k, 'og_')
             ) {
                 continue;
             }
-            // process Markdown shortcodes
+            // process shortcodes
             if (\str_starts_with($v, '[markdown]')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
                 if (!LOCALHOST
@@ -100,12 +100,6 @@ class HomePresenter extends APresenter
                 }
             } else {
                 SF::convertEolToBrNbsp($data['l'][$k]);
-            }
-            if (\str_starts_with($k, 'meta_')) {
-                continue;
-            }
-            if (\str_starts_with($k, 'og_')) {
-                continue;
             }
             SF::correctTextSpacing($data['l'][$k], $lang);
         }
