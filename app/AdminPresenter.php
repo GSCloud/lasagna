@@ -112,10 +112,10 @@ class AdminPresenter extends APresenter
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
         if (!\is_array($cfg = $this->getCfg())) {
-            return $this->setData('output', 'FATAL ERROR in Cfg.');
+            return $this->setData('output', 'FATAL ERROR in the data model - cfg.');
         }
         if (!\is_array($data = $this->getData())) {
-            return $this->setData('output', 'FATAL ERROR in Model.');
+            return $this->setData('output', 'FATAL ERROR in the data model.');
         }
         $this->dataExpander($data);
 
@@ -1088,7 +1088,7 @@ class AdminPresenter extends APresenter
         if (!\is_string($path)) {
             $path = '*** not set ***';
         }
-        $this->addMessage("ADMIN: Unauthorized access.\nPath: [{$path}]");
+        $this->addMessage("ADMIN: Unauthorized access. Path: [{$path}]");
         $this->setLocation('/err/401');
     }
 

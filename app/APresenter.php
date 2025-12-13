@@ -1288,22 +1288,24 @@ abstract class APresenter
         $ban_secs = $this->getData['ban_secs'] ?? 3600;
         $limiter_secs = $this->getData['limiter_secs'] ?? 5;
 
-        // bans limiting
+        // ban rate limiting
         $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
+
                 // user is limited
                 $ban_reset = \floor(self::BAN_MAXIMUM / 2);
                 Cache::write($ban_rate, $ban_reset, 'ban');
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
             }
+
             // user is banned
             \header('Retry-After: ' . $ban_secs);
             $this->setLocation('/err/429');
         }
 
-        // rate limiting
+        // normal rate limiting
         $rate_limit_count = Cache::read($rate_limit, 'limiter');
         if (\is_numeric($rate_limit_count)) {
             $rate_limit_count++;
@@ -1314,10 +1316,12 @@ abstract class APresenter
         Cache::write($rate_limit, $rate_limit_count, 'limiter');
 
         if ($rate_limit_count >= (int) $max) {
-            // increment ban
+
+            // increment the ban
             $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
             Cache::write($ban_rate, ++$ban_rate_count, 'ban');
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
+
                 // user is banned
                 $path = $this->getData('request_path');
                 if (!\is_string($path)) {
@@ -1325,10 +1329,11 @@ abstract class APresenter
                 }
                 $ua = \trim($_SERVER['HTTP_USER_AGENT'] ?? '');
                 $ua = $ua ? "User [{$ua}]" : "User";
-                $this->addMessage("LIMITER: {$ua} is banned.\nPath: [{$path}]"); // phpcs:ignore
+                $this->addMessage("LIMITER: {$ua} is banned. Path: [{$path}]"); // phpcs:ignore
                 \header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
+
             // user is limited
             \header('Retry-After: ' . $limiter_secs);
             $this->setLocation('/err/429');
