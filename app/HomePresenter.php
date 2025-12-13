@@ -41,7 +41,7 @@ class HomePresenter extends APresenter
     {
         $this->checkRateLimit();
         if (!\is_array($data = $this->getData())) {
-            return $this->setData('output', 'FATAL ERROR in Model.');
+            return $this->setData('output', 'FATAL ERROR in the data model.');
         }
         if (!\is_string($view = $this->getView())) {
             return $this->setData('output', 'FATAL ERROR in View.');

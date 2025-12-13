@@ -38,17 +38,16 @@ class CorePresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-
         if (!\is_array($data = $this->getData())) {
             return $this->setData('output', 'FATAL ERROR in the data model.');
         }
-        $this->dataExpander($data);
         if (!$view = $this->getView()) {
             return $this;
         }
         if (!\is_array($presenter = $this->getPresenter())) {
             return $this;
         }
+        $this->dataExpander($data);
         
         // API parameters
         $match = $this->getMatch();

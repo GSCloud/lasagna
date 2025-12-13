@@ -31,7 +31,7 @@ use ParagonIE\Halite\KeyFactory;
 abstract class APresenter
 {
     /* @var integer max string length to decode by NE-ON */
-    const NEON_DECODE_LIMIT = 4096;
+    const NEON_DECODE_LIMIT = 8192;
 
     /* @var integer octal file mode for logs */
     const LOG_FILEMODE = 0664;
@@ -55,7 +55,7 @@ abstract class APresenter
     const COOKIE_KEY_FILEMODE = 0600;
 
     /* @var integer cookie TTL in seconds */
-    const COOKIE_TTL = 86400 * 31;
+    const COOKIE_TTL = 86400 * 15;
 
     /* @var string CloudFlare API URL */
     const CLOUDFLARE_API = 'https://api.cloudflare.com/client/v4/';
@@ -82,7 +82,7 @@ abstract class APresenter
     const BAN_MAXIMUM = 10;
 
     /* @var integer update ignore interval in seconds */
-    const CSV_UPDATE_IGNORE = 120;
+    const CSV_UPDATE_IGNORE = 180;
 
     /* @var string identity nonce filename inside the DATA folder */
     const IDENTITY_NONCE_FILE = 'identity_nonce.key';

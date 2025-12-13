@@ -110,12 +110,11 @@ class AdminPresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-
-        if (!\is_array($cfg = $this->getCfg())) {
-            return $this->setData('output', 'FATAL ERROR in the data model - cfg.');
-        }
         if (!\is_array($data = $this->getData())) {
             return $this->setData('output', 'FATAL ERROR in the data model.');
+        }
+        if (!\is_array($cfg = $this->getCfg())) {
+            return $this->setData('output', 'FATAL ERROR in Cfg.');
         }
         $this->dataExpander($data);
 
