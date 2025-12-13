@@ -39,6 +39,7 @@ register_shutdown_function(
         $error = error_get_last();
         if ($error) {
             $halite = strpos($error['file'], 'constant_time_encoding') !== false;
+            $dot = strpos($error['file'], 'php-dot-notation') !== false;
             $memory = strpos($error['message'], 'Allowed memory size') !== false;
             $logMessage = sprintf(
                 "CRASH: Error (%s) detected in %s on line %d. User Agent: %s",
@@ -50,7 +51,7 @@ register_shutdown_function(
             $timestamp = date('[Y-m-d H:i:s] ');
             $logFile = ROOT . DS . 'logs' . DS . 'crash.log';
             error_log($timestamp . $logMessage . "\n\n", 3, $logFile);
-            if ($halite || $memory) {
+            if ($halite || $memory || $dot) {
                 header('Clear-Site-Data: "cookies"');
                 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
                 header('Pragma: no-cache');
