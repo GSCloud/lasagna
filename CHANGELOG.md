@@ -2,6 +2,17 @@
 
 ---
 
+`2025-12-13`
+
+* **`1095-BUGFIX` enhanced Service Worker**
+
+`2025-12-12`
+
+* **`1094-FEATURE`** new **StringFilter:**  
+  * **`[css <class> …][/css]`**  
+* **`1093-BUGFIX` GOVERNOR cookie system** to handle updates  
+* **`1092-BUGFIX` emergency crash handler** with logging to handle Out of RAM/Time fatal errors
+
 `2025-12-10`
 
 * **`1091-BUGFIX`** updated **CakePHP Cache Module** to v5  
