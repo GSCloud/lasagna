@@ -386,64 +386,93 @@ abstract class APresenter
     {
         $dot = new \Adbar\Dot((array) $this->data);
 
-        // ENGINE CONSTANTS
-        $dot->set(
-            [
-                'CONST.APP' => APP,
-                'CONST.APPNAME' => APPNAME,
-                'CONST.CACHE' => CACHE,
-                'CONST.CACHEPREFIX' => CACHEPREFIX,
-                'CONST.CLI' => CLI,
-                'CONST.CONFIG' => CONFIG,
-                'CONST.CONFIG_PRIVATE' => CONFIG_PRIVATE,
-                'CONST.CSP' => CSP,
-                'CONST.DATA' => DATA,
-                'CONST.DOMAIN' => DOMAIN,
-                'CONST.DOWNLOAD' => DOWNLOAD,
-                'CONST.ENGINE' => ENGINE,
-                'CONST.FCGI_ENABLED' => FCGI_ENABLED,
-                'CONST.LOGS' => LOGS,
-                'CONST.LOCALHOST' => LOCALHOST,
-                'CONST.PARTIALS' => PARTIALS,
-                'CONST.PROJECT' => PROJECT,
-                'CONST.REDIS_CACHE' => REDIS_CACHE,
-                'CONST.ROOT' => ROOT,
-                'CONST.SERVER' => SERVER,
-                'CONST.TEMP' => TEMP,
-                'CONST.TEMPLATES' => TEMPLATES,
-                'CONST.UPLOAD' => UPLOAD,
-                'CONST.WWW' => WWW,
+        if (!$dot->get('CONST.ADBARDOTFLAG')) {
+            $dot->set(
+                [
+                    // Adbar Dot flag
+                    'CONST.ADBARDOTFLAG' => true,
+    
+                    // ENGINE CONSTANTS
+                    'CONST.APP' => APP,
+                    'CONST.APPNAME' => APPNAME,
+                    'CONST.CACHE' => CACHE,
+                    'CONST.CACHEPREFIX' => CACHEPREFIX,
+                    'CONST.CLI' => CLI,
+                    'CONST.CONFIG' => CONFIG,
+                    'CONST.CONFIG_PRIVATE' => CONFIG_PRIVATE,
+                    'CONST.CSP' => CSP,
+                    'CONST.DATA' => DATA,
+                    'CONST.DOMAIN' => DOMAIN,
+                    'CONST.DOWNLOAD' => DOWNLOAD,
+                    'CONST.ENGINE' => ENGINE,
+                    'CONST.FCGI_ENABLED' => FCGI_ENABLED,
+                    'CONST.LOGS' => LOGS,
+                    'CONST.LOCALHOST' => LOCALHOST,
+                    'CONST.PARTIALS' => PARTIALS,
+                    'CONST.PROJECT' => PROJECT,
+                    'CONST.REDIS_CACHE' => REDIS_CACHE,
+                    'CONST.ROOT' => ROOT,
+                    'CONST.SERVER' => SERVER,
+                    'CONST.TEMP' => TEMP,
+                    'CONST.TEMPLATES' => TEMPLATES,
+                    'CONST.UPLOAD' => UPLOAD,
+                    'CONST.WWW' => WWW,
+    
+                    // PHP INI CONSTANTS
+                    'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
+                    'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
+                    'CONST.UPLOAD_MAX_FILESIZE' => ini_get('upload_max_filesize'),
+    
+                    // CLASS CONSTANTS
+                    'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
+                    'CONST.CSV_FILEMODE' => self::CSV_FILEMODE,
+                    'CONST.CSV_MIN_SIZE' => self::CSV_MIN_SIZE,
+                    'CONST.COOKIE_KEY_FILEMODE' => self::COOKIE_KEY_FILEMODE,
+                    'CONST.COOKIE_TTL' => self::COOKIE_TTL,
+                    'CONST.GS_CSV_PREFIX' => self::GS_CSV_PREFIX,
+                    'CONST.GS_CSV_POSTFIX' => self::GS_CSV_POSTFIX,
+                    'CONST.GS_TSV_POSTFIX' => self::GS_TSV_POSTFIX,
+                    'CONST.GS_SHEET_PREFIX' => self::GS_SHEET_PREFIX,
+                    'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
+                    'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
+                    'CONST.BAN_MAXIMUM' => self::BAN_MAXIMUM,
+                    'CONST.CSV_UPDATE_IGNORE' => self::CSV_UPDATE_IGNORE,
+                    'CONST.AUDITLOG_FILE' => self::AUDITLOG_FILE,
+                ]
+            );
+        }
 
-                // PHP ini constants
-                'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
-                'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
-                'CONST.UPLOAD_MAX_FILESIZE' => ini_get('upload_max_filesize'),
-            ]
-        );
-
-        // CLASS CONSTANTS
-        $dot->set(
-            [
-                'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
-                'CONST.CSV_FILEMODE' => self::CSV_FILEMODE,
-                'CONST.CSV_MIN_SIZE' => self::CSV_MIN_SIZE,
-                'CONST.COOKIE_KEY_FILEMODE' => self::COOKIE_KEY_FILEMODE,
-                'CONST.COOKIE_TTL' => self::COOKIE_TTL,
-                'CONST.GS_CSV_PREFIX' => self::GS_CSV_PREFIX,
-                'CONST.GS_CSV_POSTFIX' => self::GS_CSV_POSTFIX,
-                'CONST.GS_TSV_POSTFIX' => self::GS_TSV_POSTFIX,
-                'CONST.GS_SHEET_PREFIX' => self::GS_SHEET_PREFIX,
-                'CONST.GS_SHEET_POSTFIX' => self::GS_SHEET_POSTFIX,
-                'CONST.LIMITER_MAXIMUM' => self::LIMITER_MAXIMUM,
-                'CONST.BAN_MAXIMUM' => self::BAN_MAXIMUM,
-                'CONST.CSV_UPDATE_IGNORE' => self::CSV_UPDATE_IGNORE,
-                'CONST.AUDITLOG_FILE' => self::AUDITLOG_FILE,
-            ]
-        );
+        // get a key value of Model
         if (\is_string($key)) {
+
+            // KEY LOGGER - START
+            $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = $trace[1] ?? [];
+            // phpcs:ignore
+            $caller_info = ($caller['class'] ?? 'Fn') . '::' . ($caller['function'] ?? 'N/A');
+            $log_entry = \sprintf(
+                "[%s] %s => %s\n", 
+                \date('H:i:s'), 
+                $caller_info, 
+                'GET: ' . $key
+            );
+            try {
+                // phpcs:ignore
+                @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND);
+            } catch (\Throwable $e) {
+                \error_log($e->getMessage());
+            }
+            // KEY LOGGER - END
+
+            // phpcs:ignore
+            //bdump(strlen(json_encode($this->data)), 'MODEL GET KEY ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
             return $dot->get($key);
         }
+
+        // get the whole Model
         $this->data = (array) $dot->all();
+        // phpcs:ignore
+        //bdump(strlen(json_encode($this->data)), 'MODEL GET ALL ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
         return $this->data;
     }
 
@@ -457,22 +486,47 @@ abstract class APresenter
      */
     public function setData($data = null, $value = null)
     {
+        // replace the whole Model
         if (\is_array($data)) {
-             // new model, replace it
             $this->data = (array) $data;
-        } else {
-            // $data = key index
+            // phpcs:ignore
+            //bdump(strlen(json_encode($this->data)), 'MODEL SET ALL ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
+        }
+
+        // set a single key in Model
+        if (\is_string($data) && !empty($value)) {
             $key = $data;
-            if (\is_string($key) && !empty($key)) {
-                if (\str_starts_with($key, 'cfg.')) {
-                    $err = 'FATAL ERROR: trying to modify cfg data';
-                    \error_log($err);
-                    throw new \Exception($err);
-                }
-                $dot = new \Adbar\Dot($this->data);
-                $dot->set($key, $value);
-                $this->data = (array) $dot->all();
+
+            // KEY LOGGER - START
+            $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = $trace[1] ?? [];
+            // phpcs:ignore
+            $caller_info = ($caller['class'] ?? 'Fn') . '::' . ($caller['function'] ?? 'N/A');
+            $log_entry = \sprintf(
+                "[%s] %s => %s\n", 
+                \date('H:i:s'), 
+                $caller_info, 
+                'SET: ' . $key
+            );
+            try {
+                // phpcs:ignore
+                @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND);
+            } catch (\Throwable $e) {
+                \error_log($e->getMessage());
             }
+            // KEY LOGGER - END
+
+            if (\str_starts_with($key, 'cfg.')) {
+                // cfg keys cannot be modified!
+                $err = 'FATAL ERROR: trying to modify cfg data';
+                \error_log($err);
+                throw new \Exception($err);
+            }
+            $dot = new \Adbar\Dot($this->data);
+            $dot->set($key, $value);
+            $this->data = (array) $dot->all();
+            // phpcs:ignore
+            //bdump(strlen(json_encode($this->data)), 'MODEL SET KEY ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
         }
         return $this;
     }
@@ -2015,7 +2069,7 @@ abstract class APresenter
                         \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
-                        bdump($e, $kk);
+                        //bdump($e, $kk);
                         continue;
                     }
                 }
@@ -2038,7 +2092,7 @@ abstract class APresenter
                         \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
-                        bdump($e, $kk);
+                        //bdump($e, $kk);
                         continue;
                     }
                 }
@@ -2071,7 +2125,7 @@ abstract class APresenter
                         \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
-                        bdump($e, $kk);
+                        //bdump($e, $kk);
                         continue;
                     }
                 }
@@ -2105,7 +2159,7 @@ abstract class APresenter
         // update model
         if ($reps) {
             $dot->set('model.x_count', $reps);
-            bdump($reps, 'MODEL X');
+            //bdump($reps, 'MODEL X');
             $this->data = $data = $dot->all();
         }
 
