@@ -262,12 +262,16 @@ date_default_timezone_set(
 if (CLI === true) {
     defined('DEBUG') || define('DEBUG', false);
 }
+
+// localhost
 if (($_SERVER['SERVER_NAME'] ?? '') === 'localhost') {
     if (($cfg['dbg'] ?? null) === false) {
         defined('DEBUG') || define('DEBUG', false); // DISABLED - configuration
     }
     defined('DEBUG') || define('DEBUG', true); // ENABLED - localhost
 }
+
+// curl
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') !== false) {
         define('CURL', true);
