@@ -458,7 +458,9 @@ abstract class APresenter
             );
             try {
                 // phpcs:ignore
-                @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND);
+                if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === false) {
+                    @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
+                }
             } catch (\Throwable $e) {
                 \error_log($e->getMessage());
             }
@@ -510,7 +512,9 @@ abstract class APresenter
             );
             try {
                 // phpcs:ignore
-                @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND);
+                if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === false) {
+                    @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
+                }
             } catch (\Throwable $e) {
                 \error_log($e->getMessage());
             }
