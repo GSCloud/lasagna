@@ -271,6 +271,9 @@ if (($_SERVER['SERVER_NAME'] ?? '') === 'localhost') {
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') !== false) {
         defined('DEBUG') || define('DEBUG', false); // DISABLED - curl
+        define('CURL', true);
+    } else {
+        define('CURL', false);
     }
 }
 defined('DEBUG') || define('DEBUG', (bool) ($cfg['dbg'] ?? false));

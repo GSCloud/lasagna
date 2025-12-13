@@ -457,8 +457,7 @@ abstract class APresenter
                 'GET: ' . $key
             );
             try {
-                // phpcs:ignore
-                if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === false) {
+                if (!CURL) {
                     @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
                 }
             } catch (\Throwable $e) {
@@ -511,8 +510,7 @@ abstract class APresenter
                 'SET: ' . $key
             );
             try {
-                // phpcs:ignore
-                if (strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === false) {
+                if (!CURL) {
                     @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
                 }
             } catch (\Throwable $e) {
