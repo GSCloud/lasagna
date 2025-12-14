@@ -166,7 +166,6 @@ class LoginPresenter extends APresenter
 
                 // IDENTITY
                 $this->setIdentity($i);
-                //$this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
                 }
