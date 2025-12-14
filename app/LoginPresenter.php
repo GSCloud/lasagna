@@ -101,7 +101,7 @@ class LoginPresenter extends APresenter
         } catch (\Throwable $e) {
             $err = "OAuth: failure. Exception: " . $e->getMessage();
             $this->addError($err);
-            ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
+            ErrorPresenter::getInstance()->process(['code' => 400, 'message' => $err]); // phpcs:ignore
         }
         if (!empty($_GET['error'])) {
             $err = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
@@ -161,8 +161,11 @@ class LoginPresenter extends APresenter
                 // IDENTITY
                 $this->setIdentity($i);
                 if (!empty($group = $this->getUserGroup())) {
-                    $this->addMessage("OAuth login. User group: [{$group}]");
+                    $name = $i['name'];
+                    $this->addMessage("OAuth [{$name}] login. User group: [{$group}]");
                 }
+
+                // RETURN URL
                 $returnUrl = \urldecode($_COOKIE['returnURL'] ?? '/');
                 $url = '/';
                 if (\strpos($returnUrl, '/') === 0) {
@@ -170,15 +173,17 @@ class LoginPresenter extends APresenter
                 }
                 $this->setLocation("{$url}?nonce=" . $this->getNonce());
             } catch (\Throwable $e) {
+
+                // EXCEPTION
                 $err = "OAuth: failure. Exception: " . $e->getMessage();
                 $this->addError($err);
                 ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
             }
         }
 
-        /* should not happend */
+        /* SHOULD NOT HAPPEN! */
         $err = "OAuth: general error";
         $this->addError($err);
-        ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]);
+        ErrorPresenter::getInstance()->process(['code' => 400, 'message' => $err]);
     }
 }
