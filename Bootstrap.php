@@ -157,6 +157,11 @@ if (defined($d) && is_readable($d) && is_writable($d)) {
     }
 }
 
+// clean key logs
+if (is_file(LOGS . DS . 'key_log.txt')) {
+    @unlink(LOGS . DS . 'key_log.txt');
+}
+
 // TEMP files storage
 $d = 'TEMP';
 $x = ROOT . DS . 'temp';

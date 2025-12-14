@@ -216,7 +216,7 @@ abstract class APresenter
     }
 
     /**
-     * Logs an array to a JSON file
+     * Logs an array to JSON file
      *
      * @param array  $data     data to be logged
      * @param string $filePath path to the log file
@@ -445,6 +445,7 @@ abstract class APresenter
         // get a key value of Model
         if (\is_string($key)) {
 
+            /*
             // KEY LOGGER - START
             $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $caller = $trace[1] ?? [];
@@ -458,22 +459,20 @@ abstract class APresenter
             );
             try {
                 if (!CURL) {
-                    @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
+                // phpcs:ignore
+                    @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND);
                 }
             } catch (\Throwable $e) {
                 \error_log($e->getMessage());
             }
             // KEY LOGGER - END
+            */
 
-            // phpcs:ignore
-            //bdump(strlen(json_encode($this->data)), 'MODEL GET KEY ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
             return $dot->get($key);
         }
 
         // get the whole Model
         $this->data = (array) $dot->all();
-        // phpcs:ignore
-        //bdump(strlen(json_encode($this->data)), 'MODEL GET ALL ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
         return $this->data;
     }
 
@@ -490,14 +489,13 @@ abstract class APresenter
         // replace the whole Model
         if (\is_array($data)) {
             $this->data = (array) $data;
-            // phpcs:ignore
-            //bdump(strlen(json_encode($this->data)), 'MODEL SET ALL ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
         }
 
         // set a single key in Model
         if (\is_string($data) && !empty($value)) {
             $key = $data;
 
+            /*
             // KEY LOGGER - START
             $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $caller = $trace[1] ?? [];
@@ -511,12 +509,14 @@ abstract class APresenter
             );
             try {
                 if (!CURL) {
+                // phpcs:ignore
                     @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
                 }
             } catch (\Throwable $e) {
                 \error_log($e->getMessage());
             }
             // KEY LOGGER - END
+            */
 
             if (\str_starts_with($key, 'cfg.')) {
                 // cfg keys cannot be modified!
@@ -527,8 +527,6 @@ abstract class APresenter
             $dot = new \Adbar\Dot($this->data);
             $dot->set($key, $value);
             $this->data = (array) $dot->all();
-            // phpcs:ignore
-            //bdump(strlen(json_encode($this->data)), 'MODEL SET KEY ' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function']);
         }
         return $this;
     }
@@ -579,11 +577,10 @@ abstract class APresenter
         $message = \trim($message);
         $message = \str_replace(["\n", "\r", "\t", ';', '  '], ["<br>", " ", " ", ",", ' '], $message); // phpcs:ignore
         $date = \date('c');
-        $ip = $this->getIP();
-        //$i = $this->getIdentity();
         $i = $this->_identity;
         $name = $i['name'] ?? '';
         $email = $i['email'] ?? '';
+        $ip = $this->getIP();
 
         if (empty($name)) {
             try {
@@ -687,6 +684,7 @@ abstract class APresenter
         }
         if (\is_string($message) && !empty($message)) {
             $this->_criticals[] = $message;
+            $this->addAuditMessage($message);
 
             // get the backtrace
             $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
@@ -887,35 +885,35 @@ abstract class APresenter
             }
             $q = \json_decode($content, true);
             if (!\is_array($q)) {
-                //$this->addError('Identity is not an array.');                
+                $this->addError('Identity is not an array.');                
                 $this->logout();
             }
             if (!\array_key_exists('id', $q)) {
-                //$this->addError('Identity has no id.');
+                $this->addError('Identity has no id.');
                 $this->logout();
             }
             if (!\array_key_exists('name', $q)) {
-                //$this->addError('Identity has no name.');
+                $this->addError('Identity has no name.');
                 $this->logout();
             }
             if (!\array_key_exists('email', $q)) {
-                //$this->addError('Identity has no email.');
+                $this->addError('Identity has no email.');
                 $this->logout();
             }
             if (!\array_key_exists('fingerprint', $q)) {
-                //$this->addError('Identity has no fingerprint.');
+                $this->addError('Identity has no fingerprint.');
                 $this->logout();
             }
             if ($q['fingerprint'] !== $fingerprint) {
-                //$this->addError('Identity fingerprint is invalid.');
+                $this->addError('Identity fingerprint is invalid.');
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
-                //$this->addError('Identity has no nonce.');
+                $this->addError('Identity has no nonce.');
                 $this->logout();
             }
             if ($q['nonce'] !== $nonce) {
-                //$this->addError('Identity nonce is invalid.');
+                $this->addError('Identity nonce is invalid.');
                 $this->logout();
             }
             $this->_identity = $q;
