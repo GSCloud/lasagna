@@ -152,8 +152,7 @@ class AdminPresenter extends APresenter
         // API calls
         switch ($view) {
         case 'Upload':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -180,8 +179,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(\array_values($uploads), $extras);
 
         case 'UploadDelete':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -202,8 +200,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(400, $extras);
 
         case 'getUploadsInfo':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -242,8 +239,7 @@ class AdminPresenter extends APresenter
             );
         
         case 'getUploads':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             if (!defined('UPLOAD')
                 || \is_null(UPLOAD)
                 || !\is_dir(UPLOAD)
@@ -354,8 +350,7 @@ class AdminPresenter extends APresenter
             );
     
         case 'AuditLog':
-            $this->_checkGovernor();
-            $this->checkPermission('admin');
+            $this->_checkGovernor()->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . self::AUDITLOG_FILE;
             if (file_exists($filename) && !is_readable($filename)) {
@@ -378,8 +373,7 @@ class AdminPresenter extends APresenter
             return $this->setData('output', $this->setData($data)->renderHTML('auditlog')); // phpcs:ignore
 
         case 'BlockLog':
-            $this->_checkGovernor();
-            $this->checkPermission('admin');
+            $this->_checkGovernor()->checkPermission('admin');
             $this->setHeaderHTML();
             $filename = DATA . DS . self::AUDITLOG_FILE;
             if (file_exists($filename) && !is_readable($filename)) {
@@ -438,25 +432,24 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData($data, $extras);
 
         case 'UpdateArticles':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             $x = 0;
             $profile = 'default';
             if (isset($_POST['data'])) {
-                $data = (string) trim((string) $_POST['data']);
+                $data = (string) \trim((string) $_POST['data']);
                 // remove extra whitespace
                 $data_nows = \preg_replace('/\s\s+/', ' ', (string) $_POST['data']);
                 $x++;
             }
             if (isset($_POST['path'])) {
-                $path = trim((string) $_POST['path']);
+                $path = \trim((string) $_POST['path']);
                 // URL path
                 if (strlen($path)) {
                     $x++;
                 }
             }
             if (isset($_POST['hash'])) {
-                $hash = trim((string) $_POST['hash']);
+                $hash = \trim((string) $_POST['hash']);
                 // SHA 256 hexadecimal
                 if (strlen($hash) === 64) {
                     $x++;
@@ -542,8 +535,7 @@ class AdminPresenter extends APresenter
             return $this->writeJsonData(['status' => 'OK', 'hash' => $hash], $extras); // phpcs:ignore
     
         case 'GetToken':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             if (!$key = $this->_readAdminKey()) {
                 return $this->writeJsonData(500, $extras);
             }
@@ -750,18 +742,15 @@ class AdminPresenter extends APresenter
             $this->_unauthorizedAccess();
 
         case 'FlushCache':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
-            $this->addMessage('ADMIN: FLUSH CACHE');
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             $this->flushCache();
+            $this->addMessage('ADMIN: FLUSH CACHE');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         case 'CoreUpdate':
-            $this->_checkGovernor();
-            $this->_checkPermission('admin,manager,editor', $extras);
-            $this->addMessage('ADMIN: CORE UPDATE');
+            $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
             $this->setForceCsvCheck();
-            $this->postloadAppData('app_data');
+            $this->postloadAppData('app_data')->addMessage('ADMIN: CORE UPDATE');
             return $this->writeJsonData(['status' => 'OK'], $extras);
 
         default:
@@ -797,7 +786,7 @@ class AdminPresenter extends APresenter
             
             // Sanitize the filename
             $f = $file['name'];
-            $f = \strtr(trim(\basename($f)), " '\"\\()", '______');
+            $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
             SF::transliterate($f);
             SF::sanitizeStringLC($f);
             SF::transliterate($f);
@@ -911,7 +900,7 @@ class AdminPresenter extends APresenter
 
         if (isset($_POST['name'])) {
             $name = \trim($_POST['name']);
-            $name = \strtr(trim($name), " '\"\\()", '______');
+            $name = \strtr(\trim($name), " '\"\\()", '______');
             SF::transliterate($name);
             SF::sanitizeStringLC($name);
             SF::transliterate($name);
@@ -988,12 +977,19 @@ class AdminPresenter extends APresenter
     /**
      * Rebuild the admin key
      *
-     * @return self
+     * @return object
      */
     private function _rebuildAdminKey()
     {
         $file = DATA . DS . self::ADMIN_KEY;
-        @unlink($file);
+        @\unlink($file);
+        if (\file_exists($file)) {
+            $err = 'Admin key cannot be removed!';
+            $this->addCritical($err);
+            ErrorPresenter::getInstance()->process(
+                ['code' => 500, 'message' => 'SYSTEM ERROR: ' . $err]
+            );
+        }
         return $this->_createAdminKey();
     }
 
@@ -1005,27 +1001,28 @@ class AdminPresenter extends APresenter
     private function _rebuildSecureKey()
     {
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        if (!\is_string($key)) {
-            $this->addCritical('Secure cookie must be a string!');
+        if (!\is_string($key) || empty($key)) {
+            $err = 'Secure key not defined!';
+            $this->addCritical($err);
             ErrorPresenter::getInstance()->process(
-                ['code' => 500, 'message' => 'SYSTEM ERROR: unable to setup the encryption'] // phpcs:ignore
+                ['code' => 500, 'message' => 'SYSTEM ERROR: ' . $err]
             );
-
         }
         if (\is_string($key)) {
-            $key = trim($key, '/.');
-            if (file_exists(DATA . DS . $key)) {
-                unlink(DATA . DS . $key);
-                clearstatcache();
+            $key = \trim($key, '/.');
+            if (\file_exists(DATA . DS . $key)) {
+                \unlink(DATA . DS . $key);
+                \clearstatcache();
             }
         }
+        // Halite sets the key on its own if missing
         return $this->setIdentity();
     }
 
     /**
      * Flush the cache
      *
-     * @return self
+     * @return object
      */
     public function flushCache()
     {
@@ -1034,8 +1031,8 @@ class AdminPresenter extends APresenter
         $lock = $factory->createLock('core-update');
         if ($lock->acquire()) {
             try {
-                if (ob_get_level()) {
-                    @ob_end_clean();
+                if (\ob_get_level()) {
+                    @\ob_end_clean();
                 }
                 if (\is_array($this->getData('cache_profiles'))) {
                     foreach ($this->getData('cache_profiles') as $k => $v) {
@@ -1094,25 +1091,25 @@ class AdminPresenter extends APresenter
     /**
      * Create the admin key
      *
-     * @return self
+     * @return object
      */
     private function _createAdminKey()
     {
         $file = DATA . DS . self::ADMIN_KEY;
-        if (!file_exists($file)) {
+        if (!\file_exists($file)) {
             try {
-                $key = \hash('sha256', random_bytes(32) . time());
+                $key = \hash('sha256', random_bytes(32) . \time());
             } catch (\Throwable $e) {
                 $this->addError("ADMIN: error generating random key: " . $e->getMessage()); // phpcs:ignore
                 ErrorPresenter::getInstance()->process(500);
                 return $this;
             }
-            if (@file_put_contents($file, $key) === false) {
+            if (@\file_put_contents($file, $key) === false) {
                 $this->_handleFileError($file, "ADMIN: error writing to admin key file"); // phpcs:ignore
-                unlink($file);
-            } else if (!chmod($file, 0600)) {
+                \unlink($file);
+            } else if (!\chmod($file, 0600)) {
                 $this->_handleFileError($file, "ADMIN: error setting admin key file permissions"); // phpcs:ignore
-                unlink($file);
+                \unlink($file);
             } else {
                 $this->addMessage('ADMIN: keyfile created');
             }
@@ -1130,7 +1127,7 @@ class AdminPresenter extends APresenter
      */
     private function _handleFileError($file, $messagePrefix)
     {
-        $err = error_get_last();
+        $err = \error_get_last();
         $errMessage = ($err ? $err['message'] : 'Unknown error');
         $message = $messagePrefix . " Message:\n{$errMessage}";
         $this->addError($message);
@@ -1145,13 +1142,13 @@ class AdminPresenter extends APresenter
     private function _readAdminKey()
     {
         $file = DATA . DS . self::ADMIN_KEY;
-        if (!is_readable($file)) {
+        if (!\is_readable($file)) {
             $this->addError('ADMIN: missing or unreadable admin key file');
             $this->_createAdminKey();
         }
-        if (is_readable($file)) {
-            $key = trim(file_get_contents($file) ?: '');
-            if (strlen($key) > 0) {
+        if (\is_readable($file)) {
+            $key = \trim(\file_get_contents($file) ?: '');
+            if (\strlen($key) > 0) {
                 return $key;
             }
         }
@@ -1390,8 +1387,8 @@ class AdminPresenter extends APresenter
             'manager',
             'purged',
         ];
-        $x[1] = preg_replace_callback(
-            '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
+        $x[1] = \preg_replace_callback(
+            '/\b(' . \implode('|', \array_map('preg_quote', $bolds)) . ')\b/',
             function ($match) {
                 return '<b>' . $match[1] . '</b>';
             },
@@ -1525,8 +1522,8 @@ class AdminPresenter extends APresenter
             'download blocked',
             'Unauthorized access',
         ];
-        $x[1] = preg_replace_callback(
-            '/\b(' . implode('|', array_map('preg_quote', $bolds)) . ')\b/',
+        $x[1] = \preg_replace_callback(
+            '/\b(' . \implode('|', \array_map('preg_quote', $bolds)) . ')\b/',
             function ($match) {
                 return '<b>' . $match[1] . '</b>';
             },
@@ -1600,10 +1597,10 @@ class AdminPresenter extends APresenter
         $x[3] = \str_replace('NAME:', '', $x[3]);
         $x[4] = \str_replace('EMAIL:', '', $x[4]);
 
-        $x[1] = trim($x[1], "\r\n\t");
-        $x[2] = trim($x[2], "\r\n\t");
-        $x[3] = trim($x[3], "\r\n\t");
-        $x[4] = trim($x[4], "\r\n\t");
+        $x[1] = \trim($x[1], "\r\n\t");
+        $x[2] = \trim($x[2], "\r\n\t");
+        $x[3] = \trim($x[3], "\r\n\t");
+        $x[4] = \trim($x[4], "\r\n\t");
 
         $type = 'unknown';
         $lookup = [
@@ -1626,7 +1623,7 @@ class AdminPresenter extends APresenter
             }
         }
 
-        $x[1] = str_replace('<br>', " ", $x[1]);
+        $x[1] = \str_replace('<br>', " ", $x[1]);
 
         $val = [
             'id' => $key + 1,
@@ -1650,7 +1647,7 @@ class AdminPresenter extends APresenter
     private function _getCSVFileLines($f)
     {
         try {
-            if (!file_exists($f)) {
+            if (!\file_exists($f) || !\is_readable($f)) {
                 return -1;
             }
             $count = 0;
@@ -1675,25 +1672,28 @@ class AdminPresenter extends APresenter
      */
     private function _checkPermission($list, $extras)
     {
-        if (\is_string($list) && \is_array($extras) && $this->checkPermission($list, true)) { // phpcs:ignore
-            return;
+        $result = $this->checkPermission($list, true);
+        if (!$result) {
+            return $this->writeJsonData(401, $extras ?? []);
         }
-        return $this->writeJsonData(401, $extras ?? []);
+        return $this;
     }
 
     /**
      * Check GOVERNOR cookie consistency
      * 
-     * @return void
+     * @return self
      */
     private function _checkGovernor()
     {
+        $cookie = 'GOVERNOR';
+        if (!isset($_COOKIE[$cookie])) {
+            $this->setLocation('/?logout');
+        }
         $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
-        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
+        if ($_COOKIE[$cookie] !== $governor) {
             $this->setLocation('/?logout');
         }
-        if (!isset($_COOKIE['GOVERNOR'])) {
-            $this->setLocation('/?logout');
-        }
+        return $this;
     }
 }

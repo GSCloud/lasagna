@@ -1147,6 +1147,13 @@ abstract class APresenter
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
         $key = \trim($key, "/.\\");
+        if (!\is_string($key) || empty($key)) {
+            $err = 'Secure key not defined!';
+            $this->addCritical($err);
+            ErrorPresenter::getInstance()->process(
+                ['code' => 500, 'message' => 'SYSTEM ERROR: ' . $err]
+            );
+        }
         $keyfile = DATA . DS . $key;
         if (\file_exists($keyfile) && \is_readable($keyfile)) {
             $enc = KeyFactory::loadEncryptionKey($keyfile);
@@ -1424,19 +1431,21 @@ abstract class APresenter
      */
     public function getUserGroup()
     {
-        //$id = $this->getIdentity()['id'] ?? null;
-        $id = $this->_identity['id'] ?? null;
+        $id = $this->getIdentity()['id'] ?? null;
+        //$id = $this->_identity['id'] ?? null;
         if (!$id) {
             return null;
         }
-        //$email = $this->getIdentity()['email'] ?? null;
-        $email = $this->_identity['email'] ?? null;
+
+        $email = $this->getIdentity()['email'] ?? null;
+        //$email = $this->_identity['email'] ?? null;
         if (!$email) {
             return null;
         }
 
         $mygroup = null;
         $email = \trim((string) $email);
+
         // search all groups for email or asterisk
         foreach ($this->getData('admin_groups') ?? [] as $group => $users) {
             if (\in_array($email, $users, true)) {
@@ -1931,7 +1940,7 @@ abstract class APresenter
         if (\is_string($data)) {
             $data = [$data];
         }
-        if (is_int($data)) {
+        if (\is_int($data)) {
             $code = $data;
             $data = null;
             $m = null;

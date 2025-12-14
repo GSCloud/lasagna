@@ -38,6 +38,7 @@ class CorePresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
         if (!\is_array($data = $this->getData())) {
             return $this->setData('output', 'FATAL ERROR in the data model.');
         }
@@ -75,9 +76,9 @@ class CorePresenter extends APresenter
             $this->setHeaderText();
             $file = APP . DS . 'badrobots.txt';
             $bots = [];
-            if (file_exists($file) && is_readable($file)) {
+            if (\file_exists($file) && \is_readable($file)) {
+                // bad bots
                 $bots = \file(
-                    // bad bots
                     APP . DS . 'badrobots.txt',
                     FILE_SKIP_EMPTY_LINES
                 );
@@ -105,7 +106,7 @@ class CorePresenter extends APresenter
             $map = [];
             foreach ($presenter as $p) {
                 if (isset($p["sitemap"]) && $p["sitemap"]) {
-                    $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
+                    $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
                 }
             }
             return $this->setData(
@@ -118,7 +119,7 @@ class CorePresenter extends APresenter
             $map = [];
             foreach ($presenter as $p) {
                 if (isset($p["sitemap"]) && $p["sitemap"]) {
-                    $map[] = trim($p["path"], "/ \t\n\r\0\x0B");
+                    $map[] = \trim($p["path"], "/ \t\n\r\0\x0B");
                 }
             }
             return $this->setData(
@@ -155,7 +156,7 @@ class CorePresenter extends APresenter
             }
             $scale = 5;
             if ($match && \is_array($match) && isset($match["params"]["size"])) {
-                $size = trim((string) $match["params"]["size"]);
+                $size = \trim((string) $match["params"]["size"]);
                 $size = \strtolower($size);
                 switch ($size) {
                 case "x":
@@ -175,7 +176,7 @@ class CorePresenter extends APresenter
             }
             $text = 'Hello World!';
             if ($match && \is_array($match) && isset($match["params"]["trailing"])) {
-                $text = trim((string) $match["params"]["trailing"]);
+                $text = \trim((string) $match["params"]["trailing"]);
                 $x++;
             }
             if ($x !== 2) {
@@ -241,11 +242,11 @@ class CorePresenter extends APresenter
                 return $this->writeJsonData(400, $extras);
             }
             if (isset($match["params"]["profile"])) {
-                $profile = trim($match["params"]["profile"]);
+                $profile = \trim($match["params"]["profile"]);
                 $x++;
             }
             if (isset($match["params"]["hash"])) {
-                $hash = trim($match["params"]["hash"]);
+                $hash = \trim($match["params"]["hash"]);
                 $x++;
             }
             if ($x !== 2) {
@@ -260,9 +261,9 @@ class CorePresenter extends APresenter
             $data = "";
             $time = null;
             $f = DATA . "/summernote_{$profile}_{$hash}.json";
-            if (file_exists($f)) {
+            if (\file_exists($f)) {
                 $data = @file_get_contents($f);
-                $time = filemtime($f);
+                $time = \filemtime($f);
             }
             if (!$data) {
                 $data = '';
@@ -301,7 +302,7 @@ class CorePresenter extends APresenter
         }
 
         // check $view starting with 'API'
-        if (is_string($view) && substr(strtoupper($view), 0, 3) === "API") {
+        if (\is_string($view) && \substr(\strtoupper($view), 0, 3) === "API") {
             $this->checkRateLimit();
             $this->setHeaderHTML();
             $map = [];
@@ -331,7 +332,7 @@ class CorePresenter extends APresenter
                         // do not link to path with parameters!
                         "linkit" => !(\strpos($p["path"], "[") ?: false),
                         "method" => \strtoupper($p["method"]),
-                        "path" => trim($p["path"], "/ \t\n\r\0\x0B"),
+                        "path" => \trim($p["path"], "/ \t\n\r\0\x0B"),
                         "private" => (bool) $p["private"] ?: false,
                     ];
                 }

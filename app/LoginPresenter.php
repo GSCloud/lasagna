@@ -36,12 +36,6 @@ class LoginPresenter extends APresenter
             @\ob_end_clean();
         }
 
-        // CHECK GOVERNOR
-        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
-        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
-            $this->setLocation('/?logout');
-        }
-
         if (!\is_array($data = $this->getData())) {
             $err = 'Model: invalid data';
             $this->addCritical($err);
