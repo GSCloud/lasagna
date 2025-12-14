@@ -836,9 +836,7 @@ abstract class APresenter
             'fingerprint' => $this->getBrowserFingerprint(),
             'timestamp' => \time(),
         ];
-        //$this->addMessage(["setIdentity" => $i]);
 
-        // set identity
         $this->_identity = $i;
         if ($i['id']) {
             $this->setCookie(APPNAME, \json_encode($i));
@@ -2221,16 +2219,15 @@ abstract class APresenter
     }
 
     /**
-     * Get simple nonce (16 bytes)
+     * Get simple unsecure nonce (16 bytes)
      *
      * @return string nonce
      */
     public function getNonce()
     {
-        $randomPart = \uniqid('', true);
+        $random = \uniqid('', true);
         $time = (string) \microtime(true);
-        $seed = $randomPart . $time . \mt_rand();
-        $hash = \md5($seed);
+        $hash = \md5($random . $time . \mt_rand());
         return \substr($hash, 0, 16);
     }
 
