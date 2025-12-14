@@ -33,11 +33,17 @@ abstract class APresenter
     /* @var integer max string length to decode by NE-ON */
     const NEON_DECODE_LIMIT = 8192;
 
+    /* @var integer octal file mode for CSV */
+    const CSV_FILEMODE = 0664;
+
     /* @var integer octal file mode for logs */
     const LOG_FILEMODE = 0664;
 
-    /* @var integer octal file mode for CSV */
-    const CSV_FILEMODE = 0664;
+    /* @var integer octal file mode for cookie secret */
+    const COOKIE_KEY_FILEMODE = 0600;
+
+    /* @var integer octal file mode for nonce secret */
+    const IDENTITY_NONCE_FILEMODE = 0600;
 
     /* @var integer CSV min. file size - something meaningful :) */
     const CSV_MIN_SIZE = 42;
@@ -51,11 +57,8 @@ abstract class APresenter
     /* @var string cookie secret filename */
     const COOKIE_KEY_FILE_TEST = 'cookie_key_test.key';
 
-    /* @var integer octal file mode for cookie secret */
-    const COOKIE_KEY_FILEMODE = 0600;
-
     /* @var integer cookie TTL in seconds */
-    const COOKIE_TTL = 86400 * 15;
+    const COOKIE_TTL = 86400 * 31;
 
     /* @var string CloudFlare API URL */
     const CLOUDFLARE_API = 'https://api.cloudflare.com/client/v4/';
@@ -212,7 +215,6 @@ abstract class APresenter
 
         // load actual CSV data
         $this->checkLocales((bool) $this->_force_csv_check);
-        exit(0);
     }
 
     /**
@@ -279,35 +281,6 @@ abstract class APresenter
     }
 
     /**
-     * Get instance for testing
-     *
-     * @static
-     * @final
-     * 
-     * @return object Class instance
-     */
-    final public static function getTestInstance()
-    {
-        // SANITY CHECK
-        foreach ([
-            'APP',
-            'CACHE',
-            'CONFIG',
-            'DATA',
-            'DS',
-            'PARTIALS',
-            'ROOT',
-            'SS',
-            'TEMPLATES',
-            'WWW',
-        ] as $x) {
-            defined($x) || die("FATAL ERROR: sanity check for const: '{$x}'");
-        }
-        $class = \get_called_class();
-        return new $class();
-    }
-
-    /**
      * Render HTML content from given template (string or filename)
      *
      * @param string $template template
@@ -331,7 +304,7 @@ abstract class APresenter
             [
                 'template_class_prefix' => PROJECT . SS,
                 'cache' => TEMP,
-                'cache_file_mode' => 0666,
+                'cache_file_mode' => 0644,
                 'cache_lambda_templates' => true,
                 'loader' => $type ? new \Mustache_Loader_FilesystemLoader(TEMPLATES)
                     : new \Mustache_Loader_StringLoader,
@@ -536,7 +509,7 @@ abstract class APresenter
      *
      * @return array Array of messages
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return (array) $this->_messages;
     }
@@ -546,7 +519,7 @@ abstract class APresenter
      *
      * @return array Array of errors
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return (array) $this->_errors;
     }
@@ -556,7 +529,7 @@ abstract class APresenter
      *
      * @return array Array of critical messages
      */
-    public function getCriticals()
+    public function getCriticals(): array
     {
         return (array) $this->_criticals;
     }
@@ -709,7 +682,7 @@ abstract class APresenter
      *
      * @return string IP address
      */
-    public function getIP()
+    public function getIP(): string
     {
         if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
             $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
@@ -757,7 +730,7 @@ abstract class APresenter
      *
      * @return string UID string
      */
-    public function getUIDstring()
+    public function getUIDstring(): string
     {
         $parts = [];
         $parts[] = CLI ? 'CLI' : 'WEB';
@@ -775,7 +748,7 @@ abstract class APresenter
                 if (!\preg_match('/^[a-fA-f0-9]{16}$/', $uid)) {
                     $this->addError("COOKIE: invalid UID cookie");
                     unset($_COOKIE[$name]);
-                    exit;
+                    $this->setLocation('/err/403');
                 }
             }
             if (!\array_key_exists($name, $_COOKIE)) {
@@ -807,7 +780,7 @@ abstract class APresenter
      *
      * @return string UID hash
      */
-    public function getUID()
+    public function getUID(): string
     {
         return \hash('sha256', $this->getUIDstring());
     }
@@ -1245,7 +1218,7 @@ abstract class APresenter
     }
 
     /**
-     * Logout
+     * Logout, clear cookies and stop
      * 
      * @return void
      */
@@ -2275,7 +2248,7 @@ abstract class APresenter
             \error_log($err);
             throw new \Exception($err);
         }
-        if (\chmod($file, 0644) === false) {
+        if (\chmod($file, self::IDENTITY_NONCE_FILEMODE) === false) {
             $err = 'Failed to set permissions on identity nonce file.';
             \error_log($err);
             throw new \Exception($err);
