@@ -165,7 +165,8 @@ class LoginPresenter extends APresenter
                 \setcookie('GOVERNOR', $governor, $cookie_options);
 
                 // IDENTITY
-                $this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
+                $this->setIdentity($i);
+                //$this->setIdentity($i)->addMessage(["OAuthIdentity" => $i]);
                 if (!empty($group = $this->getUserGroup())) {
                     $this->addMessage("OAuth login. User group: [{$group}]");
                 }
