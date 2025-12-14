@@ -1246,7 +1246,7 @@ abstract class APresenter
     }
 
     /**
-     * Enforce current user rate limits
+     * Enforce user rate limits
      *
      * @param integer $max hits per limiter cache time (optional)
      * 
@@ -1304,11 +1304,13 @@ abstract class APresenter
                 // user is banned
                 $path = $this->getData('request_path');
                 if (!\is_string($path)) {
-                    $path = '*** unknown ***';
+                    $path = null;
                 }
+                $path = $path ? " Path: [{$path}]" : "";
                 $ua = \trim($_SERVER['HTTP_USER_AGENT'] ?? '');
-                $ua = $ua ? "User [{$ua}]" : "User";
-                $this->addMessage("LIMITER: {$ua} is banned. Path: [{$path}]"); // phpcs:ignore
+                $ip = $this->getIP();
+                $ua = $ua ? "User [{$ua}]" : "User [{$ip}]";
+                $this->addMessage("LIMITER: {$ua} is banned.{$path}"); // phpcs:ignore
                 \header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }

@@ -162,7 +162,7 @@ class LoginPresenter extends APresenter
                 $this->setIdentity($i);
                 if (!empty($group = $this->getUserGroup())) {
                     $name = $i['name'];
-                    $this->addMessage("OAuth [{$name}] login. User group: [{$group}]");
+                    $this->addMessage("OAuth [{$name}] login. User group: [{$group}]"); // phpcs:ignore
                 }
 
                 // RETURN URL
