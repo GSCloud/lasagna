@@ -144,7 +144,7 @@ if (isset($_GET['clearall'])) {
 // TIMER START
 Debugger::timer('DATA');
 
-// MODEL
+// CREATE MODEL
 $cfg = $cfg ?? [];
 
 // LANGUAGE - PREBAKED CSV
@@ -152,7 +152,9 @@ if (isset($cfg['locales'])) {
     array_unshift($cfg['locales'], 'base.csv');
 }
 $data = $cfg;
-$data['cfg'] = $cfg; // $cfg shallow backup
+
+// CFG
+$data['cfg'] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anon.
 $data['cf_ray'] = $_SERVER['Cf-Ray'] ?? null;
