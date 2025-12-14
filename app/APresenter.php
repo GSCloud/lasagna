@@ -836,7 +836,7 @@ abstract class APresenter
             'fingerprint' => $this->getBrowserFingerprint(),
             'timestamp' => \time(),
         ];
-        $this->addMessage(["setIdentity" => $i]);
+        //$this->addMessage(["setIdentity" => $i]);
 
         // set identity
         $this->_identity = $i;
