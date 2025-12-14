@@ -74,6 +74,13 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         data-tooltip="{{ l.a_logout_ttip }}"
         href="/logout"
         ><i class="fas fa-sign-out-alt"></i></a>
+      <a
+        class="tooltipped waves-effect waves-light orange btn"
+        data-position="bottom"
+        data-tooltip="{{ canonical_url }}"
+        href="{{ canonical_url }}"
+        rel="noreferrer noopener"
+        ><i class="fa-regular fa-house"></i></a>
 {{#admin_group_admin}}
       <a
         target="_blank"
