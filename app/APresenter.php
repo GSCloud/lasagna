@@ -299,7 +299,6 @@ abstract class APresenter
 
         // $type: string = 0, template = 1
         $type = (\file_exists(TEMPLATES . DS . "{$template}.mustache")) ? 1 : 0;
-
         $renderer = new \Mustache_Engine(
             [
                 'template_class_prefix' => PROJECT . SS,
@@ -339,10 +338,11 @@ abstract class APresenter
                         return (string) $text;
                     },
                 ],
-                'charset' => 'UTF-8',
+                // escaping is off by default, no user generated content!
                 'escape' => function ($value) {
                     return $value;
                 },
+                'charset' => 'UTF-8',
             ]
         );
         return $type ? $renderer->loadTemplate($template)->render($this->getData()) : $renderer->render($template, $this->getData()); // phpcs:ignore
@@ -1083,7 +1083,6 @@ abstract class APresenter
                 $cookie = new Cookie(KeyFactory::loadEncryptionKey($keyfile));
                 try {
                     $c = $cookie->fetch($name);
-                    \error_log("decrypted cookie: {$c}");
                     return $c;
                 } catch (\Throwable $e) {
                     $err = "HALITE: error reading/decrypting cookie '{$name}': ";
@@ -1272,9 +1271,8 @@ abstract class APresenter
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
 
-                // user is limited
-                $ban_reset = \floor(self::BAN_MAXIMUM / 2);
-                Cache::write($ban_rate, $ban_reset, 'ban');
+                // administrator is limited
+                Cache::write($ban_rate, 0, 'ban');
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
             }
@@ -1352,7 +1350,8 @@ abstract class APresenter
 
         // GOVERNOR cookie
         $allowed = false;
-        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        $nonce = $this->getIdentityNonce();
+        $governor = \substr(\hash('sha256', $nonce. ENGINE . VERSION), 0, 16);
         if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] === $governor)) {
             $allowed = true;
         }
@@ -1577,10 +1576,6 @@ abstract class APresenter
                 ErrorPresenter::getInstance()->process(
                     ['code' => 500, 'message' => 'SYSTEM ERROR: corrupted localization'] // phpcs:ignore
                 );
-            } else {
-                // second try!
-                $this->checkLocales(true);
-                return $this->getLocale($language, $key);
             }
         }
         Cache::write($file, $locale, 'default');

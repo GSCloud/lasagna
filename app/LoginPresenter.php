@@ -68,7 +68,8 @@ class LoginPresenter extends APresenter
         if ($this->getCurrentUser()['id']) {
             $url = '/';
             $returnUrl = $_GET['returnURL'] ?? '/';
-            if (\str_starts_with($returnUrl, '/')) {
+            $parsed = \parse_url($returnUrl);
+            if (empty($parsed['scheme']) && empty($parsed['host']) && \str_starts_with($returnUrl, '/')) { // phpcs:ignore
                 $url = $returnUrl;
             }
             $this->setLocation($url);
@@ -147,7 +148,8 @@ class LoginPresenter extends APresenter
                 $this->clearCookie('oauth2state');
 
                 // GOVERNOR COOKIE
-                $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+                $nonce = $this->getIdentityNonce();
+                $governor = \substr(\hash('sha256', $nonce . ENGINE . VERSION), 0, 16); // phpcs:ignore
                 $cookie_options = [
                     'expires' => \time() + 86400 * 31,
                     'path' => '/',
@@ -168,7 +170,8 @@ class LoginPresenter extends APresenter
                 // RETURN URL
                 $returnUrl = \urldecode($_COOKIE['returnURL'] ?? '/');
                 $url = '/';
-                if (\strpos($returnUrl, '/') === 0) {
+                $parsed = \parse_url($returnUrl);
+                if (empty($parsed['scheme']) && empty($parsed['host']) && \str_starts_with($returnUrl, '/')) { // phpcs:ignore
                     $url = $returnUrl;
                 }
                 $this->setLocation("{$url}?nonce=" . $this->getNonce());
