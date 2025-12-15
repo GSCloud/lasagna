@@ -100,13 +100,13 @@ class LoginPresenter extends APresenter
                 ]
             );
         } catch (\Throwable $e) {
-            $err = "OAuth: failure. Exception: " . $e->getMessage();
+            $err = "OAuth: failure. Message: " . $e->getMessage();
             $this->addError($err);
             ErrorPresenter::getInstance()->process(['code' => 400, 'message' => $err]); // phpcs:ignore
         }
         if (!empty($_GET['error'])) {
             $err = \htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
-            $err = "OAuth: failure.\nMessage: $err";
+            $err = "OAuth: failure. Message: $err";
             $this->addError($err);
             ErrorPresenter::getInstance()->process(['code' => 403, 'message' => $err]); // phpcs:ignore
         } elseif (empty($_GET['code'])) {
