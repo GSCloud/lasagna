@@ -1690,7 +1690,8 @@ class AdminPresenter extends APresenter
         if (!isset($_COOKIE[$cookie])) {
             $this->setLocation('/?logout');
         }
-        $governor = \substr(\hash('sha256', ENGINE . VERSION), 0, 16);
+        $nonce = $this->getIdentityNonce();
+        $governor = \substr(\hash('sha256', $nonce . ENGINE . VERSION), 0, 16);
         if ($_COOKIE[$cookie] !== $governor) {
             $this->setLocation('/?logout');
         }
