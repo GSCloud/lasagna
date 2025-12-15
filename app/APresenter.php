@@ -1355,6 +1355,11 @@ abstract class APresenter
         if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] === $governor)) {
             $allowed = true;
         }
+        if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
+            if (!$retbool) {
+                $this->logout();
+            }
+        }
         if ($retbool && !$allowed) {
             return false;
         }

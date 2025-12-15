@@ -775,7 +775,6 @@ class AdminPresenter extends APresenter
         }
 
         $uploads = [];
-        // Loop through uploads
         foreach ($_FILES as $key => &$file) {
             if ($file['error'] !== UPLOAD_ERR_OK) {
                 continue;
@@ -784,14 +783,14 @@ class AdminPresenter extends APresenter
                 continue;
             }
             
-            // Sanitize the filename
+            // sanitize
             $f = $file['name'];
             $f = \strtr(\trim(\basename($f)), " '\"\\()", '______');
             SF::transliterate($f);
             SF::sanitizeStringLC($f);
             SF::transliterate($f);
 
-            // Skipping ...
+            // skipping ...
             if (\str_starts_with($f, self::THUMB_PREFIX)) {
                 continue;
             }
@@ -813,6 +812,12 @@ class AdminPresenter extends APresenter
             if (\str_ends_with($f, '.php')) {
                 continue;
             }
+            if (\str_ends_with($f, '.phtml')) {
+                continue;
+            }
+            if (\str_ends_with($f, '.phar')) {
+                continue;
+            }
             if ($f === '.size') {
                 continue;
             }
@@ -826,19 +831,24 @@ class AdminPresenter extends APresenter
                 continue;
             }
 
-            // Get the file information
+            // get file information
             $info = \pathinfo($f);
             if (\is_array($info) && !$info['filename']) {
                 continue;
             }
 
-            // Rename .jpeg files
+            // disable any PHP files
+            if (isset($info['extension']) && \str_starts_with($info['extension'], 'php')) { // phpcs:ignore
+                continue;
+            }
+            
+            // rename .jpeg files
             if (isset($info['extension']) && \strtolower($info['extension']) === 'jpeg') { // phpcs:ignore
                 $f = $info['filename'] . '.jpg';
                 $info = \pathinfo($f);
             }
 
-            // Process the uploaded file
+            // process the uploaded file
             if (\move_uploaded_file($file['tmp_name'], UPLOAD . DS . $f)) {
                 if (\is_array($info)) {
                     $fn = $info['filename'];
