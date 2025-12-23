@@ -74,10 +74,10 @@ endif
 	@echo "${BOLD}build${RESET}\t build image"
 	@echo "${BOLD}push${RESET}\t push image to Docker Hub"
 	@echo "${BOLD}start${RESET}\t start container"
-	@echo "${BOLD}run${RESET}\t start container + Chrome browser"
 	@echo "${BOLD}stop${RESET}\t stop container"
 	@echo "${BOLD}kill${RESET}\t kill container"
-	@echo "${BOLD}exec${RESET}\t run terminal inside container"
+	@echo "${BOLD}run${RESET}\t start container + Chrome browser"
+	@echo "${BOLD}exec${RESET}\t run a Bash terminal inside the container"
 	@echo ""
 
 base:
