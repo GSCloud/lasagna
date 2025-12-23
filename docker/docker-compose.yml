@@ -15,7 +15,7 @@ services:
       - TZ=Europe/Prague
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/cs"]
+      test: ["CMD", "curl", "-f", "http://localhost/en"]
       interval: 1m
       timeout: 10s
       retries: 3
