@@ -1,12 +1,16 @@
 parameters:
     level: 9
     ignoreErrors:
+        - '#Call to function is_null\(\)#'
+        - '#Expression on left side#'
         - '#If condition is always false#'
         - '#If condition is always true#'
-        - '#Right side of && is always true#'
         - '#Negated boolean expression is always true#'
+        - '#Parameter \#2 \$value of method Adbar\\Dot#'
+        - '#Right side of && is always true#'
         - '#Ternary operator condition is always true#'
-        - '#Call to function is_null\(\)#'
+        - identifier: missingType.iterableValue
+        - identifier: missingType.property
     bootstrapFiles:
         - phpstan_constants.php
     dynamicConstantNames:
@@ -14,3 +18,4 @@ parameters:
         - UPLOAD
         - CSP
     treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false

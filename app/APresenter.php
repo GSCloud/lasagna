@@ -96,29 +96,29 @@ abstract class APresenter
     /* @var integer octal file mode for AuditLog */
     const AUDITLOG_FILEMODE = 0644;
 
-    /* @var array data model */
-    public $data = [];
+    /* @var array<string, mixed> data model */
+    public array $data = [];
 
-    /* @var array messages */
-    private $_messages = [];
+    /* @var array<string, mixed> messages */
+    private array $_messages = [];
 
-    /* @var array errors */
-    private $_errors = [];
+    /* @var array<string, mixed> errors */
+    private array $_errors = [];
 
-    /* @var array critical Errors */
-    private $_criticals = [];
+    /* @var array<string, mixed> critical Errors */
+    private array $_criticals = [];
 
-    /* @var array user identity */
-    private $_identity = [];
+    /* @var array<string, mixed> user identity */
+    private array $_identity = [];
 
     /* @var boolean force check locales in desctructor */
-    private $_force_csv_check = false;
+    private bool $_force_csv_check = false;
 
-    /* @var array CSV Keys */
-    private $_csv_postload = [];
+    /* @var array<string> CSV Keys */
+    private array $_csv_postload = [];
 
-    /* @var array singleton instances */
-    public static $instances = [];
+    /* @var array<object> singleton instances */
+    public static array $instances = [];
 
     /**
      * Abstract Processor
@@ -364,7 +364,6 @@ abstract class APresenter
                 [
                     // Adbar Dot flag
                     'CONST.ADBARDOTFLAG' => true,
-    
                     // ENGINE CONSTANTS
                     'CONST.APP' => APP,
                     'CONST.APPNAME' => APPNAME,
@@ -390,12 +389,10 @@ abstract class APresenter
                     'CONST.TEMPLATES' => TEMPLATES,
                     'CONST.UPLOAD' => UPLOAD,
                     'CONST.WWW' => WWW,
-    
                     // PHP INI CONSTANTS
                     'CONST.MAX_FILE_UPLOADS' => ini_get('max_file_uploads'),
                     'CONST.POST_MAX_SIZE' => ini_get('post_max_size'),
                     'CONST.UPLOAD_MAX_FILESIZE' => ini_get('upload_max_filesize'),
-    
                     // CLASS CONSTANTS
                     'CONST.LOG_FILEMODE' => self::LOG_FILEMODE,
                     'CONST.CSV_FILEMODE' => self::CSV_FILEMODE,
@@ -417,30 +414,6 @@ abstract class APresenter
 
         // get a key value of Model
         if (\is_string($key)) {
-
-            /*
-            // KEY LOGGER - START
-            $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-            $caller = $trace[1] ?? [];
-            // phpcs:ignore
-            $caller_info = ($caller['class'] ?? 'Fn') . '::' . ($caller['function'] ?? 'N/A');
-            $log_entry = \sprintf(
-                "[%s] %s => %s\n", 
-                \date('H:i:s'), 
-                $caller_info, 
-                'GET: ' . $key
-            );
-            try {
-                if (!CURL) {
-                // phpcs:ignore
-                    @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND);
-                }
-            } catch (\Throwable $e) {
-                \error_log($e->getMessage());
-            }
-            // KEY LOGGER - END
-            */
-
             return $dot->get($key);
         }
 
@@ -463,34 +436,9 @@ abstract class APresenter
         if (\is_array($data)) {
             $this->data = (array) $data;
         }
-
         // set a single key in Model
         if (\is_string($data) && !empty($value)) {
             $key = $data;
-
-            /*
-            // KEY LOGGER - START
-            $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-            $caller = $trace[1] ?? [];
-            // phpcs:ignore
-            $caller_info = ($caller['class'] ?? 'Fn') . '::' . ($caller['function'] ?? 'N/A');
-            $log_entry = \sprintf(
-                "[%s] %s => %s\n", 
-                \date('H:i:s'), 
-                $caller_info, 
-                'SET: ' . $key
-            );
-            try {
-                if (!CURL) {
-                // phpcs:ignore
-                    @file_put_contents(LOGS . DS . 'key_log.txt', $log_entry, FILE_APPEND); // phpcs:ignore
-                }
-            } catch (\Throwable $e) {
-                \error_log($e->getMessage());
-            }
-            // KEY LOGGER - END
-            */
-
             if (\str_starts_with($key, 'cfg.')) {
                 // cfg keys cannot be modified!
                 $err = 'FATAL ERROR: trying to modify cfg data';
@@ -507,7 +455,7 @@ abstract class APresenter
     /**
      * Messages getter
      *
-     * @return array Array of messages
+     * @return array<string> Array of messages
      */
     public function getMessages(): array
     {
@@ -517,7 +465,7 @@ abstract class APresenter
     /**
      * Errors getter
      *
-     * @return array Array of errors
+     * @return array<string> Array of errors
      */
     public function getErrors(): array
     {
@@ -527,7 +475,7 @@ abstract class APresenter
     /**
      * Criticals getter
      *
-     * @return array Array of critical messages
+     * @return array<string> Array of critical messages
      */
     public function getCriticals(): array
     {
@@ -758,7 +706,7 @@ abstract class APresenter
                     [
                         'expires' => \time() + self::COOKIE_TTL,
                         'path' => '/',
-                        'domain' => DOMAIN,
+                        'domain' => DOMAIN ?? '',
                         'secure' => !LOCALHOST,
                         'httponly' => true,
                         'samesite' => 'Lax',
@@ -1152,7 +1100,7 @@ abstract class APresenter
             $data,
             \time() + self::COOKIE_TTL,
             '/',
-            DOMAIN,
+            DOMAIN ?? '',
             !LOCALHOST,
             true,
             'Lax'
@@ -1169,6 +1117,9 @@ abstract class APresenter
      */
     public function clearCookie($name)
     {
+        if (CLI) {
+            return $this;
+        }
         if (empty($name)) {
             return $this;
         }
@@ -1180,7 +1131,7 @@ abstract class APresenter
                 [
                     'expires' => \time() - 86400,
                     'path' => '/',
-                    'domain' => DOMAIN,
+                    'domain' => DOMAIN ?? '',
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax'
@@ -1323,7 +1274,7 @@ abstract class APresenter
     /**
      * Get current user rate limits
      *
-     * @return integer current rate limit
+     * @return mixed current rate limit
      */
     public function getRateLimit()
     {
@@ -1379,9 +1330,24 @@ abstract class APresenter
             // ERROR 401: not authorized
             $this->setLocation('/err/401');
         }
+        if (!\is_string($rolelist)) {
+            if ($retbool) {
+                return false;
+            }
+            // ERROR 401: not authorized
+            $this->setLocation('/err/401');
+        }
+        if (\is_string($rolelist)) {
+            $roles = \explode(',', \trim($rolelist));
+        } else {
+            if ($retbool) {
+                return false;
+            }
+            // ERROR 401: not authorized
+            $this->setLocation('/err/401');
+        }
 
-        $roles = \explode(',', \trim((string) $rolelist));
-        if (\is_array($roles)) {
+        if (isset($roles) && \is_array($roles)) {
             foreach ($roles as $role) {
                 $role = \strtolower(\trim($role));
                 if (\strlen($role) && \strlen($email)) {
@@ -1406,7 +1372,7 @@ abstract class APresenter
     /**
      * Get current user group
      *
-     * @return string User group name
+     * @return mixed User group name or null
      */
     public function getUserGroup()
     {
@@ -1734,11 +1700,11 @@ abstract class APresenter
                     $this->addError("CSV: there is no data for [{$name}] at: {$remote}"); // phpcs:ignore
                     return $this;
                 }
-                if ($data && !\is_string($data)) {
+                if (!\is_string($data)) {
                     $this->addError("CSV: there is no data for [{$name}]");
                     return $this;
                 }
-                if ($data && \strpos($data, '!DOCTYPE html') > 0) {
+                if (\strpos($data, '!DOCTYPE html') > 0) {
                     $this->addError("CSV: fetching URL [{$remote}] data contains HTML"); // phpcs:ignore
                     return $this;
                 }
@@ -1873,7 +1839,7 @@ abstract class APresenter
             'timestamp_RFC2822' => \date(\DATE_RFC2822, $time),
             'version' => (string) ($this->getCfg('version') ?? 'v1'),
             'engine' => ENGINE,
-            'domain' => DOMAIN,
+            'domain' => DOMAIN ?? '',
         ];
 
         // last decoding error
@@ -1980,7 +1946,11 @@ abstract class APresenter
         }
         $this->setHeaderJson();
         $out['message'] = $msg;
-        $out['processing_time'] = \round((\microtime(true) - TESSERACT_START) * 1000, 2) . ' ms'; // phpcs:ignore
+        if (defined('TESSERACT_START')) {
+            $out['processing_time'] = \round((\microtime(true) - TESSERACT_START) * 1000, 2) . ' ms'; // phpcs:ignore
+        } else {
+            $out['processing_time'] = 'N/A';
+        }
         $out = \array_merge_recursive($out, $headers);
         $out['data'] = $data ?? null;
         if (\is_null($switches)) {
@@ -2015,10 +1985,14 @@ abstract class APresenter
         // language
         $presenter = $this->getPresenter();
         $view = $this->getView();
+
         if ($presenter && $view) {
-            $data['lang'] = $language = \strtolower(
-                $presenter[$view]['language']
-            ) ?? 'en';
+            if (\array_key_exists('language', $presenter[$view])) {
+                $language = (string) $presenter[$view]['language'];
+            } else {
+                $language = 'en';
+            }
+            $data['lang'] = $language;
             $data["lang{$language}"] = true;
         } else {
             $this->addCritical('SYSTEM ERROR: something is terribly wrong with locales!'); // phpcs:ignore
@@ -2030,7 +2004,7 @@ abstract class APresenter
         // get locale if not already present
         $l = null;
         if (!\array_key_exists('l', $data)) {
-            $l = $this->getLocale($language);
+            $l = $this->getLocale($language ?? 'en');
             if (\is_null($l)) {
                 $l = $this->getLocale('en');
                 if (\is_null($l)) {
@@ -2056,10 +2030,9 @@ abstract class APresenter
                 }
                 if (\str_starts_with($v, '[neon]')) {
                     try {
-                        \substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
-                        //bdump($e, $kk);
                         continue;
                     }
                 }
@@ -2079,7 +2052,7 @@ abstract class APresenter
                 }
                 if (\str_starts_with($v, '[neon]')) {
                     try {
-                        \substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
                         //bdump($e, $kk);
@@ -2112,7 +2085,7 @@ abstract class APresenter
                 }
                 if (\str_starts_with($v, '[neon]')) {
                     try {
-                        \substr($v, 0, self::NEON_DECODE_LIMIT);
+                        $v = \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
                         //bdump($e, $kk);
@@ -2192,12 +2165,14 @@ abstract class APresenter
         }
 
         // extract REQUEST PATH SLUG
-        if (($pos = \strpos($data['request_path'], $language)) !== false) {
-            $data['request_path_slug'] = \substr_replace(
-                $data['request_path'], '', $pos, \strlen($language)
-            );
+        if (isset($language)) {
+            if (($pos = \strpos($data['request_path'], $language)) !== false) {
+                    $data['request_path_slug'] = \substr_replace($data['request_path'], '', $pos, \strlen($language)); // phpcs:ignore
+            } else {
+                $data['request_path_slug'] = $data['request_path'] ?? '';
+            }
         } else {
-            $data['request_path_slug'] = $data['request_path'] ?? '';
+            $data['request_path'] = $data['request_path_slug'] = '';
         }
         return $this;
     }

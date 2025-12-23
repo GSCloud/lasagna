@@ -1,32 +1,52 @@
-#@author Fred Brooker <git@gscloud.cz>
+# Tesseract Lasagna CMS
+# @author Fred Brooker <git@gscloud.cz>
 
 ARG CODE_VERSION=8.2-apache
-ARG DEBIAN_FRONTEND=noninteractive
-ARG LC_ALL=en_US.UTF-8
-ARG TERM=linux
-
 FROM php:${CODE_VERSION}
-ENV TERM=xterm LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN apt-get update -qq && apt-get upgrade -yqq && apt-get install -yqq --no-install-recommends curl openssl redis
+# Metadata
+LABEL maintainer="Fred Brooker <git@gscloud.cz>"
+LABEL description="GS Cloud Ltd. - Tesseract LASAGNA Production Image"
+
+# Arguments & Environment
+ENV TERM=xterm-256color \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    DEBIAN_FRONTEND=noninteractive
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions gd redis imagick
 
-RUN a2enmod rewrite expires headers && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
-COPY php.ini /usr/local/etc/php/
+RUN apt-get update -qq && apt-get upgrade -yqq && \
+    apt-get install -yqq --no-install-recommends \
+    curl \
+    openssl \
+    unzip \
+    && install-php-extensions gd imagick opcache bcmath zip intl \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/www/ci /var/www/data /var/www/logs /var/www/temp \
-    && chmod 0777 /var/www/ci /var/www/data /var/www/logs /var/www/temp \
-    && ln -s /var/www/html /var/www/www
 
-COPY app/*.txt app/*.redist  app/*.php app/router* app/csp.neon app/base.csv app/config.neon app/config_docker.neon /var/www/app/
-COPY app/partials/* /var/www/app/partials/
-COPY app/templates/* /var/www/app/templates/
-COPY Bootstrap.php composer.json composer.lock LICENSE *.md REVISIONS VERSION docker/ /var/www/
-COPY vendor /var/www/vendor
-COPY www /var/www/html
-COPY bashrc /root/.bashrc
+RUN a2enmod rewrite expires headers && \
+    mkdir -p \
+        /var/www/data /var/www/logs /var/www/temp && \
+    ln -sf /var/www/html /var/www/www && \
+    ln -sf /dev/stdout /var/log/apache2/access.log && \
+    ln -sf /dev/stderr /var/log/apache2/error.log
 
 WORKDIR /var/www/
+
+COPY . .
+COPY php.ini /usr/local/etc/php/conf.d/tesseract.ini
+COPY docker/* .
+COPY bashrc /root/.bashrc
+RUN chown -R www-data:www-data \
+        /var/www/data /var/www/logs /var/www/temp  && \
+    chmod -R 775 \
+        /var/www/data /var/www/logs /var/www/temp 
+
+HEALTHCHECK --interval=1m --timeout=10s \
+CMD curl -f http://localhost/ || exit 1
+
+
 EXPOSE 80
+CMD ["apache2-foreground"]

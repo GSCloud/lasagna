@@ -109,7 +109,7 @@ if (defined($d) && is_readable($d) && is_writable($d)) {
     }
 }
 
-// LOGOUT
+// URI: ?logout
 if (isset($_GET['logout'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
@@ -125,7 +125,7 @@ if (isset($_GET['logout'])) {
     exit;
 }
 
-// CLEAR EVERYTHING
+// URI: ?clearall
 if (isset($_GET['clearall'])) {
     $canonicalUrl = $cfg['canonical_url'] ?? null;
     $googleOAuthOrigin = $cfg['goauth_origin'] ?? null;
@@ -151,12 +151,10 @@ $cfg = $cfg ?? [];
 if (isset($cfg['locales'])) {
     array_unshift($cfg['locales'], 'base.csv');
 }
-$data = $cfg;
+$data = $cfg; // set model
+$data['cfg'] = $cfg; // backup config
 
-// CFG
-$data['cfg'] = $cfg;
-
-// CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR anon.
+// CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR
 $data['cf_ray'] = $_SERVER['Cf-Ray'] ?? null;
 $data['cf_worker'] = $_SERVER['CF-Worker'] ?? null;
 $data['cf_cache_status'] = $_SERVER['Cf-Cache-Status'] ?? null;
@@ -164,7 +162,7 @@ $country = strtoupper((string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'));
 $data['cf_country'] = $data['country'] = $country;
 $data["country_id_{$country}"] = true; // country_id_UK etc.
 
-// DEFAULT BLOCKED COUNTRIES
+// BLOCKED COUNTRIES DEFAULTS
 $blocked = (array) ($data['geoblock'] ?? [
     'AF',
     'BY',
@@ -174,7 +172,6 @@ $blocked = (array) ($data['geoblock'] ?? [
     'SY',
     'T1', // TOR network
 ]);
-
 if (!LOCALHOST && in_array($country, $blocked)) {
     error_log("Country [{$country}] forbidden and all requests blocked.");
     header('HTTP/1.1 403 Forbidden');
@@ -182,7 +179,7 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.4.9');
+define('ENGINE', 'Tesseract v2.5.0 beta');
 $data['ENGINE'] = ENGINE;
 
 // version to load: https://cdnjs.com/libraries/codemirror 
@@ -232,7 +229,7 @@ $data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?:
 $data['VERSION_TIMESTAMP'] = @filemtime(ROOT . DS . 'VERSION') ?: time();
 $data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
 
-// RANDOM HASH set by the administrator after CACHE PURGE
+// RANDOM HASH - set by administrator after CACHE PURGE
 $hash = DATA . DS . '_random_cdn_hash';
 if (file_exists($hash) && is_readable($hash)) {
     if ($hash = file_get_contents($hash)) {
@@ -243,7 +240,7 @@ $data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
 $data['cdn_trimmed'] = 'cdn-assets' . DS . $version;
 defined('CDN') || define('CDN', $data['CDN']);
 
-// Apple Safari
+// Apple Safari detection
 $isSafari = false;
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
@@ -269,6 +266,10 @@ $data['request_path_hash'] = ($rqp === '') ? '' : hash('sha256', $rqp);
 $data['nonce'] = $data['NONCE'] = substr(md5(random_bytes(16) . (string) time()), 0, 8); // phpcs:ignore
 $data['LOCALHOST'] = LOCALHOST;
 
+// MORE CONSTANTS
+if (CLI) {
+    defined('DOMAIN')  || define('DOMAIN', 'localhost');
+}
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore

@@ -1,14 +1,14 @@
 ### TESSERACT   LASAGNA
 # @author Fred Brooker <git@gscloud.cz>
 
+# DEBUGGING
 dbg: TRUE
 #dbg: FALSE
-
 #DEBUG_MAX_DEPTH: 0
 #DEBUG_MAX_ITEMS: 0
 #DEBUG_MAX_LENGTH: 0
 
-# core
+# CORE
 app: lasagna
 canonical_url: "https://lasagna.gscloud.cz/"
 date_default_timezone: "Europe/Prague"
@@ -18,28 +18,28 @@ identity_nonce_key: identity_nonce.key
 version: v1 # is it used anywhere??
 admin: 'ewiufyveuwigfyveiur' # administration endpoint stub
 
-# Google OAuth 2.0
+# GOOGLE OAUTH 2.0
 goauth_origin: "https://lasagna.gscloud.cz"
 goauth_redirect: "https://lasagna.gscloud.cz/login"
 local_goauth_origin: "http://localhost:8009"
 local_goauth_redirect: "http://localhost:8009/login"
 
-# Google
+# GOOGLE MISC.
 google: [
 #  map_query: "Prague,Czechia"
 #  google-site-verification: "R_wyDJPQ-ktbz560jBaKUlcitDq1cHKwf-jwviFdB5g"
   google-site-domain-verification: true
 ]
 
-# RSS feed enable switch: true/false [default: disabled]
+# RSS FEED SWITCH: true/false [default: disabled]
 #rss_feed: true
 
-# DISABLE SWITCHES FOR SHARE BUTTONS: TRUE/FALSE [DEFAULT: ENABLED]
+# DISABLE SHARE BUTTONS SWITCHES: true/false [default: enabled]
 #disable_share_bluesky: true
 #disable_share_facebook: true
 #disable_share_mastodon: true
 
-# DISABLE ADMIN PANEL SECTIONS: TRUE/FALSE [DEFAULT: ENABLED] (1 section MUST be enabled)
+# DISABLE ADMIN PANEL SECTIONS: true/false [default: enabled] (1 section must be enabled)
 #disable_data_admin: true
 #disable_fn_admin: true
 #disable_services_admin: true
@@ -47,26 +47,26 @@ google: [
 #disable_dev_admin: true
 #disable_news_admin: true
 
-# Umami Analytics
+# UMAMI ANALYTICS
 umami: [
   id: "d64aa098-b60c-4c6b-90b1-dc5b6e83c255"
   share: "https://umami.gscloud.cz/share/Zj4HVPMYhRV69yz6/TESSERACT%20LASAGNA"
 ]
 
-# extra cache profiles
+# EXTRA CACHE PROFILES
 cache_profiles: []
 
-# blocked countries
+# BLOCKED COUNTRIES
 # see https://developers.cloudflare.com/fundamentals/reference/http-headers/#cf-ipcountry
 geoblock: []
 
-# disable articles feature
+# DISABLE ARTICLES FEATURE (legacy)
 disable_articles: true
 
-# disable version check feature
+# DISABLE VERSION CHECK FEATURE
 #disable_version_check: true
 
-# Redis
+# REDIS
 redis: [
   #database: 0
   #host: "127.0.0.1"
@@ -76,77 +76,78 @@ redis: [
 
   # to disable REDIS, set port to 0
   port: 0
+  #port: 6379
   timeout: 1
 ]
 
-# CSS sources
+# EXTERNAL CSS
 css_sources: [
   "https://cdn.gscloud.cz/fontawesome/v7.0.0/css/fontawesome.min.css",
   "https://cdn.gscloud.cz/fontawesome/v7.0.0/css/brands.min.css",
   "https://cdn.gscloud.cz/fontawesome/v7.0.0/css/solid.min.css",
 ]
 
-# local CSS sources
+# LOCAL CSS
 css_sources_extra: [
   "/css/style.css",
   "/css/lightbox.min.css",
 ]
 
-# script sources
+# EXTERNAL SCRIPTS
 script_sources: [
   "https://cdn.gscloud.cz/materialize/v1.2.2/js/materialize.min.js",
 ]
 
-# local script sources
+# LOCAL SCRIPTS
 script_sources_extra: [
   "/js/lightbox.min.js",
   "/js/lightbox.options.js",
 ]
 
-# locale Sheets
+# LOCALE SHEETS
 lasagna_sheets: [
   lasagna: "1cnFGiu0l3kXhMwyjRWUt61lPVbZDyYhxjnFpS94XIaI"
 ]
 
-# locale CSV
+# LOCALE CSV
 locales: [
   lasagna: "2PACX-1vSO_-SIQp7bgv3IWUdFaycOktA-D9AZDML8i2Lw-gqbkI8kZ1yDkM0DTWYbMla6A8DFSp-q87pqwZtJ"
 ]
 
-# application data
+# APPLICATION CSV (for caching)
 app_data: []
 
-# design
+# DESIGN
 design: [
+  background_color: "white"
+  content: "white black-text"
   css_font: []
   footer_color: "grey darken-4"
   nav_color: "orange"
-  theme_color: "orange"
-  background_color: "white"
-  content: "white black-text"
-  skin: "white"
+  progress_bar_background: "#ccc"
   progress_bar_color: "#48f"
   progress_bar_size: "8px"
-  progress_bar_background: "#ccc"
   progress_bar_transition: "width 0.3s ease-in-out"
+  skin: "white"
+  theme_color: "orange"
 ]
 
-# locale overrides
+# LOCALE OVERRIDES
 locale_override: [
   #copyright: "2017-2025"
 ]
 
-# Service Worker preload
+# SERVICE WORKER PRELOAD
 swpreload: [
   "https://cdn.gscloud.cz/tesseract/js/jquery.min.js"
   "https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css"
 ]
 
-# Service Worker preload with CDN hash
+# SERVICE WORKER PRELOAD WITH LOCAL CDN HASH
 swpreload_cdn: []
 
-# DON'T CACHE patterns
+# DON'T CACHE PATTERNS
 dontcache: []
 
-# completely block robots? (not only via robots.txt)
-block_robots: true
+# COMPLETELY BLOCK ROBOTS? (NOT ONLY VIA ROBOTS.TXT)
+block_robots: false

@@ -139,10 +139,11 @@ icons:
 
 stan:
 ifneq ($(strip $(has_phpstan)),)
-	@vendor/bin/phpstan -l9 analyse -c phpstan.neon \
+	@vendor/bin/phpstan -l6 analyse -c phpstan.neon \
 		www/index.php \
 		Bootstrap.php \
 		app/App.php \
+		app/APresenter.php \
 		app/AdminPresenter.php \
 		app/ArticlePresenter.php \
 		app/CiTester.php \

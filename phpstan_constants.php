@@ -45,3 +45,4 @@ define('PROJECT', 'LASAGNA');
 define('SERVER', $_SERVER['SERVER_NAME'] ?? 'localhost');
 
 define('VERSION', true);
+define('TESSERACT_START', 12345);
