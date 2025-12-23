@@ -21,7 +21,7 @@ RUN apt-get update -qq && apt-get upgrade -yqq && \
     curl \
     openssl \
     unzip \
-    && install-php-extensions gd imagick opcache bcmath zip intl \
+    && install-php-extensions gd imagick opcache bcmath zip intl sodium \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
