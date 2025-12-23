@@ -16,7 +16,8 @@ phpstan_constants.php
 .vscode/
 .DS_Store
 
-# app folders
+# app
+.env
 data/*
 logs/*
 temp/*

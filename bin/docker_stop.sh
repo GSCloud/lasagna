@@ -2,7 +2,20 @@
 #@author Fred Brooker <git@gscloud.cz>
 
 dir="$(dirname "$0")"
-. "$dir/_includes.sh"
+
+info() {
+  echo -e " \e[1;32m*\e[0;1m ${*}\e[0m" 1>&2
+}
+
+warn() {
+  echo -e " \e[1;33m***\e[0;1m ${*}\e[0m" 1>&2
+}
+
+fail() {
+  echo -e " \e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
+  sleep 5
+  exit 1
+}
 
 command -v docker >/dev/null 2>&1 || fail "Docker is NOT installed!"
 
