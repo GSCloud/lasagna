@@ -55,21 +55,28 @@ endif
 endif
 	@echo "${L}» DEVELOPMENT${RESET}"
 	@echo "${BOLD}install${RESET}\t core installation"
+	@echo "${BOLD}doctor${RESET}\t check state"
 	@echo "${BOLD}update${RESET}\t update dependencies"
-	@echo "${BOLD}doctor${RESET}\t check installation"
-	@echo ""
-	@echo "${BOLD}icons${RESET}\t update icons"
-	@echo "${BOLD}base${RESET}\t download and build base CSV"
-	@echo "${BOLD}refresh${RESET}\t refresh cloud CSV"
-	@echo "${BOLD}clear${RESET}\t clear temporary files"
+	@echo "${BOLD}icons${RESET}\t rebuild icons"
+	@echo "${BOLD}base${RESET}\t download and build base Sheets CSV"
+	@echo "${BOLD}refresh${RESET}\t refresh Sheets CSV"
+	@echo "${BOLD}clear${RESET}\t clear all temporary files"
 	@echo "${BOLD}sync${RESET}\t sync to the remote host"
-	@echo "${BOLD}docs${RESET}\t fix CHANGELOG.md"
+	@echo "${BOLD}docs${RESET}\t fix Sheets export for CHANGELOG.md "
 	@echo ""
 	@echo "${L}» TESTING${RESET}"
-	@echo "${BOLD}stan${RESET}\t PHPStan test"
-	@echo "${BOLD}unit${RESET}\t UNIT test"
+	@echo "${BOLD}stan${RESET}\t PHPStan tests"
+	@echo "${BOLD}unit${RESET}\t UNIT tests"
 	@echo "${BOLD}test${RESET}\t LOCAL integration test"
 	@echo "${BOLD}prod${RESET}\t PRODUCTION integration test"
+	@echo ""
+	@echo "${L}» DOCKER${RESET}"
+	@echo "${BOLD}build${RESET}\t build Docker image"
+	@echo "${BOLD}start${RESET}\t start Docker container"
+	@echo "${BOLD}run${RESET}\t start Docker container + Chrome"
+	@echo "${BOLD}stop${RESET}\t stop Docker container"
+	@echo "${BOLD}kill${RESET}\t kill Docker container"
+	@echo "${BOLD}exec${RESET}\t run terminal inside Docker container"
 	@echo ""
 
 base:
@@ -164,6 +171,33 @@ endif
 ifneq ($(strip $(PHPSTAN_EXTRA)),)
 	@./phpstan_extra.sh
 endif
+
+build:
+	@echo "🔨 \e[1;32m Building image\e[0m\n"
+	@bash ./bin/docker_build.sh
+
+push:
+	@echo "🔨 \e[1;32m Pushing image to Docker Hub\e[0m\n"
+	@bash ./bin/docker_push.sh
+
+run:
+	@echo "🔨 \e[1;32m Running container\e[0m\n"
+	@bash ./bin/docker_run.sh
+
+start:
+	@echo "🔨 \e[1;32m Starting container\e[0m\n"
+	@bash ./bin/docker_start.sh
+
+stop:
+	@echo "🔨 \e[1;32m Stopping container\e[0m\n"
+	@bash ./bin/docker_stop.sh
+
+kill:
+	@echo "🔨 \e[1;32m Killing container\e[0m\n"
+	@bash ./bin/docker_kill.sh
+
+exec:
+	@bash ./bin/docker_exec.sh
 
 # macros
 everything: clear update stan local sync prod

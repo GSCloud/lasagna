@@ -36,41 +36,40 @@ class Doctor
     {
         $climate = new CLImate;
         $climate->out("<bold>Tesseract DOCTOR</bold>");
-
         $climate->out("\n<blue><bold>File System - FOLDERS");
         $this->validate(
             "<bold>APP</bold> » "
-            . APP, $this->isreadable(APP)
+                . APP, $this->isreadable(APP)
         );
         $this->validate(
             "<bold>CACHE</bold> » "
-            . CACHE, $this->isreadable(CACHE)
+                . CACHE, $this->isreadable(CACHE)
         );
         $this->validate(
             "<bold>DATA</bold> » "
-            . DATA, $this->iswritable(DATA)
+                . DATA, $this->iswritable(DATA)
         );
         $this->validate(
             "<bold>PARTIALS</bold> » "
-            . PARTIALS, $this->isreadable(PARTIALS)
+                . PARTIALS, $this->isreadable(PARTIALS)
         );
         $this->validate(
             "<bold>TEMP</bold> » "
-            . TEMP, $this->iswritable(TEMP)
+                . TEMP, $this->iswritable(TEMP)
         );
         $this->validate(
             "<bold>TEMPLATES</bold> » "
-            . TEMPLATES, $this->isreadable(TEMPLATES)
+                . TEMPLATES, $this->isreadable(TEMPLATES)
         );
         $this->validate(
             "<bold>WWW</bold> » "
-            . WWW, $this->isreadable(WWW)
+                . WWW, $this->isreadable(WWW)
         );
 
         $climate->out("\n<blue><bold>File System - FILES");
         $this->validate(
             "<bold>CONFIG</bold> » "
-            . CONFIG, $this->isreadable(CONFIG)
+                . CONFIG, $this->isreadable(CONFIG)
         );
         $this->validate(
             "<bold>REVISIONS</bold> in ROOT",
@@ -95,7 +94,7 @@ class Doctor
 
         $climate->out("\n<blue><bold>File System - WRITABLE");
         $this->validate(
-            "<bold>ci</bold>",
+            "<bold>CI</bold>",
             $this->iswritable(ROOT . DS . "ci")
         );
         $this->validate(
@@ -136,10 +135,12 @@ class Doctor
             "lib <bold>mbstring",
             $this->isloaded("mbstring")
         );
+        /*
         $this->validate(
             "lib <bold>redis",
             $this->isloaded("redis")
         );
+        */
         $this->validate(
             "lib <bold>sodium",
             $this->isloaded("sodium")
