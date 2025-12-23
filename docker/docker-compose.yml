@@ -7,6 +7,7 @@ services:
     ports:
       - "9000:80"
     volumes:
+      - ./app:/var/www/app
       - ./data:/var/www/data
       - ./logs:/var/www/logs
       - ./temp:/var/www/temp

@@ -17,6 +17,7 @@ phpstan_constants.php
 
 # app
 .env
+app/config_private.neon
 data/*
 logs/*
 temp/*
