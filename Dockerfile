@@ -20,8 +20,7 @@ RUN apt-get update -qq && apt-get upgrade -yqq && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     a2enmod rewrite expires headers && \
-    mkdir -p \
-        /var/www/data /var/www/logs /var/www/temp && \
+    mkdir -p /var/www/data /var/www/logs /var/www/temp && \
     ln -sf /var/www/html /var/www/www && \
     ln -sf /dev/stdout /var/log/apache2/access.log && \
     ln -sf /dev/stderr /var/log/apache2/error.log
@@ -32,13 +31,10 @@ COPY . .
 COPY php.ini /usr/local/etc/php/conf.d/tesseract.ini
 COPY docker/* .
 COPY bashrc /root/.bashrc
-RUN chown -R www-data:www-data \
-        /var/www/data /var/www/logs /var/www/temp  && \
-    chmod -R 775 \
-        /var/www/data /var/www/logs /var/www/temp 
+RUN chown -R www-data:www-data /var/www/data /var/www/logs /var/www/temp  && \
+    chmod -R 775 /var/www/data /var/www/logs /var/www/temp 
 
-HEALTHCHECK --interval=1m --timeout=10s \
-CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK --interval=1m --timeout=10s CMD curl -f http://localhost/ || exit 1
 
 EXPOSE 80
 CMD ["apache2-foreground"]
