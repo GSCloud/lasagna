@@ -2,6 +2,17 @@
 
 ---
 
+`2025-12-23`  **`v2.5.0 beta`**
+
+* **`1100-FEATURE` Dockerfile and Docker Hub image:** `gscloudcz/tesseract-lasagna:latest`  
+* **`1099-FEATURE` Makefile update**  
+* **`1098-FEATURE` PHPStan L9 for everything 🙂**
+
+`2025-12-14`
+
+* **`1097-BUGFIX` authentication regression** \= forever loop ERR 500  
+* **`1096-FEATURE` home button** to quickly access origin from administration
+
 `2025-12-13`
 
 * **`1095-BUGFIX` enhanced Service Worker**
