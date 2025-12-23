@@ -3,12 +3,9 @@
 
 ARG CODE_VERSION=8.2-apache
 FROM php:${CODE_VERSION}
-
-# Metadata
 LABEL maintainer="Fred Brooker <git@gscloud.cz>"
 LABEL description="GS Cloud Ltd. - Tesseract LASAGNA Production Image"
 
-# Arguments & Environment
 ENV TERM=xterm-256color \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
@@ -18,15 +15,11 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN apt-get update -qq && apt-get upgrade -yqq && \
     apt-get install -yqq --no-install-recommends \
-    curl \
-    openssl \
-    unzip \
-    && install-php-extensions gd imagick opcache bcmath zip intl sodium \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && rm -rf /var/lib/apt/lists/*
-
-
-RUN a2enmod rewrite expires headers && \
+    curl openssl unzip mc && \
+    install-php-extensions gd imagick opcache bcmath zip intl sodium && \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    rm -rf /var/lib/apt/lists/* && \
+    a2enmod rewrite expires headers && \
     mkdir -p \
         /var/www/data /var/www/logs /var/www/temp && \
     ln -sf /var/www/html /var/www/www && \
@@ -46,7 +39,6 @@ RUN chown -R www-data:www-data \
 
 HEALTHCHECK --interval=1m --timeout=10s \
 CMD curl -f http://localhost/ || exit 1
-
 
 EXPOSE 80
 CMD ["apache2-foreground"]
