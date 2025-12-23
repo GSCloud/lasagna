@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  tesseract:
+    image: gscloudcz/tesseract-lasagna:latest
+    container_name: tesseract-lasagna
+    ports:
+      - "9000:80"
+    volumes:
+      - ./data:/var/www/data
+      - ./logs:/var/www/logs
+      - ./temp:/var/www/temp
+      - ./www:/var/www/www
+    environment:
+      - TZ=Europe/Prague
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/cs"]
+      interval: 1m
+      timeout: 10s
+      retries: 3

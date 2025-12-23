@@ -6,7 +6,6 @@
 .dockerignore
 Dockerfile
 docker-compose.yml
-docker/*
 
 # PHPStan
 phpstan.neon
