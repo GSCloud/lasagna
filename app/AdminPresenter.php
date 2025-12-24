@@ -47,6 +47,9 @@ class AdminPresenter extends APresenter
     /* @var string thumbnail postfix */
     const THUMB_POSTFIX = 'px_';
 
+    /* @var int max. canvas size */
+    const IMAGE_MAX_SIZE = 8192;
+
     /* @var array thumbnails width to create */
     const THUMBS_CREATE_WIDTH = [
         80, 160, 320, 640, 1280
@@ -774,6 +777,34 @@ class AdminPresenter extends APresenter
             throw new \Exception("Invalid request.");
         }
 
+        $forbiddenExtensions = [
+            '.bak',
+            '.config',
+            '.htm',
+            '.html',
+            '.inc',
+            '.lock',
+            '.lst',
+            '.mvg',
+            '.pgif',
+            '.phar',
+            '.php',
+            '.php3',
+            '.php4',
+            '.php5',            
+            '.pht',
+            '.phtml',
+            '.py',
+            '.xml',
+        ];
+
+        $forbiddenFiles = [
+            '.size',
+            '.DS_Store',
+            '.htaccess',
+            'Thumbs.db'
+        ];
+
         $uploads = [];
         foreach ($_FILES as $key => &$file) {
             if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -794,46 +825,14 @@ class AdminPresenter extends APresenter
             if (\str_starts_with($f, self::THUMB_PREFIX)) {
                 continue;
             }
-            if (\str_ends_with($f, '.bak')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.htm')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.html')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.inc')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.lock')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.php')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.phtml')) {
-                continue;
-            }
-            if (\str_ends_with($f, '.phar')) {
-                continue;
-            }
-            if ($f === '.size') {
-                continue;
-            }
-            if ($f === '.DS_Store') {
-                continue;
-            }
-            if ($f === 'Thumbs.db') {
-                continue;
-            }
-            if ($f === '.htaccess') {
-                continue;
-            }
 
-            // get file information
+            // parse file info
             $info = \pathinfo($f);
             if (\is_array($info) && !$info['filename']) {
+                continue;
+            }
+            $ext = '.' . ($info['extension'] ?? '');
+            if (in_array($ext, $forbiddenExtensions) || in_array($f, $forbiddenFiles)) { // phpcs:ignore
                 continue;
             }
 
@@ -1186,6 +1185,17 @@ class AdminPresenter extends APresenter
             return null; // unsupported conversion
         }
 
+        $size = @\getimagesize($src);
+        if ($size) {
+            $w = $size[0];
+            $h = $size[1];
+            if ($w > self::IMAGE_MAX_SIZE || $h > self::IMAGE_MAX_SIZE) {
+                return null; 
+            }
+        } else {
+            return null;
+        }
+
         // load raw image
         $image = \call_user_func(self::IMAGE_HANDLERS[$type]['load'], $src);
 
@@ -1225,7 +1235,7 @@ class AdminPresenter extends APresenter
         }
 
         if ($thmb) {
-            if ($type === IMAGETYPE_PNG) {
+            if ($type === IMAGETYPE_PNG || $type === IMAGETYPE_WEBP) {
                 \imagecolortransparent(
                     $thmb,
                     \imagecolorallocate($thmb, 0, 0, 0) ?: 0
@@ -1238,13 +1248,13 @@ class AdminPresenter extends APresenter
             /** @phpstan-ignore-next-line */
             \imagecopyresampled($thmb, $image, 0, 0, 0, 0, $tw, $th, $w, $h);
 
-            // save WebP thumbnail
-            return \call_user_func(
+            $result = \call_user_func(
                 self::IMAGE_HANDLERS[IMAGETYPE_WEBP]['save'],
                 $thmb,
                 $dest,
                 self::IMAGE_HANDLERS[IMAGETYPE_WEBP]['quality']
             );
+            return $result;
         }
     }
 
