@@ -1,6 +1,10 @@
-# **Tesseract LASAGNA changelog**
+# **Tesseract LASAGNA v2.5.0 changelog**
 
 ---
+
+`2025-12-24`
+
+* **`1101-BUGFIX` upload handlers and thumbnail creation hardened**
 
 `2025-12-23`  **`v2.5.0 beta`**
 
