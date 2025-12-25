@@ -1,18 +1,15 @@
 # Git
 .git
-.gitattributes
-.gitignore
+.git*
 _rebase
 
 # Docker
 .dockerignore
 Dockerfile
-docker-compose.yml
+docker/docker-compose.yml
 
 # PHPStan
-phpstan.neon
-phpstan_constants.php
-phpstan_extra.sh
+phpstan*
 
 # IDE
 .DS_Store
@@ -21,16 +18,15 @@ phpstan_extra.sh
 
 # App
 .env
-.env.dist
-bin/*
+.env.*
+bin/
 ci/*
 data/*
 logs/*
-patches/*
+patches/
 temp/*
 app/*.redist
 app/config_private.neon
-remote_fixer.sh
 
 # Docs
 *.md
@@ -38,3 +34,7 @@ remote_fixer.sh
 *.txt
 LICENSE
 CONTRIBUTORS.txt
+
+# Other
+apache/
+remote_fixer.sh

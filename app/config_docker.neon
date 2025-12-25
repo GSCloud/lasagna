@@ -1,4 +1,4 @@
-### DOCKER CONFIG
+### DOCKER SPECIFIC CONFIG
 # @author Fred Brooker <git@gscloud.cz>
 
 dbg: TRUE
@@ -11,7 +11,10 @@ test_origin: "http://localhost:80"
 local_goauth_origin: "http://localhost:9000"
 local_goauth_redirect: "http://localhost:9000/login"
 
-# Redis
+# Redis off
 redis: [
   port: 0
 ]
+
+# Docker info
+running_in_docker: true

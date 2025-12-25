@@ -6,4 +6,8 @@ alias la='ls -lA'
 alias ..='cd ..'
 alias ...='cd ../..'
 
-#source /root/completion.bash
+alias app='/var/www/cli.sh'
+
+if [ -f /var/www/tesseract_completion.sh ]; then
+    . /var/www/tesseract_completion.sh
+fi

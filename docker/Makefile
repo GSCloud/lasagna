@@ -32,7 +32,7 @@ info:
 	@echo "${B}unit${R}\t UNIT test"
 	@echo "${B}test${R}\t LOCAL integration test"
 	@echo ""
-	@echo "${L}run ${B}./cli.sh${R}${L} for see other commands${R}"
+	@echo "${L}run ${B}./cli.sh${R}${L} or ${B}app${R}${L} to see other commands${R}"
 
 doctor:
 	@./cli.sh doctor
