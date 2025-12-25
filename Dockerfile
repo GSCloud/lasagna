@@ -1,10 +1,12 @@
-# Tesseract Lasagna CMS
+# Tesseract Lasagna CMS v2.5.0
 # @author Fred Brooker <git@gscloud.cz>
 
 ARG CODE_VERSION=8.2-apache
 FROM php:${CODE_VERSION}
+
 LABEL maintainer="Fred Brooker <git@gscloud.cz>"
-LABEL description="GS Cloud Ltd. - Tesseract LASAGNA Production Image"
+LABEL description="Tesseract LASAGNA by GS Cloud Ltd."
+LABEL version="2.5.0 beta"
 
 ENV TERM=xterm-256color \
     LANG=C.UTF-8 \
@@ -15,11 +17,15 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN apt-get update -qq && apt-get upgrade -yqq && \
     apt-get install -yqq --no-install-recommends \
-    curl openssl unzip mc && \
-    install-php-extensions gd imagick opcache bcmath zip intl sodium && \
+        curl haveged htop mc openssl unzip && \
+    install-php-extensions \
+        bcmath exif gd imagick intl opcache redis sodium zip && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
-    a2enmod rewrite expires headers
+    a2enmod \
+        rewrite expires headers setenvif
+
+RUN apt-get purge -y libopenexr-3-1-30 && apt-get autoremove -y
 
 RUN rm -rf /var/www/html && \
     mkdir -p /var/www/data /var/www/logs /var/www/temp /var/www/www && \
@@ -34,11 +40,11 @@ COPY docker/* ./
 COPY php.ini /usr/local/etc/php/conf.d/tesseract.ini
 COPY bashrc /root/.bashrc
 RUN chown -R www-data:www-data \
-        data logs temp  && \
+        data logs temp www && \
     chmod -R 775 \
-        data logs temp 
+        data logs temp www
 
-HEALTHCHECK --interval=1m --timeout=10s CMD curl -f http://localhost/en || exit 1
+HEALTHCHECK --interval=1m --timeout=7s CMD curl -f http://localhost/en || exit 1
 
 EXPOSE 80
 CMD ["apache2-foreground"]

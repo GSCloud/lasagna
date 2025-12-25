@@ -47,37 +47,36 @@ endif
 all: info
 info:
 	@echo "${GREEN}${B}👾 ${APP_NAME}${R}"
-	@echo ""
 ifneq ($(origin NAME), undefined)
 ifneq ($(origin PORT), undefined)
-	@echo "${R}📦️ ${B}TESSERACT: ${YELLOW}${NAME}${R}\t$(dot) \e[0;4m${NAME}${R} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
+	@echo "${R}📦️ ${B}${YELLOW}${NAME}${R}\t$(dot) \e[0;4m${NAME}${R} \t🚀 http://localhost:${PORT}\n"
 endif
 endif
-	@echo "${L}» DEVELOPMENT${R}"
-	@echo "${B}install${R}\t core installation"
-	@echo "${B}doctor${R}\t check state"
-	@echo "${B}update${R}\t update dependencies"
-	@echo "${B}icons${R}\t rebuild icons"
+	@echo "${L}🔧 DEVELOPMENT${R}"
 	@echo "${B}base${R}\t download and build base Sheets CSV"
-	@echo "${B}refresh${R}\t refresh Sheets CSV"
 	@echo "${B}clear${R}\t clear all temporary files"
-	@echo "${B}sync${R}\t sync to the remote host"
 	@echo "${B}docs${R}\t fix Sheets export for CHANGELOG.md "
+	@echo "${B}doctor${R}\t check state"
+	@echo "${B}icons${R}\t rebuild icons"
+	@echo "${B}install${R}\t core installation"
+	@echo "${B}refresh${R}\t refresh Sheets CSV"
+	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${B}update${R}\t update dependencies"
 	@echo ""
-	@echo "${L}» TESTING${R}"
-	@echo "${B}stan${R}\t PHPStan tests"
-	@echo "${B}unit${R}\t UNIT tests"
-	@echo "${B}test${R}\t LOCAL integration test"
+	@echo "${L}🤯 TESTING${R}"
 	@echo "${B}prod${R}\t PRODUCTION integration test"
+	@echo "${B}stan${R}\t PHPStan tests"
+	@echo "${B}test${R}\t LOCAL integration test"
+	@echo "${B}unit${R}\t UNIT tests"
 	@echo ""
-	@echo "${L}» DOCKER${R}"
+	@echo "${L}🐳 DOCKER${R}"
 	@echo "${B}build${R}\t build image"
+	@echo "${B}exec${R}\t run a Bash terminal inside the container"
+	@echo "${B}kill${R}\t kill container"
 	@echo "${B}push${R}\t push image to Docker Hub"
+	@echo "${B}run${R}\t start container + Chrome browser"
 	@echo "${B}start${R}\t start container"
 	@echo "${B}stop${R}\t stop container"
-	@echo "${B}kill${R}\t kill container"
-	@echo "${B}run${R}\t start container + Chrome browser"
-	@echo "${B}exec${R}\t run a Bash terminal inside the container"
 
 base:
 ifneq ($(strip $(has_wget)),)
@@ -190,14 +189,15 @@ start:
 
 stop:
 	@echo "🔨 \e[1;32m Stopping container\e[0m\n"
-	@bash ./bin/docker_stop.sh
+	@-bash ./bin/docker_stop.sh
 
 kill:
 	@echo "🔨 \e[1;32m Killing container\e[0m\n"
-	@bash ./bin/docker_kill.sh
+	@-bash ./bin/docker_kill.sh
 
 exec:
 	@bash ./bin/docker_exec.sh
 
 # macros
 everything: clear update stan local sync prod
+reimage: clear stop build run exec

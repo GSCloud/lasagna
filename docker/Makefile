@@ -28,7 +28,6 @@ info:
 	@echo "${B}doctor${R}\t check installation"
 	@echo "${B}refresh${R}\t refresh cloud CSV"
 	@echo "${B}clear${R}\t clear temporary files"
-	@echo ""
 	@echo "${B}unit${R}\t UNIT test"
 	@echo "${B}test${R}\t LOCAL integration test"
 	@echo ""

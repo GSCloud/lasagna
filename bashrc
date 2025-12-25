@@ -2,6 +2,7 @@ umask 022
 export PAGER=cat
 
 alias ll='ls -l'
+alias l='ll'
 alias la='ls -lA'
 alias ..='cd ..'
 alias ...='cd ../..'

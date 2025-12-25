@@ -779,29 +779,35 @@ class AdminPresenter extends APresenter
 
         $forbiddenExtensions = [
             '.bak',
+            '.bash',
             '.config',
+            '.exr',
             '.htm',
             '.html',
             '.inc',
+            '.ini',
+            '.json',
             '.lock',
             '.lst',
             '.mvg',
+            '.old',
             '.pgif',
             '.phar',
             '.php',
-            '.php3',
-            '.php4',
-            '.php5',            
             '.pht',
             '.phtml',
+            '.pl',
             '.py',
+            '.sh',
             '.xml',
         ];
 
         $forbiddenFiles = [
-            '.size',
             '.DS_Store',
+            '.env',
+            '.git',
             '.htaccess',
+            '.size',
             'Thumbs.db'
         ];
 
@@ -825,7 +831,6 @@ class AdminPresenter extends APresenter
             if (\str_starts_with($f, self::THUMB_PREFIX)) {
                 continue;
             }
-
             // parse file info
             $info = \pathinfo($f);
             if (\is_array($info) && !$info['filename']) {
@@ -835,7 +840,6 @@ class AdminPresenter extends APresenter
             if (in_array($ext, $forbiddenExtensions) || in_array($f, $forbiddenFiles)) { // phpcs:ignore
                 continue;
             }
-
             // disable any PHP files
             if (isset($info['extension']) && \str_starts_with($info['extension'], 'php')) { // phpcs:ignore
                 continue;
@@ -1177,12 +1181,17 @@ class AdminPresenter extends APresenter
      */
     public function createThumbnail($src, $dest, $tw = null, $th = null
     ) {
+        $this->addMessage("createThumbnail: $src $dest");
         $type = \exif_imagetype($src);
         if (!$type) {
-            return null; // unknown type
+            // unknown type
+            //$this->addMessage("unknown type: $src");
+            return null;
         }
         if (!\array_key_exists($type, self::IMAGE_HANDLERS)) {
-            return null; // unsupported conversion
+            // unsupported conversion
+            //$this->addMessage("unsupported conversion: $src");
+            return null;
         }
 
         $size = @\getimagesize($src);
