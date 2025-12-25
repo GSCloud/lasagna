@@ -27,17 +27,17 @@ endif
 
 # color definitions
 ifeq ($(NO_COLOR),1)
-	BOLD :=
-	DIM :=
-	RESET :=
+	B :=
+	L :=
+	R :=
 	GREEN :=
 	RED :=
 	YELLOW :=
 	BLUE :=
 else
-	BOLD := $(shell tput bold)
-	DIM := $(shell tput dim)
-	RESET := $(shell tput sgr0)
+	B := $(shell tput bold)
+	L := $(shell tput dim)
+	R := $(shell tput sgr0)
 	GREEN := $(shell tput setaf 2)
 	RED := $(shell tput setaf 1)
 	YELLOW := $(shell tput setaf 3)
@@ -46,39 +46,38 @@ endif
 
 all: info
 info:
-	@echo "${GREEN}${BOLD}👾 ${APP_NAME}${RESET}"
+	@echo "${GREEN}${B}👾 ${APP_NAME}${R}"
 	@echo ""
 ifneq ($(origin NAME), undefined)
 ifneq ($(origin PORT), undefined)
-	@echo "${RESET}📦️ ${BOLD}TESSERACT: ${YELLOW}${NAME}${RESET}\t$(dot) \e[0;4m${NAME}${RESET} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
+	@echo "${R}📦️ ${B}TESSERACT: ${YELLOW}${NAME}${R}\t$(dot) \e[0;4m${NAME}${R} \tport: ${PORT} \t🚀 http://localhost:${PORT}\n"
 endif
 endif
-	@echo "${L}» DEVELOPMENT${RESET}"
-	@echo "${BOLD}install${RESET}\t core installation"
-	@echo "${BOLD}doctor${RESET}\t check state"
-	@echo "${BOLD}update${RESET}\t update dependencies"
-	@echo "${BOLD}icons${RESET}\t rebuild icons"
-	@echo "${BOLD}base${RESET}\t download and build base Sheets CSV"
-	@echo "${BOLD}refresh${RESET}\t refresh Sheets CSV"
-	@echo "${BOLD}clear${RESET}\t clear all temporary files"
-	@echo "${BOLD}sync${RESET}\t sync to the remote host"
-	@echo "${BOLD}docs${RESET}\t fix Sheets export for CHANGELOG.md "
+	@echo "${L}» DEVELOPMENT${R}"
+	@echo "${B}install${R}\t core installation"
+	@echo "${B}doctor${R}\t check state"
+	@echo "${B}update${R}\t update dependencies"
+	@echo "${B}icons${R}\t rebuild icons"
+	@echo "${B}base${R}\t download and build base Sheets CSV"
+	@echo "${B}refresh${R}\t refresh Sheets CSV"
+	@echo "${B}clear${R}\t clear all temporary files"
+	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${B}docs${R}\t fix Sheets export for CHANGELOG.md "
 	@echo ""
-	@echo "${L}» TESTING${RESET}"
-	@echo "${BOLD}stan${RESET}\t PHPStan tests"
-	@echo "${BOLD}unit${RESET}\t UNIT tests"
-	@echo "${BOLD}test${RESET}\t LOCAL integration test"
-	@echo "${BOLD}prod${RESET}\t PRODUCTION integration test"
+	@echo "${L}» TESTING${R}"
+	@echo "${B}stan${R}\t PHPStan tests"
+	@echo "${B}unit${R}\t UNIT tests"
+	@echo "${B}test${R}\t LOCAL integration test"
+	@echo "${B}prod${R}\t PRODUCTION integration test"
 	@echo ""
-	@echo "${L}» DOCKER${RESET}"
-	@echo "${BOLD}build${RESET}\t build image"
-	@echo "${BOLD}push${RESET}\t push image to Docker Hub"
-	@echo "${BOLD}start${RESET}\t start container"
-	@echo "${BOLD}stop${RESET}\t stop container"
-	@echo "${BOLD}kill${RESET}\t kill container"
-	@echo "${BOLD}run${RESET}\t start container + Chrome browser"
-	@echo "${BOLD}exec${RESET}\t run a Bash terminal inside the container"
-	@echo ""
+	@echo "${L}» DOCKER${R}"
+	@echo "${B}build${R}\t build image"
+	@echo "${B}push${R}\t push image to Docker Hub"
+	@echo "${B}start${R}\t start container"
+	@echo "${B}stop${R}\t stop container"
+	@echo "${B}kill${R}\t kill container"
+	@echo "${B}run${R}\t start container + Chrome browser"
+	@echo "${B}exec${R}\t run a Bash terminal inside the container"
 
 base:
 ifneq ($(strip $(has_wget)),)

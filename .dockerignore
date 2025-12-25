@@ -1,6 +1,8 @@
 # Git
 .git
+.gitattributes
 .gitignore
+_rebase
 
 # Docker
 .dockerignore
@@ -10,22 +12,29 @@ docker-compose.yml
 # PHPStan
 phpstan.neon
 phpstan_constants.php
+phpstan_extra.sh
 
 # IDE
-.vscode/
 .DS_Store
+.editorconfig
+.vscode/
 
-# app
+# App
 .env
-app/config_private.neon
+.env.dist
+bin/*
 ci/*
 data/*
 logs/*
 patches/*
 temp/*
+app/*.redist
+app/config_private.neon
+remote_fixer.sh
 
-# docs
+# Docs
 *.md
 *.pdf
 *.txt
 LICENSE
+CONTRIBUTORS.txt

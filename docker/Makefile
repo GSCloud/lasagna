@@ -1,18 +1,29 @@
 #@author Fred Brooker <git@gscloud.cz>
 MAKEFLAGS += --no-print-directory
+WWW_USER := www-data
 
 # color definitions
-B := $(shell tput bold)
-L := $(shell tput dim)
-R := $(shell tput sgr0)
-GREEN := $(shell tput setaf 2)
-RED := $(shell tput setaf 1)
-YELLOW := $(shell tput setaf 3)
-BLUE := $(shell tput setaf 4)
+ifeq ($(NO_COLOR),1)
+	B :=
+	L :=
+	R :=
+	GREEN :=
+	RED :=
+	YELLOW :=
+	BLUE :=
+else
+	B := $(shell tput bold)
+	L := $(shell tput dim)
+	R := $(shell tput sgr0)
+	GREEN := $(shell tput setaf 2)
+	RED := $(shell tput setaf 1)
+	YELLOW := $(shell tput setaf 3)
+	BLUE := $(shell tput setaf 4)
+endif
 
 all: info
 info:
-	@echo "${GREEN}${B}👾 Welcome to Tesseract LASAGNA${R}"
+	@echo "${GREEN}${B}👾 Tesseract LASAGNA${R}"
 	@echo ""
 	@echo "${B}doctor${R}\t check installation"
 	@echo "${B}refresh${R}\t refresh cloud CSV"
@@ -21,8 +32,7 @@ info:
 	@echo "${B}unit${R}\t UNIT test"
 	@echo "${B}test${R}\t LOCAL integration test"
 	@echo ""
-	@echo "${L}run ${B}./cli.sh${R}${L} for all the other commands${R}"
-	@echo ""
+	@echo "${L}run ${B}./cli.sh${R}${L} for see other commands${R}"
 
 doctor:
 	@./cli.sh doctor
