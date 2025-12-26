@@ -53,30 +53,32 @@ ifneq ($(origin PORT), undefined)
 endif
 endif
 	@echo "${L}🔧 DEVELOPMENT${R}"
-	@echo "${B}base${R}\t download and build base Sheets CSV"
-	@echo "${B}clear${R}\t clear all temporary files"
-	@echo "${B}docs${R}\t fix Sheets export for CHANGELOG.md "
-	@echo "${B}doctor${R}\t check state"
-	@echo "${B}icons${R}\t rebuild icons"
 	@echo "${B}install${R}\t core installation"
-	@echo "${B}refresh${R}\t refresh Sheets CSV"
-	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${B}doctor${R}\t check state"
 	@echo "${B}update${R}\t update dependencies"
+	@echo "${B}clear${R}\t clear all temporary files"
+	@echo "${B}base${R}\t download and build base Sheets CSV"
+	@echo "${B}refresh${R}\t refresh Sheets CSV"
+	@echo "${B}icons${R}\t rebuild icons"
+	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${B}docs${R}\t fix Sheets export for CHANGELOG.md "
 	@echo ""
 	@echo "${L}🤯 TESTING${R}"
-	@echo "${B}prod${R}\t PRODUCTION integration test"
+	@echo "${B}unit${R}\t UNIT tests"
 	@echo "${B}stan${R}\t PHPStan tests"
 	@echo "${B}test${R}\t LOCAL integration test"
-	@echo "${B}unit${R}\t UNIT tests"
+	@echo "${B}prod${R}\t PRODUCTION integration test"
 	@echo ""
 	@echo "${L}🐳 DOCKER${R}"
 	@echo "${B}build${R}\t build image"
-	@echo "${B}exec${R}\t run a Bash terminal inside the container"
-	@echo "${B}kill${R}\t kill container"
 	@echo "${B}push${R}\t push image to Docker Hub"
-	@echo "${B}run${R}\t start container + Chrome browser"
+	@echo "${B}exec${R}\t run a Bash terminal inside the container"
 	@echo "${B}start${R}\t start container"
+	@echo "${B}run${R}\t start container in Chrome browser"
 	@echo "${B}stop${R}\t stop container"
+	@echo "${B}kill${R}\t kill container"
+	@echo "${B}remove${R}\t remove container (forced)"
+	@echo "${B}showlogs${R}\t show container logs"
 
 base:
 ifneq ($(strip $(has_wget)),)
@@ -172,31 +174,65 @@ ifneq ($(strip $(PHPSTAN_EXTRA)),)
 endif
 
 build:
-	@echo "🔨 \e[1;32m Building image\e[0m\n"
-	@bash ./bin/docker_build.sh
+ifeq (${TAG},true)
+	@docker build --pull -t ${TAG}:latest .
+ifeq (${VERSION},true)
+	@docker build --pull -t ${TAG}:${VERSION} .
+endif
+else
+	@echo "❌missing TAG definition"
+endif
 
 push:
-	@echo "🔨 \e[1;32m Pushing image to Docker Hub\e[0m\n"
-	@bash ./bin/docker_push.sh
-
-run:
-	@echo "🔨 \e[1;32m Running container\e[0m\n"
-	@bash ./bin/docker_run.sh
+ifeq (${TAG},true)
+	@docker push ${TAG}:latest .
+ifeq (${VERSION},true)
+	@docker push ${TAG}:${VERSION} .
+endif
+else
+	@echo "❌missing TAG definition"
+endif
 
 start:
-	@echo "🔨 \e[1;32m Starting container\e[0m\n"
 	@bash ./bin/docker_start.sh
 
+run:
+	@bash ./bin/docker_run.sh
+
 stop:
-	@echo "🔨 \e[1;32m Stopping container\e[0m\n"
-	@-bash ./bin/docker_stop.sh
+ifeq ($(status),true)
+	@docker stop ${NAME}
+else
+	@echo "❌ container is not running"
+endif
+
+remove:
+ifeq ($(status),true)
+	@docker rm ${NAME} --force
+else
+	@echo "❌ container is not running"
+endif
 
 kill:
-	@echo "🔨 \e[1;32m Killing container\e[0m\n"
-	@-bash ./bin/docker_kill.sh
+ifeq ($(status),true)
+	@docker kill ${NAME}
+else
+	@echo "❌ container is not running"
+endif
 
 exec:
-	@bash ./bin/docker_exec.sh
+ifeq ($(status),true)
+	@docker exec -it ${NAME} /bin/bash
+else
+	@echo "❌ container is not running"
+endif
+
+showlogs:
+ifeq ($(status),true)
+	@docker logs ${NAME}
+else
+	@echo "❌ container is not running"
+endif
 
 # macros
 everything: clear update stan local sync prod
