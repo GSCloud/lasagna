@@ -27,7 +27,7 @@ fi
 source ".env"
 
 [ -z "${TAG}" ] && fail "Missing TAG definition!"
-
 docker push ${TAG}
 
-exit 0
+[ -z "${TAG2}" ] && fail "Missing TAG definition!"
+docker push ${TAG2}

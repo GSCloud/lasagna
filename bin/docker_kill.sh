@@ -33,5 +33,3 @@ source .env
 [ "$(docker container inspect -f '{{.State.Status}}' ${NAME} 2>&1)" == "running" ] || fail "Container '${NAME}' is not running!"
 
 docker kill $NAME
-
-exit 0

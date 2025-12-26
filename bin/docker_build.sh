@@ -27,5 +27,7 @@ fi
 source ".env"
 
 [ -z "${TAG}" ] && fail "Missing TAG definition!"
-
 docker build --pull -t ${TAG} .
+
+[ -z "${TAG2}" ] && fail "Missing TAG2 definition!"
+docker build --pull -t ${TAG2} .
