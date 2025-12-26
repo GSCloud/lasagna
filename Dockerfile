@@ -17,15 +17,15 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN apt-get update -qq && apt-get upgrade -yqq && \
     apt-get install -yqq --no-install-recommends \
-        curl haveged htop mc openssl unzip && \
+        curl haveged htop mc openssl && \
     install-php-extensions \
-        bcmath exif gd imagick intl opcache redis sodium zip && \
+        bcmath exif gd imagick intl opcache redis sodium && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     a2enmod \
         rewrite expires headers setenvif
 
-RUN apt-get purge -y libopenexr-3-1-30 && apt-get autoremove -y
+RUN apt-get purge -y libopenexr-3-1-30 && apt-get autoremove -y && apt-get clean -y
 
 RUN rm -rf /var/www/html && \
     mkdir -p \
