@@ -1,5 +1,23 @@
 parameters:
     level: 9
+    paths:
+        - www/index.php
+        - Bootstrap.php
+        - app/App.php
+        - app/AdminPresenter.php
+        - app/ArticlePresenter.php
+        - app/CiTester.php
+        - app/CliDemo.php
+        - app/CliVersion.php
+        - app/CliVersionjson.php
+        - app/CorePresenter.php
+        - app/Doctor.php
+        - app/ErrorPresenter.php
+        - app/HomePresenter.php
+        - app/LogoutPresenter.php
+        - app/RSSPresenter.php
+        - app/StringFilters.php
+        - app/UnitTester.php
     ignoreErrors:
         - '#Call to function is_null\(\)#'
         - '#Expression on left side#'

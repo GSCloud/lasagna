@@ -16,6 +16,8 @@ use Cake\Cache\Cache;
 use Nette\Neon\Neon;
 use Tracy\Debugger;
 
+umask(0000);
+
 // SANITY CHECK
 foreach ([
     'APP',
@@ -344,6 +346,8 @@ foreach ($cache_profiles as $k => $v) {
         "{$k}_file", [
             'className' => 'Cake\Cache\Engine\FileEngine',
             'duration' => $v,
+            'dirMask' => 0777,
+            'mask' => 0666,
             'lock' => true,
             'path' => CACHE,
             'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,
@@ -372,6 +376,8 @@ foreach ($cache_profiles as $k => $v) {
                 'className' => 'Cake\Cache\Engine\FileEngine',
                 'duration' => $v,
                 'fallback' => false,
+                'dirMask' => 0777,
+                'mask' => 0666,
                 'lock' => true,
                 'path' => CACHE,
                 'prefix' => PROJECT . SS . APPNAME . SS . CACHEPREFIX,

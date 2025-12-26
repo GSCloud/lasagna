@@ -3,6 +3,11 @@ MAKEFLAGS += --no-print-directory
 WWW_USER := www-data
 
 include .env
+# sanitize .env variables (remove quotes and comments)
+NAME := $(shell echo $(NAME))
+PORT := $(shell echo $(PORT))
+TAG := $(shell echo $(TAG))
+VERSION := $(shell ./cli.sh app 'echo explode(" ",ENGINE)[1]')
 
 # app checks
 has_chrome := $(shell command -v google-chrome 2>/dev/null)
@@ -78,7 +83,7 @@ endif
 	@echo "${B}stop${R}\t stop container"
 	@echo "${B}kill${R}\t kill container"
 	@echo "${B}remove${R}\t remove container (forced)"
-	@echo "${B}showlogs${R}\t show container logs"
+	@echo "${B}log${R}\t show container logs"
 
 base:
 ifneq ($(strip $(has_wget)),)
@@ -102,12 +107,8 @@ docs:
 	@sed -i -e 's/`~~\*\*/`**/g' -e 's/\* \*\*~~/* ~~**/g' -e 's/ `\*\*/`**/g' CHANGELOG.md
 	@echo 'Done.'
 
-update:
+update: clear
 	@./bin/update.sh
-	@./cli.sh clearcache
-	@./cli.sh clearci
-	@./cli.sh clearlogs
-	@./cli.sh cleartemp
 
 unit:
 	@./cli.sh unit
@@ -136,7 +137,7 @@ test:
 
 refresh:
 	@sudo -u $(WWW_USER) -- ./cli.sh refresh
-	@sudo -u $(WWW_USER) -- ./cli.sh clearcache
+	@./cli.sh clearcache
 
 prod:
 	@./cli.sh unit
@@ -147,25 +148,7 @@ icons:
 
 stan:
 ifneq ($(strip $(has_phpstan)),)
-	@vendor/bin/phpstan -l6 analyse -c phpstan.neon \
-		www/index.php \
-		Bootstrap.php \
-		app/App.php \
-		app/APresenter.php \
-		app/AdminPresenter.php \
-		app/ArticlePresenter.php \
-		app/CiTester.php \
-		app/CliDemo.php \
-		app/CliVersion.php \
-		app/CliVersionjson.php \
-		app/CorePresenter.php \
-		app/Doctor.php \
-		app/ErrorPresenter.php \
-		app/HomePresenter.php \
-		app/LogoutPresenter.php \
-		app/RSSPresenter.php \
-		app/StringFilters.php \
-		app/UnitTester.php
+	@vendor/bin/phpstan analyse -c phpstan.neon
 else
 	$(error "PHPStan is not installed")
 endif
@@ -174,66 +157,79 @@ ifneq ($(strip $(PHPSTAN_EXTRA)),)
 endif
 
 build:
-ifeq (${TAG},true)
-	@docker build --pull -t ${TAG}:latest .
-ifeq (${VERSION},true)
-	@docker build --pull -t ${TAG}:${VERSION} .
+ifneq ($(TAG),)
+	@echo "Building image for version: ${YELLOW}${VERSION}${R}"
+	@docker build --pull -t $(TAG):latest .
+ifneq ($(VERSION),)
+	@docker build --pull -t $(TAG):$(VERSION) .
 endif
 else
-	@echo "❌missing TAG definition"
+	@echo "❌ missing TAG definition"
 endif
 
 push:
-ifeq (${TAG},true)
-	@docker push ${TAG}:latest .
-ifeq (${VERSION},true)
-	@docker push ${TAG}:${VERSION} .
+	@echo Version: $(VERSION)
+ifneq ($(TAG),)
+	@docker push $(TAG):latest
+ifneq ($(VERSION),)
+	@docker push $(TAG):$(VERSION)
 endif
 else
-	@echo "❌missing TAG definition"
+	@echo "❌ missing TAG definition"
 endif
 
 start:
 	@bash ./bin/docker_start.sh
 
 run:
-	@bash ./bin/docker_run.sh
+ifneq ($(origin TAG), undefined)
+	@echo "🚀 Starting container ${YELLOW}$(NAME)${R} on port ${B}$(PORT)${R}..."
+	@docker run -d --rm \
+		--name $(NAME) \
+		-p $(PORT):80 \
+		-v $(CURDIR)/app/config_private.neon:/var/www/app/config_private.neon \
+		$(TAG)
+	@if command -v google-chrome >/dev/null 2>&1; then \
+		echo "🌐 Opening Chrome at http://localhost:$(PORT)"; \
+		google-chrome http://localhost:$(PORT) >/dev/null 2>&1 & \
+	else \
+		echo "ℹ️  Container is up at http://localhost:$(PORT) (Chrome not found)"; \
+	fi
+else
+	@echo "❌ missing TAG definition"
+endif
 
 stop:
 ifeq ($(status),true)
-	@docker stop ${NAME}
+	@-docker stop $(NAME)
 else
 	@echo "❌ container is not running"
 endif
 
 remove:
 ifeq ($(status),true)
-	@docker rm ${NAME} --force
+	@docker rm $(NAME) --force
 else
 	@echo "❌ container is not running"
 endif
 
 kill:
 ifeq ($(status),true)
-	@docker kill ${NAME}
+	@-docker kill $(NAME)
 else
 	@echo "❌ container is not running"
 endif
 
 exec:
-ifeq ($(status),true)
-	@docker exec -it ${NAME} /bin/bash
-else
-	@echo "❌ container is not running"
-endif
+	@docker exec -it $(NAME) /bin/bash
 
-showlogs:
+log:
 ifeq ($(status),true)
-	@docker logs ${NAME}
+	@docker logs $(NAME)
 else
 	@echo "❌ container is not running"
 endif
 
 # macros
 everything: clear update stan local sync prod
-reimage: clear stop build run exec
+reimage: stop clear test build run exec

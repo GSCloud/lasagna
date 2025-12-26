@@ -303,7 +303,7 @@ abstract class APresenter
             [
                 'template_class_prefix' => PROJECT . SS,
                 'cache' => TEMP,
-                'cache_file_mode' => 0644,
+                'cache_file_mode' => 0666,
                 'cache_lambda_templates' => true,
                 'loader' => $type ? new \Mustache_Loader_FilesystemLoader(TEMPLATES)
                     : new \Mustache_Loader_StringLoader,

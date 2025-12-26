@@ -28,7 +28,8 @@ RUN apt-get update -qq && apt-get upgrade -yqq && \
 RUN apt-get purge -y libopenexr-3-1-30 && apt-get autoremove -y
 
 RUN rm -rf /var/www/html && \
-    mkdir -p /var/www/data /var/www/logs /var/www/temp /var/www/www && \
+    mkdir -p \
+        /var/www/data /var/www/logs /var/www/temp /var/www/www /var/www/www/upload /var/www/www/download/export && \
     ln -sf /var/www/www /var/www/html && \
     ln -sf /dev/stdout /var/log/apache2/access.log && \
     ln -sf /dev/stderr /var/log/apache2/error.log
@@ -39,10 +40,12 @@ COPY . ./
 COPY docker/* ./
 COPY php.ini /usr/local/etc/php/conf.d/tesseract.ini
 COPY bashrc /root/.bashrc
-RUN chown -R www-data:www-data \
-        data logs temp www && \
-    chmod -R 775 \
-        data logs temp www
+RUN chown -R www-data:www-data . && \
+    chmod -R 775 data logs temp && \
+    find www -type d -exec chmod 555 {} + && \
+    find www -type f -exec chmod 444 {} + && \
+    mkdir -p www/upload www/download/export && \
+    chmod -R 775 www/upload www/download/export
 
 HEALTHCHECK --interval=1m --timeout=7s CMD curl -f http://localhost/en || exit 1
 

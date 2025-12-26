@@ -555,7 +555,9 @@ class AdminPresenter extends APresenter
                         . $h
                         . '&token='
                         . \hash('sha256', $role . $key . $h);
-                    $this->addMessage("ADMIN: new token as [{$role}] for [{$h}]");
+                    if (is_string($role)) {
+                        $this->addMessage("ADMIN: new token as [{$role}] for [{$h}]"); // phpcs:ignore
+                    }
                     return $this->writeJsonData($code, $extras);
                 }
             }
