@@ -56,4 +56,3 @@ Tesseract LASAGNA is a high-performance, Model View Presenter (MVP) CMS framewor
 * **In-page Administration Panel:** Provides a streamlined interface for managing the application.  
 * **REST API:** Dynamically generated API for flexible data access and integration.  
 * **Remote Function Calls:** Enables secure remote operations.
-
