@@ -7,11 +7,15 @@ services:
     ports:
       - "9000:80"
     volumes:
-      - ./app:/var/www/app
+      # customization = templates, routers, config, presenters
+      - ./custom:/var/www/custom
+      # persistence
       - ./data:/var/www/data
       - ./logs:/var/www/logs
-      - ./temp:/var/www/temp
-      - ./www:/var/www/www
+      # static assets
+      - ./www/download:/var/www/www/download
+      - ./www/img/logo.png:/var/www/www/img/logo.png
+      - ./www/upload:/var/www/www/upload
     environment:
       - TZ=Europe/Prague
     restart: unless-stopped
