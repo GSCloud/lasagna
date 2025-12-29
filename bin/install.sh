@@ -50,7 +50,11 @@ mkdir -p ci custom data logs temp www/download/export www/upload www/img && find
 echo "😎 root permission needed to run the following tasks"
 
 # set permissions and ownership for all mapped volumes
-sudo chmod -R 0777 ci custom data logs temp www/download www/upload www/img
+sudo chmod -R 0755 www/download www/img
+sudo find www -type d -exec chmod 555 {} +
+sudo find www -type f -exec chmod 444 {} +
+sudo chmod -R 0777 ci custom data logs temp www/download/export www/upload
+sudo chmod -R 0666 www/upload www/img/logo.* www/img/favicon*
 sudo chown -R www-data:www-data custom data logs
 sudo chgrp -R www-data ci custom data logs www www/download www/upload www/img
 
@@ -77,4 +81,4 @@ fi
 command -v composer >/dev/null 2>&1 || fail PHP composer is not installed!
 [ ! -d "vendor" ] && make update
 
-info "👾 run \e[1m\e[4mmake doctor\e[0m to check your configuration\n\n"
+info "👾 run \e[1m\e[4mmake doctor\e[0m to check your configuration\n"
