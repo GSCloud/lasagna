@@ -14,8 +14,8 @@ services:
       - ./logs:/var/www/logs
       # static assets
       - ./www/download:/var/www/www/download
-      - ./www/img/logo.png:/var/www/www/img/logo.png
       - ./www/upload:/var/www/www/upload
+      - ./www/img/logo.png:/var/www/www/img/logo.png
     environment:
       - TZ=Europe/Prague
     restart: unless-stopped

@@ -6,11 +6,11 @@ info() {
 }
 
 warn() {
-  echo -e " \e[1;33m***\e[0;1m ${*}\e[0m" 1>&2
+  echo -e " \e[1;33m❗️ \e[0;1m ${*}\e[0m" 1>&2
 }
 
 fail() {
-  echo -e " \e[1;31m***\e[0;1m ${*}\e[0m" 1>&2
+  echo -e " \e[1;31m❌ \e[0;1m ${*}\e[0m" 1>&2
   sleep 5
   exit 1
 }
