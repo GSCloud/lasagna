@@ -45,17 +45,19 @@ PACKAGES=(
 info "👶 installing"
 
 # create directory structure for volumes
-mkdir -p ci custom data logs temp www/download/export www/upload www/img && find . -name "*.sh" -exec chmod +x {} +
+mkdir -p ci custom data logs temp www/download/export www/upload www/img
 
 echo "😎 root permission needed to run the following tasks"
 
 # set permissions and ownership for all mapped volumes
-sudo chmod -R 0755 www/download www/img
+sudo chmod -R 0777 ci custom data logs temp www
+sudo find . -name "*.sh" -exec chmod +x {} +
 sudo find www -type d -exec chmod 555 {} +
 sudo find www -type f -exec chmod 444 {} +
-sudo chmod -R 0777 ci custom data logs temp www/download/export www/upload
-sudo chmod -R 0666 www/upload www/img/logo.* www/img/favicon*
-sudo chown -R www-data:www-data custom data logs
+sudo chmod 0775 www www/img/create_favicons.sh
+sudo chmod -R 0666 www/img/logo.* www/img/favicon*
+sudo chmod -R 0755 www/download
+sudo chown -R www-data:www-data custom data logs www
 sudo chgrp -R www-data ci custom data logs www www/download www/upload www/img
 
 # check for missing packages

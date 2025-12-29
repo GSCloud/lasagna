@@ -2,15 +2,19 @@
 
 ---
 
+`2025-12-29`
+
+* **`1102-FEATURE` HARDENING: install, update, Makefile, Dockerfile**
+
 `2025-12-24`
 
-* **`1101-BUGFIX` upload handlers and thumbnail creation hardened**
+* **`1101-FEATURE` HARDENING: upload handlers, thumbnails creation**
 
 `2025-12-23`  **`v2.5.0 beta`**
 
-* **`1100-FEATURE` Dockerfile and Docker Hub image:** `gscloudcz/tesseract-lasagna:latest`  
+* **`1100-FEATURE` Dockerfile / Docker Hub image:** `gscloudcz/tesseract-lasagna:latest`  
 * **`1099-FEATURE` Makefile update**  
-* **`1098-FEATURE` PHPStan L9 for everything 🙂**
+* **`1098-FEATURE` PHPStan L9 update**
 
 `2025-12-14`
 
