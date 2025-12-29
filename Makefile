@@ -58,28 +58,28 @@ ifneq ($(origin PORT), undefined)
 endif
 endif
 	@echo "${L}🔧 DEVELOPMENT${R}"
-	@echo "${B}install${R}\t core installation"
-	@echo "${B}doctor${R}\t check state"
+	@echo "${B}install${R}\t do core installation"
+	@echo "${B}doctor${R}\t check installation"
 	@echo "${B}update${R}\t update dependencies"
 	@echo "${B}clear${R}\t clear all temporary files"
 	@echo "${B}base${R}\t download and build base Sheets CSV"
 	@echo "${B}refresh${R}\t refresh Sheets CSV"
 	@echo "${B}icons${R}\t rebuild icons"
-	@echo "${B}sync${R}\t sync to the remote host"
+	@echo "${B}sync${R}\t sync files to the remote host"
 	@echo "${B}docs${R}\t fix Sheets export for CHANGELOG.md "
 	@echo ""
 	@echo "${L}🤯 TESTING${R}"
 	@echo "${B}unit${R}\t UNIT tests"
 	@echo "${B}stan${R}\t PHPStan tests"
-	@echo "${B}test${R}\t LOCAL integration test"
-	@echo "${B}prod${R}\t PRODUCTION integration test"
+	@echo "${B}test${R}\t LOCAL integration tests"
+	@echo "${B}prod${R}\t PRODUCTION integration tests"
 	@echo ""
 	@echo "${L}🐳 DOCKER${R}"
 	@echo "${B}build${R}\t build image"
-	@echo "${B}push${R}\t push image to Docker Hub"
+	@echo "${B}push${R}\t push image to the Docker Hub"
 	@echo "${B}exec${R}\t run a Bash terminal inside the container"
 	@echo "${B}start${R}\t start container"
-	@echo "${B}run${R}\t start container in Chrome browser"
+	@echo "${B}run${R}\t start container in the Chrome browser"
 	@echo "${B}stop${R}\t stop container"
 	@echo "${B}kill${R}\t kill container"
 	@echo "${B}remove${R}\t remove container (forced)"
@@ -232,4 +232,4 @@ endif
 
 # macros
 everything: clear update stan local sync prod
-reimage: stop clear test build run exec
+reimage: stop clear update test build run exec
