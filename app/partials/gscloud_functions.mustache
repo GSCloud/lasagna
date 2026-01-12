@@ -1,6 +1,17 @@
 <script nonce="{{ csp_nonce }}">
 'use strict';
 
+// SHUFFLE PROTOTYPE
+if (!Array.prototype.shuffle) {
+    Array.prototype.shuffle = function() {
+        for (let i = this.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this[i], this[j]] = [this[j], this[i]];
+        }
+        return this;
+    };
+}
+
 // CREATE LOCAL STORAGE UID
 var uuid = null;
 try {
@@ -12,7 +23,7 @@ try {
 }
 
 // LOCAL STORAGE TEST + SET UUID
-var nolocalstorage = false;
+var test = false;
 try {
   if (localStorage) {
     if (!localStorage['uuid'] || localStorage['uuid'].length !== 36) {
@@ -21,10 +32,11 @@ try {
     localStorage.removeItem('luid');
   }
 } catch (e) {
-  nolocalstorage = true;
+  test = true;
   console.log('WARNING: localStorage is blocked!');
   console.log(e);
 }
+let nolocalstorage = test;
 
 // COMPUTE SHA-256 HASH
 async function sha256(message) {
