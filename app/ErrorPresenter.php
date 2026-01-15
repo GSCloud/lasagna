@@ -122,7 +122,6 @@ class ErrorPresenter extends APresenter
         $template = "error";
         
         header("HTTP/1.1 {$code} {$error}");
-        header('Clear-Site-Data: "cookies"');
         header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0'); // phpcs:ignore
         header('Pragma: no-cache');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
