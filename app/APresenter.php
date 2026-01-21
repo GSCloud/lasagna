@@ -664,9 +664,15 @@ abstract class APresenter
         $parts = [];
         $parts[] = CLI ? 'CLI_ENV' : 'WEB_ENV';
         if (!CLI) {
-            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+            // SPACELINK fix
+            if (!isset($_SERVER['HTTP_SPACELINK'])) {
+                $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+                $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING'); // phpcs:ignore
+            } else {
+                $parts[] = 'N/A_SPACELINK';
+                $parts[] = 'N/A_ENCODING';
+            }
             $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
-            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING'); // phpcs:ignore
             $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE'); // phpcs:ignore
             $parts[] = \strtolower($_SERVER['HTTP_HOST'] ?? 'N/A_HOST');
         }
@@ -824,7 +830,7 @@ abstract class APresenter
                 $this->logout();
             }
             if ($q['fingerprint'] !== $fingerprint) {
-                $this->addError('Identity fingerprint is invalid.');
+                $this->addError('Identity fingerprint is invalid. SPACELINK status: ' . ($_SERVER['HTTP_SPACELINK'] ?? '0')); // phpcs:ignore
                 $this->logout();
             }
             if (!\array_key_exists('nonce', $q)) {
