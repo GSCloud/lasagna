@@ -664,16 +664,10 @@ abstract class APresenter
         $parts = [];
         $parts[] = CLI ? 'CLI_ENV' : 'WEB_ENV';
         if (!CLI) {
-            // SPACELINK fix
-            if (!isset($_SERVER['HTTP_SPACELINK'])) {
-                $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
-                $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_ENCODING'); // phpcs:ignore
-            } else {
-                $parts[] = 'N/A_SPACELINK';
-                $parts[] = 'N/A_ENCODING';
-            }
-            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_USER_AGENT';
-            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_LANGUAGE'); // phpcs:ignore
+            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
+            $parts[] = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A_UA';
+            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'N/A_AE');
+            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'N/A_AL');
             $parts[] = \strtolower($_SERVER['HTTP_HOST'] ?? 'N/A_HOST');
         }
         return \hash('sha256', \implode(SS, $parts));
@@ -830,8 +824,26 @@ abstract class APresenter
                 $this->logout();
             }
             if ($q['fingerprint'] !== $fingerprint) {
-                $this->addError('Identity fingerprint is invalid. SPACELINK status: ' . ($_SERVER['HTTP_SPACELINK'] ?? '0')); // phpcs:ignore
-                $this->logout();
+                try {
+                    $ip = $this->getIP();
+                    $name = \gethostbyaddr($ip);
+                    if ($name === $ip) {
+                        $name = '';
+                    }
+                } catch (\Throwable $e) {
+                        $this->addError("Identity fingerprint is invalid. Could not translate IP address: [{$ip}]"); // phpcs:ignore
+                        $this->logout();
+                }
+                if (empty($name)) {
+                    $this->addError('Identity fingerprint is invalid. We got IP as a name.'); // phpcs:ignore
+                    $this->logout();
+                }
+                if (\str_ends_with($name, 'isp.starlink.com')) {
+                    // we got Starlink here!
+                } else {
+                        $this->addError("Identity fingerprint is invalid. [{$name}]"); // phpcs:ignore
+                        $this->logout();
+                }
             }
             if (!\array_key_exists('nonce', $q)) {
                 $this->addError('Identity has no nonce.');
