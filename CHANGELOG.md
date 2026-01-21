@@ -2,13 +2,20 @@
 
 ---
 
+`2026-01-21`
+
+* **`1104-FEATURE` removed UA string from browser fingerprinting** (due to the UA reduction)  
+* **`1103-FEATURE` authentication fix for Starlink users** (to prevent country hopping)
+
+---
+
 `2025-12-29`
 
 * **`1102-FEATURE` HARDENING: install, update, Makefile, Dockerfile**
 
 `2025-12-24`
 
-* **`1101-FEATURE` HARDENING: upload handlers, thumbnails creation**
+* **`1101-FEATURE` HARDENING: upload handlers, upload thumbnails creation**
 
 `2025-12-23`  **`v2.5.0 beta`**
 
@@ -307,6 +314,8 @@
 
 * ~~**`1007-IDEA`** **add visual labels** for latest files uploaded~~  
 * ~~**`1006-IDEA`** show **total uploads sizes** \+ counts in admin panel~~
+
+---
 
 `2024-12-28`
 
