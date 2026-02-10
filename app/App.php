@@ -20,14 +20,14 @@ umask(0000);
 
 // SANITY CHECK
 foreach ([
+    'DS',
+    'SS',
+    'ROOT',
     'APP',
     'CACHE',
     'CONFIG',
     'DATA',
-    'DS',
     'LOGS',
-    'ROOT',
-    'SS',
     'TEMP',
 ] as $x) {
     defined($x) || die("FATAL ERROR - sanity check for const: '{$x}'");
@@ -181,12 +181,13 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.5.0 beta');
+define('ENGINE', 'Tesseract v2.5.0');
 $data['ENGINE'] = ENGINE;
 
-// version to load: https://cdnjs.com/libraries/codemirror 
+// https://cdnjs.com/libraries/codemirror 
 $data['codemirror'] = '6.65.7';
-// version to load: https://cdn.gscloud.cz/summernote/
+
+// https://cdnjs.com/libraries/summernote
 $data['summernote'] = 'v0.8.18';
 
 // Base58 encoder
