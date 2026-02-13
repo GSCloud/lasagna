@@ -837,8 +837,10 @@ abstract class APresenter
                     $this->addError('Identity fingerprint is invalid. We got IP as a name.'); // phpcs:ignore
                     $this->logout();
                 }
-                if (\str_ends_with($name, 'isp.starlink.com')) {
-                    // we got Starlink here!
+                if (\str_ends_with($name, '.starlinkisp.net')) {
+                    // we got Starlink!
+                } else if (\str_ends_with($name, '.starlink.com')) {
+                    // we got Starlink!
                 } else {
                         $this->addError("Identity fingerprint is invalid. [{$name}]"); // phpcs:ignore
                         $this->logout();
