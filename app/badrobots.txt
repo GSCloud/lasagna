@@ -6,8 +6,6 @@ Barkrowler
 Bytespider
 CCBot
 ChatGPT-User
-Claude-Web
-ClaudeBot
 Crawlspace
 DataForSeoBot
 Diffbot
@@ -25,7 +23,6 @@ Meta-ExternalFetcher
 OAI-SearchBot
 Omgili
 PanguBot
-PerplexityBot
 PetalBot
 Scrapy
 SemrushBot
@@ -39,7 +36,6 @@ Webzio-Extended
 YandexBot
 YandexFavicons
 YouBot
-anthropic-ai
 cohere-ai
 cohere-training-data-crawler
 iaskspider

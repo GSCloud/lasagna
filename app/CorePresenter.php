@@ -75,7 +75,8 @@ class CorePresenter extends APresenter
         case "GetLLMSTxt":
             $this->setHeaderText();
             $l = $this->getLocale('en');
-            $this->setData("llms", $l["llms"] ?? "# LLMS data not set");
+            $x = "# LLMS data not set";
+            $this->setData("llms", $l["llms"] ?? $x);
             return $this->setData('output', $this->renderHTML('{{ llms }}'));
 
         case "GetRobotsTxt":
