@@ -72,6 +72,13 @@ class CorePresenter extends APresenter
         case 'clearbrowser':
             $this->clearBrowserStorage();
     
+        case "GetLLMSTxt":
+            $this->setHeaderText();
+            $l = $this->getLocale('en');
+            $this->setData("llms", $l["llms"] ?? "# LLMS data not set");
+            return $this->setData('output', $this->renderHTML('{{ llms }}'));
+            break;
+
         case "GetRobotsTxt":
             $this->setHeaderText();
             $file = APP . DS . 'badrobots.txt';

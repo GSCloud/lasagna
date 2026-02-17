@@ -43,6 +43,10 @@ GetServiceWorker:
   path: /sw.js
   presenter: core
 
+GetLLMSTxt:
+  path: /llms.txt
+  presenter: core
+
 GetError:
   path: '/err/[i:code]'
   api: true
