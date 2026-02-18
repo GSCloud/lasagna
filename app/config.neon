@@ -82,9 +82,9 @@ redis: [
 
 # EXTERNAL CSS
 css_sources: [
-  "https://cdn.gscloud.cz/fontawesome/v7.0.0/css/fontawesome.min.css",
-  "https://cdn.gscloud.cz/fontawesome/v7.0.0/css/brands.min.css",
-  "https://cdn.gscloud.cz/fontawesome/v7.0.0/css/solid.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v7.2.0/css/fontawesome.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v7.2.0/css/brands.min.css",
+  "https://cdn.gscloud.cz/fontawesome/v7.2.0/css/solid.min.css",
 ]
 
 # LOCAL CSS
