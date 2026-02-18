@@ -172,8 +172,8 @@ a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnut�
 a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
 a_uploading_finished,INFO,Upload has finished.,Nahrávání dokončeno.,Nahrávanie bolo dokončené.,Der Upload ist abgeschlossen.
 a_webpage,INFO,web page,webová stránka,webová stránka,Webseite
-a_data_info,SUBPAR,"fetch remote data, manage uploads and articles","načítání vzdálených dat, správa nahrávání a článků","načítavať vzdialené dáta, spravovať nahrávania a články","Remote-Daten abrufen, Uploads und Artikel verwalten"
-a_dev_info,SUBPAR,special development functions,speciální vývojové funkce,špeciálne vývojové funkcie,spezielle Entwicklungsfunktionen
+a_data_info,SUBPAR,"fetch remote data, manage uploads","načítání vzdálených dat, správa nahrávání","načítavať vzdialené dáta, spravovať nahrávania","Remote-Daten abrufen, Uploads verwalten"
+a_dev_info,SUBPAR,development functions,vývojové funkce,vývojové funkcie,Entwicklungsfunktionen
 a_groups_info,SUBPAR,user lists and their permissions,seznamy uživatelů a jejich oprávnění,zoznamy používateľov a ich povolenia,Benutzerlisten und deren Berechtigungen
 a_news_info,SUBPAR,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
 a_news_os_info,SUBPAR,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
