@@ -4,8 +4,13 @@ $author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker
 $gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud Ltd.
 $gscloud,$,$gsc,$gsc,$gsc,$gsc
 $year,$,2026,2026,2026,2026
-llms,CORE,"LLMS data not set
-# website by $author / $gsc",,,
+llms,CORE,"# $title
+
+> $description
+
+## Docs
+
+- Author: $author / $gsc",,,
 $design_light_red,$TPL,"[neon][
 footer_color: ""grey darken-4""
 nav_color: ""red""
@@ -114,7 +119,7 @@ nav_english,NAVI,English,English,English,English
 nav_deutsch,NAVI,Deutsch,Deutsch,Deutsch,Deutsch
 a_changelog,BUTTON,CHANGES AND UPDATES,ZMĚNY A AKTUALIZACE,ZMENY A AKTUALIZÁCIE,ÄNDERUNGEN UND AKTUALISIERUNGEN
 a_close,BUTTON,CLOSE,ZAVŘÍT,ZAVRIEŤ,SCHLIESSEN
-a_cssdebugger,BUTTON,DEBUGGER,DEBUGGER,DEBUGGER,DEBUGGER
+a_cssdebugger,BUTTON,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER,CSS DEBUGGER
 a_flush,BUTTON,FLUSH CACHE,VYPRÁZDNIT CACHE,VYPRÁZDNIŤ CACHE,CACHE LEEREN
 a_get_token,BUTTON,CREATE TOKEN,VYTVOŘIT TOKEN,VYTVORIŤ TOKEN,Token erstellen
 a_google_account,BUTTON,ACCOUNT,ÚČET,ÚČET,KONTO
@@ -125,7 +130,7 @@ a_login,BUTTON,LOGIN,PŘIHLÁSIT,PRIHLÁSENIE,LOGIN
 a_logout,BUTTON,LOGOUT,ODHLÁSIT,ODHLÁSIŤ SA,ABMELDEN
 a_logout_msg,BUTTON,BYE 👋,ZDAREC 👋,DO VIDZENIA 👋,TSCHÜSS 👋
 a_manual,BUTTON,MANUAL,MANUÁL,MANUÁL,HANDBUCH
-a_phpdebugger,BUTTON,DEBUGGER,DEBUGGER,DEBUGGER,DEBUGGER
+a_phpdebugger,BUTTON,TRACY DEBUGGER,TRACY DEBUGGER,TRACY DEBUGGER,TRACY DEBUGGER
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
 a_show_translations,BUTTON,📍,📍,📍,📍
@@ -189,7 +194,7 @@ a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,celá obr
 a_summer_history_ttip,SUMMERNOTE,history,historie,história,Geschichte
 a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
 a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
-a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalt speichern
+a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern
 a_tab_changes,TAB,INFORMATION,INFORMACE,INFORMÁCIE,INFORMATION
 a_tab_data,TAB,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
 a_tab_dev,TAB,DEV,DEV,DEV,DEV

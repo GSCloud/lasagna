@@ -1,14 +1,15 @@
 {{#robots_disabled}}
 User-agent: {{.}}
 Disallow: /
+Allow: /llms.txt
 
 {{/robots_disabled}}
+
+User-agent: SeznamBot
+Request-rate: 1/5s
 
 User-agent: *
 Allow: /
 Disallow: /err
 Disallow: /login
 Disallow: *?nonce=*
-
-User-agent: SeznamBot
-Request-rate: 1/5s

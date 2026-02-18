@@ -2,7 +2,11 @@
 
 ---
 
-`2026-01-21`
+`2026-02-17`
+
+* **`1105-FEATURE` support for [`llms.txt`](https://llmstxt.org/)** via **`llms`** Sheet data cell
+
+`2026-01-21 v2.5.0 `
 
 * **`1104-FEATURE` removed UA string from browser fingerprinting** (due to the UA reduction)  
 * **`1103-FEATURE` authentication fix for Starlink users** (to prevent country hopping)
@@ -17,7 +21,7 @@
 
 * **`1101-FEATURE` HARDENING: upload handlers, upload thumbnails creation**
 
-`2025-12-23`  **`v2.5.0 beta`**
+`2025-12-23 v2.5.0 beta `
 
 * **`1100-FEATURE` Dockerfile / Docker Hub image:** `gscloudcz/tesseract-lasagna:latest`  
 * **`1099-FEATURE` Makefile update**  
