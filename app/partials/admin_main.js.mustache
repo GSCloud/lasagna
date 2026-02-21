@@ -422,13 +422,13 @@
                   si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
                   if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" width=120 src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
                   si += '</a>';
-                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align card-link" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
+                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align blue-text" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
                 }
   
                 // AGE + SIZE
                 var saz = '';
                 var warn = '';
-                if (data.data.files[i]["size"] > 2*1024*1024) {
+                if (data.data.files[i]["size"] >= 3*1024*1024) {
                   warn = 'bold red warning';
                 }
 
@@ -440,27 +440,29 @@
                 saz += '</span>';
                 saz += '</div>';
   
-                // SML
+                // XS SML XL
                 var sml = '';
                 for (var j in data.data.files[i]["thumbnails"]) {
                   name = data.data.files[i]["thumbnails"][j];
-                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">📋' + wt[j] + '</span>&nbsp;&nbsp;';
+                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '</span>&nbsp;&nbsp;';
                 }
                 if (sml.length) {
-                  sml = '<div class="row center"><i class="fa-solid fa-shapes"></i>&nbsp;' + sml + '</div>';
+                  sml = '<div class="smlrow row center"><i class="fa-solid fa-shapes"></i>&nbsp;' + sml + '</div>';
                 }
   
-                // DELETE + RCB
+                // DOWNLOAD + DELETE + RCB
                 var sd = '';
                 if (data.data.files[i]["thumbnails"] === null) {
                   sd += '<div class="row">';
-                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.3rem" class="hover left" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>&nbsp; ';
+                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.3rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
                   sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
                   sd += '</div>';
                 }
                 else {
                   sd += '<div class="row">';
-                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.3rem" class="hover left" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>&nbsp; ';
+                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.3rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
                   sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
                   if (ext != 'webp') {
                     sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">📋webp</span>';
@@ -488,6 +490,7 @@
               $("#a_file_manager").hide().html(s).show(100);
             }
             if (!stubs_rendered) $('.btn-stubs').hide();
+            if (displaystate == 'hide-images') $('.smlrow').hide();            
             $('#uploadimagescount').html(printed + '&nbsp;/&nbsp;' + data.data.count);
 
             // activate new tooltips
@@ -505,6 +508,7 @@
 
             // UPLOAD: disable images
             $('#uploadimagesko').click(function () {
+              $('.smlrow').hide();
               $('.uploaded-image').hide();
               $('.uploaded-card').css('height', '150px');
               $('#uploadimagesok').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
@@ -515,6 +519,7 @@
 
             // UPLOAD: enable images
             $('#uploadimagesok').click(function () {
+              $('.smlrow').show();
               $('.uploaded-image').show();
               $('.uploaded-card').css('height', '300px');
               $('#uploadimagesok').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
