@@ -47,16 +47,16 @@
                 '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px;padding:3px;" ' +
                 'class="orange mono white-text bold nowrap" href="' +
                 'https://docs.google.com/spreadsheets/d/' +
-                sheet + '/edit">&nbsp;<i class="material-icons white-text tiny">edit</i>&#8239;&nbsp;' +
+                sheet + '/edit">&nbsp;' +
                 x + '&nbsp;</a>&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
                 ' style="font-size:1.2rem;border-radius:2px;padding:3px;" class="csv' + x +  ' bold blue white-text mono nowrap" ' +
                 'href="https://docs.google.com/spreadsheets/d/e/' +
-                csv + '/pub?output=csv">&nbsp;<i class="fas white-text fa-cloud-download-alt"></i>&#8239;&nbsp;' +
+                csv + '/pub?output=csv">&nbsp;' +
                 lines + '&nbsp;</a>&nbsp;';
             }
             content += ('<div style="margin:2px;" class="center">' +
               link +
-              '&nbsp;&nbsp;<span class="nowrap"><i class="material-icons grey-text tiny">access_time</i>&nbsp;&nbsp;<span class=csv' +
+              '&nbsp;&nbsp;<span class="nowrap">&nbsp;<span class=csv' +
               x +
               '>' +
               moment.duration(Math.abs(~~((now - data.data[x]['timestamp']))), 'seconds').humanize() +
@@ -318,6 +318,7 @@
 
             var s = '';
             var t = 0;
+            var over = false;
             var printed = 0;
 
             // search
@@ -410,7 +411,10 @@
                 }
 
                 printed++;
-                if (printed > 100) continue;
+                if (printed > 300) {
+                  over = true;
+                  continue;
+                }
   
                 var si = '';
                 if (data.data.files[i]["thumbnails"] === null) {
@@ -454,15 +458,15 @@
                 var sd = '';
                 if (data.data.files[i]["thumbnails"] === null) {
                   sd += '<div class="row">';
-                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.3rem" class="hover left" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>&nbsp; ';
-                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.3rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.5rem" class="hover left downloadicon" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>';
+                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
                   sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
                   sd += '</div>';
                 }
                 else {
                   sd += '<div class="row">';
-                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.3rem" class="hover left" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>&nbsp; ';
-                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.3rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.5rem" class="hover left downloadicon" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>';
+                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
                   sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
                   if (ext != 'webp') {
                     sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">📋webp</span>';
@@ -481,6 +485,11 @@
                 s += "</div>";
                 GSC.GetUploadsInfo();
               }
+            }
+
+            // too many images
+            if (over) {
+              s += '<div class="row center"><div id="overbutton" class="btn red">{{ l.a_too_many_images }}</div></div>';
             }
             
             // show file manager

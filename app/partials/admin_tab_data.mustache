@@ -91,10 +91,13 @@
       </p>
     </div>
 
+    <hr>
+    <div>
     {{#model.x_count}}
-    <b>MODEL eXtensions ({{ model.x_count }})</b><span id="modelx-switch" class="btn black"><i class="fa-regular fa-square-plus"></i></span>
-    <div id="modelx" class="hide">{{#model.changes}}<div class="model">{{.}}</div>{{/model.changes}}</div>
+      <b>MODEL eXtensions ({{ model.x_count }})</b><span id="modelx-switch" class="btn black"><i class="fa-regular fa-square-plus"></i></span>
+      <div id="modelx" class="hide">{{#model.changes}}<div class="modelx">{{.}}</div>{{/model.changes}}</div>
     {{/model.x_count}}
+    </div>
 
   </div>
 </div>

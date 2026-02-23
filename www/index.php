@@ -13,4 +13,6 @@
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 defined('ROOT') || define('ROOT', realpath(__DIR__ . DS . '..'));
 
+//define('UPLOAD', null);
+
 require_once ROOT . DS . 'Bootstrap.php';
