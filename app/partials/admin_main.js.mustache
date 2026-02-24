@@ -4,7 +4,11 @@
 
   // logout event
   bc.addEventListener('message', ({ data}) => {
-    if(data === 'logout') window.location.reload();
+    //if(data === 'logout') location.reload();
+    if(data === 'logout') {
+      $('#admin_main').html('').hide();
+      $('.admin_panel_switch').html('').hide();
+    }
   });
 
   if (w.GSC.init) {
@@ -66,10 +70,11 @@
           $("#a_update_info").html(content);
         })
         .fail(function (e) {
-          if (e.status == 401) location.reload(); // reload when HTTP 401 - Unauthorized
-          if (e.status == 403) location.reload(); // reload when HTTP 403 - Forbidden
+          //if (e.status === 401) location.reload(); // reload when HTTP 401 - Unauthorized
+          //if (e.status === 403) location.reload(); // reload when HTTP 403 - Forbidden
           GSC.PingDot("#csv_ping", false);
-          $("#a_update_info").addClass("bigemoji").html("ERROR 🤯");
+          $('#admin_main').html('').hide();
+          $('.admin_panel_switch').html('').hide();
         });
     }
 
@@ -286,7 +291,7 @@
       // GSC.CloseFileManager()
       if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
           delCookie("open_filemanager");
-          $("#a_file_manager").hide(50);
+          $("#a_file_manager").hide(250);
           $("#a_uploader_progress").html('');
       }
 

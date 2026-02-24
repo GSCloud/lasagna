@@ -336,6 +336,11 @@ class AdminPresenter extends APresenter
                     unset($stubs[$k]);
                     unset($stubs_count[$k]);
                 }
+                if (is_numeric($v) && (int)$v < 10000) {
+                    unset($stubs[$k]);
+                    unset($stubs_count[$k]);
+                    continue;
+                }
             }
 
             \ksort($stubs);

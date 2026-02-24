@@ -43,14 +43,14 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   padding: 10px!important;
   border-radius: 3px;
   position: sticky!important;
-  z-index: 99;
-  top: 60px;
+  z-index: 10000;
+  top: 70px;
   right: 0;
 }
 </style>
 
 <!-- CONTROL PANEL SWITCH -->
-<span style="position:fixed;left:2px;top:2px;z-index:999999" class="noselect admin_panel_switch transparent hover white">
+<span style="position:fixed;left:2px;top:2px;z-index:99999999" class="noselect admin_panel_switch transparent hover white">
   <img
     src="https://cdn.gscloud.cz/img/LASAGNA_logo.webp"
     class="responsive-img notap"
@@ -62,7 +62,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 </span>
 
 <!-- ADMIN PANEL -->
-<div id="admin_main" class="row black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important">
+<div id="admin_main" class="row black white-text" style="display:none;margin:0!important;padding-bottom:1rem!important;">
 
   <!-- CURRENT USER -->
   <div class="right identity-box">

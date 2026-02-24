@@ -1150,7 +1150,8 @@ abstract class APresenter
                 [
                     'expires' => \time() - 86400,
                     'path' => '/',
-                    'domain' => DOMAIN ?? '',
+                    //'domain' => DOMAIN ?? '',
+                    'domain' => '',
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax'
@@ -1327,7 +1328,8 @@ abstract class APresenter
         }
         if (isset($_COOKIE['GOVERNOR']) && ($_COOKIE['GOVERNOR'] !== $governor)) {
             if (!$retbool) {
-                $this->logout();
+                // version has changed
+                $this->setLocation('/clearcookies');
             }
         }
         if ($retbool && !$allowed) {

@@ -153,7 +153,8 @@ class LoginPresenter extends APresenter
                 $cookie_options = [
                     'expires' => \time() + 86400 * 31,
                     'path' => '/',
-                    'domain' => DOMAIN,
+                    //'domain' => DOMAIN,
+                    'domain' => '',
                     'secure' => !LOCALHOST,
                     'httponly' => true,
                     'samesite' => 'Lax',

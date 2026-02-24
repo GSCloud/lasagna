@@ -8,8 +8,7 @@
   src: local('Material Icons'),
        local('materialicons-regular'),
        url(https://cdn.gscloud.cz/webfonts/materialicons-regular.woff2) format('woff2'),
-       url(https://cdn.gscloud.cz/webfonts/materialicons-regular.woff) format('woff'),
-       url(https://cdn.gscloud.cz/webfonts/materialicons-regular.ttf) format('truetype');
+       url(https://cdn.gscloud.cz/webfonts/materialicons-regular.woff) format('woff');
 }
 
 .material-icons {
@@ -62,7 +61,7 @@ a[x-apple-data-detectors]{color:inherit!important;text-decoration:none!important
   height: {{#design.progress_bar_size}}{{ design.progress_bar_size }}{{/design.progress_bar_size}}{{^design.progress_bar_size}} 8px {{/design.progress_bar_size}};
   background: {{#design.progress_bar_background}}{{ design.progress_bar_background }}{{/design.progress_bar_background}}{{^design.progress_bar_background}} #ccc {{/design.progress_bar_background}};
   position: fixed;
-  bottom: 0;
+  {{#design.progress_bar_position}}{{ design.progress_bar_position }}{{/design.progress_bar_position}}{{^design.progress_bar_position}}bottom{{/design.progress_bar_position}}: 0;
   z-index:9999999;
 }
 .progress-bar {
