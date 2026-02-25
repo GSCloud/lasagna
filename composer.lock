@@ -120,16 +120,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "5.3.0",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "6b888617eaddf21991a22676c6efe2cd38f81f19"
+                "reference": "38be0a6ec9c81023e05471e38971273316ca46d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/6b888617eaddf21991a22676c6efe2cd38f81f19",
-                "reference": "6b888617eaddf21991a22676c6efe2cd38f81f19",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/38be0a6ec9c81023e05471e38971273316ca46d6",
+                "reference": "38be0a6ec9c81023e05471e38971273316ca46d6",
                 "shasum": ""
             },
             "require": {
@@ -175,20 +175,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cache"
             },
-            "time": "2026-01-10T04:29:00+00:00"
+            "time": "2026-02-24T07:24:26+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "5.3.0",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "c30bd737306167ece77430fceee837dcf055a93a"
+                "reference": "01e43eeb1c3269fa0eaae718cae71fdb9bb5e44d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/c30bd737306167ece77430fceee837dcf055a93a",
-                "reference": "c30bd737306167ece77430fceee837dcf055a93a",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/01e43eeb1c3269fa0eaae718cae71fdb9bb5e44d",
+                "reference": "01e43eeb1c3269fa0eaae718cae71fdb9bb5e44d",
                 "shasum": ""
             },
             "require": {
@@ -242,20 +242,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/core"
             },
-            "time": "2026-01-10T04:29:00+00:00"
+            "time": "2026-02-24T07:24:26+00:00"
         },
         {
             "name": "cakephp/event",
-            "version": "5.3.0",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/event.git",
-                "reference": "f200510c938b5758eefa2e52477ac2c7f86c9002"
+                "reference": "8de5049bb52de6b60375e5e60c61feec645fa10b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/event/zipball/f200510c938b5758eefa2e52477ac2c7f86c9002",
-                "reference": "f200510c938b5758eefa2e52477ac2c7f86c9002",
+                "url": "https://api.github.com/repos/cakephp/event/zipball/8de5049bb52de6b60375e5e60c61feec645fa10b",
+                "reference": "8de5049bb52de6b60375e5e60c61feec645fa10b",
                 "shasum": ""
             },
             "require": {
@@ -297,20 +297,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/event"
             },
-            "time": "2026-01-10T04:29:00+00:00"
+            "time": "2026-02-24T07:24:26+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "5.3.0",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "033499304b29b6e500c2297c8a73c4e2dec36b70"
+                "reference": "0026e773c0e015090f4a4c69e5f56f073109186b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/033499304b29b6e500c2297c8a73c4e2dec36b70",
-                "reference": "033499304b29b6e500c2297c8a73c4e2dec36b70",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/0026e773c0e015090f4a4c69e5f56f073109186b",
+                "reference": "0026e773c0e015090f4a4c69e5f56f073109186b",
                 "shasum": ""
             },
             "require": {
@@ -361,7 +361,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2026-01-10T04:29:00+00:00"
+            "time": "2026-02-24T07:24:26+00:00"
         },
         {
             "name": "cheprasov/php-redis-client",
@@ -2771,16 +2771,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.11.2",
+            "version": "v2.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "9b265515240a6768347525d463ef04207b4e7d98"
+                "reference": "a41a2774c24abbcb0ba31f00a822eb372cf2ac96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/9b265515240a6768347525d463ef04207b4e7d98",
-                "reference": "9b265515240a6768347525d463ef04207b4e7d98",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/a41a2774c24abbcb0ba31f00a822eb372cf2ac96",
+                "reference": "a41a2774c24abbcb0ba31f00a822eb372cf2ac96",
                 "shasum": ""
             },
             "require": {
@@ -2845,9 +2845,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/tracy/issues",
-                "source": "https://github.com/nette/tracy/tree/v2.11.2"
+                "source": "https://github.com/nette/tracy/tree/v2.11.3"
             },
-            "time": "2026-02-20T05:56:23+00:00"
+            "time": "2026-02-25T18:34:26+00:00"
         },
         {
             "name": "tuupola/base58",

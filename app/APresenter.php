@@ -2054,6 +2054,7 @@ abstract class APresenter
                         $v = \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
+                        bdump($e, $kk);
                         continue;
                     }
                 }
@@ -2076,7 +2077,7 @@ abstract class APresenter
                         $v = \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
-                        //bdump($e, $kk);
+                        bdump($e, $kk);
                         continue;
                     }
                 }
@@ -2109,7 +2110,7 @@ abstract class APresenter
                         $v = \substr($v, 0, self::NEON_DECODE_LIMIT);
                         $v = Neon::decode(\substr($v, 6));
                     } catch (\Throwable $e) {
-                        //bdump($e, $kk);
+                        bdump($e, $kk);
                         continue;
                     }
                 }
