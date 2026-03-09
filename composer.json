@@ -22,7 +22,7 @@
         "php": "^8.2",
         "phpseclib/phpseclib": "^3",
         "psr/simple-cache": "^3",
-        "symfony/lock": "^6",
+        "symfony/lock": "^7",
         "symfony/polyfill-mbstring": "^1",
         "tracy/tracy": "^2",
         "tuupola/base58": "^2"
