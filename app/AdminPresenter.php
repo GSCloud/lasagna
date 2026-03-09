@@ -14,7 +14,7 @@ namespace GSC;
 
 use Cake\Cache\Cache;
 use League\Csv\Reader;
-use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
 use GSC\StringFilters as SF;
 
@@ -1047,7 +1047,7 @@ class AdminPresenter extends APresenter
     public function flushCache()
     {
         $store = new FlockStore();
-        $factory = new Factory($store);
+        $factory = new LockFactory($store);
         $lock = $factory->createLock('core-update');
         if ($lock->acquire()) {
             try {
