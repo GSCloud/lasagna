@@ -30,7 +30,7 @@ use ParagonIE\Halite\KeyFactory;
  */
 abstract class APresenter
 {
-    /* @var integer max string length to decode by NE-ON */
+    /* @var integer max string length to decode NE-ON */
     const NEON_DECODE_LIMIT = 8192;
 
     /* @var integer octal file mode for CSV */
@@ -45,7 +45,7 @@ abstract class APresenter
     /* @var integer octal file mode for nonce secret */
     const IDENTITY_NONCE_FILEMODE = 0600;
 
-    /* @var integer CSV min. file size - something meaningful :) */
+    /* @var integer CSV minimal file size - meaningful :) */
     const CSV_MIN_SIZE = 42;
 
     /* @var string UID cookie name */
@@ -313,7 +313,7 @@ abstract class APresenter
                         return (string) \time();
                     },
                     'rndstr' => function () {
-                        return \substr(\md5((string) \microtime(true)), 0, 8);
+                        return \substr(\md5((string) \microtime(true)), 0, 4);
                     },
                     'convert_hyperlinks' => function (
                         $source, \Mustache_LambdaHelper $lambdaHelper
@@ -2036,14 +2036,14 @@ abstract class APresenter
             $data['l'] = $l;
         }
 
-        // process special keys: [cfg.*, usr.*, add.*, del.*]
+        // PROCESS SPECIAL KEYS - [cfg.*, usr.*, add.*, del.*]
         $reps = 0;
         $dot = new \Adbar\Dot($data);
         $dot->set('model.changes', []);
         foreach ($l ?? [] as $k => $v) {
             $kk = $k;
 
-            // CFG: replace key if exists
+            // CFG: replace key if it exists
             if (\str_starts_with($k, 'cfg.')) {
                 $k = \substr($k, 4);
                 if (!\strlen($k)) {
@@ -2066,7 +2066,7 @@ abstract class APresenter
                 continue;
             }
 
-            // USR: set key
+            // USR: set a user based custom key
             if (\str_starts_with($k, 'usr.')) {
                 $k = \substr($k, 4);
                 if (!\strlen($k)) {
@@ -2087,7 +2087,7 @@ abstract class APresenter
                 continue;
             }
 
-            // DEL: delete key
+            // DEL: delete a key
             if (\str_starts_with($k, 'del.')) {
                 $k = \substr($k, 4);
                 if (!\strlen($k)) {
@@ -2099,7 +2099,7 @@ abstract class APresenter
                 continue;
             }
 
-            //  ADD: add to array
+            //  ADD: add data to an a array
             if (\str_starts_with($k, 'add.')) {
                 $k = \substr($k, 4);
                 if (!\strlen($k)) {
