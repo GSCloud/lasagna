@@ -438,10 +438,10 @@ $data['cache_profiles'] = $cache_profiles;
 
 // ADMIN ENDPOINT
 $admin = $data['admin'] ?? 'thequickbrownfoxjumpsoverthelazydog';
-$admin = substr($admin, 0, 32);
+$admin = substr($admin, 0, 64);
 $admin = trim($admin, '/');
 if ($admin === '') {
-    $admin = 'admin';
+    $admin = 'thequickbrownfoxjumpsoverthelazydog';
 }
 if (is_dir(WWW . DS . $admin)) {
     $err = "Administration end-point [{$admin}] already exists as a web folder";

@@ -313,7 +313,7 @@ abstract class APresenter
                         return (string) \time();
                     },
                     'rndstr' => function () {
-                        return \substr(\md5((string) \microtime(true)), 0, 4);
+                        return \substr(\md5((string) \microtime(true)), 0, 8);
                     },
                     'convert_hyperlinks' => function (
                         $source, \Mustache_LambdaHelper $lambdaHelper
