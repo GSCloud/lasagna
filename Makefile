@@ -179,7 +179,17 @@ else
 endif
 
 start:
-	@bash ./bin/docker_start.sh
+ifneq ($(origin TAG), undefined)
+	@echo "🚀 Starting container ${YELLOW}$(NAME)${R} on port ${B}$(PORT)${R}..."
+	@docker run -d --rm \
+		--name $(NAME) \
+		-p $(PORT):80 \
+		-v $(CURDIR)/app/config_private.neon:/var/www/app/config_private.neon \
+		$(TAG)
+	@echo "\nℹ️  Container is up at http://localhost:$(PORT)";
+else
+	@echo "❌ missing TAG definition"
+endif
 
 run:
 ifneq ($(origin TAG), undefined)
