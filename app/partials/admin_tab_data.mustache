@@ -36,30 +36,6 @@
 
     <div class="center bl col s12 l4">
       <p>
-        {{^disable_articles}}
-        <div class="white">
-          <label for="ArticleURLSelect">{{ l.a_articles }}</label>
-          <select id="ArticleURLSelect"></select>
-        </div>
-        <a
-          id="a_summernote"
-          class="tooltipped waves-effect waves-light green btn"
-          style="margin:5px"
-          data-position="top"
-          data-tooltip="{{ l.a_summernote_ttip }}"
-          ><i
-            class="fas fa-edit"></i>&nbsp;&nbsp;{{ l.a_summernote }}</a>
-        <a
-          id="a_article"
-          class="tooltipped waves-effect waves-light green btn"
-          style="margin:5px"
-          data-position="top"
-          data-tooltip="{{ l.a_article_ttip }}"
-          ><i
-            class="fas fa-plus-square"></i>&nbsp;&nbsp;URL</a>
-        <br>
-        {{/disable_articles}}
-
         {{#CONST.UPLOAD}}
         <a
           id="a_upload"

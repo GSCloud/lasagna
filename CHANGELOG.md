@@ -2,9 +2,26 @@
 
 ---
 
+`2026-03-31 v2.5.1 `
+
+* **`1109-FEATURE` removed support for Summernote editor**
+
+`2026-03-09`
+
+* **`1108-FEATURE` Symfony components upgrade**
+
+`2026-03-01`
+
+* **`1107-FEATURE` updates to the File Manager**
+
+`2026-02-18`
+
+* **`1106-FEATURE` Font Awesome 7.2.0**
+
 `2026-02-17`
 
-* **`1105-FEATURE` support for [`llms.txt`](https://llmstxt.org/)** via **`llms`** Sheet data cell
+* **`1105-FEATURE` support for [`llms.txt`](https://llmstxt.org/)**  
+  * use **`llms`** data cell in the Sheets
 
 `2026-01-21 v2.5.0 `
 

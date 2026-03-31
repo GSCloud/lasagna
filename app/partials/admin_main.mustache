@@ -200,25 +200,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
 
 <script nonce="{{ csp_nonce }}">
 {{>admin_main.js.mustache}}
-{{>admin_summernote.js.mustache}}
 </script>
-
-{{^disable_articles}}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/codemirror.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/theme/material-darker.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/addon/display/fullscreen.min.css" rel="stylesheet">
-
-<link href="https://cdn.gscloud.cz/summernote/{{ summernote }}/summernote-lite.min.css" rel="stylesheet">
-
-<script nonce="{{ csp_nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/codemirror.min.js" defer></script>
-<script nonce="{{ csp_nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/mode/xml/xml.min.js" defer></script>
-<script nonce="{{ csp_nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/{{ codemirror }}/addon/display/fullscreen.min.js" defer></script>
-
-<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/{{ summernote }}/summernote-lite.min.js" defer></script>
-{{#langcs}}<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/{{ summernote }}/lang/summernote-cs-CZ.min.js" defer></script>{{/langcs}}
-{{#langsk}}<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/{{ summernote }}/lang/summernote-sk-SK.min.js" defer></script>{{/langsk}}
-{{#langde}}<script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/summernote/{{ summernote }}/lang/summernote-de-DE.min.js" defer></script>{{/langde}}
-{{/disable_articles}}
 
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/moment-with-locales.min.js" defer></script>
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/zeroupload.min.js" defer></script>

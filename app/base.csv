@@ -134,7 +134,6 @@ a_phpdebugger,BUTTON,TRACY DEBUGGER,TRACY DEBUGGER,TRACY DEBUGGER,TRACY DEBUGGER
 a_save,BUTTON,SAVE,ULOŽIT,ULOŽIŤ,speichern
 a_save_all,BUTTON,SAVE ALL,ULOŽIT VŠE,ULOŽIŤ VŠETKO,ALLES SPEICHERN
 a_show_translations,BUTTON,📍,📍,📍,📍
-a_summernote,BUTTON,EDIT,EDIT,EDIT,BEARBEITEN
 a_umami,BUTTON,WEB ANALYTICS,WEBOVÁ ANALYTIKA,WEBOVÁ ANALYTIKA,WEBANALYSE
 a_update,BUTTON,UPDATE,AKTUALIZOVAT,AKTUALIZÁCIA,AKTUALISIEREN
 a_error_general,ERROR,🤯 ERROR!,🤯 CHYBA!,🤯 CHYBA!,🤯 FEHLER!
@@ -145,8 +144,6 @@ a_upload_maxbytes,ERROR,😵 Total filesize is too big (max. 100 MB).,😵 Obsah
 a_upload_maxfiles,ERROR,😵 Too many files were selected (max. 100).,😵 Vybráno příliš mnoho souborů (max. 100).,😵 Bolo vybraných príliš veľa súborov (max. 100).,😵 Es wurden zu viele Dateien ausgewählt (max. 100).
 a_upload_unsupported,ERROR,😳 This browser is unsupported.,😳 Tento prohlížeč není podporován.,😳 Tento prehliadač nie je podporovaný.,😳 Dieser Browser wird nicht unterstützt.
 a_age,INFO,age,stáří,vek,Alter
-a_article_add_prompt,INFO,Article name (URL part after /en/id/),Název článku (část URL adresy za /cs/id/),Názov článku (časť po /sk/id),Artikelname (URL-Teil nach /de/id/)
-a_articles,INFO,ARTICLES,ČLÁNKY,ČLÁNKY,ARTIKEL
 a_ban,INFO,BAN,BAN,BAN,VERBOT
 a_clipboardcopy,INFO,📋 ,📋 ,📋 ,📋
 a_copy_tit,INFO,copy URL,kopírovat URL,kopírovať URL,URL kopieren
@@ -180,21 +177,6 @@ a_news_os_info,SUBPAR,open source libraries are continuously updated,open source
 a_news_sc_info,SUBPAR,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
 a_remote_fn_info,SUBPAR,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,"ermöglicht es Ihnen, einen autorisierten Link zum Aufruf einer Remote-Systemfunktion zu generieren."
 a_services_info,SUBPAR,external services,externí služby,externé služby,externe Dienstleistungen
-a_summer_close,SUMMERNOTE,CLOSE,ZAVŘÍT,ZATVORENÉ,SCHLIESSEN
-a_summer_close_ttip,SUMMERNOTE,close editor (not saving),zavřít editor (bez uložení),zavrieť editor (bez uloženia),Editor schließen (Speichern wird nicht gespeichert)
-a_summer_emoji_ttip,SUMMERNOTE,Emojis,Emotikony,Emoji,Emojis
-a_summer_emoji1_ttip,SUMMERNOTE,Legacy,Zastaralé,Dedičstvo,Vermächtnis
-a_summer_emoji2_ttip,SUMMERNOTE,Smileys & People,Úsměvy a lidé,Smajlíky a ľudia,Smileys & Menschen
-a_summer_emoji3_ttip,SUMMERNOTE,Nature & Weather,Příroda a počasí,Príroda a počasie,Natur & Wetter
-a_summer_emoji4_ttip,SUMMERNOTE,Food & Drink,Jídlo a pití,Jedlo a nápoje,Essen & Trinken
-a_summer_emoji5_ttip,SUMMERNOTE,Activity & Objects,Aktivity a objekty,Aktivita a objekty,Aktivität & Objekte
-a_summer_emoji6_ttip,SUMMERNOTE,Travel & Places,Cestování a místa,Cestovanie a miesta,Reisen & Orte
-a_summer_emoji7_ttip,SUMMERNOTE,Symbols,Symboly,Symboly,Symbole
-a_summer_fullscreen_ttip,SUMMERNOTE,full-screen,režim celé obrazovky,celá obrazovka,Vollbild
-a_summer_history_ttip,SUMMERNOTE,history,historie,história,Geschichte
-a_summer_plugins_ttip,SUMMERNOTE,plugins,pluginy,pluginy,Plugins
-a_summer_save,SUMMERNOTE,SAVE,ULOŽIT,ULOŽIŤ,SPEICHERN
-a_summer_save_ttip,SUMMERNOTE,save content,uložit obsah,uložiť obsah,Inhalte speichern
 a_tab_changes,TAB,INFORMATION,INFORMACE,INFORMÁCIE,INFORMATION
 a_tab_data,TAB,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
 a_tab_dev,TAB,DEV,DEV,DEV,DEV
@@ -207,7 +189,6 @@ a_locales,TITLE,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
 a_oss,TITLE,OPEN SOURCE REFERENCES,OPEN SOURCE REFERENCE,OPEN SOURCE REFERENCIE,OPEN SOURCE REFERENZEN
 a_services,TITLE,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_shortcodes,TITLE,SHORTCODES info,SHORTCODES informace,SHORTCODES informácie,KURZCODES Informationen
-a_article_ttip,TOOLTIP,add article,přidat článek,pridať článok,Artikel hinzufügen
 a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
 a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll
 a_debugger_ttip,TOOLTIP,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF
@@ -223,7 +204,6 @@ a_lasagna_manual_ttip,TOOLTIP,Tesseract LASAGNA documentation,Tesseract LASAGNA 
 a_locale_template_ttip,TOOLTIP,localization template,vzor lokalizace,šablóna lokalizácie,Lokalisierungsvorlage
 a_login_ttip,TOOLTIP,LOGIN,PŘIHLÁSIT SE,PRIHLÁSIŤ SA,LOGIN
 a_logout_ttip,TOOLTIP,LOGOUT,ODHLÁSIT SE,ODHLÁSIŤ SA,ABMELDEN
-a_summernote_ttip,TOOLTIP,WYSIWYG editor,WYSIWYG editor,WYSIWYG editor,WYSIWYG-Editor
 a_umami_ttip,TOOLTIP,Umami Analytics,Umami Analytika,Umami Analytika,Umami Analytics
 a_update_ttip,TOOLTIP,update data from Google,aktualizovat data z Google,aktualizovať údaje z Googlu,Daten von Google aktualisieren
 a_upload_ttip,TOOLTIP,batch file uploads,dávkové nahrávání souborů,dávkové nahrávanie súborov,Stapel-Datei-Uploads

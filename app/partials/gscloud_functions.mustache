@@ -355,77 +355,6 @@ async function sha256(message) {
       setTimeout(function() {GSC.VersionCheck()}, 3000);
     });
 
-    // GSC.ReadArticles()
-    GSC.init.push(function() {
-      {{#disable_articles}}GSC.ReadArticles = function(){$(".summernote").html("");};{{/disable_articles}}
-      {{#disable_articles}}GSC.names.push("ReadArticles (disabled)");{{/disable_articles}}
-      {{^disable_articles}}GSC.names.push("ReadArticles");{{/disable_articles}}
-      GSC.articles_rendered = false;
-      if (typeof GSC.ReadArticles !== "function") GSC.ReadArticles = function(callback) {
-        var html = '';
-        if (nolocalstorage) {
-          html = GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
-        } else {
-          html = localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] || "";
-        }
-        if (html != "") {
-          var obj = JSON.parse(html);
-          for (var p in obj) if (obj.hasOwnProperty(p)) {
-            if (obj[p] == "<p><br></p>") {
-              obj[p] = " ";
-            }
-            $("#" + p).html(obj[p]);
-          }
-          // fix Summernote
-          $(".summernote ul").addClass("browser-default");
-          $(".summernote img").addClass("responsive-img");
-          GSC.articles_rendered = true;
-        }
-
-        //  check later if offline
-        if (GSC.summernote_on || GSC.offline) {
-          setTimeout(function() {GSC.ReadArticles()}, 10000);
-          if (!GSC.articles_rendered) {
-            $(".summernote").html("📵");
-          }
-          return false;
-        }
-
-        // get articles data
-        $.get("/ReadArticles/" + GSC.profile + "/{{ request_path_hash }}?" +
-            Date.now() + "&crc=" + (GSC.data.articlescrc || ""), function(data) {
-          if (data && data.data) {
-            if (nolocalstorage) {
-              GSC.localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
-            } else {
-              localStorage["articles_" + GSC.profile + "_{{ request_path_hash }}"] = data.data.html;
-            }
-            if (data.data.crc) {
-              GSC.data.articlescrc = data.data.crc;
-              if (data.data.html != "") {
-                var obj = JSON.parse(data.data.html);
-                for (var p in obj) if (obj.hasOwnProperty(p)) {
-                  if (obj[p] == "<p><br></p>") {
-                    obj[p] = " ";
-                  }
-                  $("#" + p).html(obj[p]);
-                }
-                // fix Summernote
-                $(".summernote ul").addClass("browser-default");
-                $(".summernote img").addClass("responsive-img");
-                GSC.articles_rendered = true;
-              } else {
-                $(".summernote").html("");
-              }
-            }
-          }
-          if (typeof callback === "function") callback();
-        });
-        setTimeout(function() {GSC.ReadArticles()}, 10000);
-      }
-      GSC.ReadArticles();
-    });
-
     // UI
     GSC.init.push(function() {
       GSC.names.push("UI");
@@ -438,11 +367,6 @@ async function sha256(message) {
       // move to top button
       $('#movetotop').click(function() {
         $("html,body").animate({scrollTop:0}, "fast");
-      });
-
-      // fix Summernote
-      $(".summernote>ul").each(function(i, obj) {
-        $(obj).addClass("browser-default");
       });
 
       if (GSC.touch) {

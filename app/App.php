@@ -181,14 +181,8 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 }
 
 // + MODEL
-define('ENGINE', 'Tesseract v2.5.0');
+define('ENGINE', 'Tesseract v2.5.1');
 $data['ENGINE'] = ENGINE;
-
-// https://cdnjs.com/libraries/codemirror 
-$data['codemirror'] = '6.65.7';
-
-// https://cdnjs.com/libraries/summernote
-$data['summernote'] = 'v0.8.18';
 
 // Base58 encoder
 $base58 = new \Tuupola\Base58;

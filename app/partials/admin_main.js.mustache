@@ -155,34 +155,6 @@
         }
       });
     
-      // editor block
-      $(".summernote").unbind();
-      $(".summernote").click(function () {
-        $(".summernote").unbind("dblclick");
-        GSC.DeploySummernote();
-      });
-
-      // add article
-      $("#a_article").click(function () {
-        var name = prompt('{{ l.a_article_add_prompt }}:').trim();
-        name = name.replace(/['"/\\]/g, '');
-        if (name.length && name != '!') {
-          location.pathname = '{{ lang }}/id/' + name;
-        }
-      });
-
-      // API: GetArticlesInfo
-      $.get("/{{ cfg.admin }}/GetArticlesInfo?" + Date.now(), function (data) {
-        if (data && data.data) {
-          $('#ArticleURLSelect').html('<option value="" disabled selected>&hellip;</option>');
-          for (var i in data.data) {
-            if (typeof data.data[i] === 'function') continue;
-            $('#ArticleURLSelect').append("<option value='" + data.data[i] + "'>" + data.data[i] + "</option>");
-          }
-          // populate form data
-          $('#ArticleURLSelect').formSelect();
-        }
-      });
     }
 
     // SETUP ADMIN UI
@@ -218,11 +190,6 @@
           const isPanelVisible = $("#admin_main").is(":visible");
           localStorage.setItem('adminpanel', isPanelVisible);
         });
-      });
-
-      // ARTICLES URL SELECTOR
-      $("#ArticleURLSelect").change(function () {
-        location.pathname = $('#ArticleURLSelect').val();
       });
 
       // REMOTE FUNCTION SELECTOR
@@ -263,17 +230,6 @@
         // API: CoreUpdate
         $.post("/{{ cfg.admin }}/CoreUpdate");
         M.toast({text: "{{ l.a_processing_data }}", classes: "normaltoast"});
-      });
-
-      // INVOKE SUMMERNOTE EDITOR
-      $("#a_summernote").click(function () {
-        if (w.GSC.offline) {
-          ({text: "📶 offline", classes: "normaltoast"});
-          return GSC.PingDot("#psi_ping", false);
-        }
-        GSC.ReadArticles(function () {
-          GSC.DeploySummernote();
-        });
       });
 
       // FILE MANAGER
