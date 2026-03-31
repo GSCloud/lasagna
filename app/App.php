@@ -213,6 +213,7 @@ function safeHtmlspecialchars(array $data): array
 // Base58 encoder
 $base58 = new \Tuupola\Base58;
 
+// + MODEL
 $data['ARGC'] = $argc ?? 0;
 $data['ARGV'] = $argv ?? [];
 $data['GET'] = safeHtmlspecialchars($_GET);
@@ -223,6 +224,7 @@ $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
 $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
 
+// + MODEL
 define('VERSION', trim(@file_get_contents(ROOT . DS . 'VERSION') ?: 'xoxo')); // phpcs:ignore
 $data['VERSION'] = VERSION;
 $data['DATA_VERSION'] = null;
@@ -281,8 +283,8 @@ defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
-$x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
-defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
+$prefix = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? 'WTF';
+defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($prefix) . SS);
 
 // OFFLINE TEMPLATE resolution
 $offline = TEMPLATES . DS . 'offline.mustache';
@@ -304,7 +306,7 @@ if (file_exists($offline) && is_readable($offline)) {
     }
 }
 
-// running on Google OAuth origin server?
+// RUNNING ON GOOGLE OAUTH ORIGIN SERVER?
 $data['is_goauth_origin'] = false;
 if (DOMAIN === str_replace('https://', '', $cfg['goauth_origin'] ?? '')) {
     $data['is_goauth_origin'] = true;
@@ -435,7 +437,7 @@ defined('REDIS_CACHE') || define('REDIS_CACHE', false);
 $data['cache_profiles'] = $cache_profiles;
 
 // ADMIN ENDPOINT
-$admin = $data['admin'] ?? 'admin';
+$admin = $data['admin'] ?? 'thequickbrownfoxjumpsoverthelazydog';
 $admin = substr($admin, 0, 32);
 $admin = trim($admin, '/');
 if ($admin === '') {
