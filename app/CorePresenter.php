@@ -237,60 +237,6 @@ class CorePresenter extends APresenter
             $d["LASAGNA"]["core"]["cdn"] = CDN;
             return $this->writeJsonData($d, $extras);
 
-        case "ReadArticles":
-            if ($this->getCfg('disable_articles')) {
-                return $this->writeJsonData(403, $extras);
-            }
-            $this->checkRateLimit();
-            $x = 0;
-            $hash = null;
-            $profile = "default";
-            if (!\is_array($match)) {
-                return $this->writeJsonData(400, $extras);
-            }
-            if (isset($match["params"]["profile"])) {
-                $profile = \trim($match["params"]["profile"]);
-                $x++;
-            }
-            if (isset($match["params"]["hash"])) {
-                $hash = \trim($match["params"]["hash"]);
-                $x++;
-            }
-            if ($x !== 2) {
-                return $this->writeJsonData(400, $extras);
-            }
-            if (!$hash) {
-                return $this->writeJsonData(400, $extras);
-            }
-            if (!$profile) {
-                return $this->writeJsonData(400, $extras);
-            }
-            $data = "";
-            $time = null;
-            $f = DATA . "/summernote_{$profile}_{$hash}.json";
-            if (\file_exists($f)) {
-                $data = @file_get_contents($f);
-                $time = \filemtime($f);
-            }
-            if (!$data) {
-                $data = '';
-                $time = \time();
-            }
-            $crc = \hash("sha256", $data);
-            if (isset($_GET["crc"])) {
-                if ($_GET["crc"] == $crc) {
-                    return $this->writeJsonData(304, $extras);
-                }
-            }
-            return $this->writeJsonData(
-                [
-                    "crc" => $crc,
-                    "hash" => $hash,
-                    "html" => $data,
-                    "profile" => $profile,
-                    "timestamp" => $time,
-                    ], $extras
-            );
         }
 
         $language = $this->_validateLanguage($presenter[$view]["language"]);

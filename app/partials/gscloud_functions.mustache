@@ -155,7 +155,6 @@ async function sha256(message) {
     GSC.isadmin = {{#admin_group_admin}}true{{/admin_group_admin}}{{^admin_group_admin}}false{{/admin_group_admin}};
     GSC.islogged = {{#admin}}true{{/admin}}{{^admin}}false{{/admin}};
     GSC.uid = "{{ COOKIE.UID }}";
-    GSC.profile = 'default'; // deprecated
 
     // automatic UID AJAX setup
     $.ajaxSetup({

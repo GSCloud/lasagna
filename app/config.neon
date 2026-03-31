@@ -60,9 +60,6 @@ cache_profiles: []
 # see https://developers.cloudflare.com/fundamentals/reference/http-headers/#cf-ipcountry
 geoblock: []
 
-# DISABLE ARTICLES FEATURE (legacy)
-disable_articles: true
-
 # DISABLE VERSION CHECK FEATURE
 #disable_version_check: true
 
