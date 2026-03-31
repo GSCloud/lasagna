@@ -5,7 +5,6 @@ parameters:
         - Bootstrap.php
         - app/App.php
         - app/AdminPresenter.php
-        - app/ArticlePresenter.php
         - app/CiTester.php
         - app/CliDemo.php
         - app/CliVersion.php
