@@ -30,7 +30,7 @@ foreach ([
     'LOGS',
     'TEMP',
 ] as $x) {
-    defined($x) || die("FATAL ERROR - sanity check for const: '{$x}'");
+    defined($x) || die("FATAL ERROR - sanity check  for a constant: '{$x}'");
 }
 
 // BLOCK BAD ROBOTS
@@ -63,7 +63,7 @@ if (defined($d) && is_readable($d)) {
     }
 }
 
-// Mustache templates, not mandatory
+// MUSTACHE templates, not mandatory
 $d = 'TEMPLATES';
 $x = APP . DS . 'templates';
 if (defined($d) && is_readable($d)) {
@@ -75,7 +75,7 @@ if (defined($d) && is_readable($d)) {
     }
 }
 
-// Mustache partials, not mandatory
+// MUSTACHE templates partials, not mandatory
 $d = 'PARTIALS';
 $x = APP . DS . 'partials';
 if (defined($d) && is_readable($d)) {
@@ -153,8 +153,12 @@ $cfg = $cfg ?? [];
 if (isset($cfg['locales'])) {
     array_unshift($cfg['locales'], 'base.csv');
 }
-$data = $cfg; // set model
-$data['cfg'] = $cfg; // backup config
+
+// SET MODEL
+$data = $cfg;
+
+// BACKUP CONFIG
+$data['cfg'] = $cfg;
 
 // CLOUDFLARE GEO BLOCKING: XX = unknown, T1 = TOR
 $data['cf_ray'] = $_SERVER['Cf-Ray'] ?? null;
@@ -174,6 +178,7 @@ $blocked = (array) ($data['geoblock'] ?? [
     'SY',
     'T1', // TOR network
 ]);
+
 if (!LOCALHOST && in_array($country, $blocked)) {
     error_log("Country [{$country}] forbidden and all requests blocked.");
     header('HTTP/1.1 403 Forbidden');
@@ -183,9 +188,6 @@ if (!LOCALHOST && in_array($country, $blocked)) {
 // + MODEL
 define('ENGINE', 'Tesseract v2.5.1');
 $data['ENGINE'] = ENGINE;
-
-// Base58 encoder
-$base58 = new \Tuupola\Base58;
 
 /**
  * Apply htmlspecialchars recursively
@@ -208,6 +210,9 @@ function safeHtmlspecialchars(array $data): array
     return $result;
 }
 
+// Base58 encoder
+$base58 = new \Tuupola\Base58;
+
 $data['ARGC'] = $argc ?? 0;
 $data['ARGV'] = $argv ?? [];
 $data['GET'] = safeHtmlspecialchars($_GET);
@@ -217,25 +222,29 @@ $data['SERVER'] = safeHtmlspecialchars($_SERVER);
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
 $data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
-$data['PHP_VERSION'] = PHP_VERSION;
+
+define('VERSION', trim(@file_get_contents(ROOT . DS . 'VERSION') ?: 'xoxo')); // phpcs:ignore
+$data['VERSION'] = VERSION;
 $data['DATA_VERSION'] = null;
-$data['VERSION'] = $version = trim(@file_get_contents(ROOT . DS . 'VERSION') ?: 'xoxo'); // phpcs:ignore 
-define('VERSION', $version);
-$data['VERSION_SHORT'] = $base58->encode(base_convert(substr($version, 0, 6), 16, 10)); // phpcs:ignore
+$data['PHP_VERSION'] = PHP_VERSION;
+$data['VERSION_SHORT'] = $base58->encode(base_convert(substr(VERSION, 0, 6), 16, 10)); // phpcs:ignore
 $data['VERSION_DATE'] = date('j. n. Y G:i', @filemtime(ROOT . DS . 'VERSION') ?: time()); // phpcs:ignore
 $data['VERSION_TIMESTAMP'] = @filemtime(ROOT . DS . 'VERSION') ?: time();
 $data['REVISIONS'] = (int) trim(@file_get_contents(ROOT . DS . 'REVISIONS') ?: '0');
 
 // RANDOM HASH - set by administrator after CACHE PURGE
+$ver = VERSION;
 $hash = DATA . DS . '_random_cdn_hash';
 if (file_exists($hash) && is_readable($hash)) {
     if ($hash = file_get_contents($hash)) {
-        $version = trim($hash);
+        $ver = trim($hash);
     }
 }
-$data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $version;
-$data['cdn_trimmed'] = 'cdn-assets' . DS . $version;
+
+// CDN HASH
+$data['cdn'] = $data['CDN'] = DS . 'cdn-assets' . DS . $ver;
 defined('CDN') || define('CDN', $data['CDN']);
+$data['cdn_trimmed'] = 'cdn-assets' . DS . $ver;
 
 // Apple Safari detection
 $isSafari = false;
@@ -245,6 +254,7 @@ if ((stripos($ua, 'Chrome') === false) && (stripos($ua, 'Safari') !== false)) {
 }
 $data['isSafari'] = $isSafari;
 
+// host and URI based data
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 defined('HOST') || define('HOST', $host);
 $data['base'] = $data['BASE'] = $host ? (($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/") : ''; // phpcs:ignore
@@ -271,7 +281,6 @@ defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
 defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
 defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
-
 $x = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? '';
 defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($x) . SS);
 
@@ -452,13 +461,12 @@ if ($routers = glob('router_*.neon')) {
         }
     }
 }
-// main router
-array_push($routes, 'router.neon');
+array_push($routes, 'router.neon'); // main app router
 
 // + MODEL
 $data['router_files'] = $routes;
 
-// load and parse ROUTING TABLES
+// ROUTING TABLES
 foreach ($routes as $routeFileName) {
     $route = APP . DS . $routeFileName;
     if (!$content = file_get_contents($route)) {
@@ -631,10 +639,10 @@ if ($router[$view]['country'] ?? false) {
     }
 }
 
-// POLICIES
+// CONTENT SECURITY POLICIES
 $csp = null;
 $data['csp_nonce'] = '';
-switch ($presenter[$view]['template']) {
+switch ($presenter[$view]['template']) { // TBD ?
 default:
     if (CSP && file_exists(CSP) && is_readable(CSP)) {
         try {
@@ -645,6 +653,7 @@ default:
             error_log("Error parsing NE-ON file: " . $e->getMessage());
         }
         if (is_array($csp)) {
+            // NONCE
             $csp_nonce = $data['csp_nonce'] = md5(random_bytes(8));
             header(
                 str_replace(
@@ -653,14 +662,12 @@ default:
                     implode(' ', (array) $csp['csp'])
                 )
             );
-
             // PERMISSIONS
             if (isset($data['csp_permissions']) && is_string($data['csp_permissions'])) { // phpcs:ignore
                 header($data['csp_permissions']);
             } else {
                 header('Permissions-Policy: camera=(), microphone=(), geolocation=(), midi=(), usb=(), serial=(), hid=(), gamepad=(), payment=(), publickey-credentials-get=(), clipboard-write=(), display-capture=()'); // phpcs:ignore
             }
-                
         }
     }
 }
@@ -678,6 +685,7 @@ Debugger::timer('PROCESS');
 // RUN
 $app = $controller::getInstance()->setData($data)->process();
 $data = $app->getData();
+$output = $data['output'] ?? ''; // rendered output
 
 // PROFILER
 $time1 = $data['time_data'];
@@ -695,18 +703,13 @@ header("X-Time-Process: $time2 ms");
 header("X-Time-Run: $time3 ms");
 header("X-Rate-Limit: $limit");
 
-// OUTPUT
-$output = $data['output'] ?? '';
-
-// TIMING
+// DOM TIMING injection
 $fn = [
     "if(d.getElementById('time1'))d.getElementById('time1').textContent='{$time1}';",
     "if(d.getElementById('time2'))d.getElementById('time2').textContent='{$time2}';",
     "if(d.getElementById('time3'))d.getElementById('time3').textContent='{$time3}';",
     "if(d.getElementById('limit'))d.getElementById('limit').textContent='{$limit}';",
 ];
-
-// TIMING injection
 foreach (headers_list() as $h) {
     if (strpos($h, 'Content-Type: text/html;') === 0) {
         $output = str_replace(
@@ -722,7 +725,7 @@ foreach (headers_list() as $h) {
     }
 }
 
-// OUTPUT
+// ECHO RENDERING
 echo $output;
 
 // DEBUGGING
