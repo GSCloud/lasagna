@@ -43,7 +43,6 @@ class UnitTester
         $controllers = [
             'AdminPresenter',
             'ApiPresenter',
-            'ArticlePresenter',
             'CliPresenter',
             'CliDemo',
             'CliVersion',
