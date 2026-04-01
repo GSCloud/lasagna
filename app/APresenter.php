@@ -822,6 +822,7 @@ abstract class APresenter
                 $this->addError('Identity has no fingerprint.');
                 $this->logout();
             }
+
             if ($q['fingerprint'] !== $fingerprint) {
                 try {
                     $ip = $this->getIP();
@@ -846,6 +847,7 @@ abstract class APresenter
                         $this->logout();
                 }
             }
+
             if (!\array_key_exists('nonce', $q)) {
                 $this->addError('Identity has no nonce.');
                 $this->logout();
