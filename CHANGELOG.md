@@ -1,6 +1,10 @@
-# **Tesseract LASAGNA v2.5.0 changelog**
+# **Tesseract LASAGNA v2.5.1 changelog**
 
 ---
+
+`2026-04-05`
+
+* **`1110-FEATURE` shortcodes cache (SCC)** \- static file cache for image galleries
 
 `2026-03-31 v2.5.1 `
 
