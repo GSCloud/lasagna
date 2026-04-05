@@ -14,6 +14,7 @@ namespace GSC;
 
 use Michelf\Markdown;
 use Michelf\MarkdownExtra;
+use Tracy\Debugger;
 
 /**
  * String Filters class
@@ -30,6 +31,12 @@ class StringFilters
 {
     // max. single shortcode iterations
     const ITERATIONS = 100;
+
+    // file cache time-to-live
+    const CACHE_TTL = 3600;
+
+    // file cache ON/OFF
+    const USE_CACHE = true;
 
     // SANITIZATION: IMAGE MASK for search
     const UPLOAD_SANITIZE = '/[^a-z0-9!@#+*=,;\-._]+/i';
@@ -1709,8 +1716,11 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-
         $content = \trim($content);
+        if (!\is_string($content)) {
+            return;
+        }
+
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('Incorrect SC flag!');
         } else {
@@ -1735,11 +1745,19 @@ class StringFilters
         $counter = 0;
         $pattern = '#\[gallery\s(.*?)\s*?\]#is';
 
-        if (!\is_string($content)) {
-            return;
+        $hash = sha1($content);
+        $original_content = $content;
+        $timer = "gallery_shortcode_{$hash}";
+        Debugger::timer($timer);
+        $cache = CACHE . DS . "gallery_shortcode_{$hash}.html";
+        if (self::USE_CACHE && \file_exists($cache) && \is_readable($cache)) {
+            if ((\time() - \filemtime($cache)) < self::CACHE_TTL) {
+                $content = \file_get_contents($cache);
+                return;
+            }
         }
 
-        while (\is_string($content) && \str_contains($content, '[gallery ')) {
+        while (\is_string($content) && \str_contains($content, '[gallery ')) {  
             \preg_match($pattern, $content, $m);
             if (\is_array($m) && isset($m[1])) {
                 $mask = $full_param_string = $m[1];
@@ -1810,6 +1828,14 @@ class StringFilters
                 }
             }
         }
+
+        $elapsed = round(Debugger::timer($timer) * 1000000);
+        if (self::USE_CACHE && $elapsed > 100) {
+            file_put_contents($cache, $content, LOCK_EX);
+            self::profiler('cached-renderGalleryShortCode', $hash, $elapsed, $original_content); // phpcs:ignore
+        } else {
+            self::profiler('renderGalleryShortCode', $hash, $elapsed, $original_content);  // phpcs:ignore
+        }
     }
 
     /**
@@ -1828,8 +1854,11 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-
         $content = \trim($content);
+        if (!\is_string($content)) {
+            return;
+        }
+
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('Incorrect SC flag!');
         } else {
@@ -1854,8 +1883,16 @@ class StringFilters
         $counter = 0;
         $pattern = '#\[galleryspan\s(.*?)\s*?\]#is';
 
-        if (!\is_string($content)) {
-            return;
+        $hash = sha1($content);
+        $original_content = $content;
+        $timer = "galleryspan_shortcode_{$hash}";
+        Debugger::timer($timer);
+        $cache = CACHE . DS . "galleryspan_shortcode_{$hash}.html";
+        if (self::USE_CACHE && \file_exists($cache) && \is_readable($cache)) {
+            if ((\time() - \filemtime($cache)) < self::CACHE_TTL) {
+                $content = \file_get_contents($cache);
+                return;
+            }
         }
 
         while (\is_string($content) && \str_contains($content, '[galleryspan ')) {
@@ -1927,6 +1964,14 @@ class StringFilters
                     break;
                 }
             }
+        }
+
+        $elapsed = round(Debugger::timer($timer) * 1000000);
+        if (self::USE_CACHE && $elapsed > 100) {
+            file_put_contents($cache, $content, LOCK_EX);
+            self::profiler('cached-renderGallerySpanShortCode', $hash, $elapsed, $original_content); // phpcs:ignore
+        } else {
+            self::profiler('renderGallerySpanShortCode', $hash, $elapsed, $original_content);  // phpcs:ignore
         }
     }
 
@@ -2342,6 +2387,38 @@ class StringFilters
 
         $string = \str_replace(\array_keys(self::$_shortCodeCache), \array_values(self::$_shortCodeCache), $string); // phpcs:ignore
         self::$_shortCodeCache = [];
+    }
+
+    /**
+     * Profiler
+     * 
+     * @param string $type    profiler type
+     * @param string $hash    data hash
+     * @param float  $elapsed time in microseconds
+     * @param string $data    original content
+     * 
+     * @return void
+     */
+    public static function profiler(string $type, string $hash, float $elapsed, string $data): void // phpcs:ignore
+    {
+        if (empty($elapsed) || empty($hash) || empty($data)) {
+            return;
+        }
+
+        if (\is_float($elapsed) && \is_string($hash) && \is_string($data)) {
+            $file = CACHE . DS . "cacheprofiler_{$type}_{$hash}.json";
+            $payload = [
+                'hash'     => $hash,
+                'duration' => $elapsed,
+                'timestamp'=> \date('Y-m-d H:i:s'),
+                'data'     => $data
+            ];
+            \file_put_contents(
+                $file,
+                \json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
+                LOCK_EX
+            );
+        }
     }
 
 }
