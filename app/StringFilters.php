@@ -1170,7 +1170,7 @@ class StringFilters
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
-            throw new \InvalidArgumentException('renderImageSC: FLAGS!');
+            throw new \InvalidArgumentException('renderFigureSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
