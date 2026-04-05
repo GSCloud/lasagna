@@ -1002,6 +1002,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[css ')) {
+            return;
+        }
 
         $pattern = '#\[css\s+(.*?)\](.*?)\[\/css\]#is';
 
@@ -1045,6 +1048,9 @@ class StringFilters
             return;
         }
         if (!\is_string($key)) {
+            return;
+        }
+        if (!\str_contains($content, '[googlemap ')) {
             return;
         }
 
@@ -1103,6 +1109,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[image ')) {
+            return;
+        }
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
@@ -1153,6 +1162,9 @@ class StringFilters
     public static function renderFigureShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[figure ')) {
             return;
         }
 
@@ -1209,6 +1221,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[imageleft ')) {
+            return;
+        }
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
@@ -1260,6 +1275,9 @@ class StringFilters
     public static function renderImageRightShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[imageright ')) {
             return;
         }
 
@@ -1314,6 +1332,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[imageresp ')) {
+            return;
+        }
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
@@ -1364,6 +1385,9 @@ class StringFilters
     public static function renderSoundCloudShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[soundcloud ')) {
             return;
         }
 
@@ -1426,6 +1450,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[youtube ')) {
+            return;
+        }
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
@@ -1482,6 +1509,9 @@ class StringFilters
     public static function renderVimeoShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[vimeo ')) {
             return;
         }
 
@@ -1541,6 +1571,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[twitch ')) {
+            return;
+        }
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
@@ -1598,6 +1631,9 @@ class StringFilters
     public static function renderTwitchVidShortCode(&$content, $flags = null)
     {
         if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[twitchvid ')) {
             return;
         }
 
@@ -1660,6 +1696,9 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
+        if (!\str_contains($content, '[mastodon ')) {
+            return;
+        }
 
         $content = \trim($content);
         if (!\is_integer($flags)) {
@@ -1716,8 +1755,7 @@ class StringFilters
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
-        if (!\is_string($content)) {
+        if (!\str_contains($content, '[gallery ')) {
             return;
         }
 
@@ -1850,12 +1888,10 @@ class StringFilters
      */
     public static function renderGallerySpanShortCode(&$content, $flags = null)
     {
-
         if (!\is_string($content)) {
             return;
         }
-        $content = \trim($content);
-        if (!\is_string($content)) {
+        if (!\str_contains($content, '[galleryspan ')) {
             return;
         }
 
@@ -1987,7 +2023,10 @@ class StringFilters
      */
     public static function renderQRShortCode(&$content, $flags = null)
     {
-        if (!\is_string($content) || $content === '') {
+        if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[qrcode ')) {
             return;
         }
 
