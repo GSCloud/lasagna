@@ -941,6 +941,8 @@ class AdminPresenter extends APresenter
                         Cache::clear("{$k}_file");
                     }
                 }
+                \array_map('unlink', \glob(CACHE . DS . '*.html') ?: []);
+                \array_map('unlink', \glob(CACHE . DS . '*.json') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.php') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . '*.tmp') ?: []);
                 \array_map('unlink', \glob(CACHE . DS . CACHEPREFIX . '*') ?: []);
