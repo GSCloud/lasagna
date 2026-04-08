@@ -213,12 +213,10 @@ class CorePresenter extends APresenter
 
         case "GetServiceWorker":
             $this->setHeaderJavaScript();
-            if (\is_array($data)) {
-                $g = $this->getUserGroup();
-                if (\is_string($g)) {
-                    $data["admin_group_{$g}"] = true;
-                    $this->setData("admin_group_{$g}", true);
-                }
+            $g = $this->getUserGroup();
+            if (\is_string($g)) {
+                $data["admin_group_{$g}"] = true;
+                $this->setData("admin_group_{$g}", true);
             }
             return $this->setData(
                 "output", $this->renderHTML("sw.js")
@@ -226,10 +224,8 @@ class CorePresenter extends APresenter
 
         case "GetCoreVersion":
             $this->checkRateLimit();
-            if (!\is_array($data)) {
-                $this->addError('GetCoreVersion: data consistency error');
-                $this->setLocation('/err/404');
-            }
+            $this->addError('GetCoreVersion: data consistency error');
+            $this->setLocation('/err/404');
             $d = [];
             $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
             $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
@@ -274,6 +270,9 @@ class CorePresenter extends APresenter
                         array('href="\1"', '<\1>'),
                         $info
                     );
+                    if (!\is_array($p["api_example"])) {
+                        $p["api_example"] = [];
+                    }
                     $map[] = [
                         "count" => \count($p["api_example"]),
                         "deprecated" => (bool) $p["deprecated"],

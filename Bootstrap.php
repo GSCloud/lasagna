@@ -29,7 +29,7 @@ if (PHP_SAPI === 'cli') {
 // current working directory
 defined('ROOT') || define('ROOT', __DIR__);
 // directory separator
-defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+defined('DS') || define('DS', '/');
 // string separator
 defined('SS') || define('SS', '_');
 
@@ -37,6 +37,10 @@ defined('SS') || define('SS', '_');
 register_shutdown_function(
     function () {
         $error = error_get_last();
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'N/A';
+        if (!is_string($user_agent)) {
+            $user_agent = 'N/A';
+        }
         if ($error) {
             $halite = strpos($error['file'], 'constant_time_encoding') !== false;
             $dot = strpos($error['file'], 'php-dot-notation') !== false;
@@ -46,7 +50,7 @@ register_shutdown_function(
                 $error['message'],
                 $error['file'],
                 $error['line'],
-                $_SERVER['HTTP_USER_AGENT'] ?? 'N/A'
+                $user_agent
             );
             $timestamp = date('[Y-m-d H:i:s] ');
             $logFile = ROOT . DS . 'logs' . DS . 'crash.log';
@@ -244,11 +248,6 @@ if (file_exists(CONFIG) && is_readable(CONFIG)) {
     }
 } else {
     $err = 'FATAL ERROR: CONFIG file not found';
-    error_log($err);
-    die($err);
-}
-if (!is_array($cfg)) {
-    $err = 'FATAL ERROR: INVALID CONFIG';
     error_log($err);
     die($err);
 }

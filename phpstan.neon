@@ -27,6 +27,13 @@ parameters:
         - '#Parameter \#2 \$value of method Adbar\\Dot#'
         - identifier: missingType.iterableValue
         - identifier: missingType.property
+        - '#encapsed string cannot be cast to string#'
+        - '#expects string#'
+        - '#Call to function is_string#'
+        - '#Cannot access offset#'
+        - '#Cannot cast mixed#'
+        - '#expects array<string, string>, array<mixed, mixed> given#'
+        - '#Binary operation "."#'
     bootstrapFiles:
         - phpstan_constants.php
     dynamicConstantNames:

@@ -1168,10 +1168,6 @@ class AdminPresenter extends APresenter
             return;
         }
         $x = \explode(';', $val);
-        if (!\is_array($x)) {
-            $val = '';
-            return;
-        }
         if (\count($x) < 5) {
             $val = '';
             return;
@@ -1345,10 +1341,6 @@ class AdminPresenter extends APresenter
             return;
         }
         $x = \explode(';', $val);
-        if (!\is_array($x)) {
-            $val = '';
-            return;
-        }
         if (\count($x) < 5) {
             $val = '';
             return;
@@ -1481,9 +1473,6 @@ class AdminPresenter extends APresenter
         }
 
         $x = \explode(';', $val);
-        if (!\is_array($x)) {
-            return;
-        }
         if (\count($x) < 5) {
             return;
         }

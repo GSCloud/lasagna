@@ -211,6 +211,21 @@ function safeHtmlspecialchars(array $data): array
     return $result;
 }
 
+/**
+ * Safe strtolower
+ *
+ * @param mixed $string string to convert
+ *
+ * @return mixed
+ */
+function safeStrtolower($string): mixed
+{
+    if (is_string($string)) {
+        $string = strtolower($string);
+    }
+    return $string;
+}
+
 // Base58 encoder
 $base58 = new \Tuupola\Base58;
 
@@ -222,7 +237,11 @@ $data['POST'] = safeHtmlspecialchars($_POST);
 $data['COOKIE'] = safeHtmlspecialchars($_COOKIE);
 $data['SERVER'] = safeHtmlspecialchars($_SERVER);
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
-$data['SERVER_NAME'] = $_SERVER['SERVER_NAME'] ?? 'localhost';
+$server_name = $_SERVER['SERVER_NAME'] ?? 'localhost';
+if (!is_string($server_name)) {
+    $server_name = 'localhost';
+}
+$data['SERVER_NAME'] = $server_name;
 $data['IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; // phpcs:ignore
 
 // + MODEL
@@ -260,7 +279,7 @@ $data['isSafari'] = $isSafari;
 // host and URI based data
 $data['host'] = $data['HOST'] = $host = $_SERVER['HTTP_HOST'] ?? '';
 defined('HOST') || define('HOST', $host);
-$data['base'] = $data['BASE'] = $host ? (($_SERVER['HTTPS'] ?? 'off' == 'on') ? "https://{$host}/" : "http://{$host}/") : ''; // phpcs:ignore
+$data['base'] = $data['BASE'] = $host ? ((($_SERVER['HTTPS'] ?? 'off') === 'on') ? "https://{$host}/" : "http://{$host}/") : ''; // phpcs:ignore
 $requestUri = $_SERVER['REQUEST_URI'] ?? '';
 if (!$requestUri) {
     $requestUri = '';
@@ -282,8 +301,8 @@ if (CLI) {
 }
 defined('APPNAME') || define('APPNAME', (string) ($cfg['app'] ?? 'app'));
 defined('PROJECT') || define('PROJECT', (string) ($cfg['project'] ?? 'LASAGNA'));
-defined('DOMAIN')  || define('DOMAIN', strtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
-defined('SERVER')  || define('SERVER', strtolower(preg_replace("/[^A-Za-z0-9]/", '', $_SERVER['SERVER_NAME'] ?? 'localhost'))); // phpcs:ignore
+defined('DOMAIN')  || define('DOMAIN', safeStrtolower(preg_replace("/[^A-Za-z0-9.-]/", '', $server_name))); // phpcs:ignore
+defined('SERVER')  || define('SERVER', safeStrtolower(preg_replace("/[^A-Za-z0-9]/", '', $server_name))); // phpcs:ignore
 $prefix = $cfg['app'] ?? $cfg['canonical_url'] ?? $cfg['goauth_origin'] ?? 'WTF';
 defined('CACHEPREFIX') || define('CACHEPREFIX', 'cache_' . md5($prefix) . SS);
 

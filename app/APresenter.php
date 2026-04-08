@@ -664,10 +664,21 @@ abstract class APresenter
         $parts = [];
         $parts[] = CLI ? 'CLI_ENV' : 'WEB_ENV';
         if (!CLI) {
-            // !!! OBSOLETE - $_SERVER['HTTP_USER_AGENT']
-            $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX';
-            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'ENCODING');
-            $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'LANGUAGE');
+            if (\is_string($_SERVER['HTTP_CF_IPCOUNTRY'])) {
+                $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'];
+            } else {
+                $parts[] = 'XX';
+            }
+            if (\is_string($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+                $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING']);
+            } else {
+                $parts[] = 'ENCODING';
+            }
+            if (\is_string($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            } else {
+                $parts[] = 'LANGUAGE';
+            }
         }
         return \hash('sha256', \implode(SS, $parts));
     }

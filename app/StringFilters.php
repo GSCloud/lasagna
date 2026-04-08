@@ -89,7 +89,7 @@ class StringFilters
     // shortcodes cache during tokenization
     // phpcs:ignore
     /**
-     * @var array<string><string>
+     * @var array<string>
      */
     private static array $_shortCodeCache = [];
 
@@ -1801,7 +1801,7 @@ class StringFilters
 
         while (\is_string($content) && \str_contains($content, '[gallery ')) {  
             \preg_match($pattern, $content, $m);
-            if (\is_array($m) && isset($m[1])) {
+            if (isset($m[1])) {
                 $mask = $full_param_string = $m[1];
                 $params = \preg_split('/\s+/', $full_param_string);
                 $order_param = null;
@@ -1940,7 +1940,7 @@ class StringFilters
 
         while (\is_string($content) && \str_contains($content, '[galleryspan ')) {
             \preg_match($pattern, $content, $m);
-            if (\is_array($m) && isset($m[1])) {
+            if (isset($m[1])) {
                 $mask = $full_param_string = $m[1];
                 $params = \preg_split('/\s+/', $full_param_string);
                 $order_param = null;
@@ -2272,21 +2272,21 @@ class StringFilters
     /**
      * Sort an array of mixed data types in ascending order: numbers and strings.
      *
-     * @param array<mixed> $arr array to be sorted by reference
+     * @param array<mixed> $array array to be sorted by reference
      *
      * @return void
      *
      * @throws \InvalidArgumentException if the input is not an array
      */
-    public static function sort(&$arr)
+    public static function sort(&$array)
     {
-        if (!\is_array($arr)) {
+        if (!\is_array($array)) {
             throw new \InvalidArgumentException('Input must be an array.');
         }
 
         $numbers = [];
         $strings = [];
-        foreach ($arr as $a) {
+        foreach ($array as $a) {
             if (\is_numeric($a)) {
                 $numbers[] = $a;
             } else {
@@ -2295,27 +2295,27 @@ class StringFilters
         }
         \sort($numbers, SORT_NUMERIC);
         \sort($strings, SORT_LOCALE_STRING);
-        $arr = \array_merge($numbers, $strings);
+        $array = \array_merge($numbers, $strings);
     }
 
     /**
      * Sort an array of mixed data types in descending order: numbers and strings.
      *
-     * @param array<mixed> $arr array to be sorted by reference
+     * @param array<mixed> $array array to be sorted by reference
      *
      * @return void
      *
      * @throws \InvalidArgumentException if the input is not an array
      */
-    public static function rsort(&$arr)
+    public static function rsort(&$array)
     {
-        if (!\is_array($arr)) {
+        if (!\is_array($array)) {
             throw new \InvalidArgumentException('Input must be an array.');
         }
 
         $numbers = [];
         $strings = [];
-        foreach ($arr as $a) {
+        foreach ($array as $a) {
             if (\is_numeric($a)) {
                 $numbers[] = $a;
             } else {
@@ -2324,7 +2324,7 @@ class StringFilters
         }
         \rsort($numbers, SORT_NUMERIC);
         \rsort($strings, SORT_LOCALE_STRING);
-        $arr = \array_merge($numbers, $strings);
+        $array = \array_merge($numbers, $strings);
     }
 
     /**
@@ -2451,7 +2451,7 @@ class StringFilters
             return;
         }
 
-        if (\is_float($elapsed) && \is_string($hash) && \is_string($data)) {
+        if (\is_string($hash) && \is_string($data)) {
             $file = CACHE . DS . "cacheprofiler_{$type}_{$hash}.json";
             $payload = [
                 'hash'     => $hash,

@@ -55,7 +55,7 @@ class CiTester
         $api_key = "";
         $presenter = (array) $presenter;
         $type = (string) $type;
-        if (\is_array($cfg) && \array_key_exists("ci_tester", $cfg)
+        if (\array_key_exists("ci_tester", $cfg)
             && \is_string($cfg["ci_tester"]["api_key"])
         ) {
             $api_key = $cfg["ci_tester"]["api_key"];

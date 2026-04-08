@@ -10,7 +10,7 @@
  * @link     https://mini.gscloud.cz
  */
 
-defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+defined('DS') || define('DS', '/');
 defined('SS') || define('SS', '_');
 
 define('ROOT', __DIR__);
