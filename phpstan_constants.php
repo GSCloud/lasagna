@@ -14,6 +14,7 @@ defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 defined('SS') || define('SS', '_');
 
 define('ROOT', __DIR__);
+
 define('APP', ROOT . DS . 'app');
 define('CACHE', ROOT . DS . 'temp');
 define('CDN', '');
@@ -33,16 +34,15 @@ define('CSP', APP . DS . 'csp.neon');
 define('DOWNLOAD', WWW . DS . 'download');
 define('UPLOAD', WWW . DS . 'upload');
 
-define('CLI', (bool) (PHP_SAPI == 'cli'));
-define('DEBUG', true);
-define('REDIS_CACHE', true);
-define('LOCALHOST', (bool) (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') || CLI);
-define('HOST', 'localhost');
 define('APPNAME', 'app');
 define('CACHEPREFIX', 'cache_');
+define('CLI', (bool) (PHP_SAPI == 'cli'));
+define('DEBUG', true);
 define('DOMAIN', $_SERVER['SERVER_NAME'] ?? 'localhost');
+define('HOST', 'localhost');
+define('LOCALHOST', (bool) (($_SERVER['SERVER_NAME'] ?? '') == 'localhost') || CLI);
 define('PROJECT', 'LASAGNA');
+define('REDIS_CACHE', true);
 define('SERVER', $_SERVER['SERVER_NAME'] ?? 'localhost');
-
-define('VERSION', true);
 define('TESSERACT_START', 12345);
+define('VERSION', true);

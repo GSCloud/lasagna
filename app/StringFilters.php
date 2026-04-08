@@ -10,6 +10,7 @@
  * @link     https://github.com/GSCloud/lasagna
  */
 
+declare (strict_types = 1);
 namespace GSC;
 
 use Michelf\Markdown;
@@ -29,7 +30,7 @@ use Tracy\Debugger;
  */
 class StringFilters
 {
-    // max. single shortcode iterations
+    // single shortcode maximum iterations
     const ITERATIONS = 100;
 
     // file cache time-to-live
@@ -1778,6 +1779,9 @@ class StringFilters
             if ($flags & self::THUMBS_640) {
                 $size = 640;
             }
+            if ($flags & self::THUMBS_1280) {
+                $size = 1280;
+            }
         }
 
         $counter = 0;
@@ -1913,6 +1917,9 @@ class StringFilters
             }
             if ($flags & self::THUMBS_640) {
                 $size = 640;
+            }
+            if ($flags & self::THUMBS_1280) {
+                $size = 1280;
             }
         }
 

@@ -11,7 +11,6 @@
  */
 
 declare (strict_types = 1);
-
 namespace GSC;
 
 /**
@@ -50,7 +49,7 @@ class ErrorPresenter extends APresenter
     // custom messages
     const MESSAGE = [
         400 => "Bad request received 🪲",
-        401 => "You are not unauthorized 👾",
+        401 => "You are not authorized 👾",
         402 => "Payment is required 🤑",
         403 => "Access is forbidden ⛔️",
         404 => "Not found 😵",
@@ -79,7 +78,7 @@ class ErrorPresenter extends APresenter
     public function process($err = null)
     {
         $this->setHeaderHtml();
-        
+ 
         $code = 404;
         if (\is_int($err)) {
             $code = $err;
@@ -95,26 +94,19 @@ class ErrorPresenter extends APresenter
                 }
             }
         }
-
-        // check error code validity
         if (!isset(self::CODESET[$code])) {
             $code = 404;
         }
         $error = self::CODESET[$code];
-
-        // find error image
-        $image = "error.png";
-        if (\file_exists(WWW . "/img/{$code}.png")) {
-            $image = "{$code}.png";
-        } elseif (\file_exists(WWW . "/img/{$code}.jpg")) {
-            $image = "{$code}.jpg";
-        } elseif (\file_exists(WWW . "/img/{$code}.webp")) {
+ 
+        $image = "error.webp";
+        if (\file_exists(WWW . "/img/{$code}.webp")) {
             $image = "{$code}.webp";
         }
-
         if (empty($message)) {
             $message = self::MESSAGE[$code];
         }
+ 
         $data['code'] = $code;
         $data['error'] = $error;
         $data['image'] = $image;
@@ -126,7 +118,6 @@ class ErrorPresenter extends APresenter
         header('Pragma: no-cache');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
         
-        // render template and exit
         echo $this->setData($data)->renderHTML($template);
         exit(0);
     }

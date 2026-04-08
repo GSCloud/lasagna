@@ -10,6 +10,7 @@
  * @link     https://github.com/GSCloud/lasagna
  */
 
+declare (strict_types = 1);
 namespace GSC;
 
 /**

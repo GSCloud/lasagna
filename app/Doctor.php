@@ -10,7 +10,8 @@
  * @link     https://github.com/GSCloud/lasagna
  */
 
- namespace GSC;
+declare (strict_types = 1);
+namespace GSC;
 
 use League\CLImate\CLImate;
 

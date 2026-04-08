@@ -10,6 +10,7 @@
  * @link     https://github.com/GSCloud/lasagna
  */
 
+declare (strict_types = 1);
 namespace GSC;
 
 use Cake\Cache\Cache;
@@ -156,10 +157,8 @@ class AdminPresenter extends APresenter
         switch ($view) {
         case 'Upload':
             $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
-            if (!defined('UPLOAD')
-                || \is_null(UPLOAD)
-                || !\is_dir(UPLOAD)
-            ) {
+            $upload = defined('UPLOAD') ? UPLOAD : null;
+            if ($upload === null || !\is_string($upload) || !\is_dir($upload)) {
                 return $this->writeJsonData(410, $extras);
             }
 
@@ -183,10 +182,8 @@ class AdminPresenter extends APresenter
 
         case 'UploadDelete':
             $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
-            if (!defined('UPLOAD')
-                || \is_null(UPLOAD)
-                || !\is_dir(UPLOAD)
-            ) {
+            $upload = defined('UPLOAD') ? UPLOAD : null;
+            if ($upload === null || !\is_string($upload) || !\is_dir($upload)) {
                 return $this->writeJsonData(410, $extras);
             }
 
@@ -204,11 +201,8 @@ class AdminPresenter extends APresenter
 
         case 'getUploadsInfo':
             $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
-            if (!defined('UPLOAD')
-                || \is_null(UPLOAD)
-                || !\is_dir(UPLOAD)
-                || !\is_readable(UPLOAD)
-            ) {
+            $upload = defined('UPLOAD') ? UPLOAD : null;
+            if ($upload === null || !\is_string($upload) || !\is_dir($upload)) {
                 return $this->writeJsonData(410, $extras);
             }
 
@@ -243,10 +237,8 @@ class AdminPresenter extends APresenter
         
         case 'getUploads':
             $this->_checkGovernor()->_checkPermission('admin,manager,editor', $extras); // phpcs:ignore
-            if (!defined('UPLOAD')
-                || \is_null(UPLOAD)
-                || !\is_dir(UPLOAD)
-            ) {
+            $upload = defined('UPLOAD') ? UPLOAD : null;
+            if ($upload === null || !\is_string($upload) || !\is_dir($upload)) {
                 return $this->writeJsonData(410, $extras);
             }
 
@@ -658,10 +650,8 @@ class AdminPresenter extends APresenter
      */
     public function processUpload()
     {
-        if (!defined('UPLOAD')
-            || \is_null(UPLOAD)
-            || !\is_dir(UPLOAD)
-        ) {
+        $upload = defined('UPLOAD') ? UPLOAD : null;
+        if ($upload === null || !\is_string($upload) || !\is_dir($upload)) {
             throw new \Exception("Invalid request.");
         }
 
@@ -792,10 +782,8 @@ class AdminPresenter extends APresenter
      */
     public function processDelete()
     {
-        if (!defined('UPLOAD')
-            || \is_null(UPLOAD)
-            || !\is_dir(UPLOAD)
-        ) {
+        $upload = defined('UPLOAD') ? UPLOAD : null;
+        if ($upload === null || !\is_string($upload) || !\is_dir($upload)) {
             throw new \Exception("Invalid request.");
         }
 

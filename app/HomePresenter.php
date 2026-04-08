@@ -10,6 +10,7 @@
  * @link     https://github.com/GSCloud/lasagna
  */
 
+declare (strict_types = 1);
 namespace GSC;
 
 use Cake\Cache\Cache;
@@ -63,7 +64,7 @@ class HomePresenter extends APresenter
                     SF::addCustomReplacements($reps);
                 }
             } catch (\Throwable $e) {
-                $this->addError($e);
+                $this->addError($e->getMessage());
             }
         }
         // add "custom replacements" from a Sheet data cell - usr.custom_replacements

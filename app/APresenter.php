@@ -10,6 +10,7 @@
  * @link     https://github.com/GSCloud/lasagna
  */
 
+declare (strict_types = 1);
 namespace GSC;
 
 use Cake\Cache\Cache;
@@ -243,8 +244,7 @@ abstract class APresenter
         $logLine = $json . "\n";
         $flags = FILE_APPEND | LOCK_EX;
         if (\file_put_contents($filePath, $logLine, $flags) === false) {
-            $err = \error_get_last()['message'];
-            \error_log("Error writing to log file [" . $filePath . ']. Message: ' . $err); // phpcs:ignore
+            \error_log("Error writing to log file [" . $filePath . '].'); // phpcs:ignore
         }
     }
 
@@ -759,7 +759,10 @@ abstract class APresenter
 
         $this->_identity = $i;
         if ($i['id']) {
-            $this->setCookie(APPNAME, \json_encode($i));
+            $str = \json_encode($i);
+            if ($str) {
+                $this->setCookie(APPNAME, $str);
+            }
         } else {
             $this->clearCookie(APPNAME);
         }
@@ -801,62 +804,66 @@ abstract class APresenter
             if (!\is_string($content)) {
                 $this->logout();
             }
-            $q = \json_decode($content, true);
+            $q = [];
+            if (is_string($content)) {
+                $q = \json_decode($content, true);
+            }
             if (!\is_array($q)) {
                 $this->addError('Identity is not an array.');                
                 $this->logout();
             }
-            if (!\array_key_exists('id', $q)) {
-                $this->addError('Identity has no id.');
-                $this->logout();
-            }
-            if (!\array_key_exists('name', $q)) {
-                $this->addError('Identity has no name.');
-                $this->logout();
-            }
-            if (!\array_key_exists('email', $q)) {
-                $this->addError('Identity has no email.');
-                $this->logout();
-            }
-            if (!\array_key_exists('fingerprint', $q)) {
-                $this->addError('Identity has no fingerprint.');
-                $this->logout();
-            }
-
-            if ($q['fingerprint'] !== $fingerprint) {
-                try {
-                    $ip = $this->getIP();
-                    $name = \gethostbyaddr($ip);
-                    if ($name === $ip) {
-                        $name = '';
-                    }
-                } catch (\Throwable $e) {
-                        $this->addError("Identity fingerprint is invalid. Could not translate IP address: [{$ip}]"); // phpcs:ignore
-                        $this->logout();
-                }
-                if (empty($name)) {
-                    $this->addError('Identity fingerprint is invalid. We got IP as a name.'); // phpcs:ignore
+            if (\is_array($q)) {
+                if (!\array_key_exists('id', $q)) {
+                    $this->addError('Identity has no id.');
                     $this->logout();
                 }
-                if (\str_ends_with($name, '.starlinkisp.net')) {
-                    // we got Starlink!
-                } else if (\str_ends_with($name, '.starlink.com')) {
-                    // we got Starlink!
-                } else {
-                        $this->addError("Identity fingerprint is invalid. [{$name}]"); // phpcs:ignore
-                        $this->logout();
+                if (!\array_key_exists('name', $q)) {
+                    $this->addError('Identity has no name.');
+                    $this->logout();
                 }
+                if (!\array_key_exists('email', $q)) {
+                    $this->addError('Identity has no email.');
+                    $this->logout();
+                }
+                if (!\array_key_exists('fingerprint', $q)) {
+                    $this->addError('Identity has no fingerprint.');
+                    $this->logout();
+                }
+                if ($q['fingerprint'] !== $fingerprint) {
+                    try {
+                        $ip = $this->getIP() ?? 'N/A';
+                        $name = \gethostbyaddr($ip);
+                        if ($name === $ip) {
+                            $name = '';
+                        }
+                    } catch (\Throwable $e) {
+                            $ip = $this->getIP() ?? 'N/A';
+                            $this->addError("Identity fingerprint is invalid. Could not translate IP address: [{$ip}]"); // phpcs:ignore
+                            $this->logout();
+                    }
+                    if (empty($name)) {
+                        $this->addError('Identity fingerprint is invalid. We got IP as a name.'); // phpcs:ignore
+                        $this->logout();
+                    }
+                    if (\str_ends_with($name, '.starlinkisp.net')) {
+                        // we got Starlink!
+                    } else if (\str_ends_with($name, '.starlink.com')) {
+                        // we got Starlink!
+                    } else {
+                            $this->addError("Identity fingerprint is invalid. [{$name}]"); // phpcs:ignore
+                            $this->logout();
+                    }
+                }
+                if (!\array_key_exists('nonce', $q)) {
+                    $this->addError('Identity has no nonce.');
+                    $this->logout();
+                }
+                if ($q['nonce'] !== $nonce) {
+                    $this->addError('Identity nonce is invalid.');
+                    $this->logout();
+                }
+                $this->_identity = $q;
             }
-
-            if (!\array_key_exists('nonce', $q)) {
-                $this->addError('Identity has no nonce.');
-                $this->logout();
-            }
-            if ($q['nonce'] !== $nonce) {
-                $this->addError('Identity nonce is invalid.');
-                $this->logout();
-            }
-            $this->_identity = $q;
         }
         \ksort($this->_identity);
         return $this->_identity;
@@ -1045,7 +1052,9 @@ abstract class APresenter
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        $key = \trim($key, "/.\\");
+        if (\is_string($key)) {
+            $key = \trim($key, "/.\\");
+        }
         $keyfile = DATA . DS . $key;
         try {
             if (\file_exists($keyfile) && \is_readable($keyfile)) {
@@ -1087,7 +1096,9 @@ abstract class APresenter
         }
 
         $key = $this->getCfg('secret_cookie_key') ?? 'secure.key';
-        $key = \trim($key, "/.\\");
+        if (\is_string($key)) {
+            $key = \trim($key, "/.\\");
+        }
         if (!\is_string($key) || empty($key)) {
             $err = 'Secure key not defined!';
             $this->addCritical($err);
@@ -1240,7 +1251,7 @@ abstract class APresenter
         $limiter_secs = $this->getData('limiter_secs') ?? 5;
 
         // ban rate limiting
-        $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
+        $ban_rate_count = Cache::read($ban_rate, 'ban') ?? 0;
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
 
@@ -1268,7 +1279,7 @@ abstract class APresenter
         if ($rate_limit_count >= (int) $max) {
 
             // increment the ban
-            $ban_rate_count = (int) (Cache::read($ban_rate, 'ban') ?? 0);
+            $ban_rate_count = Cache::read($ban_rate, 'ban') ?? 0;
             Cache::write($ban_rate, ++$ban_rate_count, 'ban');
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
 
@@ -1370,17 +1381,20 @@ abstract class APresenter
             $this->setLocation('/err/401');
         }
 
-        if (isset($roles) && \is_array($roles)) {
+        if (isset($roles) && \is_array($roles) && \is_array($groups)) {
             foreach ($roles as $role) {
                 $role = \strtolower(\trim($role));
                 if (\strlen($role) && \strlen($email)) {
                     // check if email is allowed
-                    if (\in_array($email, $groups[$role] ?? [], true)) {
-                        return $retbool ? true : $this;
-                    }
-                    // check if any logged user is allowed
-                    if (\in_array('*', $groups[$role] ?? [], true)) {
-                        return $retbool ? true : $this;
+                    $role = $groups[$role] ?? [];
+                    if (\is_array($role)) {
+                        if (\in_array($email, $role, true)) {
+                            return $retbool ? true : $this;
+                        }
+                        // check if any logged user is allowed
+                        if (\in_array('*', $role, true)) {
+                            return $retbool ? true : $this;
+                        }
                     }
                 }
             }
@@ -1415,14 +1429,17 @@ abstract class APresenter
         $email = \trim((string) $email);
 
         // search all groups for email or asterisk
-        foreach ($this->getData('admin_groups') ?? [] as $group => $users) {
-            if (\in_array($email, $users, true)) {
-                $mygroup = $group;
-                break;
-            }
-            if (\in_array('*', $users, true)) {
-                $mygroup = $group;
-                continue;
+        $admin_groups = $this->getData('admin_groups') ?? null;
+        if (\is_array($admin_groups)) {
+            foreach ($admin_groups as $group => $users) {
+                if (\in_array($email, $users, true)) {
+                    $mygroup = $group;
+                    break;
+                }
+                if (\in_array('*', $users, true)) {
+                    $mygroup = $group;
+                    continue;
+                }
             }
         }
         return $mygroup;
@@ -1490,8 +1507,11 @@ abstract class APresenter
 
                 $locale = [];
                 foreach ((array) $cfg['locales'] as $k => $v) {
-                    $csv = false;
+                    if (!\is_string($k)) {
+                        continue;
+                    }
                     $subfile = \strtolower($k);
+                    $csv = false;
                     $csvfile = DATA . DS . "{$subfile}.csv";
                     $csvfilebak = DATA . DS . "{$subfile}.bak";
 
@@ -1522,25 +1542,30 @@ abstract class APresenter
                         }
                     }
 
-                    // parse CSV string
+                    // phpcs:ignore
+                    /** @var array<string|int> $keys */
                     $keys = [];
+                    // phpcs:ignore
+                    /** @var array<mixed> $values */
                     $values = [];
+
+                    // parse CSV string
                     try {
-                        $reader = Reader::createFromString($csv);
-                        $reader->setHeaderOffset(0);
-                        $records = (new Statement())->offset(1)->process($reader);
-                        foreach ($records->fetchColumn($key) as $x) {
-                            $keys[] = $x;
-                        }
-                        foreach ($records->fetchColumn($language) as $x) {
-                            $values[] = $x;
+                        if (\is_string($csv)) {
+                            $reader = Reader::createFromString($csv);
+                            $reader->setHeaderOffset(0);
+                            $records = (new Statement())->offset(1)->process($reader); // phpcs:ignore
+                            foreach ($records->fetchColumn($key) as $x) {
+                                $keys[] = $x;
+                            }
+                            foreach ($records->fetchColumn($language) as $x) {
+                                $values[] = $x;
+                            }
                         }
                     } catch (\Throwable $e) {
                         continue;
                     }
-                    $locale = \array_replace(
-                        $locale, \array_combine($keys, $values)
-                    );
+                    $locale = \array_replace($locale, \array_combine($keys, $values)); // phpcs:ignore
                 }
 
                 // EXTRA locale variable = git revisions
@@ -1576,10 +1601,13 @@ abstract class APresenter
 
         // locale override
         $override = $this->getData('locale_override');
-        if (\is_array($override)) {
+        if (\is_array($override) && \is_array($locale)) {
             foreach ($override as $k => $v) {
                 $locale[$k] = $v;
             }
+        }
+        if (!\is_array($locale)) {
+            $locale = [];
         }
         return $locale;
     }
@@ -1653,14 +1681,21 @@ abstract class APresenter
             $response = \curl_exec($ch);
             $httpcode = \curl_getinfo($ch, CURLINFO_HTTP_CODE);
             \curl_close($ch);
-            $result = \json_decode($response, true);
+
+            if (\is_string($response)) {
+                $result = \json_decode($response, true);
+            } else {
+                $result = null;
+            }
 
             $c++;
-            if ($httpcode === 200 && $result['success'] === true) {
-                $this->addMessage("CLOUDFLARE: #{$c} cache for zoneID [{$zone}] purged successfully."); // phpcs:ignore
-            } else {
-                $err = $result['errors'][0]['message'] ?? 'Unknown error: ' . $response; // phpcs:ignore
-                $this->addError("CLOUDFLARE: Failed to purge cache for zone [{$zone}]. HTTP Code: {$httpcode}. Error: {$err}"); // phpcs:ignore
+            if (\is_array($result)) {
+                if ($httpcode === 200 && $result['success'] === true) {
+                    $this->addMessage("CLOUDFLARE: #{$c} cache for zoneID [{$zone}] purged successfully."); // phpcs:ignore
+                } else {
+                    $err = $result['errors'][0]['message'] ?? 'Unknown error: ' . $response; // phpcs:ignore
+                    $this->addError("CLOUDFLARE: Failed to purge cache for zone [{$zone}]. HTTP Code: {$httpcode}. Error: {$err}"); // phpcs:ignore
+                }
             }
         }
         return $this;
@@ -1772,9 +1807,13 @@ abstract class APresenter
         }
         $key = \strtolower(\trim((string) $key));
         $cfg = $this->getCfg();
-        if (\array_key_exists($key, $cfg)) {
-            foreach ((array) $cfg[$key] as $name => $csvkey) {
-                $this->csvPreloader($name, $csvkey, (bool) $force);
+        if (\is_array($cfg)) {
+            if (\array_key_exists($key, $cfg)) {
+                foreach ((array) $cfg[$key] as $name => $csvkey) {
+                    if (\is_string($name) && \is_string($csvkey)) {
+                        $this->csvPreloader($name, $csvkey, (bool) $force);
+                    }                    
+                }
             }
         }
         return $this;
@@ -1857,14 +1896,17 @@ abstract class APresenter
     {
         $code = 200;
         $time = \time();
+        $version = $this->getCfg('version');
+        if (!\is_string($version)) {
+            $version = 'v1';
+        }
         $out = [
             'timestamp' => $time,
             'timestamp_RFC2822' => \date(\DATE_RFC2822, $time),
-            'version' => (string) ($this->getCfg('version') ?? 'v1'),
+            'version' => $version,
             'engine' => ENGINE,
             'domain' => DOMAIN ?? '',
         ];
-
         // last decoding error
         switch (\json_last_error()) {
         case JSON_ERROR_NONE:
@@ -2009,7 +2051,7 @@ abstract class APresenter
         $presenter = $this->getPresenter();
         $view = $this->getView();
 
-        if ($presenter && $view) {
+        if (\is_array($presenter) && \is_string($view)) {
             if (\array_key_exists('language', $presenter[$view])) {
                 $language = (string) $presenter[$view]['language'];
             } else {
@@ -2155,7 +2197,7 @@ abstract class APresenter
         $data["is_logged"] = false;
         $data['user'] = $user = $this->getCurrentUser();
         $data['group'] = $data['admin'] = $group = $this->getUserGroup();
-        if ($group) {
+        if (\is_string($group)) {
             $data["admin_group_{$group}"] = true;
             $data["is_admin"] = true;
         }
