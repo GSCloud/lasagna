@@ -224,8 +224,6 @@ class CorePresenter extends APresenter
 
         case "GetCoreVersion":
             $this->checkRateLimit();
-            $this->addError('GetCoreVersion: data consistency error');
-            $this->setLocation('/err/404');
             $d = [];
             $d["LASAGNA"]["core"]["date"] = (string) $data["VERSION_DATE"];
             $d["LASAGNA"]["core"]["revisions"] = (int) $data["REVISIONS"];
