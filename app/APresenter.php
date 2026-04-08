@@ -1507,13 +1507,15 @@ abstract class APresenter
 
                 $locale = [];
                 foreach ((array) $cfg['locales'] as $k => $v) {
-                    if (!\is_string($k)) {
-                        continue;
-                    }
-                    $subfile = \strtolower($k);
                     $csv = false;
-                    $csvfile = DATA . DS . "{$subfile}.csv";
-                    $csvfilebak = DATA . DS . "{$subfile}.bak";
+                    $csvfile = null;
+                    $csvfilebak = null;
+
+                    if (\is_string($k)) {
+                        $subfile = \strtolower($k);
+                        $csvfile = DATA . DS . "{$subfile}.csv";
+                        $csvfilebak = DATA . DS . "{$subfile}.bak";
+                    }
 
                     // 0. read injected prefabricated base CSV file
                     if (\str_ends_with($v, ".csv")) {
@@ -1524,7 +1526,7 @@ abstract class APresenter
                     }
 
                     // 1. read from CSV file
-                    if ($csv === false && file_exists(($csvfile))) {
+                    if ($csv === false && $csvfile && file_exists(($csvfile))) {
                         $csv = \file_get_contents($csvfile);
                         if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
@@ -1532,13 +1534,15 @@ abstract class APresenter
                     }
 
                     // 2. read from CSV file backup
-                    if ($csv === false && \file_exists($csvfilebak)) {
+                    if ($csv === false && $csvfilebak && \file_exists($csvfilebak)) {
                         $csv = \file_get_contents($csvfilebak);
                         if ($csv === false || \strlen($csv) < self::CSV_MIN_SIZE) {
                             $csv = false;
                             continue;
                         } else {
-                            \copy($csvfilebak, $csvfile);
+                            if ($csvfile) {
+                                \copy($csvfilebak, $csvfile);
+                            }
                         }
                     }
 
@@ -2079,6 +2083,7 @@ abstract class APresenter
             }
             $data['l'] = $l;
         }
+        //bdump($l);
 
         // PROCESS SPECIAL KEYS - [cfg.*, usr.*, add.*, del.*]
         $reps = 0;
@@ -2298,5 +2303,4 @@ abstract class APresenter
         }
         return $nonce;
     }
-
 }
