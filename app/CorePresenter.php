@@ -39,7 +39,6 @@ class CorePresenter extends APresenter
     {
         \setlocale(LC_ALL, "cs_CZ.utf8");
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-
         if (!\is_array($data = $this->getData())) {
             return $this->setData('output', 'FATAL ERROR in the data model.');
         }
@@ -145,7 +144,6 @@ class CorePresenter extends APresenter
             } else {
                 $map = [];
             }
-            // @phpstan-ignore-next-line
             if (isset($map['lastbuilddate'])) {
                 $this->setData("lastbuilddate", $map['lastbuilddate']);
                 unset($map['lastbuilddate']);
