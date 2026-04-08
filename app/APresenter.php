@@ -655,31 +655,22 @@ abstract class APresenter
     }
 
     /**
-     * Get browser fingerprint
+     * Get browser fingerprint with strict existence checks
      *
      * @return string hash
      */
     function getBrowserFingerprint(): string
     {
-        $parts = [];
-        $parts[] = CLI ? 'CLI_ENV' : 'WEB_ENV';
-        if (!CLI) {
-            if (\is_string($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX')) {
-                $parts[] = $_SERVER['HTTP_CF_IPCOUNTRY'];
-            } else {
-                $parts[] = 'XX';
-            }
-            if (\is_string($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'ENC')) {
-                $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_ENCODING']);
-            } else {
-                $parts[] = 'ENC';
-            }
-            if (\is_string($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'LANG')) {
-                $parts[] = \strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-            } else {
-                $parts[] = 'LANG';
-            }
+        if (defined('CLI') && CLI) {
+            return \hash('sha256', 'CLI_ENV');
         }
+        $parts = [
+            'WEB_ENV',
+            (string) ($_SERVER['HTTP_CF_IPCOUNTRY'] ?? 'XX'),
+            \strtolower((string) ($_SERVER['HTTP_ACCEPT_ENCODING'] ?? 'ENC')),
+            \strtolower((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'LANG')),
+        ];
+
         return \hash('sha256', \implode(SS, $parts));
     }
 
