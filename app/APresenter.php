@@ -86,7 +86,7 @@ abstract class APresenter
     const BAN_MAXIMUM = 10;
 
     /* @var integer update ignore interval in seconds */
-    const CSV_UPDATE_IGNORE = 180;
+    const CSV_UPDATE_IGNORE = 179; // 3 minutes
 
     /* @var string identity nonce filename inside the DATA folder */
     const IDENTITY_NONCE_FILE = 'identity_nonce.key';
@@ -1758,6 +1758,7 @@ abstract class APresenter
                                 . $csvkey . self::GS_CSV_POSTFIX;
                         }
                     }
+                    ini_set('default_socket_timeout', '30');
                     $data = @\file_get_contents($remote) ?: null;
                 }
                 if (!$data) {
