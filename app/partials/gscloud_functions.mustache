@@ -304,6 +304,24 @@ async function sha256(message) {
       }
     }
 
+    // GSC.NewVersionNotification() - show new version notification + set key handler
+    if (typeof GSC.NewVersionNotification !== "function") GSC.NewVersionNotification = function() {
+      $("#update-message").show().focus();
+      $('#update-button').click(function() {
+        location.replace(location.pathname + '?{{ nonce }}');
+      });
+      $(document).on('keydown', function(e) {
+          if (e.which === 13) {
+              const $btn = $('#update-button');
+              if ($btn.length && $btn.is(':visible')) {
+                  e.preventDefault();
+                  location.replace(location.pathname + '?{{ nonce }}');
+              }
+          }
+      });
+      GSC.VersionCheck = function(){};
+    }
+
     // GSC.VersionCheck()
     GSC.init.push(function() {
       {{#disable_version_check}}GSC.VersionCheck = function(){};{{/disable_version_check}}
@@ -311,39 +329,30 @@ async function sha256(message) {
       {{^disable_version_check}}GSC.names.push("VersionCheck");{{/disable_version_check}}
       if (typeof GSC.VersionCheck !== "function") GSC.VersionCheck = function() {
         if (!GSC.offline) {
+
           // check core consistency
           $.post("/version/core", function(post) {
             if (post.data.LASAGNA.core.version) {
               if (post.data.LASAGNA.core.version != GSC.LASAGNA.core.version) {
-                $("#update-message").show().focus();
-                $('#update-button').click(function() {
-                  location.replace(location.pathname + '?{{ nonce }}');
-                });
-                GSC.VersionCheck = function(){};
+                GSC.NewVersionNotification();
                 return;
               }
             }
-            // check cdn hash
+
+            // check CDN hash
             if (post.data.LASAGNA.core.cdn) {
               if (post.data.LASAGNA.core.cdn != GSC.LASAGNA.core.cdn) {
-                $("#update-message").show().focus();
-                $('#update-button').click(function() {
-                  location.replace(location.pathname + '?{{ nonce }}');
-                });
-                GSC.VersionCheck = function(){};
+                GSC.NewVersionNotification();
                 return;
               }
             }
           });
+
           // check data consistency
           $.post("/{{ lang }}/version/data", function(post) {
             if (post.data.LASAGNA.data.version) {
               if (post.data.LASAGNA.data.version != GSC.LASAGNA.data.version) {
-                $("#update-message").show().focus();
-                $('#update-button').click(function() {
-                  location.replace(location.pathname + '?{{ nonce }}');
-                });
-                GSC.VersionCheck = function(){};
+                GSC.NewVersionNotification();
                 return;
               }
             }

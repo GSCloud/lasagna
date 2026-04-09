@@ -193,7 +193,7 @@ a_auditlog_ttip,TOOLTIP,AUDIT log,AUDIT log,AUDIT log,AUDIT-Protokoll
 a_blocklog_ttip,TOOLTIP,BLOCK log,BLOCK log,BLOCK log,BLOCK-Protokoll
 a_debugger_ttip,TOOLTIP,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF,DEBUGGER ON/OFF
 a_download_csv_ttip,TOOLTIP,download file as CSV (count of lines),stáhnout soubor v CSV formátu (počet řádek),stiahnuť súbor v CSV formáte (počet riadkov),Datei als CSV herunterladen (Anzahl der Zeilen)
-a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google-Tabelle
+a_edit_gsheet_ttip,TOOLTIP,Google Sheet,Google Sheet,Google Sheet,Google Tabellen
 a_emojis_ttip,TOOLTIP,🐱 emoji panel,🐱 emoji panel,🐱 emoji panel,🐱 Emoji-Panel
 a_files_ttip,TOOLTIP,file manager,správce souborů,správca súborov,Dateimanager
 a_flush_ttip,TOOLTIP,clears all caches,vyprázdní veškerou cache,vyprázdní všetku cache,Löscht alle Caches

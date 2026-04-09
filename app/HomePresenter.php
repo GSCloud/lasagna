@@ -82,16 +82,13 @@ class HomePresenter extends APresenter
             ) {
                 continue;
             }
+            // fix int to string
+            if (\is_int($v)) {
+                $v = (string) $v;
+                $data['l'][$k] = $v;
+            }
             // process shortcodes
-            if (\str_starts_with($v, '[markdown]')) {
-                SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
-                if (!LOCALHOST
-                    && \str_contains($data['l'][$k], '[googlemap ')
-                    && ($key = $this->getData('google.mapsapi_key'))
-                ) {
-                    SF::renderGoogleMapShortCode($data['l'][$k], $key, 0);
-                }
-            } elseif (\str_starts_with($v, '[markdownextra]')) {
+            if (\is_string($v) && \str_starts_with($v, '[markdown')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
                 if (!LOCALHOST
                     && \str_contains($data['l'][$k], '[googlemap ')
