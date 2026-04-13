@@ -3,6 +3,7 @@
   <div class="container">
 
     <h4><i class="fa-solid small fa-database"></i>&nbsp;&nbsp;{{ l.a_locales }}&nbsp;&nbsp;<span id="csv_ping" class="mono">&nbsp;</span></h4>
+
     <p>{{ l.a_data_info }}</p>
 
     <div class="bl col s12 l4">
@@ -11,10 +12,12 @@
 
     <div class="bl col s12 l4">
       <div class="row center" style="margin:10px 0 10px 0;">
+
         <a
           id="showpins"
           class="waves-effect grey darken-3 waves-light btn trans_pin hover"
           style="margin:5px;font-size:15px!important">{{ l.a_show_translations }}</a>
+
         <a
           id="a_update"
           class="tooltipped waves-effect waves-light green btn"
@@ -23,6 +26,7 @@
           data-tooltip="{{ l.a_update_ttip }}"
           ><i
             class="fab fa-google-drive"></i>&nbsp;&nbsp;{{ l.a_update }}</a>
+
         <a
           id="a_flush"
           class="tooltipped waves-effect waves-light green btn"
@@ -45,6 +49,7 @@
           data-tooltip="{{ l.a_upload_ttip }}"
           ><i
             class="fas fa-upload"></i>&nbsp;&nbsp;UPLOAD</a>
+
         <a
           id="a_files"
           class="tooltipped waves-effect waves-light brown btn"
@@ -68,6 +73,7 @@
     </div>
 
     <hr>
+
     <div>
     {{#model.x_count}}
       <b>MODEL eXtensions ({{ model.x_count }})</b><span id="modelx-switch" class="btn black"><i class="fa-regular fa-square-plus"></i></span>

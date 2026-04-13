@@ -1,7 +1,7 @@
-<!-- EXTRA ADMIN STYLES -->
-<link href="https://cdn.gscloud.cz/tesseract/css/admin.css?v13" rel="stylesheet">
-
 <style>
+#admin_main {font-family:Arial!important;padding-top:5px;font-size:14px!important}
+#admin_main .row {margin-bottom:5px}
+#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6 {font-family:Arial!important}
 #admin_main hr {border:0;clear:both;margin:0 auto}
 #a_file_manager {padding-top:5px}
 #a_file_manager .btn-small {line-height:25px;height:25px;padding:0 8px 0 8px}
@@ -11,6 +11,23 @@
 #uploadimagescount {border-radius:3px;border:1px solid #fff}
 #uploads_extended_info {padding:10px}
 #modelx {border:2px solid #888;padding:2px;}
+
+label {color:#000;font-weight:bold}
+
+.a_reset {font-family:Arial!important;font-size:14px!important}
+.a_h2 {font-size:2.5em!important;font-weight:700!important}
+.a_h3 {font-size:2.1em!important;font-weight:700!important}
+.a_h4 {font-size:1.8em!important;font-weight:700!important}
+.a_h5 {font-size:1.5em!important;font-weight:700!important;background-color:#444;color:#fff;border-radius:3px}
+
+.btnmargin {margin:2px;margin-bottom:5px}
+.dragover {border:4px dashed blue!important}
+.extrapadding {padding:5px;border-radius:5px}
+.hover {cursor:pointer!important}
+.mobilebutt {font-size:1.5rem}
+.noselect {-webkit-user-select:none;-ms-user-select:none;user-select:none}
+.nowrap {white-space:nowrap!important}
+.protect {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
 
 .btn-stubs {margin:1px;font-size:0.8rem!important}
 .btn-stubs:hover {background-color:red!important}
@@ -70,6 +87,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
       <div class="nowrap">
         <b class="group_icon_{{ group }}">{{user.email}}</b>
       </div>
+
       <a
         id="logout"
         class="tooltipped waves-effect waves-light green btn"
@@ -77,6 +95,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         data-tooltip="{{ l.a_logout_ttip }}"
         href="/logout"
         ><i class="fas fa-sign-out-alt"></i></a>
+
       <a
         class="tooltipped waves-effect waves-light orange btn"
         data-position="bottom"
@@ -93,6 +112,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
         data-position="left"
         href="/{{ cfg.admin }}/AuditLog?{{ nonce }}"
         ><i class="fas fa-list"></i></a>
+
       <a
         target="_blank"
         ref="nofollow"
@@ -181,10 +201,14 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <div class="row center">
     {{ l.a_fcgi }}: <span class=bold>{{#CONST.FCGI_ENABLED}}{{ l.a_on }}{{/CONST.FCGI_ENABLED}}{{^CONST.FCGI_ENABLED}}{{ l.a_off }}{{/CONST.FCGI_ENABLED}}</span>, &nbsp;
     {{ l.a_redis }}: <span class=bold>{{#CONST.REDIS_CACHE}}{{ l.a_on }}{{/CONST.REDIS_CACHE}}{{^CONST.REDIS_CACHE}}{{ l.a_off }}{{/CONST.REDIS_CACHE}}</span>
+
     <br>
+
     {{ l.a_limiter }}: <span class=bold id="limit">?</span> (<b>{{ CONST.LIMITER_MAXIMUM }}x</b> / {{ cache_profiles.limiter }}) &nbsp;
     {{ l.a_ban }}: <b>{{ CONST.BAN_MAXIMUM }}x</b> » {{ cache_profiles.ban }}
+
     <br>
+
     {{ l.a_model }}: <span class=bold id="time1">?</span> ms &nbsp;
     {{ l.a_processing }}: <span class=bold id="time2">?</span> ms &nbsp;
     {{ l.a_total }}: <span class=bold id="time3">?</span> ms

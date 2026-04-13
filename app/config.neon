@@ -86,7 +86,6 @@ css_sources: [
 
 # LOCAL CSS
 css_sources_extra: [
-  "/css/style.css",
   "/css/lightbox.min.css",
 ]
 
