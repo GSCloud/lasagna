@@ -88,7 +88,7 @@ class CiTester
         $pages = [];
         $redirects = [];
         $nt = '*** no testing';
-        if (\is_array($presenter)) {
+        if ((array) $presenter) {
             $hasPath = array_filter(
                 $presenter, function ($item) {
                     return isset($item['path']);

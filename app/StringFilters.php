@@ -1834,6 +1834,9 @@ class StringFilters
                     }
                     $id = 0;
                     foreach ($files as $f) {
+                        if (!\is_string($f)) {
+                            continue;
+                        }
                         $id++;
                         $t = CDN . "/upload/.thumb_{$size}px_{$f}";
                         $n = \pathinfo(
@@ -1973,6 +1976,9 @@ class StringFilters
                     }
                     $id = 0;
                     foreach ($files as $f) {
+                        if (!\is_string($f)) {
+                            continue;
+                        }
                         $id++;
                         $t = CDN . "/upload/.thumb_{$size}px_{$f}";
                         $n = \pathinfo(
@@ -2046,17 +2052,11 @@ class StringFilters
             throw new \InvalidArgumentException('renderQRSC: FLAGS!');
         }
         
+        $counter = 0;
+        $pattern = '#\[qrcode\s*(.*?)\]#is';
         $lazy = (bool) ($flags & self::LAZY_LOADING);
         $lazy_attr = $lazy ? ' loading="lazy" ' : '';
 
-        $counter = 0;
-        $pattern = '#\[qrcode\s*(.*?)\]#is';
-
-        if (!\is_string($content)) {
-            return;
-        }
-
-        // @phpstan-ignore-next-line
         while (\str_contains($content, '[qrcode ')) {
             $counter++;
             $replace = '<div '
@@ -2100,9 +2100,6 @@ class StringFilters
         $mask = \preg_replace(self::UPLOAD_SANITIZE, '', \trim($mask));
         if ($mask) {
             $mask = \str_replace('..', '.', $mask);
-        }
-        if (!\is_string($mask)) {
-            return null;
         }
 
         // mask always ends with '*'

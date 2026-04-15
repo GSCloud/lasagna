@@ -193,9 +193,9 @@ $data['ENGINE'] = ENGINE;
 /**
  * Apply htmlspecialchars recursively
  *
- * @param array<string,mixed> $data array
+ * @param array<mixed,mixed> $data array
  *
- * @return array<string,mixed>
+ * @return array<mixed,mixed>
  */
 function safeHtmlspecialchars(array $data): array
 {

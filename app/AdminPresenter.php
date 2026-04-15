@@ -397,7 +397,7 @@ class AdminPresenter extends APresenter
 
         case 'GetCsvInfo':
             $this->_checkPermission('admin,manager,editor', $extras);
-            $csv_info = \array_merge($cfg['locales'] ?? [], $cfg['app_data'] ?? []);
+            $csv_info = \array_merge((array) $cfg['locales'] ?? [], (array) $cfg['app_data'] ?? []); // phpcs:ignore
             foreach ($csv_info as $k => $v) {
                 if ($k && $v) {
                     if (file_exists(DATA . DS . "{$k}.csv") && is_readable(DATA . DS . "{$k}.csv")) { // phpcs:ignore
@@ -1117,7 +1117,9 @@ class AdminPresenter extends APresenter
             $tw = \intval($tw);
             if (\is_numeric($th)) {
                 $th = \intval($th);
-                $thmb = \imagecreatetruecolor($tw, $th); // placeholder
+                if ($tw > 0 && $th > 0) {
+                    $thmb = \imagecreatetruecolor($tw, $th); // placeholder
+                }                    
             }
         }
 

@@ -635,20 +635,29 @@ abstract class APresenter
         if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
             $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
             if ($ip && \filter_var($ip, \FILTER_VALIDATE_IP)) {
-                return $ip;
+                if (\is_string($ip)) {
+                    return $ip;                    
+                }
+                return '';
             }
         }
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ipList = \explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             $ip = \trim(\reset($ipList));
             if ($ip && \filter_var($ip, \FILTER_VALIDATE_IP)) {
-                return $ip;
+                if (\is_string($ip)) {
+                    return $ip;                    
+                }
+                return '';
             }
         }
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $ip = $_SERVER['REMOTE_ADDR'];
             if ($ip && \filter_var($ip, \FILTER_VALIDATE_IP)) {
-                return $ip;
+                if (\is_string($ip)) {
+                    return $ip;                    
+                }
+                return '';
             }
         }
         return '127.0.0.1';
@@ -1256,13 +1265,11 @@ abstract class APresenter
         $ban_rate_count = Cache::read($ban_rate, 'ban') ?? 0;
         if ($ban_rate_count >= self::BAN_MAXIMUM) {
             if ($this->checkPermission('admin,manager,editor', true)) {
-
                 // administrator is limited
                 Cache::write($ban_rate, 0, 'ban');
                 header('Retry-After: ' . $limiter_secs);
                 $this->setLocation('/err/429');
             }
-
             // user is banned
             \header('Retry-After: ' . $ban_secs);
             $this->setLocation('/err/429');
@@ -1279,12 +1286,15 @@ abstract class APresenter
         Cache::write($rate_limit, $rate_limit_count, 'limiter');
 
         if ($rate_limit_count >= (int) $max) {
-
             // increment the ban
             $ban_rate_count = Cache::read($ban_rate, 'ban') ?? 0;
-            Cache::write($ban_rate, ++$ban_rate_count, 'ban');
+            if (\is_numeric($ban_rate_count)) {
+                $ban_rate_count++;
+            } else {
+                $ban_rate_count = 1;
+            }
+            Cache::write($ban_rate, $ban_rate_count, 'ban');
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
-
                 // user is banned
                 $path = $this->getData('request_path');
                 if (!\is_string($path)) {
@@ -1383,7 +1393,7 @@ abstract class APresenter
             $this->setLocation('/err/401');
         }
 
-        if (isset($roles) && \is_array($roles) && \is_array($groups)) {
+        if (isset($roles) && \is_array($groups)) {
             foreach ($roles as $role) {
                 $role = \strtolower(\trim($role));
                 if (\strlen($role) && \strlen($email)) {
@@ -1434,13 +1444,15 @@ abstract class APresenter
         $admin_groups = $this->getData('admin_groups') ?? null;
         if (\is_array($admin_groups)) {
             foreach ($admin_groups as $group => $users) {
-                if (\in_array($email, $users, true)) {
-                    $mygroup = $group;
-                    break;
-                }
-                if (\in_array('*', $users, true)) {
-                    $mygroup = $group;
-                    continue;
+                if (\is_array($users)) {
+                    if (\in_array($email, $users, true)) {
+                        $mygroup = $group;
+                        break;
+                    }
+                    if (\in_array('*', $users, true)) {
+                        $mygroup = $group;
+                        continue;
+                    }
                 }
             }
         }
@@ -1676,12 +1688,11 @@ abstract class APresenter
                 "X-Auth-Key: {$apikey}",
                 'Content-Type: application/json',
             ];
-            $data = \json_encode(['purge_everything' => true]);
 
             $ch = \curl_init();
             \curl_setopt($ch, CURLOPT_URL, $url);
             \curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-            \curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            \curl_setopt($ch, CURLOPT_POSTFIELDS, '{"purge_everything":true}');
             \curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $response = \curl_exec($ch);
@@ -2059,7 +2070,7 @@ abstract class APresenter
         $view = $this->getView();
 
         if (\is_array($presenter) && \is_string($view)) {
-            if (\array_key_exists('language', $presenter[$view])) {
+            if (\array_key_exists('language', (array) $presenter[$view])) {
                 $language = (string) $presenter[$view]['language'];
             } else {
                 $language = 'en';
@@ -2067,7 +2078,7 @@ abstract class APresenter
             $data['lang'] = $language;
             $data["lang{$language}"] = true;
         } else {
-            $this->addCritical('SYSTEM ERROR: something is terribly wrong with locales!'); // phpcs:ignore
+            $this->addCritical('SYSTEM ERROR: something is terribly wrong with locales'); // phpcs:ignore
             ErrorPresenter::getInstance()->process(
                 ['code' => 500, 'message' => 'SYSTEM ERROR: corrupted localization'] // phpcs:ignore
             );
