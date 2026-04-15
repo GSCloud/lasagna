@@ -67,6 +67,7 @@ class HomePresenter extends APresenter
                 $this->addError($e->getMessage());
             }
         }
+
         // add "custom replacements" from a Sheet data cell - usr.custom_replacements
         if (\is_array($reps = $data['custom_replacements'] ?? null)) {
             SF::addCustomReplacements($reps);

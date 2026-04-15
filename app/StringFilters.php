@@ -990,7 +990,7 @@ class StringFilters
     }
 
     /**
-     * Render CSS short code(s) for generic CSS components (e.g., buttons).
+     * Render CSS short code(s) for CSS classes
      *
      * Format: [css class1 class2 ...]CONTENT[/css]
      *
@@ -1014,22 +1014,27 @@ class StringFilters
          *
          * @param array $matches matches
          * 
-         * @return string HTML <span> code
+         * @return string HTML <div> section
          */
         $callback = function (array $matches): string {
             $classes = $matches[1] ?? '';
-            $content = $matches[2] ?? '';
+            $inner_content = $matches[2] ?? '';
             $classes = \str_replace(['"', "'"], ' ', $classes);
             $classes = \trim($classes);
-            $content = \str_ireplace('</span>', ' ', $content);
-            $content = \trim($content);
-            return '<span class="' . $classes . '">' . $content . '</span>';
+
+            $inner_content = \trim($inner_content);
+            if (\str_contains($inner_content, '[') && \str_contains($inner_content, ']') || \str_contains($inner_content, '](')) { // phpcs:ignore
+                $inner_content = Markdown::defaultTransform($inner_content);
+                $inner_content = \preg_replace('#^<p>(.*?)</p>$#is', '$1', \trim($inner_content)); // phpcs:ignore
+            }
+            return '<div class="' . $classes . '">' . \trim($inner_content) . '</div>'; // phpcs:ignore
         };
 
         $newContent = \preg_replace_callback($pattern, $callback, $content);
         if (\is_string($newContent)) {
             $content = $newContent;
         }
+        $content = \preg_replace('#^<p>(.*?)</p>$#is', '$1', \trim($content)); // phpcs:ignore
     }
 
     /**
@@ -2375,6 +2380,8 @@ class StringFilters
         self::renderTwitchVidShortCode($string, $flags);
         self::renderVimeoShortCode($string, $flags);
         self::renderYouTubeShortCode($string, $flags);
+
+        //bdump(self::$_shortCodeCache);
     }
 
     /**
@@ -2388,15 +2395,8 @@ class StringFilters
     {
         self::$_shortCodeCache = [];
         $names = \implode('|', self::ALL_SHORTCODES);
-        //$pattern = '/\[(' . $names . ')(\s[^\]]*)?\]/Usi';
-        $pattern = '/
-            # 1. paired shortcode
-            \[(' . $names . ')(\s[^\]]*)?\](.*?)\[\/\1\]
-            |
-            # 2. unpaired shortcode
-            \[(' . $names . ')(\s[^\]]*)?\]
-        /UsiX';
-
+        $pattern = '/\[(?P<name>' . $names . ')(?:\s+(?P<args>[^\]]*))?\](?:(?P<content>.*?)\[\/\1\])?/si'; // phpcs:ignore
+        
         if (\preg_match_all($pattern, $string, $matches)) {
             $tokens = [];
             $replacements = [];
@@ -2409,7 +2409,15 @@ class StringFilters
                 } else {
                     $normalized_match = $match;
                 }
-                $token = '~sc' . $i++ . '~';
+
+                // create a unique nonce
+                do {
+                    $nonce = "~sc_" . bin2hex(random_bytes(2));
+                } while (\strpos($string, $nonce) !== false);
+
+                // nonce based token
+                $token = $nonce . $i++ . '~';
+
                 self::$_shortCodeCache[$token] = $match;
                 $tokens[] = $match;
                 $replacements[] = $token;
@@ -2419,7 +2427,7 @@ class StringFilters
     }
 
     /**
-     * Replace all shortcode tokens (~sc#~) with the original content
+     * Replace all shortcode tokens with the original content
      *
      * @param string $string input string containing shortcode tokens by reference
      * 
@@ -2430,6 +2438,8 @@ class StringFilters
         if (empty(self::$_shortCodeCache)) {
             return;
         }
+
+        //\bdump(self::$_shortCodeCache);
 
         $string = \str_replace(\array_keys(self::$_shortCodeCache), \array_values(self::$_shortCodeCache), $string); // phpcs:ignore
         self::$_shortCodeCache = [];
