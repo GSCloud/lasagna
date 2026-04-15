@@ -1,6 +1,10 @@
-# **Tesseract LASAGNA v2.5.1 changelog**
+# **`Tesseract LASAGNA v2.5.1 changelog`**
 
 ---
+
+`2026-04-15`
+
+* **`1111-BUGFIX` short code tokenizer** fix
 
 `2026-04-05`
 
@@ -191,7 +195,7 @@
 
 `2025-06-22`
 
-* **`1058-FEATURE`** new short code  
+* **`1058-FEATURE`** new **short code**  
   * **`[figure image description]`** \- figure with a description
 
 `2025-06-14`
