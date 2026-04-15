@@ -319,13 +319,7 @@ abstract class APresenter
                         $source, \Mustache_LambdaHelper $lambdaHelper
                     ) {
                         $text = $lambdaHelper->render($source);
-                        $text = \preg_replace(
-                            '/(https)\:\/\/([a-zA-Z0-9\-\.]+\.'
-                            . '[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/',
-                            '<a rel="noopener nofollow" '
-                            . 'target=_blank href="$0">$2$3</a>',
-                            $text
-                        );
+                        $text = \preg_replace('/(https)\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,20})(\/[a-zA-Z0-9\-_\/]*)?/', '<a rel="noopener nofollow" target=_blank href="$0">$2$3</a>', $text); // phpcs:ignore
                         return (string) $text;
                     },
                     'shuffle_lines' => function (
