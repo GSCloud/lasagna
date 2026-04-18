@@ -248,10 +248,6 @@ async function sha256(message) {
 
     // GSC.CopyClipboard(data) - copy data to clipboard
     if (typeof GSC.CopyClipboard !== "function") GSC.CopyClipboard = function(data) {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(data);
-        return;
-      }
       var el = d.createElement("textarea");
       el.value = data;
       el.setAttribute("readonly", "");
