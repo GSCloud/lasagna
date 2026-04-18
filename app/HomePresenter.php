@@ -88,8 +88,8 @@ class HomePresenter extends APresenter
                 $v = (string) $v;
                 $data['l'][$k] = $v;
             }
+
             // process shortcodes
-            $data['l'][$k] = preg_replace('/(\d)-(\d)/', '$1–$2', $data['l'][$k]);
             if (\is_string($v) && \str_starts_with($v, '[markdown')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
                 if (!LOCALHOST
@@ -99,6 +99,7 @@ class HomePresenter extends APresenter
                     SF::renderGoogleMapShortCode($data['l'][$k], $key, 0);
                 }
             } else {
+                $data['l'][$k] = preg_replace('/(\d)-(\d)/', '$1–$2', $data['l'][$k]); // phpcs:ignore
                 SF::convertEolToBrNbsp($data['l'][$k]);
             }
             SF::correctTextSpacing($data['l'][$k], $lang);
