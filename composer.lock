@@ -120,16 +120,16 @@
         },
         {
             "name": "cakephp/cache",
-            "version": "5.3.3",
+            "version": "5.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cache.git",
-                "reference": "d58286ab2fac69eaef817a586b23f41ee5689995"
+                "reference": "cf69007dce8a348d5366e920e5aa4df0b0615793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cache/zipball/d58286ab2fac69eaef817a586b23f41ee5689995",
-                "reference": "d58286ab2fac69eaef817a586b23f41ee5689995",
+                "url": "https://api.github.com/repos/cakephp/cache/zipball/cf69007dce8a348d5366e920e5aa4df0b0615793",
+                "reference": "cf69007dce8a348d5366e920e5aa4df0b0615793",
                 "shasum": ""
             },
             "require": {
@@ -175,20 +175,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cache"
             },
-            "time": "2026-03-09T07:57:42+00:00"
+            "time": "2026-03-09T09:38:36+00:00"
         },
         {
             "name": "cakephp/core",
-            "version": "5.3.3",
+            "version": "5.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/core.git",
-                "reference": "20577a5a13d6b100a28cabfec3533c94bfe6d580"
+                "reference": "eb012517900ed288f580aa3487e9a09f28ea85f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/core/zipball/20577a5a13d6b100a28cabfec3533c94bfe6d580",
-                "reference": "20577a5a13d6b100a28cabfec3533c94bfe6d580",
+                "url": "https://api.github.com/repos/cakephp/core/zipball/eb012517900ed288f580aa3487e9a09f28ea85f9",
+                "reference": "eb012517900ed288f580aa3487e9a09f28ea85f9",
                 "shasum": ""
             },
             "require": {
@@ -242,20 +242,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/core"
             },
-            "time": "2026-03-09T07:57:42+00:00"
+            "time": "2026-03-31T06:25:23+00:00"
         },
         {
             "name": "cakephp/event",
-            "version": "5.3.3",
+            "version": "5.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/event.git",
-                "reference": "ef44902568624ecf1278df1a2d4533dc279f49ec"
+                "reference": "a5639980870e3867e1ac2a0150d4be1de78c3e09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/event/zipball/ef44902568624ecf1278df1a2d4533dc279f49ec",
-                "reference": "ef44902568624ecf1278df1a2d4533dc279f49ec",
+                "url": "https://api.github.com/repos/cakephp/event/zipball/a5639980870e3867e1ac2a0150d4be1de78c3e09",
+                "reference": "a5639980870e3867e1ac2a0150d4be1de78c3e09",
                 "shasum": ""
             },
             "require": {
@@ -297,20 +297,20 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/event"
             },
-            "time": "2026-03-09T07:57:42+00:00"
+            "time": "2026-03-09T09:38:36+00:00"
         },
         {
             "name": "cakephp/utility",
-            "version": "5.3.3",
+            "version": "5.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "defb12c8f33f49d180a584ef77b4ea6bfc48b594"
+                "reference": "4ac9826fe5faa1505ec5aa3c171d6b58b6ab4e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/defb12c8f33f49d180a584ef77b4ea6bfc48b594",
-                "reference": "defb12c8f33f49d180a584ef77b4ea6bfc48b594",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/4ac9826fe5faa1505ec5aa3c171d6b58b6ab4e99",
+                "reference": "4ac9826fe5faa1505ec5aa3c171d6b58b6ab4e99",
                 "shasum": ""
             },
             "require": {
@@ -361,7 +361,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/utility"
             },
-            "time": "2026-03-09T07:57:42+00:00"
+            "time": "2026-03-09T09:38:36+00:00"
         },
         {
             "name": "cheprasov/php-redis-client",
