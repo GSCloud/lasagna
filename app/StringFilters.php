@@ -795,8 +795,6 @@ class StringFilters
             return;
         }
 
-        $content = preg_replace('/(\d)-(\d)/', '$1–$2', $content);
-
         if (!\is_string($language)) {
             $language = 'en'; // default language
         }

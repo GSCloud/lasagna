@@ -89,6 +89,7 @@ class HomePresenter extends APresenter
                 $data['l'][$k] = $v;
             }
             // process shortcodes
+            $data['l'][$k] = preg_replace('/(\d)-(\d)/', '$1–$2', $data['l'][$k]);
             if (\is_string($v) && \str_starts_with($v, '[markdown')) {
                 SF::shortCodesProcessor($data['l'][$k], self::PROCESSOR_FLAGS);
                 if (!LOCALHOST
