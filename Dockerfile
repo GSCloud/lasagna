@@ -1,12 +1,12 @@
 # Tesseract Lasagna CMS v2.5.0
 # @author Fred Brooker <git@gscloud.cz>
 
-ARG CODE_VERSION=8.2-apache
+ARG CODE_VERSION=8.4-apache
 FROM php:${CODE_VERSION}
 
 LABEL maintainer="Fred Brooker <git@gscloud.cz>"
-LABEL description="Tesseract LASAGNA by GS Cloud Ltd."
-LABEL version="2.5.0 beta"
+LABEL description="Tesseract LASAGNA / GS Cloud Ltd."
+LABEL version="2.5.1"
 
 ENV TERM=xterm-256color \
     LANG=C.UTF-8 \
