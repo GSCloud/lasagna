@@ -2314,7 +2314,7 @@ class StringFilters
     }
 
     /**
-     * Extract shortcodes and replace them with unique tokens (~sc#~)
+     * Extract shortcodes and replace them with unique tokens
      *
      * @param string $string input string containing shortcodes by reference
      * 
@@ -2341,15 +2341,15 @@ class StringFilters
 
                 // create a unique nonce
                 do {
-                    $nonce = "~sc_" . bin2hex(random_bytes(2));
+                    $nonce = "~sc-" . bin2hex(random_bytes(2));
                 } while (\strpos($string, $nonce) !== false);
 
                 // nonce based token
-                $token = $nonce . $i++ . '~';
-
+                $token = "{$nonce}-{$i}~";
                 self::$_shortCodeCache[$token] = $match;
                 $tokens[] = $match;
                 $replacements[] = $token;
+                $i++;
             }
             $string = \str_replace($tokens, $replacements, $string);
         }
