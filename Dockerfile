@@ -1,4 +1,4 @@
-# Tesseract Lasagna CMS v2.5.0
+# Tesseract Lasagna CMS v2.5.1
 # @author Fred Brooker <git@gscloud.cz>
 
 ARG CODE_VERSION=8.4-apache
