@@ -14,7 +14,8 @@ declare (strict_types = 1);
 namespace GSC;
 
 use Cake\Cache\Cache;
-use League\Csv\Reader;
+//use League\Csv\Reader;
+use League\Csv\AbstractCsv;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
 use GSC\StringFilters as SF;
@@ -1549,7 +1550,8 @@ class AdminPresenter extends APresenter
                 return -1;
             }
             $count = 0;
-            $csv = Reader::createFromPath($f, 'r');
+            //$csv = Reader::createFromPath($f, 'r');
+            $csv = AbstractCsv::from($f, 'r');
             $csv->setHeaderOffset(0);
             foreach ($csv->getRecords() as $record) {
                 $count++;
