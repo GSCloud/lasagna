@@ -14,8 +14,7 @@ declare (strict_types = 1);
 namespace GSC;
 
 use Cake\Cache\Cache;
-//use League\Csv\Reader;
-use League\Csv\AbstractCsv;
+use League\Csv\Reader;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
 use GSC\StringFilters as SF;
@@ -1550,13 +1549,11 @@ class AdminPresenter extends APresenter
                 return -1;
             }
             $count = 0;
-            //$csv = Reader::createFromPath($f, 'r');
-            $csv = AbstractCsv::from($f, 'r');
+            $csv = Reader::createFromPath($f);
             $csv->setHeaderOffset(0);
-            foreach ($csv->getRecords() as $record) {
-                $count++;
-            }
-            return $count - 1;
+            $count = count($csv);
+            $count--; // Tesseract CSV header has two lines
+            return $count;
         } catch (\Throwable $e) {
             return -1;
         }

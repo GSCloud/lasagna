@@ -14,8 +14,7 @@ declare (strict_types = 1);
 namespace GSC;
 
 use Cake\Cache\Cache;
-//use League\Csv\Reader;
-use League\Csv\AbstractCsv;
+use League\Csv\Reader;
 use League\Csv\Statement;
 use Nette\Neon\Neon;
 use ParagonIE\Halite\Cookie;
@@ -1565,8 +1564,7 @@ abstract class APresenter
                     // parse CSV string
                     try {
                         if (\is_string($csv)) {
-                            //$reader = Reader::createFromString($csv);
-                            $reader = AbstractCsv::from($csv);
+                            $reader = Reader::fromString($csv);
                             $reader->setHeaderOffset(0);
                             $records = (new Statement())->offset(1)->process($reader); // phpcs:ignore
                             foreach ($records->fetchColumn($key) as $x) {
