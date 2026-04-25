@@ -1549,8 +1549,9 @@ class AdminPresenter extends APresenter
                 return -1;
             }
             $count = 0;
-            $csv = Reader::createFromPath($f);
+            $csv = Reader::from($f, 'r');
             $csv->setHeaderOffset(0);
+            $csv->setEscape('');
             $count = count($csv);
             $count--; // Tesseract CSV header has two lines
             return $count;
