@@ -1157,6 +1157,13 @@ class AdminPresenter extends APresenter
      */
     private function _decorateAuditLogs(&$val, $key)
     {
+        if (empty($val)) {
+            return;
+        }
+        if (!\is_string($val)) {
+            return;
+        }
+
         if (\stripos($val, 'exception') !== false) {
             $val = '';
             return;
@@ -1330,6 +1337,13 @@ class AdminPresenter extends APresenter
      */
     private function _decorateBlockLogs(&$val, $key)
     {
+        if (empty($val)) {
+            return;
+        }
+        if (!\is_string($val)) {
+            return;
+        }
+
         if (\stripos($val, 'exception') !== false) {
             $val = '';
             return;
