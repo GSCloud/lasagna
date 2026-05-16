@@ -1288,6 +1288,7 @@ abstract class APresenter
                 $ban_rate_count = 1;
             }
             Cache::write($ban_rate, $ban_rate_count, 'ban');
+
             if ($ban_rate_count >= self::BAN_MAXIMUM) {
                 // user is banned
                 $path = $this->getData('request_path');
@@ -1296,9 +1297,8 @@ abstract class APresenter
                 }
                 $path = $path ? " Path: [{$path}]" : "";
                 $ua = \trim($_SERVER['HTTP_USER_AGENT'] ?? '');
-                $ip = $this->getIP();
-                $ua = $ua ? "User [{$ua}]" : "User [{$ip}]";
-                $this->addMessage("LIMITER: {$ua} is banned.{$path}"); // phpcs:ignore
+                $host = \gethostbyaddr($this->getIP());
+                $this->addMessage("LIMITER: [{$host}] is banned.{$path}"); // phpcs:ignore
                 \header('Retry-After: ' . $ban_secs);
                 $this->setLocation('/err/429');
             }
