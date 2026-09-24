@@ -32,6 +32,7 @@
 
 <link rel="stylesheet" href="https://cdn.gscloud.cz/materialize/v1.2.2/css/materialize.min.css">
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/jquery.min.js"></script>
+<script nonce="{{ csp_nonce }}">document.documentElement.classList.add('js');</script>
 
 {{>head_post}}
 
@@ -46,7 +47,7 @@
   catch(err) {
     externallyFramed = true;
   }
-  if(externallyFramed) {
+  if (externallyFramed) {
     top.location = location;
   }
 })();
@@ -58,6 +59,7 @@
 </script>
 </head>
 <body id="mainbody" class="hold-transition {{ design.skin }} sidebar-mini">
+
 {{>body_pre}}
 
 <noscript style="text-align:center;position:fixed;bottom:0;z-index:999999;width:100%;display:block;">{{>noscript}}</noscript>
@@ -76,7 +78,7 @@
 {{>gscloud_functions}}
 
 <div id="maincontent" class="{{ design.content }}">
-  {{>container_switcher}}
+{{>body_container}}
 </div>
 
 {{>body_resources}}
