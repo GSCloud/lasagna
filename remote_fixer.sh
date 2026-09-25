@@ -37,4 +37,4 @@ fi
 chmod -R 0777 ci data logs temp www www/{download,upload}
 chown -R www-data:www-data . www ci data www/{download,upload}
 find www/ -type f -exec chmod 0644 {} +
-rm -f data/_random_cdn_hash
+rm -f data/_random_cdn_hash temp/*
