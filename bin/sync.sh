@@ -51,7 +51,8 @@ mkdir -p app ci data temp www/download www/upload
 chmod 0777 www/download www/upload >/dev/null 2>&1
 find www/ -type f -exec chmod 0644 {} \; >/dev/null 2>&1
 find . -type f -iname "*.sh" -exec chmod +x {} \;
-rm -rf www/cdn-assets temp/*
+find temp/ -mindepth 1 -delete
+rm -rf www/cdn-assets
 
 VERSION=$(git rev-parse HEAD)
 echo $VERSION > VERSION
