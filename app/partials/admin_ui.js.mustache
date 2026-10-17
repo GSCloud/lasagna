@@ -328,7 +328,6 @@
               $('.uploaded-card').css('height', '150px');
               $('#uploadimagesok').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
               $('#uploadimagesko').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
-              delCookie("displayimages");
               localStorage.removeItem("displayimages");
             });
 
@@ -339,7 +338,6 @@
               $('.uploaded-card').css('height', '300px');
               $('#uploadimagesok').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
               $('#uploadimagesko').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
-              setCookie("displayimages", 1);
               localStorage.setItem("displayimages", 1);
             });
 
@@ -398,8 +396,8 @@
 
         // API: FlushCache
         $.post("/{{ cfg.admin }}/FlushCache");
-        delCookie("displayimages");
         delCookie("open_filemanager");
+        localStorage.removeItem("displayimages");
         location.replace(location.href.split('?')[0] + "?{{ nonce }}");
       });
 
