@@ -12,7 +12,7 @@
   if (w.GSC.init) {
     w.GSC.data = {} || w.GSC.data;
 
-    // GSC.PingDot()
+    // GSC.PingDot() - blinking dot
     if (!w.GSC.PingDot) w.GSC.PingDot = function (el, status = true) {
       if (!el) return;
       if (status) {
@@ -76,7 +76,6 @@
 
     // GSC.AdminUI()
     if (!w.GSC.AdminUI) w.GSC.AdminUI = function () {
-      // fix various CSS styles
       $("#admin_main div").addClass("a_reset");
       $("#admin_main h2").addClass("a_reset a_h2");
       $("#admin_main h4").addClass("a_reset a_h4");
@@ -99,19 +98,20 @@
         }
       });
 
-      // show MODEL-X
+      // show MODEL-X details
       $('#modelx-switch').click(function () {
           $('#modelx').removeClass('hide').show();
           $('#modelx-switch').hide();
       });
 
-      // press logout
+      // press LOGOUT
       $('#logout').click(function () {
         bc.postMessage('logout');
       });
 
 {{#dbg}}
 {{#admin_group_admin}}
+      // switch PHP debugger ON/OFF
       $('#phpdebugger').click(function () {
         if (getCookie('tracy-debug')) {
           $('#phpdebugger').removeClass('red').addClass('blue');

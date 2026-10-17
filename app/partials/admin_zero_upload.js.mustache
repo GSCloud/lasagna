@@ -2,7 +2,7 @@
   if (w.GSC.init) {
     w.GSC.data = {} || w.GSC.data;
 
-    // SETUP ZEROUPLOAD
+    // SETUP ZERO UPLOAD
     w.GSC.init.push(function () {
       w.GSC.names.push("ZeroUpload");
 
@@ -67,7 +67,7 @@
       ZeroUpload.init();
       ZeroUpload.addDropTarget("body");
 
-      // UI: upload button
+      // UI: upload button click
       $("#a_upload").click(function () {
         if (w.GSC.offline) {
           M.toast({text: "📶 offline", classes: "normaltoast"});

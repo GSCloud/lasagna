@@ -398,6 +398,7 @@
 
         // API: FlushCache
         $.post("/{{ cfg.admin }}/FlushCache");
+        delCookie("displayimages");
         delCookie("open_filemanager");
         location.replace(location.href.split('?')[0] + "?{{ nonce }}");
       });
@@ -412,6 +413,7 @@
       if (GSC.touch) {
         $('#menutabbed').removeClass('container');
       }
+
       // filemanager state
       if (getCookie("open_filemanager") == 1) {
         $("#a_file_manager").hide();
