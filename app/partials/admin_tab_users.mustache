@@ -5,42 +5,42 @@
     <h4><i class="fa-regular small fa-user"></i>&nbsp;&nbsp;{{ l.a_groups_permissions }}</h4>
     <p>{{ l.a_groups_info }}</p>
 
-    <!-- groups -->
+    <!-- GROUPS -->
     <div>
       <div class="white-text">
         <div class="row">
 
           {{#admin_groups_masked}}
           <strong class="group_icon_admin">ADMIN</strong>
-          <div class="container">
+          <span class="container">
             <div class="orange-text">{{#admin_groups_masked.admin}}{{ . }} {{/admin_groups_masked.admin}}
               {{^admin_groups_masked.admin}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.admin}}
             </div>
-          </div>
+          </span>
           <br>
 
           <strong class="group_icon_manager">MANAGER</strong>
-          <div class="container">
+          <span class="container">
             <div class="orange-text">{{#admin_groups_masked.manager}}{{ . }} {{/admin_groups_masked.manager}}
               {{^admin_groups_masked.manager}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.manager}}
             </div>
-          </div>
+          </span>
           <br>
 
           <strong class="group_icon_editor">EDITOR</strong>
-          <div class="container">
+          <span class="container">
             <div class="orange-text">{{#admin_groups_masked.editor}}{{ . }} {{/admin_groups_masked.editor}}
               {{^admin_groups_masked.editor}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.editor}}
             </div>
-          </div>
+          </span>
           <br>
 
           <strong class="group_icon_tester">TESTER</strong>
-          <div class="container">
+          <span class="container">
             <div class="orange-text">{{#admin_groups_masked.tester}}{{ . }} {{/admin_groups_masked.tester}}
               {{^admin_groups_masked.tester}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.tester}}
             </div>
-          </div>
+          </span>
           <br>
           {{/admin_groups_masked}}
 

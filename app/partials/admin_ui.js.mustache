@@ -1,0 +1,456 @@
+(function (w, d, undefined) {
+  if (w.GSC.init) {
+    w.GSC.data = {} || w.GSC.data;
+
+    // SETUP ADMIN UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("admin UI - bind");
+
+      // SHOW ADMIN UI?
+      const adminPanelState = localStorage.getItem('adminpanel');
+      if (adminPanelState === null || adminPanelState === 'true') {
+        $("#admin_main").show(100);
+        localStorage.setItem('adminpanel', true);
+      }
+
+      // TABBED MENU
+      $('#menutabbed .tabs a').click(function (e) {
+        if (GSC.nolocalstorage) return;
+        let id = $(this).data('id');
+        if (id) localStorage['admintab'] = id;
+      });
+
+      // SELECT LAST TABBED MENU
+      if (!GSC.nolocalstorage) {
+        if (localStorage && localStorage['admintab']) {
+          let id = localStorage['admintab'];
+          $('#menutabbed .tabs').tabs('select', id);
+        }
+      }
+
+      // TOGGLE ADMIN PANEL
+      $(".admin_panel_switch").click(function () {
+        $("#admin_main").toggle(100, function () {
+          window.scrollTo(0, 0);
+          const isPanelVisible = $("#admin_main").is(":visible");
+          localStorage.setItem('adminpanel', isPanelVisible);
+        });
+      });
+
+      // REMOTE FUNCTION SELECTOR
+      $("#RemoteFnSelect").change(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#sectok_ping", false);
+        }
+        if (!$("#RemoteFnSelect").val()) return;
+
+        // API: GetToken
+        $.get("/{{ cfg.admin }}/GetToken?" + Date.now(), function (data) {
+          var s = $("#RemoteFnSelect").val();
+          var t = data.data[0];
+          t = t.replace(/[a-zA-Z]*\?/, s + "?");
+          GSC.CopyClipboard(t);
+          GSC.PingDot("#sectok_ping");
+          M.toast({text: "{{ l.a_clipboardcopy }} {{ l.a_remotecode }}: " + s, classes: "normaltoast"});
+        }).fail(function () {
+          $("#a_security_token").val("N/A");
+          GSC.PingDot("#sectok_ping", false);
+          GSC.CopyClipboard("");
+          M.toast({text: "{{ l.a_error_general }}", classes: "normaltoast"});
+        });
+      });
+
+      // UPDATE CSV DATA
+      $("#a_update").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        $("#a_update").attr("disabled", "disabled");
+        setTimeout(function () {
+          $("#a_update").removeAttr("disabled");
+        }, 30E3);
+
+        // API: CoreUpdate
+        $.post("/{{ cfg.admin }}/CoreUpdate");
+        M.toast({text: "{{ l.a_processing_data }}", classes: "normaltoast"});
+      });
+
+      // FILE MANAGER
+      $("#a_files").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        if (getCookie("open_filemanager") == 1) {
+          return GSC.CloseFileManager();
+        }
+        GSC.RenderUploadInfo();
+      });
+
+      // GSC.CloseFileManager()
+      if (typeof GSC.CloseFileManager !== "function") GSC.CloseFileManager = function() {
+          delCookie("open_filemanager");
+          $("#a_file_manager").hide(250);
+          $("#a_uploader_progress").html('');
+      }
+
+      // GSC.GetUploadsInfo()
+      if (typeof GSC.GetUploadsInfo !== "function") GSC.GetUploadsInfo = function (info) {
+        if (info === undefined) {
+
+          // API: getUploadsInfo
+          $.get("/{{ cfg.admin }}/getUploadsInfo?" + Date.now(), function (data) {
+            if (data && data.data && data.data.reg_count && data.data.reg_size) {
+              var i1 = data.data.reg_count;
+              var i2 = GSC.FormatBytes(data.data.reg_size);
+              var i3 = data.data.dot_count;
+              var i4 = GSC.FormatBytes(data.data.dot_size);
+              $('#files_count').html(i1 + '&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;' + i2);
+              $('#uploads_extended_info').html('<i class="fa-solid fa-shapes"></i>&nbsp;&nbsp;' + i3 + '&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;' + i4);
+            }
+          });
+        }
+        $('#files_count').text(info);
+      }
+
+      // GSC.RenderUploadInfo()
+      if (typeof GSC.RenderUploadInfo !== "function") GSC.RenderUploadInfo = function() {
+        $.get("/{{ cfg.admin }}/getUploads?" + Date.now(), function (data) {
+          if (data && data.data && data.data.files) {
+
+            setCookie("open_filemanager", 1);
+
+            var s = '';
+            var t = 0;
+            var over = false;
+            var printed = 0;
+
+            // search
+            var search = '';
+            if (localStorage.getItem('search')) {
+              var search = localStorage.getItem('search');
+              search = search.replace(/[^a-z0-9_.\-]/gim, '').toLowerCase();
+            }
+
+            // current time and Moment locale
+            var now = ~~(Date.now() / 1000);
+            moment.locale('{{ lang }}');
+
+            var imageson = 'grey darken-3 cursorpointer';
+            var imagesoff = 'orange cursordefault';
+            var cardsize = '150px';
+            var displaystate = 'hide-images';
+
+            if (localStorage.getItem("displayimages") && localStorage.getItem("displayimages") == 1) {
+              imageson = 'orange cursordefault';
+              imagesoff = 'grey darken-3 cursorpointer';
+              cardsize = '300px';
+              displaystate = '';
+            }
+
+            // thumbnails sizes
+            var wt = [];
+            wt[80] = 'XS';
+            wt[160] = 'S';
+            wt[320] = 'M';
+            wt[640] = 'L';
+            wt[1280] = 'XL';
+
+            if (!data.data.count) {
+              s = '';
+              $('#files_count').html('0');
+              data.data.count = 0;
+            } else {
+              var stubs = '';
+              var stubs_rendered = 0;
+              if (data.data.stubs && data.data.stubs_count) {
+                stubs = '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
+                for (var i in data.data.stubs) {
+                  if (typeof data.data.stubs[i] === 'function') continue;
+                  if (data.data.stubs_count[data.data.stubs[i]] < 3) continue;
+
+                  var stubcolor = 'grey darken-3';
+                  if (data.data.stubs[i] === search) stubcolor = 'red';
+                  stubs += '<span data-stub="' + data.data.stubs[i] + '" class="' + stubcolor +' text-white btn-small btn-stubs">' + data.data.stubs[i] + '</span>';
+                  stubs_rendered++;
+                }
+                if (stubs_rendered > 19) stubs += '<span data-stub="" class="black btn-small btn-stubs"><i class="fa-regular fa-circle-xmark"></i></span>';
+              }
+
+              // controls + search
+              s += '<div id="stubs" class="row center">' + stubs + '</div>';
+              s += '<div id="uploadimagesko" class="btn ' + imagesoff + ' right upload-controls"><i class="fa-solid fa-list"></i></div>';
+              s += '<div id="uploadimagesok" class="btn ' + imageson + '  right upload-controls"><i class="fa-solid fa-image"></i></div>';
+              s += '<div id="uploadimagescount" style="cursor:auto!important" class="noselect btn black text-white bold upload-controls right"></div>';
+              s += '<div class="row white container"><input id="searchbox" type="text" value="' + search + '"></div>';
+
+              // last upload
+              var lastupload = [];
+              if (localStorage['last_upload']) {
+                lastupload = JSON.parse(localStorage['last_upload']);
+              }
+
+              // process all uploads
+              for (var i in data.data.files) {
+                if (typeof data.data.files[i] === 'function') continue;
+
+                t++;
+                if (t === 1) {
+                  s += '<div class=row>';
+                }
+  
+                var name1 = name = data.data.files[i]["name"];
+                var name2 = name.replace(/\.[^.]+$/, '.webp');
+                var ext = GSC.GetFileExtension(name);
+
+                // process last uploads
+                var labelnew = '';
+                if (lastupload && typeof lastupload === 'object' && lastupload.includes(name)) {
+                  labelnew = '<i class="left yellow-text transparent fa-solid fa-diamond btn-flat btn-floating pulse cursordefault"></i> ';
+                }
+
+                // process search if available
+                if (search && name.indexOf(search) === -1) {
+                  continue;
+                }
+
+                printed++;
+                if (printed > 300) {
+                  over = true;
+                  continue;
+                }
+  
+                var si = '';
+                if (data.data.files[i]["thumbnails"] === null) {
+                  // ICON
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  si += '<span class="uploaded-image' + displaystate + '">📄<br><br></span></a><a target=_blank title="{{ l.a_open_tit }}" class="truncate center-align white-text" style="font-size:1rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">' + name + '<br><br></a>';
+                } else {
+                  // THUMBNAIL
+                  si += '<a target=_blank data-tooltip="{{ l.a_open_tit }}: ' + name + '" class="tooltipped hover center-align" style="font-size:2rem;line-height:1rem;display:block" href="{{ cdn }}/upload/' + name + '">';
+                  if (data.data.files[i]["thumbnails"][160]) si += '<img alt="thumbnail" class="responsive-img uploaded-image ' + displaystate + '" height=70% src="{{ cdn }}/upload/' + data.data.files[i]['thumbnails'][160] + '">';
+                  si += '</a>';
+                  si += '<div style="margin:3px" class="center bold truncate"><a target=_blank class="center-align blue-text" href="{{ cdn }}/upload/' + name + '">' + name + '</a></div>';
+                }
+  
+                // AGE + SIZE
+                var saz = '';
+                var warn = '';
+                if (data.data.files[i]["size"] >= 3*1024*1024) {
+                  warn = 'bold red warning';
+                }
+
+                saz += '<div class="center">' + labelnew + '<i class="fa-solid fa-clock"></i>&nbsp;&nbsp;';
+                saz += moment.duration(Math.abs(~~((now - data.data.files[i]["timestamp"]))), "seconds").humanize();
+                saz += '&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-cube"></i>&nbsp;&nbsp;';
+                saz += '<span class="' + warn + '">';
+                saz += GSC.FormatBytes(data.data.files[i]["size"]);
+                saz += '</span>';
+                saz += '</div>';
+  
+                // XS SML XL
+                var sml = '';
+                for (var j in data.data.files[i]["thumbnails"]) {
+                  name = data.data.files[i]["thumbnails"][j];
+                  sml += '<span style="font-size:1rem" class="mobilebutt tooltipped imgthumb hover copydata" data-position=bottom data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name + '">' + wt[j] + '</span>&nbsp;&nbsp;';
+                }
+                if (sml.length) {
+                  sml = '<div class="smlrow row center"><i class="fa-solid fa-shapes"></i>&nbsp;' + sml + '</div>';
+                }
+  
+                // DOWNLOAD + DELETE + RCB
+                var sd = '';
+                if (data.data.files[i]["thumbnails"] === null) {
+                  sd += '<div class="row">';
+                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.5rem" class="hover left downloadicon" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>';
+                  sd += '&nbsp;<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
+                  sd += '</div>';
+                }
+                else {
+                  sd += '<div class="row">';
+                  sd += '<a href="{{cdn}}/' + name1 + '" style="font-size:1.5rem" class="hover left downloadicon" download="' + name1 + '"><i class="fa-solid fa-download blue-text"></i></a>';
+                  sd += '<span data-tooltip="🗑 {{ l.a_delete_tit }}" style="font-size:1.5rem" class="tooltipped mobilebutt right hover delete" data-fig="' + t + '" data-id="' + name1 + '"><i class="fa-solid red-text fa-trash"></i></span>&nbsp;';
+                  sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name1 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name1 + '">📋' + ext + '</span>';
+                  if (ext != 'webp') {
+                    sd += '<span data-tooltip="📋 {{ l.a_copy_tit }} ' + name2 + '" style="font-size:1rem" class="tooltipped mobilebutt extrapadding left hover copydata" data-text="{{ BASE }}{{ cdn_trimmed }}/upload/' + name2 + '">📋webp</span>';
+                  }
+                  sd += '</div>';
+                }
+
+                // COMPOSITION
+                s += '<div style="margin:0;padding:1rem;height:' + cardsize + ';background-color:#222;border:1px solid #000" id="fig' + t + '" class="left-align bottom col l2 m4 s12 uploaded-card">'
+                s += sd + si + saz + sml;
+                s += '</div>';
+              }
+
+              // close listing
+              if (t) {
+                s += "</div>";
+                GSC.GetUploadsInfo();
+              }
+            }
+
+            // too many images
+            if (over) {
+              s += '<div class="row center"><div id="overbutton" class="btn red">{{ l.a_too_many_images }}</div></div>';
+            }
+            
+            // show file manager
+            if ($("#a_file_manager").html() != "") {
+              $("#a_file_manager").html(s).show();
+            } else {
+              $("#a_file_manager").hide().html(s).show(100);
+            }
+            if (!stubs_rendered) $('.btn-stubs').hide();
+            if (displaystate == 'hide-images') $('.smlrow').hide();            
+            $('#uploadimagescount').html(printed + '&nbsp;/&nbsp;' + data.data.count);
+
+            // activate new tooltips
+            $('.tooltipped').tooltip();
+            // thumbnail tooltip previews
+            $('.imgthumb').each(function(index) {
+              $(this).tooltip({html: '<img src="' + $(this).data('text') + '">'});
+            });
+
+            // searchbox focus
+            if (localStorage.getItem('searchset')) {
+              $('#searchbox').focus();
+            }
+            localStorage.removeItem('searchset');
+
+            // UPLOAD: disable images
+            $('#uploadimagesko').click(function () {
+              $('.smlrow').hide();
+              $('.uploaded-image').hide();
+              $('.uploaded-card').css('height', '150px');
+              $('#uploadimagesok').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
+              $('#uploadimagesko').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
+              delCookie("displayimages");
+              localStorage.removeItem("displayimages");
+            });
+
+            // UPLOAD: enable images
+            $('#uploadimagesok').click(function () {
+              $('.smlrow').show();
+              $('.uploaded-image').show();
+              $('.uploaded-card').css('height', '300px');
+              $('#uploadimagesok').removeClass('grey darken-3 cursorpointer').addClass('orange cursordefault');
+              $('#uploadimagesko').removeClass('orange cursordefault').addClass('grey darken-3 cursorpointer');
+              setCookie("displayimages", 1);
+              localStorage.setItem("displayimages", 1);
+            });
+
+            // UPLOAD: click search stub
+            $('.btn-stubs').click(function () {
+              localStorage.setItem('search', $(this).data('stub'));
+              GSC.RenderUploadInfo();
+            });
+
+            // UPLOAD: change searchbox
+            $('#searchbox').change(function () {
+              var search = $(this).val();
+              search = search.replace(/[^a-z0-9_.\-]/gim, '').toLowerCase();
+              localStorage.setItem('search', search);
+              localStorage.setItem('searchset', 1);
+              GSC.RenderUploadInfo();
+            });
+
+            // UPLOAD: copy path to clipboard
+            $("#a_file_manager .copydata").click(function () {
+              var x = $(this).data("text");
+              GSC.CopyClipboard(x);
+              M.toast({text: "📋 " + GSC.GetFileName(x), classes: "normaltoast"});
+            });
+            
+            // UPLOAD: delete file
+            $("#a_file_manager .delete").click(function () {
+              if (GSC.deleteconfirmed || confirm("{{ l.a_delete_tit }}?")) {
+                GSC.deleteconfirmed = true;
+                var x = $(this).data("id");
+                var fig = $(this).data("fig");
+                $(this).tooltip('close');
+                $('#fig' + fig).hide(250);
+
+                // API: UploadedFileDelete
+                $.post("/{{ cfg.admin }}/UploadDelete", {
+                  name: x
+                }).done(function (data) {
+                  M.toast({text: "🚮 " + x, classes: "normaltoast"});
+                  GSC.RenderUploadInfo();
+                });
+              }
+            });
+          }
+        });
+      }
+
+      // FLUSH CACHE
+      $("#a_flush").click(function () {
+        if (w.GSC.offline) {
+          M.toast({text: "📶 offline", classes: "normaltoast"});
+          return GSC.PingDot("#csv_ping", false);
+        }
+        GSC.GetCsvInfo = function () {};
+        $("#a_flush").attr("disabled", "disabled");
+
+        // API: FlushCache
+        $.post("/{{ cfg.admin }}/FlushCache");
+        delCookie("open_filemanager");
+        location.replace(location.href.split('?')[0] + "?{{ nonce }}");
+      });
+
+    });
+
+    // SHOW ADMIN UI
+    w.GSC.init.push(function () {
+      w.GSC.names.push("admin UI - activate");
+      GSC.AdminUI();
+      $('.tabs').tabs();
+      if (GSC.touch) {
+        $('#menutabbed').removeClass('container');
+      }
+      // filemanager state
+      if (getCookie("open_filemanager") == 1) {
+        $("#a_file_manager").hide();
+        GSC.RenderUploadInfo();
+        GSC.GetUploadsInfo();
+      } else {
+        GSC.GetUploadsInfo();
+      }
+    });
+
+    // CSV INFO TIMER
+    w.GSC.init.push(function () {
+      w.GSC.names.push("CSV timer");
+      setInterval(function () {
+        GSC.GetCsvInfo();
+      }, 2500);
+      GSC.GetCsvInfo();
+    });
+
+    // SHOW TRANSLATION PINS
+    $(".trans_pin").click(function () {
+    if ($(this).data('on') == '1') {
+        $(this).data('on', 0);    
+        $('#showpins').removeClass('white').addClass('grey darken-3');
+        $('.sheetpin').remove();
+    } else {
+        $(this).data('on', 1);
+        $('#showpins').removeClass('grey darken-3').addClass('white');
+        // inject pins
+        $('*[data-admin-tooltip]').each(function() {
+        $(this).prepend('<b data-copy="' + $(this).data('admin-tooltip') + '" title="' + $(this).data('admin-tooltip') + '" class="hover sheetpin">📌&nbsp;</b>')
+        });
+
+        // pin event handler
+        $('.sheetpin').click(function() {
+        GSC.CopyThisText(this);
+        });
+    }
+    });
+
+  }
+})(window, document);

@@ -175,12 +175,12 @@ a_groups_info,SUBPAR,user lists and their permissions,seznamy uživatelů a jeji
 a_news_info,SUBPAR,information about used libraries and shortcuts,informace o použitých knihovnách a zkratkách,informácie o použitých knižniciach a skratkách,Informationen zu verwendeten Bibliotheken und Verknüpfungen
 a_news_os_info,SUBPAR,open source libraries are continuously updated,open source knihovny jsou průběžně aktualizovány,open source knižnice sú priebežne aktualizované,Open-Source-Bibliotheken werden kontinuierlich aktualisiert
 a_news_sc_info,SUBPAR,abbreviations can be used in translation if the cell begins as a Markdown definition,"zkratky je možné použít v překladu, pokud buňka začíná jako definice Markdown","skratky je možné použiť v preklade, ak bunka začína ako definícia Markdown","Abkürzungen können in der Übersetzung verwendet werden, wenn die Zelle als Markdown-Definition beginnt"
-a_remote_fn_info,SUBPAR,allows you to generate an authorized link to call a remote system function,umožňuje generovat autorizovaný odkaz na volání vzdálené systémové funkce,umožňuje vygenerovať autorizovaný odkaz na volanie funkcie vzdialeného systému,"ermöglicht es Ihnen, einen autorisierten Link zum Aufruf einer Remote-Systemfunktion zu generieren."
+a_remote_fn_info,SUBPAR,authorized link generation for remote system functions,generování autorizovaných odkazů pro funkce vzdáleného systému,autorizované generovanie prepojení pre funkcie vzdialeného systému,Autorisierte Linkgenerierung für Remote-Systemfunktionen
 a_services_info,SUBPAR,external services,externí služby,externé služby,externe Dienstleistungen
 a_tab_changes,TAB,INFORMATION,INFORMACE,INFORMÁCIE,INFORMATION
 a_tab_data,TAB,LASAGNA DATA,LASAGNA DATA,LASAGNA DATA,LASAGNA DATEN
 a_tab_dev,TAB,DEV,DEV,DEV,DEV
-a_tab_fn,TAB,REMOTE fn(),VZDÁLENÉ fn(),VZDIALENÉ fn(),FERNBEDIENUNGSFUNKTIONEN fn()
+a_tab_fn,TAB,AI + REMOTE fn(),AI + VZDÁLENÉ fn(),AI + VZDIALENÉ fn(),AI + FERNBEDIENUNGSFUNKTIONEN fn()
 a_tab_services,TAB,SERVICES,SLUŽBY,SLUŽBY,DIENSTLEISTUNGEN
 a_tab_users,TAB,USERS,UŽIVATELÉ,UŽÍVATEĽA,BENUTZER
 a_dev,TITLE,DEVELOPER,VÝVOJÁŘ,VÝVOJÁR,ENTWICKLER

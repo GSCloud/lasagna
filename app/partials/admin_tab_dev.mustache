@@ -1,11 +1,8 @@
 {{^disable_dev_admin}}
 <div id="dev" class="row">
   <div class="container">
-
     <h4><i class="fa-solid fa-user-secret"></i>&nbsp;&nbsp;{{ l.a_dev }}</h4>
-
     <p>{{ l.a_dev_info }}</p>
-
     <a
       id="cssdebugger"
       style="margin:2px!important;"
@@ -13,7 +10,6 @@
       data-position="bottom"
       data-tooltip="{{ l.a_debugger_ttip }}"
       ><i class="fa-brands fa-css"></i>&nbsp;<sup><i style="font-size:8px!important" class="fa-solid fa-bug"></i></sup>&nbsp;&nbsp;{{ l.a_cssdebugger }}</a>
-
 {{#dbg}}
 {{#admin_group_admin}}
     <a
@@ -25,30 +21,24 @@
       ><i class="fa-brands fa-php"></i>&nbsp;<sup><i style="font-size:8px!important" class="fa-solid fa-bug"></i></sup>&nbsp;&nbsp;{{ l.a_phpdebugger }}</a>
 {{/admin_group_admin}}
 {{/dbg}}
-
-    <br>
-
     <a
       href="{{ canonical_url }}robots.txt"
       target="_blank"
       style="margin:2px!important;"
       class="btn waves-light white-text brown"
-      ><i class="fa-solid fa-robot"></i>&nbsp;robots.txt</a>
-
+      ><i class="fa-solid fa-robot"></i>&nbsp;ROBOTS</a>
     <a
       href="{{ canonical_url }}llms.txt"
       target="_blank"
       style="margin:2px!important;"
       class="btn waves-light white-text brown"
-      ><i class="fa-solid fa-microchip"></i>&nbsp;llms.txt</a>
-
+      ><i class="fa-solid fa-microchip"></i>&nbsp;LLMS</a>
     <a
       href="{{ canonical_url }}humans.txt"
       target="_blank"
       style="margin:2px!important;"
       class="btn waves-light white-text brown"
-      ><i class="fa-solid fa-person"></i>&nbsp;humans.txt</a>
-
+      ><i class="fa-solid fa-person"></i>&nbsp;HUMANS</a>
   </div>
 </div>
 {{/disable_dev_admin}}
