@@ -73,6 +73,7 @@ class StringFilters
         'gallery',
         'galleryspan',
         'googlemap',
+        'icon',
         'image',
         'imageleft',
         'imageresp',
@@ -1023,6 +1024,43 @@ class StringFilters
                 . "data-counter={$counter} "
                 . 'src="https://www.google.com/maps/embed/v1/place?key='
                 . $key . '&q=$1"></iframe>';
+            if (\is_string($content)) {
+                $content = \preg_replace($pattern, $replace, $content, 1);
+            }
+            if ($counter === self::ITERATIONS) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render Font Awesome Icon short code(s)
+     *
+     * @param string $content string containing [icon id]
+     * 
+     * @return void
+     * 
+     * @throws \InvalidArgumentException for incorrect flags
+     */
+    public static function renderIconShortCode(&$content)
+    {
+        if (!\is_string($content)) {
+            return;
+        }
+        if (!\str_contains($content, '[icon ')) {
+            return;
+        }
+
+        $content = \trim($content);
+        if (!\is_string($content)) {
+            return;
+        }
+
+        $counter = 0;
+        $pattern = '#\[icon\s+([^\]]+)\]#is';
+        while (\str_contains($content, '[icon ')) {
+            $counter++;
+            $replace = '<i class="$1" aria-hidden="true"></i>';
             if (\is_string($content)) {
                 $content = \preg_replace($pattern, $replace, $content, 1);
             }
@@ -2303,6 +2341,7 @@ class StringFilters
         self::renderImageShortCode($string, $flags);
         self::renderMastodonShortCode($string, $flags);
         self::renderCssShortCode($string);
+        self::renderIconShortCode($string);
         self::renderQRShortCode($string, $flags);
         self::renderSoundCloudShortCode($string, $flags);
         self::renderTwitchChannellShortCode($string, $flags);
