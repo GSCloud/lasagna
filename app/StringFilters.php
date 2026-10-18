@@ -1090,21 +1090,19 @@ class StringFilters
         }
 
         $content = \trim($content);
+        if (!\is_string($content)) {
+            return;
+        }
+
         if (!\is_integer($flags)) {
             throw new \InvalidArgumentException('renderImageSC: FLAGS!');
         } else {
             $lazy = (bool) ($flags & self::LAZY_LOADING);
             $lazy = $lazy ? ' loading="lazy" ' : '';
         }
-
+            
         $counter = 0;
         $pattern = '#\[image\s.*?(.*?)\]#is';
-
-        if (!\is_string($content)) {
-            return;
-        }
-
-        // @phpstan-ignore-next-line
         while (\str_contains($content, '[image ')) {
             $counter++;
             $replace = '<span class="img-container">'

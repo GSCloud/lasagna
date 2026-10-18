@@ -1609,8 +1609,7 @@ abstract class APresenter
                 );
             }
         }
-        Cache::write($file, $locale, 'default');
-
+        
         // locale override
         $override = $this->getData('locale_override');
         if (\is_array($override) && \is_array($locale)) {
@@ -1618,6 +1617,8 @@ abstract class APresenter
                 $locale[$k] = $v;
             }
         }
+        Cache::write($file, $locale, 'default');
+
         if (!\is_array($locale)) {
             $locale = [];
         }

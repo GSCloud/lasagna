@@ -130,7 +130,7 @@ design: [
 
 # LOCALE OVERRIDES
 locale_override: [
-  #copyright: "2017-2025"
+#  motto: "[markdown]\n## TEST [css container red-text grey lighten-3][icon fa-solid fa-rocket][/css]"
 ]
 
 # SERVICE WORKER PRELOAD
