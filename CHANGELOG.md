@@ -1,10 +1,17 @@
-# **`Tesseract LASAGNA v2.5.1 changelog`**
+# **`Tesseract LASAGNA v2.5.2 changelog`**
 
 ---
 
+`2026-10-18 v2.5.2 `
+
+* **`1114-FEATURE`** new StringFilter: **`[icon <font_awesome_id> ...]`**  
+  * `example:` **\[icon fa-solid fa-rocket\]**  
+* **`1113-FEATURE` Font Awesome 7.3.1**  
+* **`1112-FEATURE` admin panel UI optimizations, File Manager updates**
+
 `2026-04-15`
 
-* **`1111-BUGFIX` short code tokenizer** fix
+* **`1111-BUGFIX` short code tokenizer fix**
 
 `2026-04-05`
 
@@ -63,8 +70,8 @@
 
 `2025-12-12`
 
-* **`1094-FEATURE`** new **StringFilter:**  
-  * **`[css <class> …][/css]`**  
+* **`1094-FEATURE`** new StringFilter: **`[css <class> ...][/css]`**  
+  * `example:` **\[css container red-text grey lighten-3\]example\[/css\]**  
 * **`1093-BUGFIX` GOVERNOR cookie system** to handle updates  
 * **`1092-BUGFIX` emergency crash handler** with logging to handle Out of RAM/Time fatal errors
 
@@ -170,7 +177,7 @@
 `2025-07-16`
 
 * **`1064-BUGFIX`** added **Tracy configuration**:  
-  * Debugger::$maxItems \= (int) ($cfg\['DEBUG\_MAX\_ITEMS'\] ?? 1000);
+  * Debugger::\$maxItems \= (int) (\$cfg\['DEBUG\_MAX\_ITEMS'\] ?? 1000);
 
 `2025-07-15`
 
@@ -337,7 +344,7 @@
 * **`1010-BUGFIX`** **Lightbox2** [v2.11.5](https://github.com/lokesh/lightbox2/releases/tag/v2.11.5)  
 * ~~**`1009-IDEA`** **remember active admin tab**~~  
 * **`1008-IDEA` migrate Materialize framework to the newest [v2.2.2](https://github.com/materializecss/materialize/releases/tag/v2.2.2)**  
-  * note: [https://github.com/materializecss/materialize/pull/49](https://github.com/materializecss/materialize/pull/49)
+  * note: [https\://github.com/materializecss/materialize/pull/49](https://github.com/materializecss/materialize/pull/49)
 
 `2025-01-02`
 
