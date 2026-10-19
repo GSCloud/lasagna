@@ -49,16 +49,16 @@
                 '<a rel=noopener target=_blank title="{{ l.a_edit_gsheet_ttip }}" style="font-size:1.2rem;border-radius:2px;padding:3px;" ' +
                 'class="orange mono white-text bold nowrap" href="' +
                 'https://docs.google.com/spreadsheets/d/' +
-                sheet + '/edit">&nbsp;' +
+                sheet + '/edit">&nbsp;📝&nbsp;' +
                 x + '&nbsp;</a>&nbsp;<a rel=noopener target=_blank title="{{ l.a_download_csv_ttip }}"' +
                 ' style="font-size:1.2rem;border-radius:2px;padding:3px;" class="csv' + x +  ' bold blue white-text mono nowrap" ' +
                 'href="https://docs.google.com/spreadsheets/d/e/' +
-                csv + '/pub?output=csv">&nbsp;' +
+                csv + '/pub?output=csv">&nbsp;📄&nbsp;' +
                 lines + '&nbsp;</a>&nbsp;';
             }
             content += ('<div style="margin:2px;" class="center">' +
               link +
-              '&nbsp;&nbsp;<span class="nowrap">&nbsp;<span class=csv' +
+              '&nbsp;&nbsp;<span class="nowrap">&nbsp;⌚️&nbsp;<span class=csv' +
               x +
               '>' +
               moment.duration(Math.abs(~~((now - data.data[x]['timestamp']))), 'seconds').humanize() +
