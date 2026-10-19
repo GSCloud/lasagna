@@ -2094,12 +2094,18 @@ abstract class APresenter
         }
         //bdump($l);
 
-        // PROCESS SPECIAL KEYS - [cfg.*, usr.*, add.*, del.*]
+        // PROCESS SPECIAL KEYS - [xxx*, cfg.*, usr.*, add.*, del.*]
         $reps = 0;
         $dot = new \Adbar\Dot($data);
         $dot->set('model.changes', []);
         foreach ($l ?? [] as $k => $v) {
             $kk = $k;
+
+            // xxx: delete row
+            if (\str_starts_with($k, 'xxx')) {
+                $dot->delete($k);
+                continue;
+            }
 
             // CFG: replace key if it exists
             if (\str_starts_with($k, 'cfg.')) {
@@ -2199,6 +2205,7 @@ abstract class APresenter
                 }
             }
         }
+
         // update model
         if ($reps) {
             $dot->set('model.x_count', $reps);

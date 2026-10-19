@@ -237,6 +237,15 @@ $data['POST'] = safeHtmlspecialchars($_POST);
 $data['COOKIE'] = safeHtmlspecialchars($_COOKIE);
 $data['SERVER'] = safeHtmlspecialchars($_SERVER);
 $data['REFERER'] = $_SERVER['HTTP_REFERER'] ?? null;
+
+// Bearer token
+$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? ''; // phpcs:ignore
+$bearer = null;
+if (str_starts_with($authHeader, 'Bearer ')) {
+    $bearer = trim(substr($authHeader, 7));
+}
+$data['AUTHORIZATION'] = $bearer;
+
 $server_name = $_SERVER['SERVER_NAME'] ?? 'localhost';
 if (!is_string($server_name)) {
     $server_name = 'localhost';

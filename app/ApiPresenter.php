@@ -110,7 +110,7 @@ class ApiPresenter extends APresenter
         $uid = $this->getUID();
         $key = 'access_limiter_' . SERVER . SS . PROJECT . "_{$hour}_{$uid}";
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-        if (!$this->getData('redis.port')) {
+        if ($this->getData('redis.port') === 0) {
             return 0;
         }
         $host = $this->getData('redis.host');
