@@ -1371,21 +1371,21 @@
         },
         {
             "name": "nette/neon",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/neon.git",
-                "reference": "9009f99ce1396b366a88ca16c90177148352b7d3"
+                "reference": "62a868999838ba3392ccd11deb40ab2eb1478c37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/neon/zipball/9009f99ce1396b366a88ca16c90177148352b7d3",
-                "reference": "9009f99ce1396b366a88ca16c90177148352b7d3",
+                "url": "https://api.github.com/repos/nette/neon/zipball/62a868999838ba3392ccd11deb40ab2eb1478c37",
+                "reference": "62a868999838ba3392ccd11deb40ab2eb1478c37",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "8.0 - 8.5"
+                "php": "8.0 - 8.6"
             },
             "require-dev": {
                 "nette/tester": "^2.4",
@@ -1419,39 +1419,37 @@
                 {
                     "name": "David Grudl",
                     "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
+            "description": "🍸 Nette NEON: a human-friendly data format, simpler than YAML and with entities for objects. Comes with a fast encoder and decoder.",
             "homepage": "https://neon.nette.org",
             "keywords": [
-                "export",
-                "import",
+                "config",
+                "configuration",
+                "data format",
                 "neon",
                 "nette",
+                "parser",
                 "yaml"
             ],
             "support": {
                 "issues": "https://github.com/nette/neon/issues",
-                "source": "https://github.com/nette/neon/tree/v3.4.8"
+                "source": "https://github.com/nette/neon/tree/v3.4.9"
             },
-            "time": "2026-05-11T21:34:00+00:00"
+            "time": "2026-10-21T05:05:29+00:00"
         },
         {
             "name": "nette/tester",
-            "version": "v2.6.2",
+            "version": "v2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tester.git",
-                "reference": "aa30c13835c8cd9c65d9ced6b475edab125b5557"
+                "reference": "d784f539cfb6bb425a1aa58124973fb2d8689372"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/aa30c13835c8cd9c65d9ced6b475edab125b5557",
-                "reference": "aa30c13835c8cd9c65d9ced6b475edab125b5557",
+                "url": "https://api.github.com/repos/nette/tester/zipball/d784f539cfb6bb425a1aa58124973fb2d8689372",
+                "reference": "d784f539cfb6bb425a1aa58124973fb2d8689372",
                 "shasum": ""
             },
             "require": {
@@ -1492,31 +1490,25 @@
                 {
                     "name": "Miloslav Hůla",
                     "homepage": "https://github.com/milo"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "Nette Tester: enjoyable unit testing in PHP with code coverage reporter. 🍏🍏🍎🍏",
+            "description": "🍏 Nette Tester: enjoyable unit testing in PHP. Tests are plain PHP scripts that run in parallel, with readable assertions and code coverage.",
             "homepage": "https://tester.nette.org",
             "keywords": [
-                "Xdebug",
                 "assertions",
-                "clover",
                 "code coverage",
                 "nette",
-                "pcov",
-                "phpdbg",
+                "parallel",
                 "phpunit",
+                "test framework",
                 "testing",
-                "unit"
+                "unit testing"
             ],
             "support": {
                 "issues": "https://github.com/nette/tester/issues",
-                "source": "https://github.com/nette/tester/tree/v2.6.2"
+                "source": "https://github.com/nette/tester/tree/v2.6.3"
             },
-            "time": "2026-09-13T00:11:01+00:00"
+            "time": "2026-10-23T11:17:32+00:00"
         },
         {
             "name": "nette/utils",
@@ -2841,22 +2833,22 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.12.1",
+            "version": "v2.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "90d24872cd97202f79281aac7eb09c27ec48bf69"
+                "reference": "2664bd9456cb745ff1fb0b31efa79fe2f411bef3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/90d24872cd97202f79281aac7eb09c27ec48bf69",
-                "reference": "90d24872cd97202f79281aac7eb09c27ec48bf69",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/2664bd9456cb745ff1fb0b31efa79fe2f411bef3",
+                "reference": "2664bd9456cb745ff1fb0b31efa79fe2f411bef3",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-session": "*",
-                "php": "8.2 - 8.5"
+                "php": "8.2 - 8.6"
             },
             "conflict": {
                 "nette/di": "<3.0"
@@ -2870,7 +2862,7 @@
                 "nette/tester": "^2.6",
                 "nette/utils": "^3.0 || ^4.0",
                 "phpstan/extension-installer": "^1.4@stable",
-                "phpstan/phpstan": "^2.1@stable",
+                "phpstan/phpstan": "^2.3@stable",
                 "psr/log": "^1.0 || ^2.0 || ^3.0"
             },
             "type": "library",
@@ -2898,26 +2890,27 @@
                 {
                     "name": "David Grudl",
                     "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "😎  Tracy: the addictive tool to ease debugging PHP code for cool developers. Friendly design, logging, profiler, advanced features like debugging AJAX calls or CLI support. You will love it.",
+            "description": "😎 Tracy: the addictive PHP debugger. Clear error pages with full context, a debug bar, readable dumps, AJAX and CLI support, and logging with e-mail alerts in production.",
             "homepage": "https://tracy.nette.org",
             "keywords": [
-                "Xdebug",
-                "debug",
+                "debug bar",
                 "debugger",
+                "debugging",
+                "dump",
+                "error handler",
+                "logging",
                 "nette",
-                "profiler"
+                "tracy",
+                "var_dump",
+                "whoops"
             ],
             "support": {
                 "issues": "https://github.com/nette/tracy/issues",
-                "source": "https://github.com/nette/tracy/tree/v2.12.1"
+                "source": "https://github.com/nette/tracy/tree/v2.12.2"
             },
-            "time": "2026-08-18T10:56:11+00:00"
+            "time": "2026-10-21T05:14:18+00:00"
         },
         {
             "name": "tuupola/base58",
