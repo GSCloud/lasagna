@@ -5,12 +5,13 @@
     <h4><i class="fa-regular small fa-user"></i>&nbsp;&nbsp;{{ l.a_groups_permissions }}</h4>
     <p>{{ l.a_groups_info }}</p>
 
-    <!-- GROUPS -->
+    <!-- USER GROUPS -->
     <div>
       <div class="white-text">
         <div class="row">
 
           {{#admin_groups_masked}}
+
           <strong class="group_icon_admin">ADMIN</strong>
           <span class="container">
             <div class="orange-text">{{#admin_groups_masked.admin}}{{ . }} {{/admin_groups_masked.admin}}
@@ -42,6 +43,15 @@
             </div>
           </span>
           <br>
+
+          <strong class="group_icon_ai">AI / MCP</strong>
+          <span class="container">
+            <div class="orange-text">{{#admin_groups_masked.ai}}{{ . }} {{/admin_groups_masked.ai}}
+              {{^admin_groups_masked.ai}}<i class="red-text fas fa-times"></i>{{/admin_groups_masked.ai}}
+            </div>
+          </span>
+          <br>
+
           {{/admin_groups_masked}}
 
         </div>

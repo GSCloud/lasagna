@@ -1,69 +1,61 @@
 <style>
-#admin_main {font-family:Arial!important;padding-top:5px;font-size:14px!important}
-#admin_main .row {margin-bottom:5px}
-#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6 {font-family:Arial!important}
-#admin_main hr {border:0;clear:both;margin:0 auto}
-#a_file_manager {padding-top:5px}
-#a_file_manager .btn-small {line-height:25px;height:25px;padding:0 8px 0 8px}
-#data b {font-weight:bold!important}
-#searchbox {text-indent:1rem}
+#admin_main {font-family:Arial!important;padding-top:5px;font-size:14px!important;}
+#admin_main .row {margin-bottom:5px;}
+#admin_main h2,#admin_main h3,#admin_main h4,#admin_main h5,#admin_main h6 {font-family:Arial!important;}
+#admin_main hr {border:0;clear:both;margin:0 auto;}
+#a_file_manager {padding-top:5px;}
+#a_file_manager .btn-small {line-height:25px;height:25px;padding:0 8px 0 8px;}
+#data b {font-weight:bold!important;}
+#searchbox {text-indent:1rem;}
 #stubs {padding-bottom:0.5rem;}
-#uploadimagescount {border-radius:3px;border:1px solid #fff}
-#uploads_extended_info {padding:10px}
-#modelx {border:2px solid #888;padding:2px;}
+#uploadimagescount {border-radius:3px;border:1px solid #fff;}
+#uploads_extended_info {padding:10px;}
+#modelx {border:2px solid #888;padding:2px;;}
 
-label {color:#000;font-weight:bold}
+label {color:#000;font-weight:bold;}
 
-.a_reset {font-family:Arial!important;font-size:14px!important}
-.a_h2 {font-size:2.5em!important;font-weight:700!important}
-.a_h3 {font-size:2.1em!important;font-weight:700!important}
-.a_h4 {font-size:1.8em!important;font-weight:700!important}
-.a_h5 {font-size:1.5em!important;font-weight:700!important;background-color:#444;color:#fff;border-radius:3px}
+.a_reset {font-family:Arial!important;font-size:14px!important;}
+.a_h2 {font-size:2.5em!important;font-weight:700!important;}
+.a_h3 {font-size:2.1em!important;font-weight:700!important;}
+.a_h4 {font-size:1.8em!important;font-weight:700!important;}
+.a_h5 {font-size:1.5em!important;font-weight:700!important;background-color:#444;color:#fff;border-radius:3px;}
 
-.btnmargin {margin:2px;margin-bottom:5px}
-.dragover {border:4px dashed blue!important}
-.extrapadding {padding:5px;border-radius:5px}
-.hover {cursor:pointer!important}
-.mobilebutt {font-size:1.5rem}
-.noselect {-webkit-user-select:none;-ms-user-select:none;user-select:none}
-.nowrap {white-space:nowrap!important}
-.protect {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px}
+.btnmargin {margin:2px;margin-bottom:5px;}
+.dragover {border:4px dashed blue!important;}
+.extrapadding {padding:5px;border-radius:5px;}
+.hover {cursor:pointer!important;}
+.mobilebutt {font-size:1.5rem;}
+.noselect {-webkit-user-select:none;-ms-user-select:none;user-select:none;}
+.nowrap {white-space:nowrap!important;}
+.protect {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;width:10em;line-height:12px;}
 
-.btn-stubs {margin:1px;font-size:0.8rem!important}
-.btn-stubs:hover {background-color:red!important}
-.fa-trash {margin-right:1rem}
-.hide-images {display:none}
-.tab>a {color:#fff!important}
-.tabs .indicator {background-color: transparent!important}
-.tabs a.active {border-bottom: 4px solid #fff!important}
-.tabs {overflow: auto;overflow-x: hidden}
-.tabs>li>a>i {margin-right:1rem;font-size:20px}
-.upload-controls {margin:10px}
+.btn-stubs {margin:1px;font-size:0.8rem!important;}
+.btn-stubs:hover {background-color:red!important;}
+.fa-trash {margin-right:1rem;}
+.hide-images {display:none;}
+.tab>a {color:#fff!important;}
+.tabs .indicator {background-color:transparent!important;}
+.tabs a.active {border-bottom:4px solid #fff!important;}
+.tabs {overflow:auto;overflow-x:hidden;}
+.tabs>li>a>i {margin-right:1rem;font-size:20px;}
+.upload-controls {margin:10px;}
 .warning {padding:5px}
-.cursordefault {cursor:default!important}
-.cursorpointer {cursor:pointer!important}
+.cursordefault {cursor:default!important;}
+.cursorpointer {cursor:pointer!important;}
 .downloadicon {padding:0 5px 0 5px 0;margin-right:0.5rem;}
 .modelx {padding:3px!important;margin:1px!important;background-color:#333;display:inline-block;border-radius:3px;}
 
 /* GROUP ICONS */
-.group_icon_admin::before {content:"🫅 ";font-size:1.3rem}
-.group_icon_editor::before {content:"🧑‍💼 ";font-size:1.3rem}
-.group_icon_manager::before {content:"🧙 ";font-size:1.3rem}
-.group_icon_tester::before {content:"👷 ";font-size:1.3rem}
+.group_icon_admin::before {content:"🫅 ";font-size:1.3rem;}
+.group_icon_editor::before {content:"🧑‍💼 ";font-size:1.3rem;}
+.group_icon_manager::before {content:"🧙 ";font-size:1.3rem;}
+.group_icon_tester::before {content:"👷 ";font-size:1.3rem;}
+.group_icon_ai::before {content:"🤖 ";font-size:1.3rem;}
 
-div#data .bl {background:linear-gradient(to bottom, #333, #24202F, #101520);border:2px solid #000;border-radius:3px}
-div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
+div#data .bl {background:linear-gradient(to bottom, #333, #24202F, #101520);border:2px solid #000;border-radius:3px;}
+div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222);}
 
-.identity-box {
-  background-color: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(3px);
-  padding: 10px!important;
-  border-radius: 3px;
-  position: sticky!important;
-  z-index: 10000;
-  top: 70px;
-  right: 0;
-}
+.identity-box {background-color:rgba(0, 0, 0, 0.1);backdrop-filter:blur(3px);padding:10px!important;border-radius:3px;position:sticky!important;z-index:10000;top:70px;right:0;}
 </style>
 
 <!-- CONTROL PANEL SWITCH -->
@@ -73,7 +65,6 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
     class="responsive-img notap"
     style="margin:1em;padding:5px;background-color:#fff;border-radius:50%"
     alt="{{ ENGINE }}"
-    title="{{ ENGINE }}"
     width="32"
     height="32">
 </span>
@@ -135,7 +126,7 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <!-- CUSTOM PANEL -->
   {{>admin_custom}}
 
-  <!-- TABBED NAVIGATION -->
+  <!-- NAVIGATION TABS -->
   <div id="menutabbed" class="row container noselect">
     <ul class="tabs grey darken-3 bold">
     {{^disable_data_admin}}
@@ -206,8 +197,6 @@ div#menutabbed .tabs {background:linear-gradient(to bottom, #666, #222)}
   <div id="a_file_manager" class="noselect"></div>
 </div>
 
-<script nonce="{{ csp_nonce }}">
-{{>admin_main.js.mustache}}
-</script>
+<script nonce="{{ csp_nonce }}">{{>admin_main.js.mustache}}</script>
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/moment-with-locales.min.js" defer></script>
 <script nonce="{{ csp_nonce }}" src="https://cdn.gscloud.cz/tesseract/js/zeroupload.min.js" defer></script>

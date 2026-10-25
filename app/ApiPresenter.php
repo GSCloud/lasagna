@@ -110,16 +110,16 @@ class ApiPresenter extends APresenter
         $uid = $this->getUID();
         $key = 'access_limiter_' . SERVER . SS . PROJECT . "_{$hour}_{$uid}";
         \error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-        if ($this->getData('redis.port') === 0) {
+        $port = $this->getData('redis.port');
+        if ($port === 0) {
+            return 0;
+        }
+        if (!\is_string($port) || !\is_numeric($port)) {
             return 0;
         }
         $host = $this->getData('redis.host');
         if (!\is_string($host)) {
             $host = 'localhost';
-        }
-        $port = $this->getData('redis.port');
-        if (!\is_string($port) || !\is_numeric($port)) {
-            $port = 6379;
         }
         $redis = new RedisClient(
             [
