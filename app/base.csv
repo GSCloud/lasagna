@@ -3,15 +3,7 @@ klíč,sekce,anglicky,česky,slovensky,německy
 $author,$,Fred Brooker,Fred Brooker,Fred Brooker,Fred Brooker
 $gsc,$,GS Cloud Ltd.,GS Cloud s.r.o.,GS Cloud s.r.o.,GS Cloud Ltd.
 $gscloud,$,$gsc,$gsc,$gsc,$gsc
-$year,$,2026,2026,2026,2026
-llms,CORE,"# $title
-
-> $description
-
-## Docs
-
-- Author: $author / $gsc",,,
-$design_light_red,$TPL,"[neon][
+$design_light_red,$,"[neon][
 footer_color: ""grey darken-4""
 nav_color: ""red""
 theme_color: ""red""
@@ -36,6 +28,14 @@ theme_color: ""red""
 background_color: ""white""
 content: ""white black-text""
 skin: ""white""]"
+llms,CORE,"# $title
+
+> $description
+
+## Docs
+
+- Author: $author / $gsc",,,
+year,TPL,2026,2026,2026,2026
 nojs_placeholder,ALERT,JAVASCRIPT IS DISABLED,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT JE VYPNUTÝ,JAVASCRIPT IST DEAKTIVIERT
 nojs_sorry,ALERT,⚠️ WARNING,⚠️ UPOZORNĚNÍ,⚠️ VAROVANIE,⚠️ WARNUNG
 nojs_text,ALERT,You should enable JavaScript to use this application.,Měli byste zapnout JavaScript při používání této aplikace.,"Ak chcete používať túto aplikáciu, mali by ste povoliť JavaScript.","Sie müssen JavaScript aktivieren, um diese Anwendung nutzen zu können."
