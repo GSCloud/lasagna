@@ -35,7 +35,7 @@
 <div class="footer-copyright black grey-text noselect noprint" style="margin-bottom:0!important">
   <div class="row center" style="margin-bottom:0!important">
   <br>
-  <div style="font-size:1rem!important;">{{ l.poweredby }}</div>
+  <div style="font-size:1rem!important;" data-admin-tooltip="poweredby">{{ l.poweredby }}</div>
   <a
     target="_blank"
     rel="nofollow noopener"
@@ -46,6 +46,7 @@
     target="_blank"
     rel="nofollow noopener"
     class="white-text"
+    data-admin-tooltip="privacy_policy"
     href="https://gscloud.cz/privacy-policy.pdf">🕵&nbsp;{{ l.privacy_policy }}</a>
   &nbsp;&nbsp;<a
       target="_blank"
@@ -57,6 +58,7 @@
       rel="nofollow noopener"
       class="white-text" 
       title="SOS"
+      data-admin-tooltip="support_email"
       href="mailto:{{ l.support_email }}{{^l.support_email}}info@gscloud.cz{{/l.support_email}}">🆘&nbsp;{{ l.support_email }}{{^l.support_email}}info@gscloud.cz{{/l.support_email}}</a>
   <br>
   <a
@@ -85,6 +87,7 @@
     rel="me nofollow"
     class="white-text"
     title="{{ l.author }}"
+    data-admin-tooltip="author"
     href="{{ l.copyright_link }}{{^l.copyright_link}}https://hmcgames.com/fred{{/l.copyright_link}}">{{ l.author }}</a>&nbsp;{{ l.copyright }}{{^l.copyright}}{{ l.year }}{{/l.copyright}}
   <br>
   <div class="row center" style="margin-bottom:0!important">
