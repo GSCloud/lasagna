@@ -159,11 +159,11 @@ a_model,INFO,model,model,model,Modell
 a_off,INFO,OFF,VYP,VYP,AUS
 a_on,INFO,ON,ZAP,ZAP,AN
 a_open_tit,INFO,open file,otevřít soubor,otvoriť súbor,Datei öffnen
-a_processing,INFO,processing,zpracování,spracovanie,Verwechseln
+a_processing,INFO,processing,zpracování,spracovanie,in bearbeitung
 a_processing_data,INFO,The system is processing data ☕️,Systém zpracovává data ☕️,Systém spracováva údaje ☕️,Das System verarbeitet Daten ☕️
 a_redis,INFO,REDIS,REDIS,REDIS,REDIS
-a_remote_fns,INFO,REMOTE FUNCTION CALLS,VZDÁLENÁ VOLÁNÍ FUNKCÍ,VOLANIA NA DIALKU,FERNFUNKTIONSANRUFE
-a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,GESPERRT OK
+a_remote_fns,INFO,REMOTE FNS,REMOTE FN,REMOTE FN,FERNVERBINDUNG
+a_saved_ok,INFO,SAVED OK,ULOŽENO OK,ULOŽENÉ OK,GESPEICHERT
 a_total,INFO,total,celkem,celkom,Gesamt
 a_upload_disabled,INFO,UPLOAD is disabled.,UPLOAD je vypnutý.,UPLOAD je vypnutý.,UPLOAD ist deaktiviert.
 a_uploading,INFO,⬆️ Uploading,⬆️ Nahrávám,⬆️ Nahrávam,⬆️ Hochladen
